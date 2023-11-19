@@ -5,7 +5,7 @@ import { canonicalize } from "json-canonicalize";
 import { join } from "path";
 import { format } from "prettier";
 
-const OutputDir = "specs";
+export const SchemaOutputDir = "schemas";
 
 export type IntegrityProps = { $hash: string };
 
@@ -15,15 +15,15 @@ export type FileChange = {
 };
 
 export async function download(): Promise<FileChange[]> {
-  await mkdir(OutputDir, { recursive: true });
-  const existing = new Set(await readdir(OutputDir));
+  await mkdir(SchemaOutputDir, { recursive: true });
+  const existing = new Set(await readdir(SchemaOutputDir));
   const changes: FileChange[] = [];
 
   for await (const schema of fetchResourceSchemas()) {
     const fileName =
       schema.typeName.replace(/::/g, "-").toLowerCase() + ".json";
 
-    const filepath = join(OutputDir, fileName);
+    const filepath = join(SchemaOutputDir, fileName);
     existing.delete(fileName);
 
     const newContents = addIntegrity(schema);
@@ -52,7 +52,7 @@ export async function download(): Promise<FileChange[]> {
 
   for (const fileName of existing) {
     changes.push({ type: "removed", fileName });
-    await unlink(join(OutputDir, fileName));
+    await unlink(join(SchemaOutputDir, fileName));
   }
 
   return changes;
