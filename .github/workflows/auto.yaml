@@ -1,0 +1,43 @@
+name: Automated build
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18.x"
+          cache: "npm"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: NPM install
+        run: npm ci
+
+      - name: Download latest
+        run: npm run download
+        continue-on-error: true
+
+      - name: Make PR
+        if: success()
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: Update schemas
+          committer: GitHub <noreply@github.com>
+          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          branch: latest
+          delete-branch: true
+          title: "Update schemas"
+          body: |
+            Update schemas
+          labels: |
+            automated
