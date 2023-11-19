@@ -1,13 +1,10 @@
 import { fetchResourceSchemas } from "@awboost/cfn-resource-schemas";
-import { createHash } from "crypto";
 import { mkdir, readFile, readdir, unlink, writeFile } from "fs/promises";
-import { canonicalize } from "json-canonicalize";
 import { join } from "path";
 import { format } from "prettier";
+import { IntegrityProps, addIntegrity } from "./integrity.js";
 
 export const SchemaOutputDir = "schemas";
-
-export type IntegrityProps = { $hash: string };
 
 export type FileChange = {
   type: "added" | "removed" | "updated";
@@ -56,14 +53,4 @@ export async function download(): Promise<FileChange[]> {
   }
 
   return changes;
-}
-
-function addIntegrity<T>(value: T): T & IntegrityProps {
-  const hash = createHash("sha1");
-  hash.update(canonicalize(value));
-
-  return {
-    ...value,
-    $hash: hash.digest("hex"),
-  };
 }
