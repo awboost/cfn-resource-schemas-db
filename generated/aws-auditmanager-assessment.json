@@ -1,0 +1,490 @@
+{
+  "definitions": {
+    "FrameworkId": {
+      "type": "string",
+      "description": "The identifier for the specified framework.",
+      "maxLength": 36,
+      "minLength": 32,
+      "pattern": "^([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}|.*\\S.*)$"
+    },
+    "UUID": {
+      "type": "string",
+      "maxLength": 36,
+      "minLength": 36,
+      "pattern": "^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$"
+    },
+    "AccountId": {
+      "type": "string",
+      "description": "The identifier for the specified AWS account.",
+      "maxLength": 12,
+      "minLength": 12,
+      "pattern": "^[0-9]{12}$"
+    },
+    "EmailAddress": {
+      "type": "string",
+      "description": "The unique identifier for the email account.",
+      "maxLength": 320,
+      "minLength": 1,
+      "pattern": "^.*@.*$"
+    },
+    "AccountName": {
+      "type": "string",
+      "description": "The name of the specified AWS account.",
+      "maxLength": 50,
+      "minLength": 1,
+      "pattern": "^[\\u0020-\\u007E]+$"
+    },
+    "AWSAccount": {
+      "type": "object",
+      "description": "The AWS account associated with the assessment.",
+      "properties": [
+        {
+          "name": "Id",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "AccountId"
+          }
+        },
+        {
+          "name": "EmailAddress",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "EmailAddress"
+          }
+        },
+        {
+          "name": "Name",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "AccountName"
+          }
+        }
+      ]
+    },
+    "AssessmentArn": {
+      "type": "string",
+      "description": "The Amazon Resource Name (ARN) of the assessment.",
+      "maxLength": 2048,
+      "minLength": 20,
+      "pattern": "^arn:.*:auditmanager:.*"
+    },
+    "Timestamp": {
+      "type": "number",
+      "description": "The sequence of characters that identifies when the event occurred.",
+      "isInteger": false
+    },
+    "ControlSetId": {
+      "type": "string",
+      "description": "The identifier for the specified control set.",
+      "maxLength": 300,
+      "minLength": 1,
+      "pattern": "^[\\w\\W\\s\\S]*$"
+    },
+    "CreatedBy": {
+      "type": "string",
+      "description": "The IAM user or role that performed the action.",
+      "maxLength": 2048,
+      "minLength": 20,
+      "pattern": "^arn:.*:*:.*"
+    },
+    "IamArn": {
+      "type": "string",
+      "description": "The Amazon Resource Name (ARN) of the IAM user or role.",
+      "maxLength": 2048,
+      "minLength": 20,
+      "pattern": "^arn:.*:iam:.*"
+    },
+    "AssessmentName": {
+      "type": "string",
+      "description": "The name of the related assessment.",
+      "maxLength": 127,
+      "minLength": 1,
+      "pattern": "^[a-zA-Z0-9-_\\.]+$"
+    },
+    "DelegationComment": {
+      "type": "string",
+      "description": "The comment related to the delegation.",
+      "maxLength": 350,
+      "pattern": "^[\\w\\W\\s\\S]*$"
+    },
+    "RoleType": {
+      "type": "string",
+      "description": " The IAM role type.",
+      "allowedValues": ["PROCESS_OWNER", "RESOURCE_OWNER"]
+    },
+    "DelegationStatus": {
+      "type": "string",
+      "description": "The status of the delegation.",
+      "allowedValues": ["IN_PROGRESS", "UNDER_REVIEW", "COMPLETE"]
+    },
+    "Delegation": {
+      "type": "object",
+      "description": "The assignment of a control set to a delegate for review.",
+      "properties": [
+        {
+          "name": "LastUpdated",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Timestamp"
+          }
+        },
+        {
+          "name": "ControlSetId",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ControlSetId"
+          }
+        },
+        {
+          "name": "CreationTime",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Timestamp"
+          }
+        },
+        {
+          "name": "CreatedBy",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "CreatedBy"
+          }
+        },
+        {
+          "name": "RoleArn",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "IamArn"
+          }
+        },
+        {
+          "name": "AssessmentName",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "AssessmentName"
+          }
+        },
+        {
+          "name": "Comment",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DelegationComment"
+          }
+        },
+        {
+          "name": "Id",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "UUID"
+          }
+        },
+        {
+          "name": "RoleType",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "RoleType"
+          }
+        },
+        {
+          "name": "AssessmentId",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "UUID"
+          }
+        },
+        {
+          "name": "Status",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DelegationStatus"
+          }
+        }
+      ]
+    },
+    "Role": {
+      "type": "object",
+      "description": "The wrapper that contains AWS Audit Manager role information, such as the role type and IAM ARN.",
+      "properties": [
+        {
+          "name": "RoleArn",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "IamArn"
+          }
+        },
+        {
+          "name": "RoleType",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "RoleType"
+          }
+        }
+      ]
+    },
+    "AWSServiceName": {
+      "type": "string",
+      "description": "The name of the AWS service."
+    },
+    "AWSService": {
+      "type": "object",
+      "description": "An AWS service such as Amazon S3, AWS CloudTrail, and so on.",
+      "properties": [
+        {
+          "name": "ServiceName",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "AWSServiceName"
+          }
+        }
+      ]
+    },
+    "Scope": {
+      "type": "object",
+      "description": "The wrapper that contains the AWS accounts and AWS services in scope for the assessment.",
+      "properties": [
+        {
+          "name": "AwsAccounts",
+          "description": "The AWS accounts included in scope.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "The AWS accounts included in scope.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "AWSAccount"
+            }
+          }
+        },
+        {
+          "name": "AwsServices",
+          "description": "The AWS services included in scope.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "The AWS services included in scope.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "AWSService"
+            }
+          }
+        }
+      ]
+    },
+    "S3Url": {
+      "type": "string",
+      "description": "The URL of the specified Amazon S3 bucket."
+    },
+    "AssessmentReportDestinationType": {
+      "type": "string",
+      "description": "The destination type, such as Amazon S3.",
+      "allowedValues": ["S3"]
+    },
+    "AssessmentReportsDestination": {
+      "type": "object",
+      "description": "The destination in which evidence reports are stored for the specified assessment.",
+      "properties": [
+        {
+          "name": "Destination",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "S3Url"
+          }
+        },
+        {
+          "name": "DestinationType",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "AssessmentReportDestinationType"
+          }
+        }
+      ]
+    },
+    "AssessmentStatus": {
+      "type": "string",
+      "description": "The status of the specified assessment. ",
+      "allowedValues": ["ACTIVE", "INACTIVE"]
+    },
+    "AssessmentDescription": {
+      "type": "string",
+      "description": "The description of the specified assessment."
+    },
+    "Tag": {
+      "type": "object",
+      "description": "A key-value pair to associate with a resource.",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "The key name of the tag. You can specify a value that is 1 to 127 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The key name of the tag. You can specify a value that is 1 to 127 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "description": "The value for the tag. You can specify a value that is 1 to 255 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The value for the tag. You can specify a value that is 1 to 255 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
+            "maxLength": 256,
+            "minLength": 0
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "An entity that defines the scope of audit evidence collected by AWS Audit Manager.",
+    "properties": [
+      {
+        "name": "FrameworkId",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "FrameworkId"
+        }
+      },
+      {
+        "name": "AwsAccount",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "AWSAccount"
+        }
+      },
+      {
+        "name": "Tags",
+        "description": "The tags associated with the assessment.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "The tags associated with the assessment.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          }
+        }
+      },
+      {
+        "name": "Delegations",
+        "description": "The list of delegations.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "The list of delegations.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Delegation"
+          }
+        }
+      },
+      {
+        "name": "Roles",
+        "description": "The list of roles for the specified assessment.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "The list of roles for the specified assessment.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Role"
+          }
+        }
+      },
+      {
+        "name": "Scope",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "Scope"
+        }
+      },
+      {
+        "name": "AssessmentReportsDestination",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "AssessmentReportsDestination"
+        }
+      },
+      {
+        "name": "Status",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "AssessmentStatus"
+        }
+      },
+      {
+        "name": "Name",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "AssessmentName"
+        }
+      },
+      {
+        "name": "Description",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "AssessmentDescription"
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "An entity that defines the scope of audit evidence collected by AWS Audit Manager.",
+    "properties": [
+      {
+        "name": "AssessmentId",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "UUID"
+        }
+      },
+      {
+        "name": "Arn",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "AssessmentArn"
+        }
+      },
+      {
+        "name": "CreationTime",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "Timestamp"
+        }
+      }
+    ]
+  },
+  "$hash": "4845513cea46d3692fd178c3ff238a7fc7f0ed40"
+}

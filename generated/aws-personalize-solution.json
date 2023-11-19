@@ -1,0 +1,419 @@
+{
+  "definitions": {
+    "SolutionArn": {
+      "type": "string",
+      "description": "The ARN of the solution",
+      "maxLength": 256,
+      "pattern": "arn:([a-z\\d-]+):personalize:.*:.*:.+"
+    },
+    "CategoricalHyperParameterRange": {
+      "type": "object",
+      "description": "Provides the name and values of a Categorical hyperparameter.",
+      "properties": [
+        {
+          "name": "Name",
+          "description": "The name of the hyperparameter.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The name of the hyperparameter.",
+            "maxLength": 256
+          }
+        },
+        {
+          "name": "Values",
+          "description": "A list of the categories for the hyperparameter.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "A list of the categories for the hyperparameter.",
+            "itemType": {
+              "type": "string",
+              "maxLength": 1000
+            },
+            "maxLength": 100
+          }
+        }
+      ]
+    },
+    "ContinuousHyperParameterRange": {
+      "type": "object",
+      "description": "Provides the name and range of a continuous hyperparameter.",
+      "properties": [
+        {
+          "name": "Name",
+          "description": "The name of the hyperparameter.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The name of the hyperparameter.",
+            "maxLength": 256
+          }
+        },
+        {
+          "name": "MinValue",
+          "description": "The minimum allowable value for the hyperparameter.",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "The minimum allowable value for the hyperparameter.",
+            "isInteger": false,
+            "minimum": -1000000
+          }
+        },
+        {
+          "name": "MaxValue",
+          "description": "The maximum allowable value for the hyperparameter.",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "The maximum allowable value for the hyperparameter.",
+            "isInteger": false,
+            "minimum": -1000000
+          }
+        }
+      ]
+    },
+    "IntegerHyperParameterRange": {
+      "type": "object",
+      "description": "Provides the name and range of an integer-valued hyperparameter.",
+      "properties": [
+        {
+          "name": "Name",
+          "description": "The name of the hyperparameter.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The name of the hyperparameter.",
+            "maxLength": 256
+          }
+        },
+        {
+          "name": "MinValue",
+          "description": "The minimum allowable value for the hyperparameter.",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "The minimum allowable value for the hyperparameter.",
+            "isInteger": true,
+            "minimum": -1000000
+          }
+        },
+        {
+          "name": "MaxValue",
+          "description": "The maximum allowable value for the hyperparameter.",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "The maximum allowable value for the hyperparameter.",
+            "isInteger": true,
+            "maximum": 1000000
+          }
+        }
+      ]
+    },
+    "SolutionConfig": {
+      "type": "object",
+      "description": "The configuration to use with the solution. When performAutoML is set to true, Amazon Personalize only evaluates the autoMLConfig section of the solution configuration.",
+      "properties": [
+        {
+          "name": "AlgorithmHyperParameters",
+          "description": "Lists the hyperparameter names and ranges.",
+          "optional": true,
+          "type": {
+            "type": "record",
+            "description": "Lists the hyperparameter names and ranges.",
+            "valueType": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "name": "AutoMLConfig",
+          "description": "The AutoMLConfig object containing a list of recipes to search when AutoML is performed.",
+          "optional": true,
+          "type": {
+            "type": "object",
+            "description": "The AutoMLConfig object containing a list of recipes to search when AutoML is performed.",
+            "properties": [
+              {
+                "name": "MetricName",
+                "description": "The metric to optimize.",
+                "optional": true,
+                "type": {
+                  "type": "string",
+                  "description": "The metric to optimize.",
+                  "maxLength": 256
+                }
+              },
+              {
+                "name": "RecipeList",
+                "description": "The list of candidate recipes.",
+                "optional": true,
+                "type": {
+                  "type": "array",
+                  "description": "The list of candidate recipes.",
+                  "itemType": {
+                    "type": "string",
+                    "maxLength": 256,
+                    "pattern": "arn:([a-z\\d-]+):personalize:.*:.*:.+"
+                  },
+                  "maxLength": 100
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "EventValueThreshold",
+          "description": "Only events with a value greater than or equal to this threshold are used for training a model.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Only events with a value greater than or equal to this threshold are used for training a model.",
+            "maxLength": 256
+          }
+        },
+        {
+          "name": "FeatureTransformationParameters",
+          "description": "Lists the feature transformation parameters.",
+          "optional": true,
+          "type": {
+            "type": "record",
+            "description": "Lists the feature transformation parameters.",
+            "valueType": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "name": "HpoConfig",
+          "description": "Describes the properties for hyperparameter optimization (HPO)",
+          "optional": true,
+          "type": {
+            "type": "object",
+            "description": "Describes the properties for hyperparameter optimization (HPO)",
+            "properties": [
+              {
+                "name": "AlgorithmHyperParameterRanges",
+                "description": "The hyperparameters and their allowable ranges",
+                "optional": true,
+                "type": {
+                  "type": "object",
+                  "description": "The hyperparameters and their allowable ranges",
+                  "properties": [
+                    {
+                      "name": "CategoricalHyperParameterRanges",
+                      "description": "The categorical hyperparameters and their ranges.",
+                      "optional": true,
+                      "type": {
+                        "type": "array",
+                        "description": "The categorical hyperparameters and their ranges.",
+                        "itemType": {
+                          "type": "ref",
+                          "typeName": "CategoricalHyperParameterRange"
+                        },
+                        "maxLength": 100
+                      }
+                    },
+                    {
+                      "name": "ContinuousHyperParameterRanges",
+                      "description": "The continuous hyperparameters and their ranges.",
+                      "optional": true,
+                      "type": {
+                        "type": "array",
+                        "description": "The continuous hyperparameters and their ranges.",
+                        "itemType": {
+                          "type": "ref",
+                          "typeName": "ContinuousHyperParameterRange"
+                        },
+                        "maxLength": 100
+                      }
+                    },
+                    {
+                      "name": "IntegerHyperParameterRanges",
+                      "description": "The integer hyperparameters and their ranges.",
+                      "optional": true,
+                      "type": {
+                        "type": "array",
+                        "description": "The integer hyperparameters and their ranges.",
+                        "itemType": {
+                          "type": "ref",
+                          "typeName": "IntegerHyperParameterRange"
+                        },
+                        "maxLength": 100
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "HpoObjective",
+                "description": "The metric to optimize during HPO.",
+                "optional": true,
+                "type": {
+                  "type": "object",
+                  "description": "The metric to optimize during HPO.",
+                  "properties": [
+                    {
+                      "name": "MetricName",
+                      "description": "The name of the metric",
+                      "optional": true,
+                      "type": {
+                        "type": "string",
+                        "description": "The name of the metric",
+                        "maxLength": 256
+                      }
+                    },
+                    {
+                      "name": "Type",
+                      "description": "The type of the metric. Valid values are Maximize and Minimize.",
+                      "optional": true,
+                      "type": {
+                        "type": "string",
+                        "description": "The type of the metric. Valid values are Maximize and Minimize.",
+                        "allowedValues": ["Maximize", "Minimize"]
+                      }
+                    },
+                    {
+                      "name": "MetricRegex",
+                      "description": "A regular expression for finding the metric in the training job logs.",
+                      "optional": true,
+                      "type": {
+                        "type": "string",
+                        "description": "A regular expression for finding the metric in the training job logs.",
+                        "maxLength": 256
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "HpoResourceConfig",
+                "description": "Describes the resource configuration for hyperparameter optimization (HPO).",
+                "optional": true,
+                "type": {
+                  "type": "object",
+                  "description": "Describes the resource configuration for hyperparameter optimization (HPO).",
+                  "properties": [
+                    {
+                      "name": "MaxNumberOfTrainingJobs",
+                      "description": "The maximum number of training jobs when you create a solution version. The maximum value for maxNumberOfTrainingJobs is 40.",
+                      "optional": true,
+                      "type": {
+                        "type": "string",
+                        "description": "The maximum number of training jobs when you create a solution version. The maximum value for maxNumberOfTrainingJobs is 40.",
+                        "maxLength": 256
+                      }
+                    },
+                    {
+                      "name": "MaxParallelTrainingJobs",
+                      "description": "The maximum number of parallel training jobs when you create a solution version. The maximum value for maxParallelTrainingJobs is 10.",
+                      "optional": true,
+                      "type": {
+                        "type": "string",
+                        "description": "The maximum number of parallel training jobs when you create a solution version. The maximum value for maxParallelTrainingJobs is 10.",
+                        "maxLength": 256
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource schema for AWS::Personalize::Solution.",
+    "properties": [
+      {
+        "name": "Name",
+        "description": "The name for the solution",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The name for the solution",
+          "maxLength": 63,
+          "minLength": 1,
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\-_]*"
+        }
+      },
+      {
+        "name": "EventType",
+        "description": "When your have multiple event types (using an EVENT_TYPE schema field), this parameter specifies which event type (for example, 'click' or 'like') is used for training the model. If you do not provide an eventType, Amazon Personalize will use all interactions for training with equal weight regardless of type.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "When your have multiple event types (using an EVENT_TYPE schema field), this parameter specifies which event type (for example, 'click' or 'like') is used for training the model. If you do not provide an eventType, Amazon Personalize will use all interactions for training with equal weight regardless of type.",
+          "maxLength": 256
+        }
+      },
+      {
+        "name": "DatasetGroupArn",
+        "description": "The ARN of the dataset group that provides the training data.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The ARN of the dataset group that provides the training data.",
+          "maxLength": 256,
+          "pattern": "arn:([a-z\\d-]+):personalize:.*:.*:.+"
+        }
+      },
+      {
+        "name": "PerformAutoML",
+        "description": "Whether to perform automated machine learning (AutoML). The default is false. For this case, you must specify recipeArn.",
+        "optional": true,
+        "type": {
+          "type": "boolean",
+          "description": "Whether to perform automated machine learning (AutoML). The default is false. For this case, you must specify recipeArn."
+        }
+      },
+      {
+        "name": "PerformHPO",
+        "description": "Whether to perform hyperparameter optimization (HPO) on the specified or selected recipe. The default is false. When performing AutoML, this parameter is always true and you should not set it to false.",
+        "optional": true,
+        "type": {
+          "type": "boolean",
+          "description": "Whether to perform hyperparameter optimization (HPO) on the specified or selected recipe. The default is false. When performing AutoML, this parameter is always true and you should not set it to false."
+        }
+      },
+      {
+        "name": "RecipeArn",
+        "description": "The ARN of the recipe to use for model training. Only specified when performAutoML is false.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The ARN of the recipe to use for model training. Only specified when performAutoML is false.",
+          "maxLength": 256,
+          "pattern": "arn:([a-z\\d-]+):personalize:.*:.*:.+"
+        }
+      },
+      {
+        "name": "SolutionConfig",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "SolutionConfig"
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Resource schema for AWS::Personalize::Solution.",
+    "properties": [
+      {
+        "name": "SolutionArn",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "SolutionArn"
+        }
+      }
+    ]
+  },
+  "$hash": "3909e6ebc386599a1aa96a05800b031039e52401"
+}

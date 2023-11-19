@@ -1,0 +1,585 @@
+{
+  "definitions": {
+    "Tag": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^(?!aws:)[a-zA-Z+-=._:/]+$"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 0
+          }
+        }
+      ]
+    },
+    "DomainStats": {
+      "type": "object",
+      "description": "Usage-specific statistics about the domain.",
+      "properties": [
+        {
+          "name": "MeteringProfileCount",
+          "description": "The number of profiles that you are currently paying for in the domain. If you have more than 100 objects associated with a single profile, that profile counts as two profiles. If you have more than 200 objects, that profile counts as three, and so on.",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "The number of profiles that you are currently paying for in the domain. If you have more than 100 objects associated with a single profile, that profile counts as two profiles. If you have more than 200 objects, that profile counts as three, and so on.",
+            "isInteger": false
+          }
+        },
+        {
+          "name": "ObjectCount",
+          "description": "The total number of objects in domain.",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "The total number of objects in domain.",
+            "isInteger": false
+          }
+        },
+        {
+          "name": "ProfileCount",
+          "description": "The total number of profiles currently in the domain.",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "The total number of profiles currently in the domain.",
+            "isInteger": false
+          }
+        },
+        {
+          "name": "TotalSize",
+          "description": "The total size, in bytes, of all objects in the domain.",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "The total size, in bytes, of all objects in the domain.",
+            "isInteger": false
+          }
+        }
+      ]
+    },
+    "S3ExportingConfig": {
+      "type": "object",
+      "description": "The S3 location where Identity Resolution Jobs write result files.",
+      "properties": [
+        {
+          "name": "S3BucketName",
+          "description": "The name of the S3 bucket where Identity Resolution Jobs write result files.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The name of the S3 bucket where Identity Resolution Jobs write result files.",
+            "maxLength": 63,
+            "minLength": 3,
+            "pattern": "^[a-z0-9.-]+$"
+          }
+        },
+        {
+          "name": "S3KeyName",
+          "description": "The S3 key name of the location where Identity Resolution Jobs write result files.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The S3 key name of the location where Identity Resolution Jobs write result files.",
+            "maxLength": 800,
+            "minLength": 1,
+            "pattern": ".*"
+          }
+        }
+      ]
+    },
+    "ExportingConfig": {
+      "type": "object",
+      "description": "Configuration information for exporting Identity Resolution results, for example, to an S3 bucket.",
+      "properties": [
+        {
+          "name": "S3Exporting",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "S3ExportingConfig"
+          }
+        }
+      ]
+    },
+    "JobSchedule": {
+      "type": "object",
+      "description": "The day and time when do you want to start the Identity Resolution Job every week.",
+      "properties": [
+        {
+          "name": "DayOfTheWeek",
+          "description": "The day when the Identity Resolution Job should run every week.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The day when the Identity Resolution Job should run every week.",
+            "allowedValues": [
+              "SUNDAY",
+              "MONDAY",
+              "TUESDAY",
+              "WEDNESDAY",
+              "THURSDAY",
+              "FRIDAY",
+              "SATURDAY"
+            ]
+          }
+        },
+        {
+          "name": "Time",
+          "description": "The time when the Identity Resolution Job should run every week.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The time when the Identity Resolution Job should run every week.",
+            "maxLength": 5,
+            "minLength": 3,
+            "pattern": "^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$"
+          }
+        }
+      ]
+    },
+    "ConflictResolution": {
+      "type": "object",
+      "description": "How the auto-merging process should resolve conflicts between different profiles. For example, if Profile A and Profile B have the same FirstName and LastName (and that is the matching criteria), which EmailAddress should be used? ",
+      "properties": [
+        {
+          "name": "ConflictResolvingModel",
+          "description": "How the auto-merging process should resolve conflicts between different profiles.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "How the auto-merging process should resolve conflicts between different profiles.",
+            "allowedValues": ["RECENCY", "SOURCE"]
+          }
+        },
+        {
+          "name": "SourceName",
+          "description": "The ObjectType name that is used to resolve profile merging conflicts when choosing SOURCE as the ConflictResolvingModel.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The ObjectType name that is used to resolve profile merging conflicts when choosing SOURCE as the ConflictResolvingModel.",
+            "maxLength": 255,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "MatchingAttributes": {
+      "type": "array",
+      "itemType": {
+        "type": "string",
+        "maxLength": 255,
+        "minLength": 1
+      },
+      "maxLength": 20,
+      "minLength": 1
+    },
+    "Consolidation": {
+      "type": "object",
+      "description": "A list of matching attributes that represent matching criteria. If two profiles meet at least one of the requirements in the matching attributes list, they will be merged.",
+      "properties": [
+        {
+          "name": "MatchingAttributesList",
+          "description": "A list of matching criteria.",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "description": "A list of matching criteria.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "MatchingAttributes"
+            },
+            "maxLength": 10,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "AutoMerging": {
+      "type": "object",
+      "description": "Configuration information about the auto-merging process.",
+      "properties": [
+        {
+          "name": "Enabled",
+          "description": "The flag that enables the auto-merging of duplicate profiles.",
+          "optional": false,
+          "type": {
+            "type": "boolean",
+            "description": "The flag that enables the auto-merging of duplicate profiles."
+          }
+        },
+        {
+          "name": "ConflictResolution",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ConflictResolution"
+          }
+        },
+        {
+          "name": "Consolidation",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Consolidation"
+          }
+        },
+        {
+          "name": "MinAllowedConfidenceScoreForMerging",
+          "description": "A number between 0 and 1 that represents the minimum confidence score required for profiles within a matching group to be merged during the auto-merge process. A higher score means higher similarity required to merge profiles.",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "A number between 0 and 1 that represents the minimum confidence score required for profiles within a matching group to be merged during the auto-merge process. A higher score means higher similarity required to merge profiles.",
+            "isInteger": false,
+            "maximum": 1,
+            "minimum": 0
+          }
+        }
+      ]
+    },
+    "MatchingRuleAttributeList": {
+      "type": "array",
+      "description": "A single rule level of the MatchRules. Configures how the rule-based matching process should match profiles.",
+      "itemType": {
+        "type": "string",
+        "maxLength": 255,
+        "minLength": 1
+      },
+      "maxLength": 15,
+      "minLength": 1
+    },
+    "MatchingRule": {
+      "type": "object",
+      "description": "Specifies how does the rule-based matching process should match profiles.",
+      "properties": [
+        {
+          "name": "Rule",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "MatchingRuleAttributeList"
+          }
+        }
+      ]
+    },
+    "AttributeTypesSelector": {
+      "type": "object",
+      "description": "Configures information about the AttributeTypesSelector where the rule-based identity resolution uses to match profiles.",
+      "properties": [
+        {
+          "name": "AttributeMatchingModel",
+          "description": "Configures the AttributeMatchingModel, you can either choose ONE_TO_ONE or MANY_TO_MANY.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Configures the AttributeMatchingModel, you can either choose ONE_TO_ONE or MANY_TO_MANY.",
+            "allowedValues": ["ONE_TO_ONE", "MANY_TO_MANY"]
+          }
+        },
+        {
+          "name": "Address",
+          "description": "The Address type. You can choose from Address, BusinessAddress, MaillingAddress, and ShippingAddress. You only can use the Address type in the MatchingRule. For example, if you want to match profile based on BusinessAddress.City or MaillingAddress.City, you need to choose the BusinessAddress and the MaillingAddress to represent the Address type and specify the Address.City on the matching rule.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "The Address type. You can choose from Address, BusinessAddress, MaillingAddress, and ShippingAddress. You only can use the Address type in the MatchingRule. For example, if you want to match profile based on BusinessAddress.City or MaillingAddress.City, you need to choose the BusinessAddress and the MaillingAddress to represent the Address type and specify the Address.City on the matching rule.",
+            "itemType": {
+              "type": "string",
+              "maxLength": 255,
+              "minLength": 1
+            },
+            "maxLength": 4,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "EmailAddress",
+          "description": "The Email type. You can choose from EmailAddress, BusinessEmailAddress and PersonalEmailAddress. You only can use the EmailAddress type in the MatchingRule. For example, if you want to match profile based on PersonalEmailAddress or BusinessEmailAddress, you need to choose the PersonalEmailAddress and the BusinessEmailAddress to represent the EmailAddress type and only specify the EmailAddress on the matching rule.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "The Email type. You can choose from EmailAddress, BusinessEmailAddress and PersonalEmailAddress. You only can use the EmailAddress type in the MatchingRule. For example, if you want to match profile based on PersonalEmailAddress or BusinessEmailAddress, you need to choose the PersonalEmailAddress and the BusinessEmailAddress to represent the EmailAddress type and only specify the EmailAddress on the matching rule.",
+            "itemType": {
+              "type": "string",
+              "maxLength": 255,
+              "minLength": 1
+            },
+            "maxLength": 3,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "PhoneNumber",
+          "description": "The PhoneNumber type. You can choose from PhoneNumber, HomePhoneNumber, and MobilePhoneNumber. You only can use the PhoneNumber type in the MatchingRule. For example, if you want to match a profile based on Phone or HomePhone, you need to choose the Phone and the HomePhone to represent the PhoneNumber type and only specify the PhoneNumber on the matching rule.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "The PhoneNumber type. You can choose from PhoneNumber, HomePhoneNumber, and MobilePhoneNumber. You only can use the PhoneNumber type in the MatchingRule. For example, if you want to match a profile based on Phone or HomePhone, you need to choose the Phone and the HomePhone to represent the PhoneNumber type and only specify the PhoneNumber on the matching rule.",
+            "itemType": {
+              "type": "string",
+              "maxLength": 255,
+              "minLength": 1
+            },
+            "maxLength": 4,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "Matching": {
+      "type": "object",
+      "description": "The process of matching duplicate profiles. If Matching = true, Amazon Connect Customer Profiles starts a weekly batch process called Identity Resolution Job. If you do not specify a date and time for Identity Resolution Job to run, by default it runs every Saturday at 12AM UTC to detect duplicate profiles in your domains. After the Identity Resolution Job completes, use the GetMatches API to return and review the results. Or, if you have configured ExportingConfig in the MatchingRequest, you can download the results from S3.",
+      "properties": [
+        {
+          "name": "Enabled",
+          "description": "The flag that enables the matching process of duplicate profiles.",
+          "optional": false,
+          "type": {
+            "type": "boolean",
+            "description": "The flag that enables the matching process of duplicate profiles."
+          }
+        },
+        {
+          "name": "AutoMerging",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "AutoMerging"
+          }
+        },
+        {
+          "name": "ExportingConfig",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ExportingConfig"
+          }
+        },
+        {
+          "name": "JobSchedule",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "JobSchedule"
+          }
+        }
+      ]
+    },
+    "RuleBasedMatching": {
+      "type": "object",
+      "description": "The process of matching duplicate profiles using the Rule-Based matching. If RuleBasedMatching = true, Amazon Connect Customer Profiles will start to match and merge your profiles according to your configuration in the RuleBasedMatchingRequest. You can use the ListRuleBasedMatches and GetSimilarProfiles API to return and review the results. Also, if you have configured ExportingConfig in the RuleBasedMatchingRequest, you can download the results from S3.",
+      "properties": [
+        {
+          "name": "Enabled",
+          "description": "The flag that enables the rule-based matching process of duplicate profiles.",
+          "optional": false,
+          "type": {
+            "type": "boolean",
+            "description": "The flag that enables the rule-based matching process of duplicate profiles."
+          }
+        },
+        {
+          "name": "AttributeTypesSelector",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "AttributeTypesSelector"
+          }
+        },
+        {
+          "name": "ConflictResolution",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ConflictResolution"
+          }
+        },
+        {
+          "name": "ExportingConfig",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ExportingConfig"
+          }
+        },
+        {
+          "name": "MatchingRules",
+          "description": "Configures how the rule-based matching process should match profiles. You can have up to 15 MatchingRule in the MatchingRules.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "Configures how the rule-based matching process should match profiles. You can have up to 15 MatchingRule in the MatchingRules.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "MatchingRule"
+            },
+            "maxLength": 15,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "MaxAllowedRuleLevelForMatching",
+          "description": "Indicates the maximum allowed rule level for matching.",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "Indicates the maximum allowed rule level for matching.",
+            "isInteger": true,
+            "maximum": 15,
+            "minimum": 1
+          }
+        },
+        {
+          "name": "MaxAllowedRuleLevelForMerging",
+          "description": "Indicates the maximum allowed rule level for merging.",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "Indicates the maximum allowed rule level for merging.",
+            "isInteger": true,
+            "maximum": 15,
+            "minimum": 1
+          }
+        },
+        {
+          "name": "Status",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": ["PENDING", "IN_PROGRESS", "ACTIVE"]
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "A domain defined for 3rd party data source in Profile Service",
+    "properties": [
+      {
+        "name": "DomainName",
+        "description": "The unique name of the domain.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The unique name of the domain.",
+          "maxLength": 64,
+          "minLength": 1,
+          "pattern": "^[a-zA-Z0-9_-]+$"
+        }
+      },
+      {
+        "name": "DeadLetterQueueUrl",
+        "description": "The URL of the SQS dead letter queue",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The URL of the SQS dead letter queue",
+          "maxLength": 255,
+          "minLength": 0
+        }
+      },
+      {
+        "name": "DefaultEncryptionKey",
+        "description": "The default encryption key",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The default encryption key",
+          "maxLength": 255,
+          "minLength": 0
+        }
+      },
+      {
+        "name": "DefaultExpirationDays",
+        "description": "The default number of days until the data within the domain expires.",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "The default number of days until the data within the domain expires.",
+          "isInteger": true,
+          "maximum": 1098,
+          "minimum": 1
+        }
+      },
+      {
+        "name": "Matching",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "Matching"
+        }
+      },
+      {
+        "name": "RuleBasedMatching",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "RuleBasedMatching"
+        }
+      },
+      {
+        "name": "Tags",
+        "description": "The tags (keys and values) associated with the domain",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "The tags (keys and values) associated with the domain",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          },
+          "maxLength": 50,
+          "minLength": 0
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "A domain defined for 3rd party data source in Profile Service",
+    "properties": [
+      {
+        "name": "Stats",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "DomainStats"
+        }
+      },
+      {
+        "name": "CreatedAt",
+        "description": "The time of this integration got created",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The time of this integration got created"
+        }
+      },
+      {
+        "name": "LastUpdatedAt",
+        "description": "The time of this integration got last updated at",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The time of this integration got last updated at"
+        }
+      }
+    ]
+  },
+  "$hash": "9f9c5963aaec9382c1d4cba349f53e5c16df8ff9"
+}

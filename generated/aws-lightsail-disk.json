@@ -1,0 +1,275 @@
+{
+  "definitions": {
+    "Tag": {
+      "type": "object",
+      "description": "A key-value pair to associate with a resource.",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+            "maxLength": 256,
+            "minLength": 0
+          }
+        }
+      ]
+    },
+    "AutoSnapshotAddOn": {
+      "type": "object",
+      "description": "An object that represents additional parameters when enabling or modifying the automatic snapshot add-on",
+      "properties": [
+        {
+          "name": "SnapshotTimeOfDay",
+          "description": "The daily time when an automatic snapshot will be created.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The daily time when an automatic snapshot will be created.",
+            "pattern": "^[0-9]{2}:00$"
+          }
+        }
+      ]
+    },
+    "AddOn": {
+      "type": "object",
+      "description": "A addon associate with a resource.",
+      "properties": [
+        {
+          "name": "AddOnType",
+          "description": "The add-on type",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The add-on type",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Status",
+          "description": "Status of the Addon",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Status of the Addon",
+            "allowedValues": [
+              "Enabling",
+              "Disabling",
+              "Enabled",
+              "Terminating",
+              "Terminated",
+              "Disabled",
+              "Failed"
+            ]
+          }
+        },
+        {
+          "name": "AutoSnapshotAddOnRequest",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "AutoSnapshotAddOn"
+          }
+        }
+      ]
+    },
+    "Location": {
+      "type": "object",
+      "description": "Location of a resource.",
+      "properties": [
+        {
+          "name": "AvailabilityZone",
+          "description": "The Availability Zone in which to create your disk. Use the following format: us-east-2a (case sensitive). Be sure to add the include Availability Zones parameter to your request.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The Availability Zone in which to create your disk. Use the following format: us-east-2a (case sensitive). Be sure to add the include Availability Zones parameter to your request."
+          }
+        },
+        {
+          "name": "RegionName",
+          "description": "The Region Name in which to create your disk.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The Region Name in which to create your disk."
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource Type definition for AWS::Lightsail::Disk",
+    "properties": [
+      {
+        "name": "DiskName",
+        "description": "The names to use for your new Lightsail disk.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The names to use for your new Lightsail disk.",
+          "maxLength": 254,
+          "minLength": 1,
+          "pattern": "^[a-zA-Z0-9][\\w\\-.]*[a-zA-Z0-9]$"
+        }
+      },
+      {
+        "name": "AvailabilityZone",
+        "description": "The Availability Zone in which to create your instance. Use the following format: us-east-2a (case sensitive). Be sure to add the include Availability Zones parameter to your request.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Availability Zone in which to create your instance. Use the following format: us-east-2a (case sensitive). Be sure to add the include Availability Zones parameter to your request.",
+          "maxLength": 255,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "Location",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "Location"
+        }
+      },
+      {
+        "name": "Tags",
+        "description": "An array of key-value pairs to apply to this resource.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "An array of key-value pairs to apply to this resource.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          }
+        }
+      },
+      {
+        "name": "AddOns",
+        "description": "An array of objects representing the add-ons to enable for the new instance.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "An array of objects representing the add-ons to enable for the new instance.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "AddOn"
+          }
+        }
+      },
+      {
+        "name": "SizeInGb",
+        "description": "Size of the Lightsail disk",
+        "optional": false,
+        "type": {
+          "type": "number",
+          "description": "Size of the Lightsail disk",
+          "isInteger": true
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Resource Type definition for AWS::Lightsail::Disk",
+    "properties": [
+      {
+        "name": "DiskArn",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "SupportCode",
+        "description": "Support code to help identify any issues",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Support code to help identify any issues"
+        }
+      },
+      {
+        "name": "ResourceType",
+        "description": "Resource type of Lightsail instance.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Resource type of Lightsail instance."
+        }
+      },
+      {
+        "name": "State",
+        "description": "State of the Lightsail disk",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "State of the Lightsail disk"
+        }
+      },
+      {
+        "name": "AttachmentState",
+        "description": "Attachment State of the Lightsail disk",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Attachment State of the Lightsail disk"
+        }
+      },
+      {
+        "name": "Iops",
+        "description": "Iops of the Lightsail disk",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "Iops of the Lightsail disk",
+          "isInteger": true
+        }
+      },
+      {
+        "name": "IsAttached",
+        "description": "Check is Disk is attached state",
+        "optional": true,
+        "type": {
+          "type": "boolean",
+          "description": "Check is Disk is attached state"
+        }
+      },
+      {
+        "name": "Path",
+        "description": "Path of the  attached Disk",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Path of the  attached Disk"
+        }
+      },
+      {
+        "name": "AttachedTo",
+        "description": "Name of the attached Lightsail Instance",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Name of the attached Lightsail Instance"
+        }
+      }
+    ]
+  },
+  "$hash": "f53a6c1baa2a0d07bdb81eea7b58caefcc677665"
+}

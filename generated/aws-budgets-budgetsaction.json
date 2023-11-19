@@ -1,0 +1,269 @@
+{
+  "definitions": {
+    "Subscriber": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Type",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "allowedValues": ["SNS", "EMAIL"]
+          }
+        },
+        {
+          "name": "Address",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "ActionThreshold": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": false
+          }
+        },
+        {
+          "name": "Type",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "allowedValues": ["PERCENTAGE", "ABSOLUTE_VALUE"]
+          }
+        }
+      ]
+    },
+    "IamActionDefinition": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "PolicyArn",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Roles",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            },
+            "maxLength": 100,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Groups",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            },
+            "maxLength": 100,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Users",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            },
+            "maxLength": 100,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "ScpActionDefinition": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "PolicyId",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "TargetIds",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            },
+            "maxLength": 100,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "SsmActionDefinition": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Subtype",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "allowedValues": ["STOP_EC2_INSTANCES", "STOP_RDS_INSTANCES"]
+          }
+        },
+        {
+          "name": "Region",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "InstanceIds",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            },
+            "maxLength": 100,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "Definition": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "IamActionDefinition",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "IamActionDefinition"
+          }
+        },
+        {
+          "name": "ScpActionDefinition",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ScpActionDefinition"
+          }
+        },
+        {
+          "name": "SsmActionDefinition",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "SsmActionDefinition"
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "An example resource schema demonstrating some basic constructs and validation rules.",
+    "properties": [
+      {
+        "name": "BudgetName",
+        "optional": false,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "NotificationType",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "allowedValues": ["ACTUAL", "FORECASTED"]
+        }
+      },
+      {
+        "name": "ActionType",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "allowedValues": [
+            "APPLY_IAM_POLICY",
+            "APPLY_SCP_POLICY",
+            "RUN_SSM_DOCUMENTS"
+          ]
+        }
+      },
+      {
+        "name": "ActionThreshold",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "ActionThreshold"
+        }
+      },
+      {
+        "name": "ExecutionRoleArn",
+        "optional": false,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "ApprovalModel",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "allowedValues": ["AUTOMATIC", "MANUAL"]
+        }
+      },
+      {
+        "name": "Subscribers",
+        "optional": false,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Subscriber"
+          },
+          "maxLength": 11,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "Definition",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "Definition"
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "An example resource schema demonstrating some basic constructs and validation rules.",
+    "properties": [
+      {
+        "name": "ActionId",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      }
+    ]
+  },
+  "$hash": "906317b93dfbf164aeb8f0598becf16ed64f779a"
+}

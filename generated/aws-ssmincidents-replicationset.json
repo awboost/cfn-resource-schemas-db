@@ -1,0 +1,144 @@
+{
+  "definitions": {
+    "Arn": {
+      "type": "string",
+      "description": "The ARN of the ReplicationSet.",
+      "maxLength": 1000,
+      "pattern": "^arn:aws(-(cn|us-gov|iso(-b)?))?:[a-z-]+:(([a-z]+-)+[0-9])?:([0-9]{12})?:[^.]+$"
+    },
+    "RegionName": {
+      "type": "string",
+      "description": "The AWS region name.",
+      "maxLength": 20
+    },
+    "ReplicationRegion": {
+      "type": "object",
+      "description": "The ReplicationSet regional configuration.",
+      "properties": [
+        {
+          "name": "RegionName",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "RegionName"
+          }
+        },
+        {
+          "name": "RegionConfiguration",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "RegionConfiguration"
+          }
+        }
+      ]
+    },
+    "RegionConfiguration": {
+      "type": "object",
+      "description": "The ReplicationSet regional configuration.",
+      "properties": [
+        {
+          "name": "SseKmsKeyId",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "Arn"
+          }
+        }
+      ]
+    },
+    "DeletionProtected": {
+      "type": "boolean",
+      "description": "Configures the ReplicationSet deletion protection."
+    },
+    "RegionList": {
+      "type": "array",
+      "itemType": {
+        "type": "ref",
+        "typeName": "ReplicationRegion"
+      },
+      "maxLength": 3,
+      "minLength": 1
+    },
+    "Tag": {
+      "type": "object",
+      "description": "A key-value pair to tag a resource.",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^(?!aws:)[a-zA-Z+-=._:/]+$"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource type definition for AWS::SSMIncidents::ReplicationSet",
+    "properties": [
+      {
+        "name": "Regions",
+        "description": "The ReplicationSet configuration.",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "description": "The ReplicationSet configuration.",
+          "typeName": "RegionList"
+        }
+      },
+      {
+        "name": "DeletionProtected",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "DeletionProtected"
+        }
+      },
+      {
+        "name": "Tags",
+        "description": "The tags to apply to the replication set.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "The tags to apply to the replication set.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          },
+          "maxLength": 50
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Resource type definition for AWS::SSMIncidents::ReplicationSet",
+    "properties": [
+      {
+        "name": "Arn",
+        "description": "The ARN of the ReplicationSet.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "The ARN of the ReplicationSet.",
+          "typeName": "Arn"
+        }
+      }
+    ]
+  },
+  "$hash": "a3ee028c260d4317fa4649c9ef11013d9c980f9c"
+}

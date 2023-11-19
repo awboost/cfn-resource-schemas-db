@@ -1,0 +1,311 @@
+{
+  "definitions": {
+    "TagValue": {
+      "type": "string",
+      "maxLength": 256
+    },
+    "TagMap": {
+      "type": "record",
+      "valueType": {
+        "type": "ref",
+        "typeName": "TagValue"
+      }
+    },
+    "PhysicalResourceId": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "AwsAccountId",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "pattern": "^[0-9]{12}$"
+          }
+        },
+        {
+          "name": "AwsRegion",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "pattern": "^[a-z]{2}-((iso[a-z]{0,1}-)|(gov-)){0,1}[a-z]+-[0-9]$"
+          }
+        },
+        {
+          "name": "Identifier",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Type",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "pattern": "Arn|Native"
+          }
+        }
+      ]
+    },
+    "ResourceMapping": {
+      "type": "object",
+      "description": "Resource mapping is used to map logical resources from template to physical resource",
+      "properties": [
+        {
+          "name": "LogicalStackName",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "MappingType",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "pattern": "CfnStack|Resource|Terraform|EKS"
+          }
+        },
+        {
+          "name": "ResourceName",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_\\-]{1,59}$"
+          }
+        },
+        {
+          "name": "TerraformSourceName",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "EksSourceName",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "PhysicalResourceId",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "PhysicalResourceId"
+          }
+        }
+      ]
+    },
+    "IamRoleArn": {
+      "type": "string",
+      "pattern": "arn:(aws|aws-cn|aws-iso|aws-iso-[a-z]{1}|aws-us-gov):iam::[0-9]{12}:role\\/(([\\u0021-\\u007E]+\\u002F){1,511})?[A-Za-z0-9+=,.@_/-]{1,64}$"
+    },
+    "PermissionModel": {
+      "type": "object",
+      "description": "Defines the roles and credentials that AWS Resilience Hub would use while creating the application, importing its resources, and running an assessment.",
+      "properties": [
+        {
+          "name": "Type",
+          "description": "Defines how AWS Resilience Hub scans your resources. It can scan for the resources by using a pre-existing role in your AWS account, or by using the credentials of the current IAM user.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Defines how AWS Resilience Hub scans your resources. It can scan for the resources by using a pre-existing role in your AWS account, or by using the credentials of the current IAM user.",
+            "allowedValues": ["LegacyIAMUser", "RoleBased"]
+          }
+        },
+        {
+          "name": "InvokerRoleName",
+          "description": "Existing AWS IAM role name in the primary AWS account that will be assumed by AWS Resilience Hub Service Principle to obtain a read-only access to your application resources while running an assessment.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Existing AWS IAM role name in the primary AWS account that will be assumed by AWS Resilience Hub Service Principle to obtain a read-only access to your application resources while running an assessment.",
+            "pattern": "((\\u002F[\\u0021-\\u007E]+\\u002F){1,511})?[A-Za-z0-9+=,.@_/-]{1,64}"
+          }
+        },
+        {
+          "name": "CrossAccountRoleArns",
+          "description": "Defines a list of role Amazon Resource Names (ARNs) to be used in other accounts. These ARNs are used for querying purposes while importing resources and assessing your application.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "Defines a list of role Amazon Resource Names (ARNs) to be used in other accounts. These ARNs are used for querying purposes while importing resources and assessing your application.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "IamRoleArn"
+            }
+          }
+        }
+      ]
+    },
+    "EventSubscription": {
+      "type": "object",
+      "description": "Indicates an event you would like to subscribe and get notification for.",
+      "properties": [
+        {
+          "name": "Name",
+          "description": "Unique name to identify an event subscription.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Unique name to identify an event subscription.",
+            "maxLength": 256
+          }
+        },
+        {
+          "name": "EventType",
+          "description": "The type of event you would like to subscribe and get notification for.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The type of event you would like to subscribe and get notification for.",
+            "allowedValues": ["ScheduledAssessmentFailure", "DriftDetected"]
+          }
+        },
+        {
+          "name": "SnsTopicArn",
+          "description": "Amazon Resource Name (ARN) of the Amazon Simple Notification Service topic.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Amazon Resource Name (ARN) of the Amazon Simple Notification Service topic.",
+            "pattern": "^arn:(aws|aws-cn|aws-iso|aws-iso-[a-z]{1}|aws-us-gov):[A-Za-z0-9][A-Za-z0-9_/.-]{0,62}:([a-z]{2}-((iso[a-z]{0,1}-)|(gov-)){0,1}[a-z]+-[0-9]):[0-9]{12}:[A-Za-z0-9/][A-Za-z0-9:_/+.-]{0,1023}$"
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource Type Definition for AWS::ResilienceHub::App.",
+    "properties": [
+      {
+        "name": "Name",
+        "description": "Name of the app.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "Name of the app.",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_\\-]{1,59}$"
+        }
+      },
+      {
+        "name": "Description",
+        "description": "App description.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "App description.",
+          "maxLength": 500,
+          "minLength": 0
+        }
+      },
+      {
+        "name": "ResiliencyPolicyArn",
+        "description": "Amazon Resource Name (ARN) of the Resiliency Policy.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Amazon Resource Name (ARN) of the Resiliency Policy.",
+          "pattern": "^arn:(aws|aws-cn|aws-iso|aws-iso-[a-z]{1}|aws-us-gov):[A-Za-z0-9][A-Za-z0-9_/.-]{0,62}:([a-z]{2}-((iso[a-z]{0,1}-)|(gov-)){0,1}[a-z]+-[0-9]):[0-9]{12}:[A-Za-z0-9][A-Za-z0-9:_/+=,@.-]{0,1023}$"
+        }
+      },
+      {
+        "name": "Tags",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "TagMap"
+        }
+      },
+      {
+        "name": "AppTemplateBody",
+        "description": "A string containing full ResilienceHub app template body.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "A string containing full ResilienceHub app template body.",
+          "maxLength": 409600,
+          "minLength": 0,
+          "pattern": "^[\\w\\s:,-\\.'\\/{}\\[\\]:\"]+$"
+        }
+      },
+      {
+        "name": "ResourceMappings",
+        "description": "An array of ResourceMapping objects.",
+        "optional": false,
+        "type": {
+          "type": "array",
+          "description": "An array of ResourceMapping objects.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "ResourceMapping"
+          }
+        }
+      },
+      {
+        "name": "AppAssessmentSchedule",
+        "description": "Assessment execution schedule.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Assessment execution schedule.",
+          "allowedValues": ["Disabled", "Daily"]
+        }
+      },
+      {
+        "name": "PermissionModel",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "PermissionModel"
+        }
+      },
+      {
+        "name": "EventSubscriptions",
+        "description": "The list of events you would like to subscribe and get notification for.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "The list of events you would like to subscribe and get notification for.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "EventSubscription"
+          }
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Resource Type Definition for AWS::ResilienceHub::App.",
+    "properties": [
+      {
+        "name": "AppArn",
+        "description": "Amazon Resource Name (ARN) of the App.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Amazon Resource Name (ARN) of the App.",
+          "pattern": "^arn:(aws|aws-cn|aws-iso|aws-iso-[a-z]{1}|aws-us-gov):[A-Za-z0-9][A-Za-z0-9_/.-]{0,62}:([a-z]{2}-((iso[a-z]{0,1}-)|(gov-)){0,1}[a-z]+-[0-9]):[0-9]{12}:[A-Za-z0-9][A-Za-z0-9:_/+=,@.-]{0,1023}$"
+        }
+      },
+      {
+        "name": "DriftStatus",
+        "description": "Indicates if compliance drifts (deviations) were detected while running an assessment for your application.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Indicates if compliance drifts (deviations) were detected while running an assessment for your application.",
+          "allowedValues": ["NotChecked", "NotDetected", "Detected"]
+        }
+      }
+    ]
+  },
+  "$hash": "c95dba9c99b3ce3d694619ed89c18101512b053d"
+}

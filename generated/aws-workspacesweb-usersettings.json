@@ -1,0 +1,242 @@
+{
+  "definitions": {
+    "CookieSpecification": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Domain",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 253,
+            "minLength": 0,
+            "pattern": "^(\\.?)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\\.)*[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$"
+          }
+        },
+        {
+          "name": "Name",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 4096,
+            "minLength": 0
+          }
+        },
+        {
+          "name": "Path",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 0,
+            "pattern": "^/(\\S)*$"
+          }
+        }
+      ]
+    },
+    "CookieSynchronizationConfiguration": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Allowlist",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "CookieSpecification"
+            },
+            "maxLength": 10,
+            "minLength": 0
+          }
+        },
+        {
+          "name": "Blocklist",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "CookieSpecification"
+            },
+            "maxLength": 10,
+            "minLength": 0
+          }
+        }
+      ]
+    },
+    "EnabledType": {
+      "type": "string",
+      "allowedValues": ["Disabled", "Enabled"]
+    },
+    "EncryptionContextMap": {
+      "type": "record",
+      "valueType": {
+        "type": "string",
+        "maxLength": 131072,
+        "minLength": 0,
+        "pattern": "^[\\s\\S]*$"
+      }
+    },
+    "Tag": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 0,
+            "pattern": "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$"
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Definition of AWS::WorkSpacesWeb::UserSettings Resource Type",
+    "properties": [
+      {
+        "name": "AdditionalEncryptionContext",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "EncryptionContextMap"
+        }
+      },
+      {
+        "name": "CookieSynchronizationConfiguration",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "CookieSynchronizationConfiguration"
+        }
+      },
+      {
+        "name": "CopyAllowed",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "EnabledType"
+        }
+      },
+      {
+        "name": "CustomerManagedKey",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 2048,
+          "minLength": 20,
+          "pattern": "^arn:[\\w+=\\/,.@-]+:kms:[a-zA-Z0-9\\-]*:[a-zA-Z0-9]{1,12}:key\\/[a-zA-Z0-9-]+$"
+        }
+      },
+      {
+        "name": "DisconnectTimeoutInMinutes",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "isInteger": false,
+          "maximum": 600,
+          "minimum": 1
+        }
+      },
+      {
+        "name": "DownloadAllowed",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "EnabledType"
+        }
+      },
+      {
+        "name": "IdleDisconnectTimeoutInMinutes",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "isInteger": false,
+          "maximum": 60,
+          "minimum": 0
+        }
+      },
+      {
+        "name": "PasteAllowed",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "EnabledType"
+        }
+      },
+      {
+        "name": "PrintAllowed",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "EnabledType"
+        }
+      },
+      {
+        "name": "Tags",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          },
+          "maxLength": 200,
+          "minLength": 0
+        }
+      },
+      {
+        "name": "UploadAllowed",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "EnabledType"
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Definition of AWS::WorkSpacesWeb::UserSettings Resource Type",
+    "properties": [
+      {
+        "name": "AssociatedPortalArns",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "string",
+            "maxLength": 2048,
+            "minLength": 20,
+            "pattern": "^arn:[\\w+=\\/,.@-]+:[a-zA-Z0-9\\-]+:[a-zA-Z0-9\\-]*:[a-zA-Z0-9]{1,12}:[a-zA-Z]+(\\/[a-fA-F0-9\\-]{36})+$"
+          }
+        }
+      },
+      {
+        "name": "UserSettingsArn",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 2048,
+          "minLength": 20,
+          "pattern": "^arn:[\\w+=\\/,.@-]+:[a-zA-Z0-9\\-]+:[a-zA-Z0-9\\-]*:[a-zA-Z0-9]{1,12}:[a-zA-Z]+(\\/[a-fA-F0-9\\-]{36})+$"
+        }
+      }
+    ]
+  },
+  "$hash": "a968be3e8a92083a0dbebf5312900230be8d352e"
+}

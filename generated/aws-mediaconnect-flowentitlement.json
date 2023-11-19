@@ -1,0 +1,184 @@
+{
+  "definitions": {
+    "Encryption": {
+      "type": "object",
+      "description": "Information about the encryption of the flow.",
+      "properties": [
+        {
+          "name": "Algorithm",
+          "description": "The type of algorithm that is used for the encryption (such as aes128, aes192, or aes256).",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The type of algorithm that is used for the encryption (such as aes128, aes192, or aes256).",
+            "allowedValues": ["aes128", "aes192", "aes256"]
+          }
+        },
+        {
+          "name": "ConstantInitializationVector",
+          "description": "A 128-bit, 16-byte hex value represented by a 32-character string, to be used with the key for encrypting content. This parameter is not valid for static key encryption.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "A 128-bit, 16-byte hex value represented by a 32-character string, to be used with the key for encrypting content. This parameter is not valid for static key encryption."
+          }
+        },
+        {
+          "name": "DeviceId",
+          "description": "The value of one of the devices that you configured with your digital rights management (DRM) platform key provider. This parameter is required for SPEKE encryption and is not valid for static key encryption.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The value of one of the devices that you configured with your digital rights management (DRM) platform key provider. This parameter is required for SPEKE encryption and is not valid for static key encryption."
+          }
+        },
+        {
+          "name": "KeyType",
+          "description": "The type of key that is used for the encryption. If no keyType is provided, the service will use the default setting (static-key).",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The type of key that is used for the encryption. If no keyType is provided, the service will use the default setting (static-key).",
+            "allowedValues": ["speke", "static-key"]
+          }
+        },
+        {
+          "name": "Region",
+          "description": "The AWS Region that the API Gateway proxy endpoint was created in. This parameter is required for SPEKE encryption and is not valid for static key encryption.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The AWS Region that the API Gateway proxy endpoint was created in. This parameter is required for SPEKE encryption and is not valid for static key encryption."
+          }
+        },
+        {
+          "name": "ResourceId",
+          "description": "An identifier for the content. The service sends this value to the key server to identify the current endpoint. The resource ID is also known as the content ID. This parameter is required for SPEKE encryption and is not valid for static key encryption.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "An identifier for the content. The service sends this value to the key server to identify the current endpoint. The resource ID is also known as the content ID. This parameter is required for SPEKE encryption and is not valid for static key encryption."
+          }
+        },
+        {
+          "name": "RoleArn",
+          "description": "The ARN of the role that you created during setup (when you set up AWS Elemental MediaConnect as a trusted entity).",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The ARN of the role that you created during setup (when you set up AWS Elemental MediaConnect as a trusted entity)."
+          }
+        },
+        {
+          "name": "SecretArn",
+          "description": " The ARN of the secret that you created in AWS Secrets Manager to store the encryption key. This parameter is required for static key encryption and is not valid for SPEKE encryption.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": " The ARN of the secret that you created in AWS Secrets Manager to store the encryption key. This parameter is required for static key encryption and is not valid for SPEKE encryption."
+          }
+        },
+        {
+          "name": "Url",
+          "description": "The URL from the API Gateway proxy that you set up to talk to your key server. This parameter is required for SPEKE encryption and is not valid for static key encryption.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The URL from the API Gateway proxy that you set up to talk to your key server. This parameter is required for SPEKE encryption and is not valid for static key encryption."
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource schema for AWS::MediaConnect::FlowEntitlement",
+    "properties": [
+      {
+        "name": "FlowArn",
+        "description": "The ARN of the flow.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The ARN of the flow."
+        }
+      },
+      {
+        "name": "DataTransferSubscriberFeePercent",
+        "description": "Percentage from 0-100 of the data transfer cost to be billed to the subscriber.",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "Percentage from 0-100 of the data transfer cost to be billed to the subscriber.",
+          "isInteger": true
+        }
+      },
+      {
+        "name": "Description",
+        "description": "A description of the entitlement.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "A description of the entitlement."
+        }
+      },
+      {
+        "name": "Encryption",
+        "description": "The type of encryption that will be used on the output that is associated with this entitlement.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "The type of encryption that will be used on the output that is associated with this entitlement.",
+          "typeName": "Encryption"
+        }
+      },
+      {
+        "name": "EntitlementStatus",
+        "description": " An indication of whether the entitlement is enabled.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": " An indication of whether the entitlement is enabled.",
+          "allowedValues": ["ENABLED", "DISABLED"]
+        }
+      },
+      {
+        "name": "Name",
+        "description": "The name of the entitlement.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The name of the entitlement."
+        }
+      },
+      {
+        "name": "Subscribers",
+        "description": "The AWS account IDs that you want to share your content with. The receiving accounts (subscribers) will be allowed to create their own flow using your content as the source.",
+        "optional": false,
+        "type": {
+          "type": "array",
+          "description": "The AWS account IDs that you want to share your content with. The receiving accounts (subscribers) will be allowed to create their own flow using your content as the source.",
+          "itemType": {
+            "type": "string"
+          }
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Resource schema for AWS::MediaConnect::FlowEntitlement",
+    "properties": [
+      {
+        "name": "EntitlementArn",
+        "description": "The ARN of the entitlement.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The ARN of the entitlement."
+        }
+      }
+    ]
+  },
+  "$hash": "e3f1398b49f31c79ed3f049e72e32e7e6687d8a0"
+}

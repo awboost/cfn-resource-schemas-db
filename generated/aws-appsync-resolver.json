@@ -1,0 +1,288 @@
+{
+  "definitions": {
+    "AppSyncRuntime": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "RuntimeVersion",
+          "description": "The version of the runtime to use.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The version of the runtime to use."
+          }
+        },
+        {
+          "name": "Name",
+          "description": "The name of the runtime to use.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The name of the runtime to use."
+          }
+        }
+      ]
+    },
+    "PipelineConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Functions",
+          "description": "A list of Function objects.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "A list of Function objects.",
+            "itemType": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "CachingConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "CachingKeys",
+          "description": "The caching keys for a resolver that has caching activated. Valid values are entries from the $context.arguments, $context.source, and $context.identity maps.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "The caching keys for a resolver that has caching activated. Valid values are entries from the $context.arguments, $context.source, and $context.identity maps.",
+            "itemType": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "name": "Ttl",
+          "description": "The TTL in seconds for a resolver that has caching activated. Valid values are 1-36.00 seconds.",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "description": "The TTL in seconds for a resolver that has caching activated. Valid values are 1-36.00 seconds.",
+            "isInteger": false
+          }
+        }
+      ]
+    },
+    "SyncConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ConflictHandler",
+          "description": "The Conflict Resolution strategy to perform in the event of a conflict.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The Conflict Resolution strategy to perform in the event of a conflict."
+          }
+        },
+        {
+          "name": "ConflictDetection",
+          "description": "The Conflict Detection strategy to use.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The Conflict Detection strategy to use."
+          }
+        },
+        {
+          "name": "LambdaConflictHandlerConfig",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "LambdaConflictHandlerConfig"
+          }
+        }
+      ]
+    },
+    "LambdaConflictHandlerConfig": {
+      "type": "object",
+      "description": "The LambdaConflictHandlerConfig when configuring LAMBDA as the Conflict Handler.",
+      "properties": [
+        {
+          "name": "LambdaConflictHandlerArn",
+          "description": "The Amazon Resource Name (ARN) for the Lambda function to use as the Conflict Handler.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) for the Lambda function to use as the Conflict Handler."
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource Type definition for AWS::AppSync::Resolver",
+    "properties": [
+      {
+        "name": "ApiId",
+        "description": "The AWS AppSync GraphQL API to which you want to attach this resolver.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The AWS AppSync GraphQL API to which you want to attach this resolver."
+        }
+      },
+      {
+        "name": "CachingConfig",
+        "description": "The caching configuration for the resolver.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "The caching configuration for the resolver.",
+          "typeName": "CachingConfig"
+        }
+      },
+      {
+        "name": "Code",
+        "description": "The resolver code that contains the request and response functions. When code is used, the runtime is required.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The resolver code that contains the request and response functions. When code is used, the runtime is required."
+        }
+      },
+      {
+        "name": "CodeS3Location",
+        "description": "The Amazon S3 endpoint.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Amazon S3 endpoint."
+        }
+      },
+      {
+        "name": "DataSourceName",
+        "description": "The resolver data source name.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The resolver data source name."
+        }
+      },
+      {
+        "name": "FieldName",
+        "description": "The GraphQL field on a type that invokes the resolver.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The GraphQL field on a type that invokes the resolver."
+        }
+      },
+      {
+        "name": "Kind",
+        "description": "The resolver type.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The resolver type."
+        }
+      },
+      {
+        "name": "MaxBatchSize",
+        "description": "The maximum number of resolver request inputs that will be sent to a single AWS Lambda function in a BatchInvoke operation.",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "The maximum number of resolver request inputs that will be sent to a single AWS Lambda function in a BatchInvoke operation.",
+          "isInteger": true
+        }
+      },
+      {
+        "name": "PipelineConfig",
+        "description": "Functions linked with the pipeline resolver.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "Functions linked with the pipeline resolver.",
+          "typeName": "PipelineConfig"
+        }
+      },
+      {
+        "name": "RequestMappingTemplate",
+        "description": "Request mapping templates are optional when using a Lambda data source. For all other data sources, a request mapping template is required.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Request mapping templates are optional when using a Lambda data source. For all other data sources, a request mapping template is required."
+        }
+      },
+      {
+        "name": "RequestMappingTemplateS3Location",
+        "description": "The location of a request mapping template in an Amazon S3 bucket. Use this if you want to provision with a template file in Amazon S3 rather than embedding it in your CloudFormation template.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The location of a request mapping template in an Amazon S3 bucket. Use this if you want to provision with a template file in Amazon S3 rather than embedding it in your CloudFormation template."
+        }
+      },
+      {
+        "name": "ResponseMappingTemplate",
+        "description": "The response mapping template.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The response mapping template."
+        }
+      },
+      {
+        "name": "ResponseMappingTemplateS3Location",
+        "description": "The location of a response mapping template in an Amazon S3 bucket. Use this if you want to provision with a template file in Amazon S3 rather than embedding it in your CloudFormation template.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The location of a response mapping template in an Amazon S3 bucket. Use this if you want to provision with a template file in Amazon S3 rather than embedding it in your CloudFormation template."
+        }
+      },
+      {
+        "name": "Runtime",
+        "description": "Describes a runtime used by an AWS AppSync pipeline resolver or AWS AppSync function. Specifies the name and version of the runtime to use. Note that if a runtime is specified, code must also be specified.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "Describes a runtime used by an AWS AppSync pipeline resolver or AWS AppSync function. Specifies the name and version of the runtime to use. Note that if a runtime is specified, code must also be specified.",
+          "typeName": "AppSyncRuntime"
+        }
+      },
+      {
+        "name": "SyncConfig",
+        "description": "The SyncConfig for a resolver attached to a versioned data source.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "The SyncConfig for a resolver attached to a versioned data source.",
+          "typeName": "SyncConfig"
+        }
+      },
+      {
+        "name": "TypeName",
+        "description": "The GraphQL type that invokes this resolver.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The GraphQL type that invokes this resolver."
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Resource Type definition for AWS::AppSync::Resolver",
+    "properties": [
+      {
+        "name": "ResolverArn",
+        "description": "The Amazon Resource Name (ARN) for the resolver.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) for the resolver."
+        }
+      }
+    ]
+  },
+  "$hash": "9b5024c01ba1d9d033d6033e2648cce242465c5a"
+}

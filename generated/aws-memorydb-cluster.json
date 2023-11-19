@@ -1,0 +1,346 @@
+{
+  "definitions": {
+    "Endpoint": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Address",
+          "description": "The DNS address of the primary read-write node.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The DNS address of the primary read-write node."
+          }
+        },
+        {
+          "name": "Port",
+          "description": "The port number that the engine is listening on. ",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "The port number that the engine is listening on. ",
+            "isInteger": true
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "description": "A key-value pair to associate with a resource.",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "The key for the tag. May not be null.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The key for the tag. May not be null.",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^(?!aws:)(?!memorydb:)[a-zA-Z0-9 _\\.\\/=+:\\-@]{1,128}$"
+          }
+        },
+        {
+          "name": "Value",
+          "description": "The tag's value. May be null.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The tag's value. May be null.",
+            "maxLength": 256,
+            "minLength": 1,
+            "pattern": "^(?!aws:)(?!memorydb:)[a-zA-Z0-9 _\\.\\/=+:\\-@]{1,256}$"
+          }
+        }
+      ]
+    },
+    "DataTieringStatus": {
+      "type": "string",
+      "allowedValues": ["true", "false"]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "The AWS::MemoryDB::Cluster resource creates an Amazon MemoryDB Cluster.",
+    "properties": [
+      {
+        "name": "ClusterName",
+        "description": "The name of the cluster. This value must be unique as it also serves as the cluster identifier.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The name of the cluster. This value must be unique as it also serves as the cluster identifier.",
+          "pattern": "[a-z][a-z0-9\\-]*"
+        }
+      },
+      {
+        "name": "Description",
+        "description": "An optional description of the cluster.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "An optional description of the cluster."
+        }
+      },
+      {
+        "name": "NodeType",
+        "description": "The compute and memory capacity of the nodes in the cluster.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The compute and memory capacity of the nodes in the cluster."
+        }
+      },
+      {
+        "name": "NumShards",
+        "description": "The number of shards the cluster will contain.",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "The number of shards the cluster will contain.",
+          "isInteger": true
+        }
+      },
+      {
+        "name": "NumReplicasPerShard",
+        "description": "The number of replicas to apply to each shard. The limit is 5.",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "The number of replicas to apply to each shard. The limit is 5.",
+          "isInteger": true
+        }
+      },
+      {
+        "name": "SubnetGroupName",
+        "description": "The name of the subnet group to be used for the cluster.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The name of the subnet group to be used for the cluster."
+        }
+      },
+      {
+        "name": "SecurityGroupIds",
+        "description": "One or more Amazon VPC security groups associated with this cluster.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "One or more Amazon VPC security groups associated with this cluster.",
+          "itemType": {
+            "type": "string"
+          }
+        }
+      },
+      {
+        "name": "MaintenanceWindow",
+        "description": "Specifies the weekly time range during which maintenance on the cluster is performed. It is specified as a range in the format ddd:hh24:mi-ddd:hh24:mi (24H Clock UTC). The minimum maintenance window is a 60 minute period.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Specifies the weekly time range during which maintenance on the cluster is performed. It is specified as a range in the format ddd:hh24:mi-ddd:hh24:mi (24H Clock UTC). The minimum maintenance window is a 60 minute period."
+        }
+      },
+      {
+        "name": "ParameterGroupName",
+        "description": "The name of the parameter group associated with the cluster.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The name of the parameter group associated with the cluster."
+        }
+      },
+      {
+        "name": "Port",
+        "description": "The port number on which each member of the cluster accepts connections.",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "The port number on which each member of the cluster accepts connections.",
+          "isInteger": true
+        }
+      },
+      {
+        "name": "SnapshotRetentionLimit",
+        "description": "The number of days for which MemoryDB retains automatic snapshots before deleting them. For example, if you set SnapshotRetentionLimit to 5, a snapshot that was taken today is retained for 5 days before being deleted.",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "The number of days for which MemoryDB retains automatic snapshots before deleting them. For example, if you set SnapshotRetentionLimit to 5, a snapshot that was taken today is retained for 5 days before being deleted.",
+          "isInteger": true
+        }
+      },
+      {
+        "name": "SnapshotWindow",
+        "description": "The daily time range (in UTC) during which MemoryDB begins taking a daily snapshot of your cluster.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The daily time range (in UTC) during which MemoryDB begins taking a daily snapshot of your cluster."
+        }
+      },
+      {
+        "name": "ACLName",
+        "description": "The name of the Access Control List to associate with the cluster.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The name of the Access Control List to associate with the cluster.",
+          "pattern": "[a-zA-Z][a-zA-Z0-9\\-]*"
+        }
+      },
+      {
+        "name": "SnsTopicArn",
+        "description": "The Amazon Resource Name (ARN) of the Amazon Simple Notification Service (SNS) topic to which notifications are sent.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) of the Amazon Simple Notification Service (SNS) topic to which notifications are sent."
+        }
+      },
+      {
+        "name": "SnsTopicStatus",
+        "description": "The status of the Amazon SNS notification topic. Notifications are sent only if the status is enabled.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The status of the Amazon SNS notification topic. Notifications are sent only if the status is enabled."
+        }
+      },
+      {
+        "name": "TLSEnabled",
+        "description": "A flag that enables in-transit encryption when set to true.\n\nYou cannot modify the value of TransitEncryptionEnabled after the cluster is created. To enable in-transit encryption on a cluster you must set TransitEncryptionEnabled to true when you create a cluster.",
+        "optional": true,
+        "type": {
+          "type": "boolean",
+          "description": "A flag that enables in-transit encryption when set to true.\n\nYou cannot modify the value of TransitEncryptionEnabled after the cluster is created. To enable in-transit encryption on a cluster you must set TransitEncryptionEnabled to true when you create a cluster."
+        }
+      },
+      {
+        "name": "DataTiering",
+        "description": "Enables data tiering. Data tiering is only supported for clusters using the r6gd node type. This parameter must be set when using r6gd nodes.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "Enables data tiering. Data tiering is only supported for clusters using the r6gd node type. This parameter must be set when using r6gd nodes.",
+          "typeName": "DataTieringStatus"
+        }
+      },
+      {
+        "name": "KmsKeyId",
+        "description": "The ID of the KMS key used to encrypt the cluster.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The ID of the KMS key used to encrypt the cluster."
+        }
+      },
+      {
+        "name": "SnapshotArns",
+        "description": "A list of Amazon Resource Names (ARN) that uniquely identify the RDB snapshot files stored in Amazon S3. The snapshot files are used to populate the new cluster. The Amazon S3 object name in the ARN cannot contain any commas.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "A list of Amazon Resource Names (ARN) that uniquely identify the RDB snapshot files stored in Amazon S3. The snapshot files are used to populate the new cluster. The Amazon S3 object name in the ARN cannot contain any commas.",
+          "itemType": {
+            "type": "string"
+          }
+        }
+      },
+      {
+        "name": "SnapshotName",
+        "description": "The name of a snapshot from which to restore data into the new cluster. The snapshot status changes to restoring while the new cluster is being created.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The name of a snapshot from which to restore data into the new cluster. The snapshot status changes to restoring while the new cluster is being created."
+        }
+      },
+      {
+        "name": "FinalSnapshotName",
+        "description": "The user-supplied name of a final cluster snapshot. This is the unique name that identifies the snapshot. MemoryDB creates the snapshot, and then deletes the cluster immediately afterward.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The user-supplied name of a final cluster snapshot. This is the unique name that identifies the snapshot. MemoryDB creates the snapshot, and then deletes the cluster immediately afterward."
+        }
+      },
+      {
+        "name": "EngineVersion",
+        "description": "The Redis engine version used by the cluster.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Redis engine version used by the cluster."
+        }
+      },
+      {
+        "name": "ClusterEndpoint",
+        "description": "The cluster endpoint.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "The cluster endpoint.",
+          "typeName": "Endpoint"
+        }
+      },
+      {
+        "name": "AutoMinorVersionUpgrade",
+        "description": "A flag that enables automatic minor version upgrade when set to true.\n\nYou cannot modify the value of AutoMinorVersionUpgrade after the cluster is created. To enable AutoMinorVersionUpgrade on a cluster you must set AutoMinorVersionUpgrade to true when you create a cluster.",
+        "optional": true,
+        "type": {
+          "type": "boolean",
+          "description": "A flag that enables automatic minor version upgrade when set to true.\n\nYou cannot modify the value of AutoMinorVersionUpgrade after the cluster is created. To enable AutoMinorVersionUpgrade on a cluster you must set AutoMinorVersionUpgrade to true when you create a cluster."
+        }
+      },
+      {
+        "name": "Tags",
+        "description": "An array of key-value pairs to apply to this cluster.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "An array of key-value pairs to apply to this cluster.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          },
+          "maxLength": 50
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "The AWS::MemoryDB::Cluster resource creates an Amazon MemoryDB Cluster.",
+    "properties": [
+      {
+        "name": "Status",
+        "description": "The status of the cluster. For example, Available, Updating, Creating.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The status of the cluster. For example, Available, Updating, Creating."
+        }
+      },
+      {
+        "name": "ParameterGroupStatus",
+        "description": "The status of the parameter group used by the cluster.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The status of the parameter group used by the cluster."
+        }
+      },
+      {
+        "name": "ARN",
+        "description": "The Amazon Resource Name (ARN) of the cluster.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) of the cluster."
+        }
+      }
+    ]
+  },
+  "$hash": "75ed520c7e1ae5bcf3f476971c3585747c4b8092"
+}

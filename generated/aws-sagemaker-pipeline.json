@@ -1,0 +1,185 @@
+{
+  "definitions": {
+    "S3Location": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Bucket",
+          "description": "The name of the S3 bucket where the PipelineDefinition file is stored.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The name of the S3 bucket where the PipelineDefinition file is stored."
+          }
+        },
+        {
+          "name": "Key",
+          "description": "The file name of the PipelineDefinition file (Amazon S3 object name).",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The file name of the PipelineDefinition file (Amazon S3 object name)."
+          }
+        },
+        {
+          "name": "Version",
+          "description": "For versioning-enabled buckets, a specific version of the PipelineDefinition file.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "For versioning-enabled buckets, a specific version of the PipelineDefinition file."
+          }
+        },
+        {
+          "name": "ETag",
+          "description": "The Amazon S3 ETag (a file checksum) of the PipelineDefinition file. If you don't specify a value, SageMaker skips ETag validation of your PipelineDefinition file.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The Amazon S3 ETag (a file checksum) of the PipelineDefinition file. If you don't specify a value, SageMaker skips ETag validation of your PipelineDefinition file."
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource Type definition for AWS::SageMaker::Pipeline",
+    "properties": [
+      {
+        "name": "PipelineName",
+        "description": "The name of the Pipeline.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The name of the Pipeline.",
+          "maxLength": 256,
+          "minLength": 1,
+          "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9])*"
+        }
+      },
+      {
+        "name": "PipelineDisplayName",
+        "description": "The display name of the Pipeline.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The display name of the Pipeline.",
+          "maxLength": 256,
+          "minLength": 1,
+          "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9])*"
+        }
+      },
+      {
+        "name": "PipelineDescription",
+        "description": "The description of the Pipeline.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The description of the Pipeline.",
+          "maxLength": 3072,
+          "minLength": 0
+        }
+      },
+      {
+        "name": "PipelineDefinition",
+        "optional": false,
+        "type": {
+          "type": "union",
+          "types": [
+            {
+              "type": "object",
+              "properties": [
+                {
+                  "name": "PipelineDefinitionBody",
+                  "description": "A specification that defines the pipeline in JSON format.",
+                  "optional": false,
+                  "type": {
+                    "type": "string",
+                    "description": "A specification that defines the pipeline in JSON format."
+                  }
+                }
+              ]
+            },
+            {
+              "type": "object",
+              "properties": [
+                {
+                  "name": "PipelineDefinitionS3Location",
+                  "optional": false,
+                  "type": {
+                    "type": "ref",
+                    "typeName": "S3Location"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "name": "RoleArn",
+        "description": "Role Arn",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "Role Arn",
+          "maxLength": 2048,
+          "minLength": 20,
+          "pattern": "^arn:aws[a-z\\-]*:iam::\\d{12}:role/?[a-zA-Z_0-9+=,.@\\-_/]+$"
+        }
+      },
+      {
+        "name": "Tags",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          }
+        }
+      },
+      {
+        "name": "ParallelismConfiguration",
+        "optional": true,
+        "type": {
+          "type": "object",
+          "properties": [
+            {
+              "name": "MaxParallelExecutionSteps",
+              "description": "Maximum parallel execution steps",
+              "optional": false,
+              "type": {
+                "type": "number",
+                "description": "Maximum parallel execution steps",
+                "isInteger": true,
+                "minimum": 1
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "$hash": "08d0afd1569b567d5c5ddbc1dffa6f81db3d1845"
+}

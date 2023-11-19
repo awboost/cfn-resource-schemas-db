@@ -1,0 +1,282 @@
+{
+  "definitions": {
+    "LogExport": {
+      "type": "string",
+      "allowedValues": ["useractivitylog", "userlog", "connectionlog"]
+    },
+    "Namespace": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "NamespaceArn",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "NamespaceId",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "NamespaceName",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 3,
+            "pattern": "^[a-z0-9-]+$"
+          }
+        },
+        {
+          "name": "AdminUsername",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "DbName",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "pattern": "[a-zA-Z][a-zA-Z_0-9+.@-]*"
+          }
+        },
+        {
+          "name": "KmsKeyId",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "DefaultIamRoleArn",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "IamRoles",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string",
+              "maxLength": 512,
+              "minLength": 0
+            }
+          }
+        },
+        {
+          "name": "LogExports",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "LogExport"
+            },
+            "maxLength": 16,
+            "minLength": 0
+          }
+        },
+        {
+          "name": "Status",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "NamespaceStatus"
+          }
+        },
+        {
+          "name": "CreationDate",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "NamespaceStatus": {
+      "type": "string",
+      "allowedValues": ["AVAILABLE", "MODIFYING", "DELETING"]
+    },
+    "Tag": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 0
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Definition of AWS::RedshiftServerless::Namespace Resource Type",
+    "properties": [
+      {
+        "name": "AdminUserPassword",
+        "description": "The password associated with the admin user for the namespace that is being created. Password must be at least 8 characters in length, should be any printable ASCII character. Must contain at least one lowercase letter, one uppercase letter and one decimal digit.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The password associated with the admin user for the namespace that is being created. Password must be at least 8 characters in length, should be any printable ASCII character. Must contain at least one lowercase letter, one uppercase letter and one decimal digit.",
+          "maxLength": 64,
+          "minLength": 8,
+          "pattern": "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[^\\x00-\\x20\\x22\\x27\\x2f\\x40\\x5c\\x7f-\\uffff]+"
+        }
+      },
+      {
+        "name": "AdminUsername",
+        "description": "The user name associated with the admin user for the namespace that is being created. Only alphanumeric characters and underscores are allowed. It should start with an alphabet.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The user name associated with the admin user for the namespace that is being created. Only alphanumeric characters and underscores are allowed. It should start with an alphabet.",
+          "pattern": "[a-zA-Z][a-zA-Z_0-9+.@-]*"
+        }
+      },
+      {
+        "name": "DbName",
+        "description": "The database name associated for the namespace that is being created. Only alphanumeric characters and underscores are allowed. It should start with an alphabet.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The database name associated for the namespace that is being created. Only alphanumeric characters and underscores are allowed. It should start with an alphabet.",
+          "maxLength": 127,
+          "pattern": "[a-zA-Z][a-zA-Z_0-9+.@-]*"
+        }
+      },
+      {
+        "name": "DefaultIamRoleArn",
+        "description": "The default IAM role ARN for the namespace that is being created.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The default IAM role ARN for the namespace that is being created."
+        }
+      },
+      {
+        "name": "IamRoles",
+        "description": "A list of AWS Identity and Access Management (IAM) roles that can be used by the namespace to access other AWS services. You must supply the IAM roles in their Amazon Resource Name (ARN) format. The Default role limit for each request is 10.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "A list of AWS Identity and Access Management (IAM) roles that can be used by the namespace to access other AWS services. You must supply the IAM roles in their Amazon Resource Name (ARN) format. The Default role limit for each request is 10.",
+          "itemType": {
+            "type": "string",
+            "maxLength": 512,
+            "minLength": 0
+          }
+        }
+      },
+      {
+        "name": "KmsKeyId",
+        "description": "The AWS Key Management Service (KMS) key ID of the encryption key that you want to use to encrypt data in the namespace.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The AWS Key Management Service (KMS) key ID of the encryption key that you want to use to encrypt data in the namespace."
+        }
+      },
+      {
+        "name": "LogExports",
+        "description": "The collection of log types to be exported provided by the customer. Should only be one of the three supported log types: userlog, useractivitylog and connectionlog",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "The collection of log types to be exported provided by the customer. Should only be one of the three supported log types: userlog, useractivitylog and connectionlog",
+          "itemType": {
+            "type": "ref",
+            "typeName": "LogExport"
+          },
+          "maxLength": 16,
+          "minLength": 0
+        }
+      },
+      {
+        "name": "NamespaceName",
+        "description": "A unique identifier for the namespace. You use this identifier to refer to the namespace for any subsequent namespace operations such as deleting or modifying. All alphabetical characters must be lower case. Namespace name should be unique for all namespaces within an AWS account.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "A unique identifier for the namespace. You use this identifier to refer to the namespace for any subsequent namespace operations such as deleting or modifying. All alphabetical characters must be lower case. Namespace name should be unique for all namespaces within an AWS account.",
+          "maxLength": 64,
+          "minLength": 3,
+          "pattern": "^[a-z0-9-]+$"
+        }
+      },
+      {
+        "name": "Tags",
+        "description": "The list of tags for the namespace.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "The list of tags for the namespace.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          },
+          "maxLength": 200,
+          "minLength": 0
+        }
+      },
+      {
+        "name": "FinalSnapshotName",
+        "description": "The name of the namespace the source snapshot was created from. Please specify the name if needed before deleting namespace",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The name of the namespace the source snapshot was created from. Please specify the name if needed before deleting namespace",
+          "maxLength": 255,
+          "pattern": "[a-z][a-z0-9]*(-[a-z0-9]+)*"
+        }
+      },
+      {
+        "name": "FinalSnapshotRetentionPeriod",
+        "description": "The number of days to retain automated snapshot in the destination region after they are copied from the source region. If the value is -1, the manual snapshot is retained indefinitely. The value must be either -1 or an integer between 1 and 3,653.",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "The number of days to retain automated snapshot in the destination region after they are copied from the source region. If the value is -1, the manual snapshot is retained indefinitely. The value must be either -1 or an integer between 1 and 3,653.",
+          "isInteger": true
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Definition of AWS::RedshiftServerless::Namespace Resource Type",
+    "properties": [
+      {
+        "name": "Namespace",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "Namespace"
+        }
+      }
+    ]
+  },
+  "$hash": "a95a89fd497aa15bd2123e5f3789bcaaf17cb6e8"
+}

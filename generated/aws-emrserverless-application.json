@@ -1,0 +1,635 @@
+{
+  "definitions": {
+    "Architecture": {
+      "type": "string",
+      "description": "The cpu architecture of an application.",
+      "allowedValues": ["ARM64", "X86_64"]
+    },
+    "ImageConfigurationInput": {
+      "type": "object",
+      "description": "The image configuration.",
+      "properties": [
+        {
+          "name": "ImageUri",
+          "description": "The URI of an image in the Amazon ECR registry. This field is required when you create a new application. If you leave this field blank in an update, Amazon EMR will remove the image configuration.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The URI of an image in the Amazon ECR registry. This field is required when you create a new application. If you leave this field blank in an update, Amazon EMR will remove the image configuration.",
+            "maxLength": 1024,
+            "minLength": 1,
+            "pattern": "^([a-z0-9]+[a-z0-9-.]*)\\/((?:[a-z0-9]+(?:[._-][a-z0-9]+)*\\/)*[a-z0-9]+(?:[._-][a-z0-9]+)*)(?:\\:([a-zA-Z0-9_][a-zA-Z0-9-._]{0,299})|@(sha256:[0-9a-f]{64}))$"
+          }
+        }
+      ]
+    },
+    "ConfigurationList": {
+      "type": "array",
+      "description": "Runtime configuration for batch and interactive JobRun.",
+      "itemType": {
+        "type": "ref",
+        "typeName": "ConfigurationObject"
+      }
+    },
+    "MonitoringConfiguration": {
+      "type": "object",
+      "description": "Monitoring configuration for batch and interactive JobRun.",
+      "properties": [
+        {
+          "name": "S3MonitoringConfiguration",
+          "description": "S3 monitoring configurations for a JobRun.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "S3 monitoring configurations for a JobRun.",
+            "typeName": "S3MonitoringConfiguration"
+          }
+        },
+        {
+          "name": "ManagedPersistenceMonitoringConfiguration",
+          "description": "Managed log persistence configurations for a JobRun.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "Managed log persistence configurations for a JobRun.",
+            "typeName": "ManagedPersistenceMonitoringConfiguration"
+          }
+        }
+      ]
+    },
+    "S3MonitoringConfiguration": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "LogUri",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "UriString"
+          }
+        },
+        {
+          "name": "EncryptionKeyArn",
+          "description": "KMS key ARN to encrypt the logs stored in given s3",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "KMS key ARN to encrypt the logs stored in given s3",
+            "typeName": "EncryptionKeyArn"
+          }
+        }
+      ]
+    },
+    "ManagedPersistenceMonitoringConfiguration": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Enabled",
+          "description": "If set to false, managed logging will be turned off. Defaults to true.",
+          "optional": true,
+          "type": {
+            "type": "boolean",
+            "description": "If set to false, managed logging will be turned off. Defaults to true."
+          }
+        },
+        {
+          "name": "EncryptionKeyArn",
+          "description": "KMS key ARN to encrypt the logs stored in managed persistence",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "KMS key ARN to encrypt the logs stored in managed persistence",
+            "typeName": "EncryptionKeyArn"
+          }
+        }
+      ]
+    },
+    "InitialCapacityConfigMap": {
+      "type": "array",
+      "itemType": {
+        "type": "ref",
+        "typeName": "InitialCapacityConfigKeyValuePair"
+      }
+    },
+    "InitialCapacityConfigKeyValuePair": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "Worker type for an analytics framework.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Worker type for an analytics framework.",
+            "maxLength": 50,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z]+[-_]*[a-zA-Z]+$"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "InitialCapacityConfig"
+          }
+        }
+      ]
+    },
+    "InitialCapacityConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "WorkerCount",
+          "description": "Initial count of workers to be initialized when an Application is started. This count will be continued to be maintained until the Application is stopped",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "description": "Initial count of workers to be initialized when an Application is started. This count will be continued to be maintained until the Application is stopped",
+            "isInteger": true,
+            "maximum": 1000000,
+            "minimum": 1
+          }
+        },
+        {
+          "name": "WorkerConfiguration",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "WorkerConfiguration"
+          }
+        }
+      ]
+    },
+    "WorkerConfiguration": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Cpu",
+          "description": "Per worker CPU resource. vCPU is the only supported unit and specifying vCPU is optional.",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "description": "Per worker CPU resource. vCPU is the only supported unit and specifying vCPU is optional.",
+            "typeName": "CpuSize"
+          }
+        },
+        {
+          "name": "Memory",
+          "description": "Per worker memory resource. GB is the only supported unit and specifying GB is optional.",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "description": "Per worker memory resource. GB is the only supported unit and specifying GB is optional.",
+            "typeName": "MemorySize"
+          }
+        },
+        {
+          "name": "Disk",
+          "description": "Per worker Disk resource. GB is the only supported unit and specifying GB is optional",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "Per worker Disk resource. GB is the only supported unit and specifying GB is optional",
+            "typeName": "DiskSize"
+          }
+        }
+      ]
+    },
+    "MaximumAllowedResources": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Cpu",
+          "description": "Per worker CPU resource. vCPU is the only supported unit and specifying vCPU is optional.",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "description": "Per worker CPU resource. vCPU is the only supported unit and specifying vCPU is optional.",
+            "typeName": "CpuSize"
+          }
+        },
+        {
+          "name": "Memory",
+          "description": "Per worker memory resource. GB is the only supported unit and specifying GB is optional.",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "description": "Per worker memory resource. GB is the only supported unit and specifying GB is optional.",
+            "typeName": "MemorySize"
+          }
+        },
+        {
+          "name": "Disk",
+          "description": "Per worker Disk resource. GB is the only supported unit and specifying GB is optional",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "Per worker Disk resource. GB is the only supported unit and specifying GB is optional",
+            "typeName": "DiskSize"
+          }
+        }
+      ]
+    },
+    "AutoStartConfiguration": {
+      "type": "object",
+      "description": "Configuration for Auto Start of Application",
+      "properties": [
+        {
+          "name": "Enabled",
+          "description": "If set to true, the Application will automatically start. Defaults to true.",
+          "optional": true,
+          "type": {
+            "type": "boolean",
+            "description": "If set to true, the Application will automatically start. Defaults to true."
+          }
+        }
+      ]
+    },
+    "AutoStopConfiguration": {
+      "type": "object",
+      "description": "Configuration for Auto Stop of Application",
+      "properties": [
+        {
+          "name": "Enabled",
+          "description": "If set to true, the Application will automatically stop after being idle. Defaults to true.",
+          "optional": true,
+          "type": {
+            "type": "boolean",
+            "description": "If set to true, the Application will automatically stop after being idle. Defaults to true."
+          }
+        },
+        {
+          "name": "IdleTimeoutMinutes",
+          "description": "The amount of time [in minutes] to wait before auto stopping the Application when idle. Defaults to 15 minutes.",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "The amount of time [in minutes] to wait before auto stopping the Application when idle. Defaults to 15 minutes.",
+            "isInteger": true
+          }
+        }
+      ]
+    },
+    "NetworkConfiguration": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "SubnetIds",
+          "description": "The ID of the subnets in the VPC to which you want to connect your job or application.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "The ID of the subnets in the VPC to which you want to connect your job or application.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "SubnetId"
+            },
+            "maxLength": 16,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "SecurityGroupIds",
+          "description": "The ID of the security groups in the VPC to which you want to connect your job or application.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "The ID of the security groups in the VPC to which you want to connect your job or application.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "SecurityGroupId"
+            },
+            "maxLength": 5,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "SubnetId": {
+      "type": "string",
+      "description": "Identifier of a subnet",
+      "maxLength": 32,
+      "minLength": 1,
+      "pattern": "^[-0-9a-zA-Z]+"
+    },
+    "SecurityGroupId": {
+      "type": "string",
+      "description": "Identifier of a security group",
+      "maxLength": 32,
+      "minLength": 1,
+      "pattern": "^[-0-9a-zA-Z]+"
+    },
+    "UriString": {
+      "type": "string",
+      "maxLength": 10280,
+      "minLength": 1,
+      "pattern": "[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDBFF-\\uDC00\\uDFFF\\r\\n\\t]*"
+    },
+    "EncryptionKeyArn": {
+      "type": "string",
+      "maxLength": 2048,
+      "minLength": 20,
+      "pattern": "^arn:(aws[a-zA-Z0-9-]*):kms:[a-zA-Z0-9\\-]*:(\\d{12})?:key\\/[a-zA-Z0-9-]+$"
+    },
+    "Classification": {
+      "type": "string",
+      "maxLength": 1024,
+      "minLength": 1,
+      "pattern": ".*\\S.*"
+    },
+    "Tag": {
+      "type": "object",
+      "description": "A key-value pair to associate with a resource.",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "The value for the tag. You can specify a value that is 1 to 128 Unicode characters in length. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The value for the tag. You can specify a value that is 1 to 128 Unicode characters in length. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9 /_.:=+@-]+$"
+          }
+        },
+        {
+          "name": "Value",
+          "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
+            "maxLength": 256,
+            "minLength": 0,
+            "pattern": "^[A-Za-z0-9 /_.:=+@-]*$"
+          }
+        }
+      ]
+    },
+    "ConfigurationObject": {
+      "type": "object",
+      "description": "Configuration for a JobRun.",
+      "properties": [
+        {
+          "name": "Classification",
+          "description": "String with a maximum length of 1024.",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "description": "String with a maximum length of 1024.",
+            "typeName": "Classification"
+          }
+        },
+        {
+          "name": "Properties",
+          "optional": true,
+          "type": {
+            "type": "record",
+            "valueType": {
+              "type": "ref",
+              "typeName": "SensitivePropertiesMap"
+            }
+          }
+        },
+        {
+          "name": "Configurations",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "ConfigurationObject"
+            }
+          }
+        }
+      ]
+    },
+    "SensitivePropertiesMap": {
+      "type": "string",
+      "maxLength": 1024,
+      "minLength": 1,
+      "pattern": ".*\\S.*"
+    },
+    "SensitivePropertiesKeyValuePair": {
+      "type": "string",
+      "maxLength": 1024,
+      "minLength": 1,
+      "pattern": ".*\\S.*"
+    },
+    "CpuSize": {
+      "type": "string",
+      "description": "Per worker CPU resource. vCPU is the only supported unit and specifying vCPU is optional.",
+      "maxLength": 15,
+      "minLength": 1,
+      "pattern": "^[1-9][0-9]*(\\s)?(vCPU|vcpu|VCPU)?$"
+    },
+    "MemorySize": {
+      "type": "string",
+      "description": "Per worker memory resource. GB is the only supported unit and specifying GB is optional.",
+      "maxLength": 15,
+      "minLength": 1,
+      "pattern": "^[1-9][0-9]*(\\s)?(GB|gb|gB|Gb)?$"
+    },
+    "DiskSize": {
+      "type": "string",
+      "description": "Per worker Disk resource. GB is the only supported unit and specifying GB is optional",
+      "maxLength": 15,
+      "minLength": 1,
+      "pattern": "^[1-9][0-9]*(\\s)?(GB|gb|gB|Gb)$"
+    },
+    "WorkerTypeSpecificationInput": {
+      "type": "object",
+      "description": "The specifications for a worker type.",
+      "properties": [
+        {
+          "name": "ImageConfiguration",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ImageConfigurationInput"
+          }
+        }
+      ]
+    },
+    "WorkerTypeSpecificationInputMap": {
+      "type": "record",
+      "valueType": {
+        "type": "ref",
+        "typeName": "WorkerTypeSpecificationInput"
+      }
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource schema for AWS::EMRServerless::Application Type",
+    "properties": [
+      {
+        "name": "Architecture",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "Architecture"
+        }
+      },
+      {
+        "name": "Name",
+        "description": "User friendly Application name.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "User friendly Application name.",
+          "maxLength": 64,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9._\\/#-]+$"
+        }
+      },
+      {
+        "name": "ReleaseLabel",
+        "description": "EMR release label.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "EMR release label.",
+          "maxLength": 64,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9._/-]+$"
+        }
+      },
+      {
+        "name": "Type",
+        "description": "The type of the application",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The type of the application"
+        }
+      },
+      {
+        "name": "InitialCapacity",
+        "description": "Initial capacity initialized when an Application is started.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "Initial capacity initialized when an Application is started.",
+          "typeName": "InitialCapacityConfigMap"
+        }
+      },
+      {
+        "name": "MaximumCapacity",
+        "description": "Maximum allowed cumulative resources for an Application. No new resources will be created once the limit is hit.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "Maximum allowed cumulative resources for an Application. No new resources will be created once the limit is hit.",
+          "typeName": "MaximumAllowedResources"
+        }
+      },
+      {
+        "name": "Tags",
+        "description": "Tag map with key and value",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "Tag map with key and value",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          }
+        }
+      },
+      {
+        "name": "AutoStartConfiguration",
+        "description": "Configuration for Auto Start of Application.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "Configuration for Auto Start of Application.",
+          "typeName": "AutoStartConfiguration"
+        }
+      },
+      {
+        "name": "AutoStopConfiguration",
+        "description": "Configuration for Auto Stop of Application.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "Configuration for Auto Stop of Application.",
+          "typeName": "AutoStopConfiguration"
+        }
+      },
+      {
+        "name": "ImageConfiguration",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "ImageConfigurationInput"
+        }
+      },
+      {
+        "name": "MonitoringConfiguration",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "MonitoringConfiguration"
+        }
+      },
+      {
+        "name": "RuntimeConfiguration",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "ConfigurationList"
+        }
+      },
+      {
+        "name": "NetworkConfiguration",
+        "description": "Network Configuration for customer VPC connectivity.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "Network Configuration for customer VPC connectivity.",
+          "typeName": "NetworkConfiguration"
+        }
+      },
+      {
+        "name": "WorkerTypeSpecifications",
+        "description": "The key-value pairs that specify worker type to WorkerTypeSpecificationInput. This parameter must contain all valid worker types for a Spark or Hive application. Valid worker types include Driver and Executor for Spark applications and HiveDriver and TezTask for Hive applications. You can either set image details in this parameter for each worker type, or in imageConfiguration for all worker types.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "The key-value pairs that specify worker type to WorkerTypeSpecificationInput. This parameter must contain all valid worker types for a Spark or Hive application. Valid worker types include Driver and Executor for Spark applications and HiveDriver and TezTask for Hive applications. You can either set image details in this parameter for each worker type, or in imageConfiguration for all worker types.",
+          "typeName": "WorkerTypeSpecificationInputMap"
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Resource schema for AWS::EMRServerless::Application Type",
+    "properties": [
+      {
+        "name": "Arn",
+        "description": "The Amazon Resource Name (ARN) of the EMR Serverless Application.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) of the EMR Serverless Application."
+        }
+      },
+      {
+        "name": "ApplicationId",
+        "description": "The ID of the EMR Serverless Application.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The ID of the EMR Serverless Application.",
+          "maxLength": 64,
+          "minLength": 1
+        }
+      }
+    ]
+  },
+  "$hash": "8af0ce685652593188255072d0bb3c1848200801"
+}

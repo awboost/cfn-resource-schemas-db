@@ -1,0 +1,108 @@
+{
+  "definitions": {
+    "AccessControlAttributeValueSource": {
+      "type": "string",
+      "maxLength": 256,
+      "minLength": 0,
+      "pattern": "[\\p{L}\\p{Z}\\p{N}_.:\\/=+\\-@\\[\\]\\{\\}\\$\\\\\"]*"
+    },
+    "AccessControlAttributeValueSourceList": {
+      "type": "array",
+      "itemType": {
+        "type": "ref",
+        "typeName": "AccessControlAttributeValueSource"
+      },
+      "maxLength": 1
+    },
+    "AccessControlAttributeValue": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Source",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "AccessControlAttributeValueSourceList"
+          }
+        }
+      ]
+    },
+    "AccessControlAttribute": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "[\\p{L}\\p{Z}\\p{N}_.:\\/=+\\-@]+"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "AccessControlAttributeValue"
+          }
+        }
+      ]
+    },
+    "AccessControlAttributeList": {
+      "type": "array",
+      "itemType": {
+        "type": "ref",
+        "typeName": "AccessControlAttribute"
+      },
+      "maxLength": 50
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource Type definition for SSO InstanceAccessControlAttributeConfiguration",
+    "properties": [
+      {
+        "name": "InstanceArn",
+        "description": "The ARN of the AWS SSO instance under which the operation will be executed.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The ARN of the AWS SSO instance under which the operation will be executed.",
+          "maxLength": 1224,
+          "minLength": 10,
+          "pattern": "arn:(aws|aws-us-gov|aws-cn|aws-iso|aws-iso-b):sso:::instance/(sso)?ins-[a-zA-Z0-9-.]{16}"
+        }
+      },
+      {
+        "name": "InstanceAccessControlAttributeConfiguration",
+        "description": "The InstanceAccessControlAttributeConfiguration property has been deprecated but is still supported for backwards compatibility purposes. We recomend that you use  AccessControlAttributes property instead.",
+        "optional": true,
+        "type": {
+          "type": "object",
+          "description": "The InstanceAccessControlAttributeConfiguration property has been deprecated but is still supported for backwards compatibility purposes. We recomend that you use  AccessControlAttributes property instead.",
+          "properties": [
+            {
+              "name": "AccessControlAttributes",
+              "optional": false,
+              "type": {
+                "type": "ref",
+                "typeName": "AccessControlAttributeList"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "AccessControlAttributes",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "AccessControlAttributeList"
+        }
+      }
+    ]
+  },
+  "$hash": "94ab731c88c25bf2ce46f525fa9c568e8ab7db12"
+}

@@ -1,0 +1,294 @@
+{
+  "definitions": {
+    "Bucket": {
+      "type": "string",
+      "maxLength": 63,
+      "minLength": 3,
+      "pattern": "^[a-z0-9][\\.\\-a-z0-9]{1,61}[a-z0-9]$"
+    },
+    "Prefix": {
+      "type": "string",
+      "maxLength": 1024,
+      "minLength": 0
+    },
+    "S3InputConfiguration": {
+      "type": "object",
+      "description": "Specifies configuration information for the input data for the inference, including input data S3 location.",
+      "properties": [
+        {
+          "name": "Bucket",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "Bucket"
+          }
+        },
+        {
+          "name": "Prefix",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Prefix"
+          }
+        }
+      ]
+    },
+    "S3OutputConfiguration": {
+      "type": "object",
+      "description": "Specifies configuration information for the output results from the inference, including output S3 location.",
+      "properties": [
+        {
+          "name": "Bucket",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "Bucket"
+          }
+        },
+        {
+          "name": "Prefix",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Prefix"
+          }
+        }
+      ]
+    },
+    "InputNameConfiguration": {
+      "type": "object",
+      "description": "Specifies configuration information for the input data for the inference, including timestamp format and delimiter.",
+      "properties": [
+        {
+          "name": "ComponentTimestampDelimiter",
+          "description": "Indicates the delimiter character used between items in the data.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Indicates the delimiter character used between items in the data.",
+            "maxLength": 1,
+            "minLength": 0,
+            "pattern": "^(\\-|\\_|\\s)?$"
+          }
+        },
+        {
+          "name": "TimestampFormat",
+          "description": "The format of the timestamp, whether Epoch time, or standard, with or without hyphens (-).",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The format of the timestamp, whether Epoch time, or standard, with or without hyphens (-).",
+            "pattern": "^EPOCH|yyyy-MM-dd-HH-mm-ss|yyyyMMddHHmmss$"
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "description": "A tag is a key-value pair that can be added to a resource as metadata.",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "The key for the specified tag.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The key for the specified tag.",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^(?!aws:)[a-zA-Z+-=._:/]+$"
+          }
+        },
+        {
+          "name": "Value",
+          "description": "The value for the specified tag.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The value for the specified tag.",
+            "maxLength": 256,
+            "minLength": 0,
+            "pattern": "[\\s\\w+-=\\.:/@]*"
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource schema for LookoutEquipment InferenceScheduler.",
+    "properties": [
+      {
+        "name": "DataDelayOffsetInMinutes",
+        "description": "A period of time (in minutes) by which inference on the data is delayed after the data starts.",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "A period of time (in minutes) by which inference on the data is delayed after the data starts.",
+          "isInteger": true,
+          "maximum": 60,
+          "minimum": 0
+        }
+      },
+      {
+        "name": "DataInputConfiguration",
+        "description": "Specifies configuration information for the input data for the inference scheduler, including delimiter, format, and dataset location.",
+        "optional": false,
+        "type": {
+          "type": "object",
+          "description": "Specifies configuration information for the input data for the inference scheduler, including delimiter, format, and dataset location.",
+          "properties": [
+            {
+              "name": "InputTimeZoneOffset",
+              "description": "Indicates the difference between your time zone and Greenwich Mean Time (GMT).",
+              "optional": true,
+              "type": {
+                "type": "string",
+                "description": "Indicates the difference between your time zone and Greenwich Mean Time (GMT).",
+                "pattern": "^(\\+|\\-)[0-9]{2}\\:[0-9]{2}$"
+              }
+            },
+            {
+              "name": "InferenceInputNameConfiguration",
+              "optional": true,
+              "type": {
+                "type": "ref",
+                "typeName": "InputNameConfiguration"
+              }
+            },
+            {
+              "name": "S3InputConfiguration",
+              "optional": false,
+              "type": {
+                "type": "ref",
+                "typeName": "S3InputConfiguration"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "DataOutputConfiguration",
+        "description": "Specifies configuration information for the output results for the inference scheduler, including the S3 location for the output.",
+        "optional": false,
+        "type": {
+          "type": "object",
+          "description": "Specifies configuration information for the output results for the inference scheduler, including the S3 location for the output.",
+          "properties": [
+            {
+              "name": "KmsKeyId",
+              "description": "The ID number for the AWS KMS key used to encrypt the inference output.",
+              "optional": true,
+              "type": {
+                "type": "string",
+                "description": "The ID number for the AWS KMS key used to encrypt the inference output.",
+                "maxLength": 2048,
+                "minLength": 1,
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9:_/+=,@.-]{0,2048}$"
+              }
+            },
+            {
+              "name": "S3OutputConfiguration",
+              "optional": false,
+              "type": {
+                "type": "ref",
+                "typeName": "S3OutputConfiguration"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "DataUploadFrequency",
+        "description": "How often data is uploaded to the source S3 bucket for the input data.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "How often data is uploaded to the source S3 bucket for the input data.",
+          "allowedValues": ["PT5M", "PT10M", "PT15M", "PT30M", "PT1H"]
+        }
+      },
+      {
+        "name": "InferenceSchedulerName",
+        "description": "The name of the inference scheduler being created.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The name of the inference scheduler being created.",
+          "maxLength": 200,
+          "minLength": 1,
+          "pattern": "^[0-9a-zA-Z_-]{1,200}$"
+        }
+      },
+      {
+        "name": "ModelName",
+        "description": "The name of the previously trained ML model being used to create the inference scheduler.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The name of the previously trained ML model being used to create the inference scheduler.",
+          "maxLength": 200,
+          "minLength": 1,
+          "pattern": "^[0-9a-zA-Z_-]{1,200}$"
+        }
+      },
+      {
+        "name": "RoleArn",
+        "description": "The Amazon Resource Name (ARN) of a role with permission to access the data source being used for the inference.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) of a role with permission to access the data source being used for the inference.",
+          "maxLength": 2048,
+          "minLength": 20,
+          "pattern": "arn:aws(-[^:]+)?:iam::[0-9]{12}:role/.+"
+        }
+      },
+      {
+        "name": "ServerSideKmsKeyId",
+        "description": "Provides the identifier of the AWS KMS customer master key (CMK) used to encrypt inference scheduler data by Amazon Lookout for Equipment.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Provides the identifier of the AWS KMS customer master key (CMK) used to encrypt inference scheduler data by Amazon Lookout for Equipment.",
+          "maxLength": 2048,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9:_/+=,@.-]{0,2048}$"
+        }
+      },
+      {
+        "name": "Tags",
+        "description": "Any tags associated with the inference scheduler.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "Any tags associated with the inference scheduler.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          },
+          "maxLength": 200
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Resource schema for LookoutEquipment InferenceScheduler.",
+    "properties": [
+      {
+        "name": "InferenceSchedulerArn",
+        "description": "The Amazon Resource Name (ARN) of the inference scheduler being created.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) of the inference scheduler being created.",
+          "maxLength": 200,
+          "minLength": 1,
+          "pattern": "arn:aws(-[^:]+)?:lookoutequipment:[a-zA-Z0-9\\-]*:[0-9]{12}:inference-scheduler\\/.+"
+        }
+      }
+    ]
+  },
+  "$hash": "3a92b4c73d7cd9c256f33682bd125ac6ef3b7e11"
+}

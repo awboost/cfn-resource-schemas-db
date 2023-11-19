@@ -1,0 +1,717 @@
+{
+  "definitions": {
+    "Arn": {
+      "type": "string",
+      "maxLength": 256,
+      "pattern": "arn:([a-z\\d-]+):.*:.*:.*:.+"
+    },
+    "ColumnName": {
+      "type": "string",
+      "description": "Name of a column in the data.",
+      "maxLength": 63,
+      "minLength": 1,
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\-_]*"
+    },
+    "Charset": {
+      "type": "string",
+      "maxLength": 63,
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\-_]*"
+    },
+    "CsvFormatDescriptor": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "FileCompression",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": ["NONE", "GZIP"]
+          }
+        },
+        {
+          "name": "Charset",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Charset"
+          }
+        },
+        {
+          "name": "Delimiter",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 1,
+            "pattern": "[^\\r\\n]"
+          }
+        },
+        {
+          "name": "HeaderList",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "ColumnName"
+            }
+          }
+        },
+        {
+          "name": "QuoteSymbol",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 1,
+            "pattern": "[^\\r\\n]|^$"
+          }
+        },
+        {
+          "name": "ContainsHeader",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        }
+      ]
+    },
+    "JsonFormatDescriptor": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "FileCompression",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": ["NONE", "GZIP"]
+          }
+        },
+        {
+          "name": "Charset",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Charset"
+          }
+        }
+      ]
+    },
+    "FileFormatDescriptor": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "CsvFormatDescriptor",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "CsvFormatDescriptor"
+          }
+        },
+        {
+          "name": "JsonFormatDescriptor",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "JsonFormatDescriptor"
+          }
+        }
+      ]
+    },
+    "S3SourceConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "RoleArn",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "Arn"
+          }
+        },
+        {
+          "name": "TemplatedPathList",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string",
+              "maxLength": 1024,
+              "pattern": "^s3://[a-zA-Z0-9_\\-\\/ {}=]+$"
+            },
+            "maxLength": 1,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "HistoricalDataPathList",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string",
+              "maxLength": 1024,
+              "pattern": "^s3://[a-z0-9].+$"
+            },
+            "maxLength": 1,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "FileFormatDescriptor",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "FileFormatDescriptor"
+          }
+        }
+      ]
+    },
+    "AppFlowConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "RoleArn",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "Arn"
+          }
+        },
+        {
+          "name": "FlowName",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "pattern": "[a-zA-Z0-9][\\w!@#.-]+"
+          }
+        }
+      ]
+    },
+    "CloudwatchConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "RoleArn",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "Arn"
+          }
+        }
+      ]
+    },
+    "DatabaseHost": {
+      "type": "string",
+      "maxLength": 253,
+      "minLength": 1,
+      "pattern": ".*\\S.*"
+    },
+    "DatabasePort": {
+      "type": "number",
+      "isInteger": true,
+      "maximum": 65535,
+      "minimum": 1
+    },
+    "TableName": {
+      "type": "string",
+      "maxLength": 100,
+      "minLength": 1,
+      "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$"
+    },
+    "SubnetIdList": {
+      "type": "array",
+      "itemType": {
+        "type": "string",
+        "maxLength": 255,
+        "pattern": "[\\-0-9a-zA-Z]+"
+      }
+    },
+    "SecurityGroupIdList": {
+      "type": "array",
+      "itemType": {
+        "type": "string",
+        "maxLength": 255,
+        "minLength": 1,
+        "pattern": "[-0-9a-zA-Z]+"
+      }
+    },
+    "VpcConfiguration": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "SubnetIdList",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "SubnetIdList"
+          }
+        },
+        {
+          "name": "SecurityGroupIdList",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "SecurityGroupIdList"
+          }
+        }
+      ]
+    },
+    "SecretManagerArn": {
+      "type": "string",
+      "maxLength": 256,
+      "pattern": "arn:([a-z\\d-]+):.*:.*:secret:AmazonLookoutMetrics-.+"
+    },
+    "RDSSourceConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "DBInstanceIdentifier",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 63,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z](?!.*--)(?!.*-$)[0-9a-zA-Z\\-]*$"
+          }
+        },
+        {
+          "name": "DatabaseHost",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "DatabaseHost"
+          }
+        },
+        {
+          "name": "DatabasePort",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "DatabasePort"
+          }
+        },
+        {
+          "name": "SecretManagerArn",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "SecretManagerArn"
+          }
+        },
+        {
+          "name": "DatabaseName",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "pattern": "[a-zA-Z0-9_]+"
+          }
+        },
+        {
+          "name": "TableName",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "TableName"
+          }
+        },
+        {
+          "name": "RoleArn",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "Arn"
+          }
+        },
+        {
+          "name": "VpcConfiguration",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "VpcConfiguration"
+          }
+        }
+      ]
+    },
+    "RedshiftSourceConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ClusterIdentifier",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 63,
+            "minLength": 1,
+            "pattern": "^[a-z](?!.*--)(?!.*-$)[0-9a-z\\-]*$"
+          }
+        },
+        {
+          "name": "DatabaseHost",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "DatabaseHost"
+          }
+        },
+        {
+          "name": "DatabasePort",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "DatabasePort"
+          }
+        },
+        {
+          "name": "SecretManagerArn",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "SecretManagerArn"
+          }
+        },
+        {
+          "name": "DatabaseName",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1,
+            "pattern": "[a-z0-9]+"
+          }
+        },
+        {
+          "name": "TableName",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "TableName"
+          }
+        },
+        {
+          "name": "RoleArn",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "Arn"
+          }
+        },
+        {
+          "name": "VpcConfiguration",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "VpcConfiguration"
+          }
+        }
+      ]
+    },
+    "MetricSource": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "S3SourceConfig",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "S3SourceConfig"
+          }
+        },
+        {
+          "name": "RDSSourceConfig",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "RDSSourceConfig"
+          }
+        },
+        {
+          "name": "RedshiftSourceConfig",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "RedshiftSourceConfig"
+          }
+        },
+        {
+          "name": "CloudwatchConfig",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "CloudwatchConfig"
+          }
+        },
+        {
+          "name": "AppFlowConfig",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "AppFlowConfig"
+          }
+        }
+      ]
+    },
+    "TimestampColumn": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ColumnName",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ColumnName"
+          }
+        },
+        {
+          "name": "ColumnFormat",
+          "description": "A timestamp format for the timestamps in the dataset",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "A timestamp format for the timestamps in the dataset",
+            "maxLength": 63,
+            "pattern": ".*\\S.*"
+          }
+        }
+      ]
+    },
+    "Metric": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "MetricName",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "ColumnName"
+          }
+        },
+        {
+          "name": "AggregationFunction",
+          "description": "Operator used to aggregate metric values",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Operator used to aggregate metric values",
+            "allowedValues": ["AVG", "SUM"]
+          }
+        },
+        {
+          "name": "Namespace",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "pattern": "[^:].*"
+          }
+        }
+      ]
+    },
+    "MetricSet": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "MetricSetName",
+          "description": "The name of the MetricSet.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The name of the MetricSet.",
+            "maxLength": 63,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\-_]*"
+          }
+        },
+        {
+          "name": "MetricSetDescription",
+          "description": "A description for the MetricSet.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "A description for the MetricSet.",
+            "maxLength": 256,
+            "pattern": ".*\\S.*"
+          }
+        },
+        {
+          "name": "MetricSource",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "MetricSource"
+          }
+        },
+        {
+          "name": "MetricList",
+          "description": "Metrics captured by this MetricSet.",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "description": "Metrics captured by this MetricSet.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Metric"
+            },
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Offset",
+          "description": "Offset, in seconds, between the frequency interval and the time at which the metrics are available.",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "Offset, in seconds, between the frequency interval and the time at which the metrics are available.",
+            "isInteger": true,
+            "maximum": 432000,
+            "minimum": 0
+          }
+        },
+        {
+          "name": "TimestampColumn",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "TimestampColumn"
+          }
+        },
+        {
+          "name": "DimensionList",
+          "description": "Dimensions for this MetricSet.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "Dimensions for this MetricSet.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "ColumnName"
+            },
+            "minLength": 0
+          }
+        },
+        {
+          "name": "MetricSetFrequency",
+          "description": "A frequency period to aggregate the data",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "A frequency period to aggregate the data",
+            "allowedValues": ["PT5M", "PT10M", "PT1H", "P1D"]
+          }
+        },
+        {
+          "name": "Timezone",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 60,
+            "pattern": ".*\\S.*"
+          }
+        }
+      ]
+    },
+    "AnomalyDetectorFrequency": {
+      "type": "string",
+      "description": "Frequency of anomaly detection",
+      "allowedValues": ["PT5M", "PT10M", "PT1H", "P1D"]
+    },
+    "AnomalyDetectorConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "AnomalyDetectorFrequency",
+          "description": "Frequency of anomaly detection",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "description": "Frequency of anomaly detection",
+            "typeName": "AnomalyDetectorFrequency"
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "An Amazon Lookout for Metrics Detector",
+    "properties": [
+      {
+        "name": "AnomalyDetectorName",
+        "description": "Name for the Amazon Lookout for Metrics Anomaly Detector",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Name for the Amazon Lookout for Metrics Anomaly Detector",
+          "maxLength": 63,
+          "minLength": 1,
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\-_]*"
+        }
+      },
+      {
+        "name": "AnomalyDetectorDescription",
+        "description": "A description for the AnomalyDetector.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "A description for the AnomalyDetector.",
+          "maxLength": 256,
+          "pattern": ".*\\S.*"
+        }
+      },
+      {
+        "name": "AnomalyDetectorConfig",
+        "description": "Configuration options for the AnomalyDetector",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "description": "Configuration options for the AnomalyDetector",
+          "typeName": "AnomalyDetectorConfig"
+        }
+      },
+      {
+        "name": "MetricSetList",
+        "description": "List of metric sets for anomaly detection",
+        "optional": false,
+        "type": {
+          "type": "array",
+          "description": "List of metric sets for anomaly detection",
+          "itemType": {
+            "type": "ref",
+            "typeName": "MetricSet"
+          },
+          "maxLength": 1,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "KmsKeyArn",
+        "description": "KMS key used to encrypt the AnomalyDetector data",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "KMS key used to encrypt the AnomalyDetector data",
+          "maxLength": 2048,
+          "minLength": 20,
+          "pattern": "arn:aws.*:kms:.*:[0-9]{12}:key/.*"
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "An Amazon Lookout for Metrics Detector",
+    "properties": [
+      {
+        "name": "Arn",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "Arn"
+        }
+      }
+    ]
+  },
+  "$hash": "3649333f04bdedd9ab932fd4cee789e757da46ef"
+}

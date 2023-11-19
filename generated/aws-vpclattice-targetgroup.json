@@ -1,0 +1,338 @@
+{
+  "definitions": {
+    "HealthCheckConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Enabled",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "Protocol",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": ["HTTP", "HTTPS"]
+          }
+        },
+        {
+          "name": "ProtocolVersion",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": ["HTTP1", "HTTP2", "GRPC"]
+          }
+        },
+        {
+          "name": "Port",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 65535,
+            "minimum": 1
+          }
+        },
+        {
+          "name": "Path",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 2048,
+            "minLength": 0,
+            "pattern": "(^/[a-zA-Z0-9@:%_+.~#?&/=-]*$|(^$))"
+          }
+        },
+        {
+          "name": "HealthCheckIntervalSeconds",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 300,
+            "minimum": 5
+          }
+        },
+        {
+          "name": "HealthCheckTimeoutSeconds",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 120,
+            "minimum": 1
+          }
+        },
+        {
+          "name": "HealthyThresholdCount",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 10,
+            "minimum": 2
+          }
+        },
+        {
+          "name": "UnhealthyThresholdCount",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 10,
+            "minimum": 2
+          }
+        },
+        {
+          "name": "Matcher",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Matcher"
+          }
+        }
+      ]
+    },
+    "Matcher": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "HttpCode",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 3,
+            "pattern": "^[0-9-,]+$"
+          }
+        }
+      ]
+    },
+    "TargetGroupConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Port",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 65535,
+            "minimum": 1
+          }
+        },
+        {
+          "name": "Protocol",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": ["HTTP", "HTTPS"]
+          }
+        },
+        {
+          "name": "ProtocolVersion",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": ["HTTP1", "HTTP2", "GRPC"]
+          }
+        },
+        {
+          "name": "IpAddressType",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": ["IPV4", "IPV6"]
+          }
+        },
+        {
+          "name": "LambdaEventStructureVersion",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": ["V1", "V2"]
+          }
+        },
+        {
+          "name": "VpcIdentifier",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 2048,
+            "minLength": 5,
+            "pattern": "^vpc-(([0-9a-z]{8})|([0-9a-z]{17}))$"
+          }
+        },
+        {
+          "name": "HealthCheck",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "HealthCheckConfig"
+          }
+        }
+      ]
+    },
+    "Target": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Id",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Port",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 65535,
+            "minimum": 1
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "A target group is a collection of targets, or compute resources, that run your application or service. A target group can only be used by a single service.",
+    "properties": [
+      {
+        "name": "Config",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "TargetGroupConfig"
+        }
+      },
+      {
+        "name": "Name",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "^(?!tg-)(?![-])(?!.*[-]$)(?!.*[-]{2})[a-z0-9-]+$"
+        }
+      },
+      {
+        "name": "Type",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "allowedValues": ["IP", "LAMBDA", "INSTANCE", "ALB"]
+        }
+      },
+      {
+        "name": "Targets",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Target"
+          },
+          "maxLength": 100,
+          "minLength": 0
+        }
+      },
+      {
+        "name": "Tags",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          },
+          "maxLength": 50,
+          "minLength": 0
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "A target group is a collection of targets, or compute resources, that run your application or service. A target group can only be used by a single service.",
+    "properties": [
+      {
+        "name": "Arn",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 2048,
+          "minLength": 20,
+          "pattern": "^arn:[a-z0-9\\-]+:vpc-lattice:[a-zA-Z0-9\\-]+:\\d{12}:targetgroup/tg-[0-9a-z]{17}$"
+        }
+      },
+      {
+        "name": "CreatedAt",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "Id",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 20,
+          "minLength": 20,
+          "pattern": "^tg-[0-9a-z]{17}$"
+        }
+      },
+      {
+        "name": "LastUpdatedAt",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "Status",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "allowedValues": [
+            "CREATE_IN_PROGRESS",
+            "ACTIVE",
+            "DELETE_IN_PROGRESS",
+            "CREATE_FAILED",
+            "DELETE_FAILED"
+          ]
+        }
+      }
+    ]
+  },
+  "$hash": "a570ba498bef9b13fd4922420b729156e0195f63"
+}

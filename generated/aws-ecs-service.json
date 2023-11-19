@@ -1,0 +1,779 @@
+{
+  "definitions": {
+    "CapacityProviderStrategyItem": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "CapacityProvider",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Base",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "Weight",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        }
+      ]
+    },
+    "DeploymentAlarms": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "AlarmNames",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "name": "Enable",
+          "optional": false,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "Rollback",
+          "optional": false,
+          "type": {
+            "type": "boolean"
+          }
+        }
+      ]
+    },
+    "LoadBalancer": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "TargetGroupArn",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "LoadBalancerName",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "ContainerName",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "ContainerPort",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        }
+      ]
+    },
+    "PlacementStrategy": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Field",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Type",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "allowedValues": ["binpack", "random", "spread"]
+          }
+        }
+      ]
+    },
+    "ServiceConnectConfiguration": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Services",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "ServiceConnectService"
+            }
+          }
+        },
+        {
+          "name": "Enabled",
+          "optional": false,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "LogConfiguration",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "LogConfiguration"
+          }
+        },
+        {
+          "name": "Namespace",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "DeploymentController": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Type",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": ["CODE_DEPLOY", "ECS", "EXTERNAL"]
+          }
+        }
+      ]
+    },
+    "LogConfiguration": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "SecretOptions",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Secret"
+            }
+          }
+        },
+        {
+          "name": "Options",
+          "optional": true,
+          "type": {
+            "type": "record",
+            "valueType": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "name": "LogDriver",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "Secret": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ValueFrom",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Name",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "AwsVpcConfiguration": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "SecurityGroups",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "name": "Subnets",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "name": "AssignPublicIp",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": ["DISABLED", "ENABLED"]
+          }
+        }
+      ]
+    },
+    "PlacementConstraint": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Type",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "allowedValues": ["distinctInstance", "memberOf"]
+          }
+        },
+        {
+          "name": "Expression",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "ServiceManagedEBSVolumeConfiguration": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "SnapshotId",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "VolumeType",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "KmsKeyId",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "TagSpecifications",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "EBSTagSpecification"
+            }
+          }
+        },
+        {
+          "name": "FilesystemType",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Encrypted",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "Throughput",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "Iops",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "SizeInGiB",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "RoleArn",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "ServiceConnectClientAlias": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "DnsName",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Port",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        }
+      ]
+    },
+    "NetworkConfiguration": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "AwsvpcConfiguration",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "AwsVpcConfiguration"
+          }
+        }
+      ]
+    },
+    "ServiceRegistry": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ContainerName",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Port",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "ContainerPort",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "RegistryArn",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Value",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Key",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "DeploymentCircuitBreaker": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Enable",
+          "optional": false,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "Rollback",
+          "optional": false,
+          "type": {
+            "type": "boolean"
+          }
+        }
+      ]
+    },
+    "DeploymentConfiguration": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Alarms",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DeploymentAlarms"
+          }
+        },
+        {
+          "name": "DeploymentCircuitBreaker",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DeploymentCircuitBreaker"
+          }
+        },
+        {
+          "name": "MaximumPercent",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "MinimumHealthyPercent",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        }
+      ]
+    },
+    "EBSTagSpecification": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "PropagateTags",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": ["SERVICE", "TASK_DEFINITION"]
+          }
+        },
+        {
+          "name": "ResourceType",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Tags",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Tag"
+            }
+          }
+        }
+      ]
+    },
+    "ServiceConnectService": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "IngressPortOverride",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "ClientAliases",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "ServiceConnectClientAlias"
+            }
+          }
+        },
+        {
+          "name": "DiscoveryName",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "PortName",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource Type definition for AWS::ECS::Service",
+    "properties": [
+      {
+        "name": "PlatformVersion",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "PropagateTags",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "allowedValues": ["SERVICE", "TASK_DEFINITION"]
+        }
+      },
+      {
+        "name": "PlacementStrategies",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "PlacementStrategy"
+          }
+        }
+      },
+      {
+        "name": "ServiceRegistries",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "ServiceRegistry"
+          }
+        }
+      },
+      {
+        "name": "CapacityProviderStrategy",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "CapacityProviderStrategyItem"
+          }
+        }
+      },
+      {
+        "name": "LaunchType",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "allowedValues": ["EC2", "FARGATE", "EXTERNAL"]
+        }
+      },
+      {
+        "name": "SchedulingStrategy",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "allowedValues": ["DAEMON", "REPLICA"]
+        }
+      },
+      {
+        "name": "NetworkConfiguration",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "NetworkConfiguration"
+        }
+      },
+      {
+        "name": "Tags",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          }
+        }
+      },
+      {
+        "name": "HealthCheckGracePeriodSeconds",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "isInteger": true
+        }
+      },
+      {
+        "name": "EnableECSManagedTags",
+        "optional": true,
+        "type": {
+          "type": "boolean"
+        }
+      },
+      {
+        "name": "EnableExecuteCommand",
+        "optional": true,
+        "type": {
+          "type": "boolean"
+        }
+      },
+      {
+        "name": "PlacementConstraints",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "PlacementConstraint"
+          }
+        }
+      },
+      {
+        "name": "Cluster",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "LoadBalancers",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "LoadBalancer"
+          }
+        }
+      },
+      {
+        "name": "ServiceConnectConfiguration",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "ServiceConnectConfiguration"
+        }
+      },
+      {
+        "name": "DesiredCount",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "isInteger": true
+        }
+      },
+      {
+        "name": "DeploymentController",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "DeploymentController"
+        }
+      },
+      {
+        "name": "Role",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "TaskDefinition",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "ServiceName",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "DeploymentConfiguration",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "DeploymentConfiguration"
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Resource Type definition for AWS::ECS::Service",
+    "properties": [
+      {
+        "name": "ServiceArn",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "Name",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      }
+    ]
+  },
+  "$hash": "262fa479944032ca70d1cd28835b4e16df4f4e2e"
+}

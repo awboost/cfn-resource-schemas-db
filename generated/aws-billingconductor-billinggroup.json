@@ -1,0 +1,193 @@
+{
+  "definitions": {
+    "BillingGroupStatus": {
+      "type": "string",
+      "allowedValues": ["ACTIVE", "PRIMARY_ACCOUNT_MISSING"]
+    },
+    "ComputationPreference": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "PricingPlanArn",
+          "description": "ARN of the attached pricing plan",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "ARN of the attached pricing plan",
+            "pattern": "arn:aws(-cn)?:billingconductor::[0-9]{12}:pricingplan/[a-zA-Z0-9]{10}"
+          }
+        }
+      ]
+    },
+    "AccountGrouping": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "LinkedAccountIds",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string",
+              "pattern": "[0-9]{12}"
+            },
+            "minLength": 1
+          }
+        },
+        {
+          "name": "AutoAssociate",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "A billing group is a set of linked account which belong to the same end customer. It can be seen as a virtual consolidated billing family.",
+    "properties": [
+      {
+        "name": "Name",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "[a-zA-Z0-9_\\+=\\.\\-@]+"
+        }
+      },
+      {
+        "name": "Description",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 1024
+        }
+      },
+      {
+        "name": "PrimaryAccountId",
+        "description": "This account will act as a virtual payer account of the billing group",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "This account will act as a virtual payer account of the billing group",
+          "pattern": "[0-9]{12}"
+        }
+      },
+      {
+        "name": "ComputationPreference",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "ComputationPreference"
+        }
+      },
+      {
+        "name": "AccountGrouping",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "AccountGrouping"
+        }
+      },
+      {
+        "name": "Tags",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          }
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "A billing group is a set of linked account which belong to the same end customer. It can be seen as a virtual consolidated billing family.",
+    "properties": [
+      {
+        "name": "Arn",
+        "description": "Billing Group ARN",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Billing Group ARN",
+          "pattern": "arn:aws(-cn)?:billingconductor::[0-9]{12}:billinggroup/?[0-9]{12}"
+        }
+      },
+      {
+        "name": "Size",
+        "description": "Number of accounts in the billing group",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "Number of accounts in the billing group",
+          "isInteger": true
+        }
+      },
+      {
+        "name": "Status",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "BillingGroupStatus"
+        }
+      },
+      {
+        "name": "StatusReason",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "CreationTime",
+        "description": "Creation timestamp in UNIX epoch time format",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "Creation timestamp in UNIX epoch time format",
+          "isInteger": true
+        }
+      },
+      {
+        "name": "LastModifiedTime",
+        "description": "Latest modified timestamp in UNIX epoch time format",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "Latest modified timestamp in UNIX epoch time format",
+          "isInteger": true
+        }
+      }
+    ]
+  },
+  "$hash": "99526c8750112e7afde4f35f75bfdffc6d7c44d8"
+}

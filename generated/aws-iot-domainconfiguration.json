@@ -1,0 +1,212 @@
+{
+  "definitions": {
+    "AuthorizerConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "AllowAuthorizerOverride",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "DefaultAuthorizerName",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^[\\w=,@-]+$"
+          }
+        }
+      ]
+    },
+    "ServerCertificateSummary": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ServerCertificateArn",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 2048,
+            "minLength": 1,
+            "pattern": "^arn:aws(-cn|-us-gov|-iso-b|-iso)?:acm:[a-z]{2}-(gov-|iso-|isob-)?[a-z]{4,9}-\\d{1}:\\d{12}:certificate/[a-zA-Z0-9/-]+$"
+          }
+        },
+        {
+          "name": "ServerCertificateStatus",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": ["INVALID", "VALID"]
+          }
+        },
+        {
+          "name": "ServerCertificateStatusDetail",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "TlsConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "SecurityPolicy",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 128
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Create and manage a Domain Configuration",
+    "properties": [
+      {
+        "name": "DomainConfigurationName",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[\\w.-]+$"
+        }
+      },
+      {
+        "name": "AuthorizerConfig",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "AuthorizerConfig"
+        }
+      },
+      {
+        "name": "DomainName",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 253,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "ServerCertificateArns",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "string",
+            "maxLength": 2048,
+            "minLength": 1,
+            "pattern": "^arn:aws(-cn|-us-gov|-iso-b|-iso)?:acm:[a-z]{2}-(gov-|iso-|isob-)?[a-z]{4,9}-\\d{1}:\\d{12}:certificate/[a-zA-Z0-9/-]+$"
+          },
+          "maxLength": 1,
+          "minLength": 0
+        }
+      },
+      {
+        "name": "ServiceType",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "allowedValues": ["DATA", "CREDENTIAL_PROVIDER", "JOBS"]
+        }
+      },
+      {
+        "name": "ValidationCertificateArn",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "pattern": "^arn:aws(-cn|-us-gov|-iso-b|-iso)?:acm:[a-z]{2}-(gov-|iso-|isob-)?[a-z]{4,9}-\\d{1}:\\d{12}:certificate/[a-zA-Z0-9/-]+$"
+        }
+      },
+      {
+        "name": "DomainConfigurationStatus",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "allowedValues": ["ENABLED", "DISABLED"]
+        }
+      },
+      {
+        "name": "TlsConfig",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "TlsConfig"
+        }
+      },
+      {
+        "name": "Tags",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          }
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Create and manage a Domain Configuration",
+    "properties": [
+      {
+        "name": "Arn",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "DomainType",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "allowedValues": ["ENDPOINT", "AWS_MANAGED", "CUSTOMER_MANAGED"]
+        }
+      },
+      {
+        "name": "ServerCertificates",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "ServerCertificateSummary"
+          }
+        }
+      }
+    ]
+  },
+  "$hash": "5c60edaf0073af332c860bbd8f0f42cf6bc74480"
+}

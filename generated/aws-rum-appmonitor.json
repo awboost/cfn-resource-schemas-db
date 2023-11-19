@@ -1,0 +1,423 @@
+{
+  "definitions": {
+    "AppMonitorConfiguration": {
+      "type": "object",
+      "description": "AppMonitor configuration",
+      "properties": [
+        {
+          "name": "IdentityPoolId",
+          "description": "The ID of the identity pool that is used to authorize the sending of data to RUM.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The ID of the identity pool that is used to authorize the sending of data to RUM.",
+            "maxLength": 55,
+            "minLength": 1,
+            "pattern": "[\\w-]+:[0-9a-f-]+"
+          }
+        },
+        {
+          "name": "ExcludedPages",
+          "description": "A list of URLs in your website or application to exclude from RUM data collection. You can't include both ExcludedPages and IncludedPages in the same operation.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "A list of URLs in your website or application to exclude from RUM data collection. You can't include both ExcludedPages and IncludedPages in the same operation.",
+            "typeName": "Pages"
+          }
+        },
+        {
+          "name": "IncludedPages",
+          "description": "If this app monitor is to collect data from only certain pages in your application, this structure lists those pages. You can't include both ExcludedPages and IncludedPages in the same operation.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "If this app monitor is to collect data from only certain pages in your application, this structure lists those pages. You can't include both ExcludedPages and IncludedPages in the same operation.",
+            "typeName": "Pages"
+          }
+        },
+        {
+          "name": "FavoritePages",
+          "description": "A list of pages in the RUM console that are to be displayed with a favorite icon.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "A list of pages in the RUM console that are to be displayed with a favorite icon.",
+            "typeName": "FavoritePages"
+          }
+        },
+        {
+          "name": "SessionSampleRate",
+          "description": "Specifies the percentage of user sessions to use for RUM data collection. Choosing a higher percentage gives you more data but also incurs more costs. The number you specify is the percentage of user sessions that will be used. If you omit this parameter, the default of 10 is used.",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "Specifies the percentage of user sessions to use for RUM data collection. Choosing a higher percentage gives you more data but also incurs more costs. The number you specify is the percentage of user sessions that will be used. If you omit this parameter, the default of 10 is used.",
+            "isInteger": false,
+            "maximum": 1,
+            "minimum": 0
+          }
+        },
+        {
+          "name": "GuestRoleArn",
+          "description": "The ARN of the guest IAM role that is attached to the identity pool that is used to authorize the sending of data to RUM.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The ARN of the guest IAM role that is attached to the identity pool that is used to authorize the sending of data to RUM.",
+            "typeName": "Arn"
+          }
+        },
+        {
+          "name": "AllowCookies",
+          "description": "If you set this to true, the RUM web client sets two cookies, a session cookie and a user cookie. The cookies allow the RUM web client to collect data relating to the number of users an application has and the behavior of the application across a sequence of events. Cookies are stored in the top-level domain of the current page.",
+          "optional": true,
+          "type": {
+            "type": "boolean",
+            "description": "If you set this to true, the RUM web client sets two cookies, a session cookie and a user cookie. The cookies allow the RUM web client to collect data relating to the number of users an application has and the behavior of the application across a sequence of events. Cookies are stored in the top-level domain of the current page."
+          }
+        },
+        {
+          "name": "Telemetries",
+          "description": "An array that lists the types of telemetry data that this app monitor is to collect.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "An array that lists the types of telemetry data that this app monitor is to collect.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Telemetry"
+            }
+          }
+        },
+        {
+          "name": "EnableXRay",
+          "description": "If you set this to true, RUM enables xray tracing for the user sessions that RUM samples. RUM adds an xray trace header to allowed HTTP requests. It also records an xray segment for allowed HTTP requests. You can see traces and segments from these user sessions in the xray console and the CW ServiceLens console.",
+          "optional": true,
+          "type": {
+            "type": "boolean",
+            "description": "If you set this to true, RUM enables xray tracing for the user sessions that RUM samples. RUM adds an xray trace header to allowed HTTP requests. It also records an xray segment for allowed HTTP requests. You can see traces and segments from these user sessions in the xray console and the CW ServiceLens console."
+          }
+        },
+        {
+          "name": "MetricDestinations",
+          "description": "An array of structures which define the destinations and the metrics that you want to send.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "An array of structures which define the destinations and the metrics that you want to send.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "MetricDestination"
+            },
+            "maxLength": 20,
+            "minLength": 0
+          }
+        }
+      ]
+    },
+    "TagDef": {
+      "type": "array",
+      "description": "Assigns one or more tags (key-value pairs) to the app monitor. Tags can help you organize and categorize your resources. You can also use them to scope user permissions by granting a user permission to access or change only resources with certain tag values. Tags don't have any semantic meaning to AWS and are interpreted strictly as strings of characters.You can associate as many as 50 tags with an app monitor.",
+      "itemType": {
+        "type": "ref",
+        "typeName": "Tag"
+      }
+    },
+    "Tag": {
+      "type": "object",
+      "description": "A key-value pair to associate with a resource.",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^(?!aws:)[a-zA-Z+-=._:/]+$"
+          }
+        },
+        {
+          "name": "Value",
+          "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
+            "maxLength": 256,
+            "minLength": 0
+          }
+        }
+      ]
+    },
+    "Pages": {
+      "type": "array",
+      "description": "List of url pages",
+      "itemType": {
+        "type": "ref",
+        "typeName": "Url"
+      },
+      "maxLength": 50,
+      "minLength": 0
+    },
+    "FavoritePages": {
+      "type": "array",
+      "description": "List of favorite pages",
+      "itemType": {
+        "type": "string"
+      },
+      "maxLength": 50,
+      "minLength": 0
+    },
+    "Url": {
+      "type": "string",
+      "description": "Page Url",
+      "maxLength": 1260,
+      "minLength": 1,
+      "pattern": "https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)"
+    },
+    "Arn": {
+      "type": "string",
+      "description": "Resource ARN",
+      "pattern": "arn:[^:]*:[^:]*:[^:]*:[^:]*:.*"
+    },
+    "Telemetry": {
+      "type": "string",
+      "allowedValues": ["errors", "performance", "http"]
+    },
+    "MetricDestination": {
+      "type": "object",
+      "description": "An structure which defines the destination and the metrics that you want to send.",
+      "properties": [
+        {
+          "name": "Destination",
+          "description": "Defines the destination to send the metrics to. Valid values are CloudWatch and Evidently. If you specify Evidently, you must also specify the ARN of the Evidently experiment that is to be the destination and an IAM role that has permission to write to the experiment.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Defines the destination to send the metrics to. Valid values are CloudWatch and Evidently. If you specify Evidently, you must also specify the ARN of the Evidently experiment that is to be the destination and an IAM role that has permission to write to the experiment.",
+            "allowedValues": ["CloudWatch", "Evidently"]
+          }
+        },
+        {
+          "name": "DestinationArn",
+          "description": "Use this parameter only if Destination is Evidently. This parameter specifies the ARN of the Evidently experiment that will receive the extended metrics.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Use this parameter only if Destination is Evidently. This parameter specifies the ARN of the Evidently experiment that will receive the extended metrics.",
+            "pattern": "arn:[^:]*:[^:]*:[^:]*:[^:]*:.*"
+          }
+        },
+        {
+          "name": "IamRoleArn",
+          "description": "This parameter is required if Destination is Evidently. If Destination is CloudWatch, do not use this parameter.\n\nThis parameter specifies the ARN of an IAM role that RUM will assume to write to the Evidently experiment that you are sending metrics to. This role must have permission to write to that experiment.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "This parameter is required if Destination is Evidently. If Destination is CloudWatch, do not use this parameter.\n\nThis parameter specifies the ARN of an IAM role that RUM will assume to write to the Evidently experiment that you are sending metrics to. This role must have permission to write to that experiment.",
+            "pattern": "arn:[^:]*:[^:]*:[^:]*:[^:]*:.*"
+          }
+        },
+        {
+          "name": "MetricDefinitions",
+          "description": "An array of structures which define the metrics that you want to send.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "An array of structures which define the metrics that you want to send.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "MetricDefinition"
+            },
+            "maxLength": 2000,
+            "minLength": 0
+          }
+        }
+      ]
+    },
+    "MetricDefinition": {
+      "type": "object",
+      "description": "A single metric definition",
+      "properties": [
+        {
+          "name": "Name",
+          "description": "The name for the metric that is defined in this structure. For extended metrics, valid values are the following:\n\nPerformanceNavigationDuration\n\nPerformanceResourceDuration\n\nNavigationSatisfiedTransaction\n\nNavigationToleratedTransaction\n\nNavigationFrustratedTransaction\n\nWebVitalsCumulativeLayoutShift\n\nWebVitalsFirstInputDelay\n\nWebVitalsLargestContentfulPaint\n\nJsErrorCount\n\nHttpErrorCount\n\nSessionCount",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The name for the metric that is defined in this structure. For extended metrics, valid values are the following:\n\nPerformanceNavigationDuration\n\nPerformanceResourceDuration\n\nNavigationSatisfiedTransaction\n\nNavigationToleratedTransaction\n\nNavigationFrustratedTransaction\n\nWebVitalsCumulativeLayoutShift\n\nWebVitalsFirstInputDelay\n\nWebVitalsLargestContentfulPaint\n\nJsErrorCount\n\nHttpErrorCount\n\nSessionCount",
+            "maxLength": 255,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Namespace",
+          "description": "The namespace used by CloudWatch Metrics for the metric that is defined in this structure",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The namespace used by CloudWatch Metrics for the metric that is defined in this structure",
+            "maxLength": 237,
+            "minLength": 1,
+            "pattern": "[a-zA-Z0-9-._/#:]+$"
+          }
+        },
+        {
+          "name": "ValueKey",
+          "description": "The field within the event object that the metric value is sourced from.\n\nIf you omit this field, a hardcoded value of 1 is pushed as the metric value. This is useful if you just want to count the number of events that the filter catches.\n\nIf this metric is sent to Evidently, this field will be passed to Evidently raw and Evidently will handle data extraction from the event.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The field within the event object that the metric value is sourced from.\n\nIf you omit this field, a hardcoded value of 1 is pushed as the metric value. This is useful if you just want to count the number of events that the filter catches.\n\nIf this metric is sent to Evidently, this field will be passed to Evidently raw and Evidently will handle data extraction from the event.",
+            "maxLength": 256,
+            "minLength": 1,
+            "pattern": ".*"
+          }
+        },
+        {
+          "name": "UnitLabel",
+          "description": "The CloudWatch metric unit to use for this metric. If you omit this field, the metric is recorded with no unit.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The CloudWatch metric unit to use for this metric. If you omit this field, the metric is recorded with no unit.",
+            "maxLength": 256,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "DimensionKeys",
+          "description": "Use this field only if you are sending the metric to CloudWatch.\n\nThis field is a map of field paths to dimension names. It defines the dimensions to associate with this metric in CloudWatch. For extended metrics, valid values for the entries in this field are the following:\n\n\"metadata.pageId\": \"PageId\"\n\n\"metadata.browserName\": \"BrowserName\"\n\n\"metadata.deviceType\": \"DeviceType\"\n\n\"metadata.osName\": \"OSName\"\n\n\"metadata.countryCode\": \"CountryCode\"\n\n\"event_details.fileType\": \"FileType\"\n\nAll dimensions listed in this field must also be included in EventPattern.",
+          "optional": true,
+          "type": {
+            "type": "record",
+            "description": "Use this field only if you are sending the metric to CloudWatch.\n\nThis field is a map of field paths to dimension names. It defines the dimensions to associate with this metric in CloudWatch. For extended metrics, valid values for the entries in this field are the following:\n\n\"metadata.pageId\": \"PageId\"\n\n\"metadata.browserName\": \"BrowserName\"\n\n\"metadata.deviceType\": \"DeviceType\"\n\n\"metadata.osName\": \"OSName\"\n\n\"metadata.countryCode\": \"CountryCode\"\n\n\"event_details.fileType\": \"FileType\"\n\nAll dimensions listed in this field must also be included in EventPattern.",
+            "valueType": {
+              "type": "string",
+              "maxLength": 255,
+              "minLength": 1,
+              "pattern": ".*[^\\s].*"
+            }
+          }
+        },
+        {
+          "name": "EventPattern",
+          "description": "The pattern that defines the metric, specified as a JSON object. RUM checks events that happen in a user's session against the pattern, and events that match the pattern are sent to the metric destination.\n\nWhen you define extended metrics, the metric definition is not valid if EventPattern is omitted.\n\nExample event patterns:\n\n'{ \"event_type\": [\"com.amazon.rum.js_error_event\"], \"metadata\": { \"browserName\": [ \"Chrome\", \"Safari\" ], } }'\n\n'{ \"event_type\": [\"com.amazon.rum.performance_navigation_event\"], \"metadata\": { \"browserName\": [ \"Chrome\", \"Firefox\" ] }, \"event_details\": { \"duration\": [{ \"numeric\": [ \"<\", 2000 ] }] } }'\n\n'{ \"event_type\": [\"com.amazon.rum.performance_navigation_event\"], \"metadata\": { \"browserName\": [ \"Chrome\", \"Safari\" ], \"countryCode\": [ \"US\" ] }, \"event_details\": { \"duration\": [{ \"numeric\": [ \">=\", 2000, \"<\", 8000 ] }] } }'\n\nIf the metrics destination' is CloudWatch and the event also matches a value in DimensionKeys, then the metric is published with the specified dimensions.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The pattern that defines the metric, specified as a JSON object. RUM checks events that happen in a user's session against the pattern, and events that match the pattern are sent to the metric destination.\n\nWhen you define extended metrics, the metric definition is not valid if EventPattern is omitted.\n\nExample event patterns:\n\n'{ \"event_type\": [\"com.amazon.rum.js_error_event\"], \"metadata\": { \"browserName\": [ \"Chrome\", \"Safari\" ], } }'\n\n'{ \"event_type\": [\"com.amazon.rum.performance_navigation_event\"], \"metadata\": { \"browserName\": [ \"Chrome\", \"Firefox\" ] }, \"event_details\": { \"duration\": [{ \"numeric\": [ \"<\", 2000 ] }] } }'\n\n'{ \"event_type\": [\"com.amazon.rum.performance_navigation_event\"], \"metadata\": { \"browserName\": [ \"Chrome\", \"Safari\" ], \"countryCode\": [ \"US\" ] }, \"event_details\": { \"duration\": [{ \"numeric\": [ \">=\", 2000, \"<\", 8000 ] }] } }'\n\nIf the metrics destination' is CloudWatch and the event also matches a value in DimensionKeys, then the metric is published with the specified dimensions.",
+            "maxLength": 4000,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "CustomEventsStatus": {
+      "type": "string",
+      "allowedValues": ["ENABLED", "DISABLED"]
+    },
+    "CustomEvents": {
+      "type": "object",
+      "description": "AppMonitor custom events configuration",
+      "properties": [
+        {
+          "name": "Status",
+          "description": "Indicates whether AppMonitor accepts custom events.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "Indicates whether AppMonitor accepts custom events.",
+            "typeName": "CustomEventsStatus"
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource Type definition for AWS::RUM::AppMonitor",
+    "properties": [
+      {
+        "name": "Name",
+        "description": "A name for the app monitor",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "A name for the app monitor",
+          "maxLength": 255,
+          "minLength": 1,
+          "pattern": "[\\.\\-_/#A-Za-z0-9]+"
+        }
+      },
+      {
+        "name": "Domain",
+        "description": "The top-level internet domain name for which your application has administrative authority.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The top-level internet domain name for which your application has administrative authority.",
+          "maxLength": 253,
+          "minLength": 1,
+          "pattern": "^(localhost)|^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$|^(?![-.])([A-Za-z0-9-\\.\\-]{0,63})((?![-])([a-zA-Z0-9]{1}|^[a-zA-Z0-9]{0,1}))\\.(?![-])[A-Za-z-0-9]{1,63}((?![-])([a-zA-Z0-9]{1}|^[a-zA-Z0-9]{0,1}))|^(\\*\\.)(?![-.])([A-Za-z0-9-\\.\\-]{0,63})((?![-])([a-zA-Z0-9]{1}|^[a-zA-Z0-9]{0,1}))\\.(?![-])[A-Za-z-0-9]{1,63}((?![-])([a-zA-Z0-9]{1}|^[a-zA-Z0-9]{0,1}))"
+        }
+      },
+      {
+        "name": "CwLogEnabled",
+        "description": "Data collected by RUM is kept by RUM for 30 days and then deleted. This parameter specifies whether RUM sends a copy of this telemetry data to CWLlong in your account. This enables you to keep the telemetry data for more than 30 days, but it does incur CWLlong charges. If you omit this parameter, the default is false",
+        "optional": true,
+        "type": {
+          "type": "boolean",
+          "description": "Data collected by RUM is kept by RUM for 30 days and then deleted. This parameter specifies whether RUM sends a copy of this telemetry data to CWLlong in your account. This enables you to keep the telemetry data for more than 30 days, but it does incur CWLlong charges. If you omit this parameter, the default is false"
+        }
+      },
+      {
+        "name": "Tags",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "TagDef"
+        }
+      },
+      {
+        "name": "AppMonitorConfiguration",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "AppMonitorConfiguration"
+        }
+      },
+      {
+        "name": "CustomEvents",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "CustomEvents"
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Resource Type definition for AWS::RUM::AppMonitor",
+    "properties": [
+      {
+        "name": "Id",
+        "description": "The unique ID of the new app monitor.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The unique ID of the new app monitor.",
+          "maxLength": 36,
+          "minLength": 36,
+          "pattern": "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$"
+        }
+      }
+    ]
+  },
+  "$hash": "288ac6f961657a01a0d48322d7e348054351f72d"
+}

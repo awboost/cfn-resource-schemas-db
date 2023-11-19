@@ -1,0 +1,159 @@
+{
+  "definitions": {
+    "LoggingConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "LogGroupName",
+          "description": "The Amazon CloudWatch log group to which CloudFormation sends error logging information when invoking the type's handlers.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The Amazon CloudWatch log group to which CloudFormation sends error logging information when invoking the type's handlers.",
+            "maxLength": 512,
+            "minLength": 1,
+            "pattern": "^[\\.\\-_/#A-Za-z0-9]+$"
+          }
+        },
+        {
+          "name": "LogRoleArn",
+          "description": "The ARN of the role that CloudFormation should assume when sending log entries to CloudWatch logs.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The ARN of the role that CloudFormation should assume when sending log entries to CloudWatch logs.",
+            "maxLength": 256,
+            "minLength": 1
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Enable a resource that has been published in the CloudFormation Registry.",
+    "properties": [
+      {
+        "name": "ExecutionRoleArn",
+        "description": "The Amazon Resource Name (ARN) of the IAM execution role to use to register the type. If your resource type calls AWS APIs in any of its handlers, you must create an IAM execution role that includes the necessary permissions to call those AWS APIs, and provision that execution role in your account. CloudFormation then assumes that execution role to provide your resource type with the appropriate credentials.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) of the IAM execution role to use to register the type. If your resource type calls AWS APIs in any of its handlers, you must create an IAM execution role that includes the necessary permissions to call those AWS APIs, and provision that execution role in your account. CloudFormation then assumes that execution role to provide your resource type with the appropriate credentials."
+        }
+      },
+      {
+        "name": "PublisherId",
+        "description": "The publisher id assigned by CloudFormation for publishing in this region.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The publisher id assigned by CloudFormation for publishing in this region.",
+          "maxLength": 40,
+          "minLength": 1,
+          "pattern": "[0-9a-zA-Z]{40}"
+        }
+      },
+      {
+        "name": "LoggingConfig",
+        "description": "Specifies logging configuration information for a type.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "Specifies logging configuration information for a type.",
+          "typeName": "LoggingConfig"
+        }
+      },
+      {
+        "name": "PublicTypeArn",
+        "description": "The Amazon Resource Number (ARN) assigned to the public extension upon publication",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Number (ARN) assigned to the public extension upon publication",
+          "maxLength": 1024,
+          "pattern": "arn:aws[A-Za-z0-9-]{0,64}:cloudformation:[A-Za-z0-9-]{1,64}:([0-9]{12})?:type/.+"
+        }
+      },
+      {
+        "name": "AutoUpdate",
+        "description": "Whether to automatically update the extension in this account and region when a new minor version is published by the extension publisher. Major versions released by the publisher must be manually updated.",
+        "optional": true,
+        "type": {
+          "type": "boolean",
+          "description": "Whether to automatically update the extension in this account and region when a new minor version is published by the extension publisher. Major versions released by the publisher must be manually updated."
+        }
+      },
+      {
+        "name": "TypeNameAlias",
+        "description": "An alias to assign to the public extension in this account and region. If you specify an alias for the extension, you must then use the alias to refer to the extension in your templates.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "An alias to assign to the public extension in this account and region. If you specify an alias for the extension, you must then use the alias to refer to the extension in your templates.",
+          "maxLength": 204,
+          "minLength": 10,
+          "pattern": "[A-Za-z0-9]{2,64}::[A-Za-z0-9]{2,64}::[A-Za-z0-9]{2,64}(::MODULE){0,1}"
+        }
+      },
+      {
+        "name": "VersionBump",
+        "description": "Manually updates a previously-enabled type to a new major or minor version, if available. You can also use this parameter to update the value of AutoUpdateEnabled",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Manually updates a previously-enabled type to a new major or minor version, if available. You can also use this parameter to update the value of AutoUpdateEnabled",
+          "allowedValues": ["MAJOR", "MINOR"]
+        }
+      },
+      {
+        "name": "MajorVersion",
+        "description": "The Major Version of the type you want to enable",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Major Version of the type you want to enable",
+          "maxLength": 100000,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "TypeName",
+        "description": "The name of the type being registered.\n\nWe recommend that type names adhere to the following pattern: company_or_organization::service::type.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The name of the type being registered.\n\nWe recommend that type names adhere to the following pattern: company_or_organization::service::type.",
+          "pattern": "[A-Za-z0-9]{2,64}::[A-Za-z0-9]{2,64}::[A-Za-z0-9]{2,64}(::MODULE){0,1}"
+        }
+      },
+      {
+        "name": "Type",
+        "description": "The kind of extension",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The kind of extension",
+          "allowedValues": ["RESOURCE", "MODULE", "HOOK"]
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Enable a resource that has been published in the CloudFormation Registry.",
+    "properties": [
+      {
+        "name": "Arn",
+        "description": "The Amazon Resource Name (ARN) of the extension.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) of the extension.",
+          "pattern": "arn:aws[A-Za-z0-9-]{0,64}:cloudformation:[A-Za-z0-9-]{1,64}:([0-9]{12})?:type/.+"
+        }
+      }
+    ]
+  },
+  "$hash": "3a0625999d1aba74b5bfe476ea9702824739ba6b"
+}

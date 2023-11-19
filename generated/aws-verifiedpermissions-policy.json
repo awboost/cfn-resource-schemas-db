@@ -1,0 +1,167 @@
+{
+  "definitions": {
+    "EntityIdentifier": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "EntityType",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "pattern": "^.*$"
+          }
+        },
+        {
+          "name": "EntityId",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "pattern": "^.*$"
+          }
+        }
+      ]
+    },
+    "PolicyDefinition": {
+      "type": "union",
+      "types": [
+        {
+          "type": "object",
+          "properties": [
+            {
+              "name": "Static",
+              "optional": false,
+              "type": {
+                "type": "ref",
+                "typeName": "StaticPolicyDefinition"
+              }
+            }
+          ]
+        },
+        {
+          "type": "object",
+          "properties": [
+            {
+              "name": "TemplateLinked",
+              "optional": false,
+              "type": {
+                "type": "ref",
+                "typeName": "TemplateLinkedPolicyDefinition"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "PolicyType": {
+      "type": "string",
+      "allowedValues": ["STATIC", "TEMPLATE_LINKED"]
+    },
+    "StaticPolicyDefinition": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Description",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 150,
+            "minLength": 0
+          }
+        },
+        {
+          "name": "Statement",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 10000,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "TemplateLinkedPolicyDefinition": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "PolicyTemplateId",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9-]*$"
+          }
+        },
+        {
+          "name": "Principal",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "EntityIdentifier"
+          }
+        },
+        {
+          "name": "Resource",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "EntityIdentifier"
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Definition of AWS::VerifiedPermissions::Policy Resource Type",
+    "properties": [
+      {
+        "name": "Definition",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "PolicyDefinition"
+        }
+      },
+      {
+        "name": "PolicyStoreId",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 200,
+          "minLength": 1,
+          "pattern": "^[a-zA-Z0-9-]*$"
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Definition of AWS::VerifiedPermissions::Policy Resource Type",
+    "properties": [
+      {
+        "name": "PolicyId",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 200,
+          "minLength": 1,
+          "pattern": "^[a-zA-Z0-9-]*$"
+        }
+      },
+      {
+        "name": "PolicyType",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "PolicyType"
+        }
+      }
+    ]
+  },
+  "$hash": "c2df27ed156a57abd22b25b5bc8600bb13bc7f18"
+}

@@ -1,0 +1,243 @@
+{
+  "definitions": {
+    "Arn": {
+      "type": "string",
+      "pattern": "arn:[\\w+=/,.@-]+:[\\w+=/,.@-]+:[\\w+=/,.@-]*:[0-9]*:[\\w+=,.@-]+(/[\\w+=,.@-]+)*"
+    },
+    "Tags": {
+      "type": "record",
+      "description": "A key-value pair to associate with a resource.",
+      "valueType": {
+        "type": "string",
+        "description": "The value for the tag. You can specify a value that is 1 to 255 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+        "maxLength": 256,
+        "minLength": 1
+      }
+    },
+    "RenderingEngine": {
+      "type": "object",
+      "description": "Information about a rendering engine.",
+      "properties": [
+        {
+          "name": "Name",
+          "description": "The name of the rendering engine.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The name of the rendering engine.",
+            "allowedValues": ["OGRE"]
+          }
+        },
+        {
+          "name": "Version",
+          "description": "The version of the rendering engine.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The version of the rendering engine.",
+            "pattern": "1.x"
+          }
+        }
+      ]
+    },
+    "RobotSoftwareSuite": {
+      "type": "object",
+      "description": "Information about a robot software suite.",
+      "properties": [
+        {
+          "name": "Name",
+          "description": "The name of the robot software suite.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The name of the robot software suite.",
+            "allowedValues": ["ROS", "ROS2", "General"]
+          }
+        },
+        {
+          "name": "Version",
+          "description": "The version of the robot software suite.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The version of the robot software suite.",
+            "allowedValues": ["Kinetic", "Melodic", "Dashing", "Foxy"]
+          }
+        }
+      ]
+    },
+    "SourceConfig": {
+      "type": "object",
+      "description": "Information about a source configuration.",
+      "properties": [
+        {
+          "name": "S3Bucket",
+          "description": "The Amazon S3 bucket name.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The Amazon S3 bucket name.",
+            "pattern": "[a-z0-9][a-z0-9.\\-]*[a-z0-9]"
+          }
+        },
+        {
+          "name": "S3Key",
+          "description": "The s3 object key.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The s3 object key.",
+            "maxLength": 1024,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Architecture",
+          "description": "The target processor architecture for the application.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The target processor architecture for the application.",
+            "allowedValues": ["X86_64", "ARM64", "ARMHF"]
+          }
+        }
+      ]
+    },
+    "SimulationSoftwareSuite": {
+      "type": "object",
+      "description": "Information about a simulation software suite.",
+      "properties": [
+        {
+          "name": "Name",
+          "description": "The name of the simulation software suite.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The name of the simulation software suite.",
+            "allowedValues": ["Gazebo", "RosbagPlay", "SimulationRuntime"]
+          }
+        },
+        {
+          "name": "Version",
+          "description": "The version of the simulation software suite.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The version of the simulation software suite.",
+            "allowedValues": [
+              "7",
+              "9",
+              "11",
+              "Kinetic",
+              "Melodic",
+              "Dashing",
+              "Foxy"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "This schema is for testing purpose only.",
+    "properties": [
+      {
+        "name": "Name",
+        "description": "The name of the simulation application.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The name of the simulation application.",
+          "maxLength": 255,
+          "minLength": 1,
+          "pattern": "[a-zA-Z0-9_\\-]*"
+        }
+      },
+      {
+        "name": "CurrentRevisionId",
+        "description": "The current revision id.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The current revision id."
+        }
+      },
+      {
+        "name": "RenderingEngine",
+        "description": "The rendering engine for the simulation application.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "The rendering engine for the simulation application.",
+          "typeName": "RenderingEngine"
+        }
+      },
+      {
+        "name": "RobotSoftwareSuite",
+        "description": "The robot software suite used by the simulation application.",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "description": "The robot software suite used by the simulation application.",
+          "typeName": "RobotSoftwareSuite"
+        }
+      },
+      {
+        "name": "SimulationSoftwareSuite",
+        "description": "The simulation software suite used by the simulation application.",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "description": "The simulation software suite used by the simulation application.",
+          "typeName": "SimulationSoftwareSuite"
+        }
+      },
+      {
+        "name": "Sources",
+        "description": "The sources of the simulation application.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "The sources of the simulation application.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "SourceConfig"
+          }
+        }
+      },
+      {
+        "name": "Environment",
+        "description": "The URI of the Docker image for the robot application.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The URI of the Docker image for the robot application."
+        }
+      },
+      {
+        "name": "Tags",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "Tags"
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "This schema is for testing purpose only.",
+    "properties": [
+      {
+        "name": "Arn",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "Arn"
+        }
+      }
+    ]
+  },
+  "$hash": "34bcda4d98a5f45bdbfe6d559669120f63be48db"
+}

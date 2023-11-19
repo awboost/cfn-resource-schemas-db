@@ -1,0 +1,161 @@
+{
+  "definitions": {
+    "ContactTargetInfo": {
+      "type": "object",
+      "description": "The contact that SSM Incident Manager is engaging during an incident.",
+      "properties": [
+        {
+          "name": "ContactId",
+          "description": "The Amazon Resource Name (ARN) of the contact.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the contact."
+          }
+        },
+        {
+          "name": "IsEssential",
+          "description": "A Boolean value determining if the contact's acknowledgement stops the progress of stages in the plan.",
+          "optional": false,
+          "type": {
+            "type": "boolean",
+            "description": "A Boolean value determining if the contact's acknowledgement stops the progress of stages in the plan."
+          }
+        }
+      ]
+    },
+    "ChannelTargetInfo": {
+      "type": "object",
+      "description": "Information about the contact channel that SSM Incident Manager uses to engage the contact.",
+      "properties": [
+        {
+          "name": "ChannelId",
+          "description": "The Amazon Resource Name (ARN) of the contact channel.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the contact channel."
+          }
+        },
+        {
+          "name": "RetryIntervalInMinutes",
+          "description": "The number of minutes to wait to retry sending engagement in the case the engagement initially fails.",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "description": "The number of minutes to wait to retry sending engagement in the case the engagement initially fails.",
+            "isInteger": true
+          }
+        }
+      ]
+    },
+    "Stage": {
+      "type": "object",
+      "description": "A set amount of time that an escalation plan or engagement plan engages the specified contacts or contact methods.",
+      "properties": [
+        {
+          "name": "DurationInMinutes",
+          "description": "The time to wait until beginning the next stage.",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "description": "The time to wait until beginning the next stage.",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "Targets",
+          "description": "The contacts or contact methods that the escalation plan or engagement plan is engaging.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "The contacts or contact methods that the escalation plan or engagement plan is engaging.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Targets"
+            }
+          }
+        }
+      ]
+    },
+    "Targets": {
+      "type": "object",
+      "description": "The contacts or contact methods that the escalation plan or engagement plan is engaging.",
+      "properties": [
+        {
+          "name": "ContactTargetInfo",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ContactTargetInfo"
+          }
+        },
+        {
+          "name": "ChannelTargetInfo",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ChannelTargetInfo"
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Engagement Plan for a SSM Incident Manager Contact.",
+    "properties": [
+      {
+        "name": "ContactId",
+        "description": "Contact ID for the AWS SSM Incident Manager Contact to associate the plan.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Contact ID for the AWS SSM Incident Manager Contact to associate the plan.",
+          "pattern": "arn:[-\\w+=\\/,.@]+:[-\\w+=\\/,.@]+:[-\\w+=\\/,.@]*:[0-9]+:([\\w+=\\/,.@:-]+)*"
+        }
+      },
+      {
+        "name": "Stages",
+        "description": "The stages that an escalation plan or engagement plan engages contacts and contact methods in.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "The stages that an escalation plan or engagement plan engages contacts and contact methods in.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Stage"
+          }
+        }
+      },
+      {
+        "name": "RotationIds",
+        "description": "Rotation Ids to associate with Oncall Contact for engagement.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "Rotation Ids to associate with Oncall Contact for engagement.",
+          "itemType": {
+            "type": "string"
+          }
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Engagement Plan for a SSM Incident Manager Contact.",
+    "properties": [
+      {
+        "name": "Arn",
+        "description": "The Amazon Resource Name (ARN) of the contact.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) of the contact."
+        }
+      }
+    ]
+  },
+  "$hash": "38afc2ebecb3bc39c0e055615315838905310ac3"
+}

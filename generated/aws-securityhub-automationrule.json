@@ -1,0 +1,986 @@
+{
+  "definitions": {
+    "Tags": {
+      "type": "record",
+      "description": "A key-value pair to associate with a resource.",
+      "valueType": {
+        "type": "string",
+        "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+        "maxLength": 256,
+        "minLength": 0
+      }
+    },
+    "NonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "DateFilter": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "DateRange",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DateRange"
+          }
+        },
+        {
+          "name": "End",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ISO8601DateString"
+          }
+        },
+        {
+          "name": "Start",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ISO8601DateString"
+          }
+        }
+      ]
+    },
+    "DateRange": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Unit",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "allowedValues": ["DAYS"]
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": false
+          }
+        }
+      ]
+    },
+    "BooleanFilter": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "boolean"
+          }
+        }
+      ]
+    },
+    "MapFilter": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Comparison",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "allowedValues": [
+              "EQUALS",
+              "NOT_EQUALS",
+              "CONTAINS",
+              "NOT_CONTAINS"
+            ]
+          }
+        },
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "NumberFilter": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Eq",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": false
+          }
+        },
+        {
+          "name": "Gte",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": false
+          }
+        },
+        {
+          "name": "Lte",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": false
+          }
+        }
+      ]
+    },
+    "StringFilter": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Comparison",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "StringFilterComparison"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "StringFilterComparison": {
+      "type": "string",
+      "allowedValues": [
+        "EQUALS",
+        "PREFIX",
+        "NOT_EQUALS",
+        "PREFIX_NOT_EQUALS",
+        "CONTAINS",
+        "NOT_CONTAINS"
+      ]
+    },
+    "ISO8601DateString": {
+      "type": "string",
+      "pattern": "^(\\d\\d\\d\\d)-([0][1-9]|[1][0-2])-([0][1-9]|[1-2](\\d)|[3][0-1])[T](?:([0-1](\\d)|[2][0-3]):[0-5](\\d):[0-5](\\d)|23:59:60)(?:\\.(\\d)+)?([Z]|[+-](\\d\\d)(:?(\\d\\d))?)$"
+    },
+    "arn": {
+      "type": "string",
+      "maxLength": 2048,
+      "minLength": 12,
+      "pattern": "^arn:(aws|aws-cn|aws-us-gov|aws-iso-?[a-z]{0,2}):[A-Za-z0-9]{1,63}:[a-z]+-([a-z]{1,10}-)?[a-z]+-[0-9]+:([0-9]{12})?:.+$"
+    },
+    "arnOrId": {
+      "type": "union",
+      "types": [
+        {
+          "type": "string",
+          "maxLength": 512,
+          "minLength": 1
+        },
+        {
+          "type": "ref",
+          "typeName": "arn"
+        }
+      ]
+    },
+    "timestamp": {
+      "type": "string",
+      "pattern": "(\\d\\d\\d\\d)-[0-1](\\d)-[0-3](\\d)[Tt](?:[0-2](\\d):[0-5](\\d):[0-5](\\d)|23:59:60)(?:\\.(\\d)+)?(?:[Zz]|[+-](\\d\\d)(?::?(\\d\\d))?)$"
+    },
+    "int100": {
+      "type": "number",
+      "isInteger": true,
+      "maximum": 100,
+      "minimum": 0
+    },
+    "map": {
+      "type": "record",
+      "valueType": {
+        "type": "string",
+        "maxLength": 1024,
+        "minLength": 0
+      }
+    },
+    "RelatedFinding": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ProductArn",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "arn"
+          }
+        },
+        {
+          "name": "Id",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "arnOrId"
+          }
+        }
+      ]
+    },
+    "NoteUpdate": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Text",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 512,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "UpdatedBy",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "arnOrId"
+          }
+        }
+      ]
+    },
+    "WorkflowUpdate": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Status",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "allowedValues": ["NEW", "NOTIFIED", "RESOLVED", "SUPPRESSED"]
+          }
+        }
+      ]
+    },
+    "SeverityUpdate": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Product",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": false
+          }
+        },
+        {
+          "name": "Label",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": [
+              "INFORMATIONAL",
+              "LOW",
+              "MEDIUM",
+              "HIGH",
+              "CRITICAL"
+            ]
+          }
+        },
+        {
+          "name": "Normalized",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "int100"
+          }
+        }
+      ]
+    },
+    "AutomationRulesFindingFieldsUpdate": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Types",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string",
+              "pattern": "^([^/]+)(/[^/]+){0,2}$"
+            },
+            "maxLength": 50
+          }
+        },
+        {
+          "name": "Severity",
+          "description": "Severity of the finding",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "Severity of the finding",
+            "typeName": "SeverityUpdate"
+          }
+        },
+        {
+          "name": "Confidence",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "int100"
+          }
+        },
+        {
+          "name": "Criticality",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "int100"
+          }
+        },
+        {
+          "name": "UserDefinedFields",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "map"
+          }
+        },
+        {
+          "name": "VerificationState",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": [
+              "UNKNOWN",
+              "TRUE_POSITIVE",
+              "FALSE_POSITIVE",
+              "BENIGN_POSITIVE"
+            ]
+          }
+        },
+        {
+          "name": "RelatedFindings",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "RelatedFinding"
+            },
+            "maxLength": 10,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Note",
+          "description": "Note added to the finding",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "Note added to the finding",
+            "typeName": "NoteUpdate"
+          }
+        },
+        {
+          "name": "Workflow",
+          "description": "Workflow status set for the finding",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "Workflow status set for the finding",
+            "typeName": "WorkflowUpdate"
+          }
+        }
+      ]
+    },
+    "AutomationRulesAction": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Type",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "allowedValues": ["FINDING_FIELDS_UPDATE"]
+          }
+        },
+        {
+          "name": "FindingFieldsUpdate",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "AutomationRulesFindingFieldsUpdate"
+          }
+        }
+      ]
+    },
+    "AutomationRulesFindingFilters": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ProductArn",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "StringFilter"
+            },
+            "maxLength": 20
+          }
+        },
+        {
+          "name": "AwsAccountId",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "StringFilter"
+            },
+            "maxLength": 100
+          }
+        },
+        {
+          "name": "Id",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "StringFilter"
+            },
+            "maxLength": 20
+          }
+        },
+        {
+          "name": "GeneratorId",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "StringFilter"
+            },
+            "maxLength": 100
+          }
+        },
+        {
+          "name": "Type",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "StringFilter"
+            },
+            "maxLength": 20
+          }
+        },
+        {
+          "name": "FirstObservedAt",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "DateFilter"
+            },
+            "maxLength": 20
+          }
+        },
+        {
+          "name": "LastObservedAt",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "DateFilter"
+            },
+            "maxLength": 20
+          }
+        },
+        {
+          "name": "CreatedAt",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "DateFilter"
+            },
+            "maxLength": 20
+          }
+        },
+        {
+          "name": "UpdatedAt",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "DateFilter"
+            },
+            "maxLength": 20
+          }
+        },
+        {
+          "name": "Confidence",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "NumberFilter"
+            },
+            "maxLength": 20
+          }
+        },
+        {
+          "name": "Criticality",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "NumberFilter"
+            },
+            "maxLength": 20
+          }
+        },
+        {
+          "name": "Title",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "StringFilter"
+            },
+            "maxLength": 100
+          }
+        },
+        {
+          "name": "Description",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "StringFilter"
+            },
+            "maxLength": 20
+          }
+        },
+        {
+          "name": "SourceUrl",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "StringFilter"
+            },
+            "maxLength": 20
+          }
+        },
+        {
+          "name": "ProductName",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "StringFilter"
+            },
+            "maxLength": 20
+          }
+        },
+        {
+          "name": "CompanyName",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "StringFilter"
+            },
+            "maxLength": 20
+          }
+        },
+        {
+          "name": "SeverityLabel",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "StringFilter"
+            },
+            "maxLength": 20
+          }
+        },
+        {
+          "name": "ResourceType",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "StringFilter"
+            },
+            "maxLength": 20
+          }
+        },
+        {
+          "name": "ResourceId",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "StringFilter"
+            },
+            "maxLength": 100
+          }
+        },
+        {
+          "name": "ResourcePartition",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "StringFilter"
+            },
+            "maxLength": 20
+          }
+        },
+        {
+          "name": "ResourceRegion",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "StringFilter"
+            },
+            "maxLength": 20
+          }
+        },
+        {
+          "name": "ResourceTags",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "MapFilter"
+            },
+            "maxLength": 20
+          }
+        },
+        {
+          "name": "ResourceDetailsOther",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "MapFilter"
+            },
+            "maxLength": 20
+          }
+        },
+        {
+          "name": "ComplianceStatus",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "StringFilter"
+            },
+            "maxLength": 20
+          }
+        },
+        {
+          "name": "ComplianceSecurityControlId",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "StringFilter"
+            },
+            "maxLength": 20
+          }
+        },
+        {
+          "name": "ComplianceAssociatedStandardsId",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "StringFilter"
+            },
+            "maxLength": 20
+          }
+        },
+        {
+          "name": "VerificationState",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "StringFilter"
+            },
+            "maxLength": 20
+          }
+        },
+        {
+          "name": "WorkflowStatus",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "StringFilter"
+            },
+            "maxLength": 20
+          }
+        },
+        {
+          "name": "RecordState",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "StringFilter"
+            },
+            "maxLength": 20
+          }
+        },
+        {
+          "name": "RelatedFindingsProductArn",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "StringFilter"
+            },
+            "maxLength": 20
+          }
+        },
+        {
+          "name": "RelatedFindingsId",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "StringFilter"
+            },
+            "maxLength": 20
+          }
+        },
+        {
+          "name": "NoteText",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "StringFilter"
+            },
+            "maxLength": 20
+          }
+        },
+        {
+          "name": "NoteUpdatedAt",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "DateFilter"
+            },
+            "maxLength": 20
+          }
+        },
+        {
+          "name": "NoteUpdatedBy",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "StringFilter"
+            },
+            "maxLength": 20
+          }
+        },
+        {
+          "name": "UserDefinedFields",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "MapFilter"
+            },
+            "maxLength": 20
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "The AWS::SecurityHub::AutomationRule resource represents the Automation Rule in your account. One rule resource is created for each Automation Rule in which you configure rule criteria and actions.\n\n",
+    "properties": [
+      {
+        "name": "RuleStatus",
+        "description": "Status of the Rule upon creation",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Status of the Rule upon creation",
+          "allowedValues": ["ENABLED", "DISABLED"]
+        }
+      },
+      {
+        "name": "RuleOrder",
+        "description": "Rule order value",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "Rule order value",
+          "isInteger": true,
+          "maximum": 1000,
+          "minimum": 1
+        }
+      },
+      {
+        "name": "Description",
+        "description": "Rule description",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Rule description",
+          "maxLength": 1024,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "RuleName",
+        "description": "Rule name",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Rule name",
+          "maxLength": 256,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "IsTerminal",
+        "description": "If Rule is a terminal rule",
+        "optional": true,
+        "type": {
+          "type": "boolean",
+          "description": "If Rule is a terminal rule"
+        }
+      },
+      {
+        "name": "Actions",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "AutomationRulesAction"
+          },
+          "maxLength": 1,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "Criteria",
+        "description": "The rule criteria for evaluating findings",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "The rule criteria for evaluating findings",
+          "typeName": "AutomationRulesFindingFilters"
+        }
+      },
+      {
+        "name": "Tags",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "Tags"
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "The AWS::SecurityHub::AutomationRule resource represents the Automation Rule in your account. One rule resource is created for each Automation Rule in which you configure rule criteria and actions.\n\n",
+    "properties": [
+      {
+        "name": "RuleArn",
+        "description": "An Automation Rule Arn is automatically created",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "An Automation Rule Arn is automatically created",
+          "pattern": "arn:aws\\S*:securityhub:\\S*"
+        }
+      },
+      {
+        "name": "CreatedAt",
+        "description": "The date and time when Automation Rule was created",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "The date and time when Automation Rule was created",
+          "typeName": "ISO8601DateString"
+        }
+      },
+      {
+        "name": "UpdatedAt",
+        "description": "The date and time when Automation Rule was last updated",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "The date and time when Automation Rule was last updated",
+          "typeName": "ISO8601DateString"
+        }
+      },
+      {
+        "name": "CreatedBy",
+        "description": "The identifier by which created the rule",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The identifier by which created the rule",
+          "maxLength": 256,
+          "minLength": 1
+        }
+      }
+    ]
+  },
+  "$hash": "9fdefe1ee4a7fd78dca203dcc18b9766055c7f0e"
+}

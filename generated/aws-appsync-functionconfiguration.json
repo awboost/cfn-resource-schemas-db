@@ -1,0 +1,235 @@
+{
+  "definitions": {
+    "AppSyncRuntime": {
+      "type": "object",
+      "description": "Describes a runtime used by an AWS AppSync pipeline resolver or AWS AppSync function. Specifies the name and version of the runtime to use. Note that if a runtime is specified, code must also be specified.",
+      "properties": [
+        {
+          "name": "Name",
+          "description": "The name of the runtime to use. Currently, the only allowed value is APPSYNC_JS.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The name of the runtime to use. Currently, the only allowed value is APPSYNC_JS."
+          }
+        },
+        {
+          "name": "RuntimeVersion",
+          "description": "The version of the runtime to use. Currently, the only allowed version is 1.0.0.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The version of the runtime to use. Currently, the only allowed version is 1.0.0."
+          }
+        }
+      ]
+    },
+    "SyncConfig": {
+      "type": "object",
+      "description": "Describes a Sync configuration for a resolver. Specifies which Conflict Detection strategy and Resolution strategy to use when the resolver is invoked.",
+      "properties": [
+        {
+          "name": "ConflictDetection",
+          "description": "The Conflict Detection strategy to use.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The Conflict Detection strategy to use."
+          }
+        },
+        {
+          "name": "ConflictHandler",
+          "description": "The Conflict Resolution strategy to perform in the event of a conflict.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The Conflict Resolution strategy to perform in the event of a conflict."
+          }
+        },
+        {
+          "name": "LambdaConflictHandlerConfig",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "LambdaConflictHandlerConfig"
+          }
+        }
+      ]
+    },
+    "LambdaConflictHandlerConfig": {
+      "type": "object",
+      "description": "The LambdaConflictHandlerConfig when configuring LAMBDA as the Conflict Handler.",
+      "properties": [
+        {
+          "name": "LambdaConflictHandlerArn",
+          "description": "The Amazon Resource Name (ARN) for the Lambda function to use as the Conflict Handler.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) for the Lambda function to use as the Conflict Handler."
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "An example resource schema demonstrating some basic constructs and validation rules.",
+    "properties": [
+      {
+        "name": "ApiId",
+        "description": "The AWS AppSync GraphQL API that you want to attach using this function.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The AWS AppSync GraphQL API that you want to attach using this function."
+        }
+      },
+      {
+        "name": "Code",
+        "description": "The resolver code that contains the request and response functions. When code is used, the runtime is required. The runtime value must be APPSYNC_JS.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The resolver code that contains the request and response functions. When code is used, the runtime is required. The runtime value must be APPSYNC_JS."
+        }
+      },
+      {
+        "name": "CodeS3Location",
+        "description": "The Amazon S3 endpoint (where the code is located??).",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Amazon S3 endpoint (where the code is located??)."
+        }
+      },
+      {
+        "name": "DataSourceName",
+        "description": "The name of data source this function will attach.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The name of data source this function will attach."
+        }
+      },
+      {
+        "name": "Description",
+        "description": "The function description.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The function description."
+        }
+      },
+      {
+        "name": "FunctionVersion",
+        "description": "The version of the request mapping template. Currently, only the 2018-05-29 version of the template is supported.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The version of the request mapping template. Currently, only the 2018-05-29 version of the template is supported."
+        }
+      },
+      {
+        "name": "MaxBatchSize",
+        "description": "The maximum number of resolver request inputs that will be sent to a single AWS Lambda function in a BatchInvoke operation.",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "The maximum number of resolver request inputs that will be sent to a single AWS Lambda function in a BatchInvoke operation.",
+          "isInteger": true
+        }
+      },
+      {
+        "name": "Name",
+        "description": "The name of the function.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The name of the function."
+        }
+      },
+      {
+        "name": "RequestMappingTemplate",
+        "description": "The Function request mapping template. Functions support only the 2018-05-29 version of the request mapping template.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Function request mapping template. Functions support only the 2018-05-29 version of the request mapping template."
+        }
+      },
+      {
+        "name": "RequestMappingTemplateS3Location",
+        "description": "Describes a Sync configuration for a resolver. Contains information on which Conflict Detection, as well as Resolution strategy, should be performed when the resolver is invoked.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Describes a Sync configuration for a resolver. Contains information on which Conflict Detection, as well as Resolution strategy, should be performed when the resolver is invoked."
+        }
+      },
+      {
+        "name": "ResponseMappingTemplate",
+        "description": "The Function response mapping template.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Function response mapping template."
+        }
+      },
+      {
+        "name": "ResponseMappingTemplateS3Location",
+        "description": "The location of a response mapping template in an Amazon S3 bucket. Use this if you want to provision with a template file in Amazon S3 rather than embedding it in your CloudFormation template.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The location of a response mapping template in an Amazon S3 bucket. Use this if you want to provision with a template file in Amazon S3 rather than embedding it in your CloudFormation template."
+        }
+      },
+      {
+        "name": "Runtime",
+        "description": "Describes a runtime used by an AWS AppSync pipeline resolver or AWS AppSync function. Specifies the name and version of the runtime to use. Note that if a runtime is specified, code must also be specified.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "Describes a runtime used by an AWS AppSync pipeline resolver or AWS AppSync function. Specifies the name and version of the runtime to use. Note that if a runtime is specified, code must also be specified.",
+          "typeName": "AppSyncRuntime"
+        }
+      },
+      {
+        "name": "SyncConfig",
+        "description": "Describes a Sync configuration for a resolver. Specifies which Conflict Detection strategy and Resolution strategy to use when the resolver is invoked.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "Describes a Sync configuration for a resolver. Specifies which Conflict Detection strategy and Resolution strategy to use when the resolver is invoked.",
+          "typeName": "SyncConfig"
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "An example resource schema demonstrating some basic constructs and validation rules.",
+    "properties": [
+      {
+        "name": "FunctionId",
+        "description": "The unique identifier for the function generated by the service",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The unique identifier for the function generated by the service"
+        }
+      },
+      {
+        "name": "FunctionArn",
+        "description": "The ARN for the function generated by the service",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The ARN for the function generated by the service"
+        }
+      }
+    ]
+  },
+  "$hash": "e9e67254433b795583cac0fc1625b2dbf8954de8"
+}

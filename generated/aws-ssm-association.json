@@ -1,0 +1,279 @@
+{
+  "definitions": {
+    "Target": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "pattern": "^[\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]{1,128}$|resource-groups:Name"
+          }
+        },
+        {
+          "name": "Values",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            },
+            "maxLength": 50,
+            "minLength": 0
+          }
+        }
+      ]
+    },
+    "ParameterValues": {
+      "type": "array",
+      "itemType": {
+        "type": "string"
+      }
+    },
+    "S3Region": {
+      "type": "string",
+      "maxLength": 20,
+      "minLength": 3
+    },
+    "S3BucketName": {
+      "type": "string",
+      "maxLength": 63,
+      "minLength": 3
+    },
+    "S3KeyPrefix": {
+      "type": "string",
+      "maxLength": 1024
+    },
+    "S3OutputLocation": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "OutputS3Region",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "S3Region"
+          }
+        },
+        {
+          "name": "OutputS3BucketName",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "S3BucketName"
+          }
+        },
+        {
+          "name": "OutputS3KeyPrefix",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "S3KeyPrefix"
+          }
+        }
+      ]
+    },
+    "InstanceAssociationOutputLocation": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "S3Location",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "S3OutputLocation"
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "The AWS::SSM::Association resource associates an SSM document in AWS Systems Manager with EC2 instances that contain a configuration agent to process the document.",
+    "properties": [
+      {
+        "name": "AssociationName",
+        "description": "The name of the association.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The name of the association.",
+          "pattern": "^[a-zA-Z0-9_\\-.]{3,128}$"
+        }
+      },
+      {
+        "name": "DocumentVersion",
+        "description": "The version of the SSM document to associate with the target.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The version of the SSM document to associate with the target.",
+          "pattern": "([$]LATEST|[$]DEFAULT|^[1-9][0-9]*$)"
+        }
+      },
+      {
+        "name": "InstanceId",
+        "description": "The ID of the instance that the SSM document is associated with.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The ID of the instance that the SSM document is associated with.",
+          "pattern": "(^i-(\\w{8}|\\w{17})$)|(^mi-\\w{17}$)"
+        }
+      },
+      {
+        "name": "Name",
+        "description": "The name of the SSM document.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The name of the SSM document.",
+          "pattern": "^[a-zA-Z0-9_\\-.:/]{3,200}$"
+        }
+      },
+      {
+        "name": "Parameters",
+        "description": "Parameter values that the SSM document uses at runtime.",
+        "optional": true,
+        "type": {
+          "type": "record",
+          "description": "Parameter values that the SSM document uses at runtime.",
+          "valueType": {
+            "type": "ref",
+            "typeName": "ParameterValues"
+          }
+        }
+      },
+      {
+        "name": "ScheduleExpression",
+        "description": "A Cron or Rate expression that specifies when the association is applied to the target.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "A Cron or Rate expression that specifies when the association is applied to the target.",
+          "maxLength": 256,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "Targets",
+        "description": "The targets that the SSM document sends commands to.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "The targets that the SSM document sends commands to.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Target"
+          },
+          "maxLength": 5,
+          "minLength": 0
+        }
+      },
+      {
+        "name": "OutputLocation",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "InstanceAssociationOutputLocation"
+        }
+      },
+      {
+        "name": "AutomationTargetParameterName",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 50,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "MaxErrors",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "pattern": "^([1-9][0-9]{0,6}|[0]|[1-9][0-9]%|[0-9]%|100%)$"
+        }
+      },
+      {
+        "name": "MaxConcurrency",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "pattern": "^([1-9][0-9]{0,6}|[1-9][0-9]%|[1-9]%|100%)$"
+        }
+      },
+      {
+        "name": "ComplianceSeverity",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "allowedValues": ["CRITICAL", "HIGH", "MEDIUM", "LOW", "UNSPECIFIED"]
+        }
+      },
+      {
+        "name": "SyncCompliance",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "allowedValues": ["AUTO", "MANUAL"]
+        }
+      },
+      {
+        "name": "WaitForSuccessTimeoutSeconds",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "isInteger": true,
+          "maximum": 172800,
+          "minimum": 15
+        }
+      },
+      {
+        "name": "ApplyOnlyAtCronInterval",
+        "optional": true,
+        "type": {
+          "type": "boolean"
+        }
+      },
+      {
+        "name": "CalendarNames",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "string"
+          }
+        }
+      },
+      {
+        "name": "ScheduleOffset",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "isInteger": true,
+          "maximum": 6,
+          "minimum": 1
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "The AWS::SSM::Association resource associates an SSM document in AWS Systems Manager with EC2 instances that contain a configuration agent to process the document.",
+    "properties": [
+      {
+        "name": "AssociationId",
+        "description": "Unique identifier of the association.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Unique identifier of the association.",
+          "pattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+        }
+      }
+    ]
+  },
+  "$hash": "b53bd17e7949e49580b0699b1dbb0b06236c0542"
+}

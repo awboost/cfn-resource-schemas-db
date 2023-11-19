@@ -1,0 +1,148 @@
+{
+  "definitions": {
+    "S3Config": {
+      "type": "object",
+      "description": "The Amazon Resource Name (ARN) of the AWS IAM role that is used to access an Amazon S3 bucket.",
+      "properties": [
+        {
+          "name": "BucketAccessRoleArn",
+          "description": "The ARN of the IAM role of the Amazon S3 bucket.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The ARN of the IAM role of the Amazon S3 bucket.",
+            "maxLength": 2048,
+            "pattern": "^arn:(aws|aws-cn|aws-us-gov|aws-iso|aws-iso-b):iam::[0-9]{12}:role/.*$"
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "description": "A key-value pair to associate with a resource.",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "The key for an AWS resource tag.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The key for an AWS resource tag.",
+            "maxLength": 256,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9\\s+=._:/-]+$"
+          }
+        },
+        {
+          "name": "Value",
+          "description": "The value for an AWS resource tag.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The value for an AWS resource tag.",
+            "maxLength": 256,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9\\s+=._:@/-]+$"
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource schema for AWS::DataSync::LocationS3",
+    "properties": [
+      {
+        "name": "S3Config",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "S3Config"
+        }
+      },
+      {
+        "name": "S3BucketArn",
+        "description": "The Amazon Resource Name (ARN) of the Amazon S3 bucket.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) of the Amazon S3 bucket.",
+          "maxLength": 156,
+          "pattern": "^arn:(aws|aws-cn|aws-us-gov|aws-iso|aws-iso-b):s3:[a-z\\-0-9]*:[0-9]*:.*$"
+        }
+      },
+      {
+        "name": "Subdirectory",
+        "description": "A subdirectory in the Amazon S3 bucket. This subdirectory in Amazon S3 is used to read data from the S3 source location or write data to the S3 destination.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "A subdirectory in the Amazon S3 bucket. This subdirectory in Amazon S3 is used to read data from the S3 source location or write data to the S3 destination.",
+          "maxLength": 1024,
+          "pattern": "^[\\p{L}\\p{M}\\p{Z}\\p{S}\\p{N}\\p{P}\\p{C}]*$"
+        }
+      },
+      {
+        "name": "S3StorageClass",
+        "description": "The Amazon S3 storage class you want to store your files in when this location is used as a task destination.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Amazon S3 storage class you want to store your files in when this location is used as a task destination.",
+          "allowedValues": [
+            "STANDARD",
+            "STANDARD_IA",
+            "ONEZONE_IA",
+            "INTELLIGENT_TIERING",
+            "GLACIER",
+            "GLACIER_INSTANT_RETRIEVAL",
+            "DEEP_ARCHIVE"
+          ]
+        }
+      },
+      {
+        "name": "Tags",
+        "description": "An array of key-value pairs to apply to this resource.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "An array of key-value pairs to apply to this resource.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          },
+          "maxLength": 50
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Resource schema for AWS::DataSync::LocationS3",
+    "properties": [
+      {
+        "name": "LocationArn",
+        "description": "The Amazon Resource Name (ARN) of the Amazon S3 bucket location.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) of the Amazon S3 bucket location.",
+          "maxLength": 128,
+          "pattern": "^arn:(aws|aws-cn|aws-us-gov|aws-iso|aws-iso-b):datasync:[a-z\\-0-9]+:[0-9]{12}:location/loc-[0-9a-z]{17}$"
+        }
+      },
+      {
+        "name": "LocationUri",
+        "description": "The URL of the S3 location that was described.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The URL of the S3 location that was described.",
+          "maxLength": 4356,
+          "pattern": "^(efs|nfs|s3|smb|fsxw)://[a-zA-Z0-9.\\-/]+$"
+        }
+      }
+    ]
+  },
+  "$hash": "02582d8a52f7a32dae17d2d1f001d595ce7d202d"
+}

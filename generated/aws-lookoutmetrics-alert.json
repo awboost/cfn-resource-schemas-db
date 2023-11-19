@@ -1,0 +1,161 @@
+{
+  "definitions": {
+    "Arn": {
+      "type": "string",
+      "maxLength": 256,
+      "pattern": "arn:([a-z\\d-]+):.*:.*:.*:.+"
+    },
+    "Action": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "SNSConfiguration",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "SNSConfiguration"
+          }
+        },
+        {
+          "name": "LambdaConfiguration",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "LambdaConfiguration"
+          }
+        }
+      ]
+    },
+    "SNSConfiguration": {
+      "type": "object",
+      "description": "Configuration options for an SNS alert action.",
+      "properties": [
+        {
+          "name": "RoleArn",
+          "description": "ARN of an IAM role that LookoutMetrics should assume to access the SNS topic.",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "description": "ARN of an IAM role that LookoutMetrics should assume to access the SNS topic.",
+            "typeName": "Arn"
+          }
+        },
+        {
+          "name": "SnsTopicArn",
+          "description": "ARN of an SNS topic to send alert notifications to.",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "description": "ARN of an SNS topic to send alert notifications to.",
+            "typeName": "Arn"
+          }
+        }
+      ]
+    },
+    "LambdaConfiguration": {
+      "type": "object",
+      "description": "Configuration options for a Lambda alert action.",
+      "properties": [
+        {
+          "name": "RoleArn",
+          "description": "ARN of an IAM role that LookoutMetrics should assume to access the Lambda function.",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "description": "ARN of an IAM role that LookoutMetrics should assume to access the Lambda function.",
+            "typeName": "Arn"
+          }
+        },
+        {
+          "name": "LambdaArn",
+          "description": "ARN of a Lambda to send alert notifications to.",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "description": "ARN of a Lambda to send alert notifications to.",
+            "typeName": "Arn"
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource Type definition for AWS::LookoutMetrics::Alert",
+    "properties": [
+      {
+        "name": "AlertName",
+        "description": "The name of the alert. If not provided, a name is generated automatically.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The name of the alert. If not provided, a name is generated automatically.",
+          "maxLength": 63,
+          "minLength": 1,
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\-_]*"
+        }
+      },
+      {
+        "name": "AlertDescription",
+        "description": "A description for the alert.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "A description for the alert.",
+          "maxLength": 256,
+          "pattern": ".*\\S.*"
+        }
+      },
+      {
+        "name": "AnomalyDetectorArn",
+        "description": "The Amazon resource name (ARN) of the Anomaly Detector to alert.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The Amazon resource name (ARN) of the Anomaly Detector to alert.",
+          "maxLength": 256,
+          "pattern": "arn:([a-z\\d-]+):.*:.*:.*:.+"
+        }
+      },
+      {
+        "name": "AlertSensitivityThreshold",
+        "description": "A number between 0 and 100 (inclusive) that tunes the sensitivity of the alert.",
+        "optional": false,
+        "type": {
+          "type": "number",
+          "description": "A number between 0 and 100 (inclusive) that tunes the sensitivity of the alert.",
+          "isInteger": true,
+          "maximum": 100,
+          "minimum": 0
+        }
+      },
+      {
+        "name": "Action",
+        "description": "The action to be taken by the alert when an anomaly is detected.",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "description": "The action to be taken by the alert when an anomaly is detected.",
+          "typeName": "Action"
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Resource Type definition for AWS::LookoutMetrics::Alert",
+    "properties": [
+      {
+        "name": "Arn",
+        "description": "ARN assigned to the alert.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "ARN assigned to the alert.",
+          "typeName": "Arn"
+        }
+      }
+    ]
+  },
+  "$hash": "aa50d5f9498f35cd92739f688bbf5cc55a7a083f"
+}

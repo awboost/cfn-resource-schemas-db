@@ -1,0 +1,261 @@
+{
+  "definitions": {
+    "CapacityProviderStrategyItem": {
+      "type": "object",
+      "description": "A capacity provider strategy consists of one or more capacity providers along with the `base` and `weight` to assign to them. A capacity provider must be associated with the cluster to be used in a capacity provider strategy. The PutClusterCapacityProviders API is used to associate a capacity provider with a cluster. Only capacity providers with an `ACTIVE` or `UPDATING` status can be used.",
+      "properties": [
+        {
+          "name": "CapacityProvider",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Weight",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "Base",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        }
+      ]
+    },
+    "ExecuteCommandLogConfiguration": {
+      "type": "object",
+      "description": "The session logging configuration for ExecuteCommand.",
+      "properties": [
+        {
+          "name": "S3EncryptionEnabled",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "CloudWatchEncryptionEnabled",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "CloudWatchLogGroupName",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "S3KeyPrefix",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "S3BucketName",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "ClusterSettings": {
+      "type": "object",
+      "description": "The setting to use when creating a cluster. This parameter is used to enable CloudWatch Container Insights for a cluster. If this value is specified, it will override the containerInsights value set with PutAccountSetting or PutAccountSettingDefault.",
+      "properties": [
+        {
+          "name": "Value",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Name",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "ServiceConnectDefaults": {
+      "type": "object",
+      "description": "Service Connect Configuration default for all services or tasks within this cluster",
+      "properties": [
+        {
+          "name": "Namespace",
+          "description": "Service Connect Namespace Name or ARN default for all services or tasks within this cluster",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Service Connect Namespace Name or ARN default for all services or tasks within this cluster"
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "description": "The metadata that you apply to the cluster to help you categorize and organize them. Each tag consists of a key and an optional value, both of which you define.",
+      "properties": [
+        {
+          "name": "Value",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Key",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "ClusterConfiguration": {
+      "type": "object",
+      "description": "The configurations to be set at cluster level.",
+      "properties": [
+        {
+          "name": "ExecuteCommandConfiguration",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ExecuteCommandConfiguration"
+          }
+        }
+      ]
+    },
+    "ExecuteCommandConfiguration": {
+      "type": "object",
+      "description": "The configuration for ExecuteCommand.",
+      "properties": [
+        {
+          "name": "Logging",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "KmsKeyId",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "LogConfiguration",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ExecuteCommandLogConfiguration"
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Create an Elastic Container Service (ECS) cluster.",
+    "properties": [
+      {
+        "name": "ClusterSettings",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "ClusterSettings"
+          }
+        }
+      },
+      {
+        "name": "DefaultCapacityProviderStrategy",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "CapacityProviderStrategyItem"
+          }
+        }
+      },
+      {
+        "name": "Configuration",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "ClusterConfiguration"
+        }
+      },
+      {
+        "name": "ServiceConnectDefaults",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "ServiceConnectDefaults"
+        }
+      },
+      {
+        "name": "CapacityProviders",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "string"
+          }
+        }
+      },
+      {
+        "name": "ClusterName",
+        "description": "A user-generated string that you use to identify your cluster. If you don't specify a name, AWS CloudFormation generates a unique physical ID for the name.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "A user-generated string that you use to identify your cluster. If you don't specify a name, AWS CloudFormation generates a unique physical ID for the name."
+        }
+      },
+      {
+        "name": "Tags",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          }
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Create an Elastic Container Service (ECS) cluster.",
+    "properties": [
+      {
+        "name": "Arn",
+        "description": "The Amazon Resource Name (ARN) of the Amazon ECS cluster, such as arn:aws:ecs:us-east-2:123456789012:cluster/MyECSCluster.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) of the Amazon ECS cluster, such as arn:aws:ecs:us-east-2:123456789012:cluster/MyECSCluster."
+        }
+      }
+    ]
+  },
+  "$hash": "268a2f256c1e754c13392cc92ca60cecd061e6e6"
+}

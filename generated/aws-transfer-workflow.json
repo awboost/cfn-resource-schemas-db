@@ -1,0 +1,520 @@
+{
+  "definitions": {
+    "S3Tag": {
+      "type": "object",
+      "description": "Specifies the key-value pair that are assigned to a file during the execution of a Tagging step.",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "The name assigned to the tag that you create.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The name assigned to the tag that you create.",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "description": "The value that corresponds to the key.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The value that corresponds to the key.",
+            "maxLength": 256,
+            "minLength": 0
+          }
+        }
+      ]
+    },
+    "EfsInputFileLocation": {
+      "type": "object",
+      "description": "Specifies the details for an EFS file.",
+      "properties": [
+        {
+          "name": "FileSystemId",
+          "description": "Specifies the EFS filesystem that contains the file.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Specifies the EFS filesystem that contains the file.",
+            "maxLength": 128,
+            "minLength": 0,
+            "pattern": "^(arn:aws[-a-z]*:elasticfilesystem:[0-9a-z-:]+:(access-point/fsap|file-system/fs)-[0-9a-f]{8,40}|fs(ap)?-[0-9a-f]{8,40})$"
+          }
+        },
+        {
+          "name": "Path",
+          "description": "The name assigned to the file when it was created in EFS. You use the object path to retrieve the object.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The name assigned to the file when it was created in EFS. You use the object path to retrieve the object.",
+            "maxLength": 65536,
+            "minLength": 1,
+            "pattern": "^[^\\x00]+$"
+          }
+        }
+      ]
+    },
+    "S3InputFileLocation": {
+      "type": "object",
+      "description": "Specifies the details for a S3 file.",
+      "properties": [
+        {
+          "name": "Bucket",
+          "description": "Specifies the S3 bucket that contains the file.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Specifies the S3 bucket that contains the file.",
+            "maxLength": 63,
+            "minLength": 3,
+            "pattern": "^[a-z0-9][\\.\\-a-z0-9]{1,61}[a-z0-9]$"
+          }
+        },
+        {
+          "name": "Key",
+          "description": "The name assigned to the file when it was created in S3. You use the object key to retrieve the object.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The name assigned to the file when it was created in S3. You use the object key to retrieve the object.",
+            "maxLength": 1024,
+            "minLength": 0,
+            "pattern": ".*"
+          }
+        }
+      ]
+    },
+    "InputFileLocation": {
+      "type": "object",
+      "description": "Specifies the location for the file being decrypted. Only applicable for the Decrypt type of workflow steps.",
+      "properties": [
+        {
+          "name": "S3FileLocation",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "S3InputFileLocation"
+          }
+        },
+        {
+          "name": "EfsFileLocation",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "EfsInputFileLocation"
+          }
+        }
+      ]
+    },
+    "S3FileLocation": {
+      "type": "object",
+      "description": "Specifies the location for the file being copied. Only applicable for the Copy type of workflow steps.",
+      "properties": [
+        {
+          "name": "S3FileLocation",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "S3InputFileLocation"
+          }
+        }
+      ]
+    },
+    "WorkflowStep": {
+      "type": "object",
+      "description": "The basic building block of a workflow.",
+      "properties": [
+        {
+          "name": "CopyStepDetails",
+          "description": "Details for a step that performs a file copy.",
+          "optional": true,
+          "type": {
+            "type": "object",
+            "description": "Details for a step that performs a file copy.",
+            "properties": [
+              {
+                "name": "DestinationFileLocation",
+                "optional": true,
+                "type": {
+                  "type": "ref",
+                  "typeName": "S3FileLocation"
+                }
+              },
+              {
+                "name": "Name",
+                "description": "The name of the step, used as an identifier.",
+                "optional": true,
+                "type": {
+                  "type": "string",
+                  "description": "The name of the step, used as an identifier.",
+                  "maxLength": 30,
+                  "minLength": 0,
+                  "pattern": "^[\\w-]*$"
+                }
+              },
+              {
+                "name": "OverwriteExisting",
+                "description": "A flag that indicates whether or not to overwrite an existing file of the same name. The default is FALSE.",
+                "optional": true,
+                "type": {
+                  "type": "string",
+                  "description": "A flag that indicates whether or not to overwrite an existing file of the same name. The default is FALSE.",
+                  "allowedValues": ["TRUE", "FALSE"]
+                }
+              },
+              {
+                "name": "SourceFileLocation",
+                "description": "Specifies which file to use as input to the workflow step.",
+                "optional": true,
+                "type": {
+                  "type": "string",
+                  "description": "Specifies which file to use as input to the workflow step.",
+                  "maxLength": 256,
+                  "minLength": 0,
+                  "pattern": "^\\$\\{(\\w+.)+\\w+\\}$"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "CustomStepDetails",
+          "description": "Details for a step that invokes a lambda function.",
+          "optional": true,
+          "type": {
+            "type": "object",
+            "description": "Details for a step that invokes a lambda function.",
+            "properties": [
+              {
+                "name": "Name",
+                "description": "The name of the step, used as an identifier.",
+                "optional": true,
+                "type": {
+                  "type": "string",
+                  "description": "The name of the step, used as an identifier.",
+                  "maxLength": 30,
+                  "minLength": 0,
+                  "pattern": "^[\\w-]*$"
+                }
+              },
+              {
+                "name": "Target",
+                "description": "The ARN for the lambda function that is being called.",
+                "optional": true,
+                "type": {
+                  "type": "string",
+                  "description": "The ARN for the lambda function that is being called.",
+                  "maxLength": 170,
+                  "minLength": 0,
+                  "pattern": "arn:[a-z-]+:lambda:.*$"
+                }
+              },
+              {
+                "name": "TimeoutSeconds",
+                "description": "Timeout, in seconds, for the step.",
+                "optional": true,
+                "type": {
+                  "type": "number",
+                  "description": "Timeout, in seconds, for the step.",
+                  "isInteger": true,
+                  "maximum": 1800,
+                  "minimum": 1
+                }
+              },
+              {
+                "name": "SourceFileLocation",
+                "description": "Specifies which file to use as input to the workflow step.",
+                "optional": true,
+                "type": {
+                  "type": "string",
+                  "description": "Specifies which file to use as input to the workflow step.",
+                  "maxLength": 256,
+                  "minLength": 0,
+                  "pattern": "^\\$\\{(\\w+.)+\\w+\\}$"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "DecryptStepDetails",
+          "description": "Details for a step that performs a file decryption.",
+          "optional": true,
+          "type": {
+            "type": "object",
+            "description": "Details for a step that performs a file decryption.",
+            "properties": [
+              {
+                "name": "DestinationFileLocation",
+                "optional": true,
+                "type": {
+                  "type": "ref",
+                  "typeName": "InputFileLocation"
+                }
+              },
+              {
+                "name": "Name",
+                "description": "The name of the step, used as an identifier.",
+                "optional": true,
+                "type": {
+                  "type": "string",
+                  "description": "The name of the step, used as an identifier.",
+                  "maxLength": 30,
+                  "minLength": 0,
+                  "pattern": "^[\\w-]*$"
+                }
+              },
+              {
+                "name": "Type",
+                "description": "Specifies which encryption method to use.",
+                "optional": true,
+                "type": {
+                  "type": "string",
+                  "description": "Specifies which encryption method to use.",
+                  "allowedValues": ["PGP"]
+                }
+              },
+              {
+                "name": "OverwriteExisting",
+                "description": "A flag that indicates whether or not to overwrite an existing file of the same name. The default is FALSE.",
+                "optional": true,
+                "type": {
+                  "type": "string",
+                  "description": "A flag that indicates whether or not to overwrite an existing file of the same name. The default is FALSE.",
+                  "allowedValues": ["TRUE", "FALSE"]
+                }
+              },
+              {
+                "name": "SourceFileLocation",
+                "description": "Specifies which file to use as input to the workflow step.",
+                "optional": true,
+                "type": {
+                  "type": "string",
+                  "description": "Specifies which file to use as input to the workflow step.",
+                  "maxLength": 256,
+                  "minLength": 0,
+                  "pattern": "^\\$\\{(\\w+.)+\\w+\\}$"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "DeleteStepDetails",
+          "description": "Details for a step that deletes the file.",
+          "optional": true,
+          "type": {
+            "type": "object",
+            "description": "Details for a step that deletes the file.",
+            "properties": [
+              {
+                "name": "Name",
+                "description": "The name of the step, used as an identifier.",
+                "optional": true,
+                "type": {
+                  "type": "string",
+                  "description": "The name of the step, used as an identifier.",
+                  "maxLength": 30,
+                  "minLength": 0,
+                  "pattern": "^[\\w-]*$"
+                }
+              },
+              {
+                "name": "SourceFileLocation",
+                "description": "Specifies which file to use as input to the workflow step.",
+                "optional": true,
+                "type": {
+                  "type": "string",
+                  "description": "Specifies which file to use as input to the workflow step.",
+                  "maxLength": 256,
+                  "minLength": 0,
+                  "pattern": "^\\$\\{(\\w+.)+\\w+\\}$"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "TagStepDetails",
+          "description": "Details for a step that creates one or more tags.",
+          "optional": true,
+          "type": {
+            "type": "object",
+            "description": "Details for a step that creates one or more tags.",
+            "properties": [
+              {
+                "name": "Name",
+                "description": "The name of the step, used as an identifier.",
+                "optional": true,
+                "type": {
+                  "type": "string",
+                  "description": "The name of the step, used as an identifier.",
+                  "maxLength": 30,
+                  "minLength": 0,
+                  "pattern": "^[\\w-]*$"
+                }
+              },
+              {
+                "name": "Tags",
+                "description": "Array that contains from 1 to 10 key/value pairs.",
+                "optional": true,
+                "type": {
+                  "type": "array",
+                  "description": "Array that contains from 1 to 10 key/value pairs.",
+                  "itemType": {
+                    "type": "ref",
+                    "typeName": "S3Tag"
+                  },
+                  "maxLength": 10
+                }
+              },
+              {
+                "name": "SourceFileLocation",
+                "description": "Specifies which file to use as input to the workflow step.",
+                "optional": true,
+                "type": {
+                  "type": "string",
+                  "description": "Specifies which file to use as input to the workflow step.",
+                  "maxLength": 256,
+                  "minLength": 0,
+                  "pattern": "^\\$\\{(\\w+.)+\\w+\\}$"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "Type",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": ["COPY", "CUSTOM", "DECRYPT", "DELETE", "TAG"]
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "description": "Creates a key-value pair for a specific resource.",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "The name assigned to the tag that you create.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The name assigned to the tag that you create.",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "description": "Contains one or more values that you assigned to the key name you create.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Contains one or more values that you assigned to the key name you create.",
+            "maxLength": 256,
+            "minLength": 0
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource Type definition for AWS::Transfer::Workflow",
+    "properties": [
+      {
+        "name": "OnExceptionSteps",
+        "description": "Specifies the steps (actions) to take if any errors are encountered during execution of the workflow.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "Specifies the steps (actions) to take if any errors are encountered during execution of the workflow.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "WorkflowStep"
+          },
+          "maxLength": 8
+        }
+      },
+      {
+        "name": "Steps",
+        "description": "Specifies the details for the steps that are in the specified workflow.",
+        "optional": false,
+        "type": {
+          "type": "array",
+          "description": "Specifies the details for the steps that are in the specified workflow.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "WorkflowStep"
+          },
+          "maxLength": 8
+        }
+      },
+      {
+        "name": "Tags",
+        "description": "Key-value pairs that can be used to group and search for workflows. Tags are metadata attached to workflows for any purpose.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "Key-value pairs that can be used to group and search for workflows. Tags are metadata attached to workflows for any purpose.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          },
+          "maxLength": 50
+        }
+      },
+      {
+        "name": "Description",
+        "description": "A textual description for the workflow.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "A textual description for the workflow.",
+          "maxLength": 256,
+          "minLength": 0,
+          "pattern": "^[\\w\\- ]*$"
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Resource Type definition for AWS::Transfer::Workflow",
+    "properties": [
+      {
+        "name": "WorkflowId",
+        "description": "A unique identifier for the workflow.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "A unique identifier for the workflow.",
+          "maxLength": 19,
+          "minLength": 19,
+          "pattern": "^w-([a-z0-9]{17})$"
+        }
+      },
+      {
+        "name": "Arn",
+        "description": "Specifies the unique Amazon Resource Name (ARN) for the workflow.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Specifies the unique Amazon Resource Name (ARN) for the workflow.",
+          "maxLength": 1600,
+          "minLength": 20,
+          "pattern": "arn:.*"
+        }
+      }
+    ]
+  },
+  "$hash": "553240d27829b28e464df8ba96dc6346bcc16ca1"
+}

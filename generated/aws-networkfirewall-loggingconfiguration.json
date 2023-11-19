@@ -1,0 +1,96 @@
+{
+  "definitions": {
+    "ResourceArn": {
+      "type": "string",
+      "description": "A resource ARN.",
+      "maxLength": 256,
+      "minLength": 1,
+      "pattern": "^arn:aws.*$"
+    },
+    "LoggingConfiguration": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "LogDestinationConfigs",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "LogDestinationConfig"
+            },
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "LogDestinationConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "LogType",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "allowedValues": ["ALERT", "FLOW"]
+          }
+        },
+        {
+          "name": "LogDestinationType",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "allowedValues": ["S3", "CloudWatchLogs", "KinesisDataFirehose"]
+          }
+        },
+        {
+          "name": "LogDestination",
+          "description": "A key-value pair to configure the logDestinations.",
+          "optional": false,
+          "type": {
+            "type": "record",
+            "description": "A key-value pair to configure the logDestinations.",
+            "valueType": {
+              "type": "string",
+              "maxLength": 1024,
+              "minLength": 1
+            }
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource type definition for AWS::NetworkFirewall::LoggingConfiguration",
+    "properties": [
+      {
+        "name": "FirewallName",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[a-zA-Z0-9-]+$"
+        }
+      },
+      {
+        "name": "FirewallArn",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "ResourceArn"
+        }
+      },
+      {
+        "name": "LoggingConfiguration",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "LoggingConfiguration"
+        }
+      }
+    ]
+  },
+  "$hash": "f37eaea0ceafeebe6f0a9fb335c6fc76247e22eb"
+}

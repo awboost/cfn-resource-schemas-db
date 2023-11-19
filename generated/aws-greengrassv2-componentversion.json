@@ -1,0 +1,421 @@
+{
+  "definitions": {
+    "LambdaFunctionRecipeSource": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "LambdaArn",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "pattern": "^arn:[^:]*:lambda:(([a-z]+-)+[0-9])?:([0-9]{12})?:[^.]+$"
+          }
+        },
+        {
+          "name": "ComponentName",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "ComponentVersion",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "ComponentPlatforms",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "ComponentPlatform"
+            }
+          }
+        },
+        {
+          "name": "ComponentDependencies",
+          "optional": true,
+          "type": {
+            "type": "record",
+            "valueType": {
+              "type": "ref",
+              "typeName": "ComponentDependencyRequirement"
+            }
+          }
+        },
+        {
+          "name": "ComponentLambdaParameters",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "LambdaExecutionParameters"
+          }
+        }
+      ]
+    },
+    "ComponentPlatform": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Name",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Attributes",
+          "optional": true,
+          "type": {
+            "type": "record",
+            "valueType": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "ComponentDependencyRequirement": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "VersionRequirement",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "DependencyType",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": ["SOFT", "HARD"]
+          }
+        }
+      ]
+    },
+    "LambdaExecutionParameters": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "EventSources",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "LambdaEventSource"
+            }
+          }
+        },
+        {
+          "name": "MaxQueueSize",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "MaxInstancesCount",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "MaxIdleTimeInSeconds",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "TimeoutInSeconds",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "StatusTimeoutInSeconds",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "Pinned",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "InputPayloadEncodingType",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": ["json", "binary"]
+          }
+        },
+        {
+          "name": "ExecArgs",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "name": "EnvironmentVariables",
+          "optional": true,
+          "type": {
+            "type": "record",
+            "valueType": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "name": "LinuxProcessParams",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "LambdaLinuxProcessParams"
+          }
+        }
+      ]
+    },
+    "LambdaEventSource": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Topic",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Type",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": ["PUB_SUB", "IOT_CORE"]
+          }
+        }
+      ]
+    },
+    "LambdaLinuxProcessParams": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "IsolationMode",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": ["GreengrassContainer", "NoContainer"]
+          }
+        },
+        {
+          "name": "ContainerParams",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "LambdaContainerParams"
+          }
+        }
+      ]
+    },
+    "LambdaContainerParams": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "MemorySizeInKB",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "MountROSysfs",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "Volumes",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "LambdaVolumeMount"
+            }
+          }
+        },
+        {
+          "name": "Devices",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "LambdaDeviceMount"
+            }
+          }
+        }
+      ]
+    },
+    "LambdaVolumeMount": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "SourcePath",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "FilesystemPath"
+          }
+        },
+        {
+          "name": "DestinationPath",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "FilesystemPath"
+          }
+        },
+        {
+          "name": "Permission",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "LambdaFilesystemPermission"
+          }
+        },
+        {
+          "name": "AddGroupOwner",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "LambdaAddGroupOwnerBoolean"
+          }
+        }
+      ]
+    },
+    "LambdaDeviceMount": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Path",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "FilesystemPath"
+          }
+        },
+        {
+          "name": "Permission",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "LambdaFilesystemPermission"
+          }
+        },
+        {
+          "name": "AddGroupOwner",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "LambdaAddGroupOwnerBoolean"
+          }
+        }
+      ]
+    },
+    "FilesystemPath": {
+      "type": "string"
+    },
+    "LambdaFilesystemPermission": {
+      "type": "string",
+      "allowedValues": ["ro", "rw"]
+    },
+    "LambdaAddGroupOwnerBoolean": {
+      "type": "boolean"
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource for Greengrass component version.",
+    "properties": [
+      {
+        "name": "InlineRecipe",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "LambdaFunction",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "LambdaFunctionRecipeSource"
+        }
+      },
+      {
+        "name": "Tags",
+        "optional": true,
+        "type": {
+          "type": "record",
+          "valueType": {
+            "type": "string",
+            "maxLength": 256
+          }
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Resource for Greengrass component version.",
+    "properties": [
+      {
+        "name": "Arn",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "ComponentName",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "ComponentVersion",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      }
+    ]
+  },
+  "$hash": "7c0e940b6c9f26835ec66955d3ea4c9517d92f64"
+}

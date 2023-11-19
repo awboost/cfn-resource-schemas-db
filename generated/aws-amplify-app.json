@@ -1,0 +1,421 @@
+{
+  "definitions": {
+    "AutoBranchCreationConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "AutoBranchCreationPatterns",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string",
+              "maxLength": 2048,
+              "minLength": 1
+            }
+          }
+        },
+        {
+          "name": "BasicAuthConfig",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "BasicAuthConfig"
+          }
+        },
+        {
+          "name": "BuildSpec",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 25000,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "EnableAutoBranchCreation",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "EnableAutoBuild",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "EnablePerformanceMode",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "EnablePullRequestPreview",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "EnvironmentVariables",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "EnvironmentVariable"
+            }
+          }
+        },
+        {
+          "name": "Framework",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 255,
+            "pattern": "(?s).*"
+          }
+        },
+        {
+          "name": "PullRequestEnvironmentName",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 20,
+            "pattern": "(?s).*"
+          }
+        },
+        {
+          "name": "Stage",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": [
+              "EXPERIMENTAL",
+              "BETA",
+              "PULL_REQUEST",
+              "PRODUCTION",
+              "DEVELOPMENT"
+            ]
+          }
+        }
+      ]
+    },
+    "BasicAuthConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "EnableBasicAuth",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "Username",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Password",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "CustomRule": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Condition",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 2048,
+            "minLength": 0,
+            "pattern": "(?s).*"
+          }
+        },
+        {
+          "name": "Status",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 7,
+            "minLength": 3,
+            "pattern": ".{3,7}"
+          }
+        },
+        {
+          "name": "Target",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 2048,
+            "minLength": 1,
+            "pattern": "(?s).+"
+          }
+        },
+        {
+          "name": "Source",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 2048,
+            "minLength": 1,
+            "pattern": "(?s).+"
+          }
+        }
+      ]
+    },
+    "EnvironmentVariable": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Name",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 255,
+            "pattern": "(?s).*"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 5500,
+            "pattern": "(?s).*"
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^(?!aws:)[a-zA-Z+-=._:/]+$"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 0
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "The AWS::Amplify::App resource creates Apps in the Amplify Console. An App is a collection of branches.",
+    "properties": [
+      {
+        "name": "AccessToken",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "AutoBranchCreationConfig",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "AutoBranchCreationConfig"
+        }
+      },
+      {
+        "name": "BasicAuthConfig",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "BasicAuthConfig"
+        }
+      },
+      {
+        "name": "BuildSpec",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 25000,
+          "minLength": 1,
+          "pattern": "(?s).+"
+        }
+      },
+      {
+        "name": "CustomHeaders",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 25000,
+          "minLength": 0,
+          "pattern": "(?s).*"
+        }
+      },
+      {
+        "name": "CustomRules",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "CustomRule"
+          }
+        }
+      },
+      {
+        "name": "Description",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 1000,
+          "pattern": "(?s).*"
+        }
+      },
+      {
+        "name": "EnableBranchAutoDeletion",
+        "optional": true,
+        "type": {
+          "type": "boolean"
+        }
+      },
+      {
+        "name": "EnvironmentVariables",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "EnvironmentVariable"
+          }
+        }
+      },
+      {
+        "name": "IAMServiceRole",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 1000,
+          "minLength": 1,
+          "pattern": "(?s).*"
+        }
+      },
+      {
+        "name": "Name",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1,
+          "pattern": "(?s).+"
+        }
+      },
+      {
+        "name": "OauthToken",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 1000,
+          "pattern": "(?s).*"
+        }
+      },
+      {
+        "name": "Platform",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "allowedValues": ["WEB", "WEB_DYNAMIC", "WEB_COMPUTE"]
+        }
+      },
+      {
+        "name": "Repository",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "pattern": "(?s).*"
+        }
+      },
+      {
+        "name": "Tags",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          }
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "The AWS::Amplify::App resource creates Apps in the Amplify Console. An App is a collection of branches.",
+    "properties": [
+      {
+        "name": "AppId",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 20,
+          "minLength": 1,
+          "pattern": "d[a-z0-9]+"
+        }
+      },
+      {
+        "name": "AppName",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1,
+          "pattern": "(?s).+"
+        }
+      },
+      {
+        "name": "Arn",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 1000,
+          "pattern": "(?s).*"
+        }
+      },
+      {
+        "name": "DefaultDomain",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 1000,
+          "minLength": 0
+        }
+      }
+    ]
+  },
+  "$hash": "5cacaaa32fb8aa1e47612f198da505dcd68c8af0"
+}

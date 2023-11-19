@@ -1,0 +1,189 @@
+{
+  "definitions": {
+    "AllowHeaders": {
+      "type": "array",
+      "itemType": {
+        "type": "string",
+        "maxLength": 1024,
+        "minLength": 1
+      },
+      "maxLength": 100,
+      "minLength": 1
+    },
+    "AllowMethods": {
+      "type": "array",
+      "itemType": {
+        "type": "string",
+        "allowedValues": ["GET", "PUT", "HEAD", "POST", "PATCH", "DELETE", "*"]
+      },
+      "maxLength": 6,
+      "minLength": 1
+    },
+    "AllowOrigins": {
+      "type": "array",
+      "itemType": {
+        "type": "string",
+        "maxLength": 253,
+        "minLength": 1
+      },
+      "maxLength": 100,
+      "minLength": 1
+    },
+    "ExposeHeaders": {
+      "type": "array",
+      "itemType": {
+        "type": "string",
+        "maxLength": 1024,
+        "minLength": 1
+      },
+      "maxLength": 100,
+      "minLength": 1
+    },
+    "Cors": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "AllowCredentials",
+          "description": "Specifies whether credentials are included in the CORS request.",
+          "optional": true,
+          "type": {
+            "type": "boolean",
+            "description": "Specifies whether credentials are included in the CORS request."
+          }
+        },
+        {
+          "name": "AllowHeaders",
+          "description": "Represents a collection of allowed headers.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "Represents a collection of allowed headers.",
+            "typeName": "AllowHeaders"
+          }
+        },
+        {
+          "name": "AllowMethods",
+          "description": "Represents a collection of allowed HTTP methods.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "Represents a collection of allowed HTTP methods.",
+            "typeName": "AllowMethods"
+          }
+        },
+        {
+          "name": "AllowOrigins",
+          "description": "Represents a collection of allowed origins.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "Represents a collection of allowed origins.",
+            "typeName": "AllowOrigins"
+          }
+        },
+        {
+          "name": "ExposeHeaders",
+          "description": "Represents a collection of exposed headers.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "Represents a collection of exposed headers.",
+            "typeName": "ExposeHeaders"
+          }
+        },
+        {
+          "name": "MaxAge",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 86400,
+            "minimum": 0
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource Type definition for AWS::Lambda::Url",
+    "properties": [
+      {
+        "name": "TargetFunctionArn",
+        "description": "The Amazon Resource Name (ARN) of the function associated with the Function URL.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) of the function associated with the Function URL.",
+          "pattern": "^(arn:(aws[a-zA-Z-]*)?:lambda:)?([a-z]{2}((-gov)|(-iso(b?)))?-[a-z]+-\\d{1}:)?(\\d{12}:)?(function:)?([a-zA-Z0-9-_]+)(:((?!\\d+)[0-9a-zA-Z-_]+))?$"
+        }
+      },
+      {
+        "name": "Qualifier",
+        "description": "The alias qualifier for the target function. If TargetFunctionArn is unqualified then Qualifier must be passed.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The alias qualifier for the target function. If TargetFunctionArn is unqualified then Qualifier must be passed.",
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "((?!^[0-9]+$)([a-zA-Z0-9-_]+))"
+        }
+      },
+      {
+        "name": "AuthType",
+        "description": "Can be either AWS_IAM if the requests are authorized via IAM, or NONE if no authorization is configured on the Function URL.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "Can be either AWS_IAM if the requests are authorized via IAM, or NONE if no authorization is configured on the Function URL.",
+          "allowedValues": ["AWS_IAM", "NONE"]
+        }
+      },
+      {
+        "name": "InvokeMode",
+        "description": "The invocation mode for the function’s URL. Set to BUFFERED if you want to buffer responses before returning them to the client. Set to RESPONSE_STREAM if you want to stream responses, allowing faster time to first byte and larger response payload sizes. If not set, defaults to BUFFERED.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The invocation mode for the function’s URL. Set to BUFFERED if you want to buffer responses before returning them to the client. Set to RESPONSE_STREAM if you want to stream responses, allowing faster time to first byte and larger response payload sizes. If not set, defaults to BUFFERED.",
+          "allowedValues": ["BUFFERED", "RESPONSE_STREAM"]
+        }
+      },
+      {
+        "name": "Cors",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "Cors"
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Resource Type definition for AWS::Lambda::Url",
+    "properties": [
+      {
+        "name": "FunctionArn",
+        "description": "The full Amazon Resource Name (ARN) of the function associated with the Function URL.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The full Amazon Resource Name (ARN) of the function associated with the Function URL.",
+          "pattern": "^(arn:(aws[a-zA-Z-]*)?:lambda:)?([a-z]{2}((-gov)|(-iso(b?)))?-[a-z]+-\\d{1}:)?(\\d{12}:)?(function:)?([a-zA-Z0-9-_]+)(:((?!\\d+)[0-9a-zA-Z-_]+))?$"
+        }
+      },
+      {
+        "name": "FunctionUrl",
+        "description": "The generated url for this resource.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The generated url for this resource."
+        }
+      }
+    ]
+  },
+  "$hash": "30e49116b84fc860829733cb7216350c484773ba"
+}

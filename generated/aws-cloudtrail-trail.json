@@ -1,0 +1,452 @@
+{
+  "definitions": {
+    "DataResource": {
+      "type": "object",
+      "description": "CloudTrail supports data event logging for Amazon S3 objects and AWS Lambda functions. You can specify up to 250 resources for an individual event selector, but the total number of data resources cannot exceed 250 across all event selectors in a trail. This limit does not apply if you configure resource logging for all data events.",
+      "properties": [
+        {
+          "name": "Type",
+          "description": "The resource type in which you want to log data events. You can specify AWS::S3::Object or AWS::Lambda::Function resources.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The resource type in which you want to log data events. You can specify AWS::S3::Object or AWS::Lambda::Function resources."
+          }
+        },
+        {
+          "name": "Values",
+          "description": "An array of Amazon Resource Name (ARN) strings or partial ARN strings for the specified objects.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "An array of Amazon Resource Name (ARN) strings or partial ARN strings for the specified objects.",
+            "itemType": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "AdvancedFieldSelector": {
+      "type": "object",
+      "description": "A single selector statement in an advanced event selector.",
+      "properties": [
+        {
+          "name": "Field",
+          "description": "A field in an event record on which to filter events to be logged. Supported fields include readOnly, eventCategory, eventSource (for management events), eventName, resources.type, and resources.ARN.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "A field in an event record on which to filter events to be logged. Supported fields include readOnly, eventCategory, eventSource (for management events), eventName, resources.type, and resources.ARN.",
+            "maxLength": 1000,
+            "minLength": 1,
+            "pattern": "([\\w|\\d|\\.|_]+)"
+          }
+        },
+        {
+          "name": "Equals",
+          "description": "An operator that includes events that match the exact value of the event record field specified as the value of Field. This is the only valid operator that you can use with the readOnly, eventCategory, and resources.type fields.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "An operator that includes events that match the exact value of the event record field specified as the value of Field. This is the only valid operator that you can use with the readOnly, eventCategory, and resources.type fields.",
+            "itemType": {
+              "type": "string",
+              "maxLength": 2048,
+              "minLength": 1,
+              "pattern": "(.+)"
+            },
+            "minLength": 1
+          }
+        },
+        {
+          "name": "StartsWith",
+          "description": "An operator that includes events that match the first few characters of the event record field specified as the value of Field.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "An operator that includes events that match the first few characters of the event record field specified as the value of Field.",
+            "itemType": {
+              "type": "string",
+              "maxLength": 2048,
+              "minLength": 1,
+              "pattern": "(.+)"
+            },
+            "minLength": 1
+          }
+        },
+        {
+          "name": "EndsWith",
+          "description": "An operator that includes events that match the last few characters of the event record field specified as the value of Field.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "An operator that includes events that match the last few characters of the event record field specified as the value of Field.",
+            "itemType": {
+              "type": "string",
+              "maxLength": 2048,
+              "minLength": 1,
+              "pattern": "(.+)"
+            },
+            "minLength": 1
+          }
+        },
+        {
+          "name": "NotEquals",
+          "description": "An operator that excludes events that match the exact value of the event record field specified as the value of Field.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "An operator that excludes events that match the exact value of the event record field specified as the value of Field.",
+            "itemType": {
+              "type": "string",
+              "maxLength": 2048,
+              "minLength": 1,
+              "pattern": "(.+)"
+            },
+            "minLength": 1
+          }
+        },
+        {
+          "name": "NotStartsWith",
+          "description": "An operator that excludes events that match the first few characters of the event record field specified as the value of Field.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "An operator that excludes events that match the first few characters of the event record field specified as the value of Field.",
+            "itemType": {
+              "type": "string",
+              "maxLength": 2048,
+              "minLength": 1,
+              "pattern": "(.+)"
+            },
+            "minLength": 1
+          }
+        },
+        {
+          "name": "NotEndsWith",
+          "description": "An operator that excludes events that match the last few characters of the event record field specified as the value of Field.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "An operator that excludes events that match the last few characters of the event record field specified as the value of Field.",
+            "itemType": {
+              "type": "string",
+              "maxLength": 2048,
+              "minLength": 1,
+              "pattern": "(.+)"
+            },
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "AdvancedEventSelector": {
+      "type": "object",
+      "description": "Advanced event selectors let you create fine-grained selectors for the following AWS CloudTrail event record ﬁelds. They help you control costs by logging only those events that are important to you.",
+      "properties": [
+        {
+          "name": "Name",
+          "description": "An optional, descriptive name for an advanced event selector, such as \"Log data events for only two S3 buckets\".",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "An optional, descriptive name for an advanced event selector, such as \"Log data events for only two S3 buckets\".",
+            "maxLength": 1000,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "FieldSelectors",
+          "description": "Contains all selector statements in an advanced event selector.",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "description": "Contains all selector statements in an advanced event selector.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "AdvancedFieldSelector"
+            },
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "EventSelector": {
+      "type": "object",
+      "description": "The type of email sending events to publish to the event destination.",
+      "properties": [
+        {
+          "name": "DataResources",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "DataResource"
+            }
+          }
+        },
+        {
+          "name": "IncludeManagementEvents",
+          "description": "Specify if you want your event selector to include management events for your trail.",
+          "optional": true,
+          "type": {
+            "type": "boolean",
+            "description": "Specify if you want your event selector to include management events for your trail."
+          }
+        },
+        {
+          "name": "ReadWriteType",
+          "description": "Specify if you want your trail to log read-only events, write-only events, or all. For example, the EC2 GetConsoleOutput is a read-only API operation and RunInstances is a write-only API operation.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Specify if you want your trail to log read-only events, write-only events, or all. For example, the EC2 GetConsoleOutput is a read-only API operation and RunInstances is a write-only API operation.",
+            "allowedValues": ["All", "ReadOnly", "WriteOnly"]
+          }
+        },
+        {
+          "name": "ExcludeManagementEventSources",
+          "description": "An optional list of service event sources from which you do not want management events to be logged on your trail. In this release, the list can be empty (disables the filter), or it can filter out AWS Key Management Service events by containing \"kms.amazonaws.com\". By default, ExcludeManagementEventSources is empty, and AWS KMS events are included in events that are logged to your trail.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "An optional list of service event sources from which you do not want management events to be logged on your trail. In this release, the list can be empty (disables the filter), or it can filter out AWS Key Management Service events by containing \"kms.amazonaws.com\". By default, ExcludeManagementEventSources is empty, and AWS KMS events are included in events that are logged to your trail.",
+            "itemType": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "description": "An arbitrary set of tags (key-value pairs) for this trail.",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "The key name of the tag. You can specify a value that is 1 to 127 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The key name of the tag. You can specify a value that is 1 to 127 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -."
+          }
+        },
+        {
+          "name": "Value",
+          "description": "The value for the tag. You can specify a value that is 1 to 255 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The value for the tag. You can specify a value that is 1 to 255 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -."
+          }
+        }
+      ]
+    },
+    "InsightSelector": {
+      "type": "object",
+      "description": "A string that contains insight types that are logged on a trail.",
+      "properties": [
+        {
+          "name": "InsightType",
+          "description": "The type of insight to log on a trail.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The type of insight to log on a trail."
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Creates a trail that specifies the settings for delivery of log data to an Amazon S3 bucket. A maximum of five trails can exist in a region, irrespective of the region in which they were created.",
+    "properties": [
+      {
+        "name": "CloudWatchLogsLogGroupArn",
+        "description": "Specifies a log group name using an Amazon Resource Name (ARN), a unique identifier that represents the log group to which CloudTrail logs will be delivered. Not required unless you specify CloudWatchLogsRoleArn.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Specifies a log group name using an Amazon Resource Name (ARN), a unique identifier that represents the log group to which CloudTrail logs will be delivered. Not required unless you specify CloudWatchLogsRoleArn."
+        }
+      },
+      {
+        "name": "CloudWatchLogsRoleArn",
+        "description": "Specifies the role for the CloudWatch Logs endpoint to assume to write to a user's log group.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Specifies the role for the CloudWatch Logs endpoint to assume to write to a user's log group."
+        }
+      },
+      {
+        "name": "EnableLogFileValidation",
+        "description": "Specifies whether log file validation is enabled. The default is false.",
+        "optional": true,
+        "type": {
+          "type": "boolean",
+          "description": "Specifies whether log file validation is enabled. The default is false."
+        }
+      },
+      {
+        "name": "AdvancedEventSelectors",
+        "description": "The advanced event selectors that were used to select events for the data store.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "The advanced event selectors that were used to select events for the data store.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "AdvancedEventSelector"
+          }
+        }
+      },
+      {
+        "name": "EventSelectors",
+        "description": "Use event selectors to further specify the management and data event settings for your trail. By default, trails created without specific event selectors will be configured to log all read and write management events, and no data events. When an event occurs in your account, CloudTrail evaluates the event selector for all trails. For each trail, if the event matches any event selector, the trail processes and logs the event. If the event doesn't match any event selector, the trail doesn't log the event. You can configure up to five event selectors for a trail.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "Use event selectors to further specify the management and data event settings for your trail. By default, trails created without specific event selectors will be configured to log all read and write management events, and no data events. When an event occurs in your account, CloudTrail evaluates the event selector for all trails. For each trail, if the event matches any event selector, the trail processes and logs the event. If the event doesn't match any event selector, the trail doesn't log the event. You can configure up to five event selectors for a trail.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "EventSelector"
+          },
+          "maxLength": 5
+        }
+      },
+      {
+        "name": "IncludeGlobalServiceEvents",
+        "description": "Specifies whether the trail is publishing events from global services such as IAM to the log files.",
+        "optional": true,
+        "type": {
+          "type": "boolean",
+          "description": "Specifies whether the trail is publishing events from global services such as IAM to the log files."
+        }
+      },
+      {
+        "name": "IsLogging",
+        "description": "Whether the CloudTrail is currently logging AWS API calls.",
+        "optional": false,
+        "type": {
+          "type": "boolean",
+          "description": "Whether the CloudTrail is currently logging AWS API calls."
+        }
+      },
+      {
+        "name": "IsMultiRegionTrail",
+        "description": "Specifies whether the trail applies only to the current region or to all regions. The default is false. If the trail exists only in the current region and this value is set to true, shadow trails (replications of the trail) will be created in the other regions. If the trail exists in all regions and this value is set to false, the trail will remain in the region where it was created, and its shadow trails in other regions will be deleted. As a best practice, consider using trails that log events in all regions.",
+        "optional": true,
+        "type": {
+          "type": "boolean",
+          "description": "Specifies whether the trail applies only to the current region or to all regions. The default is false. If the trail exists only in the current region and this value is set to true, shadow trails (replications of the trail) will be created in the other regions. If the trail exists in all regions and this value is set to false, the trail will remain in the region where it was created, and its shadow trails in other regions will be deleted. As a best practice, consider using trails that log events in all regions."
+        }
+      },
+      {
+        "name": "IsOrganizationTrail",
+        "description": "Specifies whether the trail is created for all accounts in an organization in AWS Organizations, or only for the current AWS account. The default is false, and cannot be true unless the call is made on behalf of an AWS account that is the master account for an organization in AWS Organizations.",
+        "optional": true,
+        "type": {
+          "type": "boolean",
+          "description": "Specifies whether the trail is created for all accounts in an organization in AWS Organizations, or only for the current AWS account. The default is false, and cannot be true unless the call is made on behalf of an AWS account that is the master account for an organization in AWS Organizations."
+        }
+      },
+      {
+        "name": "KMSKeyId",
+        "description": "Specifies the KMS key ID to use to encrypt the logs delivered by CloudTrail. The value can be an alias name prefixed by 'alias/', a fully specified ARN to an alias, a fully specified ARN to a key, or a globally unique identifier.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Specifies the KMS key ID to use to encrypt the logs delivered by CloudTrail. The value can be an alias name prefixed by 'alias/', a fully specified ARN to an alias, a fully specified ARN to a key, or a globally unique identifier."
+        }
+      },
+      {
+        "name": "S3BucketName",
+        "description": "Specifies the name of the Amazon S3 bucket designated for publishing log files. See Amazon S3 Bucket Naming Requirements.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "Specifies the name of the Amazon S3 bucket designated for publishing log files. See Amazon S3 Bucket Naming Requirements."
+        }
+      },
+      {
+        "name": "S3KeyPrefix",
+        "description": "Specifies the Amazon S3 key prefix that comes after the name of the bucket you have designated for log file delivery. For more information, see Finding Your CloudTrail Log Files. The maximum length is 200 characters.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Specifies the Amazon S3 key prefix that comes after the name of the bucket you have designated for log file delivery. For more information, see Finding Your CloudTrail Log Files. The maximum length is 200 characters.",
+          "maxLength": 200
+        }
+      },
+      {
+        "name": "SnsTopicName",
+        "description": "Specifies the name of the Amazon SNS topic defined for notification of log file delivery. The maximum length is 256 characters.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Specifies the name of the Amazon SNS topic defined for notification of log file delivery. The maximum length is 256 characters.",
+          "maxLength": 256
+        }
+      },
+      {
+        "name": "Tags",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          }
+        }
+      },
+      {
+        "name": "TrailName",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 128,
+          "minLength": 3,
+          "pattern": "(^[a-zA-Z0-9]$)|(^[a-zA-Z0-9]([a-zA-Z0-9\\._-])*[a-zA-Z0-9]$)"
+        }
+      },
+      {
+        "name": "InsightSelectors",
+        "description": "Lets you enable Insights event logging by specifying the Insights selectors that you want to enable on an existing trail.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "Lets you enable Insights event logging by specifying the Insights selectors that you want to enable on an existing trail.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "InsightSelector"
+          }
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Creates a trail that specifies the settings for delivery of log data to an Amazon S3 bucket. A maximum of five trails can exist in a region, irrespective of the region in which they were created.",
+    "properties": [
+      {
+        "name": "Arn",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "SnsTopicArn",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      }
+    ]
+  },
+  "$hash": "0a5b07d74ffa041b4451cb4958120db87c400363"
+}

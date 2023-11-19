@@ -1,0 +1,284 @@
+{
+  "definitions": {
+    "Channel": {
+      "type": "string",
+      "description": "The channels that agents can handle in the Contact Control Panel (CCP).",
+      "allowedValues": ["VOICE", "CHAT", "TASK"]
+    },
+    "Concurrency": {
+      "type": "number",
+      "description": "The number of contacts an agent can have on a channel simultaneously.",
+      "isInteger": true,
+      "maximum": 10,
+      "minimum": 1
+    },
+    "BehaviorType": {
+      "type": "string",
+      "description": "Specifies the other channels that can be routed to an agent handling their current channel.",
+      "allowedValues": ["ROUTE_CURRENT_CHANNEL_ONLY", "ROUTE_ANY_CHANNEL"]
+    },
+    "CrossChannelBehavior": {
+      "type": "object",
+      "description": "Defines the cross-channel routing behavior that allows an agent working on a contact in one channel to be offered a contact from a different channel.",
+      "properties": [
+        {
+          "name": "BehaviorType",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "BehaviorType"
+          }
+        }
+      ]
+    },
+    "MediaConcurrency": {
+      "type": "object",
+      "description": "Contains information about which channels are supported, and how many contacts an agent can have on a channel simultaneously.",
+      "properties": [
+        {
+          "name": "Channel",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "Channel"
+          }
+        },
+        {
+          "name": "Concurrency",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "Concurrency"
+          }
+        },
+        {
+          "name": "CrossChannelBehavior",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "CrossChannelBehavior"
+          }
+        }
+      ]
+    },
+    "Delay": {
+      "type": "number",
+      "description": "The delay, in seconds, a contact should wait in the queue before they are routed to an available agent.",
+      "isInteger": true,
+      "maximum": 9999,
+      "minimum": 0
+    },
+    "Priority": {
+      "type": "number",
+      "description": "The order in which contacts are to be handled for the queue.",
+      "isInteger": true,
+      "maximum": 99,
+      "minimum": 1
+    },
+    "QueueArn": {
+      "type": "string",
+      "description": "The Amazon Resource Name (ARN) for the queue.",
+      "pattern": "^arn:aws[-a-z0-9]*:connect:[-a-z0-9]*:[0-9]{12}:instance/[-a-zA-Z0-9]*/queue/[-a-zA-Z0-9]*$"
+    },
+    "RoutingProfileQueueReference": {
+      "type": "object",
+      "description": "Contains the channel and queue identifier for a routing profile.",
+      "properties": [
+        {
+          "name": "Channel",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "Channel"
+          }
+        },
+        {
+          "name": "QueueArn",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "QueueArn"
+          }
+        }
+      ]
+    },
+    "RoutingProfileQueueConfig": {
+      "type": "object",
+      "description": "Contains information about the queue and channel for which priority and delay can be set.",
+      "properties": [
+        {
+          "name": "Delay",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "Delay"
+          }
+        },
+        {
+          "name": "Priority",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "Priority"
+          }
+        },
+        {
+          "name": "QueueReference",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "RoutingProfileQueueReference"
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "description": "A key-value pair to associate with a resource.",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^(?!aws:)[a-zA-Z+-=._:/]+$"
+          }
+        },
+        {
+          "name": "Value",
+          "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+            "maxLength": 256
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource Type definition for AWS::Connect::RoutingProfile",
+    "properties": [
+      {
+        "name": "InstanceArn",
+        "description": "The identifier of the Amazon Connect instance.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The identifier of the Amazon Connect instance.",
+          "pattern": "^arn:aws[-a-z0-9]*:connect:[-a-z0-9]*:[0-9]{12}:instance/[-a-zA-Z0-9]*$"
+        }
+      },
+      {
+        "name": "Name",
+        "description": "The name of the routing profile.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The name of the routing profile.",
+          "maxLength": 127,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "Description",
+        "description": "The description of the routing profile.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The description of the routing profile.",
+          "maxLength": 250,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "MediaConcurrencies",
+        "description": "The channels agents can handle in the Contact Control Panel (CCP) for this routing profile.",
+        "optional": false,
+        "type": {
+          "type": "array",
+          "description": "The channels agents can handle in the Contact Control Panel (CCP) for this routing profile.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "MediaConcurrency"
+          }
+        }
+      },
+      {
+        "name": "DefaultOutboundQueueArn",
+        "description": "The identifier of the default outbound queue for this routing profile.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The identifier of the default outbound queue for this routing profile.",
+          "pattern": "^arn:aws[-a-z0-9]*:connect:[-a-z0-9]*:[0-9]{12}:instance/[-a-zA-Z0-9]*/queue/[-a-zA-Z0-9]*$"
+        }
+      },
+      {
+        "name": "QueueConfigs",
+        "description": "The queues to associate with this routing profile.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "The queues to associate with this routing profile.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "RoutingProfileQueueConfig"
+          },
+          "maxLength": 10,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "Tags",
+        "description": "An array of key-value pairs to apply to this resource.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "An array of key-value pairs to apply to this resource.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          },
+          "maxLength": 50
+        }
+      },
+      {
+        "name": "AgentAvailabilityTimer",
+        "description": "Whether agents with this routing profile will have their routing order calculated based on longest idle time or time since their last inbound contact.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Whether agents with this routing profile will have their routing order calculated based on longest idle time or time since their last inbound contact.",
+          "allowedValues": [
+            "TIME_SINCE_LAST_ACTIVITY",
+            "TIME_SINCE_LAST_INBOUND"
+          ]
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Resource Type definition for AWS::Connect::RoutingProfile",
+    "properties": [
+      {
+        "name": "RoutingProfileArn",
+        "description": "The Amazon Resource Name (ARN) of the routing profile.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) of the routing profile.",
+          "pattern": "^arn:aws[-a-z0-9]*:connect:[-a-z0-9]*:[0-9]{12}:instance/[-a-zA-Z0-9]*/routing-profile/[-a-zA-Z0-9]*$"
+        }
+      }
+    ]
+  },
+  "$hash": "d357a6b76134fd890889ef17bdb4a64d6413f0a3"
+}

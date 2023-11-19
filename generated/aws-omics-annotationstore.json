@@ -1,0 +1,271 @@
+{
+  "definitions": {
+    "AnnotationType": {
+      "type": "string",
+      "allowedValues": [
+        "GENERIC",
+        "CHR_POS",
+        "CHR_POS_REF_ALT",
+        "CHR_START_END_ONE_BASE",
+        "CHR_START_END_REF_ALT_ONE_BASE",
+        "CHR_START_END_ZERO_BASE",
+        "CHR_START_END_REF_ALT_ZERO_BASE"
+      ]
+    },
+    "EncryptionType": {
+      "type": "string",
+      "allowedValues": ["KMS"]
+    },
+    "FormatToHeader": {
+      "type": "record",
+      "valueType": {
+        "type": "string",
+        "maxLength": 1000,
+        "minLength": 0
+      }
+    },
+    "FormatToHeaderKey": {
+      "type": "string",
+      "allowedValues": ["CHR", "START", "END", "REF", "ALT", "POS"]
+    },
+    "ReferenceItem": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ReferenceArn",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 127,
+            "minLength": 1,
+            "pattern": "^arn:.+$"
+          }
+        }
+      ]
+    },
+    "SchemaItem": {
+      "type": "record",
+      "valueType": {
+        "type": "ref",
+        "typeName": "SchemaValueType"
+      }
+    },
+    "SchemaValueType": {
+      "type": "string",
+      "allowedValues": ["LONG", "INT", "STRING", "FLOAT", "DOUBLE", "BOOLEAN"]
+    },
+    "SseConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Type",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "EncryptionType"
+          }
+        },
+        {
+          "name": "KeyArn",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 2048,
+            "minLength": 20,
+            "pattern": "arn:([^:\n]*):([^:\n]*):([^:\n]*):([0-9]{12}):([^:\n]*)"
+          }
+        }
+      ]
+    },
+    "StoreFormat": {
+      "type": "string",
+      "allowedValues": ["GFF", "TSV", "VCF"]
+    },
+    "StoreOptions": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "TsvStoreOptions",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "TsvStoreOptions"
+          }
+        }
+      ]
+    },
+    "StoreStatus": {
+      "type": "string",
+      "allowedValues": ["CREATING", "UPDATING", "DELETING", "ACTIVE", "FAILED"]
+    },
+    "TagMap": {
+      "type": "record",
+      "valueType": {
+        "type": "string",
+        "maxLength": 256,
+        "minLength": 0
+      }
+    },
+    "TsvStoreOptions": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "AnnotationType",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "AnnotationType"
+          }
+        },
+        {
+          "name": "FormatToHeader",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "FormatToHeader"
+          }
+        },
+        {
+          "name": "Schema",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "SchemaItem"
+            },
+            "maxLength": 5000,
+            "minLength": 1
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Definition of AWS::Omics::AnnotationStore Resource Type",
+    "properties": [
+      {
+        "name": "Description",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 500,
+          "minLength": 0
+        }
+      },
+      {
+        "name": "Name",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "pattern": "^([a-z]){1}([a-z0-9_]){2,254}"
+        }
+      },
+      {
+        "name": "Reference",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "ReferenceItem"
+        }
+      },
+      {
+        "name": "SseConfig",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "SseConfig"
+        }
+      },
+      {
+        "name": "StoreFormat",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "StoreFormat"
+        }
+      },
+      {
+        "name": "StoreOptions",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "StoreOptions"
+        }
+      },
+      {
+        "name": "Tags",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "TagMap"
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Definition of AWS::Omics::AnnotationStore Resource Type",
+    "properties": [
+      {
+        "name": "CreationTime",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "Id",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{12}$"
+        }
+      },
+      {
+        "name": "Status",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "StoreStatus"
+        }
+      },
+      {
+        "name": "StatusMessage",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 1000,
+          "minLength": 0
+        }
+      },
+      {
+        "name": "StoreArn",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 2048,
+          "minLength": 20,
+          "pattern": "^arn:([^:\n]*):([^:\n]*):([^:\n]*):([0-9]{12}):([^:\n]*)$"
+        }
+      },
+      {
+        "name": "StoreSizeBytes",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "isInteger": false
+        }
+      },
+      {
+        "name": "UpdateTime",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      }
+    ]
+  },
+  "$hash": "dbdb910cd203e5df30ee46eb81f9141c6d954665"
+}

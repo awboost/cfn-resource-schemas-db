@@ -1,0 +1,255 @@
+{
+  "definitions": {
+    "KinesisStreamArn": {
+      "type": "string",
+      "description": "An ARN is a unique AWS resource identifier.",
+      "pattern": "^arn:aws[-a-z0-9]*:kinesis:[-a-z0-9]*:[0-9]{12}:stream/[-a-zA-Z0-9_.]*$"
+    },
+    "FirehoseDeliveryStreamArn": {
+      "type": "string",
+      "description": "An ARN is a unique AWS resource identifier.",
+      "pattern": "^arn:aws[-a-z0-9]*:firehose:[-a-z0-9]*:[0-9]{12}:deliverystream/[-a-zA-Z0-9_.]*$"
+    },
+    "AssociationId": {
+      "type": "string",
+      "description": "An associationID is automatically generated when a storage config is associated with an instance",
+      "maxLength": 100,
+      "minLength": 1,
+      "pattern": "^[-a-z0-9]*$"
+    },
+    "InstanceStorageResourceType": {
+      "type": "string",
+      "description": "Specifies the type of storage resource available for the instance",
+      "allowedValues": [
+        "CHAT_TRANSCRIPTS",
+        "CALL_RECORDINGS",
+        "SCHEDULED_REPORTS",
+        "MEDIA_STREAMS",
+        "CONTACT_TRACE_RECORDS",
+        "AGENT_EVENTS"
+      ]
+    },
+    "StorageType": {
+      "type": "string",
+      "description": "Specifies the storage type to be associated with the instance",
+      "allowedValues": [
+        "S3",
+        "KINESIS_VIDEO_STREAM",
+        "KINESIS_STREAM",
+        "KINESIS_FIREHOSE"
+      ]
+    },
+    "BucketName": {
+      "type": "string",
+      "description": "A name for the S3 Bucket",
+      "maxLength": 128,
+      "minLength": 1
+    },
+    "Hours": {
+      "type": "number",
+      "description": "Number of hours",
+      "isInteger": false
+    },
+    "Prefix": {
+      "type": "string",
+      "description": "Prefixes are used to infer logical hierarchy",
+      "maxLength": 128,
+      "minLength": 1
+    },
+    "EncryptionType": {
+      "type": "string",
+      "description": "Specifies default encryption using AWS KMS-Managed Keys",
+      "allowedValues": ["KMS"]
+    },
+    "KeyId": {
+      "type": "string",
+      "description": "Specifies the encryption key id",
+      "maxLength": 128,
+      "minLength": 1
+    },
+    "EncryptionConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "EncryptionType",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "EncryptionType"
+          }
+        },
+        {
+          "name": "KeyId",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "KeyId"
+          }
+        }
+      ]
+    },
+    "S3Config": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "BucketName",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "BucketName"
+          }
+        },
+        {
+          "name": "BucketPrefix",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "Prefix"
+          }
+        },
+        {
+          "name": "EncryptionConfig",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "EncryptionConfig"
+          }
+        }
+      ]
+    },
+    "KinesisVideoStreamConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Prefix",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "Prefix"
+          }
+        },
+        {
+          "name": "RetentionPeriodHours",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "Hours"
+          }
+        },
+        {
+          "name": "EncryptionConfig",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "EncryptionConfig"
+          }
+        }
+      ]
+    },
+    "KinesisStreamConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "StreamArn",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "KinesisStreamArn"
+          }
+        }
+      ]
+    },
+    "KinesisFirehoseConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "FirehoseArn",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "FirehoseDeliveryStreamArn"
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource Type definition for AWS::Connect::InstanceStorageConfig",
+    "properties": [
+      {
+        "name": "InstanceArn",
+        "description": "Connect Instance ID with which the storage config will be associated",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "Connect Instance ID with which the storage config will be associated",
+          "pattern": "^arn:aws[-a-z0-9]*:connect:[-a-z0-9]*:[0-9]{12}:instance/[-a-zA-Z0-9]*$"
+        }
+      },
+      {
+        "name": "ResourceType",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "InstanceStorageResourceType"
+        }
+      },
+      {
+        "name": "StorageType",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "StorageType"
+        }
+      },
+      {
+        "name": "S3Config",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "S3Config"
+        }
+      },
+      {
+        "name": "KinesisVideoStreamConfig",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "KinesisVideoStreamConfig"
+        }
+      },
+      {
+        "name": "KinesisStreamConfig",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "KinesisStreamConfig"
+        }
+      },
+      {
+        "name": "KinesisFirehoseConfig",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "KinesisFirehoseConfig"
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Resource Type definition for AWS::Connect::InstanceStorageConfig",
+    "properties": [
+      {
+        "name": "AssociationId",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "AssociationId"
+        }
+      }
+    ]
+  },
+  "$hash": "9c9958ab09a102977d10a2971cfc1a23813d98df"
+}

@@ -1,0 +1,818 @@
+{
+  "definitions": {
+    "S3Location": {
+      "type": "object",
+      "description": "S3 Output location",
+      "properties": [
+        {
+          "name": "Bucket",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Key",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "BucketOwner",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 12,
+            "minLength": 12
+          }
+        }
+      ]
+    },
+    "CsvOutputOptions": {
+      "type": "object",
+      "description": "Output Csv options",
+      "properties": [
+        {
+          "name": "Delimiter",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 1,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "OutputFormatOptions": {
+      "type": "object",
+      "description": "Format options for job Output",
+      "properties": [
+        {
+          "name": "Csv",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "CsvOutputOptions"
+          }
+        }
+      ]
+    },
+    "OutputLocation": {
+      "type": "object",
+      "description": "Output location",
+      "properties": [
+        {
+          "name": "Bucket",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Key",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "BucketOwner",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 12,
+            "minLength": 12
+          }
+        }
+      ]
+    },
+    "Output": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "CompressionFormat",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": [
+              "GZIP",
+              "LZ4",
+              "SNAPPY",
+              "BZIP2",
+              "DEFLATE",
+              "LZO",
+              "BROTLI",
+              "ZSTD",
+              "ZLIB"
+            ]
+          }
+        },
+        {
+          "name": "Format",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": [
+              "CSV",
+              "JSON",
+              "PARQUET",
+              "GLUEPARQUET",
+              "AVRO",
+              "ORC",
+              "XML",
+              "TABLEAUHYPER"
+            ]
+          }
+        },
+        {
+          "name": "FormatOptions",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "OutputFormatOptions"
+          }
+        },
+        {
+          "name": "PartitionColumns",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "name": "Location",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "S3Location"
+          }
+        },
+        {
+          "name": "Overwrite",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "MaxOutputFiles",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 999,
+            "minimum": 1
+          }
+        }
+      ]
+    },
+    "DataCatalogOutput": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "CatalogId",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "DatabaseName",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "TableName",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "S3Options",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "S3TableOutputOptions"
+          }
+        },
+        {
+          "name": "DatabaseOptions",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DatabaseTableOutputOptions"
+          }
+        },
+        {
+          "name": "Overwrite",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        }
+      ]
+    },
+    "S3TableOutputOptions": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Location",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "S3Location"
+          }
+        }
+      ]
+    },
+    "DatabaseTableOutputOptions": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "TempDirectory",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "S3Location"
+          }
+        },
+        {
+          "name": "TableName",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "DatabaseOutput": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "GlueConnectionName",
+          "description": "Glue connection name",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Glue connection name"
+          }
+        },
+        {
+          "name": "DatabaseOutputMode",
+          "description": "Database table name",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Database table name",
+            "allowedValues": ["NEW_TABLE"]
+          }
+        },
+        {
+          "name": "DatabaseOptions",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "DatabaseTableOutputOptions"
+          }
+        }
+      ]
+    },
+    "Recipe": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Name",
+          "description": "Recipe name",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Recipe name"
+          }
+        },
+        {
+          "name": "Version",
+          "description": "Recipe version",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Recipe version"
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "description": "A key-value pair to associate with a resource.",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 0
+          }
+        }
+      ]
+    },
+    "SampleMode": {
+      "type": "string",
+      "description": "Sample configuration mode for profile jobs.",
+      "allowedValues": ["FULL_DATASET", "CUSTOM_ROWS"]
+    },
+    "JobSize": {
+      "type": "number",
+      "description": "Sample configuration size for profile jobs.",
+      "isInteger": true
+    },
+    "JobSample": {
+      "type": "object",
+      "description": "Job Sample",
+      "properties": [
+        {
+          "name": "Mode",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "SampleMode"
+          }
+        },
+        {
+          "name": "Size",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "JobSize"
+          }
+        }
+      ]
+    },
+    "ProfileConfiguration": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "DatasetStatisticsConfiguration",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "StatisticsConfiguration"
+          }
+        },
+        {
+          "name": "ProfileColumns",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "ColumnSelector"
+            },
+            "minLength": 1
+          }
+        },
+        {
+          "name": "ColumnStatisticsConfigurations",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "ColumnStatisticsConfiguration"
+            },
+            "minLength": 1
+          }
+        },
+        {
+          "name": "EntityDetectorConfiguration",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "EntityDetectorConfiguration"
+          }
+        }
+      ]
+    },
+    "EntityDetectorConfiguration": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "EntityTypes",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string",
+              "maxLength": 128,
+              "minLength": 1,
+              "pattern": "^[A-Z_][A-Z\\\\d_]*$"
+            },
+            "minLength": 1
+          }
+        },
+        {
+          "name": "AllowedStatistics",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "AllowedStatistics"
+          }
+        }
+      ]
+    },
+    "AllowedStatistics": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Statistics",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Statistic"
+            },
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "ColumnStatisticsConfiguration": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Selectors",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "ColumnSelector"
+            },
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Statistics",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "StatisticsConfiguration"
+          }
+        }
+      ]
+    },
+    "StatisticsConfiguration": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "IncludedStatistics",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Statistic"
+            },
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Overrides",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "StatisticOverride"
+            },
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "ColumnSelector": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Regex",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Name",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "Statistic": {
+      "type": "string",
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Z\\_]+$"
+    },
+    "StatisticOverride": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Statistic",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "Statistic"
+          }
+        },
+        {
+          "name": "Parameters",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "ParameterMap"
+          }
+        }
+      ]
+    },
+    "ParameterMap": {
+      "type": "record",
+      "valueType": {
+        "type": "string"
+      }
+    },
+    "ValidationMode": {
+      "type": "string",
+      "allowedValues": ["CHECK_ALL"]
+    },
+    "ValidationConfiguration": {
+      "type": "object",
+      "description": "Configuration to attach Rulesets to the job",
+      "properties": [
+        {
+          "name": "RulesetArn",
+          "description": "Arn of the Ruleset",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Arn of the Ruleset",
+            "maxLength": 2048,
+            "minLength": 20
+          }
+        },
+        {
+          "name": "ValidationMode",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ValidationMode"
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource schema for AWS::DataBrew::Job.",
+    "properties": [
+      {
+        "name": "DatasetName",
+        "description": "Dataset name",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Dataset name",
+          "maxLength": 255,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "EncryptionKeyArn",
+        "description": "Encryption Key Arn",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Encryption Key Arn",
+          "maxLength": 2048,
+          "minLength": 20
+        }
+      },
+      {
+        "name": "EncryptionMode",
+        "description": "Encryption mode",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Encryption mode",
+          "allowedValues": ["SSE-KMS", "SSE-S3"]
+        }
+      },
+      {
+        "name": "Name",
+        "description": "Job name",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "Job name",
+          "maxLength": 255,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "Type",
+        "description": "Job type",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "Job type",
+          "allowedValues": ["PROFILE", "RECIPE"]
+        }
+      },
+      {
+        "name": "LogSubscription",
+        "description": "Log subscription",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Log subscription",
+          "allowedValues": ["ENABLE", "DISABLE"]
+        }
+      },
+      {
+        "name": "MaxCapacity",
+        "description": "Max capacity",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "Max capacity",
+          "isInteger": true
+        }
+      },
+      {
+        "name": "MaxRetries",
+        "description": "Max retries",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "Max retries",
+          "isInteger": true
+        }
+      },
+      {
+        "name": "Outputs",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Output"
+          }
+        }
+      },
+      {
+        "name": "DataCatalogOutputs",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "DataCatalogOutput"
+          }
+        }
+      },
+      {
+        "name": "DatabaseOutputs",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "DatabaseOutput"
+          }
+        }
+      },
+      {
+        "name": "OutputLocation",
+        "description": "Output location",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "Output location",
+          "typeName": "OutputLocation"
+        }
+      },
+      {
+        "name": "ProjectName",
+        "description": "Project name",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Project name",
+          "maxLength": 255,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "Recipe",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "Recipe"
+        }
+      },
+      {
+        "name": "RoleArn",
+        "description": "Role arn",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "Role arn"
+        }
+      },
+      {
+        "name": "Tags",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          }
+        }
+      },
+      {
+        "name": "Timeout",
+        "description": "Timeout",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "Timeout",
+          "isInteger": true
+        }
+      },
+      {
+        "name": "JobSample",
+        "description": "Job Sample",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "Job Sample",
+          "typeName": "JobSample"
+        }
+      },
+      {
+        "name": "ProfileConfiguration",
+        "description": "Profile Job configuration",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "Profile Job configuration",
+          "typeName": "ProfileConfiguration"
+        }
+      },
+      {
+        "name": "ValidationConfigurations",
+        "description": "Data quality rules configuration",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "Data quality rules configuration",
+          "itemType": {
+            "type": "ref",
+            "typeName": "ValidationConfiguration"
+          }
+        }
+      }
+    ]
+  },
+  "$hash": "3f65bc4e2a4d8a5576260c55fa83350a631177a0"
+}

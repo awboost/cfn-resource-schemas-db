@@ -1,0 +1,169 @@
+{
+  "definitions": {
+    "EncryptionType": {
+      "type": "string",
+      "allowedValues": ["KMS"]
+    },
+    "ReferenceItem": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ReferenceArn",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 127,
+            "minLength": 1,
+            "pattern": "^arn:.+$"
+          }
+        }
+      ]
+    },
+    "SseConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Type",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "EncryptionType"
+          }
+        },
+        {
+          "name": "KeyArn",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 2048,
+            "minLength": 20,
+            "pattern": "arn:([^:\n]*):([^:\n]*):([^:\n]*):([0-9]{12}):([^:\n]*)"
+          }
+        }
+      ]
+    },
+    "StoreStatus": {
+      "type": "string",
+      "allowedValues": ["CREATING", "UPDATING", "DELETING", "ACTIVE", "FAILED"]
+    },
+    "TagMap": {
+      "type": "record",
+      "valueType": {
+        "type": "string",
+        "maxLength": 256,
+        "minLength": 0
+      }
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Definition of AWS::Omics::VariantStore Resource Type",
+    "properties": [
+      {
+        "name": "Description",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 500,
+          "minLength": 0
+        }
+      },
+      {
+        "name": "Name",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "pattern": "^([a-z]){1}([a-z0-9_]){2,254}"
+        }
+      },
+      {
+        "name": "Reference",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "ReferenceItem"
+        }
+      },
+      {
+        "name": "SseConfig",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "SseConfig"
+        }
+      },
+      {
+        "name": "Tags",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "TagMap"
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Definition of AWS::Omics::VariantStore Resource Type",
+    "properties": [
+      {
+        "name": "CreationTime",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "Id",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{12}$"
+        }
+      },
+      {
+        "name": "Status",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "StoreStatus"
+        }
+      },
+      {
+        "name": "StatusMessage",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 1000,
+          "minLength": 0
+        }
+      },
+      {
+        "name": "StoreArn",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 2048,
+          "minLength": 20,
+          "pattern": "^arn:([^:\n]*):([^:\n]*):([^:\n]*):([0-9]{12}):([^:\n]*)$"
+        }
+      },
+      {
+        "name": "StoreSizeBytes",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "isInteger": false
+        }
+      },
+      {
+        "name": "UpdateTime",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      }
+    ]
+  },
+  "$hash": "603b4b6dd85b5385b88ff6853b4376883db155ed"
+}

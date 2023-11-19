@@ -1,0 +1,761 @@
+{
+  "definitions": {
+    "VirtualGatewayListener": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ConnectionPool",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "VirtualGatewayConnectionPool"
+          }
+        },
+        {
+          "name": "HealthCheck",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "VirtualGatewayHealthCheckPolicy"
+          }
+        },
+        {
+          "name": "TLS",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "VirtualGatewayListenerTls"
+          }
+        },
+        {
+          "name": "PortMapping",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "VirtualGatewayPortMapping"
+          }
+        }
+      ]
+    },
+    "VirtualGatewayListenerTlsValidationContextTrust": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "File",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "VirtualGatewayTlsValidationContextFileTrust"
+          }
+        },
+        {
+          "name": "SDS",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "VirtualGatewayTlsValidationContextSdsTrust"
+          }
+        }
+      ]
+    },
+    "VirtualGatewayAccessLog": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "File",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "VirtualGatewayFileAccessLog"
+          }
+        }
+      ]
+    },
+    "VirtualGatewaySpec": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Logging",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "VirtualGatewayLogging"
+          }
+        },
+        {
+          "name": "Listeners",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "VirtualGatewayListener"
+            }
+          }
+        },
+        {
+          "name": "BackendDefaults",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "VirtualGatewayBackendDefaults"
+          }
+        }
+      ]
+    },
+    "VirtualGatewayClientPolicy": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "TLS",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "VirtualGatewayClientPolicyTls"
+          }
+        }
+      ]
+    },
+    "VirtualGatewayHttpConnectionPool": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "MaxConnections",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "MaxPendingRequests",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        }
+      ]
+    },
+    "VirtualGatewayClientPolicyTls": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Validation",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "VirtualGatewayTlsValidationContext"
+          }
+        },
+        {
+          "name": "Ports",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "number",
+              "isInteger": true
+            }
+          }
+        },
+        {
+          "name": "Enforce",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "Certificate",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "VirtualGatewayClientTlsCertificate"
+          }
+        }
+      ]
+    },
+    "VirtualGatewayListenerTlsCertificate": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "SDS",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "VirtualGatewayListenerTlsSdsCertificate"
+          }
+        },
+        {
+          "name": "ACM",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "VirtualGatewayListenerTlsAcmCertificate"
+          }
+        },
+        {
+          "name": "File",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "VirtualGatewayListenerTlsFileCertificate"
+          }
+        }
+      ]
+    },
+    "VirtualGatewayTlsValidationContextSdsTrust": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "SecretName",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "VirtualGatewayFileAccessLog": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Path",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Format",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "LoggingFormat"
+          }
+        }
+      ]
+    },
+    "LoggingFormat": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Text",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Json",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "JsonFormatRef"
+            }
+          }
+        }
+      ]
+    },
+    "VirtualGatewayTlsValidationContext": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "SubjectAlternativeNames",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "SubjectAlternativeNames"
+          }
+        },
+        {
+          "name": "Trust",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "VirtualGatewayTlsValidationContextTrust"
+          }
+        }
+      ]
+    },
+    "VirtualGatewayListenerTlsValidationContext": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "SubjectAlternativeNames",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "SubjectAlternativeNames"
+          }
+        },
+        {
+          "name": "Trust",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "VirtualGatewayListenerTlsValidationContextTrust"
+          }
+        }
+      ]
+    },
+    "VirtualGatewayTlsValidationContextFileTrust": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "CertificateChain",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "JsonFormatRef": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "VirtualGatewayHealthCheckPolicy": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Path",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "UnhealthyThreshold",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "Port",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "HealthyThreshold",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "TimeoutMillis",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "Protocol",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "IntervalMillis",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        }
+      ]
+    },
+    "SubjectAlternativeNameMatchers": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Exact",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "VirtualGatewayTlsValidationContextTrust": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "SDS",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "VirtualGatewayTlsValidationContextSdsTrust"
+          }
+        },
+        {
+          "name": "ACM",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "VirtualGatewayTlsValidationContextAcmTrust"
+          }
+        },
+        {
+          "name": "File",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "VirtualGatewayTlsValidationContextFileTrust"
+          }
+        }
+      ]
+    },
+    "VirtualGatewayListenerTlsAcmCertificate": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "CertificateArn",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "VirtualGatewayConnectionPool": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "HTTP",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "VirtualGatewayHttpConnectionPool"
+          }
+        },
+        {
+          "name": "HTTP2",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "VirtualGatewayHttp2ConnectionPool"
+          }
+        },
+        {
+          "name": "GRPC",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "VirtualGatewayGrpcConnectionPool"
+          }
+        }
+      ]
+    },
+    "SubjectAlternativeNames": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Match",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "SubjectAlternativeNameMatchers"
+          }
+        }
+      ]
+    },
+    "VirtualGatewayClientTlsCertificate": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "File",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "VirtualGatewayListenerTlsFileCertificate"
+          }
+        },
+        {
+          "name": "SDS",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "VirtualGatewayListenerTlsSdsCertificate"
+          }
+        }
+      ]
+    },
+    "VirtualGatewayBackendDefaults": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ClientPolicy",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "VirtualGatewayClientPolicy"
+          }
+        }
+      ]
+    },
+    "VirtualGatewayLogging": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "AccessLog",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "VirtualGatewayAccessLog"
+          }
+        }
+      ]
+    },
+    "VirtualGatewayGrpcConnectionPool": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "MaxRequests",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        }
+      ]
+    },
+    "VirtualGatewayListenerTlsSdsCertificate": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "SecretName",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "VirtualGatewayListenerTlsFileCertificate": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "CertificateChain",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "PrivateKey",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "VirtualGatewayPortMapping": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Protocol",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Port",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        }
+      ]
+    },
+    "VirtualGatewayHttp2ConnectionPool": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "MaxRequests",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        }
+      ]
+    },
+    "VirtualGatewayTlsValidationContextAcmTrust": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "CertificateAuthorityArns",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "VirtualGatewayListenerTls": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Validation",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "VirtualGatewayListenerTlsValidationContext"
+          }
+        },
+        {
+          "name": "Mode",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Certificate",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "VirtualGatewayListenerTlsCertificate"
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource Type definition for AWS::AppMesh::VirtualGateway",
+    "properties": [
+      {
+        "name": "VirtualGatewayName",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "MeshName",
+        "optional": false,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "MeshOwner",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "Spec",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "VirtualGatewaySpec"
+        }
+      },
+      {
+        "name": "Tags",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          }
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Resource Type definition for AWS::AppMesh::VirtualGateway",
+    "properties": [
+      {
+        "name": "Uid",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "ResourceOwner",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "Id",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "Arn",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      }
+    ]
+  },
+  "$hash": "cf6bb74d3a1aedaf659323e2ecf2403f29456da6"
+}

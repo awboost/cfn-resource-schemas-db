@@ -1,0 +1,271 @@
+{
+  "definitions": {
+    "TagsEntry": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "CloudWatchLogsLogGroup": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "LogGroupArn",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "LogDestination": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "CloudWatchLogsLogGroup",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "CloudWatchLogsLogGroup"
+          }
+        }
+      ]
+    },
+    "LoggingConfiguration": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Level",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": ["ALL", "ERROR", "FATAL", "OFF"]
+          }
+        },
+        {
+          "name": "IncludeExecutionData",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "Destinations",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "LogDestination"
+            },
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "TracingConfiguration": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Enabled",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        }
+      ]
+    },
+    "S3Location": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Bucket",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Version",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "DefinitionSubstitutions": {
+      "type": "record",
+      "valueType": {
+        "type": "union",
+        "types": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "number",
+            "isInteger": true
+          },
+          {
+            "type": "boolean"
+          }
+        ]
+      }
+    },
+    "Definition": {
+      "type": "record"
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource schema for StateMachine",
+    "properties": [
+      {
+        "name": "DefinitionString",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 1048576,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "RoleArn",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "maxLength": 256,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "StateMachineName",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 80,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "StateMachineType",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "allowedValues": ["STANDARD", "EXPRESS"]
+        }
+      },
+      {
+        "name": "LoggingConfiguration",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "LoggingConfiguration"
+        }
+      },
+      {
+        "name": "TracingConfiguration",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "TracingConfiguration"
+        }
+      },
+      {
+        "name": "DefinitionS3Location",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "S3Location"
+        }
+      },
+      {
+        "name": "DefinitionSubstitutions",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "DefinitionSubstitutions"
+        }
+      },
+      {
+        "name": "Definition",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "Definition"
+        }
+      },
+      {
+        "name": "Tags",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "TagsEntry"
+          }
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Resource schema for StateMachine",
+    "properties": [
+      {
+        "name": "Arn",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 2048,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "Name",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 80,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "StateMachineRevisionId",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 256,
+          "minLength": 1
+        }
+      }
+    ]
+  },
+  "$hash": "f04a9da5596c1a977a9f66cca88e3d2856d4ec80"
+}

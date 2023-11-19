@@ -1,0 +1,1944 @@
+{
+  "definitions": {
+    "CalculatedColumn": {
+      "type": "object",
+      "description": "<p>A calculated column for a dataset.</p>",
+      "properties": [
+        {
+          "name": "ColumnId",
+          "description": "<p>A unique ID to identify a calculated column. During a dataset update, if the column ID\n            of a calculated column matches that of an existing calculated column, Amazon QuickSight\n            preserves the existing calculated column.</p>",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "<p>A unique ID to identify a calculated column. During a dataset update, if the column ID\n            of a calculated column matches that of an existing calculated column, Amazon QuickSight\n            preserves the existing calculated column.</p>",
+            "maxLength": 64,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "ColumnName",
+          "description": "<p>Column name.</p>",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "<p>Column name.</p>",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Expression",
+          "description": "<p>An expression that defines the calculated column.</p>",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "<p>An expression that defines the calculated column.</p>",
+            "maxLength": 4096,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "CastColumnTypeOperation": {
+      "type": "object",
+      "description": "<p>A transform operation that casts a column to a different type.</p>",
+      "properties": [
+        {
+          "name": "ColumnName",
+          "description": "<p>Column name.</p>",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "<p>Column name.</p>",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Format",
+          "description": "<p>When casting a column from string to datetime type, you can supply a string in a\n            format supported by Amazon QuickSight to denote the source data format.</p>",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "<p>When casting a column from string to datetime type, you can supply a string in a\n            format supported by Amazon QuickSight to denote the source data format.</p>",
+            "maxLength": 32,
+            "minLength": 0
+          }
+        },
+        {
+          "name": "NewColumnType",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "ColumnDataType"
+          }
+        },
+        {
+          "name": "SubType",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ColumnSubDataType"
+          }
+        }
+      ]
+    },
+    "ColumnDataType": {
+      "type": "string",
+      "allowedValues": ["STRING", "INTEGER", "DECIMAL", "DATETIME"]
+    },
+    "ColumnSubDataType": {
+      "type": "string",
+      "allowedValues": ["FIXED", "FLOAT"]
+    },
+    "ColumnDescription": {
+      "type": "object",
+      "description": "<p>Metadata that contains a description for a column.</p>",
+      "properties": [
+        {
+          "name": "Text",
+          "description": "<p>The text of a description for a column.</p>",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "<p>The text of a description for a column.</p>",
+            "maxLength": 500,
+            "minLength": 0
+          }
+        }
+      ]
+    },
+    "ColumnGroup": {
+      "type": "object",
+      "description": "<p>Groupings of columns that work together in certain Amazon QuickSight features. This is\n            a variant type structure. For this structure to be valid, only one of the attributes can\n            be non-null.</p>",
+      "properties": [
+        {
+          "name": "GeoSpatialColumnGroup",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "GeoSpatialColumnGroup"
+          }
+        }
+      ]
+    },
+    "ColumnLevelPermissionRule": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ColumnNames",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            },
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Principals",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            },
+            "maxLength": 100,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "ColumnTag": {
+      "type": "object",
+      "description": "<p>A tag for a column in a <a>TagColumnOperation</a> structure. This is a\n            variant type structure. For this structure to be valid, only one of the attributes can\n            be non-null.</p>",
+      "properties": [
+        {
+          "name": "ColumnGeographicRole",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "GeoSpatialDataRole"
+          }
+        },
+        {
+          "name": "ColumnDescription",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ColumnDescription"
+          }
+        }
+      ]
+    },
+    "CreateColumnsOperation": {
+      "type": "object",
+      "description": "<p>A transform operation that creates calculated columns. Columns created in one such\n            operation form a lexical closure.</p>",
+      "properties": [
+        {
+          "name": "Columns",
+          "description": "<p>Calculated columns to create.</p>",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "description": "<p>Calculated columns to create.</p>",
+            "itemType": {
+              "type": "ref",
+              "typeName": "CalculatedColumn"
+            },
+            "maxLength": 128,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "CustomSql": {
+      "type": "object",
+      "description": "<p>A physical table type built from the results of the custom SQL query.</p>",
+      "properties": [
+        {
+          "name": "DataSourceArn",
+          "description": "<p>The Amazon Resource Name (ARN) of the data source.</p>",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "<p>The Amazon Resource Name (ARN) of the data source.</p>"
+          }
+        },
+        {
+          "name": "SqlQuery",
+          "description": "<p>The SQL query.</p>",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "<p>The SQL query.</p>",
+            "maxLength": 65536,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Columns",
+          "description": "<p>The column schema from the SQL query result set.</p>",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "description": "<p>The column schema from the SQL query result set.</p>",
+            "itemType": {
+              "type": "ref",
+              "typeName": "InputColumn"
+            },
+            "maxLength": 2048,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Name",
+          "description": "<p>A display name for the SQL query result.</p>",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "<p>A display name for the SQL query result.</p>",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "DataSetImportMode": {
+      "type": "string",
+      "allowedValues": ["SPICE", "DIRECT_QUERY"]
+    },
+    "DatasetParameter": {
+      "type": "object",
+      "description": "<p>A parameter created in the dataset that could be of any one data type such as string, integer, decimal or datetime.</p>",
+      "properties": [
+        {
+          "name": "StringDatasetParameter",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "StringDatasetParameter"
+          }
+        },
+        {
+          "name": "DecimalDatasetParameter",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DecimalDatasetParameter"
+          }
+        },
+        {
+          "name": "IntegerDatasetParameter",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "IntegerDatasetParameter"
+          }
+        },
+        {
+          "name": "DateTimeDatasetParameter",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DateTimeDatasetParameter"
+          }
+        }
+      ]
+    },
+    "DatasetParameterId": {
+      "type": "string",
+      "description": "<p>Identifier of the parameter created in the dataset.</p>",
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[a-zA-Z0-9-]+$"
+    },
+    "DatasetParameterName": {
+      "type": "string",
+      "description": "<p>Name of the parameter created in the dataset.</p>",
+      "maxLength": 2048,
+      "minLength": 1,
+      "pattern": "^[a-zA-Z0-9]+$"
+    },
+    "DatasetParameterValueType": {
+      "type": "string",
+      "description": "<p>Every parameter value could be either a single value or multi value which helps to validate before evaluation.</p>",
+      "allowedValues": ["MULTI_VALUED", "SINGLE_VALUED"]
+    },
+    "DateTimeDatasetParameter": {
+      "type": "object",
+      "description": "<p>A parameter created in the dataset of date time data type.</p>",
+      "properties": [
+        {
+          "name": "Id",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "DatasetParameterId"
+          }
+        },
+        {
+          "name": "Name",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "DatasetParameterName"
+          }
+        },
+        {
+          "name": "ValueType",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "DatasetParameterValueType"
+          }
+        },
+        {
+          "name": "TimeGranularity",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "TimeGranularity"
+          }
+        },
+        {
+          "name": "DefaultValues",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DateTimeDatasetParameterDefaultValues"
+          }
+        }
+      ]
+    },
+    "DateTimeDatasetParameterDefaultValues": {
+      "type": "object",
+      "description": "<p>List of default values defined for a given string date time parameter type. Currently only static values are supported.</p>",
+      "properties": [
+        {
+          "name": "StaticValues",
+          "description": "<p>List of static default values defined for a given string date time parameter type.</p>",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "<p>List of static default values defined for a given string date time parameter type.</p>",
+            "typeName": "DateTimeDatasetParameterValueList"
+          }
+        }
+      ]
+    },
+    "DateTimeDatasetParameterValueList": {
+      "type": "array",
+      "itemType": {
+        "type": "string",
+        "description": "<p>Default value defined for the dataset parameter of date time type.</p>"
+      },
+      "maxLength": 32,
+      "minLength": 1
+    },
+    "DecimalDatasetParameter": {
+      "type": "object",
+      "description": "<p>A parameter created in the dataset of decimal data type.</p>",
+      "properties": [
+        {
+          "name": "Id",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "DatasetParameterId"
+          }
+        },
+        {
+          "name": "Name",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "DatasetParameterName"
+          }
+        },
+        {
+          "name": "ValueType",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "DatasetParameterValueType"
+          }
+        },
+        {
+          "name": "DefaultValues",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DecimalDatasetParameterDefaultValues"
+          }
+        }
+      ]
+    },
+    "DecimalDatasetParameterDefaultValues": {
+      "type": "object",
+      "description": "<p>List of default values defined for a given decimal dataset parameter type. Currently only static values are supported.</p>",
+      "properties": [
+        {
+          "name": "StaticValues",
+          "description": "<p>List of static default values defined for a given decimal dataset parameter type.</p>",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "<p>List of static default values defined for a given decimal dataset parameter type.</p>",
+            "typeName": "DecimalDatasetParameterValueList"
+          }
+        }
+      ]
+    },
+    "DecimalDatasetParameterValueList": {
+      "type": "array",
+      "itemType": {
+        "type": "number",
+        "description": "<p>Default value defined for the dataset parameter of decimal type.</p>",
+        "isInteger": false
+      },
+      "maxLength": 32,
+      "minLength": 1
+    },
+    "IntegerDatasetParameter": {
+      "type": "object",
+      "description": "<p>A parameter created in the dataset of integer data type.</p>",
+      "properties": [
+        {
+          "name": "Id",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "DatasetParameterId"
+          }
+        },
+        {
+          "name": "Name",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "DatasetParameterName"
+          }
+        },
+        {
+          "name": "ValueType",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "DatasetParameterValueType"
+          }
+        },
+        {
+          "name": "DefaultValues",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "IntegerDatasetParameterDefaultValues"
+          }
+        }
+      ]
+    },
+    "IntegerDatasetParameterDefaultValues": {
+      "type": "object",
+      "description": "<p>List of default values defined for a given integer dataset parameter type. Currently only static values are supported.</p>",
+      "properties": [
+        {
+          "name": "StaticValues",
+          "description": "<p>List of static default values defined for a given integer dataset parameter type.</p>",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "<p>List of static default values defined for a given integer dataset parameter type.</p>",
+            "typeName": "IntegerDatasetParameterValueList"
+          }
+        }
+      ]
+    },
+    "IntegerDatasetParameterValueList": {
+      "type": "array",
+      "itemType": {
+        "type": "number",
+        "description": "<p>Default value defined for the dataset parameter of integer type.</p>",
+        "isInteger": false
+      },
+      "maxLength": 32,
+      "minLength": 1
+    },
+    "StringDatasetParameter": {
+      "type": "object",
+      "description": "<p>A parameter created in the dataset of string data type.</p>",
+      "properties": [
+        {
+          "name": "Id",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "DatasetParameterId"
+          }
+        },
+        {
+          "name": "Name",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "DatasetParameterName"
+          }
+        },
+        {
+          "name": "ValueType",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "DatasetParameterValueType"
+          }
+        },
+        {
+          "name": "DefaultValues",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "StringDatasetParameterDefaultValues"
+          }
+        }
+      ]
+    },
+    "StringDatasetParameterDefaultValues": {
+      "type": "object",
+      "description": "<p>List of default values defined for a given string dataset parameter type. Currently only static values are supported.</p>",
+      "properties": [
+        {
+          "name": "StaticValues",
+          "description": "<p>List of static default values defined for a given string dataset parameter type.</p>",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "<p>List of static default values defined for a given string dataset parameter type.</p>",
+            "typeName": "StringDatasetParameterValueList"
+          }
+        }
+      ]
+    },
+    "StringDatasetParameterValueList": {
+      "type": "array",
+      "itemType": {
+        "type": "string",
+        "description": "<p>Default value defined for the dataset parameter of string type.</p>"
+      },
+      "maxLength": 32,
+      "minLength": 1
+    },
+    "FieldFolder": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Description",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 0
+          }
+        },
+        {
+          "name": "Columns",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            },
+            "maxLength": 5000,
+            "minLength": 0
+          }
+        }
+      ]
+    },
+    "FieldFolderMap": {
+      "type": "record",
+      "valueType": {
+        "type": "ref",
+        "typeName": "FieldFolder"
+      }
+    },
+    "FileFormat": {
+      "type": "string",
+      "allowedValues": ["CSV", "TSV", "CLF", "ELF", "XLSX", "JSON"]
+    },
+    "FilterOperation": {
+      "type": "object",
+      "description": "<p>A transform operation that filters rows based on a condition.</p>",
+      "properties": [
+        {
+          "name": "ConditionExpression",
+          "description": "<p>An expression that must evaluate to a Boolean value. Rows for which the expression\n            evaluates to true are kept in the dataset.</p>",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "<p>An expression that must evaluate to a Boolean value. Rows for which the expression\n            evaluates to true are kept in the dataset.</p>",
+            "maxLength": 4096,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "GeoSpatialColumnGroup": {
+      "type": "object",
+      "description": "<p>Geospatial column group that denotes a hierarchy.</p>",
+      "properties": [
+        {
+          "name": "Columns",
+          "description": "<p>Columns in this hierarchy.</p>",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "description": "<p>Columns in this hierarchy.</p>",
+            "itemType": {
+              "type": "string",
+              "maxLength": 128,
+              "minLength": 1
+            },
+            "maxLength": 16,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "CountryCode",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "GeoSpatialCountryCode"
+          }
+        },
+        {
+          "name": "Name",
+          "description": "<p>A display name for the hierarchy.</p>",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "<p>A display name for the hierarchy.</p>",
+            "maxLength": 64,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "GeoSpatialCountryCode": {
+      "type": "string",
+      "allowedValues": ["US"]
+    },
+    "GeoSpatialDataRole": {
+      "type": "string",
+      "allowedValues": [
+        "COUNTRY",
+        "STATE",
+        "COUNTY",
+        "CITY",
+        "POSTCODE",
+        "LONGITUDE",
+        "LATITUDE",
+        "POLITICAL1"
+      ]
+    },
+    "InputColumn": {
+      "type": "object",
+      "description": "<p>Metadata for a column that is used as the input of a transform operation.</p>",
+      "properties": [
+        {
+          "name": "Type",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "InputColumnDataType"
+          }
+        },
+        {
+          "name": "SubType",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ColumnSubDataType"
+          }
+        },
+        {
+          "name": "Name",
+          "description": "<p>The name of this column in the underlying data source.</p>",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "<p>The name of this column in the underlying data source.</p>",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "InputColumnDataType": {
+      "type": "string",
+      "allowedValues": [
+        "STRING",
+        "INTEGER",
+        "DECIMAL",
+        "DATETIME",
+        "BIT",
+        "BOOLEAN",
+        "JSON"
+      ]
+    },
+    "RefreshConfiguration": {
+      "type": "object",
+      "description": "<p> Refresh Configuration.</p>",
+      "properties": [
+        {
+          "name": "IncrementalRefresh",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "IncrementalRefresh"
+          }
+        }
+      ]
+    },
+    "IncrementalRefresh": {
+      "type": "object",
+      "description": "<p>Incremental Refresh</p>",
+      "properties": [
+        {
+          "name": "LookbackWindow",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "LookbackWindow"
+          }
+        }
+      ]
+    },
+    "LookbackWindow": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ColumnName",
+          "description": "<p>Column Name</p>",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "<p>Column Name</p>"
+          }
+        },
+        {
+          "name": "Size",
+          "description": "<p>Size</p>",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "<p>Size</p>",
+            "isInteger": false,
+            "minimum": 1
+          }
+        },
+        {
+          "name": "SizeUnit",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "SizeUnit"
+          }
+        }
+      ]
+    },
+    "SizeUnit": {
+      "type": "string",
+      "allowedValues": ["HOUR", "DAY", "WEEK"]
+    },
+    "JoinInstruction": {
+      "type": "object",
+      "description": "<p>Join instruction.</p>",
+      "properties": [
+        {
+          "name": "OnClause",
+          "description": "<p>On Clause.</p>",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "<p>On Clause.</p>",
+            "maxLength": 512,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Type",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "JoinType"
+          }
+        },
+        {
+          "name": "LeftJoinKeyProperties",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "JoinKeyProperties"
+          }
+        },
+        {
+          "name": "LeftOperand",
+          "description": "<p>Left operand.</p>",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "<p>Left operand.</p>",
+            "maxLength": 64,
+            "minLength": 1,
+            "pattern": "[0-9a-zA-Z-]*"
+          }
+        },
+        {
+          "name": "RightOperand",
+          "description": "<p>Right operand.</p>",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "<p>Right operand.</p>",
+            "maxLength": 64,
+            "minLength": 1,
+            "pattern": "[0-9a-zA-Z-]*"
+          }
+        },
+        {
+          "name": "RightJoinKeyProperties",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "JoinKeyProperties"
+          }
+        }
+      ]
+    },
+    "JoinKeyProperties": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "UniqueKey",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        }
+      ]
+    },
+    "JoinType": {
+      "type": "string",
+      "allowedValues": ["INNER", "OUTER", "LEFT", "RIGHT"]
+    },
+    "LogicalTable": {
+      "type": "object",
+      "description": "<p>A <i>logical table</i> is a unit that joins and that data\n            transformations operate on. A logical table has a source, which can be either a physical\n            table or result of a join. When a logical table points to a physical table, the logical\n            table acts as a mutable copy of that physical table through transform operations.</p>",
+      "properties": [
+        {
+          "name": "Alias",
+          "description": "<p>A display name for the logical table.</p>",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "<p>A display name for the logical table.</p>",
+            "maxLength": 64,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "DataTransforms",
+          "description": "<p>Transform operations that act on this logical table.</p>",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "<p>Transform operations that act on this logical table.</p>",
+            "itemType": {
+              "type": "ref",
+              "typeName": "TransformOperation"
+            },
+            "maxLength": 2048,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Source",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "LogicalTableSource"
+          }
+        }
+      ]
+    },
+    "LogicalTableMap": {
+      "type": "record",
+      "valueType": {
+        "type": "ref",
+        "typeName": "LogicalTable"
+      }
+    },
+    "LogicalTableSource": {
+      "type": "object",
+      "description": "<p>Information about the source of a logical table. This is a variant type structure. For\n            this structure to be valid, only one of the attributes can be non-null.</p>",
+      "properties": [
+        {
+          "name": "PhysicalTableId",
+          "description": "<p>Physical table ID.</p>",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "<p>Physical table ID.</p>",
+            "maxLength": 64,
+            "minLength": 1,
+            "pattern": "[0-9a-zA-Z-]*"
+          }
+        },
+        {
+          "name": "JoinInstruction",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "JoinInstruction"
+          }
+        },
+        {
+          "name": "DataSetArn",
+          "description": "<p>The Amazon Resource Name (ARN) for the dataset.</p>",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "<p>The Amazon Resource Name (ARN) for the dataset.</p>"
+          }
+        }
+      ]
+    },
+    "NewDefaultValues": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "StringStaticValues",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "StringDatasetParameterValueList"
+          }
+        },
+        {
+          "name": "DecimalStaticValues",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DecimalDatasetParameterValueList"
+          }
+        },
+        {
+          "name": "DateTimeStaticValues",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DateTimeDatasetParameterValueList"
+          }
+        },
+        {
+          "name": "IntegerStaticValues",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "IntegerDatasetParameterValueList"
+          }
+        }
+      ]
+    },
+    "OutputColumn": {
+      "type": "object",
+      "description": "<p>Output column.</p>",
+      "properties": [
+        {
+          "name": "Type",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ColumnDataType"
+          }
+        },
+        {
+          "name": "SubType",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ColumnSubDataType"
+          }
+        },
+        {
+          "name": "Description",
+          "description": "<p>A description for a column.</p>",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "<p>A description for a column.</p>",
+            "maxLength": 500,
+            "minLength": 0
+          }
+        },
+        {
+          "name": "Name",
+          "description": "<p>A display name for the dataset.</p>",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "<p>A display name for the dataset.</p>",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "OverrideDatasetParameterOperation": {
+      "type": "object",
+      "description": "<p>A transform operation that overrides the dataset parameter values defined in another dataset.</p>",
+      "properties": [
+        {
+          "name": "ParameterName",
+          "description": "<p>The name of the parameter to be overridden with different values.</p>",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "description": "<p>The name of the parameter to be overridden with different values.</p>",
+            "typeName": "DatasetParameterName"
+          }
+        },
+        {
+          "name": "NewParameterName",
+          "description": "<p>The new name for the parameter.</p>",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "<p>The new name for the parameter.</p>",
+            "typeName": "DatasetParameterName"
+          }
+        },
+        {
+          "name": "NewDefaultValues",
+          "description": "<p>The new default values for the parameter.</p>",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "<p>The new default values for the parameter.</p>",
+            "typeName": "NewDefaultValues"
+          }
+        }
+      ]
+    },
+    "PhysicalTable": {
+      "type": "object",
+      "description": "<p>A view of a data source that contains information about the shape of the data in the\n            underlying source. This is a variant type structure. For this structure to be valid,\n            only one of the attributes can be non-null.</p>",
+      "properties": [
+        {
+          "name": "RelationalTable",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "RelationalTable"
+          }
+        },
+        {
+          "name": "CustomSql",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "CustomSql"
+          }
+        },
+        {
+          "name": "S3Source",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "S3Source"
+          }
+        }
+      ]
+    },
+    "PhysicalTableMap": {
+      "type": "record",
+      "valueType": {
+        "type": "ref",
+        "typeName": "PhysicalTable"
+      }
+    },
+    "ProjectOperation": {
+      "type": "object",
+      "description": "<p>A transform operation that projects columns. Operations that come after a projection\n            can only refer to projected columns.</p>",
+      "properties": [
+        {
+          "name": "ProjectedColumns",
+          "description": "<p>Projected columns.</p>",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "description": "<p>Projected columns.</p>",
+            "itemType": {
+              "type": "string"
+            },
+            "maxLength": 2000,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "RelationalTable": {
+      "type": "object",
+      "description": "<p>A physical table type for relational data sources.</p>",
+      "properties": [
+        {
+          "name": "DataSourceArn",
+          "description": "<p>The Amazon Resource Name (ARN) for the data source.</p>",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "<p>The Amazon Resource Name (ARN) for the data source.</p>"
+          }
+        },
+        {
+          "name": "InputColumns",
+          "description": "<p>The column schema of the table.</p>",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "description": "<p>The column schema of the table.</p>",
+            "itemType": {
+              "type": "ref",
+              "typeName": "InputColumn"
+            },
+            "maxLength": 2048,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Schema",
+          "description": "<p>The schema name. This name applies to certain relational database engines.</p>",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "<p>The schema name. This name applies to certain relational database engines.</p>",
+            "maxLength": 64,
+            "minLength": 0
+          }
+        },
+        {
+          "name": "Catalog",
+          "description": "<p>The catalog associated with a table.</p>",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "<p>The catalog associated with a table.</p>",
+            "maxLength": 256,
+            "minLength": 0
+          }
+        },
+        {
+          "name": "Name",
+          "description": "<p>The name of the relational table.</p>",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "<p>The name of the relational table.</p>",
+            "maxLength": 64,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "RenameColumnOperation": {
+      "type": "object",
+      "description": "<p>A transform operation that renames a column.</p>",
+      "properties": [
+        {
+          "name": "NewColumnName",
+          "description": "<p>The new name for the column.</p>",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "<p>The new name for the column.</p>",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "ColumnName",
+          "description": "<p>The name of the column to be renamed.</p>",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "<p>The name of the column to be renamed.</p>",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "ResourcePermission": {
+      "type": "object",
+      "description": "<p>Permission for the resource.</p>",
+      "properties": [
+        {
+          "name": "Actions",
+          "description": "<p>The IAM action to grant or revoke permissions on.</p>",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "description": "<p>The IAM action to grant or revoke permissions on.</p>",
+            "itemType": {
+              "type": "string"
+            },
+            "maxLength": 20,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Principal",
+          "description": "<p>The Amazon Resource Name (ARN) of the principal. This can be one of the\n            following:</p>\n        <ul>\n            <li>\n                <p>The ARN of an Amazon QuickSight user or group associated with a data source or dataset. (This is common.)</p>\n            </li>\n            <li>\n                <p>The ARN of an Amazon QuickSight user, group, or namespace associated with an analysis, dashboard, template, or theme. (This is common.)</p>\n            </li>\n            <li>\n                <p>The ARN of an AWS account root: This is an IAM ARN rather than a QuickSight\n                    ARN. Use this option only to share resources (templates) across AWS accounts.\n                    (This is less common.) </p>\n            </li>\n         </ul>",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "<p>The Amazon Resource Name (ARN) of the principal. This can be one of the\n            following:</p>\n        <ul>\n            <li>\n                <p>The ARN of an Amazon QuickSight user or group associated with a data source or dataset. (This is common.)</p>\n            </li>\n            <li>\n                <p>The ARN of an Amazon QuickSight user, group, or namespace associated with an analysis, dashboard, template, or theme. (This is common.)</p>\n            </li>\n            <li>\n                <p>The ARN of an AWS account root: This is an IAM ARN rather than a QuickSight\n                    ARN. Use this option only to share resources (templates) across AWS accounts.\n                    (This is less common.) </p>\n            </li>\n         </ul>",
+            "maxLength": 256,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "RowLevelPermissionDataSet": {
+      "type": "object",
+      "description": "<p>The row-level security configuration for the dataset.</p>",
+      "properties": [
+        {
+          "name": "Arn",
+          "description": "<p>The Amazon Resource Name (ARN) of the permission dataset.</p>",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "<p>The Amazon Resource Name (ARN) of the permission dataset.</p>"
+          }
+        },
+        {
+          "name": "Namespace",
+          "description": "<p>The namespace associated with the row-level permissions dataset.</p>",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "<p>The namespace associated with the row-level permissions dataset.</p>",
+            "maxLength": 64,
+            "minLength": 0,
+            "pattern": "^[a-zA-Z0-9._-]*$"
+          }
+        },
+        {
+          "name": "PermissionPolicy",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "RowLevelPermissionPolicy"
+          }
+        },
+        {
+          "name": "FormatVersion",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "RowLevelPermissionFormatVersion"
+          }
+        },
+        {
+          "name": "Status",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Status"
+          }
+        }
+      ]
+    },
+    "RowLevelPermissionPolicy": {
+      "type": "string",
+      "allowedValues": ["GRANT_ACCESS", "DENY_ACCESS"]
+    },
+    "RowLevelPermissionFormatVersion": {
+      "type": "string",
+      "allowedValues": ["VERSION_1", "VERSION_2"]
+    },
+    "RowLevelPermissionTagConfiguration": {
+      "type": "object",
+      "description": "<p>The configuration of tags on a dataset to set row-level security.</p>",
+      "properties": [
+        {
+          "name": "Status",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Status"
+          }
+        },
+        {
+          "name": "TagRules",
+          "description": "<p>A set of rules associated with row-level security, such as the tag names and columns that they are assigned to.</p>",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "description": "<p>A set of rules associated with row-level security, such as the tag names and columns that they are assigned to.</p>",
+            "itemType": {
+              "type": "ref",
+              "typeName": "RowLevelPermissionTagRule"
+            },
+            "maxLength": 50,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "TagRuleConfigurations",
+          "description": "<p>A list of tag configuration rules to apply to a dataset. All tag configurations have the OR condition. Tags within each tile will be joined (AND). At least one rule in this structure must have all tag values assigned to it to apply Row-level security (RLS) to the dataset.</p>",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "<p>A list of tag configuration rules to apply to a dataset. All tag configurations have the OR condition. Tags within each tile will be joined (AND). At least one rule in this structure must have all tag values assigned to it to apply Row-level security (RLS) to the dataset.</p>",
+            "itemType": {
+              "type": "ref",
+              "typeName": "RowLevelPermissionTagRuleConfiguration"
+            },
+            "maxLength": 50,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "Status": {
+      "type": "string",
+      "allowedValues": ["ENABLED", "DISABLED"]
+    },
+    "RowLevelPermissionTagRule": {
+      "type": "object",
+      "description": "<p>Permission for the resource.</p>",
+      "properties": [
+        {
+          "name": "ColumnName",
+          "description": "<p>The column name that a tag key is assigned to.</p>",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "<p>The column name that a tag key is assigned to.</p>"
+          }
+        },
+        {
+          "name": "TagKey",
+          "description": "<p>The unique key for a tag.</p>",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "<p>The unique key for a tag.</p>",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "MatchAllValue",
+          "description": "<p>A string that you want to use to filter by all the values in a column in the dataset and don’t want to list the values one by one. For example, you can use an asterisk as your match all value.</p>",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "<p>A string that you want to use to filter by all the values in a column in the dataset and don’t want to list the values one by one. For example, you can use an asterisk as your match all value.</p>",
+            "maxLength": 256,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "TagMultiValueDelimiter",
+          "description": "<p>A string that you want to use to delimit the values when you pass the values at run time. For example, you can delimit the values with a comma.</p>",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "<p>A string that you want to use to delimit the values when you pass the values at run time. For example, you can delimit the values with a comma.</p>",
+            "maxLength": 10
+          }
+        }
+      ]
+    },
+    "RowLevelPermissionTagRuleConfiguration": {
+      "type": "array",
+      "itemType": {
+        "type": "string",
+        "maxLength": 128,
+        "minLength": 1
+      },
+      "maxLength": 50,
+      "minLength": 1
+    },
+    "S3Source": {
+      "type": "object",
+      "description": "<p>A physical table type for as S3 data source.</p>",
+      "properties": [
+        {
+          "name": "DataSourceArn",
+          "description": "<p>The amazon Resource Name (ARN) for the data source.</p>",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "<p>The amazon Resource Name (ARN) for the data source.</p>"
+          }
+        },
+        {
+          "name": "InputColumns",
+          "description": "<p>A physical table type for as S3 data source.</p>",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "description": "<p>A physical table type for as S3 data source.</p>",
+            "itemType": {
+              "type": "ref",
+              "typeName": "InputColumn"
+            },
+            "maxLength": 2048,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "UploadSettings",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "UploadSettings"
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "description": "<p>The key or keys of the key-value pairs for the resource tag or tags assigned to the\n            resource.</p>",
+      "properties": [
+        {
+          "name": "Value",
+          "description": "<p>Tag value.</p>",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "<p>Tag value.</p>",
+            "maxLength": 256,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Key",
+          "description": "<p>Tag key.</p>",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "<p>Tag key.</p>",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "TagColumnOperation": {
+      "type": "object",
+      "description": "<p>A transform operation that tags a column with additional information.</p>",
+      "properties": [
+        {
+          "name": "ColumnName",
+          "description": "<p>The column that this operation acts on.</p>",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "<p>The column that this operation acts on.</p>",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Tags",
+          "description": "<p>The dataset column tag, currently only used for geospatial type tagging. .</p>\n        <note>\n            <p>This is not tags for the AWS tagging feature. .</p>\n        </note>",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "description": "<p>The dataset column tag, currently only used for geospatial type tagging. .</p>\n        <note>\n            <p>This is not tags for the AWS tagging feature. .</p>\n        </note>",
+            "itemType": {
+              "type": "ref",
+              "typeName": "ColumnTag"
+            },
+            "maxLength": 16,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "TextQualifier": {
+      "type": "string",
+      "allowedValues": ["DOUBLE_QUOTE", "SINGLE_QUOTE"]
+    },
+    "TimeGranularity": {
+      "type": "string",
+      "allowedValues": [
+        "YEAR",
+        "QUARTER",
+        "MONTH",
+        "WEEK",
+        "DAY",
+        "HOUR",
+        "MINUTE",
+        "SECOND",
+        "MILLISECOND"
+      ]
+    },
+    "TransformOperation": {
+      "type": "object",
+      "description": "<p>A data transformation on a logical table. This is a variant type structure. For this\n            structure to be valid, only one of the attributes can be non-null.</p>",
+      "properties": [
+        {
+          "name": "TagColumnOperation",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "TagColumnOperation"
+          }
+        },
+        {
+          "name": "FilterOperation",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "FilterOperation"
+          }
+        },
+        {
+          "name": "CastColumnTypeOperation",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "CastColumnTypeOperation"
+          }
+        },
+        {
+          "name": "CreateColumnsOperation",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "CreateColumnsOperation"
+          }
+        },
+        {
+          "name": "RenameColumnOperation",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "RenameColumnOperation"
+          }
+        },
+        {
+          "name": "ProjectOperation",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ProjectOperation"
+          }
+        },
+        {
+          "name": "OverrideDatasetParameterOperation",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "OverrideDatasetParameterOperation"
+          }
+        }
+      ]
+    },
+    "UploadSettings": {
+      "type": "object",
+      "description": "<p>Information about the format for a source file or files.</p>",
+      "properties": [
+        {
+          "name": "ContainsHeader",
+          "description": "<p>Whether the file has a header row, or the files each have a header row.</p>",
+          "optional": true,
+          "type": {
+            "type": "boolean",
+            "description": "<p>Whether the file has a header row, or the files each have a header row.</p>"
+          }
+        },
+        {
+          "name": "TextQualifier",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "TextQualifier"
+          }
+        },
+        {
+          "name": "Format",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "FileFormat"
+          }
+        },
+        {
+          "name": "StartFromRow",
+          "description": "<p>A row number to start reading data from.</p>",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "<p>A row number to start reading data from.</p>",
+            "isInteger": false,
+            "minimum": 1
+          }
+        },
+        {
+          "name": "Delimiter",
+          "description": "<p>The delimiter between values in the file.</p>",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "<p>The delimiter between values in the file.</p>",
+            "maxLength": 1,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "IngestionWaitPolicy": {
+      "type": "object",
+      "description": "<p>Wait policy to use when creating/updating dataset. Default is to wait for SPICE ingestion to finish with timeout of 36 hours.</p>",
+      "properties": [
+        {
+          "name": "WaitForSpiceIngestion",
+          "description": "<p>Wait for SPICE ingestion to finish to mark dataset creation/update successful. Default (true).\n  Applicable only when DataSetImportMode mode is set to SPICE.</p>",
+          "optional": true,
+          "type": {
+            "type": "boolean",
+            "description": "<p>Wait for SPICE ingestion to finish to mark dataset creation/update successful. Default (true).\n  Applicable only when DataSetImportMode mode is set to SPICE.</p>"
+          }
+        },
+        {
+          "name": "IngestionWaitTimeInHours",
+          "description": "<p>The maximum time (in hours) to wait for Ingestion to complete. Default timeout is 36 hours.\n Applicable only when DataSetImportMode mode is set to SPICE and WaitForSpiceIngestion is set to true.</p>",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "<p>The maximum time (in hours) to wait for Ingestion to complete. Default timeout is 36 hours.\n Applicable only when DataSetImportMode mode is set to SPICE and WaitForSpiceIngestion is set to true.</p>",
+            "isInteger": false,
+            "maximum": 36,
+            "minimum": 1
+          }
+        }
+      ]
+    },
+    "DataSetUsageConfiguration": {
+      "type": "object",
+      "description": "<p>The dataset usage configuration for the dataset.</p>",
+      "properties": [
+        {
+          "name": "DisableUseAsDirectQuerySource",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "DisableUseAsImportedSource",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        }
+      ]
+    },
+    "DataSetRefreshProperties": {
+      "type": "object",
+      "description": "<p>The dataset refresh properties for the dataset.</p>",
+      "properties": [
+        {
+          "name": "RefreshConfiguration",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "RefreshConfiguration"
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Definition of the AWS::QuickSight::DataSet Resource Type.",
+    "properties": [
+      {
+        "name": "AwsAccountId",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 12,
+          "minLength": 12,
+          "pattern": "^[0-9]{12}$"
+        }
+      },
+      {
+        "name": "ColumnGroups",
+        "description": "<p>Groupings of columns that work together in certain QuickSight features. Currently, only geospatial hierarchy is supported.</p>",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "<p>Groupings of columns that work together in certain QuickSight features. Currently, only geospatial hierarchy is supported.</p>",
+          "itemType": {
+            "type": "ref",
+            "typeName": "ColumnGroup"
+          },
+          "maxLength": 8,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "ColumnLevelPermissionRules",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "ColumnLevelPermissionRule"
+          },
+          "minLength": 1
+        }
+      },
+      {
+        "name": "DataSetId",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "DatasetParameters",
+        "description": "<p>The parameters declared in the dataset.</p>",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "<p>The parameters declared in the dataset.</p>",
+          "itemType": {
+            "type": "ref",
+            "typeName": "DatasetParameter"
+          },
+          "maxLength": 32,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "FieldFolders",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "FieldFolderMap"
+        }
+      },
+      {
+        "name": "ImportMode",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "DataSetImportMode"
+        }
+      },
+      {
+        "name": "LogicalTableMap",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "LogicalTableMap"
+        }
+      },
+      {
+        "name": "Name",
+        "description": "<p>The display name for the dataset.</p>",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "<p>The display name for the dataset.</p>",
+          "maxLength": 128,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "Permissions",
+        "description": "<p>A list of resource permissions on the dataset.</p>",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "<p>A list of resource permissions on the dataset.</p>",
+          "itemType": {
+            "type": "ref",
+            "typeName": "ResourcePermission"
+          },
+          "maxLength": 64,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "PhysicalTableMap",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "PhysicalTableMap"
+        }
+      },
+      {
+        "name": "RowLevelPermissionDataSet",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "RowLevelPermissionDataSet"
+        }
+      },
+      {
+        "name": "RowLevelPermissionTagConfiguration",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "RowLevelPermissionTagConfiguration"
+        }
+      },
+      {
+        "name": "Tags",
+        "description": "<p>Contains a map of the key-value pairs for the resource tag or tags assigned to the dataset.</p>",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "<p>Contains a map of the key-value pairs for the resource tag or tags assigned to the dataset.</p>",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          },
+          "maxLength": 200,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "IngestionWaitPolicy",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "IngestionWaitPolicy"
+        }
+      },
+      {
+        "name": "DataSetUsageConfiguration",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "DataSetUsageConfiguration"
+        }
+      },
+      {
+        "name": "DataSetRefreshProperties",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "DataSetRefreshProperties"
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Definition of the AWS::QuickSight::DataSet Resource Type.",
+    "properties": [
+      {
+        "name": "Arn",
+        "description": "<p>The Amazon Resource Name (ARN) of the resource.</p>",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "<p>The Amazon Resource Name (ARN) of the resource.</p>"
+        }
+      },
+      {
+        "name": "ConsumedSpiceCapacityInBytes",
+        "description": "<p>The amount of SPICE capacity used by this dataset. This is 0 if the dataset isn't\n            imported into SPICE.</p>",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "<p>The amount of SPICE capacity used by this dataset. This is 0 if the dataset isn't\n            imported into SPICE.</p>",
+          "isInteger": false
+        }
+      },
+      {
+        "name": "CreatedTime",
+        "description": "<p>The time that this dataset was created.</p>",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "<p>The time that this dataset was created.</p>"
+        }
+      },
+      {
+        "name": "LastUpdatedTime",
+        "description": "<p>The last time that this dataset was updated.</p>",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "<p>The last time that this dataset was updated.</p>"
+        }
+      },
+      {
+        "name": "OutputColumns",
+        "description": "<p>The list of columns after all transforms. These columns are available in templates,\n            analyses, and dashboards.</p>",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "<p>The list of columns after all transforms. These columns are available in templates,\n            analyses, and dashboards.</p>",
+          "itemType": {
+            "type": "ref",
+            "typeName": "OutputColumn"
+          }
+        }
+      }
+    ]
+  },
+  "$hash": "b8fc16a63f8db02c96a1436ffac73b659bb9047f"
+}

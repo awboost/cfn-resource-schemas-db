@@ -1,0 +1,694 @@
+{
+  "definitions": {
+    "RefId": {
+      "type": "string",
+      "description": "The identifier to reference the item.",
+      "pattern": "^[a-zA-Z0-9._-]{1,40}$"
+    },
+    "Weight": {
+      "type": "number",
+      "description": "The item weight used for scoring.",
+      "isInteger": false,
+      "maximum": 100,
+      "minimum": 0
+    },
+    "Score": {
+      "type": "number",
+      "description": "The score of an answer option.",
+      "isInteger": true,
+      "maximum": 10,
+      "minimum": 0
+    },
+    "EvaluationFormBaseItem": {
+      "type": "object",
+      "description": "The evaluation form base item.",
+      "properties": [
+        {
+          "name": "Section",
+          "description": "The evaluation form section item",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "description": "The evaluation form section item",
+            "typeName": "EvaluationFormSection"
+          }
+        }
+      ]
+    },
+    "EvaluationFormItem": {
+      "type": "object",
+      "description": "The evaluation form item.",
+      "properties": [
+        {
+          "name": "Section",
+          "description": "The evaluation form section item",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The evaluation form section item",
+            "typeName": "EvaluationFormSection"
+          }
+        },
+        {
+          "name": "Question",
+          "description": "The evaluation form question item",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The evaluation form question item",
+            "typeName": "EvaluationFormQuestion"
+          }
+        }
+      ]
+    },
+    "EvaluationFormSection": {
+      "type": "object",
+      "description": "The evaluation form section.",
+      "properties": [
+        {
+          "name": "Title",
+          "description": "The title of the section.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The title of the section.",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Instructions",
+          "description": "The instructions for the section.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The instructions for the section.",
+            "maxLength": 1024
+          }
+        },
+        {
+          "name": "RefId",
+          "description": "The identifier to reference the section.",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "description": "The identifier to reference the section.",
+            "typeName": "RefId"
+          }
+        },
+        {
+          "name": "Items",
+          "description": "The list of section items.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "The list of section items.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "EvaluationFormItem"
+            },
+            "maxLength": 200,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Weight",
+          "description": "The item weight used for scoring.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The item weight used for scoring.",
+            "typeName": "Weight"
+          }
+        }
+      ]
+    },
+    "EvaluationFormNumericQuestionOption": {
+      "type": "object",
+      "description": "The option ranges used for scoring in numeric questions.",
+      "properties": [
+        {
+          "name": "MinValue",
+          "description": "The minimum value of the option range.",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "description": "The minimum value of the option range.",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "MaxValue",
+          "description": "The maximum value of the option range.",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "description": "The maximum value of the option range.",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "Score",
+          "description": "The score of the option range.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The score of the option range.",
+            "typeName": "Score"
+          }
+        },
+        {
+          "name": "AutomaticFail",
+          "description": "The flag to mark the option as automatic fail.",
+          "optional": true,
+          "type": {
+            "type": "boolean",
+            "description": "The flag to mark the option as automatic fail."
+          }
+        }
+      ]
+    },
+    "NumericQuestionPropertyValueAutomation": {
+      "type": "object",
+      "description": "The automation property name of the question.",
+      "properties": [
+        {
+          "name": "Label",
+          "description": "The automation property label.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The automation property label.",
+            "allowedValues": [
+              "OVERALL_CUSTOMER_SENTIMENT_SCORE",
+              "OVERALL_AGENT_SENTIMENT_SCORE",
+              "NON_TALK_TIME",
+              "NON_TALK_TIME_PERCENTAGE",
+              "NUMBER_OF_INTERRUPTIONS",
+              "CONTACT_DURATION",
+              "AGENT_INTERACTION_DURATION",
+              "CUSTOMER_HOLD_TIME"
+            ]
+          }
+        }
+      ]
+    },
+    "EvaluationFormNumericQuestionAutomation": {
+      "type": "object",
+      "description": "The automation properties for the numeric question.",
+      "properties": [
+        {
+          "name": "PropertyValue",
+          "description": "The automation property name of the question.",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "description": "The automation property name of the question.",
+            "typeName": "NumericQuestionPropertyValueAutomation"
+          }
+        }
+      ]
+    },
+    "EvaluationFormNumericQuestionProperties": {
+      "type": "object",
+      "description": "The properties of the numeric question.",
+      "properties": [
+        {
+          "name": "MinValue",
+          "description": "The minimum value for answers of the question.",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "description": "The minimum value for answers of the question.",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "MaxValue",
+          "description": "The maximum value for answers of the question.",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "description": "The maximum value for answers of the question.",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "Options",
+          "description": "The list of option ranges used for scoring.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "The list of option ranges used for scoring.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "EvaluationFormNumericQuestionOption"
+            },
+            "maxLength": 10,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Automation",
+          "description": "The automation properties for the numeric question.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The automation properties for the numeric question.",
+            "typeName": "EvaluationFormNumericQuestionAutomation"
+          }
+        }
+      ]
+    },
+    "EvaluationFormSingleSelectQuestionAutomationOption": {
+      "type": "object",
+      "description": "The automation option for the single-select question.",
+      "properties": [
+        {
+          "name": "RuleCategory",
+          "description": "The automation option based on Rules categories.",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "description": "The automation option based on Rules categories.",
+            "typeName": "SingleSelectQuestionRuleCategoryAutomation"
+          }
+        }
+      ]
+    },
+    "SingleSelectQuestionRuleCategoryAutomation": {
+      "type": "object",
+      "description": "The automation option based on Rules categories.",
+      "properties": [
+        {
+          "name": "Category",
+          "description": "The category name as defined in Rules.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The category name as defined in Rules.",
+            "maxLength": 50,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Condition",
+          "description": "The automation condition applied on contact categories.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The automation condition applied on contact categories.",
+            "allowedValues": ["PRESENT", "NOT_PRESENT"]
+          }
+        },
+        {
+          "name": "OptionRefId",
+          "description": "The option identifier referencing the option to be selected when the automation option is triggered.",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "description": "The option identifier referencing the option to be selected when the automation option is triggered.",
+            "typeName": "RefId"
+          }
+        }
+      ]
+    },
+    "EvaluationFormSingleSelectQuestionAutomation": {
+      "type": "object",
+      "description": "The automation properties for the single-select question.",
+      "properties": [
+        {
+          "name": "Options",
+          "description": "The answer options for the automation.",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "description": "The answer options for the automation.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "EvaluationFormSingleSelectQuestionAutomationOption"
+            },
+            "maxLength": 20,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "DefaultOptionRefId",
+          "description": "The option reference identifier of the default answer.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The option reference identifier of the default answer.",
+            "typeName": "RefId"
+          }
+        }
+      ]
+    },
+    "EvaluationFormSingleSelectQuestionOption": {
+      "type": "object",
+      "description": "The option for a question.",
+      "properties": [
+        {
+          "name": "RefId",
+          "description": "The identifier used to reference the option.",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "description": "The identifier used to reference the option.",
+            "typeName": "RefId"
+          }
+        },
+        {
+          "name": "Text",
+          "description": "The title of the option.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The title of the option.",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Score",
+          "description": "The score of the option.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The score of the option.",
+            "typeName": "Score"
+          }
+        },
+        {
+          "name": "AutomaticFail",
+          "description": "The flag to mark the option as automatic fail.",
+          "optional": true,
+          "type": {
+            "type": "boolean",
+            "description": "The flag to mark the option as automatic fail."
+          }
+        }
+      ]
+    },
+    "EvaluationFormSingleSelectQuestionProperties": {
+      "type": "object",
+      "description": "The properties of the single-select question.",
+      "properties": [
+        {
+          "name": "Options",
+          "description": "The list of options for the question.",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "description": "The list of options for the question.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "EvaluationFormSingleSelectQuestionOption"
+            },
+            "maxLength": 256,
+            "minLength": 2
+          }
+        },
+        {
+          "name": "DisplayAs",
+          "description": "The display mode of the single-select question.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The display mode of the single-select question.",
+            "allowedValues": ["DROPDOWN", "RADIO"]
+          }
+        },
+        {
+          "name": "Automation",
+          "description": "The automation properties for the single-select question.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The automation properties for the single-select question.",
+            "typeName": "EvaluationFormSingleSelectQuestionAutomation"
+          }
+        }
+      ]
+    },
+    "EvaluationFormQuestionTypeProperties": {
+      "type": "object",
+      "description": "The properties of the question.",
+      "properties": [
+        {
+          "name": "Numeric",
+          "description": "The properties of the numeric question.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The properties of the numeric question.",
+            "typeName": "EvaluationFormNumericQuestionProperties"
+          }
+        },
+        {
+          "name": "SingleSelect",
+          "description": "The properties of the single-select question.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The properties of the single-select question.",
+            "typeName": "EvaluationFormSingleSelectQuestionProperties"
+          }
+        }
+      ]
+    },
+    "EvaluationFormQuestion": {
+      "type": "object",
+      "description": "The evaluation form question.",
+      "properties": [
+        {
+          "name": "Title",
+          "description": "The title of the question.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The title of the question.",
+            "maxLength": 350,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Instructions",
+          "description": "The instructions for the question.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The instructions for the question.",
+            "maxLength": 1024
+          }
+        },
+        {
+          "name": "RefId",
+          "description": "The identifier used to reference the question.",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "description": "The identifier used to reference the question.",
+            "typeName": "RefId"
+          }
+        },
+        {
+          "name": "NotApplicableEnabled",
+          "description": "The flag to enable not applicable answers to the question.",
+          "optional": true,
+          "type": {
+            "type": "boolean",
+            "description": "The flag to enable not applicable answers to the question."
+          }
+        },
+        {
+          "name": "QuestionType",
+          "description": "The type of the question.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The type of the question.",
+            "allowedValues": ["NUMERIC", "SINGLESELECT", "TEXT"]
+          }
+        },
+        {
+          "name": "QuestionTypeProperties",
+          "description": "The properties of the question",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The properties of the question",
+            "typeName": "EvaluationFormQuestionTypeProperties"
+          }
+        },
+        {
+          "name": "Weight",
+          "description": "The question weight used for scoring.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The question weight used for scoring.",
+            "typeName": "Weight"
+          }
+        }
+      ]
+    },
+    "ScoringStrategy": {
+      "type": "object",
+      "description": "The scoring strategy.",
+      "properties": [
+        {
+          "name": "Mode",
+          "description": "The scoring mode.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The scoring mode.",
+            "allowedValues": ["QUESTION_ONLY", "SECTION_ONLY"]
+          }
+        },
+        {
+          "name": "Status",
+          "description": "The scoring status.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The scoring status.",
+            "allowedValues": ["ENABLED", "DISABLED"]
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "description": "A key-value pair to associate with a resource.",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^(?!aws:)[a-zA-Z+-=._:/]+$"
+          }
+        },
+        {
+          "name": "Value",
+          "description": "The value for the tag. You can specify a value that's 1 to 256 characters in length.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The value for the tag. You can specify a value that's 1 to 256 characters in length.",
+            "maxLength": 256
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource Type definition for AWS::Connect::EvaluationForm",
+    "properties": [
+      {
+        "name": "Title",
+        "description": "The title of the evaluation form.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The title of the evaluation form.",
+          "maxLength": 128,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "Description",
+        "description": "The description of the evaluation form.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The description of the evaluation form.",
+          "maxLength": 1024
+        }
+      },
+      {
+        "name": "InstanceArn",
+        "description": "The Amazon Resource Name (ARN) of the instance.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) of the instance.",
+          "pattern": "^arn:aws[-a-z0-9]*:connect:[-a-z0-9]*:[0-9]{12}:instance/[-a-zA-Z0-9]*$"
+        }
+      },
+      {
+        "name": "Items",
+        "description": "The list of evaluation form items.",
+        "optional": false,
+        "type": {
+          "type": "array",
+          "description": "The list of evaluation form items.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "EvaluationFormBaseItem"
+          },
+          "maxLength": 200,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "ScoringStrategy",
+        "description": "The scoring strategy.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "The scoring strategy.",
+          "typeName": "ScoringStrategy"
+        }
+      },
+      {
+        "name": "Status",
+        "description": "The status of the evaluation form.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The status of the evaluation form.",
+          "allowedValues": ["DRAFT", "ACTIVE"]
+        }
+      },
+      {
+        "name": "Tags",
+        "description": "One or more tags.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "One or more tags.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          },
+          "maxLength": 50
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Resource Type definition for AWS::Connect::EvaluationForm",
+    "properties": [
+      {
+        "name": "EvaluationFormArn",
+        "description": "The Amazon Resource Name (ARN) for the evaluation form.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) for the evaluation form.",
+          "pattern": "^arn:aws[-a-z0-9]*:connect:[-a-z0-9]*:[0-9]{12}:instance/[-a-zA-Z0-9]*/evaluation-form/[-a-zA-Z0-9]*$"
+        }
+      }
+    ]
+  },
+  "$hash": "10cc0acf4636a6019c70cd79cffa483c4ee7e7e5"
+}

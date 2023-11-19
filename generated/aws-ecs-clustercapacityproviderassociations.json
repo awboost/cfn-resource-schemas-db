@@ -1,0 +1,107 @@
+{
+  "definitions": {
+    "CapacityProviders": {
+      "type": "array",
+      "description": "List of capacity providers to associate with the cluster",
+      "itemType": {
+        "type": "ref",
+        "typeName": "CapacityProvider"
+      }
+    },
+    "CapacityProvider": {
+      "description": "If using ec2 auto-scaling, the name of the associated capacity provider. Otherwise FARGATE, FARGATE_SPOT.",
+      "type": "union",
+      "types": [
+        {
+          "type": "string",
+          "description": "If using ec2 auto-scaling, the name of the associated capacity provider. Otherwise FARGATE, FARGATE_SPOT.",
+          "allowedValues": ["FARGATE", "FARGATE_SPOT"]
+        },
+        {
+          "type": "string",
+          "description": "If using ec2 auto-scaling, the name of the associated capacity provider. Otherwise FARGATE, FARGATE_SPOT.",
+          "maxLength": 2048,
+          "minLength": 1
+        }
+      ]
+    },
+    "Cluster": {
+      "type": "string",
+      "description": "The name of the cluster",
+      "maxLength": 2048,
+      "minLength": 1
+    },
+    "DefaultCapacityProviderStrategy": {
+      "type": "array",
+      "description": "List of capacity providers to associate with the cluster",
+      "itemType": {
+        "type": "ref",
+        "typeName": "CapacityProviderStrategy"
+      }
+    },
+    "CapacityProviderStrategy": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Base",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 100000,
+            "minimum": 0
+          }
+        },
+        {
+          "name": "Weight",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 1000,
+            "minimum": 0
+          }
+        },
+        {
+          "name": "CapacityProvider",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "CapacityProvider"
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Associate a set of ECS Capacity Providers with a specified ECS Cluster",
+    "properties": [
+      {
+        "name": "CapacityProviders",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "CapacityProviders"
+        }
+      },
+      {
+        "name": "Cluster",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "Cluster"
+        }
+      },
+      {
+        "name": "DefaultCapacityProviderStrategy",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "DefaultCapacityProviderStrategy"
+        }
+      }
+    ]
+  },
+  "$hash": "921d6c1c27016dd1a9a935dadbd2aef188411db2"
+}

@@ -1,0 +1,271 @@
+{
+  "definitions": {
+    "Tag": {
+      "type": "object",
+      "description": "A key-value pair to associate with a resource.",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "The tag's key.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The tag's key.",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "description": "The tag's value.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The tag's value.",
+            "maxLength": 256,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "ActionParams": {
+      "type": "object",
+      "description": "The set of parameters for this mitigation action. You can specify only one type of parameter (in other words, you can apply only one action for each defined mitigation action).",
+      "properties": [
+        {
+          "name": "AddThingsToThingGroupParams",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "AddThingsToThingGroupParams"
+          }
+        },
+        {
+          "name": "EnableIoTLoggingParams",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "EnableIoTLoggingParams"
+          }
+        },
+        {
+          "name": "PublishFindingToSnsParams",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PublishFindingToSnsParams"
+          }
+        },
+        {
+          "name": "ReplaceDefaultPolicyVersionParams",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ReplaceDefaultPolicyVersionParams"
+          }
+        },
+        {
+          "name": "UpdateCACertificateParams",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "UpdateCACertificateParams"
+          }
+        },
+        {
+          "name": "UpdateDeviceCertificateParams",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "UpdateDeviceCertificateParams"
+          }
+        }
+      ]
+    },
+    "AddThingsToThingGroupParams": {
+      "type": "object",
+      "description": "Parameters to define a mitigation action that moves devices associated with a certificate to one or more specified thing groups, typically for quarantine.",
+      "properties": [
+        {
+          "name": "OverrideDynamicGroups",
+          "description": "Specifies if this mitigation action can move the things that triggered the mitigation action out of one or more dynamic thing groups.",
+          "optional": true,
+          "type": {
+            "type": "boolean",
+            "description": "Specifies if this mitigation action can move the things that triggered the mitigation action out of one or more dynamic thing groups."
+          }
+        },
+        {
+          "name": "ThingGroupNames",
+          "description": "The list of groups to which you want to add the things that triggered the mitigation action.",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "description": "The list of groups to which you want to add the things that triggered the mitigation action.",
+            "itemType": {
+              "type": "string",
+              "maxLength": 128,
+              "minLength": 1
+            },
+            "maxLength": 10,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "EnableIoTLoggingParams": {
+      "type": "object",
+      "description": "Parameters to define a mitigation action that enables AWS IoT logging at a specified level of detail.",
+      "properties": [
+        {
+          "name": "LogLevel",
+          "description": " Specifies which types of information are logged.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": " Specifies which types of information are logged.",
+            "allowedValues": ["DEBUG", "INFO", "ERROR", "WARN", "UNSET_VALUE"]
+          }
+        },
+        {
+          "name": "RoleArnForLogging",
+          "description": " The ARN of the IAM role used for logging.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": " The ARN of the IAM role used for logging.",
+            "maxLength": 2048,
+            "minLength": 20
+          }
+        }
+      ]
+    },
+    "PublishFindingToSnsParams": {
+      "type": "object",
+      "description": "Parameters, to define a mitigation action that publishes findings to Amazon SNS. You can implement your own custom actions in response to the Amazon SNS messages.",
+      "properties": [
+        {
+          "name": "TopicArn",
+          "description": "The ARN of the topic to which you want to publish the findings.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The ARN of the topic to which you want to publish the findings.",
+            "maxLength": 2048,
+            "minLength": 20
+          }
+        }
+      ]
+    },
+    "ReplaceDefaultPolicyVersionParams": {
+      "type": "object",
+      "description": "Parameters to define a mitigation action that adds a blank policy to restrict permissions.",
+      "properties": [
+        {
+          "name": "TemplateName",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "allowedValues": ["BLANK_POLICY", "UNSET_VALUE"]
+          }
+        }
+      ]
+    },
+    "UpdateCACertificateParams": {
+      "type": "object",
+      "description": "Parameters to define a mitigation action that changes the state of the CA certificate to inactive.",
+      "properties": [
+        {
+          "name": "Action",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "allowedValues": ["DEACTIVATE", "UNSET_VALUE"]
+          }
+        }
+      ]
+    },
+    "UpdateDeviceCertificateParams": {
+      "type": "object",
+      "description": "Parameters to define a mitigation action that changes the state of the device certificate to inactive.",
+      "properties": [
+        {
+          "name": "Action",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "allowedValues": ["DEACTIVATE", "UNSET_VALUE"]
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Mitigation actions can be used to take actions to mitigate issues that were found in an Audit finding or Detect violation.",
+    "properties": [
+      {
+        "name": "ActionName",
+        "description": "A unique identifier for the mitigation action.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "A unique identifier for the mitigation action.",
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "[a-zA-Z0-9:_-]+"
+        }
+      },
+      {
+        "name": "RoleArn",
+        "optional": false,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "Tags",
+        "description": "An array of key-value pairs to apply to this resource.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "An array of key-value pairs to apply to this resource.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          },
+          "maxLength": 50
+        }
+      },
+      {
+        "name": "ActionParams",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "ActionParams"
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Mitigation actions can be used to take actions to mitigate issues that were found in an Audit finding or Detect violation.",
+    "properties": [
+      {
+        "name": "MitigationActionArn",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "MitigationActionId",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      }
+    ]
+  },
+  "$hash": "4334de9c4f6a15b0a58775745893626fadf837fb"
+}

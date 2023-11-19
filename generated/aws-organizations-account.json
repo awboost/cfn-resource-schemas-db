@@ -1,0 +1,159 @@
+{
+  "definitions": {
+    "Tag": {
+      "type": "object",
+      "description": "A custom key-value pair associated with a resource within your organization.",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "The key identifier, or name, of the tag.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The key identifier, or name, of the tag.",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "[\\s\\S]*"
+          }
+        },
+        {
+          "name": "Value",
+          "description": "The string value that's associated with the key of the tag. You can set the value of a tag to an empty string, but you can't set the value of a tag to null.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The string value that's associated with the key of the tag. You can set the value of a tag to an empty string, but you can't set the value of a tag to null.",
+            "maxLength": 256,
+            "minLength": 0,
+            "pattern": "[\\s\\S]*"
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "You can use AWS::Organizations::Account to manage accounts in organization.",
+    "properties": [
+      {
+        "name": "AccountName",
+        "description": "The friendly name of the member account.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The friendly name of the member account.",
+          "maxLength": 50,
+          "minLength": 1,
+          "pattern": "[\\u0020-\\u007E]+"
+        }
+      },
+      {
+        "name": "Email",
+        "description": "The email address of the owner to assign to the new member account.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The email address of the owner to assign to the new member account.",
+          "maxLength": 64,
+          "minLength": 6,
+          "pattern": "[^\\s@]+@[^\\s@]+\\.[^\\s@]+"
+        }
+      },
+      {
+        "name": "RoleName",
+        "description": "The name of an IAM role that AWS Organizations automatically preconfigures in the new member account. Default name is OrganizationAccountAccessRole if not specified.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The name of an IAM role that AWS Organizations automatically preconfigures in the new member account. Default name is OrganizationAccountAccessRole if not specified.",
+          "maxLength": 64,
+          "minLength": 1,
+          "pattern": "[\\w+=,.@-]{1,64}"
+        }
+      },
+      {
+        "name": "ParentIds",
+        "description": "List of parent nodes for the member account. Currently only one parent at a time is supported. Default is root.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "List of parent nodes for the member account. Currently only one parent at a time is supported. Default is root.",
+          "itemType": {
+            "type": "string",
+            "pattern": "^(r-[0-9a-z]{4,32})|(ou-[0-9a-z]{4,32}-[a-z0-9]{8,32})$"
+          }
+        }
+      },
+      {
+        "name": "Tags",
+        "description": "A list of tags that you want to attach to the newly created account. For each tag in the list, you must specify both a tag key and a value.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "A list of tags that you want to attach to the newly created account. For each tag in the list, you must specify both a tag key and a value.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          }
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "You can use AWS::Organizations::Account to manage accounts in organization.",
+    "properties": [
+      {
+        "name": "AccountId",
+        "description": "If the account was created successfully, the unique identifier (ID) of the new account.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "If the account was created successfully, the unique identifier (ID) of the new account.",
+          "maxLength": 12,
+          "pattern": "^\\d{12}$"
+        }
+      },
+      {
+        "name": "Arn",
+        "description": "The Amazon Resource Name (ARN) of the account.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) of the account.",
+          "pattern": "^arn:aws.*:organizations::\\d{12}:account\\/o-[a-z0-9]{10,32}\\/\\d{12}"
+        }
+      },
+      {
+        "name": "JoinedMethod",
+        "description": "The method by which the account joined the organization.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The method by which the account joined the organization.",
+          "allowedValues": ["INVITED", "CREATED"]
+        }
+      },
+      {
+        "name": "JoinedTimestamp",
+        "description": "The date the account became a part of the organization.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The date the account became a part of the organization."
+        }
+      },
+      {
+        "name": "Status",
+        "description": "The status of the account in the organization.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The status of the account in the organization.",
+          "allowedValues": ["ACTIVE", "SUSPENDED", "PENDING_CLOSURE"]
+        }
+      }
+    ]
+  },
+  "$hash": "aa3a556b0cf84b6e78009f720544b573a6a3f4c9"
+}

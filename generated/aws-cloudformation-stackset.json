@@ -1,0 +1,467 @@
+{
+  "definitions": {
+    "Tag": {
+      "type": "object",
+      "description": "Tag type enables you to specify a key-value pair that can be used to store information about an AWS CloudFormation StackSet.",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "A string used to identify this tag. You can specify a maximum of 127 characters for a tag key.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "A string used to identify this tag. You can specify a maximum of 127 characters for a tag key.",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^(?!aws:.*)[a-zA-Z0-9\\s\\:\\_\\.\\/\\=\\+\\-]+$"
+          }
+        },
+        {
+          "name": "Value",
+          "description": "A string containing the value for this tag. You can specify a maximum of 256 characters for a tag value.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "A string containing the value for this tag. You can specify a maximum of 256 characters for a tag value.",
+            "maxLength": 256,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "AutoDeployment": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Enabled",
+          "description": "If set to true, StackSets automatically deploys additional stack instances to AWS Organizations accounts that are added to a target organization or organizational unit (OU) in the specified Regions. If an account is removed from a target organization or OU, StackSets deletes stack instances from the account in the specified Regions.",
+          "optional": true,
+          "type": {
+            "type": "boolean",
+            "description": "If set to true, StackSets automatically deploys additional stack instances to AWS Organizations accounts that are added to a target organization or organizational unit (OU) in the specified Regions. If an account is removed from a target organization or OU, StackSets deletes stack instances from the account in the specified Regions."
+          }
+        },
+        {
+          "name": "RetainStacksOnAccountRemoval",
+          "description": "If set to true, stack resources are retained when an account is removed from a target organization or OU. If set to false, stack resources are deleted. Specify only if Enabled is set to True.",
+          "optional": true,
+          "type": {
+            "type": "boolean",
+            "description": "If set to true, stack resources are retained when an account is removed from a target organization or OU. If set to false, stack resources are deleted. Specify only if Enabled is set to True."
+          }
+        }
+      ]
+    },
+    "Account": {
+      "type": "string",
+      "description": "AWS account that you want to create stack instances in the specified Region(s) for.",
+      "pattern": "^[0-9]{12}$"
+    },
+    "Region": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9-]{1,128}$"
+    },
+    "OrganizationalUnitId": {
+      "type": "string",
+      "pattern": "^(ou-[a-z0-9]{4,32}-[a-z0-9]{8,32}|r-[a-z0-9]{4,32})$"
+    },
+    "Capability": {
+      "type": "string",
+      "allowedValues": [
+        "CAPABILITY_IAM",
+        "CAPABILITY_NAMED_IAM",
+        "CAPABILITY_AUTO_EXPAND"
+      ]
+    },
+    "RegionConcurrencyType": {
+      "type": "string",
+      "description": "The concurrency type of deploying StackSets operations in regions, could be in parallel or one region at a time",
+      "allowedValues": ["SEQUENTIAL", "PARALLEL"]
+    },
+    "Active": {
+      "type": "boolean",
+      "description": "When true, StackSets performs non-conflicting operations concurrently and queues conflicting operations. After conflicting operations finish, StackSets starts queued operations in request order."
+    },
+    "OperationPreferences": {
+      "type": "object",
+      "description": "The user-specified preferences for how AWS CloudFormation performs a stack set operation.",
+      "properties": [
+        {
+          "name": "FailureToleranceCount",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "minimum": 0
+          }
+        },
+        {
+          "name": "FailureTolerancePercentage",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 100,
+            "minimum": 0
+          }
+        },
+        {
+          "name": "MaxConcurrentCount",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "minimum": 1
+          }
+        },
+        {
+          "name": "MaxConcurrentPercentage",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 100,
+            "minimum": 0
+          }
+        },
+        {
+          "name": "RegionOrder",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Region"
+            }
+          }
+        },
+        {
+          "name": "RegionConcurrencyType",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "RegionConcurrencyType"
+          }
+        }
+      ]
+    },
+    "Parameter": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ParameterKey",
+          "description": "The key associated with the parameter. If you don't specify a key and value for a particular parameter, AWS CloudFormation uses the default value that is specified in your template.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The key associated with the parameter. If you don't specify a key and value for a particular parameter, AWS CloudFormation uses the default value that is specified in your template."
+          }
+        },
+        {
+          "name": "ParameterValue",
+          "description": "The input value associated with the parameter.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The input value associated with the parameter."
+          }
+        }
+      ]
+    },
+    "DeploymentTargets": {
+      "type": "object",
+      "description": " The AWS OrganizationalUnitIds or Accounts for which to create stack instances in the specified Regions.",
+      "properties": [
+        {
+          "name": "Accounts",
+          "description": "AWS accounts that you want to create stack instances in the specified Region(s) for.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "AWS accounts that you want to create stack instances in the specified Region(s) for.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Account"
+            },
+            "minLength": 1
+          }
+        },
+        {
+          "name": "AccountsUrl",
+          "description": "Returns the value of the AccountsUrl property.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Returns the value of the AccountsUrl property.",
+            "maxLength": 5120,
+            "minLength": 1,
+            "pattern": "(s3://|http(s?)://).+"
+          }
+        },
+        {
+          "name": "OrganizationalUnitIds",
+          "description": "The organization root ID or organizational unit (OU) IDs to which StackSets deploys.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "The organization root ID or organizational unit (OU) IDs to which StackSets deploys.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "OrganizationalUnitId"
+            },
+            "minLength": 1
+          }
+        },
+        {
+          "name": "AccountFilterType",
+          "description": "The filter type you want to apply on organizational units and accounts.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The filter type you want to apply on organizational units and accounts.",
+            "allowedValues": ["NONE", "UNION", "INTERSECTION", "DIFFERENCE"]
+          }
+        }
+      ]
+    },
+    "StackInstances": {
+      "type": "object",
+      "description": "Stack instances in some specific accounts and Regions.",
+      "properties": [
+        {
+          "name": "DeploymentTargets",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "DeploymentTargets"
+          }
+        },
+        {
+          "name": "Regions",
+          "description": "The names of one or more Regions where you want to create stack instances using the specified AWS account(s).",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "description": "The names of one or more Regions where you want to create stack instances using the specified AWS account(s).",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Region"
+            },
+            "minLength": 1
+          }
+        },
+        {
+          "name": "ParameterOverrides",
+          "description": "A list of stack set parameters whose values you want to override in the selected stack instances.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "A list of stack set parameters whose values you want to override in the selected stack instances.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Parameter"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "StackSet as a resource provides one-click experience for provisioning a StackSet and StackInstances",
+    "properties": [
+      {
+        "name": "StackSetName",
+        "description": "The name to associate with the stack set. The name must be unique in the Region where you create your stack set.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The name to associate with the stack set. The name must be unique in the Region where you create your stack set.",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z][a-zA-Z0-9\\-]{0,127}$"
+        }
+      },
+      {
+        "name": "AdministrationRoleARN",
+        "description": "The Amazon Resource Number (ARN) of the IAM role to use to create this stack set. Specify an IAM role only if you are using customized administrator roles to control which users or groups can manage specific stack sets within the same administrator account.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Number (ARN) of the IAM role to use to create this stack set. Specify an IAM role only if you are using customized administrator roles to control which users or groups can manage specific stack sets within the same administrator account.",
+          "maxLength": 2048,
+          "minLength": 20
+        }
+      },
+      {
+        "name": "AutoDeployment",
+        "description": "Describes whether StackSets automatically deploys to AWS Organizations accounts that are added to the target organization or organizational unit (OU). Specify only if PermissionModel is SERVICE_MANAGED.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "Describes whether StackSets automatically deploys to AWS Organizations accounts that are added to the target organization or organizational unit (OU). Specify only if PermissionModel is SERVICE_MANAGED.",
+          "typeName": "AutoDeployment"
+        }
+      },
+      {
+        "name": "Capabilities",
+        "description": "In some cases, you must explicitly acknowledge that your stack set template contains certain capabilities in order for AWS CloudFormation to create the stack set and related stack instances.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "In some cases, you must explicitly acknowledge that your stack set template contains certain capabilities in order for AWS CloudFormation to create the stack set and related stack instances.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Capability"
+          }
+        }
+      },
+      {
+        "name": "Description",
+        "description": "A description of the stack set. You can use the description to identify the stack set's purpose or other important information.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "A description of the stack set. You can use the description to identify the stack set's purpose or other important information.",
+          "maxLength": 1024,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "ExecutionRoleName",
+        "description": "The name of the IAM execution role to use to create the stack set. If you do not specify an execution role, AWS CloudFormation uses the AWSCloudFormationStackSetExecutionRole role for the stack set operation.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The name of the IAM execution role to use to create the stack set. If you do not specify an execution role, AWS CloudFormation uses the AWSCloudFormationStackSetExecutionRole role for the stack set operation.",
+          "maxLength": 64,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "OperationPreferences",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "OperationPreferences"
+        }
+      },
+      {
+        "name": "StackInstancesGroup",
+        "description": "A group of stack instances with parameters in some specific accounts and regions.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "A group of stack instances with parameters in some specific accounts and regions.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "StackInstances"
+          }
+        }
+      },
+      {
+        "name": "Parameters",
+        "description": "The input parameters for the stack set template.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "The input parameters for the stack set template.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Parameter"
+          }
+        }
+      },
+      {
+        "name": "PermissionModel",
+        "description": "Describes how the IAM roles required for stack set operations are created. By default, SELF-MANAGED is specified.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "Describes how the IAM roles required for stack set operations are created. By default, SELF-MANAGED is specified.",
+          "allowedValues": ["SERVICE_MANAGED", "SELF_MANAGED"]
+        }
+      },
+      {
+        "name": "Tags",
+        "description": "The key-value pairs to associate with this stack set and the stacks created from it. AWS CloudFormation also propagates these tags to supported resources that are created in the stacks. A maximum number of 50 tags can be specified.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "The key-value pairs to associate with this stack set and the stacks created from it. AWS CloudFormation also propagates these tags to supported resources that are created in the stacks. A maximum number of 50 tags can be specified.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          },
+          "maxLength": 50
+        }
+      },
+      {
+        "name": "TemplateBody",
+        "description": "The structure that contains the template body, with a minimum length of 1 byte and a maximum length of 51,200 bytes.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The structure that contains the template body, with a minimum length of 1 byte and a maximum length of 51,200 bytes.",
+          "maxLength": 51200,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "TemplateURL",
+        "description": "Location of file containing the template body. The URL must point to a template (max size: 460,800 bytes) that is located in an Amazon S3 bucket.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Location of file containing the template body. The URL must point to a template (max size: 460,800 bytes) that is located in an Amazon S3 bucket.",
+          "maxLength": 5120,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "CallAs",
+        "description": "Specifies the AWS account that you are acting from. By default, SELF is specified. For self-managed permissions, specify SELF; for service-managed permissions, if you are signed in to the organization's management account, specify SELF. If you are signed in to a delegated administrator account, specify DELEGATED_ADMIN.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Specifies the AWS account that you are acting from. By default, SELF is specified. For self-managed permissions, specify SELF; for service-managed permissions, if you are signed in to the organization's management account, specify SELF. If you are signed in to a delegated administrator account, specify DELEGATED_ADMIN.",
+          "allowedValues": ["SELF", "DELEGATED_ADMIN"]
+        }
+      },
+      {
+        "name": "ManagedExecution",
+        "description": "Describes whether StackSets performs non-conflicting operations concurrently and queues conflicting operations.",
+        "optional": true,
+        "type": {
+          "type": "object",
+          "description": "Describes whether StackSets performs non-conflicting operations concurrently and queues conflicting operations.",
+          "properties": [
+            {
+              "name": "Active",
+              "optional": true,
+              "type": {
+                "type": "ref",
+                "typeName": "Active"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "StackSet as a resource provides one-click experience for provisioning a StackSet and StackInstances",
+    "properties": [
+      {
+        "name": "StackSetId",
+        "description": "The ID of the stack set that you're creating.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The ID of the stack set that you're creating."
+        }
+      }
+    ]
+  },
+  "$hash": "da7360512ab21a2fbd3012d5c0746806f5ab784f"
+}

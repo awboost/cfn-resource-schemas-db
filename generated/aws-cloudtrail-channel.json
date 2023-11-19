@@ -1,0 +1,151 @@
+{
+  "definitions": {
+    "Destination": {
+      "type": "object",
+      "description": "The resource that receives events arriving from a channel.",
+      "properties": [
+        {
+          "name": "Type",
+          "description": "The type of destination for events arriving from a channel.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The type of destination for events arriving from a channel.",
+            "allowedValues": ["EVENT_DATA_STORE"]
+          }
+        },
+        {
+          "name": "Location",
+          "description": "The ARN of a resource that receives events from a channel.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The ARN of a resource that receives events from a channel.",
+            "maxLength": 1024,
+            "minLength": 3,
+            "pattern": "(^[a-zA-Z0-9._/\\-:]+$)"
+          }
+        }
+      ]
+    },
+    "UUID": {
+      "type": "string",
+      "maxLength": 36,
+      "minLength": 36,
+      "pattern": "(^[a-f0-9\\-]+$)"
+    },
+    "Timestamp": {
+      "type": "string"
+    },
+    "ChannelArn": {
+      "type": "string",
+      "description": "The Amazon Resource Name (ARN) of a channel.",
+      "maxLength": 256,
+      "minLength": 3,
+      "pattern": "(^[a-zA-Z0-9._/\\-:]+$)"
+    },
+    "ChannelName": {
+      "type": "string",
+      "description": "The name of the channel.",
+      "maxLength": 128,
+      "minLength": 3,
+      "pattern": "(^[a-zA-Z0-9._\\-]+$)"
+    },
+    "Tag": {
+      "type": "object",
+      "description": "A key-value pair to associate with a resource.",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+            "maxLength": 256,
+            "minLength": 0
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "A channel receives events from a specific source (such as an on-premises storage solution or application, or a partner event data source), and delivers the events to one or more event data stores. You use channels to ingest events into CloudTrail from sources outside AWS.",
+    "properties": [
+      {
+        "name": "Name",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "ChannelName"
+        }
+      },
+      {
+        "name": "Source",
+        "description": "The ARN of an on-premises storage solution or application, or a partner event source.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The ARN of an on-premises storage solution or application, or a partner event source.",
+          "maxLength": 256,
+          "minLength": 1,
+          "pattern": "(.*)"
+        }
+      },
+      {
+        "name": "Destinations",
+        "description": "One or more resources to which events arriving through a channel are logged and stored.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "One or more resources to which events arriving through a channel are logged and stored.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Destination"
+          },
+          "maxLength": 10
+        }
+      },
+      {
+        "name": "Tags",
+        "description": "An array of key-value pairs to apply to this resource.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "An array of key-value pairs to apply to this resource.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          }
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "A channel receives events from a specific source (such as an on-premises storage solution or application, or a partner event data source), and delivers the events to one or more event data stores. You use channels to ingest events into CloudTrail from sources outside AWS.",
+    "properties": [
+      {
+        "name": "ChannelArn",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "ChannelArn"
+        }
+      }
+    ]
+  },
+  "$hash": "7e61eb4aa5424dd65a099ac2d32c17760ebd44a2"
+}

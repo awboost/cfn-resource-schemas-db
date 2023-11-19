@@ -1,0 +1,277 @@
+{
+  "definitions": {
+    "Column": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ColumnName",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_]{1,47}$"
+          }
+        },
+        {
+          "name": "ColumnType",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "ClusteringKeyColumn": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Column",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "Column"
+          }
+        },
+        {
+          "name": "OrderBy",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": ["ASC", "DESC"]
+          }
+        }
+      ]
+    },
+    "ProvisionedThroughput": {
+      "type": "object",
+      "description": "Throughput for the specified table, which consists of values for ReadCapacityUnits and WriteCapacityUnits",
+      "properties": [
+        {
+          "name": "ReadCapacityUnits",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "minimum": 1
+          }
+        },
+        {
+          "name": "WriteCapacityUnits",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "minimum": 1
+          }
+        }
+      ]
+    },
+    "Mode": {
+      "type": "string",
+      "description": "Capacity mode for the specified table",
+      "allowedValues": ["PROVISIONED", "ON_DEMAND"]
+    },
+    "BillingMode": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Mode",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "Mode"
+          }
+        },
+        {
+          "name": "ProvisionedThroughput",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ProvisionedThroughput"
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "description": "A key-value pair to apply to the resource",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "EncryptionSpecification": {
+      "type": "object",
+      "description": "Represents the settings used to enable server-side encryption",
+      "properties": [
+        {
+          "name": "EncryptionType",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "EncryptionType"
+          }
+        },
+        {
+          "name": "KmsKeyIdentifier",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "KmsKeyIdentifier"
+          }
+        }
+      ]
+    },
+    "EncryptionType": {
+      "type": "string",
+      "description": "Server-side encryption type",
+      "allowedValues": ["AWS_OWNED_KMS_KEY", "CUSTOMER_MANAGED_KMS_KEY"]
+    },
+    "KmsKeyIdentifier": {
+      "type": "string",
+      "description": "The AWS KMS customer master key (CMK) that should be used for the AWS KMS encryption. To specify a CMK, use its key ID, Amazon Resource Name (ARN), alias name, or alias ARN. "
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource schema for AWS::Cassandra::Table",
+    "properties": [
+      {
+        "name": "KeyspaceName",
+        "description": "Name for Cassandra keyspace",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "Name for Cassandra keyspace",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_]{1,47}$"
+        }
+      },
+      {
+        "name": "TableName",
+        "description": "Name for Cassandra table",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Name for Cassandra table",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_]{1,47}$"
+        }
+      },
+      {
+        "name": "RegularColumns",
+        "description": "Non-key columns of the table",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "Non-key columns of the table",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Column"
+          }
+        }
+      },
+      {
+        "name": "PartitionKeyColumns",
+        "description": "Partition key columns of the table",
+        "optional": false,
+        "type": {
+          "type": "array",
+          "description": "Partition key columns of the table",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Column"
+          },
+          "minLength": 1
+        }
+      },
+      {
+        "name": "ClusteringKeyColumns",
+        "description": "Clustering key columns of the table",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "Clustering key columns of the table",
+          "itemType": {
+            "type": "ref",
+            "typeName": "ClusteringKeyColumn"
+          }
+        }
+      },
+      {
+        "name": "BillingMode",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "BillingMode"
+        }
+      },
+      {
+        "name": "PointInTimeRecoveryEnabled",
+        "description": "Indicates whether point in time recovery is enabled (true) or disabled (false) on the table",
+        "optional": true,
+        "type": {
+          "type": "boolean",
+          "description": "Indicates whether point in time recovery is enabled (true) or disabled (false) on the table"
+        }
+      },
+      {
+        "name": "ClientSideTimestampsEnabled",
+        "description": "Indicates whether client side timestamps are enabled (true) or disabled (false) on the table. False by default, once it is enabled it cannot be disabled again.",
+        "optional": true,
+        "type": {
+          "type": "boolean",
+          "description": "Indicates whether client side timestamps are enabled (true) or disabled (false) on the table. False by default, once it is enabled it cannot be disabled again."
+        }
+      },
+      {
+        "name": "Tags",
+        "description": "An array of key-value pairs to apply to this resource",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "An array of key-value pairs to apply to this resource",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          },
+          "maxLength": 50,
+          "minLength": 0
+        }
+      },
+      {
+        "name": "DefaultTimeToLive",
+        "description": "Default TTL (Time To Live) in seconds, where zero is disabled. If the value is greater than zero, TTL is enabled for the entire table and an expiration timestamp is added to each column.",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "Default TTL (Time To Live) in seconds, where zero is disabled. If the value is greater than zero, TTL is enabled for the entire table and an expiration timestamp is added to each column.",
+          "isInteger": true,
+          "minimum": 0
+        }
+      },
+      {
+        "name": "EncryptionSpecification",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "EncryptionSpecification"
+        }
+      }
+    ]
+  },
+  "$hash": "4a963cec839ef4f3775682af3dcc5c9143bf8d88"
+}

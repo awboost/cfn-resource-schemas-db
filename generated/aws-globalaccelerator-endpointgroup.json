@@ -1,0 +1,196 @@
+{
+  "definitions": {
+    "EndpointConfiguration": {
+      "type": "object",
+      "description": "The configuration for a given endpoint",
+      "properties": [
+        {
+          "name": "EndpointId",
+          "description": "Id of the endpoint. For Network/Application Load Balancer this value is the ARN.  For EIP, this value is the allocation ID.  For EC2 instances, this is the EC2 instance ID",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Id of the endpoint. For Network/Application Load Balancer this value is the ARN.  For EIP, this value is the allocation ID.  For EC2 instances, this is the EC2 instance ID"
+          }
+        },
+        {
+          "name": "Weight",
+          "description": "The weight for the endpoint.",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "The weight for the endpoint.",
+            "isInteger": true,
+            "maximum": 255,
+            "minimum": 0
+          }
+        },
+        {
+          "name": "ClientIPPreservationEnabled",
+          "description": "true if client ip should be preserved",
+          "optional": true,
+          "type": {
+            "type": "boolean",
+            "description": "true if client ip should be preserved"
+          }
+        }
+      ]
+    },
+    "Port": {
+      "type": "number",
+      "description": "A network port number",
+      "isInteger": true,
+      "maximum": 65535,
+      "minimum": 0
+    },
+    "PortOverride": {
+      "type": "object",
+      "description": "listener to endpoint port mapping.",
+      "properties": [
+        {
+          "name": "ListenerPort",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "Port"
+          }
+        },
+        {
+          "name": "EndpointPort",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "Port"
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource Type definition for AWS::GlobalAccelerator::EndpointGroup",
+    "properties": [
+      {
+        "name": "ListenerArn",
+        "description": "The Amazon Resource Name (ARN) of the listener",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) of the listener"
+        }
+      },
+      {
+        "name": "EndpointGroupRegion",
+        "description": "The name of the AWS Region where the endpoint group is located",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The name of the AWS Region where the endpoint group is located"
+        }
+      },
+      {
+        "name": "EndpointConfigurations",
+        "description": "The list of endpoint objects.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "The list of endpoint objects.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "EndpointConfiguration"
+          }
+        }
+      },
+      {
+        "name": "TrafficDialPercentage",
+        "description": "The percentage of traffic to sent to an AWS Region",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "The percentage of traffic to sent to an AWS Region",
+          "isInteger": false,
+          "maximum": 100,
+          "minimum": 0
+        }
+      },
+      {
+        "name": "HealthCheckPort",
+        "description": "The port that AWS Global Accelerator uses to check the health of endpoints in this endpoint group.",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "The port that AWS Global Accelerator uses to check the health of endpoints in this endpoint group.",
+          "isInteger": true,
+          "maximum": 65535,
+          "minimum": -1
+        }
+      },
+      {
+        "name": "HealthCheckProtocol",
+        "description": "The protocol that AWS Global Accelerator uses to check the health of endpoints in this endpoint group.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The protocol that AWS Global Accelerator uses to check the health of endpoints in this endpoint group.",
+          "allowedValues": ["TCP", "HTTP", "HTTPS"]
+        }
+      },
+      {
+        "name": "HealthCheckPath",
+        "description": "",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": ""
+        }
+      },
+      {
+        "name": "HealthCheckIntervalSeconds",
+        "description": "The time in seconds between each health check for an endpoint. Must be a value of 10 or 30",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "The time in seconds between each health check for an endpoint. Must be a value of 10 or 30",
+          "isInteger": true
+        }
+      },
+      {
+        "name": "ThresholdCount",
+        "description": "The number of consecutive health checks required to set the state of the endpoint to unhealthy.",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "The number of consecutive health checks required to set the state of the endpoint to unhealthy.",
+          "isInteger": true
+        }
+      },
+      {
+        "name": "PortOverrides",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "PortOverride"
+          }
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Resource Type definition for AWS::GlobalAccelerator::EndpointGroup",
+    "properties": [
+      {
+        "name": "EndpointGroupArn",
+        "description": "The Amazon Resource Name (ARN) of the endpoint group",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) of the endpoint group"
+        }
+      }
+    ]
+  },
+  "$hash": "000cbf47ea3df536b5249f605e6185d8d1fcc577"
+}

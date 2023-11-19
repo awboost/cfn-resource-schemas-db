@@ -1,0 +1,326 @@
+{
+  "definitions": {
+    "Tag": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^(?!aws:)[a-zA-Z+-=._:/]+$"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 0
+          }
+        }
+      ]
+    },
+    "FieldMap": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Name",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9_-]+$"
+          }
+        },
+        {
+          "name": "ObjectTypeField",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ObjectTypeField"
+          }
+        }
+      ]
+    },
+    "ObjectTypeField": {
+      "type": "object",
+      "description": "Represents a field in a ProfileObjectType.",
+      "properties": [
+        {
+          "name": "Source",
+          "description": "A field of a ProfileObject. For example: _source.FirstName, where \"_source\" is a ProfileObjectType of a Zendesk user and \"FirstName\" is a field in that ObjectType.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "A field of a ProfileObject. For example: _source.FirstName, where \"_source\" is a ProfileObjectType of a Zendesk user and \"FirstName\" is a field in that ObjectType.",
+            "maxLength": 1000,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Target",
+          "description": "The location of the data in the standard ProfileObject model. For example: _profile.Address.PostalCode.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The location of the data in the standard ProfileObject model. For example: _profile.Address.PostalCode.",
+            "maxLength": 1000,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "ContentType",
+          "description": "The content type of the field. Used for determining equality when searching.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The content type of the field. Used for determining equality when searching.",
+            "allowedValues": [
+              "STRING",
+              "NUMBER",
+              "PHONE_NUMBER",
+              "EMAIL_ADDRESS",
+              "NAME"
+            ]
+          }
+        }
+      ]
+    },
+    "KeyMap": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Name",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9_-]+$"
+          }
+        },
+        {
+          "name": "ObjectTypeKeyList",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "ObjectTypeKey"
+            }
+          }
+        }
+      ]
+    },
+    "ObjectTypeKey": {
+      "type": "object",
+      "description": "An object that defines the Key element of a ProfileObject. A Key is a special element that can be used to search for a customer profile.",
+      "properties": [
+        {
+          "name": "FieldNames",
+          "description": "The reference for the key name of the fields map. ",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "The reference for the key name of the fields map. ",
+            "itemType": {
+              "type": "string",
+              "maxLength": 64,
+              "minLength": 1,
+              "pattern": "^[a-zA-Z0-9_-]+$"
+            }
+          }
+        },
+        {
+          "name": "StandardIdentifiers",
+          "description": "The types of keys that a ProfileObject can have. Each ProfileObject can have only 1 UNIQUE key but multiple PROFILE keys. PROFILE means that this key can be used to tie an object to a PROFILE. UNIQUE means that it can be used to uniquely identify an object. If a key a is marked as SECONDARY, it will be used to search for profiles after all other PROFILE keys have been searched. A LOOKUP_ONLY key is only used to match a profile but is not persisted to be used for searching of the profile. A NEW_ONLY key is only used if the profile does not already exist before the object is ingested, otherwise it is only used for matching objects to profiles.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "The types of keys that a ProfileObject can have. Each ProfileObject can have only 1 UNIQUE key but multiple PROFILE keys. PROFILE means that this key can be used to tie an object to a PROFILE. UNIQUE means that it can be used to uniquely identify an object. If a key a is marked as SECONDARY, it will be used to search for profiles after all other PROFILE keys have been searched. A LOOKUP_ONLY key is only used to match a profile but is not persisted to be used for searching of the profile. A NEW_ONLY key is only used if the profile does not already exist before the object is ingested, otherwise it is only used for matching objects to profiles.",
+            "itemType": {
+              "type": "string",
+              "allowedValues": [
+                "PROFILE",
+                "UNIQUE",
+                "SECONDARY",
+                "LOOKUP_ONLY",
+                "NEW_ONLY",
+                "ASSET",
+                "CASE",
+                "ORDER"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "An ObjectType resource of Amazon Connect Customer Profiles",
+    "properties": [
+      {
+        "name": "DomainName",
+        "description": "The unique name of the domain.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The unique name of the domain.",
+          "maxLength": 64,
+          "minLength": 1,
+          "pattern": "^[a-zA-Z0-9_-]+$"
+        }
+      },
+      {
+        "name": "ObjectTypeName",
+        "description": "The name of the profile object type.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The name of the profile object type.",
+          "maxLength": 255,
+          "minLength": 1,
+          "pattern": "^[a-zA-Z_][a-zA-Z_0-9-]*$"
+        }
+      },
+      {
+        "name": "AllowProfileCreation",
+        "description": "Indicates whether a profile should be created when data is received.",
+        "optional": true,
+        "type": {
+          "type": "boolean",
+          "description": "Indicates whether a profile should be created when data is received."
+        }
+      },
+      {
+        "name": "Description",
+        "description": "Description of the profile object type.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Description of the profile object type.",
+          "maxLength": 1000,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "EncryptionKey",
+        "description": "The default encryption key",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The default encryption key",
+          "maxLength": 255,
+          "minLength": 0
+        }
+      },
+      {
+        "name": "ExpirationDays",
+        "description": "The default number of days until the data within the domain expires.",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "The default number of days until the data within the domain expires.",
+          "isInteger": true,
+          "maximum": 1098,
+          "minimum": 1
+        }
+      },
+      {
+        "name": "Fields",
+        "description": "A list of the name and ObjectType field.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "A list of the name and ObjectType field.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "FieldMap"
+          }
+        }
+      },
+      {
+        "name": "Keys",
+        "description": "A list of unique keys that can be used to map data to the profile.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "A list of unique keys that can be used to map data to the profile.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "KeyMap"
+          }
+        }
+      },
+      {
+        "name": "SourceLastUpdatedTimestampFormat",
+        "description": "The format of your sourceLastUpdatedTimestamp that was previously set up.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The format of your sourceLastUpdatedTimestamp that was previously set up.",
+          "maxLength": 255,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "Tags",
+        "description": "The tags (keys and values) associated with the integration.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "The tags (keys and values) associated with the integration.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          },
+          "maxLength": 50,
+          "minLength": 0
+        }
+      },
+      {
+        "name": "TemplateId",
+        "description": "A unique identifier for the object template.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "A unique identifier for the object template.",
+          "maxLength": 64,
+          "minLength": 1,
+          "pattern": "^[a-zA-Z0-9_-]+$"
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "An ObjectType resource of Amazon Connect Customer Profiles",
+    "properties": [
+      {
+        "name": "CreatedAt",
+        "description": "The time of this integration got created.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The time of this integration got created."
+        }
+      },
+      {
+        "name": "LastUpdatedAt",
+        "description": "The time of this integration got last updated at.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The time of this integration got last updated at."
+        }
+      }
+    ]
+  },
+  "$hash": "bc05f551326b31b19276ee874a217dc3da226771"
+}

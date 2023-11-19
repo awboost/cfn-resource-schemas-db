@@ -1,0 +1,288 @@
+{
+  "definitions": {
+    "EfsStorageConfiguration": {
+      "type": "object",
+      "description": "Defines the storage configuration for an Amazon EFS file system.",
+      "properties": [
+        {
+          "name": "FileSystemId",
+          "description": "The file system identifier.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The file system identifier.",
+            "pattern": "^\\S{1,200}$"
+          }
+        },
+        {
+          "name": "MountPoint",
+          "description": "The mount point for the file system.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The mount point for the file system.",
+            "pattern": "^\\S{1,200}$"
+          }
+        }
+      ]
+    },
+    "EngineType": {
+      "type": "string",
+      "description": "The target platform for the environment.",
+      "allowedValues": ["microfocus", "bluage"]
+    },
+    "FsxStorageConfiguration": {
+      "type": "object",
+      "description": "Defines the storage configuration for an Amazon FSx file system.",
+      "properties": [
+        {
+          "name": "FileSystemId",
+          "description": "The file system identifier.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The file system identifier.",
+            "pattern": "^\\S{1,200}$"
+          }
+        },
+        {
+          "name": "MountPoint",
+          "description": "The mount point for the file system.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The mount point for the file system.",
+            "pattern": "^\\S{1,200}$"
+          }
+        }
+      ]
+    },
+    "HighAvailabilityConfig": {
+      "type": "object",
+      "description": "Defines the details of a high availability configuration.",
+      "properties": [
+        {
+          "name": "DesiredCapacity",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 100,
+            "minimum": 1
+          }
+        }
+      ]
+    },
+    "StorageConfiguration": {
+      "description": "Defines the storage configuration for an environment.",
+      "type": "union",
+      "types": [
+        {
+          "type": "object",
+          "description": "Defines the storage configuration for an environment.",
+          "properties": [
+            {
+              "name": "Efs",
+              "optional": false,
+              "type": {
+                "type": "ref",
+                "typeName": "EfsStorageConfiguration"
+              }
+            }
+          ]
+        },
+        {
+          "type": "object",
+          "description": "Defines the storage configuration for an environment.",
+          "properties": [
+            {
+              "name": "Fsx",
+              "optional": false,
+              "type": {
+                "type": "ref",
+                "typeName": "FsxStorageConfiguration"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "TagMap": {
+      "type": "record",
+      "description": "Defines tags associated to an environment.",
+      "valueType": {
+        "type": "string",
+        "maxLength": 256,
+        "minLength": 0
+      }
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Represents a runtime environment that can run migrated mainframe applications.",
+    "properties": [
+      {
+        "name": "Description",
+        "description": "The description of the environment.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The description of the environment.",
+          "maxLength": 500,
+          "minLength": 0
+        }
+      },
+      {
+        "name": "EngineType",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "EngineType"
+        }
+      },
+      {
+        "name": "EngineVersion",
+        "description": "The version of the runtime engine for the environment.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The version of the runtime engine for the environment.",
+          "pattern": "^\\S{1,10}$"
+        }
+      },
+      {
+        "name": "HighAvailabilityConfig",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "HighAvailabilityConfig"
+        }
+      },
+      {
+        "name": "InstanceType",
+        "description": "The type of instance underlying the environment.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The type of instance underlying the environment.",
+          "pattern": "^\\S{1,20}$"
+        }
+      },
+      {
+        "name": "KmsKeyId",
+        "description": "The ID or the Amazon Resource Name (ARN) of the customer managed KMS Key used for encrypting environment-related resources.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The ID or the Amazon Resource Name (ARN) of the customer managed KMS Key used for encrypting environment-related resources.",
+          "maxLength": 2048
+        }
+      },
+      {
+        "name": "Name",
+        "description": "The name of the environment.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The name of the environment.",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_\\-]{1,59}$"
+        }
+      },
+      {
+        "name": "PreferredMaintenanceWindow",
+        "description": "Configures a desired maintenance window for the environment. If you do not provide a value, a random system-generated value will be assigned.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Configures a desired maintenance window for the environment. If you do not provide a value, a random system-generated value will be assigned.",
+          "pattern": "^\\S{1,50}$"
+        }
+      },
+      {
+        "name": "PubliclyAccessible",
+        "description": "Specifies whether the environment is publicly accessible.",
+        "optional": true,
+        "type": {
+          "type": "boolean",
+          "description": "Specifies whether the environment is publicly accessible."
+        }
+      },
+      {
+        "name": "SecurityGroupIds",
+        "description": "The list of security groups for the VPC associated with this environment.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "The list of security groups for the VPC associated with this environment.",
+          "itemType": {
+            "type": "string",
+            "pattern": "^\\S{1,50}$"
+          }
+        }
+      },
+      {
+        "name": "StorageConfigurations",
+        "description": "The storage configurations defined for the runtime environment.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "The storage configurations defined for the runtime environment.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "StorageConfiguration"
+          }
+        }
+      },
+      {
+        "name": "SubnetIds",
+        "description": "The unique identifiers of the subnets assigned to this runtime environment.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "The unique identifiers of the subnets assigned to this runtime environment.",
+          "itemType": {
+            "type": "string",
+            "pattern": "^\\S{1,50}$"
+          }
+        }
+      },
+      {
+        "name": "Tags",
+        "description": "Tags associated to this environment.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "Tags associated to this environment.",
+          "typeName": "TagMap"
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Represents a runtime environment that can run migrated mainframe applications.",
+    "properties": [
+      {
+        "name": "EnvironmentArn",
+        "description": "The Amazon Resource Name (ARN) of the runtime environment.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) of the runtime environment.",
+          "pattern": "^arn:(aws|aws-cn|aws-iso|aws-iso-[a-z]{1}|aws-us-gov):[A-Za-z0-9][A-Za-z0-9_/.-]{0,62}:([a-z]{2}-((iso[a-z]{0,1}-)|(gov-)){0,1}[a-z]+-[0-9]):[0-9]{12}:[A-Za-z0-9/][A-Za-z0-9:_/+=,@.-]{0,1023}$"
+        }
+      },
+      {
+        "name": "EnvironmentId",
+        "description": "The unique identifier of the environment.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The unique identifier of the environment.",
+          "pattern": "^\\S{1,80}$"
+        }
+      }
+    ]
+  },
+  "$hash": "05beb4eab49d0dde0ace47293215a6d7c30144f9"
+}

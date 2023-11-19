@@ -1,0 +1,277 @@
+{
+  "definitions": {
+    "Expression": {
+      "type": "string",
+      "description": "Expression with rule conditions",
+      "maxLength": 1024,
+      "minLength": 4,
+      "pattern": "^[><0-9A-Za-z_.,:)(!= ]+$"
+    },
+    "SubstitutionValue": {
+      "type": "object",
+      "description": "A key-value pair to associate expression's substitution variable names with their values",
+      "properties": [
+        {
+          "name": "ValueReference",
+          "description": "Variable name",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Variable name",
+            "maxLength": 128,
+            "minLength": 2,
+            "pattern": "^:[A-Za-z0-9_]+$"
+          }
+        },
+        {
+          "name": "Value",
+          "description": "Value or column name",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Value or column name",
+            "maxLength": 1024,
+            "minLength": 0
+          }
+        }
+      ]
+    },
+    "ValuesMap": {
+      "type": "array",
+      "itemType": {
+        "type": "ref",
+        "typeName": "SubstitutionValue"
+      }
+    },
+    "ThresholdValue": {
+      "type": "number",
+      "description": "Threshold value for a rule",
+      "isInteger": false
+    },
+    "ThresholdType": {
+      "type": "string",
+      "description": "Threshold type for a rule",
+      "allowedValues": [
+        "GREATER_THAN_OR_EQUAL",
+        "LESS_THAN_OR_EQUAL",
+        "GREATER_THAN",
+        "LESS_THAN"
+      ]
+    },
+    "ThresholdUnit": {
+      "type": "string",
+      "description": "Threshold unit for a rule",
+      "allowedValues": ["COUNT", "PERCENTAGE"]
+    },
+    "Threshold": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "ThresholdValue"
+          }
+        },
+        {
+          "name": "Type",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ThresholdType"
+          }
+        },
+        {
+          "name": "Unit",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ThresholdUnit"
+          }
+        }
+      ]
+    },
+    "ColumnSelector": {
+      "type": "object",
+      "description": "Selector of a column from a dataset for profile job configuration. One selector includes either a column name or a regular expression",
+      "properties": [
+        {
+          "name": "Regex",
+          "description": "A regular expression for selecting a column from a dataset",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "A regular expression for selecting a column from a dataset",
+            "maxLength": 255,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Name",
+          "description": "The name of a column from a dataset",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The name of a column from a dataset",
+            "maxLength": 255,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "Disabled": {
+      "type": "boolean",
+      "description": "Boolean value to disable/enable a rule"
+    },
+    "Rule": {
+      "type": "object",
+      "description": "Data quality rule for a target resource (dataset)",
+      "properties": [
+        {
+          "name": "Name",
+          "description": "Name of the rule",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Name of the rule",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Disabled",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Disabled"
+          }
+        },
+        {
+          "name": "CheckExpression",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "Expression"
+          }
+        },
+        {
+          "name": "SubstitutionMap",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ValuesMap"
+          }
+        },
+        {
+          "name": "Threshold",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Threshold"
+          }
+        },
+        {
+          "name": "ColumnSelectors",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "ColumnSelector"
+            },
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "description": "A key-value pair to associate with a resource",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 0
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource schema for AWS::DataBrew::Ruleset.",
+    "properties": [
+      {
+        "name": "Name",
+        "description": "Name of the Ruleset",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "Name of the Ruleset",
+          "maxLength": 255,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "Description",
+        "description": "Description of the Ruleset",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Description of the Ruleset",
+          "maxLength": 1024
+        }
+      },
+      {
+        "name": "TargetArn",
+        "description": "Arn of the target resource (dataset) to apply the ruleset to",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "Arn of the target resource (dataset) to apply the ruleset to",
+          "maxLength": 2048,
+          "minLength": 20
+        }
+      },
+      {
+        "name": "Rules",
+        "description": "List of the data quality rules in the ruleset",
+        "optional": false,
+        "type": {
+          "type": "array",
+          "description": "List of the data quality rules in the ruleset",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Rule"
+          },
+          "minLength": 1
+        }
+      },
+      {
+        "name": "Tags",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          }
+        }
+      }
+    ]
+  },
+  "$hash": "03717eefe434bed816f45a1a52c6092ab3b47332"
+}

@@ -1,0 +1,395 @@
+{
+  "definitions": {
+    "AutomaticTerminationMode": {
+      "type": "string",
+      "allowedValues": ["DEACTIVATED", "ACTIVATED"]
+    },
+    "SessionBackupMode": {
+      "type": "string",
+      "allowedValues": ["AUTOMATIC", "DEACTIVATED"]
+    },
+    "SessionPersistenceMode": {
+      "type": "string",
+      "allowedValues": ["DEACTIVATED", "ACTIVATED"]
+    },
+    "StreamConfiguration": {
+      "type": "object",
+      "description": "<p>A configuration for a streaming session.</p>",
+      "properties": [
+        {
+          "name": "ClipboardMode",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "StreamingClipboardMode"
+          }
+        },
+        {
+          "name": "Ec2InstanceTypes",
+          "description": "<p>The EC2 instance types that users can select from when launching a streaming session\n            with this launch profile.</p>",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "description": "<p>The EC2 instance types that users can select from when launching a streaming session\n            with this launch profile.</p>",
+            "itemType": {
+              "type": "ref",
+              "typeName": "StreamingInstanceType"
+            },
+            "maxLength": 30,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "MaxSessionLengthInMinutes",
+          "description": "<p>The length of time, in minutes, that a streaming session can be active before it is\n            stopped or terminated. After this point, Nimble Studio automatically terminates or\n            stops the session. The default length of time is 690 minutes, and the maximum length of\n            time is 30 days.</p>",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "<p>The length of time, in minutes, that a streaming session can be active before it is\n            stopped or terminated. After this point, Nimble Studio automatically terminates or\n            stops the session. The default length of time is 690 minutes, and the maximum length of\n            time is 30 days.</p>",
+            "isInteger": false,
+            "maximum": 43200,
+            "minimum": 1
+          }
+        },
+        {
+          "name": "StreamingImageIds",
+          "description": "<p>The streaming images that users can select from when launching a streaming session\n            with this launch profile.</p>",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "description": "<p>The streaming images that users can select from when launching a streaming session\n            with this launch profile.</p>",
+            "itemType": {
+              "type": "string",
+              "maxLength": 22,
+              "minLength": 0,
+              "pattern": "^[a-zA-Z0-9-_]*$"
+            },
+            "maxLength": 20,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "MaxStoppedSessionLengthInMinutes",
+          "description": "<p>Integer that determines if you can start and stop your sessions and how long a session\n            can stay in the <code>STOPPED</code> state. The default value is 0. The maximum value is\n            5760.</p>\n         <p>This field is allowed only when <code>sessionPersistenceMode</code> is\n                <code>ACTIVATED</code> and <code>automaticTerminationMode</code> is\n                <code>ACTIVATED</code>.</p>\n         <p>If the value is set to 0, your sessions can’t be <code>STOPPED</code>. If you then\n            call <code>StopStreamingSession</code>, the session fails. If the time that a session\n            stays in the <code>READY</code> state exceeds the <code>maxSessionLengthInMinutes</code>\n            value, the session will automatically be terminated (instead of\n            <code>STOPPED</code>).</p>\n         <p>If the value is set to a positive number, the session can be stopped. You can call\n                <code>StopStreamingSession</code> to stop sessions in the <code>READY</code> state.\n            If the time that a session stays in the <code>READY</code> state exceeds the\n                <code>maxSessionLengthInMinutes</code> value, the session will automatically be\n            stopped (instead of terminated).</p>",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "<p>Integer that determines if you can start and stop your sessions and how long a session\n            can stay in the <code>STOPPED</code> state. The default value is 0. The maximum value is\n            5760.</p>\n         <p>This field is allowed only when <code>sessionPersistenceMode</code> is\n                <code>ACTIVATED</code> and <code>automaticTerminationMode</code> is\n                <code>ACTIVATED</code>.</p>\n         <p>If the value is set to 0, your sessions can’t be <code>STOPPED</code>. If you then\n            call <code>StopStreamingSession</code>, the session fails. If the time that a session\n            stays in the <code>READY</code> state exceeds the <code>maxSessionLengthInMinutes</code>\n            value, the session will automatically be terminated (instead of\n            <code>STOPPED</code>).</p>\n         <p>If the value is set to a positive number, the session can be stopped. You can call\n                <code>StopStreamingSession</code> to stop sessions in the <code>READY</code> state.\n            If the time that a session stays in the <code>READY</code> state exceeds the\n                <code>maxSessionLengthInMinutes</code> value, the session will automatically be\n            stopped (instead of terminated).</p>",
+            "isInteger": false,
+            "maximum": 5760,
+            "minimum": 0
+          }
+        },
+        {
+          "name": "SessionStorage",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "StreamConfigurationSessionStorage"
+          }
+        },
+        {
+          "name": "SessionBackup",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "StreamConfigurationSessionBackup"
+          }
+        },
+        {
+          "name": "SessionPersistenceMode",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "SessionPersistenceMode"
+          }
+        },
+        {
+          "name": "VolumeConfiguration",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "VolumeConfiguration"
+          }
+        },
+        {
+          "name": "AutomaticTerminationMode",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "AutomaticTerminationMode"
+          }
+        }
+      ]
+    },
+    "StreamConfigurationSessionBackup": {
+      "type": "object",
+      "description": "<p>Configures how streaming sessions are backed up when launched from this launch\n            profile.</p>",
+      "properties": [
+        {
+          "name": "Mode",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "SessionBackupMode"
+          }
+        },
+        {
+          "name": "MaxBackupsToRetain",
+          "description": "<p>The maximum number of backups that each streaming session created from this launch\n            profile can have.</p>",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "<p>The maximum number of backups that each streaming session created from this launch\n            profile can have.</p>",
+            "isInteger": false,
+            "maximum": 10,
+            "minimum": 0
+          }
+        }
+      ]
+    },
+    "StreamConfigurationSessionStorage": {
+      "type": "object",
+      "description": "<p>The configuration for a streaming session’s upload storage.</p>",
+      "properties": [
+        {
+          "name": "Root",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "StreamingSessionStorageRoot"
+          }
+        },
+        {
+          "name": "Mode",
+          "description": "<p>Allows artists to upload files to their workstations. The only valid option is\n                <code>UPLOAD</code>.</p>",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "description": "<p>Allows artists to upload files to their workstations. The only valid option is\n                <code>UPLOAD</code>.</p>",
+            "itemType": {
+              "type": "ref",
+              "typeName": "StreamingSessionStorageMode"
+            },
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "StreamingClipboardMode": {
+      "type": "string",
+      "allowedValues": ["ENABLED", "DISABLED"]
+    },
+    "StreamingInstanceType": {
+      "type": "string",
+      "allowedValues": [
+        "g4dn.xlarge",
+        "g4dn.2xlarge",
+        "g4dn.4xlarge",
+        "g4dn.8xlarge",
+        "g4dn.12xlarge",
+        "g4dn.16xlarge",
+        "g3.4xlarge",
+        "g3s.xlarge",
+        "g5.xlarge",
+        "g5.2xlarge",
+        "g5.4xlarge",
+        "g5.8xlarge",
+        "g5.16xlarge"
+      ]
+    },
+    "StreamingSessionStorageMode": {
+      "type": "string",
+      "allowedValues": ["UPLOAD"]
+    },
+    "StreamingSessionStorageRoot": {
+      "type": "object",
+      "description": "<p>The upload storage root location (folder) on streaming workstations where files are\n            uploaded.</p>",
+      "properties": [
+        {
+          "name": "Linux",
+          "description": "<p>The folder path in Linux workstations where files are uploaded.</p>",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "<p>The folder path in Linux workstations where files are uploaded.</p>",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^(\\$HOME|/)[/]?([A-Za-z0-9-_]+/)*([A-Za-z0-9_-]+)$"
+          }
+        },
+        {
+          "name": "Windows",
+          "description": "<p>The folder path in Windows workstations where files are uploaded.</p>",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "<p>The folder path in Windows workstations where files are uploaded.</p>",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^((\\%HOMEPATH\\%)|[a-zA-Z]:)[\\\\/](?:[a-zA-Z0-9_-]+[\\\\/])*[a-zA-Z0-9_-]+$"
+          }
+        }
+      ]
+    },
+    "Tags": {
+      "type": "record",
+      "valueType": {
+        "type": "string"
+      }
+    },
+    "VolumeConfiguration": {
+      "type": "object",
+      "description": "<p>Custom volume configuration for the root volumes that are attached to streaming\n            sessions.</p>\n         <p>This parameter is only allowed when <code>sessionPersistenceMode</code> is\n                <code>ACTIVATED</code>.</p>",
+      "properties": [
+        {
+          "name": "Size",
+          "description": "<p>The size of the root volume that is attached to the streaming session. The root volume\n            size is measured in GiBs.</p>",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "<p>The size of the root volume that is attached to the streaming session. The root volume\n            size is measured in GiBs.</p>",
+            "isInteger": false,
+            "maximum": 16000,
+            "minimum": 100
+          }
+        },
+        {
+          "name": "Throughput",
+          "description": "<p>The throughput to provision for the root volume that is attached to the streaming\n            session. The throughput is measured in MiB/s.</p>",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "<p>The throughput to provision for the root volume that is attached to the streaming\n            session. The throughput is measured in MiB/s.</p>",
+            "isInteger": false,
+            "maximum": 1000,
+            "minimum": 125
+          }
+        },
+        {
+          "name": "Iops",
+          "description": "<p>The number of I/O operations per second for the root volume that is attached to\n            streaming session.</p>",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "<p>The number of I/O operations per second for the root volume that is attached to\n            streaming session.</p>",
+            "isInteger": false,
+            "maximum": 16000,
+            "minimum": 3000
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Represents a launch profile which delegates access to a collection of studio components to studio users",
+    "properties": [
+      {
+        "name": "Description",
+        "description": "<p>The description.</p>",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "<p>The description.</p>",
+          "maxLength": 256,
+          "minLength": 0
+        }
+      },
+      {
+        "name": "Ec2SubnetIds",
+        "description": "<p>Specifies the IDs of the EC2 subnets where streaming sessions will be accessible from.\n            These subnets must support the specified instance types. </p>",
+        "optional": false,
+        "type": {
+          "type": "array",
+          "description": "<p>Specifies the IDs of the EC2 subnets where streaming sessions will be accessible from.\n            These subnets must support the specified instance types. </p>",
+          "itemType": {
+            "type": "string"
+          },
+          "maxLength": 6,
+          "minLength": 0
+        }
+      },
+      {
+        "name": "LaunchProfileProtocolVersions",
+        "description": "<p>The version number of the protocol that is used by the launch profile. The only valid\n            version is \"2021-03-31\".</p>",
+        "optional": false,
+        "type": {
+          "type": "array",
+          "description": "<p>The version number of the protocol that is used by the launch profile. The only valid\n            version is \"2021-03-31\".</p>",
+          "itemType": {
+            "type": "string",
+            "description": "<p>The version number of the protocol that is used by the launch profile. The only valid\n            version is \"2021-03-31\".</p>",
+            "maxLength": 10,
+            "minLength": 0,
+            "pattern": "^2021\\-03\\-31$"
+          }
+        }
+      },
+      {
+        "name": "Name",
+        "description": "<p>The name for the launch profile.</p>",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "<p>The name for the launch profile.</p>",
+          "maxLength": 64,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "StreamConfiguration",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "StreamConfiguration"
+        }
+      },
+      {
+        "name": "StudioComponentIds",
+        "description": "<p>Unique identifiers for a collection of studio components that can be used with this\n            launch profile.</p>",
+        "optional": false,
+        "type": {
+          "type": "array",
+          "description": "<p>Unique identifiers for a collection of studio components that can be used with this\n            launch profile.</p>",
+          "itemType": {
+            "type": "string"
+          },
+          "maxLength": 100,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "StudioId",
+        "description": "<p>The studio ID. </p>",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "<p>The studio ID. </p>"
+        }
+      },
+      {
+        "name": "Tags",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "Tags"
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Represents a launch profile which delegates access to a collection of studio components to studio users",
+    "properties": [
+      {
+        "name": "LaunchProfileId",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      }
+    ]
+  },
+  "$hash": "de6d38d05dee256437ae64b52761665d998ac6de"
+}

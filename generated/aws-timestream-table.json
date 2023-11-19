@@ -1,0 +1,272 @@
+{
+  "definitions": {
+    "Tag": {
+      "type": "object",
+      "description": "You can use the Resource Tags property to apply tags to resources, which can help you identify and categorize those resources.",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 0
+          }
+        }
+      ]
+    },
+    "PartitionKeyList": {
+      "type": "array",
+      "description": "A list of partition keys defining the attributes used to partition the table data. The order of the list determines the partition hierarchy. The name and type of each partition key as well as the partition key order cannot be changed after the table is created. However, the enforcement level of each partition key can be changed.",
+      "itemType": {
+        "type": "ref",
+        "typeName": "PartitionKey"
+      },
+      "minLength": 1
+    },
+    "PartitionKey": {
+      "type": "object",
+      "description": "An attribute used in partitioning data in a table. There are two types of partition keys: dimension keys and measure keys. A dimension key partitions data on a dimension name, while a measure key partitions data on the measure name.",
+      "properties": [
+        {
+          "name": "Type",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "PartitionKeyType"
+          }
+        },
+        {
+          "name": "Name",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "SchemaName"
+          }
+        },
+        {
+          "name": "EnforcementInRecord",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PartitionKeyEnforcementLevel"
+          }
+        }
+      ]
+    },
+    "PartitionKeyType": {
+      "type": "string",
+      "description": "The type of the partition key. Options are DIMENSION (dimension key) and MEASURE (measure key).",
+      "allowedValues": ["DIMENSION", "MEASURE"]
+    },
+    "SchemaName": {
+      "type": "string",
+      "description": "The name of the attribute used for a dimension key.",
+      "maxLength": 2048,
+      "minLength": 1
+    },
+    "PartitionKeyEnforcementLevel": {
+      "type": "string",
+      "description": "The level of enforcement for the specification of a dimension key in ingested records. Options are REQUIRED (dimension key must be specified) and OPTIONAL (dimension key does not have to be specified).",
+      "allowedValues": ["REQUIRED", "OPTIONAL"]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "The AWS::Timestream::Table resource creates a Timestream Table.",
+    "properties": [
+      {
+        "name": "DatabaseName",
+        "description": "The name for the database which the table to be created belongs to.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The name for the database which the table to be created belongs to.",
+          "pattern": "^[a-zA-Z0-9_.-]{3,256}$"
+        }
+      },
+      {
+        "name": "TableName",
+        "description": "The name for the table. If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the table name.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The name for the table. If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the table name.",
+          "pattern": "^[a-zA-Z0-9_.-]{3,256}$"
+        }
+      },
+      {
+        "name": "RetentionProperties",
+        "description": "The retention duration of the memory store and the magnetic store.",
+        "optional": true,
+        "type": {
+          "type": "object",
+          "description": "The retention duration of the memory store and the magnetic store.",
+          "properties": [
+            {
+              "name": "MemoryStoreRetentionPeriodInHours",
+              "description": "The duration for which data must be stored in the memory store.",
+              "optional": true,
+              "type": {
+                "type": "string",
+                "description": "The duration for which data must be stored in the memory store."
+              }
+            },
+            {
+              "name": "MagneticStoreRetentionPeriodInDays",
+              "description": "The duration for which data must be stored in the magnetic store.",
+              "optional": true,
+              "type": {
+                "type": "string",
+                "description": "The duration for which data must be stored in the magnetic store."
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "Schema",
+        "description": "A Schema specifies the expected data model of the table.",
+        "optional": true,
+        "type": {
+          "type": "object",
+          "description": "A Schema specifies the expected data model of the table.",
+          "properties": [
+            {
+              "name": "CompositePartitionKey",
+              "optional": true,
+              "type": {
+                "type": "ref",
+                "typeName": "PartitionKeyList"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "MagneticStoreWriteProperties",
+        "description": "The properties that determine whether magnetic store writes are enabled.",
+        "optional": true,
+        "type": {
+          "type": "object",
+          "description": "The properties that determine whether magnetic store writes are enabled.",
+          "properties": [
+            {
+              "name": "EnableMagneticStoreWrites",
+              "description": "Boolean flag indicating whether magnetic store writes are enabled.",
+              "optional": false,
+              "type": {
+                "type": "boolean",
+                "description": "Boolean flag indicating whether magnetic store writes are enabled."
+              }
+            },
+            {
+              "name": "MagneticStoreRejectedDataLocation",
+              "description": "Location to store information about records that were asynchronously rejected during magnetic store writes.",
+              "optional": true,
+              "type": {
+                "type": "object",
+                "description": "Location to store information about records that were asynchronously rejected during magnetic store writes.",
+                "properties": [
+                  {
+                    "name": "S3Configuration",
+                    "description": "S3 configuration for location to store rejections from magnetic store writes",
+                    "optional": true,
+                    "type": {
+                      "type": "object",
+                      "description": "S3 configuration for location to store rejections from magnetic store writes",
+                      "properties": [
+                        {
+                          "name": "BucketName",
+                          "description": "The bucket name used to store the data.",
+                          "optional": false,
+                          "type": {
+                            "type": "string",
+                            "description": "The bucket name used to store the data."
+                          }
+                        },
+                        {
+                          "name": "ObjectKeyPrefix",
+                          "description": "String used to prefix all data in the bucket.",
+                          "optional": true,
+                          "type": {
+                            "type": "string",
+                            "description": "String used to prefix all data in the bucket."
+                          }
+                        },
+                        {
+                          "name": "EncryptionOption",
+                          "description": "Either SSE_KMS or SSE_S3.",
+                          "optional": false,
+                          "type": {
+                            "type": "string",
+                            "description": "Either SSE_KMS or SSE_S3."
+                          }
+                        },
+                        {
+                          "name": "KmsKeyId",
+                          "description": "Must be provided if SSE_KMS is specified as the encryption option",
+                          "optional": true,
+                          "type": {
+                            "type": "string",
+                            "description": "Must be provided if SSE_KMS is specified as the encryption option"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "Tags",
+        "description": "An array of key-value pairs to apply to this resource.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "An array of key-value pairs to apply to this resource.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          },
+          "maxLength": 200
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "The AWS::Timestream::Table resource creates a Timestream Table.",
+    "properties": [
+      {
+        "name": "Arn",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "Name",
+        "description": "The table name exposed as a read-only attribute.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The table name exposed as a read-only attribute."
+        }
+      }
+    ]
+  },
+  "$hash": "24b3fcd0c88dd4df5f4dc13015891450f0cd0f1a"
+}

@@ -1,0 +1,377 @@
+{
+  "definitions": {
+    "AccountId": {
+      "type": "string",
+      "description": "An AWS account ID.",
+      "maxLength": 12,
+      "minLength": 12,
+      "pattern": "^([0-9]*)$"
+    },
+    "Base62Id": {
+      "type": "string",
+      "description": "A Base62 ID",
+      "maxLength": 22,
+      "minLength": 22,
+      "pattern": "^[a-z0-9A-Z]{22}$"
+    },
+    "OrganizationalUnitId": {
+      "type": "string",
+      "description": "An Organizational Unit ID.",
+      "maxLength": 68,
+      "minLength": 16,
+      "pattern": "^(ou-[0-9a-z]{4,32}-[a-z0-9]{8,32})$"
+    },
+    "IEMap": {
+      "type": "object",
+      "description": "An FMS includeMap or excludeMap.",
+      "properties": [
+        {
+          "name": "ACCOUNT",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "AccountId"
+            }
+          }
+        },
+        {
+          "name": "ORGUNIT",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "OrganizationalUnitId"
+            }
+          }
+        }
+      ]
+    },
+    "PolicyTag": {
+      "type": "object",
+      "description": "A policy tag.",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^([^\\s]*)$"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "pattern": "^([^\\s]*)$"
+          }
+        }
+      ]
+    },
+    "ResourceTag": {
+      "type": "object",
+      "description": "A resource tag.",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 256
+          }
+        }
+      ]
+    },
+    "ResourceType": {
+      "type": "string",
+      "description": "An AWS resource type",
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^([^\\s]*)$"
+    },
+    "ResourceArn": {
+      "type": "string",
+      "description": "A resource ARN.",
+      "maxLength": 1024,
+      "minLength": 1,
+      "pattern": "^([^\\s]*)$"
+    },
+    "SecurityServicePolicyData": {
+      "type": "object",
+      "description": "Firewall security service policy data.",
+      "properties": [
+        {
+          "name": "ManagedServiceData",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ManagedServiceData"
+          }
+        },
+        {
+          "name": "Type",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "PolicyType"
+          }
+        },
+        {
+          "name": "PolicyOption",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PolicyOption"
+          }
+        }
+      ]
+    },
+    "FirewallDeploymentModel": {
+      "type": "string",
+      "description": "Firewall deployment mode.",
+      "allowedValues": ["DISTRIBUTED", "CENTRALIZED"]
+    },
+    "ManagedServiceData": {
+      "type": "string",
+      "description": "Firewall managed service data.",
+      "maxLength": 8192,
+      "minLength": 1
+    },
+    "PolicyType": {
+      "type": "string",
+      "description": "Firewall policy type.",
+      "allowedValues": [
+        "WAF",
+        "WAFV2",
+        "SHIELD_ADVANCED",
+        "SECURITY_GROUPS_COMMON",
+        "SECURITY_GROUPS_CONTENT_AUDIT",
+        "SECURITY_GROUPS_USAGE_AUDIT",
+        "NETWORK_FIREWALL",
+        "THIRD_PARTY_FIREWALL",
+        "DNS_FIREWALL",
+        "IMPORT_NETWORK_FIREWALL"
+      ]
+    },
+    "NetworkFirewallPolicy": {
+      "type": "object",
+      "description": "Network firewall policy.",
+      "properties": [
+        {
+          "name": "FirewallDeploymentModel",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "FirewallDeploymentModel"
+          }
+        }
+      ]
+    },
+    "ThirdPartyFirewallPolicy": {
+      "type": "object",
+      "description": "Third party firewall policy.",
+      "properties": [
+        {
+          "name": "FirewallDeploymentModel",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "FirewallDeploymentModel"
+          }
+        }
+      ]
+    },
+    "PolicyOption": {
+      "type": "object",
+      "description": "Firewall policy option.",
+      "properties": [
+        {
+          "name": "NetworkFirewallPolicy",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "NetworkFirewallPolicy"
+          }
+        },
+        {
+          "name": "ThirdPartyFirewallPolicy",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ThirdPartyFirewallPolicy"
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Creates an AWS Firewall Manager policy.",
+    "properties": [
+      {
+        "name": "ExcludeMap",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "IEMap"
+        }
+      },
+      {
+        "name": "ExcludeResourceTags",
+        "optional": false,
+        "type": {
+          "type": "boolean"
+        }
+      },
+      {
+        "name": "IncludeMap",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "IEMap"
+        }
+      },
+      {
+        "name": "PolicyName",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "maxLength": 1024,
+          "minLength": 1,
+          "pattern": "^([a-zA-Z0-9_.:/=+\\-@\\s]+)$"
+        }
+      },
+      {
+        "name": "PolicyDescription",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 256,
+          "pattern": "^([a-zA-Z0-9_.:/=+\\-@\\s]+)$"
+        }
+      },
+      {
+        "name": "RemediationEnabled",
+        "optional": false,
+        "type": {
+          "type": "boolean"
+        }
+      },
+      {
+        "name": "ResourceTags",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "ResourceTag"
+          },
+          "maxLength": 8
+        }
+      },
+      {
+        "name": "ResourceType",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "ResourceType"
+        }
+      },
+      {
+        "name": "ResourceTypeList",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "ResourceType"
+          }
+        }
+      },
+      {
+        "name": "ResourceSetIds",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Base62Id"
+          }
+        }
+      },
+      {
+        "name": "SecurityServicePolicyData",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "SecurityServicePolicyData"
+        }
+      },
+      {
+        "name": "DeleteAllPolicyResources",
+        "optional": true,
+        "type": {
+          "type": "boolean"
+        }
+      },
+      {
+        "name": "ResourcesCleanUp",
+        "optional": true,
+        "type": {
+          "type": "boolean"
+        }
+      },
+      {
+        "name": "Tags",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "PolicyTag"
+          }
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Creates an AWS Firewall Manager policy.",
+    "properties": [
+      {
+        "name": "Id",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 36,
+          "minLength": 36,
+          "pattern": "^[a-z0-9A-Z-]{36}$"
+        }
+      },
+      {
+        "name": "Arn",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "ResourceArn"
+        }
+      }
+    ]
+  },
+  "$hash": "a23f591d5ef9696f73b53f023323cbeea0980ec1"
+}

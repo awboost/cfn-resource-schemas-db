@@ -1,0 +1,192 @@
+{
+  "definitions": {
+    "Dimension": {
+      "type": "object",
+      "description": "the key-value pairs that further define a metric.",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "The key of the dimension. Maximum length of 255.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The key of the dimension. Maximum length of 255.",
+            "maxLength": 255,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "description": "The value of the dimension. Maximum length of 255.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The value of the dimension. Maximum length of 255.",
+            "maxLength": 255,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "MetricTransformation": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "DefaultValue",
+          "description": "The value to emit when a filter pattern does not match a log event. This value can be null.",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "The value to emit when a filter pattern does not match a log event. This value can be null.",
+            "isInteger": false
+          }
+        },
+        {
+          "name": "MetricName",
+          "description": "The name of the CloudWatch metric. Metric name must be in ASCII format.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The name of the CloudWatch metric. Metric name must be in ASCII format.",
+            "maxLength": 255,
+            "minLength": 1,
+            "pattern": "^((?![:*$])[\\x00-\\x7F]){1,255}"
+          }
+        },
+        {
+          "name": "MetricNamespace",
+          "description": "The namespace of the CloudWatch metric.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The namespace of the CloudWatch metric.",
+            "maxLength": 256,
+            "minLength": 1,
+            "pattern": "^[0-9a-zA-Z\\.\\-_\\/#]{1,256}"
+          }
+        },
+        {
+          "name": "MetricValue",
+          "description": "The value to publish to the CloudWatch metric when a filter pattern matches a log event.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The value to publish to the CloudWatch metric when a filter pattern matches a log event.",
+            "maxLength": 100,
+            "minLength": 1,
+            "pattern": ".{1,100}"
+          }
+        },
+        {
+          "name": "Unit",
+          "description": "The unit to assign to the metric. If you omit this, the unit is set as None.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The unit to assign to the metric. If you omit this, the unit is set as None.",
+            "allowedValues": [
+              "Seconds",
+              "Microseconds",
+              "Milliseconds",
+              "Bytes",
+              "Kilobytes",
+              "Megabytes",
+              "Gigabytes",
+              "Terabytes",
+              "Bits",
+              "Kilobits",
+              "Megabits",
+              "Gigabits",
+              "Terabits",
+              "Percent",
+              "Count",
+              "Bytes/Second",
+              "Kilobytes/Second",
+              "Megabytes/Second",
+              "Gigabytes/Second",
+              "Terabytes/Second",
+              "Bits/Second",
+              "Kilobits/Second",
+              "Megabits/Second",
+              "Gigabits/Second",
+              "Terabits/Second",
+              "Count/Second",
+              "None"
+            ]
+          }
+        },
+        {
+          "name": "Dimensions",
+          "description": "Dimensions are the key-value pairs that further define a metric",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "Dimensions are the key-value pairs that further define a metric",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Dimension"
+            },
+            "maxLength": 3,
+            "minLength": 1
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Specifies a metric filter that describes how CloudWatch Logs extracts information from logs and transforms it into Amazon CloudWatch metrics.",
+    "properties": [
+      {
+        "name": "FilterName",
+        "description": "A name for the metric filter.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "A name for the metric filter.",
+          "maxLength": 512,
+          "minLength": 1,
+          "pattern": "^[^:*]{1,512}"
+        }
+      },
+      {
+        "name": "FilterPattern",
+        "description": "Pattern that Logs follows to interpret each entry in a log.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "Pattern that Logs follows to interpret each entry in a log.",
+          "maxLength": 1024
+        }
+      },
+      {
+        "name": "LogGroupName",
+        "description": "Existing log group that you want to associate with this filter.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "Existing log group that you want to associate with this filter.",
+          "maxLength": 512,
+          "minLength": 1,
+          "pattern": "^[.\\-_/#A-Za-z0-9]{1,512}"
+        }
+      },
+      {
+        "name": "MetricTransformations",
+        "description": "A collection of information that defines how metric data gets emitted.",
+        "optional": false,
+        "type": {
+          "type": "array",
+          "description": "A collection of information that defines how metric data gets emitted.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "MetricTransformation"
+          },
+          "maxLength": 1,
+          "minLength": 1
+        }
+      }
+    ]
+  },
+  "$hash": "a9ec8bc257aa7228e5a869a67dd8718b08158261"
+}

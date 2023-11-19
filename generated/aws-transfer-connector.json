@@ -1,0 +1,279 @@
+{
+  "definitions": {
+    "Tag": {
+      "type": "object",
+      "description": "Creates a key-value pair for a specific resource.",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "The name assigned to the tag that you create.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The name assigned to the tag that you create.",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "description": "Contains one or more values that you assigned to the key name you create.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Contains one or more values that you assigned to the key name you create.",
+            "maxLength": 256,
+            "minLength": 0
+          }
+        }
+      ]
+    },
+    "SftpConnectorTrustedHostKey": {
+      "type": "string",
+      "description": "The public host key for the external server to which you are connecting.",
+      "maxLength": 2048,
+      "minLength": 1
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource Type definition for AWS::Transfer::Connector",
+    "properties": [
+      {
+        "name": "AccessRole",
+        "description": "Specifies the access role for the connector.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "Specifies the access role for the connector.",
+          "maxLength": 2048,
+          "minLength": 20,
+          "pattern": "arn:.*role/.*"
+        }
+      },
+      {
+        "name": "As2Config",
+        "description": "Configuration for an AS2 connector.",
+        "optional": true,
+        "type": {
+          "type": "object",
+          "description": "Configuration for an AS2 connector.",
+          "properties": [
+            {
+              "name": "LocalProfileId",
+              "description": "A unique identifier for the local profile.",
+              "optional": true,
+              "type": {
+                "type": "string",
+                "description": "A unique identifier for the local profile.",
+                "maxLength": 19,
+                "minLength": 19,
+                "pattern": "^p-([0-9a-f]{17})$"
+              }
+            },
+            {
+              "name": "PartnerProfileId",
+              "description": "A unique identifier for the partner profile.",
+              "optional": true,
+              "type": {
+                "type": "string",
+                "description": "A unique identifier for the partner profile.",
+                "maxLength": 19,
+                "minLength": 19,
+                "pattern": "^p-([0-9a-f]{17})$"
+              }
+            },
+            {
+              "name": "MessageSubject",
+              "description": "The message subject for this AS2 connector configuration.",
+              "optional": true,
+              "type": {
+                "type": "string",
+                "description": "The message subject for this AS2 connector configuration.",
+                "maxLength": 1024,
+                "minLength": 1,
+                "pattern": "^[\\p{Print}\\p{Blank}]+"
+              }
+            },
+            {
+              "name": "Compression",
+              "description": "Compression setting for this AS2 connector configuration.",
+              "optional": true,
+              "type": {
+                "type": "string",
+                "description": "Compression setting for this AS2 connector configuration.",
+                "allowedValues": ["ZLIB", "DISABLED"]
+              }
+            },
+            {
+              "name": "EncryptionAlgorithm",
+              "description": "Encryption algorithm for this AS2 connector configuration.",
+              "optional": true,
+              "type": {
+                "type": "string",
+                "description": "Encryption algorithm for this AS2 connector configuration.",
+                "allowedValues": [
+                  "AES128_CBC",
+                  "AES192_CBC",
+                  "AES256_CBC",
+                  "NONE"
+                ]
+              }
+            },
+            {
+              "name": "SigningAlgorithm",
+              "description": "Signing algorithm for this AS2 connector configuration.",
+              "optional": true,
+              "type": {
+                "type": "string",
+                "description": "Signing algorithm for this AS2 connector configuration.",
+                "allowedValues": ["SHA256", "SHA384", "SHA512", "SHA1", "NONE"]
+              }
+            },
+            {
+              "name": "MdnSigningAlgorithm",
+              "description": "MDN Signing algorithm for this AS2 connector configuration.",
+              "optional": true,
+              "type": {
+                "type": "string",
+                "description": "MDN Signing algorithm for this AS2 connector configuration.",
+                "allowedValues": [
+                  "SHA256",
+                  "SHA384",
+                  "SHA512",
+                  "SHA1",
+                  "NONE",
+                  "DEFAULT"
+                ]
+              }
+            },
+            {
+              "name": "MdnResponse",
+              "description": "MDN Response setting for this AS2 connector configuration.",
+              "optional": true,
+              "type": {
+                "type": "string",
+                "description": "MDN Response setting for this AS2 connector configuration.",
+                "allowedValues": ["SYNC", "NONE"]
+              }
+            },
+            {
+              "name": "BasicAuthSecretId",
+              "description": "ARN or name of the secret in AWS Secrets Manager which contains the credentials for Basic authentication. If empty, Basic authentication is disabled for the AS2 connector",
+              "optional": true,
+              "type": {
+                "type": "string",
+                "description": "ARN or name of the secret in AWS Secrets Manager which contains the credentials for Basic authentication. If empty, Basic authentication is disabled for the AS2 connector",
+                "maxLength": 2048,
+                "minLength": 0
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "SftpConfig",
+        "description": "Configuration for an SFTP connector.",
+        "optional": true,
+        "type": {
+          "type": "object",
+          "description": "Configuration for an SFTP connector.",
+          "properties": [
+            {
+              "name": "UserSecretId",
+              "description": "ARN or name of the secret in AWS Secrets Manager which contains the SFTP user's private keys or passwords.",
+              "optional": true,
+              "type": {
+                "type": "string",
+                "description": "ARN or name of the secret in AWS Secrets Manager which contains the SFTP user's private keys or passwords.",
+                "maxLength": 2048,
+                "minLength": 1
+              }
+            },
+            {
+              "name": "TrustedHostKeys",
+              "description": "List of public host keys, for the external server to which you are connecting.",
+              "optional": true,
+              "type": {
+                "type": "array",
+                "description": "List of public host keys, for the external server to which you are connecting.",
+                "itemType": {
+                  "type": "ref",
+                  "typeName": "SftpConnectorTrustedHostKey"
+                },
+                "maxLength": 10
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "LoggingRole",
+        "description": "Specifies the logging role for the connector.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Specifies the logging role for the connector.",
+          "maxLength": 2048,
+          "minLength": 20,
+          "pattern": "arn:.*role/.*"
+        }
+      },
+      {
+        "name": "Tags",
+        "description": "Key-value pairs that can be used to group and search for connectors. Tags are metadata attached to connectors for any purpose.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "Key-value pairs that can be used to group and search for connectors. Tags are metadata attached to connectors for any purpose.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          },
+          "maxLength": 50
+        }
+      },
+      {
+        "name": "Url",
+        "description": "URL for Connector",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "URL for Connector",
+          "maxLength": 255
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Resource Type definition for AWS::Transfer::Connector",
+    "properties": [
+      {
+        "name": "Arn",
+        "description": "Specifies the unique Amazon Resource Name (ARN) for the connector.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Specifies the unique Amazon Resource Name (ARN) for the connector.",
+          "maxLength": 1600,
+          "minLength": 20,
+          "pattern": "arn:.*"
+        }
+      },
+      {
+        "name": "ConnectorId",
+        "description": "A unique identifier for the connector.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "A unique identifier for the connector.",
+          "maxLength": 19,
+          "minLength": 19,
+          "pattern": "^c-([0-9a-f]{17})$"
+        }
+      }
+    ]
+  },
+  "$hash": "fe1d88bfe2778cbbe8706bd722be3d48adf874ae"
+}

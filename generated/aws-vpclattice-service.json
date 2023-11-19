@@ -1,0 +1,164 @@
+{
+  "definitions": {
+    "DnsEntry": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "DomainName",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "HostedZoneId",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "A service is any software application that can run on instances containers, or serverless functions within an account or virtual private cloud (VPC).",
+    "properties": [
+      {
+        "name": "AuthType",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "allowedValues": ["NONE", "AWS_IAM"]
+        }
+      },
+      {
+        "name": "DnsEntry",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "DnsEntry"
+        }
+      },
+      {
+        "name": "Name",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 40,
+          "minLength": 3,
+          "pattern": "^(?!svc-)(?![-])(?!.*[-]$)(?!.*[-]{2})[a-z0-9-]+$"
+        }
+      },
+      {
+        "name": "CertificateArn",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 2048,
+          "pattern": "^(arn(:[a-z0-9]+([.-][a-z0-9]+)*){2}(:([a-z0-9]+([.-][a-z0-9]+)*)?){2}:certificate/[0-9a-z-]+)?$"
+        }
+      },
+      {
+        "name": "CustomDomainName",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 3
+        }
+      },
+      {
+        "name": "Tags",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          },
+          "maxLength": 50,
+          "minLength": 0
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "A service is any software application that can run on instances containers, or serverless functions within an account or virtual private cloud (VPC).",
+    "properties": [
+      {
+        "name": "Arn",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 2048,
+          "minLength": 20,
+          "pattern": "^arn:[a-z0-9\\-]+:vpc-lattice:[a-zA-Z0-9\\-]+:\\d{12}:service/svc-[0-9a-z]{17}$"
+        }
+      },
+      {
+        "name": "CreatedAt",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "Id",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 21,
+          "minLength": 21,
+          "pattern": "^svc-[0-9a-z]{17}$"
+        }
+      },
+      {
+        "name": "LastUpdatedAt",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "Status",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "allowedValues": [
+            "ACTIVE",
+            "CREATE_IN_PROGRESS",
+            "DELETE_IN_PROGRESS",
+            "CREATE_FAILED",
+            "DELETE_FAILED"
+          ]
+        }
+      }
+    ]
+  },
+  "$hash": "e3e8cec4a64ee4d060df1ae98a38dbc90d7a14ea"
+}

@@ -1,0 +1,395 @@
+{
+  "definitions": {
+    "ConfigParameter": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ParameterKey",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 0
+          }
+        },
+        {
+          "name": "ParameterValue",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 15000,
+            "minLength": 0
+          }
+        }
+      ]
+    },
+    "Endpoint": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Address",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Port",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "VpcEndpoints",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "VpcEndpoint"
+            }
+          }
+        }
+      ]
+    },
+    "NetworkInterface": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "NetworkInterfaceId",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "SubnetId",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "PrivateIpAddress",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "AvailabilityZone",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "VpcEndpoint": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "VpcEndpointId",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "VpcId",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "NetworkInterfaces",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "NetworkInterface"
+            }
+          }
+        }
+      ]
+    },
+    "Workgroup": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "WorkgroupId",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "WorkgroupArn",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "WorkgroupName",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 3,
+            "pattern": "^[a-z0-9-]*$"
+          }
+        },
+        {
+          "name": "NamespaceName",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 3,
+            "pattern": "^[a-z0-9-]+$"
+          }
+        },
+        {
+          "name": "BaseCapacity",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "EnhancedVpcRouting",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "ConfigParameters",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "ConfigParameter"
+            }
+          }
+        },
+        {
+          "name": "SecurityGroupIds",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string",
+              "maxLength": 255,
+              "minLength": 0,
+              "pattern": "^sg-[0-9a-fA-F]{8,}$"
+            }
+          }
+        },
+        {
+          "name": "SubnetIds",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string",
+              "maxLength": 255,
+              "minLength": 0,
+              "pattern": "^subnet-[0-9a-fA-F]{8,}$"
+            }
+          }
+        },
+        {
+          "name": "Status",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "WorkgroupStatus"
+          }
+        },
+        {
+          "name": "Endpoint",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Endpoint"
+          }
+        },
+        {
+          "name": "PubliclyAccessible",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "CreationDate",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 0
+          }
+        }
+      ]
+    },
+    "WorkgroupStatus": {
+      "type": "string",
+      "allowedValues": ["CREATING", "AVAILABLE", "MODIFYING", "DELETING"]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Definition of AWS::RedshiftServerless::Workgroup Resource Type",
+    "properties": [
+      {
+        "name": "WorkgroupName",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "maxLength": 64,
+          "minLength": 3,
+          "pattern": "^(?=^[a-z0-9-]+$).{3,64}$"
+        }
+      },
+      {
+        "name": "NamespaceName",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 64,
+          "minLength": 3,
+          "pattern": "^(?=^[a-z0-9-]+$).{3,64}$"
+        }
+      },
+      {
+        "name": "BaseCapacity",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "isInteger": true
+        }
+      },
+      {
+        "name": "EnhancedVpcRouting",
+        "optional": true,
+        "type": {
+          "type": "boolean"
+        }
+      },
+      {
+        "name": "ConfigParameters",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "ConfigParameter"
+          },
+          "minLength": 1
+        }
+      },
+      {
+        "name": "SecurityGroupIds",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 0,
+            "pattern": "^sg-[0-9a-fA-F]{8,}$"
+          },
+          "maxLength": 32,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "SubnetIds",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 0,
+            "pattern": "^subnet-[0-9a-fA-F]{8,}$"
+          },
+          "maxLength": 32,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "PubliclyAccessible",
+        "optional": true,
+        "type": {
+          "type": "boolean"
+        }
+      },
+      {
+        "name": "Port",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "isInteger": true
+        }
+      },
+      {
+        "name": "Tags",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          },
+          "maxLength": 200,
+          "minLength": 0
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Definition of AWS::RedshiftServerless::Workgroup Resource Type",
+    "properties": [
+      {
+        "name": "Workgroup",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "Workgroup"
+        }
+      }
+    ]
+  },
+  "$hash": "7d0edacdfcd98df163b08dfc3f03415f4afcb11f"
+}

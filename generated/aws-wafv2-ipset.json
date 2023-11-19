@@ -1,0 +1,148 @@
+{
+  "definitions": {
+    "EntityName": {
+      "type": "string",
+      "description": "Name of the IPSet.",
+      "pattern": "^[0-9A-Za-z_-]{1,128}$"
+    },
+    "EntityDescription": {
+      "type": "string",
+      "description": "Description of the entity.",
+      "pattern": "^[a-zA-Z0-9=:#@/\\-,.][a-zA-Z0-9+=:#@/\\-,.\\s]+[a-zA-Z0-9+=:#@/\\-,.]{1,256}$"
+    },
+    "EntityId": {
+      "type": "string",
+      "description": "Id of the IPSet",
+      "pattern": "^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$"
+    },
+    "Scope": {
+      "type": "string",
+      "description": "Use CLOUDFRONT for CloudFront IPSet, use REGIONAL for Application Load Balancer and API Gateway.",
+      "allowedValues": ["CLOUDFRONT", "REGIONAL"]
+    },
+    "IPAddressVersion": {
+      "type": "string",
+      "description": "Type of addresses in the IPSet, use IPV4 for IPV4 IP addresses, IPV6 for IPV6 address.",
+      "allowedValues": ["IPV4", "IPV6"]
+    },
+    "IPAddress": {
+      "type": "string",
+      "description": "IP address",
+      "maxLength": 50,
+      "minLength": 1
+    },
+    "ResourceArn": {
+      "type": "string",
+      "description": "ARN of the WAF entity."
+    },
+    "Tag": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 0
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Contains a list of IP addresses. This can be either IPV4 or IPV6. The list will be mutually",
+    "properties": [
+      {
+        "name": "Description",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "EntityDescription"
+        }
+      },
+      {
+        "name": "Name",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "EntityName"
+        }
+      },
+      {
+        "name": "Scope",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "Scope"
+        }
+      },
+      {
+        "name": "IPAddressVersion",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "IPAddressVersion"
+        }
+      },
+      {
+        "name": "Addresses",
+        "description": "List of IPAddresses.",
+        "optional": false,
+        "type": {
+          "type": "array",
+          "description": "List of IPAddresses.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "IPAddress"
+          }
+        }
+      },
+      {
+        "name": "Tags",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          },
+          "minLength": 1
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Contains a list of IP addresses. This can be either IPV4 or IPV6. The list will be mutually",
+    "properties": [
+      {
+        "name": "Arn",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "ResourceArn"
+        }
+      },
+      {
+        "name": "Id",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "EntityId"
+        }
+      }
+    ]
+  },
+  "$hash": "c3e8995ddfb42c1c2df7f3d483c3b8fcc993527b"
+}

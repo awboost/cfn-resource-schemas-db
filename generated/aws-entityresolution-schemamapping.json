@@ -1,0 +1,234 @@
+{
+  "definitions": {
+    "EntityName": {
+      "type": "string",
+      "maxLength": 255,
+      "minLength": 0,
+      "pattern": "^[a-zA-Z_0-9-]*$"
+    },
+    "Description": {
+      "type": "string",
+      "maxLength": 255,
+      "minLength": 0
+    },
+    "AttributeName": {
+      "type": "string",
+      "maxLength": 255,
+      "minLength": 0,
+      "pattern": "^[a-zA-Z_0-9- \\t]*$"
+    },
+    "SchemaAttributeType": {
+      "type": "string",
+      "allowedValues": [
+        "NAME",
+        "NAME_FIRST",
+        "NAME_MIDDLE",
+        "NAME_LAST",
+        "ADDRESS",
+        "ADDRESS_STREET1",
+        "ADDRESS_STREET2",
+        "ADDRESS_STREET3",
+        "ADDRESS_CITY",
+        "ADDRESS_STATE",
+        "ADDRESS_COUNTRY",
+        "ADDRESS_POSTALCODE",
+        "PHONE",
+        "PHONE_NUMBER",
+        "PHONE_COUNTRYCODE",
+        "EMAIL_ADDRESS",
+        "UNIQUE_ID",
+        "DATE",
+        "STRING",
+        "PROVIDER_ID"
+      ]
+    },
+    "MappedInputFields": {
+      "type": "array",
+      "itemType": {
+        "type": "ref",
+        "typeName": "SchemaInputAttribute"
+      },
+      "maxLength": 25,
+      "minLength": 2
+    },
+    "SchemaInputAttribute": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "FieldName",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "AttributeName"
+          }
+        },
+        {
+          "name": "Type",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "SchemaAttributeType"
+          }
+        },
+        {
+          "name": "SubType",
+          "description": "The subtype of the Attribute. Would be required only when type is PROVIDER_ID",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The subtype of the Attribute. Would be required only when type is PROVIDER_ID"
+          }
+        },
+        {
+          "name": "GroupName",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "AttributeName"
+          }
+        },
+        {
+          "name": "MatchKey",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "AttributeName"
+          }
+        }
+      ]
+    },
+    "SchemaMappingArn": {
+      "type": "string",
+      "description": "The SchemaMapping arn associated with the Schema",
+      "pattern": "^arn:(aws|aws-us-gov|aws-cn):entityresolution:.*:[0-9]+:(schemamapping/.*)$"
+    },
+    "CreatedAt": {
+      "type": "string",
+      "description": "The time of this SchemaMapping got created"
+    },
+    "UpdatedAt": {
+      "type": "string",
+      "description": "The time of this SchemaMapping got last updated at"
+    },
+    "HasWorkflows": {
+      "type": "boolean",
+      "description": "The boolean value that indicates whether or not a SchemaMapping has MatchingWorkflows that are associated with"
+    },
+    "Tag": {
+      "type": "object",
+      "description": "A key-value pair to associate with a resource",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+            "maxLength": 256,
+            "minLength": 0
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "SchemaMapping defined in AWS Entity Resolution service",
+    "properties": [
+      {
+        "name": "SchemaName",
+        "description": "The name of the SchemaMapping",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "description": "The name of the SchemaMapping",
+          "typeName": "EntityName"
+        }
+      },
+      {
+        "name": "Description",
+        "description": "The description of the SchemaMapping",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "The description of the SchemaMapping",
+          "typeName": "Description"
+        }
+      },
+      {
+        "name": "MappedInputFields",
+        "description": "The SchemaMapping attributes input",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "description": "The SchemaMapping attributes input",
+          "typeName": "MappedInputFields"
+        }
+      },
+      {
+        "name": "Tags",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          },
+          "maxLength": 200,
+          "minLength": 0
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "SchemaMapping defined in AWS Entity Resolution service",
+    "properties": [
+      {
+        "name": "SchemaArn",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "SchemaMappingArn"
+        }
+      },
+      {
+        "name": "CreatedAt",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "CreatedAt"
+        }
+      },
+      {
+        "name": "UpdatedAt",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "UpdatedAt"
+        }
+      },
+      {
+        "name": "HasWorkflows",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "HasWorkflows"
+        }
+      }
+    ]
+  },
+  "$hash": "0a678950ad6b6c51990be6cc7b67d4005ca6337d"
+}

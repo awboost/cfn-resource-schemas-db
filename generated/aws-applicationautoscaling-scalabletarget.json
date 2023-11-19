@@ -1,0 +1,203 @@
+{
+  "definitions": {
+    "SuspendedState": {
+      "type": "object",
+      "description": "specifies whether the scaling activities for a scalable target are in a suspended state",
+      "properties": [
+        {
+          "name": "ScheduledScalingSuspended",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "DynamicScalingOutSuspended",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "DynamicScalingInSuspended",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        }
+      ]
+    },
+    "ScheduledAction": {
+      "type": "object",
+      "description": "specifies a scheduled action for a scalable target",
+      "properties": [
+        {
+          "name": "Timezone",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "ScheduledActionName",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "EndTime",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Schedule",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "StartTime",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "ScalableTargetAction",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ScalableTargetAction"
+          }
+        }
+      ]
+    },
+    "ScalableTargetAction": {
+      "type": "object",
+      "description": "specifies the minimum and maximum capacity",
+      "properties": [
+        {
+          "name": "MinCapacity",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "MaxCapacity",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource Type definition for AWS::ApplicationAutoScaling::ScalableTarget",
+    "properties": [
+      {
+        "name": "MaxCapacity",
+        "description": "The maximum value that you plan to scale in to. When a scaling policy is in effect, Application Auto Scaling can scale in (contract) as needed to the minimum capacity limit in response to changing demand",
+        "optional": false,
+        "type": {
+          "type": "number",
+          "description": "The maximum value that you plan to scale in to. When a scaling policy is in effect, Application Auto Scaling can scale in (contract) as needed to the minimum capacity limit in response to changing demand",
+          "isInteger": true
+        }
+      },
+      {
+        "name": "MinCapacity",
+        "description": "The minimum value that you plan to scale in to. When a scaling policy is in effect, Application Auto Scaling can scale in (contract) as needed to the minimum capacity limit in response to changing demand",
+        "optional": false,
+        "type": {
+          "type": "number",
+          "description": "The minimum value that you plan to scale in to. When a scaling policy is in effect, Application Auto Scaling can scale in (contract) as needed to the minimum capacity limit in response to changing demand",
+          "isInteger": true
+        }
+      },
+      {
+        "name": "ResourceId",
+        "description": "The identifier of the resource associated with the scalable target",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The identifier of the resource associated with the scalable target"
+        }
+      },
+      {
+        "name": "RoleARN",
+        "description": "Specify the Amazon Resource Name (ARN) of an Identity and Access Management (IAM) role that allows Application Auto Scaling to modify the scalable target on your behalf. ",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Specify the Amazon Resource Name (ARN) of an Identity and Access Management (IAM) role that allows Application Auto Scaling to modify the scalable target on your behalf. "
+        }
+      },
+      {
+        "name": "ScalableDimension",
+        "description": "The scalable dimension associated with the scalable target. This string consists of the service namespace, resource type, and scaling property",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The scalable dimension associated with the scalable target. This string consists of the service namespace, resource type, and scaling property"
+        }
+      },
+      {
+        "name": "ScheduledActions",
+        "description": "The scheduled actions for the scalable target. Duplicates aren't allowed.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "The scheduled actions for the scalable target. Duplicates aren't allowed.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "ScheduledAction"
+          }
+        }
+      },
+      {
+        "name": "ServiceNamespace",
+        "description": "The namespace of the AWS service that provides the resource, or a custom-resource",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The namespace of the AWS service that provides the resource, or a custom-resource"
+        }
+      },
+      {
+        "name": "SuspendedState",
+        "description": "An embedded object that contains attributes and attribute values that are used to suspend and resume automatic scaling. Setting the value of an attribute to true suspends the specified scaling activities. Setting it to false (default) resumes the specified scaling activities.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "An embedded object that contains attributes and attribute values that are used to suspend and resume automatic scaling. Setting the value of an attribute to true suspends the specified scaling activities. Setting it to false (default) resumes the specified scaling activities.",
+          "typeName": "SuspendedState"
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Resource Type definition for AWS::ApplicationAutoScaling::ScalableTarget",
+    "properties": [
+      {
+        "name": "Id",
+        "description": "This value can be returned by using the Ref function. Ref returns the Cloudformation generated ID of the resource in format - ResourceId|ScalableDimension|ServiceNamespace",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "This value can be returned by using the Ref function. Ref returns the Cloudformation generated ID of the resource in format - ResourceId|ScalableDimension|ServiceNamespace"
+        }
+      }
+    ]
+  },
+  "$hash": "2c06e17bcfc52d7540da6ab97cf0260f0e72f364"
+}

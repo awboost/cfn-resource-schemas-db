@@ -1,0 +1,177 @@
+{
+  "definitions": {
+    "AzureBlobSasConfiguration": {
+      "type": "object",
+      "description": "Specifies the shared access signature (SAS) that DataSync uses to access your Azure Blob Storage container.",
+      "properties": [
+        {
+          "name": "AzureBlobSasToken",
+          "description": "Specifies the shared access signature (SAS) token, which indicates the permissions DataSync needs to access your Azure Blob Storage container.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Specifies the shared access signature (SAS) token, which indicates the permissions DataSync needs to access your Azure Blob Storage container.",
+            "maxLength": 255,
+            "minLength": 1,
+            "pattern": "(^.+$)"
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "description": "A key-value pair to associate with a resource.",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "The key for an AWS resource tag.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The key for an AWS resource tag.",
+            "maxLength": 256,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9\\s+=._:/-]+$"
+          }
+        },
+        {
+          "name": "Value",
+          "description": "The value for an AWS resource tag.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The value for an AWS resource tag.",
+            "maxLength": 256,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9\\s+=._:@/-]+$"
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource schema for AWS::DataSync::LocationAzureBlob.",
+    "properties": [
+      {
+        "name": "AgentArns",
+        "description": "The Amazon Resource Names (ARNs) of agents to use for an Azure Blob Location.",
+        "optional": false,
+        "type": {
+          "type": "array",
+          "description": "The Amazon Resource Names (ARNs) of agents to use for an Azure Blob Location.",
+          "itemType": {
+            "type": "string",
+            "maxLength": 128,
+            "pattern": "^arn:(aws|aws-cn|aws-us-gov|aws-iso|aws-iso-b):datasync:[a-z\\-0-9]+:[0-9]{12}:agent/agent-[0-9a-z]{17}$"
+          },
+          "maxLength": 4,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "AzureBlobAuthenticationType",
+        "description": "The specific authentication type that you want DataSync to use to access your Azure Blob Container.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The specific authentication type that you want DataSync to use to access your Azure Blob Container.",
+          "allowedValues": ["SAS"]
+        }
+      },
+      {
+        "name": "AzureBlobSasConfiguration",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "AzureBlobSasConfiguration"
+        }
+      },
+      {
+        "name": "AzureBlobContainerUrl",
+        "description": "The URL of the Azure Blob container that was described.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The URL of the Azure Blob container that was described.",
+          "maxLength": 325,
+          "pattern": "^https://[A-Za-z0-9]((.|-+)?[A-Za-z0-9]){0,252}/[a-z0-9](-?[a-z0-9]){2,62}$"
+        }
+      },
+      {
+        "name": "AzureBlobType",
+        "description": "Specifies a blob type for the objects you're transferring into your Azure Blob Storage container.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Specifies a blob type for the objects you're transferring into your Azure Blob Storage container.",
+          "allowedValues": ["BLOCK"]
+        }
+      },
+      {
+        "name": "AzureAccessTier",
+        "description": "Specifies an access tier for the objects you're transferring into your Azure Blob Storage container.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Specifies an access tier for the objects you're transferring into your Azure Blob Storage container.",
+          "allowedValues": ["HOT", "COOL", "ARCHIVE"]
+        }
+      },
+      {
+        "name": "Subdirectory",
+        "description": "The subdirectory in the Azure Blob Container that is used to read data from the Azure Blob Source Location.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The subdirectory in the Azure Blob Container that is used to read data from the Azure Blob Source Location.",
+          "maxLength": 1024,
+          "pattern": "^[\\p{L}\\p{M}\\p{Z}\\p{S}\\p{N}\\p{P}\\p{C}]*$"
+        }
+      },
+      {
+        "name": "Tags",
+        "description": "An array of key-value pairs to apply to this resource.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "An array of key-value pairs to apply to this resource.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          },
+          "maxLength": 50
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Resource schema for AWS::DataSync::LocationAzureBlob.",
+    "properties": [
+      {
+        "name": "LocationArn",
+        "description": "The Amazon Resource Name (ARN) of the Azure Blob Location that is created.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) of the Azure Blob Location that is created.",
+          "maxLength": 128,
+          "pattern": "^arn:(aws|aws-cn|aws-us-gov|aws-iso|aws-iso-b):datasync:[a-z\\-0-9]+:[0-9]{12}:location/loc-[0-9a-z]{17}$"
+        }
+      },
+      {
+        "name": "LocationUri",
+        "description": "The URL of the Azure Blob Location that was described.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The URL of the Azure Blob Location that was described.",
+          "maxLength": 4356,
+          "pattern": "^(azure-blob)://[a-zA-Z0-9./\\-]+$"
+        }
+      }
+    ]
+  },
+  "$hash": "22c64baab402054b323d813653a3d767c0b96e48"
+}

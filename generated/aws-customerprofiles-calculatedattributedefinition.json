@@ -1,0 +1,341 @@
+{
+  "definitions": {
+    "DomainName": {
+      "type": "string",
+      "description": "The unique name of the domain.",
+      "maxLength": 64,
+      "minLength": 1,
+      "pattern": "^[a-zA-Z0-9_-]+$"
+    },
+    "CalculatedAttributeName": {
+      "type": "string",
+      "description": "The unique name of the calculated attribute.",
+      "maxLength": 255,
+      "minLength": 1,
+      "pattern": "^[a-zA-Z_][a-zA-Z_0-9-]*$"
+    },
+    "DisplayName": {
+      "type": "string",
+      "description": "The display name of the calculated attribute.",
+      "maxLength": 255,
+      "minLength": 1,
+      "pattern": "^[a-zA-Z_][a-zA-Z_0-9-\\s]*$"
+    },
+    "Description": {
+      "type": "string",
+      "description": "The description of the calculated attribute.",
+      "maxLength": 1000,
+      "minLength": 1
+    },
+    "AttributeName": {
+      "type": "string",
+      "description": "The name of an attribute defined in a profile object type.",
+      "maxLength": 64,
+      "minLength": 1,
+      "pattern": "^[a-zA-Z0-9_.-]+$"
+    },
+    "AttributeItem": {
+      "type": "object",
+      "description": "The details of a single attribute item specified in the mathematical expression.",
+      "properties": [
+        {
+          "name": "Name",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "AttributeName"
+          }
+        }
+      ]
+    },
+    "AttributeList": {
+      "type": "array",
+      "description": "A list of attribute items specified in the mathematical expression.",
+      "itemType": {
+        "type": "ref",
+        "typeName": "AttributeItem"
+      },
+      "maxLength": 2,
+      "minLength": 1
+    },
+    "Expression": {
+      "type": "string",
+      "description": "Mathematical expression that is performed on attribute items provided in the attribute list. Each element in the expression should follow the structure of \"{ObjectTypeName.AttributeName}\".",
+      "maxLength": 255,
+      "minLength": 1
+    },
+    "AttributeDetails": {
+      "type": "object",
+      "description": "Mathematical expression and a list of attribute items specified in that expression.",
+      "properties": [
+        {
+          "name": "Attributes",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "AttributeList"
+          }
+        },
+        {
+          "name": "Expression",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "Expression"
+          }
+        }
+      ]
+    },
+    "RangeUnit": {
+      "type": "string",
+      "description": "The unit of time.",
+      "allowedValues": ["DAYS"]
+    },
+    "RangeValue": {
+      "type": "number",
+      "description": "The amount of time of the specified unit.",
+      "isInteger": true,
+      "maximum": 366,
+      "minimum": 1
+    },
+    "Range": {
+      "type": "object",
+      "description": "The relative time period over which data is included in the aggregation.",
+      "properties": [
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "RangeValue"
+          }
+        },
+        {
+          "name": "Unit",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "RangeUnit"
+          }
+        }
+      ]
+    },
+    "ObjectCount": {
+      "type": "number",
+      "description": "The number of profile objects used for the calculated attribute.",
+      "isInteger": true,
+      "maximum": 100,
+      "minimum": 1
+    },
+    "ThresholdValue": {
+      "type": "string",
+      "description": "The value of the threshold.",
+      "maxLength": 255,
+      "minLength": 1
+    },
+    "ThresholdOperator": {
+      "type": "string",
+      "description": "The operator of the threshold.",
+      "allowedValues": ["EQUAL_TO", "GREATER_THAN", "LESS_THAN", "NOT_EQUAL_TO"]
+    },
+    "Threshold": {
+      "type": "object",
+      "description": "The threshold for the calculated attribute.",
+      "properties": [
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "ThresholdValue"
+          }
+        },
+        {
+          "name": "Operator",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "ThresholdOperator"
+          }
+        }
+      ]
+    },
+    "Conditions": {
+      "type": "object",
+      "description": "The conditions including range, object count, and threshold for the calculated attribute.",
+      "properties": [
+        {
+          "name": "Range",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Range"
+          }
+        },
+        {
+          "name": "ObjectCount",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ObjectCount"
+          }
+        },
+        {
+          "name": "Threshold",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Threshold"
+          }
+        }
+      ]
+    },
+    "Statistic": {
+      "type": "string",
+      "description": "The aggregation operation to perform for the calculated attribute.",
+      "allowedValues": [
+        "FIRST_OCCURRENCE",
+        "LAST_OCCURRENCE",
+        "COUNT",
+        "SUM",
+        "MINIMUM",
+        "MAXIMUM",
+        "AVERAGE",
+        "MAX_OCCURRENCE"
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "description": "A key-value pair to associate with a resource.",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+            "maxLength": 256,
+            "minLength": 0
+          }
+        }
+      ]
+    },
+    "Tags": {
+      "type": "array",
+      "description": "An array of key-value pairs to apply to this resource.",
+      "itemType": {
+        "type": "ref",
+        "typeName": "Tag"
+      },
+      "maxLength": 50,
+      "minLength": 0
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "A calculated attribute definition for Customer Profiles",
+    "properties": [
+      {
+        "name": "DomainName",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "DomainName"
+        }
+      },
+      {
+        "name": "CalculatedAttributeName",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "CalculatedAttributeName"
+        }
+      },
+      {
+        "name": "DisplayName",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "DisplayName"
+        }
+      },
+      {
+        "name": "Description",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "Description"
+        }
+      },
+      {
+        "name": "AttributeDetails",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "AttributeDetails"
+        }
+      },
+      {
+        "name": "Conditions",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "Conditions"
+        }
+      },
+      {
+        "name": "Statistic",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "Statistic"
+        }
+      },
+      {
+        "name": "Tags",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "Tags"
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "A calculated attribute definition for Customer Profiles",
+    "properties": [
+      {
+        "name": "CreatedAt",
+        "description": "The timestamp of when the calculated attribute definition was created.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The timestamp of when the calculated attribute definition was created."
+        }
+      },
+      {
+        "name": "LastUpdatedAt",
+        "description": "The timestamp of when the calculated attribute definition was most recently edited.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The timestamp of when the calculated attribute definition was most recently edited."
+        }
+      }
+    ]
+  },
+  "$hash": "2f88585f459929c846fedf18e7941291bd859160"
+}

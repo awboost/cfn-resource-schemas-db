@@ -1,0 +1,2322 @@
+{
+  "definitions": {
+    "AssignPublicIp": {
+      "type": "string",
+      "allowedValues": ["ENABLED", "DISABLED"]
+    },
+    "AwsVpcConfiguration": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Subnets",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string",
+              "maxLength": 1024,
+              "minLength": 1,
+              "pattern": "^subnet-[0-9a-z]*|(\\$(\\.[\\w/_-]+(\\[(\\d+|\\*)\\])*)*)$"
+            },
+            "maxLength": 16,
+            "minLength": 0
+          }
+        },
+        {
+          "name": "SecurityGroups",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string",
+              "maxLength": 1024,
+              "minLength": 1,
+              "pattern": "^sg-[0-9a-zA-Z]*|(\\$(\\.[\\w/_-]+(\\[(\\d+|\\*)\\])*)*)$"
+            },
+            "maxLength": 5,
+            "minLength": 0
+          }
+        },
+        {
+          "name": "AssignPublicIp",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "AssignPublicIp"
+          }
+        }
+      ]
+    },
+    "BatchArrayProperties": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Size",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 10000,
+            "minimum": 2
+          }
+        }
+      ]
+    },
+    "BatchContainerOverrides": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Command",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "name": "Environment",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "BatchEnvironmentVariable"
+            }
+          }
+        },
+        {
+          "name": "InstanceType",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "ResourceRequirements",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "BatchResourceRequirement"
+            }
+          }
+        }
+      ]
+    },
+    "BatchEnvironmentVariable": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Name",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "BatchJobDependency": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "JobId",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Type",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "BatchJobDependencyType"
+          }
+        }
+      ]
+    },
+    "BatchJobDependencyType": {
+      "type": "string",
+      "allowedValues": ["N_TO_N", "SEQUENTIAL"]
+    },
+    "BatchParametersMap": {
+      "type": "record",
+      "valueType": {
+        "type": "string"
+      }
+    },
+    "BatchResourceRequirement": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Type",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "BatchResourceRequirementType"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "BatchResourceRequirementType": {
+      "type": "string",
+      "allowedValues": ["GPU", "MEMORY", "VCPU"]
+    },
+    "BatchRetryStrategy": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Attempts",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 10,
+            "minimum": 1
+          }
+        }
+      ]
+    },
+    "CapacityProviderStrategyItem": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "CapacityProvider",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Weight",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 1000,
+            "minimum": 0
+          }
+        },
+        {
+          "name": "Base",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 100000,
+            "minimum": 0
+          }
+        }
+      ]
+    },
+    "CloudwatchLogsLogDestination": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "LogGroupArn",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 1600,
+            "minLength": 1,
+            "pattern": "^(^arn:aws([a-z]|\\-)*:logs:([a-z]{2}((-gov)|(-iso(b?)))?-[a-z]+-\\d{1}):(\\d{12}):log-group:.+)$"
+          }
+        }
+      ]
+    },
+    "DeadLetterConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Arn",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 1600,
+            "minLength": 1,
+            "pattern": "^arn:(aws[a-zA-Z0-9-]*):([a-zA-Z0-9\\-]+):([a-z]{2}((-gov)|(-iso(b?)))?-[a-z]+-\\d{1})?:(\\d{12})?:(.+)$"
+          }
+        }
+      ]
+    },
+    "DynamoDBStreamStartPosition": {
+      "type": "string",
+      "allowedValues": ["TRIM_HORIZON", "LATEST"]
+    },
+    "EcsContainerOverride": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Command",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "name": "Cpu",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "Environment",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "EcsEnvironmentVariable"
+            }
+          }
+        },
+        {
+          "name": "EnvironmentFiles",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "EcsEnvironmentFile"
+            }
+          }
+        },
+        {
+          "name": "Memory",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "MemoryReservation",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "Name",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "ResourceRequirements",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "EcsResourceRequirement"
+            }
+          }
+        }
+      ]
+    },
+    "EcsEnvironmentFile": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Type",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "EcsEnvironmentFileType"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "EcsEnvironmentFileType": {
+      "type": "string",
+      "allowedValues": ["s3"]
+    },
+    "EcsEnvironmentVariable": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Name",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "EcsEphemeralStorage": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "SizeInGiB",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 200,
+            "minimum": 21
+          }
+        }
+      ]
+    },
+    "EcsInferenceAcceleratorOverride": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "DeviceName",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "DeviceType",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "EcsResourceRequirement": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Type",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "EcsResourceRequirementType"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "EcsResourceRequirementType": {
+      "type": "string",
+      "allowedValues": ["GPU", "InferenceAccelerator"]
+    },
+    "EcsTaskOverride": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ContainerOverrides",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "EcsContainerOverride"
+            }
+          }
+        },
+        {
+          "name": "Cpu",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "EphemeralStorage",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "EcsEphemeralStorage"
+          }
+        },
+        {
+          "name": "ExecutionRoleArn",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 1600,
+            "minLength": 1,
+            "pattern": "^arn:(aws[a-zA-Z0-9-]*):([a-zA-Z0-9\\-]+):([a-z]{2}((-gov)|(-iso(b?)))?-[a-z]+-\\d{1})?:(\\d{12})?:(.+)|(\\$(\\.[\\w/_-]+(\\[(\\d+|\\*)\\])*)*)$"
+          }
+        },
+        {
+          "name": "InferenceAcceleratorOverrides",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "EcsInferenceAcceleratorOverride"
+            }
+          }
+        },
+        {
+          "name": "Memory",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "TaskRoleArn",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 1600,
+            "minLength": 1,
+            "pattern": "^arn:(aws[a-zA-Z0-9-]*):([a-zA-Z0-9\\-]+):([a-z]{2}((-gov)|(-iso(b?)))?-[a-z]+-\\d{1})?:(\\d{12})?:(.+)|(\\$(\\.[\\w/_-]+(\\[(\\d+|\\*)\\])*)*)$"
+          }
+        }
+      ]
+    },
+    "Filter": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Pattern",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 4096,
+            "minLength": 0
+          }
+        }
+      ]
+    },
+    "FilterCriteria": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Filters",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Filter"
+            },
+            "maxLength": 5,
+            "minLength": 0
+          }
+        }
+      ]
+    },
+    "FirehoseLogDestination": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "DeliveryStreamArn",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 1600,
+            "minLength": 1,
+            "pattern": "^(^arn:aws([a-z]|\\-)*:firehose:([a-z]{2}((-gov)|(-iso(b?)))?-[a-z]+-\\d{1}):(\\d{12}):deliverystream/.+)$"
+          }
+        }
+      ]
+    },
+    "HeaderParametersMap": {
+      "type": "record",
+      "valueType": {
+        "type": "string",
+        "maxLength": 512,
+        "minLength": 0,
+        "pattern": "^[ \\t]*[\\x20-\\x7E]+([ \\t]+[\\x20-\\x7E]+)*[ \\t]*|(\\$(\\.[\\w/_-]+(\\[(\\d+|\\*)\\])*)*)$"
+      }
+    },
+    "IncludeExecutionDataOption": {
+      "type": "string",
+      "allowedValues": ["ALL"]
+    },
+    "KinesisStreamStartPosition": {
+      "type": "string",
+      "allowedValues": ["TRIM_HORIZON", "LATEST", "AT_TIMESTAMP"]
+    },
+    "LaunchType": {
+      "type": "string",
+      "allowedValues": ["EC2", "FARGATE", "EXTERNAL"]
+    },
+    "LogLevel": {
+      "type": "string",
+      "allowedValues": ["OFF", "ERROR", "INFO", "TRACE"]
+    },
+    "MQBrokerAccessCredentials": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "BasicAuth",
+          "description": "Optional SecretManager ARN which stores the database credentials",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Optional SecretManager ARN which stores the database credentials",
+            "maxLength": 1600,
+            "minLength": 1,
+            "pattern": "^(^arn:aws([a-z]|\\-)*:secretsmanager:([a-z]{2}((-gov)|(-iso(b?)))?-[a-z]+-\\d{1}):(\\d{12}):secret:.+)$"
+          }
+        }
+      ]
+    },
+    "MSKAccessCredentials": {
+      "type": "union",
+      "types": [
+        {
+          "type": "object",
+          "properties": [
+            {
+              "name": "SaslScram512Auth",
+              "description": "Optional SecretManager ARN which stores the database credentials",
+              "optional": false,
+              "type": {
+                "type": "string",
+                "description": "Optional SecretManager ARN which stores the database credentials",
+                "maxLength": 1600,
+                "minLength": 1,
+                "pattern": "^(^arn:aws([a-z]|\\-)*:secretsmanager:([a-z]{2}((-gov)|(-iso(b?)))?-[a-z]+-\\d{1}):(\\d{12}):secret:.+)$"
+              }
+            }
+          ]
+        },
+        {
+          "type": "object",
+          "properties": [
+            {
+              "name": "ClientCertificateTlsAuth",
+              "description": "Optional SecretManager ARN which stores the database credentials",
+              "optional": false,
+              "type": {
+                "type": "string",
+                "description": "Optional SecretManager ARN which stores the database credentials",
+                "maxLength": 1600,
+                "minLength": 1,
+                "pattern": "^(^arn:aws([a-z]|\\-)*:secretsmanager:([a-z]{2}((-gov)|(-iso(b?)))?-[a-z]+-\\d{1}):(\\d{12}):secret:.+)$"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "MSKStartPosition": {
+      "type": "string",
+      "allowedValues": ["TRIM_HORIZON", "LATEST"]
+    },
+    "NetworkConfiguration": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "AwsvpcConfiguration",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "AwsVpcConfiguration"
+          }
+        }
+      ]
+    },
+    "OnPartialBatchItemFailureStreams": {
+      "type": "string",
+      "allowedValues": ["AUTOMATIC_BISECT"]
+    },
+    "PipeEnrichmentHttpParameters": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "PathParameterValues",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string",
+              "pattern": "^(?!\\s*$).+|(\\$(\\.[\\w/_-]+(\\[(\\d+|\\*)\\])*)*)$"
+            }
+          }
+        },
+        {
+          "name": "HeaderParameters",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "HeaderParametersMap"
+          }
+        },
+        {
+          "name": "QueryStringParameters",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "QueryStringParametersMap"
+          }
+        }
+      ]
+    },
+    "PipeEnrichmentParameters": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "InputTemplate",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 8192,
+            "minLength": 0
+          }
+        },
+        {
+          "name": "HttpParameters",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PipeEnrichmentHttpParameters"
+          }
+        }
+      ]
+    },
+    "PipeLogConfiguration": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "S3LogDestination",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "S3LogDestination"
+          }
+        },
+        {
+          "name": "FirehoseLogDestination",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "FirehoseLogDestination"
+          }
+        },
+        {
+          "name": "CloudwatchLogsLogDestination",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "CloudwatchLogsLogDestination"
+          }
+        },
+        {
+          "name": "Level",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "LogLevel"
+          }
+        },
+        {
+          "name": "IncludeExecutionData",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "IncludeExecutionDataOption"
+            }
+          }
+        }
+      ]
+    },
+    "PipeSourceActiveMQBrokerParameters": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Credentials",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "MQBrokerAccessCredentials"
+          }
+        },
+        {
+          "name": "QueueName",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 1000,
+            "minLength": 1,
+            "pattern": "^[\\s\\S]*$"
+          }
+        },
+        {
+          "name": "BatchSize",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 10000,
+            "minimum": 1
+          }
+        },
+        {
+          "name": "MaximumBatchingWindowInSeconds",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 300,
+            "minimum": 0
+          }
+        }
+      ]
+    },
+    "PipeSourceDynamoDBStreamParameters": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "BatchSize",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 10000,
+            "minimum": 1
+          }
+        },
+        {
+          "name": "DeadLetterConfig",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DeadLetterConfig"
+          }
+        },
+        {
+          "name": "OnPartialBatchItemFailure",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "OnPartialBatchItemFailureStreams"
+          }
+        },
+        {
+          "name": "MaximumBatchingWindowInSeconds",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 300,
+            "minimum": 0
+          }
+        },
+        {
+          "name": "MaximumRecordAgeInSeconds",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 604800,
+            "minimum": -1
+          }
+        },
+        {
+          "name": "MaximumRetryAttempts",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 10000,
+            "minimum": -1
+          }
+        },
+        {
+          "name": "ParallelizationFactor",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 10,
+            "minimum": 1
+          }
+        },
+        {
+          "name": "StartingPosition",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "DynamoDBStreamStartPosition"
+          }
+        }
+      ]
+    },
+    "PipeSourceKinesisStreamParameters": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "BatchSize",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 10000,
+            "minimum": 1
+          }
+        },
+        {
+          "name": "DeadLetterConfig",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DeadLetterConfig"
+          }
+        },
+        {
+          "name": "OnPartialBatchItemFailure",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "OnPartialBatchItemFailureStreams"
+          }
+        },
+        {
+          "name": "MaximumBatchingWindowInSeconds",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 300,
+            "minimum": 0
+          }
+        },
+        {
+          "name": "MaximumRecordAgeInSeconds",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 604800,
+            "minimum": -1
+          }
+        },
+        {
+          "name": "MaximumRetryAttempts",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 10000,
+            "minimum": -1
+          }
+        },
+        {
+          "name": "ParallelizationFactor",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 10,
+            "minimum": 1
+          }
+        },
+        {
+          "name": "StartingPosition",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "KinesisStreamStartPosition"
+          }
+        },
+        {
+          "name": "StartingPositionTimestamp",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "PipeSourceManagedStreamingKafkaParameters": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "TopicName",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 249,
+            "minLength": 1,
+            "pattern": "^[^.]([a-zA-Z0-9\\-_.]+)$"
+          }
+        },
+        {
+          "name": "StartingPosition",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "MSKStartPosition"
+          }
+        },
+        {
+          "name": "BatchSize",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 10000,
+            "minimum": 1
+          }
+        },
+        {
+          "name": "MaximumBatchingWindowInSeconds",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 300,
+            "minimum": 0
+          }
+        },
+        {
+          "name": "ConsumerGroupID",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9-\\/*:_+=.@-]*$"
+          }
+        },
+        {
+          "name": "Credentials",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "MSKAccessCredentials"
+          }
+        }
+      ]
+    },
+    "PipeSourceParameters": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "FilterCriteria",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "FilterCriteria"
+          }
+        },
+        {
+          "name": "KinesisStreamParameters",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PipeSourceKinesisStreamParameters"
+          }
+        },
+        {
+          "name": "DynamoDBStreamParameters",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PipeSourceDynamoDBStreamParameters"
+          }
+        },
+        {
+          "name": "SqsQueueParameters",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PipeSourceSqsQueueParameters"
+          }
+        },
+        {
+          "name": "ActiveMQBrokerParameters",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PipeSourceActiveMQBrokerParameters"
+          }
+        },
+        {
+          "name": "RabbitMQBrokerParameters",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PipeSourceRabbitMQBrokerParameters"
+          }
+        },
+        {
+          "name": "ManagedStreamingKafkaParameters",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PipeSourceManagedStreamingKafkaParameters"
+          }
+        },
+        {
+          "name": "SelfManagedKafkaParameters",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PipeSourceSelfManagedKafkaParameters"
+          }
+        }
+      ]
+    },
+    "PipeSourceRabbitMQBrokerParameters": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Credentials",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "MQBrokerAccessCredentials"
+          }
+        },
+        {
+          "name": "QueueName",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 1000,
+            "minLength": 1,
+            "pattern": "^[\\s\\S]*$"
+          }
+        },
+        {
+          "name": "VirtualHost",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9-\\/*:_+=.@-]*$"
+          }
+        },
+        {
+          "name": "BatchSize",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 10000,
+            "minimum": 1
+          }
+        },
+        {
+          "name": "MaximumBatchingWindowInSeconds",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 300,
+            "minimum": 0
+          }
+        }
+      ]
+    },
+    "PipeSourceSelfManagedKafkaParameters": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "TopicName",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 249,
+            "minLength": 1,
+            "pattern": "^[^.]([a-zA-Z0-9\\-_.]+)$"
+          }
+        },
+        {
+          "name": "StartingPosition",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "SelfManagedKafkaStartPosition"
+          }
+        },
+        {
+          "name": "AdditionalBootstrapServers",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string",
+              "maxLength": 300,
+              "minLength": 1,
+              "pattern": "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9]):[0-9]{1,5}$"
+            },
+            "maxLength": 2,
+            "minLength": 0
+          }
+        },
+        {
+          "name": "BatchSize",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 10000,
+            "minimum": 1
+          }
+        },
+        {
+          "name": "MaximumBatchingWindowInSeconds",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 300,
+            "minimum": 0
+          }
+        },
+        {
+          "name": "ConsumerGroupID",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9-\\/*:_+=.@-]*$"
+          }
+        },
+        {
+          "name": "Credentials",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "SelfManagedKafkaAccessConfigurationCredentials"
+          }
+        },
+        {
+          "name": "ServerRootCaCertificate",
+          "description": "Optional SecretManager ARN which stores the database credentials",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Optional SecretManager ARN which stores the database credentials",
+            "maxLength": 1600,
+            "minLength": 1,
+            "pattern": "^(^arn:aws([a-z]|\\-)*:secretsmanager:([a-z]{2}((-gov)|(-iso(b?)))?-[a-z]+-\\d{1}):(\\d{12}):secret:.+)$"
+          }
+        },
+        {
+          "name": "Vpc",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "SelfManagedKafkaAccessConfigurationVpc"
+          }
+        }
+      ]
+    },
+    "PipeSourceSqsQueueParameters": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "BatchSize",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 10000,
+            "minimum": 1
+          }
+        },
+        {
+          "name": "MaximumBatchingWindowInSeconds",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 300,
+            "minimum": 0
+          }
+        }
+      ]
+    },
+    "PipeState": {
+      "type": "string",
+      "allowedValues": [
+        "RUNNING",
+        "STOPPED",
+        "CREATING",
+        "UPDATING",
+        "DELETING",
+        "STARTING",
+        "STOPPING",
+        "CREATE_FAILED",
+        "UPDATE_FAILED",
+        "START_FAILED",
+        "STOP_FAILED",
+        "DELETE_FAILED",
+        "CREATE_ROLLBACK_FAILED",
+        "DELETE_ROLLBACK_FAILED",
+        "UPDATE_ROLLBACK_FAILED"
+      ]
+    },
+    "PipeTargetBatchJobParameters": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "JobDefinition",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "JobName",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "ArrayProperties",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "BatchArrayProperties"
+          }
+        },
+        {
+          "name": "RetryStrategy",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "BatchRetryStrategy"
+          }
+        },
+        {
+          "name": "ContainerOverrides",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "BatchContainerOverrides"
+          }
+        },
+        {
+          "name": "DependsOn",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "BatchJobDependency"
+            },
+            "maxLength": 20,
+            "minLength": 0
+          }
+        },
+        {
+          "name": "Parameters",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "BatchParametersMap"
+          }
+        }
+      ]
+    },
+    "PipeTargetCloudWatchLogsParameters": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "LogStreamName",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Timestamp",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1,
+            "pattern": "^\\$(\\.[\\w_-]+(\\[(\\d+|\\*)\\])*)*$"
+          }
+        }
+      ]
+    },
+    "PipeTargetEcsTaskParameters": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "TaskDefinitionArn",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 1600,
+            "minLength": 1,
+            "pattern": "^arn:(aws[a-zA-Z0-9-]*):([a-zA-Z0-9\\-]+):([a-z]{2}((-gov)|(-iso(b?)))?-[a-z]+-\\d{1})?:(\\d{12})?:(.+)|(\\$(\\.[\\w/_-]+(\\[(\\d+|\\*)\\])*)*)$"
+          }
+        },
+        {
+          "name": "TaskCount",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "minimum": 1
+          }
+        },
+        {
+          "name": "LaunchType",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "LaunchType"
+          }
+        },
+        {
+          "name": "NetworkConfiguration",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "NetworkConfiguration"
+          }
+        },
+        {
+          "name": "PlatformVersion",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Group",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "CapacityProviderStrategy",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "CapacityProviderStrategyItem"
+            },
+            "maxLength": 6,
+            "minLength": 0
+          }
+        },
+        {
+          "name": "EnableECSManagedTags",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "EnableExecuteCommand",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "PlacementConstraints",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "PlacementConstraint"
+            },
+            "maxLength": 10,
+            "minLength": 0
+          }
+        },
+        {
+          "name": "PlacementStrategy",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "PlacementStrategy"
+            },
+            "maxLength": 5,
+            "minLength": 0
+          }
+        },
+        {
+          "name": "PropagateTags",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PropagateTags"
+          }
+        },
+        {
+          "name": "ReferenceId",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 1024,
+            "minLength": 0
+          }
+        },
+        {
+          "name": "Overrides",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "EcsTaskOverride"
+          }
+        },
+        {
+          "name": "Tags",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Tag"
+            }
+          }
+        }
+      ]
+    },
+    "PipeTargetEventBridgeEventBusParameters": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "EndpointId",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9\\-]+[\\.][A-Za-z0-9\\-]+$"
+          }
+        },
+        {
+          "name": "DetailType",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Source",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1,
+            "pattern": "(?=[/\\.\\-_A-Za-z0-9]+)((?!aws\\.).*)|(\\$(\\.[\\w/_-]+(\\[(\\d+|\\*)\\])*)*)"
+          }
+        },
+        {
+          "name": "Resources",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string",
+              "maxLength": 1600,
+              "minLength": 1,
+              "pattern": "^arn:(aws[a-zA-Z0-9-]*):([a-zA-Z0-9\\-]+):([a-z]{2}((-gov)|(-iso(b?)))?-[a-z]+-\\d{1})?:(\\d{12})?:(.+)|(\\$(\\.[\\w/_-]+(\\[(\\d+|\\*)\\])*)*)$"
+            },
+            "maxLength": 10,
+            "minLength": 0
+          }
+        },
+        {
+          "name": "Time",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1,
+            "pattern": "^\\$(\\.[\\w/_-]+(\\[(\\d+|\\*)\\])*)*$"
+          }
+        }
+      ]
+    },
+    "PipeTargetHttpParameters": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "PathParameterValues",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string",
+              "pattern": "^(?!\\s*$).+|(\\$(\\.[\\w/_-]+(\\[(\\d+|\\*)\\])*)*)$"
+            }
+          }
+        },
+        {
+          "name": "HeaderParameters",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "HeaderParametersMap"
+          }
+        },
+        {
+          "name": "QueryStringParameters",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "QueryStringParametersMap"
+          }
+        }
+      ]
+    },
+    "PipeTargetInvocationType": {
+      "type": "string",
+      "allowedValues": ["REQUEST_RESPONSE", "FIRE_AND_FORGET"]
+    },
+    "PipeTargetKinesisStreamParameters": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "PartitionKey",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 0
+          }
+        }
+      ]
+    },
+    "PipeTargetLambdaFunctionParameters": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "InvocationType",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PipeTargetInvocationType"
+          }
+        }
+      ]
+    },
+    "PipeTargetParameters": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "InputTemplate",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 8192,
+            "minLength": 0
+          }
+        },
+        {
+          "name": "LambdaFunctionParameters",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PipeTargetLambdaFunctionParameters"
+          }
+        },
+        {
+          "name": "StepFunctionStateMachineParameters",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PipeTargetStateMachineParameters"
+          }
+        },
+        {
+          "name": "KinesisStreamParameters",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PipeTargetKinesisStreamParameters"
+          }
+        },
+        {
+          "name": "EcsTaskParameters",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PipeTargetEcsTaskParameters"
+          }
+        },
+        {
+          "name": "BatchJobParameters",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PipeTargetBatchJobParameters"
+          }
+        },
+        {
+          "name": "SqsQueueParameters",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PipeTargetSqsQueueParameters"
+          }
+        },
+        {
+          "name": "HttpParameters",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PipeTargetHttpParameters"
+          }
+        },
+        {
+          "name": "RedshiftDataParameters",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PipeTargetRedshiftDataParameters"
+          }
+        },
+        {
+          "name": "SageMakerPipelineParameters",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PipeTargetSageMakerPipelineParameters"
+          }
+        },
+        {
+          "name": "EventBridgeEventBusParameters",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PipeTargetEventBridgeEventBusParameters"
+          }
+        },
+        {
+          "name": "CloudWatchLogsParameters",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PipeTargetCloudWatchLogsParameters"
+          }
+        }
+      ]
+    },
+    "PipeTargetRedshiftDataParameters": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "SecretManagerArn",
+          "description": "Optional SecretManager ARN which stores the database credentials",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Optional SecretManager ARN which stores the database credentials",
+            "maxLength": 1600,
+            "minLength": 1,
+            "pattern": "^(^arn:aws([a-z]|\\-)*:secretsmanager:([a-z]{2}((-gov)|(-iso(b?)))?-[a-z]+-\\d{1}):(\\d{12}):secret:.+)|(\\$(\\.[\\w/_-]+(\\[(\\d+|\\*)\\])*)*)$"
+          }
+        },
+        {
+          "name": "Database",
+          "description": "Redshift Database",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Redshift Database",
+            "maxLength": 64,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "DbUser",
+          "description": "Database user name",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Database user name",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "StatementName",
+          "description": "A name for Redshift DataAPI statement which can be used as filter of ListStatement.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "A name for Redshift DataAPI statement which can be used as filter of ListStatement.",
+            "maxLength": 500,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "WithEvent",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "Sqls",
+          "description": "A list of SQLs.",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "description": "A list of SQLs.",
+            "itemType": {
+              "type": "string",
+              "description": "A single Redshift SQL",
+              "maxLength": 100000,
+              "minLength": 1
+            },
+            "maxLength": 40,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "PipeTargetSageMakerPipelineParameters": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "PipelineParameterList",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "SageMakerPipelineParameter"
+            },
+            "maxLength": 200,
+            "minLength": 0
+          }
+        }
+      ]
+    },
+    "PipeTargetSqsQueueParameters": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "MessageGroupId",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          }
+        },
+        {
+          "name": "MessageDeduplicationId",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 0
+          }
+        }
+      ]
+    },
+    "PipeTargetStateMachineParameters": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "InvocationType",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PipeTargetInvocationType"
+          }
+        }
+      ]
+    },
+    "PlacementConstraint": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Type",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PlacementConstraintType"
+          }
+        },
+        {
+          "name": "Expression",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 0
+          }
+        }
+      ]
+    },
+    "PlacementConstraintType": {
+      "type": "string",
+      "allowedValues": ["distinctInstance", "memberOf"]
+    },
+    "PlacementStrategy": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Type",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PlacementStrategyType"
+          }
+        },
+        {
+          "name": "Field",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 0
+          }
+        }
+      ]
+    },
+    "PlacementStrategyType": {
+      "type": "string",
+      "allowedValues": ["random", "spread", "binpack"]
+    },
+    "PropagateTags": {
+      "type": "string",
+      "allowedValues": ["TASK_DEFINITION"]
+    },
+    "QueryStringParametersMap": {
+      "type": "record",
+      "valueType": {
+        "type": "string",
+        "maxLength": 512,
+        "minLength": 0,
+        "pattern": "^[^\\x00-\\x09\\x0B\\x0C\\x0E-\\x1F\\x7F]+|(\\$(\\.[\\w/_-]+(\\[(\\d+|\\*)\\])*)*)$"
+      }
+    },
+    "RequestedPipeState": {
+      "type": "string",
+      "allowedValues": ["RUNNING", "STOPPED"]
+    },
+    "S3LogDestination": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "BucketName",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Prefix",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "BucketOwner",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "OutputFormat",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "S3OutputFormat"
+          }
+        }
+      ]
+    },
+    "S3OutputFormat": {
+      "type": "string",
+      "allowedValues": ["json", "plain", "w3c"]
+    },
+    "SageMakerPipelineParameter": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Name",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9])*|(\\$(\\.[\\w/_-]+(\\[(\\d+|\\*)\\])*)*)$"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 1024,
+            "minLength": 0
+          }
+        }
+      ]
+    },
+    "SelfManagedKafkaAccessConfigurationCredentials": {
+      "type": "union",
+      "types": [
+        {
+          "type": "object",
+          "properties": [
+            {
+              "name": "BasicAuth",
+              "description": "Optional SecretManager ARN which stores the database credentials",
+              "optional": false,
+              "type": {
+                "type": "string",
+                "description": "Optional SecretManager ARN which stores the database credentials",
+                "maxLength": 1600,
+                "minLength": 1,
+                "pattern": "^(^arn:aws([a-z]|\\-)*:secretsmanager:([a-z]{2}((-gov)|(-iso(b?)))?-[a-z]+-\\d{1}):(\\d{12}):secret:.+)$"
+              }
+            }
+          ]
+        },
+        {
+          "type": "object",
+          "properties": [
+            {
+              "name": "SaslScram512Auth",
+              "description": "Optional SecretManager ARN which stores the database credentials",
+              "optional": false,
+              "type": {
+                "type": "string",
+                "description": "Optional SecretManager ARN which stores the database credentials",
+                "maxLength": 1600,
+                "minLength": 1,
+                "pattern": "^(^arn:aws([a-z]|\\-)*:secretsmanager:([a-z]{2}((-gov)|(-iso(b?)))?-[a-z]+-\\d{1}):(\\d{12}):secret:.+)$"
+              }
+            }
+          ]
+        },
+        {
+          "type": "object",
+          "properties": [
+            {
+              "name": "SaslScram256Auth",
+              "description": "Optional SecretManager ARN which stores the database credentials",
+              "optional": false,
+              "type": {
+                "type": "string",
+                "description": "Optional SecretManager ARN which stores the database credentials",
+                "maxLength": 1600,
+                "minLength": 1,
+                "pattern": "^(^arn:aws([a-z]|\\-)*:secretsmanager:([a-z]{2}((-gov)|(-iso(b?)))?-[a-z]+-\\d{1}):(\\d{12}):secret:.+)$"
+              }
+            }
+          ]
+        },
+        {
+          "type": "object",
+          "properties": [
+            {
+              "name": "ClientCertificateTlsAuth",
+              "description": "Optional SecretManager ARN which stores the database credentials",
+              "optional": false,
+              "type": {
+                "type": "string",
+                "description": "Optional SecretManager ARN which stores the database credentials",
+                "maxLength": 1600,
+                "minLength": 1,
+                "pattern": "^(^arn:aws([a-z]|\\-)*:secretsmanager:([a-z]{2}((-gov)|(-iso(b?)))?-[a-z]+-\\d{1}):(\\d{12}):secret:.+)$"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "SelfManagedKafkaAccessConfigurationVpc": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Subnets",
+          "description": "List of SubnetId.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "List of SubnetId.",
+            "itemType": {
+              "type": "string",
+              "maxLength": 1024,
+              "minLength": 1,
+              "pattern": "^subnet-[0-9a-z]*$"
+            },
+            "maxLength": 16,
+            "minLength": 0
+          }
+        },
+        {
+          "name": "SecurityGroup",
+          "description": "List of SecurityGroupId.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "List of SecurityGroupId.",
+            "itemType": {
+              "type": "string",
+              "maxLength": 1024,
+              "minLength": 1,
+              "pattern": "^sg-[0-9a-zA-Z]*$"
+            },
+            "maxLength": 5,
+            "minLength": 0
+          }
+        }
+      ]
+    },
+    "SelfManagedKafkaStartPosition": {
+      "type": "string",
+      "allowedValues": ["TRIM_HORIZON", "LATEST"]
+    },
+    "Tag": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 0
+          }
+        }
+      ]
+    },
+    "TagMap": {
+      "type": "record",
+      "valueType": {
+        "type": "string",
+        "maxLength": 256,
+        "minLength": 0
+      }
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Definition of AWS::Pipes::Pipe Resource Type",
+    "properties": [
+      {
+        "name": "Description",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 512,
+          "minLength": 0,
+          "pattern": "^.*$"
+        }
+      },
+      {
+        "name": "DesiredState",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "RequestedPipeState"
+        }
+      },
+      {
+        "name": "Enrichment",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 1600,
+          "minLength": 0,
+          "pattern": "^$|arn:(aws[a-zA-Z0-9-]*):([a-zA-Z0-9\\-]+):([a-z]{2}((-gov)|(-iso(b?)))?-[a-z]+-\\d{1})?:(\\d{12})?:(.+)$"
+        }
+      },
+      {
+        "name": "EnrichmentParameters",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "PipeEnrichmentParameters"
+        }
+      },
+      {
+        "name": "LogConfiguration",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "PipeLogConfiguration"
+        }
+      },
+      {
+        "name": "Name",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 64,
+          "minLength": 1,
+          "pattern": "^[\\.\\-_A-Za-z0-9]+$"
+        }
+      },
+      {
+        "name": "RoleArn",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "maxLength": 1600,
+          "minLength": 1,
+          "pattern": "^arn:(aws[a-zA-Z-]*)?:iam::\\d{12}:role/?[a-zA-Z0-9+=,.@\\-_/]+$"
+        }
+      },
+      {
+        "name": "Source",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "maxLength": 1600,
+          "minLength": 1,
+          "pattern": "^smk://(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9]):[0-9]{1,5}|arn:(aws[a-zA-Z0-9-]*):([a-zA-Z0-9\\-]+):([a-z]{2}((-gov)|(-iso(b?)))?-[a-z]+-\\d{1})?:(\\d{12})?:(.+)$"
+        }
+      },
+      {
+        "name": "SourceParameters",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "PipeSourceParameters"
+        }
+      },
+      {
+        "name": "Tags",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "TagMap"
+        }
+      },
+      {
+        "name": "Target",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "maxLength": 1600,
+          "minLength": 1,
+          "pattern": "^arn:(aws[a-zA-Z0-9-]*):([a-zA-Z0-9\\-]+):([a-z]{2}((-gov)|(-iso(b?)))?-[a-z]+-\\d{1})?:(\\d{12})?:(.+)$"
+        }
+      },
+      {
+        "name": "TargetParameters",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "PipeTargetParameters"
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Definition of AWS::Pipes::Pipe Resource Type",
+    "properties": [
+      {
+        "name": "Arn",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 1600,
+          "minLength": 1,
+          "pattern": "^arn:aws([a-z]|\\-)*:([a-zA-Z0-9\\-]+):([a-z]|\\d|\\-)*:([0-9]{12})?:(.+)$"
+        }
+      },
+      {
+        "name": "CreationTime",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "CurrentState",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "PipeState"
+        }
+      },
+      {
+        "name": "LastModifiedTime",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "StateReason",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 512,
+          "minLength": 0,
+          "pattern": "^.*$"
+        }
+      }
+    ]
+  },
+  "$hash": "efc925f39146de1a9d311b44151036862fdf103b"
+}

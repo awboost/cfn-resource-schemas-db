@@ -1,0 +1,245 @@
+{
+  "definitions": {
+    "AttachmentsSource": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "The key of a key-value pair that identifies the location of an attachment to a document.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The key of a key-value pair that identifies the location of an attachment to a document.",
+            "allowedValues": ["SourceUrl", "S3FileUrl", "AttachmentReference"]
+          }
+        },
+        {
+          "name": "Values",
+          "description": "The value of a key-value pair that identifies the location of an attachment to a document. The format for Value depends on the type of key you specify.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "The value of a key-value pair that identifies the location of an attachment to a document. The format for Value depends on the type of key you specify.",
+            "itemType": {
+              "type": "string",
+              "maxLength": 100000,
+              "minLength": 1
+            },
+            "maxLength": 1,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Name",
+          "description": "The name of the document attachment file.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The name of the document attachment file.",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$"
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "The name of the tag.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The name of the tag.",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$"
+          }
+        },
+        {
+          "name": "Value",
+          "description": "The value of the tag.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The value of the tag.",
+            "maxLength": 256,
+            "minLength": 1,
+            "pattern": "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$"
+          }
+        }
+      ]
+    },
+    "DocumentRequires": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Name",
+          "description": "The name of the required SSM document. The name can be an Amazon Resource Name (ARN).",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The name of the required SSM document. The name can be an Amazon Resource Name (ARN).",
+            "maxLength": 200,
+            "pattern": "^[a-zA-Z0-9_\\-.:/]{3,200}$"
+          }
+        },
+        {
+          "name": "Version",
+          "description": "The document version required by the current document.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The document version required by the current document.",
+            "maxLength": 8,
+            "pattern": "([$]LATEST|[$]DEFAULT|^[1-9][0-9]*$)"
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "The AWS::SSM::Document resource is an SSM document in AWS Systems Manager that defines the actions that Systems Manager performs, which can be used to set up and run commands on your instances.",
+    "properties": [
+      {
+        "name": "Content",
+        "description": "The content for the Systems Manager document in JSON, YAML or String format.",
+        "optional": false,
+        "type": {
+          "type": "union",
+          "types": [
+            {
+              "type": "record",
+              "description": "The content for the Systems Manager document in JSON, YAML or String format."
+            },
+            {
+              "type": "string",
+              "description": "The content for the Systems Manager document in JSON, YAML or String format."
+            }
+          ]
+        }
+      },
+      {
+        "name": "Attachments",
+        "description": "A list of key and value pairs that describe attachments to a version of a document.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "A list of key and value pairs that describe attachments to a version of a document.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "AttachmentsSource"
+          },
+          "maxLength": 20,
+          "minLength": 0
+        }
+      },
+      {
+        "name": "Name",
+        "description": "A name for the Systems Manager document.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "A name for the Systems Manager document.",
+          "pattern": "^[a-zA-Z0-9_\\-.]{3,128}$"
+        }
+      },
+      {
+        "name": "VersionName",
+        "description": "An optional field specifying the version of the artifact you are creating with the document. This value is unique across all versions of a document, and cannot be changed.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "An optional field specifying the version of the artifact you are creating with the document. This value is unique across all versions of a document, and cannot be changed.",
+          "pattern": "^[a-zA-Z0-9_\\-.]{1,128}$"
+        }
+      },
+      {
+        "name": "DocumentType",
+        "description": "The type of document to create.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The type of document to create.",
+          "allowedValues": [
+            "ApplicationConfiguration",
+            "ApplicationConfigurationSchema",
+            "Automation",
+            "Automation.ChangeTemplate",
+            "ChangeCalendar",
+            "CloudFormation",
+            "Command",
+            "DeploymentStrategy",
+            "Package",
+            "Policy",
+            "ProblemAnalysis",
+            "ProblemAnalysisTemplate",
+            "Session"
+          ]
+        }
+      },
+      {
+        "name": "DocumentFormat",
+        "description": "Specify the document format for the request. The document format can be either JSON or YAML. JSON is the default format.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Specify the document format for the request. The document format can be either JSON or YAML. JSON is the default format.",
+          "allowedValues": ["YAML", "JSON", "TEXT"]
+        }
+      },
+      {
+        "name": "TargetType",
+        "description": "Specify a target type to define the kinds of resources the document can run on.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Specify a target type to define the kinds of resources the document can run on.",
+          "pattern": "^\\/[\\w\\.\\-\\:\\/]*$"
+        }
+      },
+      {
+        "name": "Tags",
+        "description": "Optional metadata that you assign to a resource. Tags enable you to categorize a resource in different ways, such as by purpose, owner, or environment.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "Optional metadata that you assign to a resource. Tags enable you to categorize a resource in different ways, such as by purpose, owner, or environment.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          },
+          "maxLength": 1000
+        }
+      },
+      {
+        "name": "Requires",
+        "description": "A list of SSM documents required by a document. For example, an ApplicationConfiguration document requires an ApplicationConfigurationSchema document.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "A list of SSM documents required by a document. For example, an ApplicationConfiguration document requires an ApplicationConfigurationSchema document.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "DocumentRequires"
+          },
+          "minLength": 1
+        }
+      },
+      {
+        "name": "UpdateMethod",
+        "description": "Update method - when set to 'Replace', the update will replace the existing document; when set to 'NewVersion', the update will create a new version.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Update method - when set to 'Replace', the update will replace the existing document; when set to 'NewVersion', the update will create a new version.",
+          "allowedValues": ["Replace", "NewVersion"]
+        }
+      }
+    ]
+  },
+  "$hash": "390342eb48d9d09545c2594c41a25d025d567df5"
+}

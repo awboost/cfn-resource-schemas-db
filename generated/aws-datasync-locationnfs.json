@@ -1,0 +1,159 @@
+{
+  "definitions": {
+    "MountOptions": {
+      "type": "object",
+      "description": "The NFS mount options that DataSync can use to mount your NFS share.",
+      "properties": [
+        {
+          "name": "Version",
+          "description": "The specific NFS version that you want DataSync to use to mount your NFS share.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The specific NFS version that you want DataSync to use to mount your NFS share.",
+            "allowedValues": ["AUTOMATIC", "NFS3", "NFS4_0", "NFS4_1"]
+          }
+        }
+      ]
+    },
+    "OnPremConfig": {
+      "type": "object",
+      "description": "Contains a list of Amazon Resource Names (ARNs) of agents that are used to connect an NFS server.",
+      "properties": [
+        {
+          "name": "AgentArns",
+          "description": "ARN(s) of the agent(s) to use for an NFS location.",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "description": "ARN(s) of the agent(s) to use for an NFS location.",
+            "itemType": {
+              "type": "string",
+              "maxLength": 128,
+              "pattern": "^arn:(aws|aws-cn|aws-us-gov|aws-iso|aws-iso-b):datasync:[a-z\\-0-9]+:[0-9]{12}:agent/agent-[0-9a-z]{17}$"
+            },
+            "maxLength": 4,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "description": "A key-value pair to associate with a resource.",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "The key for an AWS resource tag.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The key for an AWS resource tag.",
+            "maxLength": 256,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9\\s+=._:/-]+$"
+          }
+        },
+        {
+          "name": "Value",
+          "description": "The value for an AWS resource tag.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The value for an AWS resource tag.",
+            "maxLength": 256,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9\\s+=._:@/-]+$"
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource schema for AWS::DataSync::LocationNFS",
+    "properties": [
+      {
+        "name": "MountOptions",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "MountOptions"
+        }
+      },
+      {
+        "name": "OnPremConfig",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "OnPremConfig"
+        }
+      },
+      {
+        "name": "ServerHostname",
+        "description": "The name of the NFS server. This value is the IP address or DNS name of the NFS server.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The name of the NFS server. This value is the IP address or DNS name of the NFS server.",
+          "maxLength": 255,
+          "pattern": "^(([a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9\\-]*[A-Za-z0-9])$"
+        }
+      },
+      {
+        "name": "Subdirectory",
+        "description": "The subdirectory in the NFS file system that is used to read data from the NFS source location or write data to the NFS destination.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The subdirectory in the NFS file system that is used to read data from the NFS source location or write data to the NFS destination.",
+          "maxLength": 4096,
+          "pattern": "^[a-zA-Z0-9_\\-\\+\\./\\(\\)\\$\\p{Zs}]+$"
+        }
+      },
+      {
+        "name": "Tags",
+        "description": "An array of key-value pairs to apply to this resource.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "An array of key-value pairs to apply to this resource.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          },
+          "maxLength": 50
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Resource schema for AWS::DataSync::LocationNFS",
+    "properties": [
+      {
+        "name": "LocationArn",
+        "description": "The Amazon Resource Name (ARN) of the NFS location.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) of the NFS location.",
+          "maxLength": 128,
+          "pattern": "^arn:(aws|aws-cn|aws-us-gov|aws-iso|aws-iso-b):datasync:[a-z\\-0-9]+:[0-9]{12}:location/loc-[0-9a-z]{17}$"
+        }
+      },
+      {
+        "name": "LocationUri",
+        "description": "The URL of the NFS location that was described.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The URL of the NFS location that was described.",
+          "maxLength": 4356,
+          "pattern": "^(efs|nfs|s3|smb|fsxw)://[a-zA-Z0-9./\\-]+$"
+        }
+      }
+    ]
+  },
+  "$hash": "2851a6535f23c1780eac0f3525a0cbdce9d0e1dd"
+}

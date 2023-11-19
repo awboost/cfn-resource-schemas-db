@@ -1,0 +1,91 @@
+{
+  "definitions": {
+    "EmergencyContact": {
+      "type": "object",
+      "description": "An emergency contact is used by Shield Response Team (SRT) to contact you for escalations to the SRT and to initiate proactive customer support. An emergency contact requires an email address.",
+      "properties": [
+        {
+          "name": "ContactNotes",
+          "description": "Additional notes regarding the contact.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Additional notes regarding the contact.",
+            "maxLength": 1024,
+            "minLength": 1,
+            "pattern": "^[\\w\\s\\.\\-,:/()+@]*$"
+          }
+        },
+        {
+          "name": "EmailAddress",
+          "description": "The email address for the contact.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The email address for the contact.",
+            "maxLength": 150,
+            "minLength": 1,
+            "pattern": "^\\S+@\\S+\\.\\S+$"
+          }
+        },
+        {
+          "name": "PhoneNumber",
+          "description": "The phone number for the contact",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The phone number for the contact",
+            "maxLength": 16,
+            "minLength": 1,
+            "pattern": "^\\+[1-9]\\d{1,14}$"
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Authorizes the Shield Response Team (SRT) to use email and phone to notify contacts about escalations to the SRT and to initiate proactive customer support.",
+    "properties": [
+      {
+        "name": "ProactiveEngagementStatus",
+        "description": "If `ENABLED`, the Shield Response Team (SRT) will use email and phone to notify contacts about escalations to the SRT and to initiate proactive customer support.\nIf `DISABLED`, the SRT will not proactively notify contacts about escalations or to initiate proactive customer support.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "If `ENABLED`, the Shield Response Team (SRT) will use email and phone to notify contacts about escalations to the SRT and to initiate proactive customer support.\nIf `DISABLED`, the SRT will not proactively notify contacts about escalations or to initiate proactive customer support.",
+          "allowedValues": ["ENABLED", "DISABLED"]
+        }
+      },
+      {
+        "name": "EmergencyContactList",
+        "description": "A list of email addresses and phone numbers that the Shield Response Team (SRT) can use to contact you for escalations to the SRT and to initiate proactive customer support.\nTo enable proactive engagement, the contact list must include at least one phone number.",
+        "optional": false,
+        "type": {
+          "type": "array",
+          "description": "A list of email addresses and phone numbers that the Shield Response Team (SRT) can use to contact you for escalations to the SRT and to initiate proactive customer support.\nTo enable proactive engagement, the contact list must include at least one phone number.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "EmergencyContact"
+          },
+          "maxLength": 10,
+          "minLength": 1
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Authorizes the Shield Response Team (SRT) to use email and phone to notify contacts about escalations to the SRT and to initiate proactive customer support.",
+    "properties": [
+      {
+        "name": "AccountId",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      }
+    ]
+  },
+  "$hash": "7755d8a196b36b91053877127d183ebb5003f894"
+}

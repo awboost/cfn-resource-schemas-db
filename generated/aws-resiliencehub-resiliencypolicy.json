@@ -1,0 +1,133 @@
+{
+  "definitions": {
+    "FailurePolicy": {
+      "type": "object",
+      "description": "Failure Policy.",
+      "properties": [
+        {
+          "name": "RtoInSecs",
+          "description": "RTO in seconds.",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "description": "RTO in seconds.",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "RpoInSecs",
+          "description": "RPO in seconds.",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "description": "RPO in seconds.",
+            "isInteger": true
+          }
+        }
+      ]
+    },
+    "PolicyMap": {
+      "type": "record",
+      "valueType": {
+        "type": "ref",
+        "typeName": "FailurePolicy"
+      }
+    },
+    "TagValue": {
+      "type": "string",
+      "maxLength": 256
+    },
+    "TagMap": {
+      "type": "record",
+      "valueType": {
+        "type": "ref",
+        "typeName": "TagValue"
+      }
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource Type Definition for Resiliency Policy.",
+    "properties": [
+      {
+        "name": "PolicyName",
+        "description": "Name of Resiliency Policy.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "Name of Resiliency Policy.",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_\\-]{1,59}$"
+        }
+      },
+      {
+        "name": "PolicyDescription",
+        "description": "Description of Resiliency Policy.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Description of Resiliency Policy.",
+          "maxLength": 500
+        }
+      },
+      {
+        "name": "DataLocationConstraint",
+        "description": "Data Location Constraint of the Policy.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Data Location Constraint of the Policy.",
+          "allowedValues": ["AnyLocation", "SameContinent", "SameCountry"]
+        }
+      },
+      {
+        "name": "Tier",
+        "description": "Resiliency Policy Tier.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "Resiliency Policy Tier.",
+          "allowedValues": [
+            "MissionCritical",
+            "Critical",
+            "Important",
+            "CoreServices",
+            "NonCritical"
+          ]
+        }
+      },
+      {
+        "name": "Policy",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "PolicyMap"
+        }
+      },
+      {
+        "name": "Tags",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "TagMap"
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Resource Type Definition for Resiliency Policy.",
+    "properties": [
+      {
+        "name": "PolicyArn",
+        "description": "Amazon Resource Name (ARN) of the Resiliency Policy.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Amazon Resource Name (ARN) of the Resiliency Policy.",
+          "pattern": "^arn:(aws|aws-cn|aws-iso|aws-iso-[a-z]{1}|aws-us-gov):[A-Za-z0-9][A-Za-z0-9_/.-]{0,62}:([a-z]{2}-((iso[a-z]{0,1}-)|(gov-)){0,1}[a-z]+-[0-9]):[0-9]{12}:[A-Za-z0-9][A-Za-z0-9:_/+=,@.-]{0,1023}$"
+        }
+      }
+    ]
+  },
+  "$hash": "5de96d415dfd40db057465343627b023f982fee4"
+}

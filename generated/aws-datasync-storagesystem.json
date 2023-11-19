@@ -1,0 +1,213 @@
+{
+  "definitions": {
+    "ServerConfiguration": {
+      "type": "object",
+      "description": "The server name and network port required to connect with the management interface of the on-premises storage system.",
+      "properties": [
+        {
+          "name": "ServerHostname",
+          "description": "The domain name or IP address of the storage system's management interface.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The domain name or IP address of the storage system's management interface.",
+            "maxLength": 255,
+            "pattern": "^(([a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9\\-]*[A-Za-z0-9])$"
+          }
+        },
+        {
+          "name": "ServerPort",
+          "description": "The network port needed to access the system's management interface",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "The network port needed to access the system's management interface",
+            "isInteger": true,
+            "maximum": 65535,
+            "minimum": 1
+          }
+        }
+      ]
+    },
+    "ServerCredentials": {
+      "type": "object",
+      "description": "The username and password for accessing your on-premises storage system's management interface.",
+      "properties": [
+        {
+          "name": "Username",
+          "description": "The username for your storage system's management interface.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The username for your storage system's management interface.",
+            "maxLength": 1024
+          }
+        },
+        {
+          "name": "Password",
+          "description": "The password for your storage system's management interface",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The password for your storage system's management interface",
+            "maxLength": 1024
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "description": "A key-value pair to associate with a resource.",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "The key for an AWS resource tag.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The key for an AWS resource tag.",
+            "maxLength": 256,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9\\s+=._:/-]+$"
+          }
+        },
+        {
+          "name": "Value",
+          "description": "The value for an AWS resource tag.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The value for an AWS resource tag.",
+            "maxLength": 256,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9\\s+=._:@/-]+$"
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource schema for AWS::DataSync::StorageSystem.",
+    "properties": [
+      {
+        "name": "ServerConfiguration",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "ServerConfiguration"
+        }
+      },
+      {
+        "name": "ServerCredentials",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "ServerCredentials"
+        }
+      },
+      {
+        "name": "SystemType",
+        "description": "The type of on-premises storage system that DataSync Discovery will analyze.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The type of on-premises storage system that DataSync Discovery will analyze.",
+          "allowedValues": ["NetAppONTAP"]
+        }
+      },
+      {
+        "name": "AgentArns",
+        "description": "The ARN of the DataSync agent that connects to and reads from the on-premises storage system's management interface.",
+        "optional": false,
+        "type": {
+          "type": "array",
+          "description": "The ARN of the DataSync agent that connects to and reads from the on-premises storage system's management interface.",
+          "itemType": {
+            "type": "string",
+            "maxLength": 128,
+            "pattern": "^arn:(aws|aws-cn|aws-us-gov|aws-iso|aws-iso-b):datasync:[a-z\\-0-9]+:[0-9]{12}:agent/agent-[0-9a-z]{17}$"
+          },
+          "maxLength": 1,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "CloudWatchLogGroupArn",
+        "description": "The ARN of the Amazon CloudWatch log group used to monitor and log discovery job events.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The ARN of the Amazon CloudWatch log group used to monitor and log discovery job events.",
+          "maxLength": 562,
+          "pattern": "^arn:(aws|aws-cn|aws-us-gov|aws-iso|aws-iso-b):logs:[a-z\\-0-9]+:[0-9]{12}:log-group:([^:\\*]*)(:\\*)?$"
+        }
+      },
+      {
+        "name": "Name",
+        "description": "A familiar name for the on-premises storage system.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "A familiar name for the on-premises storage system.",
+          "maxLength": 256,
+          "minLength": 1,
+          "pattern": "^[a-zA-Z0-9\\s+=._:@/-]+$"
+        }
+      },
+      {
+        "name": "Tags",
+        "description": "An array of key-value pairs to apply to this resource.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "An array of key-value pairs to apply to this resource.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          },
+          "maxLength": 50
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Resource schema for AWS::DataSync::StorageSystem.",
+    "properties": [
+      {
+        "name": "SecretsManagerArn",
+        "description": "The ARN of a secret stored by AWS Secrets Manager.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The ARN of a secret stored by AWS Secrets Manager.",
+          "maxLength": 2048,
+          "pattern": "^arn:(aws|aws-cn|aws-us-gov|aws-iso|aws-iso-b):secretsmanager:[a-z\\-0-9]+:[0-9]{12}:secret:.*"
+        }
+      },
+      {
+        "name": "StorageSystemArn",
+        "description": "The ARN of the on-premises storage system added to DataSync Discovery.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The ARN of the on-premises storage system added to DataSync Discovery.",
+          "maxLength": 128,
+          "pattern": "^arn:(aws|aws-cn|aws-us-gov|aws-iso|aws-iso-b):datasync:[a-z\\-0-9]+:[0-9]{12}:system/storage-system-[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$"
+        }
+      },
+      {
+        "name": "ConnectivityStatus",
+        "description": "Indicates whether the DataSync agent can access the on-premises storage system.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Indicates whether the DataSync agent can access the on-premises storage system.",
+          "allowedValues": ["PASS", "FAIL", "UNKNOWN"]
+        }
+      }
+    ]
+  },
+  "$hash": "325f73e824637617bb105805b03e61e3ca962f71"
+}

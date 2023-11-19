@@ -1,0 +1,211 @@
+{
+  "definitions": {
+    "NotificationChannel": {
+      "type": "string",
+      "allowedValues": ["ALL"]
+    },
+    "NotificationEvent": {
+      "type": "string",
+      "allowedValues": [
+        "CA_CERTIFICATE_EXPIRY",
+        "END_ENTITY_CERTIFICATE_EXPIRY"
+      ]
+    },
+    "NotificationSetting": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Enabled",
+          "optional": false,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "Event",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "NotificationEvent"
+          }
+        },
+        {
+          "name": "Threshold",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": false,
+            "maximum": 360,
+            "minimum": 1
+          }
+        },
+        {
+          "name": "Channel",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "NotificationChannel"
+          }
+        }
+      ]
+    },
+    "Source": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "SourceType",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "TrustAnchorType"
+          }
+        },
+        {
+          "name": "SourceData",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "SourceData"
+          }
+        }
+      ]
+    },
+    "SourceData": {
+      "type": "union",
+      "types": [
+        {
+          "type": "object",
+          "properties": [
+            {
+              "name": "X509CertificateData",
+              "optional": false,
+              "type": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        {
+          "type": "object",
+          "properties": [
+            {
+              "name": "AcmPcaArn",
+              "optional": false,
+              "type": {
+                "type": "string"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 0
+          }
+        }
+      ]
+    },
+    "TrustAnchorType": {
+      "type": "string",
+      "allowedValues": [
+        "AWS_ACM_PCA",
+        "CERTIFICATE_BUNDLE",
+        "SELF_SIGNED_REPOSITORY"
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Definition of AWS::RolesAnywhere::TrustAnchor Resource Type.",
+    "properties": [
+      {
+        "name": "Enabled",
+        "optional": true,
+        "type": {
+          "type": "boolean"
+        }
+      },
+      {
+        "name": "Name",
+        "optional": false,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "NotificationSettings",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "NotificationSetting"
+          },
+          "maxLength": 50,
+          "minLength": 0
+        }
+      },
+      {
+        "name": "Source",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "Source"
+        }
+      },
+      {
+        "name": "Tags",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          },
+          "maxLength": 200,
+          "minLength": 0
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Definition of AWS::RolesAnywhere::TrustAnchor Resource Type.",
+    "properties": [
+      {
+        "name": "TrustAnchorId",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "pattern": "[a-f0-9]{8}-([a-z0-9]{4}-){3}[a-z0-9]{12}"
+        }
+      },
+      {
+        "name": "TrustAnchorArn",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "pattern": "[a-f0-9]{8}-([a-z0-9]{4}-){3}[a-z0-9]{12}"
+        }
+      }
+    ]
+  },
+  "$hash": "3551f5881f4d00ce9a0a222e11575fe71e9eadff"
+}

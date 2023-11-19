@@ -1,0 +1,227 @@
+{
+  "definitions": {
+    "CollaborationQueryLogStatus": {
+      "type": "string",
+      "allowedValues": ["ENABLED", "DISABLED"]
+    },
+    "DataEncryptionMetadata": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "AllowCleartext",
+          "optional": false,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "AllowDuplicates",
+          "optional": false,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "AllowJoinsOnColumnsWithDifferentNames",
+          "optional": false,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "PreserveNulls",
+          "optional": false,
+          "type": {
+            "type": "boolean"
+          }
+        }
+      ]
+    },
+    "MemberAbility": {
+      "type": "string",
+      "allowedValues": ["CAN_QUERY", "CAN_RECEIVE_RESULTS"]
+    },
+    "MemberAbilities": {
+      "type": "array",
+      "itemType": {
+        "type": "ref",
+        "typeName": "MemberAbility"
+      }
+    },
+    "MemberSpecification": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "AccountId",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 12,
+            "minLength": 12,
+            "pattern": "^\\d+$"
+          }
+        },
+        {
+          "name": "MemberAbilities",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "MemberAbilities"
+          }
+        },
+        {
+          "name": "DisplayName",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "Name"
+          }
+        }
+      ]
+    },
+    "MemberStatus": {
+      "type": "string",
+      "allowedValues": ["INVITED", "ACTIVE", "LEFT", "REMOVED"]
+    },
+    "Tag": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "Name": {
+      "type": "string",
+      "maxLength": 100,
+      "minLength": 1,
+      "pattern": "^(?!\\s*$)[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDBFF-\\uDC00\\uDFFF\\t]*$"
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Represents a collaboration between AWS accounts that allows for secure data collaboration",
+    "documentationUrl": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cleanrooms-collaboration.html",
+    "properties": [
+      {
+        "name": "Tags",
+        "description": "An arbitrary set of tags (key-value pairs) for this cleanrooms collaboration.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "An arbitrary set of tags (key-value pairs) for this cleanrooms collaboration.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          }
+        }
+      },
+      {
+        "name": "CreatorDisplayName",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "Name"
+        }
+      },
+      {
+        "name": "CreatorMemberAbilities",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "MemberAbilities"
+        }
+      },
+      {
+        "name": "DataEncryptionMetadata",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "DataEncryptionMetadata"
+        }
+      },
+      {
+        "name": "Description",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1,
+          "pattern": "^(?!\\s*$)[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDBFF-\\uDC00\\uDFFF\\t\\r\\n]*$"
+        }
+      },
+      {
+        "name": "Members",
+        "optional": false,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "MemberSpecification"
+          },
+          "maxLength": 9,
+          "minLength": 0
+        }
+      },
+      {
+        "name": "Name",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "maxLength": 100,
+          "minLength": 1,
+          "pattern": "^(?!\\s*$)[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDBFF-\\uDC00\\uDFFF\\t]*$"
+        }
+      },
+      {
+        "name": "QueryLogStatus",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "CollaborationQueryLogStatus"
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Represents a collaboration between AWS accounts that allows for secure data collaboration",
+    "documentationUrl": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cleanrooms-collaboration.html",
+    "properties": [
+      {
+        "name": "Arn",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 100
+        }
+      },
+      {
+        "name": "CollaborationIdentifier",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 36,
+          "minLength": 36,
+          "pattern": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+        }
+      }
+    ]
+  },
+  "$hash": "7d890f7b4ab04194ae1592cbb52672b3fb82e1d9"
+}

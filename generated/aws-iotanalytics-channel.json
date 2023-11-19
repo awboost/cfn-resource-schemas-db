@@ -1,0 +1,166 @@
+{
+  "definitions": {
+    "CustomerManagedS3": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Bucket",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 3,
+            "pattern": "^[a-zA-Z0-9.\\-_]*$"
+          }
+        },
+        {
+          "name": "RoleArn",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 2048,
+            "minLength": 20
+          }
+        },
+        {
+          "name": "KeyPrefix",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9!_.*'()/{}:-]*/$"
+          }
+        }
+      ]
+    },
+    "ServiceManagedS3": {
+      "type": "record"
+    },
+    "ChannelStorage": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ServiceManagedS3",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ServiceManagedS3"
+          }
+        },
+        {
+          "name": "CustomerManagedS3",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "CustomerManagedS3"
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "RetentionPeriod": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "NumberOfDays",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 2147483647,
+            "minimum": 1
+          }
+        },
+        {
+          "name": "Unlimited",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource Type definition for AWS::IoTAnalytics::Channel",
+    "properties": [
+      {
+        "name": "ChannelStorage",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "ChannelStorage"
+        }
+      },
+      {
+        "name": "ChannelName",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "(^(?!_{2}))(^[a-zA-Z0-9_]+$)"
+        }
+      },
+      {
+        "name": "RetentionPeriod",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "RetentionPeriod"
+        }
+      },
+      {
+        "name": "Tags",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          },
+          "maxLength": 50,
+          "minLength": 1
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Resource Type definition for AWS::IoTAnalytics::Channel",
+    "properties": [
+      {
+        "name": "Id",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      }
+    ]
+  },
+  "$hash": "b2e1326a96b59bbe81d2edba8edd690445ba7e58"
+}

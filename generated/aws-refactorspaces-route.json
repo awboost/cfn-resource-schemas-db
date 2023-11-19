@@ -1,0 +1,221 @@
+{
+  "definitions": {
+    "RouteActivationState": {
+      "type": "string",
+      "allowedValues": ["INACTIVE", "ACTIVE"]
+    },
+    "Method": {
+      "type": "string",
+      "allowedValues": [
+        "DELETE",
+        "GET",
+        "HEAD",
+        "OPTIONS",
+        "PATCH",
+        "POST",
+        "PUT"
+      ]
+    },
+    "RouteType": {
+      "type": "string",
+      "allowedValues": ["DEFAULT", "URI_PATH"]
+    },
+    "DefaultRouteInput": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ActivationState",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "RouteActivationState"
+          }
+        }
+      ]
+    },
+    "UriPathRouteInput": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "SourcePath",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 2048,
+            "minLength": 1,
+            "pattern": "^(/([a-zA-Z0-9._:-]+|\\{[a-zA-Z0-9._:-]+\\}))+$"
+          }
+        },
+        {
+          "name": "ActivationState",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "RouteActivationState"
+          }
+        },
+        {
+          "name": "Methods",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Method"
+            }
+          }
+        },
+        {
+          "name": "IncludeChildPaths",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "AppendSourcePath",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "description": "A label for tagging Environment resource",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "A string used to identify this tag",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "A string used to identify this tag",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^(?!aws:).+"
+          }
+        },
+        {
+          "name": "Value",
+          "description": "A string containing the value for the tag",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "A string containing the value for the tag",
+            "maxLength": 256,
+            "minLength": 0
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Definition of AWS::RefactorSpaces::Route Resource Type",
+    "properties": [
+      {
+        "name": "ApplicationIdentifier",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "maxLength": 14,
+          "minLength": 14,
+          "pattern": "^app-([0-9A-Za-z]{10}$)"
+        }
+      },
+      {
+        "name": "EnvironmentIdentifier",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "maxLength": 14,
+          "minLength": 14,
+          "pattern": "^env-([0-9A-Za-z]{10}$)"
+        }
+      },
+      {
+        "name": "RouteType",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "RouteType"
+        }
+      },
+      {
+        "name": "ServiceIdentifier",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "maxLength": 14,
+          "minLength": 14,
+          "pattern": "^svc-([0-9A-Za-z]{10}$)"
+        }
+      },
+      {
+        "name": "DefaultRoute",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "DefaultRouteInput"
+        }
+      },
+      {
+        "name": "UriPathRoute",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "UriPathRouteInput"
+        }
+      },
+      {
+        "name": "Tags",
+        "description": "Metadata that you can assign to help organize the frameworks that you create. Each tag is a key-value pair.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "Metadata that you can assign to help organize the frameworks that you create. Each tag is a key-value pair.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          }
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Definition of AWS::RefactorSpaces::Route Resource Type",
+    "properties": [
+      {
+        "name": "PathResourceToId",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "Arn",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 2048,
+          "minLength": 20,
+          "pattern": "^arn:(aws[a-zA-Z-]*)?:refactor-spaces:[a-zA-Z0-9\\-]+:\\w{12}:[a-zA-Z_0-9+=,.@\\-_/]+$"
+        }
+      },
+      {
+        "name": "RouteIdentifier",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 14,
+          "minLength": 14,
+          "pattern": "^rte-([0-9A-Za-z]{10}$)"
+        }
+      }
+    ]
+  },
+  "$hash": "8e76baacb1429b2d678126c57e5487d6e79c9c83"
+}

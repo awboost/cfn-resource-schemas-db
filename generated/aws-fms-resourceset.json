@@ -1,0 +1,123 @@
+{
+  "definitions": {
+    "ResourceType": {
+      "type": "string",
+      "description": "An AWS resource type",
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^([^\\s]*)$"
+    },
+    "Base62Id": {
+      "type": "string",
+      "description": "A Base62 ID",
+      "maxLength": 22,
+      "minLength": 22,
+      "pattern": "^([a-z0-9A-Z]*)$"
+    },
+    "Tag": {
+      "type": "object",
+      "description": "A tag.",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^([^\\s]*)$"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "pattern": "^([^\\s]*)$"
+          }
+        }
+      ]
+    },
+    "Resource": {
+      "type": "string",
+      "description": "A resource ARN or URI.",
+      "maxLength": 1024,
+      "minLength": 1,
+      "pattern": "^([^\\s]*)$"
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Creates an AWS Firewall Manager resource set.",
+    "properties": [
+      {
+        "name": "Name",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^([a-zA-Z0-9_.:/=+\\-@\\s]+)$"
+        }
+      },
+      {
+        "name": "Description",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 256,
+          "pattern": "^([a-zA-Z0-9_.:/=+\\-@\\s]*)$"
+        }
+      },
+      {
+        "name": "ResourceTypeList",
+        "optional": false,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "ResourceType"
+          }
+        }
+      },
+      {
+        "name": "Resources",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Resource"
+          }
+        }
+      },
+      {
+        "name": "Tags",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          }
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Creates an AWS Firewall Manager resource set.",
+    "properties": [
+      {
+        "name": "Id",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "Base62Id"
+        }
+      }
+    ]
+  },
+  "$hash": "bf03d2dcdd2b2b6fef1a9b88fb5ca3db8f23e915"
+}

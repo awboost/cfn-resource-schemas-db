@@ -1,0 +1,459 @@
+{
+  "definitions": {
+    "ComponentDeploymentSpecification": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ComponentVersion",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "ConfigurationUpdate",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ComponentConfigurationUpdate"
+          }
+        },
+        {
+          "name": "RunWith",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ComponentRunWith"
+          }
+        }
+      ]
+    },
+    "SystemResourceLimits": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Memory",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 9223372036854772000,
+            "minimum": 0
+          }
+        },
+        {
+          "name": "Cpus",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": false,
+            "minimum": 0
+          }
+        }
+      ]
+    },
+    "ComponentRunWith": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "PosixUser",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        {
+          "name": "SystemResourceLimits",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "SystemResourceLimits"
+          }
+        },
+        {
+          "name": "WindowsUser",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "ComponentConfigurationUpdate": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Merge",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 10485760,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Reset",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string",
+              "maxLength": 256,
+              "minLength": 0
+            }
+          }
+        }
+      ]
+    },
+    "DeploymentIoTJobConfiguration": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "JobExecutionsRolloutConfig",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "IoTJobExecutionsRolloutConfig"
+          }
+        },
+        {
+          "name": "AbortConfig",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "IoTJobAbortConfig"
+          }
+        },
+        {
+          "name": "TimeoutConfig",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "IoTJobTimeoutConfig"
+          }
+        }
+      ]
+    },
+    "IoTJobExecutionsRolloutConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ExponentialRate",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "IoTJobExponentialRolloutRate"
+          }
+        },
+        {
+          "name": "MaximumPerMinute",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 1000,
+            "minimum": 1
+          }
+        }
+      ]
+    },
+    "IoTJobAbortConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "CriteriaList",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "IoTJobAbortCriteria"
+            },
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "IoTJobAbortCriteria": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "FailureType",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "allowedValues": ["FAILED", "REJECTED", "TIMED_OUT", "ALL"]
+          }
+        },
+        {
+          "name": "Action",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "allowedValues": ["CANCEL"]
+          }
+        },
+        {
+          "name": "ThresholdPercentage",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": false,
+            "maximum": 100,
+            "minimum": 0
+          }
+        },
+        {
+          "name": "MinNumberOfExecutedThings",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 2147483647,
+            "minimum": 1
+          }
+        }
+      ]
+    },
+    "IoTJobTimeoutConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "InProgressTimeoutInMinutes",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 2147483647,
+            "minimum": 0
+          }
+        }
+      ]
+    },
+    "IoTJobExponentialRolloutRate": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "BaseRatePerMinute",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 1000,
+            "minimum": 1
+          }
+        },
+        {
+          "name": "IncrementFactor",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": false,
+            "maximum": 5,
+            "minimum": 1
+          }
+        },
+        {
+          "name": "RateIncreaseCriteria",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "IoTJobRateIncreaseCriteria"
+          }
+        }
+      ]
+    },
+    "IoTJobRateIncreaseCriteria": {
+      "type": "union",
+      "types": [
+        {
+          "type": "object",
+          "properties": [
+            {
+              "name": "NumberOfNotifiedThings",
+              "optional": true,
+              "type": {
+                "type": "ref",
+                "typeName": "NumberOfThings"
+              }
+            }
+          ]
+        },
+        {
+          "type": "object",
+          "properties": [
+            {
+              "name": "NumberOfSucceededThings",
+              "optional": true,
+              "type": {
+                "type": "ref",
+                "typeName": "NumberOfThings"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "NumberOfThings": {
+      "type": "number",
+      "isInteger": true,
+      "maximum": 2147483647,
+      "minimum": 1
+    },
+    "DeploymentPolicies": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "FailureHandlingPolicy",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": ["ROLLBACK", "DO_NOTHING"]
+          }
+        },
+        {
+          "name": "ComponentUpdatePolicy",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DeploymentComponentUpdatePolicy"
+          }
+        },
+        {
+          "name": "ConfigurationValidationPolicy",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DeploymentConfigurationValidationPolicy"
+          }
+        }
+      ]
+    },
+    "DeploymentComponentUpdatePolicy": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "TimeoutInSeconds",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 2147483647,
+            "minimum": 1
+          }
+        },
+        {
+          "name": "Action",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": ["NOTIFY_COMPONENTS", "SKIP_NOTIFY_COMPONENTS"]
+          }
+        }
+      ]
+    },
+    "DeploymentConfigurationValidationPolicy": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "TimeoutInSeconds",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 2147483647,
+            "minimum": 1
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource for Greengrass V2 deployment.",
+    "properties": [
+      {
+        "name": "TargetArn",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "pattern": "arn:[^:]*:iot:[^:]*:[0-9]+:(thing|thinggroup)/.+"
+        }
+      },
+      {
+        "name": "ParentTargetArn",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "pattern": "arn:[^:]*:iot:[^:]*:[0-9]+:thinggroup/.+"
+        }
+      },
+      {
+        "name": "DeploymentName",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 256,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "Components",
+        "optional": true,
+        "type": {
+          "type": "record",
+          "valueType": {
+            "type": "ref",
+            "typeName": "ComponentDeploymentSpecification"
+          }
+        }
+      },
+      {
+        "name": "IotJobConfiguration",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "DeploymentIoTJobConfiguration"
+        }
+      },
+      {
+        "name": "DeploymentPolicies",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "DeploymentPolicies"
+        }
+      },
+      {
+        "name": "Tags",
+        "optional": true,
+        "type": {
+          "type": "record",
+          "valueType": {
+            "type": "string",
+            "maxLength": 256
+          }
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Resource for Greengrass V2 deployment.",
+    "properties": [
+      {
+        "name": "DeploymentId",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "pattern": ".+"
+        }
+      }
+    ]
+  },
+  "$hash": "092d36396ee91d827ba2e4b5bddca44765608381"
+}

@@ -1,0 +1,369 @@
+{
+  "definitions": {
+    "Forward": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "TargetGroups",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "WeightedTargetGroup"
+            },
+            "maxLength": 2,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "FixedResponse": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "StatusCode",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 599,
+            "minimum": 100
+          }
+        }
+      ]
+    },
+    "HeaderMatch": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Name",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 40,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Match",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "HeaderMatchType"
+          }
+        },
+        {
+          "name": "CaseSensitive",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        }
+      ]
+    },
+    "HeaderMatchType": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Exact",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Prefix",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Contains",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "HttpMatch": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Method",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": [
+              "CONNECT",
+              "DELETE",
+              "GET",
+              "HEAD",
+              "OPTIONS",
+              "POST",
+              "PUT",
+              "TRACE"
+            ]
+          }
+        },
+        {
+          "name": "PathMatch",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PathMatch"
+          }
+        },
+        {
+          "name": "HeaderMatches",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "HeaderMatch"
+            },
+            "maxLength": 5
+          }
+        }
+      ]
+    },
+    "PathMatch": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Match",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "PathMatchType"
+          }
+        },
+        {
+          "name": "CaseSensitive",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        }
+      ]
+    },
+    "PathMatchType": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Exact",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^\\/[a-zA-Z0-9@:%_+.~#?&\\/=-]*$"
+          }
+        },
+        {
+          "name": "Prefix",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^\\/[a-zA-Z0-9@:%_+.~#?&\\/=-]*$"
+          }
+        }
+      ]
+    },
+    "Action": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Forward",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Forward"
+          }
+        },
+        {
+          "name": "FixedResponse",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "FixedResponse"
+          }
+        }
+      ]
+    },
+    "Match": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "HttpMatch",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "HttpMatch"
+          }
+        }
+      ]
+    },
+    "WeightedTargetGroup": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "TargetGroupIdentifier",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 2048,
+            "minLength": 20,
+            "pattern": "^((tg-[0-9a-z]{17})|(arn:[a-z0-9\\-]+:vpc-lattice:[a-zA-Z0-9\\-]+:\\d{12}:targetgroup/tg-[0-9a-z]{17}))$"
+          }
+        },
+        {
+          "name": "Weight",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 999,
+            "minimum": 1
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Creates a listener rule. Each listener has a default rule for checking connection requests, but you can define additional rules. Each rule consists of a priority, one or more actions, and one or more conditions.",
+    "properties": [
+      {
+        "name": "Action",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "Action"
+        }
+      },
+      {
+        "name": "ListenerIdentifier",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 2048,
+          "minLength": 20,
+          "pattern": "^((listener-[0-9a-z]{17})|(arn(:[a-z0-9]+([.-][a-z0-9]+)*){2}(:([a-z0-9]+([.-][a-z0-9]+)*)?){2}:service/svc-[0-9a-z]{17}/listener/listener-[0-9a-z]{17}))$"
+        }
+      },
+      {
+        "name": "Match",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "Match"
+        }
+      },
+      {
+        "name": "Name",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 63,
+          "minLength": 3,
+          "pattern": "^(?!rule-)(?![-])(?!.*[-]$)(?!.*[-]{2})[a-z0-9-]+$"
+        }
+      },
+      {
+        "name": "Priority",
+        "optional": false,
+        "type": {
+          "type": "number",
+          "isInteger": true,
+          "maximum": 100,
+          "minimum": 1
+        }
+      },
+      {
+        "name": "ServiceIdentifier",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 2048,
+          "minLength": 20,
+          "pattern": "^((svc-[0-9a-z]{17})|(arn(:[a-z0-9]+([.-][a-z0-9]+)*){2}(:([a-z0-9]+([.-][a-z0-9]+)*)?){2}:service/svc-[0-9a-z]{17}))$"
+        }
+      },
+      {
+        "name": "Tags",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          },
+          "maxLength": 50,
+          "minLength": 0
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Creates a listener rule. Each listener has a default rule for checking connection requests, but you can define additional rules. Each rule consists of a priority, one or more actions, and one or more conditions.",
+    "properties": [
+      {
+        "name": "Arn",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 2048,
+          "minLength": 20,
+          "pattern": "^arn(:[a-z0-9]+([.-][a-z0-9]+)*){2}(:([a-z0-9]+([.-][a-z0-9]+)*)?){2}:service/svc-[0-9a-z]{17}/listener/listener-[0-9a-z]{17}/rule/((rule-[0-9a-z]{17})|(default))$"
+        }
+      },
+      {
+        "name": "Id",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 22,
+          "minLength": 7,
+          "pattern": "^((rule-[0-9a-z]{17})|(default))$"
+        }
+      }
+    ]
+  },
+  "$hash": "4871d0d854bc50787d744084778f6d27bf4e6f5f"
+}

@@ -1,0 +1,224 @@
+{
+  "definitions": {
+    "FrameworkControl": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ControlName",
+          "description": "The name of a control. This name is between 1 and 256 characters.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The name of a control. This name is between 1 and 256 characters."
+          }
+        },
+        {
+          "name": "ControlInputParameters",
+          "description": "A list of ParameterName and ParameterValue pairs.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "A list of ParameterName and ParameterValue pairs.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "ControlInputParameter"
+            }
+          }
+        },
+        {
+          "name": "ControlScope",
+          "description": "The scope of a control. The control scope defines what the control will evaluate. Three examples of control scopes are: a specific backup plan, all backup plans with a specific tag, or all backup plans.",
+          "optional": true,
+          "type": {
+            "type": "object",
+            "description": "The scope of a control. The control scope defines what the control will evaluate. Three examples of control scopes are: a specific backup plan, all backup plans with a specific tag, or all backup plans.",
+            "properties": [
+              {
+                "name": "ComplianceResourceIds",
+                "description": "The ID of the only AWS resource that you want your control scope to contain.",
+                "optional": true,
+                "type": {
+                  "type": "array",
+                  "description": "The ID of the only AWS resource that you want your control scope to contain.",
+                  "itemType": {
+                    "type": "string"
+                  }
+                }
+              },
+              {
+                "name": "ComplianceResourceTypes",
+                "description": "Describes whether the control scope includes one or more types of resources, such as `EFS` or `RDS`.",
+                "optional": true,
+                "type": {
+                  "type": "array",
+                  "description": "Describes whether the control scope includes one or more types of resources, such as `EFS` or `RDS`.",
+                  "itemType": {
+                    "type": "string"
+                  }
+                }
+              },
+              {
+                "name": "Tags",
+                "description": "Describes whether the control scope includes resources with one or more tags. Each tag is a key-value pair.",
+                "optional": true,
+                "type": {
+                  "type": "array",
+                  "description": "Describes whether the control scope includes resources with one or more tags. Each tag is a key-value pair.",
+                  "itemType": {
+                    "type": "ref",
+                    "typeName": "Tag"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "ControlInputParameter": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ParameterName",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "ParameterValue",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "description": "A key-value pair to associate with a resource.",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+            "maxLength": 256,
+            "minLength": 0
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Contains detailed information about a framework. Frameworks contain controls, which evaluate and report on your backup events and resources. Frameworks generate daily compliance results.",
+    "properties": [
+      {
+        "name": "FrameworkName",
+        "description": "The unique name of a framework. This name is between 1 and 256 characters, starting with a letter, and consisting of letters (a-z, A-Z), numbers (0-9), and underscores (_).",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The unique name of a framework. This name is between 1 and 256 characters, starting with a letter, and consisting of letters (a-z, A-Z), numbers (0-9), and underscores (_).",
+          "maxLength": 256,
+          "minLength": 1,
+          "pattern": "[a-zA-Z][_a-zA-Z0-9]*"
+        }
+      },
+      {
+        "name": "FrameworkDescription",
+        "description": "An optional description of the framework with a maximum 1,024 characters.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "An optional description of the framework with a maximum 1,024 characters.",
+          "maxLength": 1024,
+          "minLength": 0
+        }
+      },
+      {
+        "name": "FrameworkControls",
+        "description": "Contains detailed information about all of the controls of a framework. Each framework must contain at least one control.",
+        "optional": false,
+        "type": {
+          "type": "array",
+          "description": "Contains detailed information about all of the controls of a framework. Each framework must contain at least one control.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "FrameworkControl"
+          }
+        }
+      },
+      {
+        "name": "FrameworkTags",
+        "description": "Metadata that you can assign to help organize the frameworks that you create. Each tag is a key-value pair.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "Metadata that you can assign to help organize the frameworks that you create. Each tag is a key-value pair.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          }
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Contains detailed information about a framework. Frameworks contain controls, which evaluate and report on your backup events and resources. Frameworks generate daily compliance results.",
+    "properties": [
+      {
+        "name": "FrameworkArn",
+        "description": "An Amazon Resource Name (ARN) that uniquely identifies Framework as a resource",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "An Amazon Resource Name (ARN) that uniquely identifies Framework as a resource"
+        }
+      },
+      {
+        "name": "DeploymentStatus",
+        "description": "The deployment status of a framework. The statuses are: `CREATE_IN_PROGRESS | UPDATE_IN_PROGRESS | DELETE_IN_PROGRESS | COMPLETED | FAILED`",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The deployment status of a framework. The statuses are: `CREATE_IN_PROGRESS | UPDATE_IN_PROGRESS | DELETE_IN_PROGRESS | COMPLETED | FAILED`"
+        }
+      },
+      {
+        "name": "CreationTime",
+        "description": "The date and time that a framework is created, in ISO 8601 representation. The value of CreationTime is accurate to milliseconds. For example, 2020-07-10T15:00:00.000-08:00 represents the 10th of July 2020 at 3:00 PM 8 hours behind UTC.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The date and time that a framework is created, in ISO 8601 representation. The value of CreationTime is accurate to milliseconds. For example, 2020-07-10T15:00:00.000-08:00 represents the 10th of July 2020 at 3:00 PM 8 hours behind UTC."
+        }
+      },
+      {
+        "name": "FrameworkStatus",
+        "description": "A framework consists of one or more controls. Each control governs a resource, such as backup plans, backup selections, backup vaults, or recovery points. You can also turn AWS Config recording on or off for each resource. The statuses are:\n\n`ACTIVE` when recording is turned on for all resources governed by the framework.\n\n`PARTIALLY_ACTIVE` when recording is turned off for at least one resource governed by the framework.\n\n`INACTIVE` when recording is turned off for all resources governed by the framework.\n\n`UNAVAILABLE` when AWS Backup is unable to validate recording status at this time.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "A framework consists of one or more controls. Each control governs a resource, such as backup plans, backup selections, backup vaults, or recovery points. You can also turn AWS Config recording on or off for each resource. The statuses are:\n\n`ACTIVE` when recording is turned on for all resources governed by the framework.\n\n`PARTIALLY_ACTIVE` when recording is turned off for at least one resource governed by the framework.\n\n`INACTIVE` when recording is turned off for all resources governed by the framework.\n\n`UNAVAILABLE` when AWS Backup is unable to validate recording status at this time."
+        }
+      }
+    ]
+  },
+  "$hash": "2277f1020a2d961d6477591be73fc6a2b06d3ae7"
+}

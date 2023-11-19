@@ -1,0 +1,287 @@
+{
+  "definitions": {
+    "Tag": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 0
+          }
+        }
+      ]
+    },
+    "TaskConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "LanguageCode",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "allowedValues": ["en", "es", "fr", "it", "de", "pt"]
+          }
+        },
+        {
+          "name": "DocumentClassificationConfig",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DocumentClassificationConfig"
+          }
+        },
+        {
+          "name": "EntityRecognitionConfig",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "EntityRecognitionConfig"
+          }
+        }
+      ]
+    },
+    "DataSecurityConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ModelKmsKeyId",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "KmsKeyId"
+          }
+        },
+        {
+          "name": "VolumeKmsKeyId",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "KmsKeyId"
+          }
+        },
+        {
+          "name": "DataLakeKmsKeyId",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "KmsKeyId"
+          }
+        },
+        {
+          "name": "VpcConfig",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "VpcConfig"
+          }
+        }
+      ]
+    },
+    "VpcConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "SecurityGroupIds",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string",
+              "maxLength": 32,
+              "minLength": 1,
+              "pattern": "[-0-9a-zA-Z]+"
+            },
+            "maxLength": 5,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Subnets",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string",
+              "maxLength": 32,
+              "minLength": 1,
+              "pattern": "[-0-9a-zA-Z]+"
+            },
+            "maxLength": 16,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "KmsKeyId": {
+      "type": "string",
+      "maxLength": 2048,
+      "minLength": 1
+    },
+    "EntityTypesListItem": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Type",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "pattern": "^(?![^\\n\\r\\t,]*\\\\n|\\\\r|\\\\t)[^\\n\\r\\t,]+$"
+          }
+        }
+      ]
+    },
+    "EntityRecognitionConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "EntityTypes",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "EntityTypesListItem"
+            },
+            "maxLength": 25,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "DocumentClassificationConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Mode",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "allowedValues": ["MULTI_CLASS", "MULTI_LABEL"]
+          }
+        },
+        {
+          "name": "Labels",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string",
+              "maxLength": 5000
+            },
+            "maxLength": 1000
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "The AWS::Comprehend::Flywheel resource creates an Amazon Comprehend Flywheel that enables customer to train their model.",
+    "properties": [
+      {
+        "name": "ActiveModelArn",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 256,
+          "pattern": "arn:aws(-[^:]+)?:comprehend:[a-zA-Z0-9-]*:[0-9]{12}:(document-classifier|entity-recognizer)/[a-zA-Z0-9](-*[a-zA-Z0-9])*(/version/[a-zA-Z0-9](-*[a-zA-Z0-9])*)?"
+        }
+      },
+      {
+        "name": "DataAccessRoleArn",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "maxLength": 2048,
+          "minLength": 20,
+          "pattern": "arn:aws(-[^:]+)?:iam::[0-9]{12}:role/.+"
+        }
+      },
+      {
+        "name": "DataLakeS3Uri",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "maxLength": 512,
+          "pattern": "s3://[a-z0-9][\\.\\-a-z0-9]{1,61}[a-z0-9](/.*)?"
+        }
+      },
+      {
+        "name": "DataSecurityConfig",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "DataSecurityConfig"
+        }
+      },
+      {
+        "name": "FlywheelName",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "maxLength": 63,
+          "minLength": 1,
+          "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9])*$"
+        }
+      },
+      {
+        "name": "ModelType",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "allowedValues": ["DOCUMENT_CLASSIFIER", "ENTITY_RECOGNIZER"]
+        }
+      },
+      {
+        "name": "Tags",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          }
+        }
+      },
+      {
+        "name": "TaskConfig",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "TaskConfig"
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "The AWS::Comprehend::Flywheel resource creates an Amazon Comprehend Flywheel that enables customer to train their model.",
+    "properties": [
+      {
+        "name": "Arn",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 256,
+          "minLength": 1,
+          "pattern": "arn:aws(-[^:]+)?:comprehend:[a-zA-Z0-9-]*:[0-9]{12}:flywheel/[a-zA-Z0-9](-*[a-zA-Z0-9])*"
+        }
+      }
+    ]
+  },
+  "$hash": "60dc4a3d107bafc1d380d6f1fd5acd4e6b1810f9"
+}

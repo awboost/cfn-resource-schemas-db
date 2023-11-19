@@ -1,0 +1,262 @@
+{
+  "definitions": {
+    "ScheduleConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "FirstExecutionFrom",
+          "description": "The start date for objects to import in the first flow run. Epoch or ISO timestamp format is supported.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The start date for objects to import in the first flow run. Epoch or ISO timestamp format is supported.",
+            "maxLength": 255,
+            "minLength": 1,
+            "pattern": ".*\\S.*"
+          }
+        },
+        {
+          "name": "Object",
+          "description": "The name of the object to pull from the data source.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The name of the object to pull from the data source.",
+            "maxLength": 255,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9/\\._\\-]+$"
+          }
+        },
+        {
+          "name": "ScheduleExpression",
+          "description": "How often the data should be pulled from data source.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "How often the data should be pulled from data source.",
+            "maxLength": 255,
+            "minLength": 1,
+            "pattern": ".*\\S.*"
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "description": "A label for tagging DataIntegration resources",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "A key to identify the tag.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "A key to identify the tag.",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^(?!aws:)[a-zA-Z+-=._:/]+$"
+          }
+        },
+        {
+          "name": "Value",
+          "description": "Corresponding tag value for the key.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Corresponding tag value for the key.",
+            "maxLength": 256,
+            "minLength": 0
+          }
+        }
+      ]
+    },
+    "FileConfiguration": {
+      "type": "object",
+      "description": "The configuration for what files should be pulled from the source.",
+      "properties": [
+        {
+          "name": "Folders",
+          "description": "Identifiers for the source folders to pull all files from recursively.",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "description": "Identifiers for the source folders to pull all files from recursively.",
+            "itemType": {
+              "type": "string",
+              "maxLength": 200,
+              "minLength": 1,
+              "pattern": ".*\\S.*"
+            },
+            "maxLength": 10,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Filters",
+          "description": "Restrictions for what files should be pulled from the source.",
+          "optional": true,
+          "type": {
+            "type": "record",
+            "description": "Restrictions for what files should be pulled from the source.",
+            "valueType": {
+              "type": "array",
+              "itemType": {
+                "type": "string",
+                "maxLength": 255,
+                "minLength": 1
+              },
+              "maxLength": 2048,
+              "minLength": 1
+            }
+          }
+        }
+      ]
+    },
+    "ObjectConfiguration": {
+      "type": "record",
+      "description": "The configuration for what data should be pulled from the source.",
+      "valueType": {
+        "type": "record",
+        "valueType": {
+          "type": "array",
+          "itemType": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          },
+          "maxLength": 2048,
+          "minLength": 1
+        }
+      }
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource Type definition for AWS::AppIntegrations::DataIntegration",
+    "properties": [
+      {
+        "name": "Description",
+        "description": "The data integration description.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The data integration description.",
+          "maxLength": 1000,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "Name",
+        "description": "The name of the data integration.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The name of the data integration.",
+          "maxLength": 255,
+          "minLength": 1,
+          "pattern": "^[a-zA-Z0-9/\\._\\-]+$"
+        }
+      },
+      {
+        "name": "KmsKey",
+        "description": "The KMS key of the data integration.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The KMS key of the data integration.",
+          "maxLength": 255,
+          "minLength": 1,
+          "pattern": ".*\\S.*"
+        }
+      },
+      {
+        "name": "ScheduleConfig",
+        "description": "The name of the data and how often it should be pulled from the source.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "The name of the data and how often it should be pulled from the source.",
+          "typeName": "ScheduleConfig"
+        }
+      },
+      {
+        "name": "SourceURI",
+        "description": "The URI of the data source.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The URI of the data source.",
+          "maxLength": 1000,
+          "minLength": 1,
+          "pattern": "^(\\w+\\:\\/\\/[\\w.-]+[\\w/!@#+=.-]+$)|(\\w+\\:\\/\\/[\\w.-]+[\\w/!@#+=.-]+[\\w/!@#+=.-]+[\\w/!@#+=.,-]+$)"
+        }
+      },
+      {
+        "name": "Tags",
+        "description": "The tags (keys and values) associated with the data integration.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "The tags (keys and values) associated with the data integration.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          },
+          "maxLength": 200,
+          "minLength": 0
+        }
+      },
+      {
+        "name": "FileConfiguration",
+        "description": "The configuration for what files should be pulled from the source.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "The configuration for what files should be pulled from the source.",
+          "typeName": "FileConfiguration"
+        }
+      },
+      {
+        "name": "ObjectConfiguration",
+        "description": "The configuration for what data should be pulled from the source.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "The configuration for what data should be pulled from the source.",
+          "typeName": "ObjectConfiguration"
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Resource Type definition for AWS::AppIntegrations::DataIntegration",
+    "properties": [
+      {
+        "name": "Id",
+        "description": "The unique identifer of the data integration.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The unique identifer of the data integration.",
+          "maxLength": 255,
+          "minLength": 1,
+          "pattern": "[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}"
+        }
+      },
+      {
+        "name": "DataIntegrationArn",
+        "description": "The Amazon Resource Name (ARN) of the data integration.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) of the data integration.",
+          "maxLength": 2048,
+          "minLength": 1,
+          "pattern": "^arn:aws[-a-z]*:[A-Za-z0-9][A-Za-z0-9_/.-]{0,62}:[A-Za-z0-9_/.-]{0,63}:[A-Za-z0-9_/.-]{0,63}:[A-Za-z0-9][A-Za-z0-9:_/+=,@.-]{0,1023}$"
+        }
+      }
+    ]
+  },
+  "$hash": "7cc31574f35424281e78add0d86ec843ed251686"
+}

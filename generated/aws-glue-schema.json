@@ -1,0 +1,211 @@
+{
+  "definitions": {
+    "Registry": {
+      "type": "object",
+      "description": "Identifier for the registry which the schema is part of.",
+      "properties": [
+        {
+          "name": "Name",
+          "description": "Name of the registry in which the schema will be created.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Name of the registry in which the schema will be created.",
+            "maxLength": 255,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Arn",
+          "description": "Amazon Resource Name for the Registry.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Amazon Resource Name for the Registry.",
+            "pattern": "arn:aws(-(cn|us-gov|iso(-[bef])?))?:glue:.*"
+          }
+        }
+      ]
+    },
+    "SchemaVersion": {
+      "type": "object",
+      "description": "Specify checkpoint version for update. This is only required to update the Compatibility.",
+      "properties": [
+        {
+          "name": "IsLatest",
+          "description": "Indicates if the latest version needs to be updated.",
+          "optional": true,
+          "type": {
+            "type": "boolean",
+            "description": "Indicates if the latest version needs to be updated."
+          }
+        },
+        {
+          "name": "VersionNumber",
+          "description": "Indicates the version number in the schema to update.",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "Indicates the version number in the schema to update.",
+            "isInteger": true,
+            "maximum": 100000,
+            "minimum": 1
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "A key to identify the tag.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "A key to identify the tag.",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "description": "Corresponding tag value for the key.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Corresponding tag value for the key.",
+            "maxLength": 256,
+            "minLength": 0
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "This resource represents a schema of Glue Schema Registry.",
+    "properties": [
+      {
+        "name": "Registry",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "Registry"
+        }
+      },
+      {
+        "name": "Name",
+        "description": "Name of the schema.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "Name of the schema.",
+          "maxLength": 255,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "Description",
+        "description": "A description of the schema. If description is not provided, there will not be any default value for this.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "A description of the schema. If description is not provided, there will not be any default value for this.",
+          "maxLength": 1000,
+          "minLength": 0
+        }
+      },
+      {
+        "name": "DataFormat",
+        "description": "Data format name to use for the schema. Accepted values: 'AVRO', 'JSON', 'PROTOBUF'",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "Data format name to use for the schema. Accepted values: 'AVRO', 'JSON', 'PROTOBUF'",
+          "allowedValues": ["AVRO", "JSON", "PROTOBUF"]
+        }
+      },
+      {
+        "name": "Compatibility",
+        "description": "Compatibility setting for the schema.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "Compatibility setting for the schema.",
+          "allowedValues": [
+            "NONE",
+            "DISABLED",
+            "BACKWARD",
+            "BACKWARD_ALL",
+            "FORWARD",
+            "FORWARD_ALL",
+            "FULL",
+            "FULL_ALL"
+          ]
+        }
+      },
+      {
+        "name": "SchemaDefinition",
+        "description": "Definition for the initial schema version in plain-text.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "Definition for the initial schema version in plain-text.",
+          "maxLength": 170000,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "CheckpointVersion",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "SchemaVersion"
+        }
+      },
+      {
+        "name": "Tags",
+        "description": "List of tags to tag the schema",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "List of tags to tag the schema",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          },
+          "maxLength": 10,
+          "minLength": 0
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "This resource represents a schema of Glue Schema Registry.",
+    "properties": [
+      {
+        "name": "Arn",
+        "description": "Amazon Resource Name for the Schema.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Amazon Resource Name for the Schema.",
+          "pattern": "arn:aws(-(cn|us-gov|iso(-[bef])?))?:glue:.*"
+        }
+      },
+      {
+        "name": "InitialSchemaVersionId",
+        "description": "Represents the version ID associated with the initial schema version.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Represents the version ID associated with the initial schema version.",
+          "pattern": "[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}"
+        }
+      }
+    ]
+  },
+  "$hash": "738968b357300931bdfae259fba66cb9e207bc80"
+}

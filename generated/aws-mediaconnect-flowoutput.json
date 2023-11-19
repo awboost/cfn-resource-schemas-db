@@ -1,0 +1,230 @@
+{
+  "definitions": {
+    "Encryption": {
+      "type": "object",
+      "description": "Information about the encryption of the flow.",
+      "properties": [
+        {
+          "name": "Algorithm",
+          "description": "The type of algorithm that is used for the encryption (such as aes128, aes192, or aes256).",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The type of algorithm that is used for the encryption (such as aes128, aes192, or aes256).",
+            "allowedValues": ["aes128", "aes192", "aes256"]
+          }
+        },
+        {
+          "name": "KeyType",
+          "description": "The type of key that is used for the encryption. If no keyType is provided, the service will use the default setting (static-key).",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The type of key that is used for the encryption. If no keyType is provided, the service will use the default setting (static-key).",
+            "allowedValues": ["static-key", "srt-password"]
+          }
+        },
+        {
+          "name": "RoleArn",
+          "description": "The ARN of the role that you created during setup (when you set up AWS Elemental MediaConnect as a trusted entity).",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The ARN of the role that you created during setup (when you set up AWS Elemental MediaConnect as a trusted entity)."
+          }
+        },
+        {
+          "name": "SecretArn",
+          "description": " The ARN of the secret that you created in AWS Secrets Manager to store the encryption key. This parameter is required for static key encryption and is not valid for SPEKE encryption.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": " The ARN of the secret that you created in AWS Secrets Manager to store the encryption key. This parameter is required for static key encryption and is not valid for SPEKE encryption."
+          }
+        }
+      ]
+    },
+    "VpcInterfaceAttachment": {
+      "type": "object",
+      "description": "The settings for attaching a VPC interface to an output.",
+      "properties": [
+        {
+          "name": "VpcInterfaceName",
+          "description": "The name of the VPC interface to use for this output.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The name of the VPC interface to use for this output."
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource schema for AWS::MediaConnect::FlowOutput",
+    "properties": [
+      {
+        "name": "FlowArn",
+        "description": "The Amazon Resource Name (ARN), a unique identifier for any AWS resource, of the flow.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN), a unique identifier for any AWS resource, of the flow."
+        }
+      },
+      {
+        "name": "CidrAllowList",
+        "description": "The range of IP addresses that should be allowed to initiate output requests to this flow. These IP addresses should be in the form of a Classless Inter-Domain Routing (CIDR) block; for example, 10.0.0.0/16.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "The range of IP addresses that should be allowed to initiate output requests to this flow. These IP addresses should be in the form of a Classless Inter-Domain Routing (CIDR) block; for example, 10.0.0.0/16.",
+          "itemType": {
+            "type": "string"
+          }
+        }
+      },
+      {
+        "name": "Encryption",
+        "description": "The type of key used for the encryption. If no keyType is provided, the service will use the default setting (static-key).",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "The type of key used for the encryption. If no keyType is provided, the service will use the default setting (static-key).",
+          "typeName": "Encryption"
+        }
+      },
+      {
+        "name": "Description",
+        "description": "A description of the output.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "A description of the output."
+        }
+      },
+      {
+        "name": "Destination",
+        "description": "The address where you want to send the output.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The address where you want to send the output."
+        }
+      },
+      {
+        "name": "MaxLatency",
+        "description": "The maximum latency in milliseconds. This parameter applies only to RIST-based and Zixi-based streams.",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "The maximum latency in milliseconds. This parameter applies only to RIST-based and Zixi-based streams.",
+          "isInteger": true
+        }
+      },
+      {
+        "name": "MinLatency",
+        "description": "The minimum latency in milliseconds.",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "The minimum latency in milliseconds.",
+          "isInteger": true
+        }
+      },
+      {
+        "name": "Name",
+        "description": "The name of the output. This value must be unique within the current flow.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The name of the output. This value must be unique within the current flow."
+        }
+      },
+      {
+        "name": "Port",
+        "description": "The port to use when content is distributed to this output.",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "The port to use when content is distributed to this output.",
+          "isInteger": true
+        }
+      },
+      {
+        "name": "Protocol",
+        "description": "The protocol that is used by the source or output.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The protocol that is used by the source or output.",
+          "allowedValues": [
+            "zixi-push",
+            "rtp-fec",
+            "rtp",
+            "zixi-pull",
+            "rist",
+            "fujitsu-qos",
+            "srt-listener",
+            "srt-caller"
+          ]
+        }
+      },
+      {
+        "name": "RemoteId",
+        "description": "The remote ID for the Zixi-pull stream.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The remote ID for the Zixi-pull stream."
+        }
+      },
+      {
+        "name": "SmoothingLatency",
+        "description": "The smoothing latency in milliseconds for RIST, RTP, and RTP-FEC streams.",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "The smoothing latency in milliseconds for RIST, RTP, and RTP-FEC streams.",
+          "isInteger": true
+        }
+      },
+      {
+        "name": "StreamId",
+        "description": "The stream ID that you want to use for this transport. This parameter applies only to Zixi-based streams.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The stream ID that you want to use for this transport. This parameter applies only to Zixi-based streams."
+        }
+      },
+      {
+        "name": "VpcInterfaceAttachment",
+        "description": "The name of the VPC interface attachment to use for this output.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "The name of the VPC interface attachment to use for this output.",
+          "typeName": "VpcInterfaceAttachment"
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Resource schema for AWS::MediaConnect::FlowOutput",
+    "properties": [
+      {
+        "name": "OutputArn",
+        "description": "The ARN of the output.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The ARN of the output."
+        }
+      }
+    ]
+  },
+  "$hash": "3ff99c8b38062c056963db06e3c314a529f80645"
+}

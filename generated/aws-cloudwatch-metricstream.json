@@ -1,0 +1,287 @@
+{
+  "definitions": {
+    "MetricStreamFilter": {
+      "type": "object",
+      "description": "This structure defines the metrics that will be streamed.",
+      "properties": [
+        {
+          "name": "Namespace",
+          "description": "Only metrics with Namespace matching this value will be streamed.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Only metrics with Namespace matching this value will be streamed.",
+            "maxLength": 255,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "MetricNames",
+          "description": "Only metrics with MetricNames matching these values will be streamed. Must be set together with Namespace.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "Only metrics with MetricNames matching these values will be streamed. Must be set together with Namespace.",
+            "itemType": {
+              "type": "string",
+              "maxLength": 255,
+              "minLength": 1
+            },
+            "maxLength": 999
+          }
+        }
+      ]
+    },
+    "MetricStreamStatisticsConfiguration": {
+      "type": "object",
+      "description": "This structure specifies a list of additional statistics to stream, and the metrics to stream those additional statistics for. All metrics that match the combination of metric name and namespace will be streamed with the extended statistics, no matter their dimensions.",
+      "properties": [
+        {
+          "name": "AdditionalStatistics",
+          "description": "The additional statistics to stream for the metrics listed in IncludeMetrics.",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "description": "The additional statistics to stream for the metrics listed in IncludeMetrics.",
+            "itemType": {
+              "type": "string"
+            },
+            "maxLength": 20
+          }
+        },
+        {
+          "name": "IncludeMetrics",
+          "description": "An array that defines the metrics that are to have additional statistics streamed.",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "description": "An array that defines the metrics that are to have additional statistics streamed.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "MetricStreamStatisticsMetric"
+            },
+            "maxLength": 100
+          }
+        }
+      ]
+    },
+    "MetricStreamStatisticsMetric": {
+      "type": "object",
+      "description": "A structure that specifies the metric name and namespace for one metric that is going to have additional statistics included in the stream.",
+      "properties": [
+        {
+          "name": "MetricName",
+          "description": "The name of the metric.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The name of the metric.",
+            "maxLength": 255,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Namespace",
+          "description": "The namespace of the metric.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The namespace of the metric.",
+            "maxLength": 255,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "description": "Metadata that you can assign to a Metric Stream, consisting of a key-value pair.",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "A unique identifier for the tag.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "A unique identifier for the tag.",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "description": "String which you can use to describe or define the tag.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "String which you can use to describe or define the tag.",
+            "maxLength": 256,
+            "minLength": 1
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource Type definition for Metric Stream",
+    "properties": [
+      {
+        "name": "ExcludeFilters",
+        "description": "Define which metrics will be not streamed. Metrics matched by multiple instances of MetricStreamFilter are joined with an OR operation by default. If both IncludeFilters and ExcludeFilters are omitted, all metrics in the account will be streamed. IncludeFilters and ExcludeFilters are mutually exclusive. Default to null.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "Define which metrics will be not streamed. Metrics matched by multiple instances of MetricStreamFilter are joined with an OR operation by default. If both IncludeFilters and ExcludeFilters are omitted, all metrics in the account will be streamed. IncludeFilters and ExcludeFilters are mutually exclusive. Default to null.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "MetricStreamFilter"
+          },
+          "maxLength": 1000
+        }
+      },
+      {
+        "name": "FirehoseArn",
+        "description": "The ARN of the Kinesis Firehose where to stream the data.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The ARN of the Kinesis Firehose where to stream the data.",
+          "maxLength": 2048,
+          "minLength": 20
+        }
+      },
+      {
+        "name": "IncludeFilters",
+        "description": "Define which metrics will be streamed. Metrics matched by multiple instances of MetricStreamFilter are joined with an OR operation by default. If both IncludeFilters and ExcludeFilters are omitted, all metrics in the account will be streamed. IncludeFilters and ExcludeFilters are mutually exclusive. Default to null.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "Define which metrics will be streamed. Metrics matched by multiple instances of MetricStreamFilter are joined with an OR operation by default. If both IncludeFilters and ExcludeFilters are omitted, all metrics in the account will be streamed. IncludeFilters and ExcludeFilters are mutually exclusive. Default to null.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "MetricStreamFilter"
+          },
+          "maxLength": 1000
+        }
+      },
+      {
+        "name": "Name",
+        "description": "Name of the metric stream.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Name of the metric stream.",
+          "maxLength": 255,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "RoleArn",
+        "description": "The ARN of the role that provides access to the Kinesis Firehose.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The ARN of the role that provides access to the Kinesis Firehose.",
+          "maxLength": 2048,
+          "minLength": 20
+        }
+      },
+      {
+        "name": "OutputFormat",
+        "description": "The output format of the data streamed to the Kinesis Firehose.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The output format of the data streamed to the Kinesis Firehose.",
+          "maxLength": 255,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "StatisticsConfigurations",
+        "description": "By default, a metric stream always sends the MAX, MIN, SUM, and SAMPLECOUNT statistics for each metric that is streamed. You can use this parameter to have the metric stream also send additional statistics in the stream. This array can have up to 100 members.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "By default, a metric stream always sends the MAX, MIN, SUM, and SAMPLECOUNT statistics for each metric that is streamed. You can use this parameter to have the metric stream also send additional statistics in the stream. This array can have up to 100 members.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "MetricStreamStatisticsConfiguration"
+          },
+          "maxLength": 100
+        }
+      },
+      {
+        "name": "Tags",
+        "description": "A set of tags to assign to the delivery stream.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "A set of tags to assign to the delivery stream.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          },
+          "maxLength": 50
+        }
+      },
+      {
+        "name": "IncludeLinkedAccountsMetrics",
+        "description": "If you are creating a metric stream in a monitoring account, specify true to include metrics from source accounts that are linked to this monitoring account, in the metric stream. The default is false.",
+        "optional": true,
+        "type": {
+          "type": "boolean",
+          "description": "If you are creating a metric stream in a monitoring account, specify true to include metrics from source accounts that are linked to this monitoring account, in the metric stream. The default is false."
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Resource Type definition for Metric Stream",
+    "properties": [
+      {
+        "name": "Arn",
+        "description": "Amazon Resource Name of the metric stream.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Amazon Resource Name of the metric stream.",
+          "maxLength": 2048,
+          "minLength": 20
+        }
+      },
+      {
+        "name": "CreationDate",
+        "description": "The date of creation of the metric stream.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The date of creation of the metric stream."
+        }
+      },
+      {
+        "name": "LastUpdateDate",
+        "description": "The date of the last update of the metric stream.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The date of the last update of the metric stream."
+        }
+      },
+      {
+        "name": "State",
+        "description": "Displays the state of the Metric Stream.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Displays the state of the Metric Stream.",
+          "maxLength": 255,
+          "minLength": 1
+        }
+      }
+    ]
+  },
+  "$hash": "26bfc6d41248402803baf14432ecdf539ae21f8a"
+}

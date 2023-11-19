@@ -1,0 +1,347 @@
+{
+  "definitions": {
+    "Matcher": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "GrpcCode",
+          "description": "You can specify values between 0 and 99. You can specify multiple values, or a range of values. The default value is 12.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "You can specify values between 0 and 99. You can specify multiple values, or a range of values. The default value is 12."
+          }
+        },
+        {
+          "name": "HttpCode",
+          "description": "For Application Load Balancers, you can specify values between 200 and 499, and the default value is 200. You can specify multiple values or a range of values. ",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "For Application Load Balancers, you can specify values between 200 and 499, and the default value is 200. You can specify multiple values or a range of values. "
+          }
+        }
+      ]
+    },
+    "TargetDescription": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "AvailabilityZone",
+          "description": "An Availability Zone or all. This determines whether the target receives traffic from the load balancer nodes in the specified Availability Zone or from all enabled Availability Zones for the load balancer.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "An Availability Zone or all. This determines whether the target receives traffic from the load balancer nodes in the specified Availability Zone or from all enabled Availability Zones for the load balancer."
+          }
+        },
+        {
+          "name": "Id",
+          "description": "The ID of the target. If the target type of the target group is instance, specify an instance ID. If the target type is ip, specify an IP address. If the target type is lambda, specify the ARN of the Lambda function. If the target type is alb, specify the ARN of the Application Load Balancer target. ",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The ID of the target. If the target type of the target group is instance, specify an instance ID. If the target type is ip, specify an IP address. If the target type is lambda, specify the ARN of the Lambda function. If the target type is alb, specify the ARN of the Application Load Balancer target. "
+          }
+        },
+        {
+          "name": "Port",
+          "description": "The port on which the target is listening. If the target group protocol is GENEVE, the supported port is 6081. If the target type is alb, the targeted Application Load Balancer must have at least one listener whose port matches the target group port. Not used if the target is a Lambda function.",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "The port on which the target is listening. If the target group protocol is GENEVE, the supported port is 6081. If the target type is alb, the targeted Application Load Balancer must have at least one listener whose port matches the target group port. Not used if the target is a Lambda function.",
+            "isInteger": true
+          }
+        }
+      ]
+    },
+    "TargetGroupAttribute": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Value",
+          "description": "The name of the attribute.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The name of the attribute."
+          }
+        },
+        {
+          "name": "Key",
+          "description": "The value of the attribute.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The value of the attribute."
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Value",
+          "description": "The key name of the tag. ",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The key name of the tag. "
+          }
+        },
+        {
+          "name": "Key",
+          "description": "The value for the tag. ",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The value for the tag. "
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource Type definition for AWS::ElasticLoadBalancingV2::TargetGroup",
+    "properties": [
+      {
+        "name": "IpAddressType",
+        "description": "The type of IP address used for this target group. The possible values are ipv4 and ipv6. ",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The type of IP address used for this target group. The possible values are ipv4 and ipv6. "
+        }
+      },
+      {
+        "name": "HealthCheckIntervalSeconds",
+        "description": "The approximate amount of time, in seconds, between health checks of an individual target.",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "The approximate amount of time, in seconds, between health checks of an individual target.",
+          "isInteger": true
+        }
+      },
+      {
+        "name": "Matcher",
+        "description": "[HTTP/HTTPS health checks] The HTTP or gRPC codes to use when checking for a successful response from a target.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "[HTTP/HTTPS health checks] The HTTP or gRPC codes to use when checking for a successful response from a target.",
+          "typeName": "Matcher"
+        }
+      },
+      {
+        "name": "HealthCheckPath",
+        "description": "[HTTP/HTTPS health checks] The destination for health checks on the targets. [HTTP1 or HTTP2 protocol version] The ping path. The default is /. [GRPC protocol version] The path of a custom health check method with the format /package.service/method. The default is /AWS.ALB/healthcheck.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "[HTTP/HTTPS health checks] The destination for health checks on the targets. [HTTP1 or HTTP2 protocol version] The ping path. The default is /. [GRPC protocol version] The path of a custom health check method with the format /package.service/method. The default is /AWS.ALB/healthcheck."
+        }
+      },
+      {
+        "name": "Port",
+        "description": "The port on which the targets receive traffic. This port is used unless you specify a port override when registering the target. If the target is a Lambda function, this parameter does not apply. If the protocol is GENEVE, the supported port is 6081.",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "The port on which the targets receive traffic. This port is used unless you specify a port override when registering the target. If the target is a Lambda function, this parameter does not apply. If the protocol is GENEVE, the supported port is 6081.",
+          "isInteger": true
+        }
+      },
+      {
+        "name": "Targets",
+        "description": "The targets.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "The targets.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "TargetDescription"
+          }
+        }
+      },
+      {
+        "name": "HealthCheckEnabled",
+        "description": "Indicates whether health checks are enabled. If the target type is lambda, health checks are disabled by default but can be enabled. If the target type is instance, ip, or alb, health checks are always enabled and cannot be disabled.",
+        "optional": true,
+        "type": {
+          "type": "boolean",
+          "description": "Indicates whether health checks are enabled. If the target type is lambda, health checks are disabled by default but can be enabled. If the target type is instance, ip, or alb, health checks are always enabled and cannot be disabled."
+        }
+      },
+      {
+        "name": "ProtocolVersion",
+        "description": "[HTTP/HTTPS protocol] The protocol version. The possible values are GRPC, HTTP1, and HTTP2.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "[HTTP/HTTPS protocol] The protocol version. The possible values are GRPC, HTTP1, and HTTP2."
+        }
+      },
+      {
+        "name": "UnhealthyThresholdCount",
+        "description": "The number of consecutive health check failures required before considering a target unhealthy.",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "The number of consecutive health check failures required before considering a target unhealthy.",
+          "isInteger": true
+        }
+      },
+      {
+        "name": "HealthCheckTimeoutSeconds",
+        "description": "The amount of time, in seconds, during which no response from a target means a failed health check.",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "The amount of time, in seconds, during which no response from a target means a failed health check.",
+          "isInteger": true
+        }
+      },
+      {
+        "name": "Name",
+        "description": "The name of the target group.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The name of the target group."
+        }
+      },
+      {
+        "name": "VpcId",
+        "description": "The identifier of the virtual private cloud (VPC). If the target is a Lambda function, this parameter does not apply.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The identifier of the virtual private cloud (VPC). If the target is a Lambda function, this parameter does not apply."
+        }
+      },
+      {
+        "name": "HealthyThresholdCount",
+        "description": "The number of consecutive health checks successes required before considering an unhealthy target healthy. ",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "The number of consecutive health checks successes required before considering an unhealthy target healthy. ",
+          "isInteger": true
+        }
+      },
+      {
+        "name": "HealthCheckProtocol",
+        "description": "The protocol the load balancer uses when performing health checks on targets. ",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The protocol the load balancer uses when performing health checks on targets. "
+        }
+      },
+      {
+        "name": "TargetGroupAttributes",
+        "description": "The attributes.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "The attributes.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "TargetGroupAttribute"
+          }
+        }
+      },
+      {
+        "name": "TargetType",
+        "description": "The type of target that you must specify when registering targets with this target group. You can't specify targets for a target group using more than one target type.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The type of target that you must specify when registering targets with this target group. You can't specify targets for a target group using more than one target type."
+        }
+      },
+      {
+        "name": "HealthCheckPort",
+        "description": "The port the load balancer uses when performing health checks on targets. ",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The port the load balancer uses when performing health checks on targets. "
+        }
+      },
+      {
+        "name": "Protocol",
+        "description": "The protocol to use for routing traffic to the targets.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The protocol to use for routing traffic to the targets."
+        }
+      },
+      {
+        "name": "Tags",
+        "description": "The tags.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "The tags.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          }
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Resource Type definition for AWS::ElasticLoadBalancingV2::TargetGroup",
+    "properties": [
+      {
+        "name": "LoadBalancerArns",
+        "description": "The Amazon Resource Names (ARNs) of the load balancers that route traffic to this target group.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "The Amazon Resource Names (ARNs) of the load balancers that route traffic to this target group.",
+          "itemType": {
+            "type": "string"
+          }
+        }
+      },
+      {
+        "name": "TargetGroupFullName",
+        "description": "The full name of the target group.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The full name of the target group."
+        }
+      },
+      {
+        "name": "TargetGroupArn",
+        "description": "The ARN of the Target Group",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The ARN of the Target Group"
+        }
+      },
+      {
+        "name": "TargetGroupName",
+        "description": "The name of the target group.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The name of the target group."
+        }
+      }
+    ]
+  },
+  "$hash": "ceed89f0061d72aa3fd974f25f7af636f283e825"
+}

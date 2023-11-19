@@ -1,0 +1,248 @@
+{
+  "definitions": {
+    "ImageTestsConfiguration": {
+      "type": "object",
+      "description": "Image tests configuration.",
+      "properties": [
+        {
+          "name": "ImageTestsEnabled",
+          "description": "Defines if tests should be executed when building this image.",
+          "optional": true,
+          "type": {
+            "type": "boolean",
+            "description": "Defines if tests should be executed when building this image."
+          }
+        },
+        {
+          "name": "TimeoutMinutes",
+          "description": "The maximum time in minutes that tests are permitted to run.",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "The maximum time in minutes that tests are permitted to run.",
+            "isInteger": true,
+            "maximum": 1440,
+            "minimum": 60
+          }
+        }
+      ]
+    },
+    "ImageScanningConfiguration": {
+      "type": "object",
+      "description": "Determines if tests should run after building the image. Image Builder defaults to enable tests to run following the image build, before image distribution.",
+      "properties": [
+        {
+          "name": "EcrConfiguration",
+          "description": "Contains ECR settings for vulnerability scans.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "Contains ECR settings for vulnerability scans.",
+            "typeName": "EcrConfiguration"
+          }
+        },
+        {
+          "name": "ImageScanningEnabled",
+          "description": "This sets whether Image Builder keeps a snapshot of the vulnerability scans that Amazon Inspector runs against the build instance when you create a new image.",
+          "optional": true,
+          "type": {
+            "type": "boolean",
+            "description": "This sets whether Image Builder keeps a snapshot of the vulnerability scans that Amazon Inspector runs against the build instance when you create a new image."
+          }
+        }
+      ]
+    },
+    "EcrConfiguration": {
+      "type": "object",
+      "description": "Settings for Image Builder to configure the ECR repository and output container images that are scanned.",
+      "properties": [
+        {
+          "name": "ContainerTags",
+          "description": "Tags for Image Builder to apply the output container image that is scanned. Tags can help you identify and manage your scanned images.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "Tags for Image Builder to apply the output container image that is scanned. Tags can help you identify and manage your scanned images.",
+            "itemType": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "name": "RepositoryName",
+          "description": "The name of the container repository that Amazon Inspector scans to identify findings for your container images. The name includes the path for the repository location. If you don't provide this information, Image Builder creates a repository in your account named image-builder-image-scanning-repository to use for vulnerability scans for your output container images.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The name of the container repository that Amazon Inspector scans to identify findings for your container images. The name includes the path for the repository location. If you don't provide this information, Image Builder creates a repository in your account named image-builder-image-scanning-repository to use for vulnerability scans for your output container images."
+          }
+        }
+      ]
+    },
+    "Schedule": {
+      "type": "object",
+      "description": "The schedule of the image pipeline.",
+      "properties": [
+        {
+          "name": "ScheduleExpression",
+          "description": "The expression determines how often EC2 Image Builder evaluates your pipelineExecutionStartCondition.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The expression determines how often EC2 Image Builder evaluates your pipelineExecutionStartCondition."
+          }
+        },
+        {
+          "name": "PipelineExecutionStartCondition",
+          "description": "The condition configures when the pipeline should trigger a new image build.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The condition configures when the pipeline should trigger a new image build.",
+            "allowedValues": [
+              "EXPRESSION_MATCH_ONLY",
+              "EXPRESSION_MATCH_AND_DEPENDENCY_UPDATES_AVAILABLE"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource schema for AWS::ImageBuilder::ImagePipeline",
+    "properties": [
+      {
+        "name": "Name",
+        "description": "The name of the image pipeline.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The name of the image pipeline."
+        }
+      },
+      {
+        "name": "Description",
+        "description": "The description of the image pipeline.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The description of the image pipeline."
+        }
+      },
+      {
+        "name": "ImageTestsConfiguration",
+        "description": "The image tests configuration of the image pipeline.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "The image tests configuration of the image pipeline.",
+          "typeName": "ImageTestsConfiguration"
+        }
+      },
+      {
+        "name": "Status",
+        "description": "The status of the image pipeline.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The status of the image pipeline.",
+          "allowedValues": ["DISABLED", "ENABLED"]
+        }
+      },
+      {
+        "name": "Schedule",
+        "description": "The schedule of the image pipeline.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "The schedule of the image pipeline.",
+          "typeName": "Schedule"
+        }
+      },
+      {
+        "name": "ImageRecipeArn",
+        "description": "The Amazon Resource Name (ARN) of the image recipe that defines how images are configured, tested, and assessed.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) of the image recipe that defines how images are configured, tested, and assessed."
+        }
+      },
+      {
+        "name": "ContainerRecipeArn",
+        "description": "The Amazon Resource Name (ARN) of the container recipe that defines how images are configured and tested.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) of the container recipe that defines how images are configured and tested."
+        }
+      },
+      {
+        "name": "DistributionConfigurationArn",
+        "description": "The Amazon Resource Name (ARN) of the distribution configuration associated with this image pipeline.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) of the distribution configuration associated with this image pipeline."
+        }
+      },
+      {
+        "name": "InfrastructureConfigurationArn",
+        "description": "The Amazon Resource Name (ARN) of the infrastructure configuration associated with this image pipeline.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) of the infrastructure configuration associated with this image pipeline."
+        }
+      },
+      {
+        "name": "EnhancedImageMetadataEnabled",
+        "description": "Collects additional information about the image being created, including the operating system (OS) version and package list.",
+        "optional": true,
+        "type": {
+          "type": "boolean",
+          "description": "Collects additional information about the image being created, including the operating system (OS) version and package list."
+        }
+      },
+      {
+        "name": "ImageScanningConfiguration",
+        "description": "Contains settings for vulnerability scans.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "Contains settings for vulnerability scans.",
+          "typeName": "ImageScanningConfiguration"
+        }
+      },
+      {
+        "name": "Tags",
+        "description": "The tags of this image pipeline.",
+        "optional": true,
+        "type": {
+          "type": "record",
+          "description": "The tags of this image pipeline.",
+          "valueType": {
+            "type": "string"
+          }
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Resource schema for AWS::ImageBuilder::ImagePipeline",
+    "properties": [
+      {
+        "name": "Arn",
+        "description": "The Amazon Resource Name (ARN) of the image pipeline.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) of the image pipeline."
+        }
+      }
+    ]
+  },
+  "$hash": "e2f67acd8d15874b07750f76151a9e6288da5ad2"
+}

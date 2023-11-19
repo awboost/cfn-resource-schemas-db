@@ -1,0 +1,294 @@
+{
+  "definitions": {
+    "Tag": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 1024,
+            "minLength": 1,
+            "pattern": "^(?!aws:.*)([\\p{L}\\p{Z}\\p{N}_.:=+\\/\\-@%]*)$"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 1024,
+            "minLength": 1,
+            "pattern": "^([\\p{L}\\p{Z}\\p{N}_.:=+\\/\\-@%]*)$"
+          }
+        }
+      ]
+    },
+    "LifecycleConfiguration": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Rules",
+          "description": "A list of lifecycle rules for individual objects in an Amazon S3Outposts bucket.",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "description": "A list of lifecycle rules for individual objects in an Amazon S3Outposts bucket.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Rule"
+            }
+          }
+        }
+      ]
+    },
+    "Rule": {
+      "type": "object",
+      "description": "Specifies lifecycle rules for an Amazon S3Outposts bucket. You must specify at least one of the following: AbortIncompleteMultipartUpload, ExpirationDate, ExpirationInDays.",
+      "properties": [
+        {
+          "name": "Status",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": ["Enabled", "Disabled"]
+          }
+        },
+        {
+          "name": "Id",
+          "description": "Unique identifier for the lifecycle rule. The value can't be longer than 255 characters.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Unique identifier for the lifecycle rule. The value can't be longer than 255 characters.",
+            "maxLength": 255
+          }
+        },
+        {
+          "name": "AbortIncompleteMultipartUpload",
+          "description": "Specifies a lifecycle rule that stops incomplete multipart uploads to an Amazon S3Outposts bucket.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "Specifies a lifecycle rule that stops incomplete multipart uploads to an Amazon S3Outposts bucket.",
+            "typeName": "AbortIncompleteMultipartUpload"
+          }
+        },
+        {
+          "name": "ExpirationDate",
+          "description": "Indicates when objects are deleted from Amazon S3Outposts. The date value must be in ISO 8601 format. The time is always midnight UTC.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "Indicates when objects are deleted from Amazon S3Outposts. The date value must be in ISO 8601 format. The time is always midnight UTC.",
+            "typeName": "iso8601UTC"
+          }
+        },
+        {
+          "name": "ExpirationInDays",
+          "description": "Indicates the number of days after creation when objects are deleted from Amazon S3Outposts.",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "Indicates the number of days after creation when objects are deleted from Amazon S3Outposts.",
+            "isInteger": true,
+            "minimum": 1
+          }
+        },
+        {
+          "name": "Filter",
+          "description": "The container for the filter of the lifecycle rule.",
+          "optional": true,
+          "type": {
+            "type": "object",
+            "description": "The container for the filter of the lifecycle rule.",
+            "properties": [
+              {
+                "name": "Prefix",
+                "description": "Object key prefix that identifies one or more objects to which this rule applies.",
+                "optional": true,
+                "type": {
+                  "type": "ref",
+                  "description": "Object key prefix that identifies one or more objects to which this rule applies.",
+                  "typeName": "FilterPrefix"
+                }
+              },
+              {
+                "name": "Tag",
+                "description": "Specifies a tag used to identify a subset of objects for an Amazon S3Outposts bucket.",
+                "optional": true,
+                "type": {
+                  "type": "ref",
+                  "description": "Specifies a tag used to identify a subset of objects for an Amazon S3Outposts bucket.",
+                  "typeName": "FilterTag"
+                }
+              },
+              {
+                "name": "AndOperator",
+                "description": "The container for the AND condition for the lifecycle rule. A combination of Prefix and 1 or more Tags OR a minimum of 2 or more tags.",
+                "optional": true,
+                "type": {
+                  "type": "ref",
+                  "description": "The container for the AND condition for the lifecycle rule. A combination of Prefix and 1 or more Tags OR a minimum of 2 or more tags.",
+                  "typeName": "FilterAndOperator"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "iso8601UTC": {
+      "type": "string",
+      "description": "The date value in ISO 8601 format. The timezone is always UTC. (YYYY-MM-DDThh:mm:ssZ)",
+      "pattern": "^([0-2]\\d{3})-(0[0-9]|1[0-2])-([0-2]\\d|3[01])T([01]\\d|2[0-4]):([0-5]\\d):([0-6]\\d)((\\.\\d{3})?)Z$"
+    },
+    "AbortIncompleteMultipartUpload": {
+      "type": "object",
+      "description": "Specifies the days since the initiation of an incomplete multipart upload that Amazon S3Outposts will wait before permanently removing all parts of the upload.",
+      "properties": [
+        {
+          "name": "DaysAfterInitiation",
+          "description": "Specifies the number of days after which Amazon S3Outposts aborts an incomplete multipart upload.",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "description": "Specifies the number of days after which Amazon S3Outposts aborts an incomplete multipart upload.",
+            "isInteger": true,
+            "minimum": 0
+          }
+        }
+      ]
+    },
+    "FilterPrefix": {
+      "type": "string",
+      "description": "Prefix identifies one or more objects to which the rule applies."
+    },
+    "FilterTag": {
+      "type": "object",
+      "description": "Tag used to identify a subset of objects for an Amazon S3Outposts bucket.",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 1024,
+            "minLength": 1,
+            "pattern": "^([\\p{L}\\p{Z}\\p{N}_.:=+\\/\\-@%]*)$"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 1024,
+            "minLength": 1,
+            "pattern": "^([\\p{L}\\p{Z}\\p{N}_.:=+\\/\\-@%]*)$"
+          }
+        }
+      ]
+    },
+    "FilterAndOperator": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Prefix",
+          "description": "Prefix identifies one or more objects to which the rule applies.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "Prefix identifies one or more objects to which the rule applies.",
+            "typeName": "FilterPrefix"
+          }
+        },
+        {
+          "name": "Tags",
+          "description": "All of these tags must exist in the object's tag set in order for the rule to apply.",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "description": "All of these tags must exist in the object's tag set in order for the rule to apply.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "FilterTag"
+            },
+            "minLength": 1
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource Type Definition for AWS::S3Outposts::Bucket",
+    "properties": [
+      {
+        "name": "BucketName",
+        "description": "A name for the bucket.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "A name for the bucket.",
+          "maxLength": 63,
+          "minLength": 3,
+          "pattern": "(?=^.{3,63}$)(?!^(\\d+\\.)+\\d+$)(^(([a-z0-9]|[a-z0-9][a-z0-9\\-]*[a-z0-9])\\.)*([a-z0-9]|[a-z0-9][a-z0-9\\-]*[a-z0-9])$)"
+        }
+      },
+      {
+        "name": "OutpostId",
+        "description": "The id of the customer outpost on which the bucket resides.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The id of the customer outpost on which the bucket resides.",
+          "pattern": "^(op-[a-f0-9]{17}|\\d{12}|ec2)$"
+        }
+      },
+      {
+        "name": "Tags",
+        "description": "An arbitrary set of tags (key-value pairs) for this S3Outposts bucket.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "An arbitrary set of tags (key-value pairs) for this S3Outposts bucket.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          }
+        }
+      },
+      {
+        "name": "LifecycleConfiguration",
+        "description": "Rules that define how Amazon S3Outposts manages objects during their lifetime.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "Rules that define how Amazon S3Outposts manages objects during their lifetime.",
+          "typeName": "LifecycleConfiguration"
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Resource Type Definition for AWS::S3Outposts::Bucket",
+    "properties": [
+      {
+        "name": "Arn",
+        "description": "The Amazon Resource Name (ARN) of the specified bucket.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) of the specified bucket.",
+          "maxLength": 2048,
+          "minLength": 20,
+          "pattern": "^arn:[^:]+:s3-outposts:[a-zA-Z0-9\\-]+:\\d{12}:outpost\\/[^:]+\\/bucket\\/[^:]+$"
+        }
+      }
+    ]
+  },
+  "$hash": "a5c58847ce35d342ef6380ca977d99ebcecfe77f"
+}

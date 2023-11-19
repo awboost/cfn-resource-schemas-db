@@ -1,0 +1,205 @@
+{
+  "definitions": {
+    "TagMap": {
+      "type": "record",
+      "description": "A map of resource tags",
+      "valueType": {
+        "type": "string",
+        "description": "Resource tag value",
+        "maxLength": 256,
+        "minLength": 0
+      }
+    },
+    "WorkflowEngine": {
+      "type": "string",
+      "allowedValues": ["WDL", "NEXTFLOW", "CWL"],
+      "maxLength": 64,
+      "minLength": 1
+    },
+    "Accelerators": {
+      "type": "string",
+      "allowedValues": ["GPU"],
+      "maxLength": 64,
+      "minLength": 1
+    },
+    "WorkflowParameter": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Description",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 0,
+            "pattern": "^[\\p{L}||\\p{M}||\\p{Z}||\\p{S}||\\p{N}||\\p{P}]+$"
+          }
+        },
+        {
+          "name": "Optional",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        }
+      ]
+    },
+    "WorkflowParameterTemplate": {
+      "type": "record",
+      "valueType": {
+        "type": "ref",
+        "typeName": "WorkflowParameter"
+      }
+    },
+    "WorkflowStatus": {
+      "type": "string",
+      "allowedValues": ["CREATING", "ACTIVE", "UPDATING", "DELETED", "FAILED"],
+      "maxLength": 64,
+      "minLength": 1
+    },
+    "WorkflowType": {
+      "type": "string",
+      "allowedValues": ["PRIVATE"],
+      "maxLength": 64,
+      "minLength": 1
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Definition of AWS::Omics::Workflow Resource Type",
+    "properties": [
+      {
+        "name": "DefinitionUri",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 256,
+          "minLength": 1,
+          "pattern": "^[\\p{L}||\\p{M}||\\p{Z}||\\p{S}||\\p{N}||\\p{P}]+$"
+        }
+      },
+      {
+        "name": "Description",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 256,
+          "minLength": 1,
+          "pattern": "^[\\p{L}||\\p{M}||\\p{Z}||\\p{S}||\\p{N}||\\p{P}]+$"
+        }
+      },
+      {
+        "name": "Engine",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "WorkflowEngine"
+        }
+      },
+      {
+        "name": "Main",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[\\p{L}||\\p{M}||\\p{Z}||\\p{S}||\\p{N}||\\p{P}]+$"
+        }
+      },
+      {
+        "name": "Name",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[\\p{L}||\\p{M}||\\p{Z}||\\p{S}||\\p{N}||\\p{P}]+$"
+        }
+      },
+      {
+        "name": "ParameterTemplate",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "WorkflowParameterTemplate"
+        }
+      },
+      {
+        "name": "Accelerators",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "Accelerators"
+        }
+      },
+      {
+        "name": "StorageCapacity",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "isInteger": false,
+          "maximum": 100000,
+          "minimum": 0
+        }
+      },
+      {
+        "name": "Tags",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "TagMap"
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Definition of AWS::Omics::Workflow Resource Type",
+    "properties": [
+      {
+        "name": "Arn",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^arn:.+$"
+        }
+      },
+      {
+        "name": "CreationTime",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "Id",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 18,
+          "minLength": 1,
+          "pattern": "^[0-9]+$"
+        }
+      },
+      {
+        "name": "Status",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "WorkflowStatus"
+        }
+      },
+      {
+        "name": "Type",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "WorkflowType"
+        }
+      }
+    ]
+  },
+  "$hash": "81b9842e99482e4d1c75412271c7ca7b9ec8028c"
+}

@@ -1,0 +1,814 @@
+{
+  "definitions": {
+    "Tag": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^(?!aws:)[a-zA-Z+-=._:/]+$"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 0
+          }
+        }
+      ]
+    },
+    "Object": {
+      "type": "string",
+      "maxLength": 512,
+      "pattern": "\\S+"
+    },
+    "MarketoSourceProperties": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Object",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "Object"
+          }
+        }
+      ]
+    },
+    "S3SourceProperties": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "BucketName",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 63,
+            "minLength": 3,
+            "pattern": "\\S+"
+          }
+        },
+        {
+          "name": "BucketPrefix",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 512,
+            "pattern": ".*"
+          }
+        }
+      ]
+    },
+    "SalesforceSourceProperties": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Object",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "Object"
+          }
+        },
+        {
+          "name": "EnableDynamicFieldUpdate",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "IncludeDeletedRecords",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        }
+      ]
+    },
+    "ServiceNowSourceProperties": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Object",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "Object"
+          }
+        }
+      ]
+    },
+    "ZendeskSourceProperties": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Object",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "Object"
+          }
+        }
+      ]
+    },
+    "SourceConnectorProperties": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Marketo",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "MarketoSourceProperties"
+          }
+        },
+        {
+          "name": "S3",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "S3SourceProperties"
+          }
+        },
+        {
+          "name": "Salesforce",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "SalesforceSourceProperties"
+          }
+        },
+        {
+          "name": "ServiceNow",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ServiceNowSourceProperties"
+          }
+        },
+        {
+          "name": "Zendesk",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ZendeskSourceProperties"
+          }
+        }
+      ]
+    },
+    "ConnectorType": {
+      "type": "string",
+      "allowedValues": ["Salesforce", "Marketo", "ServiceNow", "Zendesk", "S3"]
+    },
+    "IncrementalPullConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "DatetimeTypeFieldName",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 256
+          }
+        }
+      ]
+    },
+    "SourceFlowConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ConnectorType",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "ConnectorType"
+          }
+        },
+        {
+          "name": "ConnectorProfileName",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "pattern": "[\\w/!@#+=.-]+"
+          }
+        },
+        {
+          "name": "IncrementalPullConfig",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "IncrementalPullConfig"
+          }
+        },
+        {
+          "name": "SourceConnectorProperties",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "SourceConnectorProperties"
+          }
+        }
+      ]
+    },
+    "ConnectorOperator": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Marketo",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "MarketoConnectorOperator"
+          }
+        },
+        {
+          "name": "S3",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "S3ConnectorOperator"
+          }
+        },
+        {
+          "name": "Salesforce",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "SalesforceConnectorOperator"
+          }
+        },
+        {
+          "name": "ServiceNow",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ServiceNowConnectorOperator"
+          }
+        },
+        {
+          "name": "Zendesk",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ZendeskConnectorOperator"
+          }
+        }
+      ]
+    },
+    "Operator": {
+      "type": "string",
+      "allowedValues": [
+        "PROJECTION",
+        "LESS_THAN",
+        "GREATER_THAN",
+        "CONTAINS",
+        "BETWEEN",
+        "LESS_THAN_OR_EQUAL_TO",
+        "GREATER_THAN_OR_EQUAL_TO",
+        "EQUAL_TO",
+        "NOT_EQUAL_TO",
+        "ADDITION",
+        "MULTIPLICATION",
+        "DIVISION",
+        "SUBTRACTION",
+        "MASK_ALL",
+        "MASK_FIRST_N",
+        "MASK_LAST_N",
+        "VALIDATE_NON_NULL",
+        "VALIDATE_NON_ZERO",
+        "VALIDATE_NON_NEGATIVE",
+        "VALIDATE_NUMERIC",
+        "NO_OP"
+      ]
+    },
+    "MarketoConnectorOperator": {
+      "type": "string",
+      "allowedValues": [
+        "PROJECTION",
+        "LESS_THAN",
+        "GREATER_THAN",
+        "BETWEEN",
+        "ADDITION",
+        "MULTIPLICATION",
+        "DIVISION",
+        "SUBTRACTION",
+        "MASK_ALL",
+        "MASK_FIRST_N",
+        "MASK_LAST_N",
+        "VALIDATE_NON_NULL",
+        "VALIDATE_NON_ZERO",
+        "VALIDATE_NON_NEGATIVE",
+        "VALIDATE_NUMERIC",
+        "NO_OP"
+      ]
+    },
+    "S3ConnectorOperator": {
+      "type": "string",
+      "allowedValues": [
+        "PROJECTION",
+        "LESS_THAN",
+        "GREATER_THAN",
+        "BETWEEN",
+        "LESS_THAN_OR_EQUAL_TO",
+        "GREATER_THAN_OR_EQUAL_TO",
+        "EQUAL_TO",
+        "NOT_EQUAL_TO",
+        "ADDITION",
+        "MULTIPLICATION",
+        "DIVISION",
+        "SUBTRACTION",
+        "MASK_ALL",
+        "MASK_FIRST_N",
+        "MASK_LAST_N",
+        "VALIDATE_NON_NULL",
+        "VALIDATE_NON_ZERO",
+        "VALIDATE_NON_NEGATIVE",
+        "VALIDATE_NUMERIC",
+        "NO_OP"
+      ]
+    },
+    "SalesforceConnectorOperator": {
+      "type": "string",
+      "allowedValues": [
+        "PROJECTION",
+        "LESS_THAN",
+        "GREATER_THAN",
+        "CONTAINS",
+        "BETWEEN",
+        "LESS_THAN_OR_EQUAL_TO",
+        "GREATER_THAN_OR_EQUAL_TO",
+        "EQUAL_TO",
+        "NOT_EQUAL_TO",
+        "ADDITION",
+        "MULTIPLICATION",
+        "DIVISION",
+        "SUBTRACTION",
+        "MASK_ALL",
+        "MASK_FIRST_N",
+        "MASK_LAST_N",
+        "VALIDATE_NON_NULL",
+        "VALIDATE_NON_ZERO",
+        "VALIDATE_NON_NEGATIVE",
+        "VALIDATE_NUMERIC",
+        "NO_OP"
+      ]
+    },
+    "ServiceNowConnectorOperator": {
+      "type": "string",
+      "allowedValues": [
+        "PROJECTION",
+        "LESS_THAN",
+        "GREATER_THAN",
+        "CONTAINS",
+        "BETWEEN",
+        "LESS_THAN_OR_EQUAL_TO",
+        "GREATER_THAN_OR_EQUAL_TO",
+        "EQUAL_TO",
+        "NOT_EQUAL_TO",
+        "ADDITION",
+        "MULTIPLICATION",
+        "DIVISION",
+        "SUBTRACTION",
+        "MASK_ALL",
+        "MASK_FIRST_N",
+        "MASK_LAST_N",
+        "VALIDATE_NON_NULL",
+        "VALIDATE_NON_ZERO",
+        "VALIDATE_NON_NEGATIVE",
+        "VALIDATE_NUMERIC",
+        "NO_OP"
+      ]
+    },
+    "ZendeskConnectorOperator": {
+      "type": "string",
+      "allowedValues": [
+        "PROJECTION",
+        "GREATER_THAN",
+        "ADDITION",
+        "MULTIPLICATION",
+        "DIVISION",
+        "SUBTRACTION",
+        "MASK_ALL",
+        "MASK_FIRST_N",
+        "MASK_LAST_N",
+        "VALIDATE_NON_NULL",
+        "VALIDATE_NON_ZERO",
+        "VALIDATE_NON_NEGATIVE",
+        "VALIDATE_NUMERIC",
+        "NO_OP"
+      ]
+    },
+    "OperatorPropertiesKeys": {
+      "type": "string",
+      "allowedValues": [
+        "VALUE",
+        "VALUES",
+        "DATA_TYPE",
+        "UPPER_BOUND",
+        "LOWER_BOUND",
+        "SOURCE_DATA_TYPE",
+        "DESTINATION_DATA_TYPE",
+        "VALIDATION_ACTION",
+        "MASK_VALUE",
+        "MASK_LENGTH",
+        "TRUNCATE_LENGTH",
+        "MATH_OPERATION_FIELDS_ORDER",
+        "CONCAT_FORMAT",
+        "SUBFIELD_CATEGORY_MAP"
+      ]
+    },
+    "DestinationField": {
+      "type": "string",
+      "maxLength": 256,
+      "pattern": ".*"
+    },
+    "TaskType": {
+      "type": "string",
+      "allowedValues": [
+        "Arithmetic",
+        "Filter",
+        "Map",
+        "Mask",
+        "Merge",
+        "Truncate",
+        "Validate"
+      ]
+    },
+    "TaskPropertiesMap": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "OperatorPropertyKey",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "OperatorPropertiesKeys"
+          }
+        },
+        {
+          "name": "Property",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 2048,
+            "pattern": ".+"
+          }
+        }
+      ]
+    },
+    "Task": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ConnectorOperator",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ConnectorOperator"
+          }
+        },
+        {
+          "name": "SourceFields",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string",
+              "maxLength": 2048,
+              "pattern": ".*"
+            }
+          }
+        },
+        {
+          "name": "DestinationField",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DestinationField"
+          }
+        },
+        {
+          "name": "TaskType",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "TaskType"
+          }
+        },
+        {
+          "name": "TaskProperties",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "TaskPropertiesMap"
+            }
+          }
+        }
+      ]
+    },
+    "TriggerType": {
+      "type": "string",
+      "allowedValues": ["Scheduled", "Event", "OnDemand"]
+    },
+    "Date": {
+      "type": "number",
+      "isInteger": false
+    },
+    "ScheduledTriggerProperties": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ScheduleExpression",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "pattern": ".*"
+          }
+        },
+        {
+          "name": "DataPullMode",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": ["Incremental", "Complete"]
+          }
+        },
+        {
+          "name": "ScheduleStartTime",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Date"
+          }
+        },
+        {
+          "name": "ScheduleEndTime",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Date"
+          }
+        },
+        {
+          "name": "Timezone",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "pattern": ".*"
+          }
+        },
+        {
+          "name": "ScheduleOffset",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 36000,
+            "minimum": 0
+          }
+        },
+        {
+          "name": "FirstExecutionFrom",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Date"
+          }
+        }
+      ]
+    },
+    "TriggerProperties": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Scheduled",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ScheduledTriggerProperties"
+          }
+        }
+      ]
+    },
+    "TriggerConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "TriggerType",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "TriggerType"
+          }
+        },
+        {
+          "name": "TriggerProperties",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "TriggerProperties"
+          }
+        }
+      ]
+    },
+    "FlowDefinition": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "FlowName",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "pattern": "[a-zA-Z0-9][\\w!@#.-]+"
+          }
+        },
+        {
+          "name": "Description",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 2048,
+            "pattern": "[\\w!@#\\-.?,\\s]*"
+          }
+        },
+        {
+          "name": "KmsArn",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 2048,
+            "minLength": 20,
+            "pattern": "arn:aws:kms:.*:[0-9]+:.*"
+          }
+        },
+        {
+          "name": "Tasks",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Task"
+            }
+          }
+        },
+        {
+          "name": "TriggerConfig",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "TriggerConfig"
+          }
+        },
+        {
+          "name": "SourceFlowConfig",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "SourceFlowConfig"
+          }
+        }
+      ]
+    },
+    "ObjectTypeMapping": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z_][a-zA-Z_0-9-]*$"
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "The resource schema for creating an Amazon Connect Customer Profiles Integration.",
+    "properties": [
+      {
+        "name": "DomainName",
+        "description": "The unique name of the domain.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The unique name of the domain.",
+          "maxLength": 64,
+          "minLength": 1,
+          "pattern": "^[a-zA-Z0-9_-]+$"
+        }
+      },
+      {
+        "name": "Uri",
+        "description": "The URI of the S3 bucket or any other type of data source.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The URI of the S3 bucket or any other type of data source.",
+          "maxLength": 255,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "FlowDefinition",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "FlowDefinition"
+        }
+      },
+      {
+        "name": "ObjectTypeName",
+        "description": "The name of the ObjectType defined for the 3rd party data in Profile Service",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The name of the ObjectType defined for the 3rd party data in Profile Service",
+          "maxLength": 255,
+          "minLength": 1,
+          "pattern": "^[a-zA-Z_][a-zA-Z_0-9-]*$"
+        }
+      },
+      {
+        "name": "Tags",
+        "description": "The tags (keys and values) associated with the integration",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "The tags (keys and values) associated with the integration",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          },
+          "maxLength": 50,
+          "minLength": 0
+        }
+      },
+      {
+        "name": "ObjectTypeNames",
+        "description": "The mapping between 3rd party event types and ObjectType names",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "The mapping between 3rd party event types and ObjectType names",
+          "itemType": {
+            "type": "ref",
+            "typeName": "ObjectTypeMapping"
+          }
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "The resource schema for creating an Amazon Connect Customer Profiles Integration.",
+    "properties": [
+      {
+        "name": "CreatedAt",
+        "description": "The time of this integration got created",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The time of this integration got created"
+        }
+      },
+      {
+        "name": "LastUpdatedAt",
+        "description": "The time of this integration got last updated at",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The time of this integration got last updated at"
+        }
+      }
+    ]
+  },
+  "$hash": "e9f8ff2f5852ad031a3f1b52b8c4c9b544798cc3"
+}

@@ -1,0 +1,308 @@
+{
+  "definitions": {
+    "FeatureDefinition": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "FeatureName",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9]){0,63}"
+          }
+        },
+        {
+          "name": "FeatureType",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "allowedValues": ["Integral", "Fractional", "String"]
+          }
+        }
+      ]
+    },
+    "KmsKeyId": {
+      "type": "string",
+      "maxLength": 2048
+    },
+    "OnlineStoreSecurityConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "KmsKeyId",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "KmsKeyId"
+          }
+        }
+      ]
+    },
+    "S3StorageConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "S3Uri",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 1024,
+            "pattern": "^(https|s3)://([^/]+)/?(.*)$"
+          }
+        },
+        {
+          "name": "KmsKeyId",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "KmsKeyId"
+          }
+        }
+      ]
+    },
+    "DataCatalogConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "TableName",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "pattern": "[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\t]*"
+          }
+        },
+        {
+          "name": "Catalog",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "pattern": "[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\t]*"
+          }
+        },
+        {
+          "name": "Database",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "pattern": "[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\t]*"
+          }
+        }
+      ]
+    },
+    "TableFormat": {
+      "type": "string",
+      "description": "Format for the offline store feature group. Iceberg is the optimal format for feature groups shared between offline and online stores.",
+      "allowedValues": ["Iceberg", "Glue"]
+    },
+    "Tag": {
+      "type": "object",
+      "description": "A key-value pair to associate with a resource.",
+      "properties": [
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource Type definition for AWS::SageMaker::FeatureGroup",
+    "properties": [
+      {
+        "name": "FeatureGroupName",
+        "description": "The Name of the FeatureGroup.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The Name of the FeatureGroup.",
+          "maxLength": 64,
+          "minLength": 1,
+          "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9]){0,63}"
+        }
+      },
+      {
+        "name": "RecordIdentifierFeatureName",
+        "description": "The Record Identifier Feature Name.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The Record Identifier Feature Name.",
+          "maxLength": 64,
+          "minLength": 1,
+          "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9]){0,63}"
+        }
+      },
+      {
+        "name": "EventTimeFeatureName",
+        "description": "The Event Time Feature Name.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The Event Time Feature Name.",
+          "maxLength": 64,
+          "minLength": 1,
+          "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9]){0,63}"
+        }
+      },
+      {
+        "name": "FeatureDefinitions",
+        "description": "An Array of Feature Definition",
+        "optional": false,
+        "type": {
+          "type": "array",
+          "description": "An Array of Feature Definition",
+          "itemType": {
+            "type": "ref",
+            "typeName": "FeatureDefinition"
+          },
+          "maxLength": 2500,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "OnlineStoreConfig",
+        "optional": true,
+        "type": {
+          "type": "object",
+          "properties": [
+            {
+              "name": "SecurityConfig",
+              "optional": true,
+              "type": {
+                "type": "ref",
+                "typeName": "OnlineStoreSecurityConfig"
+              }
+            },
+            {
+              "name": "EnableOnlineStore",
+              "optional": true,
+              "type": {
+                "type": "boolean"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "OfflineStoreConfig",
+        "optional": true,
+        "type": {
+          "type": "object",
+          "properties": [
+            {
+              "name": "S3StorageConfig",
+              "optional": false,
+              "type": {
+                "type": "ref",
+                "typeName": "S3StorageConfig"
+              }
+            },
+            {
+              "name": "DisableGlueTableCreation",
+              "optional": true,
+              "type": {
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "DataCatalogConfig",
+              "optional": true,
+              "type": {
+                "type": "ref",
+                "typeName": "DataCatalogConfig"
+              }
+            },
+            {
+              "name": "TableFormat",
+              "optional": true,
+              "type": {
+                "type": "ref",
+                "typeName": "TableFormat"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "RoleArn",
+        "description": "Role Arn",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Role Arn",
+          "maxLength": 2048,
+          "minLength": 20,
+          "pattern": "^arn:aws[a-z\\-]*:iam::\\d{12}:role/?[a-zA-Z_0-9+=,.@\\-_/]+$"
+        }
+      },
+      {
+        "name": "Description",
+        "description": "Description about the FeatureGroup.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Description about the FeatureGroup.",
+          "maxLength": 128
+        }
+      },
+      {
+        "name": "Tags",
+        "description": "An array of key-value pair to apply to this resource.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "An array of key-value pair to apply to this resource.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          },
+          "maxLength": 50
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Resource Type definition for AWS::SageMaker::FeatureGroup",
+    "properties": [
+      {
+        "name": "CreationTime",
+        "description": "A timestamp of FeatureGroup creation time.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "A timestamp of FeatureGroup creation time."
+        }
+      },
+      {
+        "name": "FeatureGroupStatus",
+        "description": "The status of the feature group.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The status of the feature group."
+        }
+      }
+    ]
+  },
+  "$hash": "b4c5f3b6f6cf9fdd47034af456fef736e64e5dbc"
+}

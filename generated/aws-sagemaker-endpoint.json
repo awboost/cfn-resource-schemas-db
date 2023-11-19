@@ -1,0 +1,292 @@
+{
+  "definitions": {
+    "CapacitySize": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "Type",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "RollingUpdatePolicy": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "MaximumExecutionTimeoutInSeconds",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "MaximumBatchSize",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "CapacitySize"
+          }
+        },
+        {
+          "name": "WaitIntervalInSeconds",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "RollbackMaximumBatchSize",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "CapacitySize"
+          }
+        }
+      ]
+    },
+    "Alarm": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "AlarmName",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "AutoRollbackConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Alarms",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Alarm"
+            }
+          }
+        }
+      ]
+    },
+    "DeploymentConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "AutoRollbackConfiguration",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "AutoRollbackConfig"
+          }
+        },
+        {
+          "name": "RollingUpdatePolicy",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "RollingUpdatePolicy"
+          }
+        },
+        {
+          "name": "BlueGreenUpdatePolicy",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "BlueGreenUpdatePolicy"
+          }
+        }
+      ]
+    },
+    "BlueGreenUpdatePolicy": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "MaximumExecutionTimeoutInSeconds",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "TerminationWaitInSeconds",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "TrafficRoutingConfiguration",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "TrafficRoutingConfig"
+          }
+        }
+      ]
+    },
+    "TrafficRoutingConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Type",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "LinearStepSize",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "CapacitySize"
+          }
+        },
+        {
+          "name": "CanarySize",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "CapacitySize"
+          }
+        },
+        {
+          "name": "WaitIntervalInSeconds",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        }
+      ]
+    },
+    "VariantProperty": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "VariantPropertyType",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource Type definition for AWS::SageMaker::Endpoint",
+    "properties": [
+      {
+        "name": "RetainAllVariantProperties",
+        "optional": true,
+        "type": {
+          "type": "boolean"
+        }
+      },
+      {
+        "name": "EndpointName",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "ExcludeRetainedVariantProperties",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "VariantProperty"
+          }
+        }
+      },
+      {
+        "name": "EndpointConfigName",
+        "optional": false,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "DeploymentConfig",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "DeploymentConfig"
+        }
+      },
+      {
+        "name": "RetainDeploymentConfig",
+        "optional": true,
+        "type": {
+          "type": "boolean"
+        }
+      },
+      {
+        "name": "Tags",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          }
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Resource Type definition for AWS::SageMaker::Endpoint",
+    "properties": [
+      {
+        "name": "Id",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      }
+    ]
+  },
+  "$hash": "37d78a1e42cf9e57336846db1d6a38c0836e3805"
+}

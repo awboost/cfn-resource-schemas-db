@@ -1,0 +1,389 @@
+{
+  "definitions": {
+    "Tag": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 0
+          }
+        }
+      ]
+    },
+    "DocumentClassifierInputDataConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "AugmentedManifests",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "AugmentedManifestsListItem"
+            }
+          }
+        },
+        {
+          "name": "DataFormat",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": ["COMPREHEND_CSV", "AUGMENTED_MANIFEST"]
+          }
+        },
+        {
+          "name": "LabelDelimiter",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 1,
+            "minLength": 1,
+            "pattern": "^[ ~!@#$%^*\\-_+=|\\\\:;\\t>?/]$"
+          }
+        },
+        {
+          "name": "DocumentType",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": ["PLAIN_TEXT_DOCUMENT", "SEMI_STRUCTURED_DOCUMENT"]
+          }
+        },
+        {
+          "name": "Documents",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DocumentClassifierDocuments"
+          }
+        },
+        {
+          "name": "DocumentReaderConfig",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DocumentReaderConfig"
+          }
+        },
+        {
+          "name": "S3Uri",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "S3Uri"
+          }
+        },
+        {
+          "name": "TestS3Uri",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "S3Uri"
+          }
+        }
+      ]
+    },
+    "AugmentedManifestsListItem": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "AttributeNames",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string",
+              "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9])*"
+            },
+            "maxLength": 63,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "S3Uri",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "S3Uri"
+          }
+        },
+        {
+          "name": "Split",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": ["TRAIN", "TEST"]
+          }
+        }
+      ]
+    },
+    "DocumentClassifierDocuments": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "S3Uri",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "S3Uri"
+          }
+        },
+        {
+          "name": "TestS3Uri",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "S3Uri"
+          }
+        }
+      ]
+    },
+    "DocumentReaderConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "DocumentReadAction",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "allowedValues": [
+              "TEXTRACT_DETECT_DOCUMENT_TEXT",
+              "TEXTRACT_ANALYZE_DOCUMENT"
+            ]
+          }
+        },
+        {
+          "name": "DocumentReadMode",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": ["SERVICE_DEFAULT", "FORCE_DOCUMENT_READ_ACTION"]
+          }
+        },
+        {
+          "name": "FeatureTypes",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string",
+              "allowedValues": ["TABLES", "FORMS"]
+            },
+            "maxLength": 2,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "DocumentClassifierOutputDataConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "KmsKeyId",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "KmsKeyId"
+          }
+        },
+        {
+          "name": "S3Uri",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "S3Uri"
+          }
+        }
+      ]
+    },
+    "VpcConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "SecurityGroupIds",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string",
+              "maxLength": 32,
+              "minLength": 1,
+              "pattern": "[-0-9a-zA-Z]+"
+            },
+            "maxLength": 5,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Subnets",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string",
+              "maxLength": 32,
+              "minLength": 1,
+              "pattern": "[-0-9a-zA-Z]+"
+            },
+            "maxLength": 16,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "S3Uri": {
+      "type": "string",
+      "maxLength": 1024,
+      "pattern": "s3://[a-z0-9][\\.\\-a-z0-9]{1,61}[a-z0-9](/.*)?"
+    },
+    "KmsKeyId": {
+      "type": "string",
+      "maxLength": 2048,
+      "minLength": 1
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Document Classifier enables training document classifier models.",
+    "properties": [
+      {
+        "name": "DataAccessRoleArn",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "maxLength": 2048,
+          "minLength": 20,
+          "pattern": "arn:aws(-[^:]+)?:iam::[0-9]{12}:role/.+"
+        }
+      },
+      {
+        "name": "InputDataConfig",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "DocumentClassifierInputDataConfig"
+        }
+      },
+      {
+        "name": "OutputDataConfig",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "DocumentClassifierOutputDataConfig"
+        }
+      },
+      {
+        "name": "LanguageCode",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "allowedValues": ["en", "es", "fr", "it", "de", "pt"]
+        }
+      },
+      {
+        "name": "ModelKmsKeyId",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "KmsKeyId"
+        }
+      },
+      {
+        "name": "ModelPolicy",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 20000,
+          "minLength": 1,
+          "pattern": "[\\u0009\\u000A\\u000D\\u0020-\\u00FF]+"
+        }
+      },
+      {
+        "name": "DocumentClassifierName",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "maxLength": 63,
+          "minLength": 1,
+          "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9])*$"
+        }
+      },
+      {
+        "name": "Mode",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "allowedValues": ["MULTI_CLASS", "MULTI_LABEL"]
+        }
+      },
+      {
+        "name": "Tags",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          }
+        }
+      },
+      {
+        "name": "VersionName",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 63,
+          "minLength": 1,
+          "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9])*$"
+        }
+      },
+      {
+        "name": "VolumeKmsKeyId",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "KmsKeyId"
+        }
+      },
+      {
+        "name": "VpcConfig",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "VpcConfig"
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Document Classifier enables training document classifier models.",
+    "properties": [
+      {
+        "name": "Arn",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 256,
+          "minLength": 1,
+          "pattern": "arn:aws(-[^:]+)?:comprehend:[a-zA-Z0-9-]*:[0-9]{12}:document-classifier/[a-zA-Z0-9](-*[a-zA-Z0-9])*(/version/[a-zA-Z0-9](-*[a-zA-Z0-9])*)?"
+        }
+      }
+    ]
+  },
+  "$hash": "a29b08cfe1022a9121cacba78b83ff9cc1268013"
+}

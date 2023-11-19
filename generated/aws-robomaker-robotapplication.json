@@ -1,0 +1,160 @@
+{
+  "definitions": {
+    "Arn": {
+      "type": "string",
+      "pattern": "arn:[\\w+=/,.@-]+:[\\w+=/,.@-]+:[\\w+=/,.@-]*:[0-9]*:[\\w+=,.@-]+(/[\\w+=,.@-]+)*"
+    },
+    "Tags": {
+      "type": "record",
+      "description": "A key-value pair to associate with a resource.",
+      "valueType": {
+        "type": "string",
+        "description": "The value for the tag. You can specify a value that is 1 to 255 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+        "maxLength": 256,
+        "minLength": 1
+      }
+    },
+    "SourceConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "S3Bucket",
+          "description": "The Arn of the S3Bucket that stores the robot application source.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The Arn of the S3Bucket that stores the robot application source."
+          }
+        },
+        {
+          "name": "S3Key",
+          "description": "The s3 key of robot application source.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The s3 key of robot application source."
+          }
+        },
+        {
+          "name": "Architecture",
+          "description": "The architecture of robot application.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The architecture of robot application.",
+            "allowedValues": ["X86_64", "ARM64", "ARMHF"],
+            "maxLength": 255,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "RobotSoftwareSuite": {
+      "type": "object",
+      "description": "The robot software suite used by the robot application.",
+      "properties": [
+        {
+          "name": "Name",
+          "description": "The name of robot software suite.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The name of robot software suite.",
+            "allowedValues": ["ROS", "ROS2", "General"]
+          }
+        },
+        {
+          "name": "Version",
+          "description": "The version of robot software suite.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The version of robot software suite.",
+            "allowedValues": ["Kinetic", "Melodic", "Dashing"]
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "This schema is for testing purpose only.",
+    "properties": [
+      {
+        "name": "Name",
+        "description": "The name of the robot application.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The name of the robot application.",
+          "maxLength": 255,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "Sources",
+        "description": "The sources of the robot application.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "The sources of the robot application.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "SourceConfig"
+          }
+        }
+      },
+      {
+        "name": "Environment",
+        "description": "The URI of the Docker image for the robot application.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The URI of the Docker image for the robot application."
+        }
+      },
+      {
+        "name": "RobotSoftwareSuite",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "RobotSoftwareSuite"
+        }
+      },
+      {
+        "name": "CurrentRevisionId",
+        "description": "The revision ID of robot application.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The revision ID of robot application.",
+          "maxLength": 40,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "Tags",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "Tags"
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "This schema is for testing purpose only.",
+    "properties": [
+      {
+        "name": "Arn",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "Arn"
+        }
+      }
+    ]
+  },
+  "$hash": "62ec9506fcf811985e1ce6dd416dcc461cf570a4"
+}

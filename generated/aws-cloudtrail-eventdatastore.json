@@ -1,0 +1,361 @@
+{
+  "definitions": {
+    "AdvancedFieldSelector": {
+      "type": "object",
+      "description": "A single selector statement in an advanced event selector.",
+      "properties": [
+        {
+          "name": "Field",
+          "description": "A field in an event record on which to filter events to be logged. Supported fields include readOnly, eventCategory, eventSource (for management events), eventName, resources.type, and resources.ARN.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "A field in an event record on which to filter events to be logged. Supported fields include readOnly, eventCategory, eventSource (for management events), eventName, resources.type, and resources.ARN.",
+            "maxLength": 1000,
+            "minLength": 1,
+            "pattern": "([\\w|\\d|\\.|_]+)"
+          }
+        },
+        {
+          "name": "Equals",
+          "description": "An operator that includes events that match the exact value of the event record field specified as the value of Field. This is the only valid operator that you can use with the readOnly, eventCategory, and resources.type fields.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "An operator that includes events that match the exact value of the event record field specified as the value of Field. This is the only valid operator that you can use with the readOnly, eventCategory, and resources.type fields.",
+            "itemType": {
+              "type": "string",
+              "maxLength": 2048,
+              "minLength": 1,
+              "pattern": "(.+)"
+            },
+            "minLength": 1
+          }
+        },
+        {
+          "name": "StartsWith",
+          "description": "An operator that includes events that match the first few characters of the event record field specified as the value of Field.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "An operator that includes events that match the first few characters of the event record field specified as the value of Field.",
+            "itemType": {
+              "type": "string",
+              "maxLength": 2048,
+              "minLength": 1,
+              "pattern": "(.+)"
+            },
+            "minLength": 1
+          }
+        },
+        {
+          "name": "EndsWith",
+          "description": "An operator that includes events that match the last few characters of the event record field specified as the value of Field.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "An operator that includes events that match the last few characters of the event record field specified as the value of Field.",
+            "itemType": {
+              "type": "string",
+              "maxLength": 2048,
+              "minLength": 1,
+              "pattern": "(.+)"
+            },
+            "minLength": 1
+          }
+        },
+        {
+          "name": "NotEquals",
+          "description": "An operator that excludes events that match the exact value of the event record field specified as the value of Field.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "An operator that excludes events that match the exact value of the event record field specified as the value of Field.",
+            "itemType": {
+              "type": "string",
+              "maxLength": 2048,
+              "minLength": 1,
+              "pattern": "(.+)"
+            },
+            "minLength": 1
+          }
+        },
+        {
+          "name": "NotStartsWith",
+          "description": "An operator that excludes events that match the first few characters of the event record field specified as the value of Field.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "An operator that excludes events that match the first few characters of the event record field specified as the value of Field.",
+            "itemType": {
+              "type": "string",
+              "maxLength": 2048,
+              "minLength": 1,
+              "pattern": "(.+)"
+            },
+            "minLength": 1
+          }
+        },
+        {
+          "name": "NotEndsWith",
+          "description": "An operator that excludes events that match the last few characters of the event record field specified as the value of Field.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "An operator that excludes events that match the last few characters of the event record field specified as the value of Field.",
+            "itemType": {
+              "type": "string",
+              "maxLength": 2048,
+              "minLength": 1,
+              "pattern": "(.+)"
+            },
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "AdvancedEventSelector": {
+      "type": "object",
+      "description": "Advanced event selectors let you create fine-grained selectors for the following AWS CloudTrail event record ﬁelds. They help you control costs by logging only those events that are important to you.",
+      "properties": [
+        {
+          "name": "Name",
+          "description": "An optional, descriptive name for an advanced event selector, such as \"Log data events for only two S3 buckets\".",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "An optional, descriptive name for an advanced event selector, such as \"Log data events for only two S3 buckets\".",
+            "maxLength": 1000,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "FieldSelectors",
+          "description": "Contains all selector statements in an advanced event selector.",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "description": "Contains all selector statements in an advanced event selector.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "AdvancedFieldSelector"
+            },
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "description": "An arbitrary set of tags (key-value pairs) for this event data store.",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "The key name of the tag. You can specify a value that is 1 to 127 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The key name of the tag. You can specify a value that is 1 to 127 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -."
+          }
+        },
+        {
+          "name": "Value",
+          "description": "The value for the tag. You can specify a value that is 1 to 255 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The value for the tag. You can specify a value that is 1 to 255 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -."
+          }
+        }
+      ]
+    },
+    "InsightSelector": {
+      "type": "object",
+      "description": "A string that contains Insights types that are logged on an event data store.",
+      "properties": [
+        {
+          "name": "InsightType",
+          "description": "The type of Insights to log on an event data store.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The type of Insights to log on an event data store."
+          }
+        }
+      ]
+    },
+    "Timestamp": {
+      "type": "string"
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "A storage lake of event data against which you can run complex SQL-based queries. An event data store can include events that you have logged on your account from the last 7 to 2557 or 3653 days (about seven or ten years) depending on the selected BillingMode.",
+    "properties": [
+      {
+        "name": "AdvancedEventSelectors",
+        "description": "The advanced event selectors that were used to select events for the data store.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "The advanced event selectors that were used to select events for the data store.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "AdvancedEventSelector"
+          }
+        }
+      },
+      {
+        "name": "MultiRegionEnabled",
+        "description": "Indicates whether the event data store includes events from all regions, or only from the region in which it was created.",
+        "optional": true,
+        "type": {
+          "type": "boolean",
+          "description": "Indicates whether the event data store includes events from all regions, or only from the region in which it was created."
+        }
+      },
+      {
+        "name": "Name",
+        "description": "The name of the event data store.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The name of the event data store."
+        }
+      },
+      {
+        "name": "OrganizationEnabled",
+        "description": "Indicates that an event data store is collecting logged events for an organization.",
+        "optional": true,
+        "type": {
+          "type": "boolean",
+          "description": "Indicates that an event data store is collecting logged events for an organization."
+        }
+      },
+      {
+        "name": "BillingMode",
+        "description": "The mode that the event data store will use to charge for event storage.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The mode that the event data store will use to charge for event storage."
+        }
+      },
+      {
+        "name": "RetentionPeriod",
+        "description": "The retention period, in days.",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "The retention period, in days.",
+          "isInteger": true
+        }
+      },
+      {
+        "name": "TerminationProtectionEnabled",
+        "description": "Indicates whether the event data store is protected from termination.",
+        "optional": true,
+        "type": {
+          "type": "boolean",
+          "description": "Indicates whether the event data store is protected from termination."
+        }
+      },
+      {
+        "name": "KmsKeyId",
+        "description": "Specifies the KMS key ID to use to encrypt the events delivered by CloudTrail. The value can be an alias name prefixed by 'alias/', a fully specified ARN to an alias, a fully specified ARN to a key, or a globally unique identifier.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Specifies the KMS key ID to use to encrypt the events delivered by CloudTrail. The value can be an alias name prefixed by 'alias/', a fully specified ARN to an alias, a fully specified ARN to a key, or a globally unique identifier."
+        }
+      },
+      {
+        "name": "Tags",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          }
+        }
+      },
+      {
+        "name": "InsightSelectors",
+        "description": "Lets you enable Insights event logging by specifying the Insights selectors that you want to enable on an existing event data store. Both InsightSelectors and InsightsDestination need to have a value in order to enable Insights events on an event data store.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "Lets you enable Insights event logging by specifying the Insights selectors that you want to enable on an existing event data store. Both InsightSelectors and InsightsDestination need to have a value in order to enable Insights events on an event data store.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "InsightSelector"
+          }
+        }
+      },
+      {
+        "name": "InsightsDestination",
+        "description": "Specifies the ARN of the event data store that will collect Insights events. Both InsightSelectors and InsightsDestination need to have a value in order to enable Insights events on an event data store",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Specifies the ARN of the event data store that will collect Insights events. Both InsightSelectors and InsightsDestination need to have a value in order to enable Insights events on an event data store"
+        }
+      },
+      {
+        "name": "IngestionEnabled",
+        "description": "Indicates whether the event data store is ingesting events.",
+        "optional": true,
+        "type": {
+          "type": "boolean",
+          "description": "Indicates whether the event data store is ingesting events."
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "A storage lake of event data against which you can run complex SQL-based queries. An event data store can include events that you have logged on your account from the last 7 to 2557 or 3653 days (about seven or ten years) depending on the selected BillingMode.",
+    "properties": [
+      {
+        "name": "CreatedTimestamp",
+        "description": "The timestamp of the event data store's creation.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "The timestamp of the event data store's creation.",
+          "typeName": "Timestamp"
+        }
+      },
+      {
+        "name": "EventDataStoreArn",
+        "description": "The ARN of the event data store.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The ARN of the event data store."
+        }
+      },
+      {
+        "name": "Status",
+        "description": "The status of an event data store. Values are STARTING_INGESTION, ENABLED, STOPPING_INGESTION, STOPPED_INGESTION and PENDING_DELETION.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The status of an event data store. Values are STARTING_INGESTION, ENABLED, STOPPING_INGESTION, STOPPED_INGESTION and PENDING_DELETION."
+        }
+      },
+      {
+        "name": "UpdatedTimestamp",
+        "description": "The timestamp showing when an event data store was updated, if applicable. UpdatedTimestamp is always either the same or newer than the time shown in CreatedTimestamp.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "The timestamp showing when an event data store was updated, if applicable. UpdatedTimestamp is always either the same or newer than the time shown in CreatedTimestamp.",
+          "typeName": "Timestamp"
+        }
+      }
+    ]
+  },
+  "$hash": "a8f344ffd6c591fbe93df9525a720a89aed20f48"
+}

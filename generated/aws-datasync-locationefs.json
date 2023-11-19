@@ -1,0 +1,178 @@
+{
+  "definitions": {
+    "Ec2Config": {
+      "type": "object",
+      "description": "The subnet and security group that DataSync uses to access target EFS file system.",
+      "properties": [
+        {
+          "name": "SecurityGroupArns",
+          "description": "The Amazon Resource Names (ARNs) of the security groups that are configured for the Amazon EC2 resource.",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "description": "The Amazon Resource Names (ARNs) of the security groups that are configured for the Amazon EC2 resource.",
+            "itemType": {
+              "type": "string",
+              "maxLength": 128,
+              "pattern": "^arn:(aws|aws-cn|aws-us-gov|aws-iso|aws-iso-b):ec2:[a-z\\-0-9]*:[0-9]{12}:security-group/.*$"
+            },
+            "maxLength": 5,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "SubnetArn",
+          "description": "The ARN of the subnet that DataSync uses to access the target EFS file system.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The ARN of the subnet that DataSync uses to access the target EFS file system.",
+            "maxLength": 128,
+            "pattern": "^arn:(aws|aws-cn|aws-us-gov|aws-iso|aws-iso-b):ec2:[a-z\\-0-9]*:[0-9]{12}:subnet/.*$"
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "description": "A key-value pair to associate with a resource.",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "The key for an AWS resource tag.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The key for an AWS resource tag.",
+            "maxLength": 256,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9\\s+=._:/-]+$"
+          }
+        },
+        {
+          "name": "Value",
+          "description": "The value for an AWS resource tag.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The value for an AWS resource tag.",
+            "maxLength": 256,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9\\s+=._:@/-]+$"
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource schema for AWS::DataSync::LocationEFS.",
+    "properties": [
+      {
+        "name": "Ec2Config",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "Ec2Config"
+        }
+      },
+      {
+        "name": "EfsFilesystemArn",
+        "description": "The Amazon Resource Name (ARN) for the Amazon EFS file system.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) for the Amazon EFS file system.",
+          "maxLength": 128,
+          "pattern": "^arn:(aws|aws-cn|aws-us-gov|aws-iso|aws-iso-b):elasticfilesystem:[a-z\\-0-9]*:[0-9]{12}:file-system/fs-.*$"
+        }
+      },
+      {
+        "name": "AccessPointArn",
+        "description": "The Amazon Resource Name (ARN) for the Amazon EFS Access point that DataSync uses when accessing the EFS file system.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) for the Amazon EFS Access point that DataSync uses when accessing the EFS file system.",
+          "maxLength": 128,
+          "pattern": "^arn:(aws|aws-cn|aws-us-gov|aws-iso|aws-iso-b):elasticfilesystem:[a-z\\-0-9]+:[0-9]{12}:access-point/fsap-[0-9a-f]{8,40}$"
+        }
+      },
+      {
+        "name": "FileSystemAccessRoleArn",
+        "description": "The Amazon Resource Name (ARN) of the AWS IAM role that the DataSync will assume when mounting the EFS file system.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) of the AWS IAM role that the DataSync will assume when mounting the EFS file system.",
+          "maxLength": 128,
+          "pattern": "^arn:(aws|aws-cn|aws-us-gov|aws-iso|aws-iso-b):iam::[0-9]{12}:role/.*$"
+        }
+      },
+      {
+        "name": "InTransitEncryption",
+        "description": "Protocol that is used for encrypting the traffic exchanged between the DataSync Agent and the EFS file system.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Protocol that is used for encrypting the traffic exchanged between the DataSync Agent and the EFS file system.",
+          "allowedValues": ["NONE", "TLS1_2"]
+        }
+      },
+      {
+        "name": "Subdirectory",
+        "description": "A subdirectory in the location's path. This subdirectory in the EFS file system is used to read data from the EFS source location or write data to the EFS destination.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "A subdirectory in the location's path. This subdirectory in the EFS file system is used to read data from the EFS source location or write data to the EFS destination.",
+          "maxLength": 4096,
+          "pattern": "^[a-zA-Z0-9_\\-\\+\\./\\(\\)\\$\\p{Zs}]+$"
+        }
+      },
+      {
+        "name": "Tags",
+        "description": "An array of key-value pairs to apply to this resource.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "An array of key-value pairs to apply to this resource.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          },
+          "maxLength": 50
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Resource schema for AWS::DataSync::LocationEFS.",
+    "properties": [
+      {
+        "name": "LocationArn",
+        "description": "The Amazon Resource Name (ARN) of the Amazon EFS file system location that is created.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) of the Amazon EFS file system location that is created.",
+          "maxLength": 128,
+          "pattern": "^arn:(aws|aws-cn|aws-us-gov|aws-iso|aws-iso-b):datasync:[a-z\\-0-9]+:[0-9]{12}:location/loc-[0-9a-z]{17}$"
+        }
+      },
+      {
+        "name": "LocationUri",
+        "description": "The URL of the EFS location that was described.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The URL of the EFS location that was described.",
+          "maxLength": 4356,
+          "pattern": "^(efs|nfs|s3|smb|fsxw)://[a-zA-Z0-9.\\-/]+$"
+        }
+      }
+    ]
+  },
+  "$hash": "594abe7e9077eb70b25817277d516d219bbcc86c"
+}

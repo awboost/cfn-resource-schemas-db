@@ -1,0 +1,216 @@
+{
+  "definitions": {
+    "ApiGatewayEndpointType": {
+      "type": "string",
+      "allowedValues": ["REGIONAL", "PRIVATE"]
+    },
+    "ApiGatewayProxyInput": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "StageName",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^[-a-zA-Z0-9_]*$"
+          }
+        },
+        {
+          "name": "EndpointType",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ApiGatewayEndpointType"
+          }
+        }
+      ]
+    },
+    "ProxyType": {
+      "type": "string",
+      "allowedValues": ["API_GATEWAY"]
+    },
+    "Tag": {
+      "type": "object",
+      "description": "A label for tagging Environment resource",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "A string used to identify this tag",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "A string used to identify this tag",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^(?!aws:).+"
+          }
+        },
+        {
+          "name": "Value",
+          "description": "A string containing the value for the tag",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "A string containing the value for the tag",
+            "maxLength": 256,
+            "minLength": 0
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Definition of AWS::RefactorSpaces::Application Resource Type",
+    "properties": [
+      {
+        "name": "ApiGatewayProxy",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "ApiGatewayProxyInput"
+        }
+      },
+      {
+        "name": "EnvironmentIdentifier",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "maxLength": 14,
+          "minLength": 14,
+          "pattern": "^env-([0-9A-Za-z]{10}$)"
+        }
+      },
+      {
+        "name": "Name",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "maxLength": 63,
+          "minLength": 3,
+          "pattern": "^(?!app-)[a-zA-Z0-9]+[a-zA-Z0-9-_ ]+$"
+        }
+      },
+      {
+        "name": "ProxyType",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "ProxyType"
+        }
+      },
+      {
+        "name": "VpcId",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "maxLength": 21,
+          "minLength": 12,
+          "pattern": "^vpc-[-a-f0-9]{8}([-a-f0-9]{9})?$"
+        }
+      },
+      {
+        "name": "Tags",
+        "description": "Metadata that you can assign to help organize the frameworks that you create. Each tag is a key-value pair.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "Metadata that you can assign to help organize the frameworks that you create. Each tag is a key-value pair.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          }
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Definition of AWS::RefactorSpaces::Application Resource Type",
+    "properties": [
+      {
+        "name": "Arn",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 2048,
+          "minLength": 20,
+          "pattern": "^arn:(aws[a-zA-Z-]*)?:refactor-spaces:[a-zA-Z0-9\\-]+:\\w{12}:[a-zA-Z_0-9+=,.@\\-_/]+$"
+        }
+      },
+      {
+        "name": "ApiGatewayId",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 10,
+          "minLength": 10,
+          "pattern": "^[a-z0-9]{10}$"
+        }
+      },
+      {
+        "name": "VpcLinkId",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 10,
+          "minLength": 10,
+          "pattern": "^[a-z0-9]{10}$"
+        }
+      },
+      {
+        "name": "NlbArn",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 2048,
+          "minLength": 20,
+          "pattern": "^arn:(aws[a-zA-Z-]*)?:elasticloadbalancing:[a-zA-Z0-9\\\\-]+:\\\\w{12}:[a-zA-Z_0-9+=,.@\\\\-_\\/]+$"
+        }
+      },
+      {
+        "name": "NlbName",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 32,
+          "minLength": 1,
+          "pattern": "^(?!internal-)[a-zA-Z0-9]+[a-zA-Z0-9-_ ]+.*[^-]$"
+        }
+      },
+      {
+        "name": "ApplicationIdentifier",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 14,
+          "minLength": 14,
+          "pattern": "^app-([0-9A-Za-z]{10}$)"
+        }
+      },
+      {
+        "name": "StageName",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[-a-zA-Z0-9_]*$"
+        }
+      },
+      {
+        "name": "ProxyUrl",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 2048,
+          "minLength": 1,
+          "pattern": "^http://[-a-zA-Z0-9+\\x38@#/%?=~_|!:,.;]*[-a-zA-Z0-9+\\x38@#/%=~_|]$"
+        }
+      }
+    ]
+  },
+  "$hash": "65032ebe3c2062e70b98692340f7666c6d33d610"
+}

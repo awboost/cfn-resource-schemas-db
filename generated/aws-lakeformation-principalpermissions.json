@@ -1,0 +1,603 @@
+{
+  "definitions": {
+    "CatalogIdString": {
+      "type": "string",
+      "maxLength": 12,
+      "minLength": 12
+    },
+    "PathString": {
+      "type": "string"
+    },
+    "ResourceArnString": {
+      "type": "string"
+    },
+    "NameString": {
+      "type": "string",
+      "maxLength": 255,
+      "minLength": 1
+    },
+    "IAMRoleArn": {
+      "type": "string",
+      "pattern": "arn:*:iam::[0-9]*:role/.*"
+    },
+    "LFTag": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "TagKey",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "LFTagKey"
+          }
+        },
+        {
+          "name": "TagValues",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "TagValueList"
+          }
+        }
+      ]
+    },
+    "LFTagPair": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "CatalogId",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "CatalogIdString"
+          }
+        },
+        {
+          "name": "TagKey",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "LFTagKey"
+          }
+        },
+        {
+          "name": "TagValues",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "TagValueList"
+          }
+        }
+      ]
+    },
+    "LFTagsList": {
+      "type": "array",
+      "itemType": {
+        "type": "ref",
+        "typeName": "LFTagPair"
+      }
+    },
+    "Expression": {
+      "type": "array",
+      "itemType": {
+        "type": "ref",
+        "typeName": "LFTag"
+      },
+      "maxLength": 5,
+      "minLength": 1
+    },
+    "DataLakePrincipalString": {
+      "type": "string",
+      "maxLength": 255,
+      "minLength": 1
+    },
+    "DataLakePrincipal": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "DataLakePrincipalIdentifier",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DataLakePrincipalString"
+          }
+        }
+      ]
+    },
+    "ResourceType": {
+      "type": "string",
+      "allowedValues": ["DATABASE", "TABLE"]
+    },
+    "CatalogResource": {
+      "type": "record"
+    },
+    "DatabaseResource": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "CatalogId",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "CatalogIdString"
+          }
+        },
+        {
+          "name": "Name",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "NameString"
+          }
+        }
+      ]
+    },
+    "TableWildcard": {
+      "type": "record"
+    },
+    "TableResource": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "CatalogId",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "CatalogIdString"
+          }
+        },
+        {
+          "name": "DatabaseName",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "NameString"
+          }
+        },
+        {
+          "name": "Name",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "NameString"
+          }
+        },
+        {
+          "name": "TableWildcard",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "TableWildcard"
+          }
+        }
+      ]
+    },
+    "ColumnNames": {
+      "type": "array",
+      "itemType": {
+        "type": "ref",
+        "typeName": "NameString"
+      }
+    },
+    "ColumnWildcard": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ExcludedColumnNames",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ColumnNames"
+          }
+        }
+      ]
+    },
+    "TableWithColumnsResource": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "CatalogId",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "CatalogIdString"
+          }
+        },
+        {
+          "name": "DatabaseName",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "NameString"
+          }
+        },
+        {
+          "name": "Name",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "NameString"
+          }
+        },
+        {
+          "name": "ColumnNames",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ColumnNames"
+          }
+        },
+        {
+          "name": "ColumnWildcard",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ColumnWildcard"
+          }
+        }
+      ]
+    },
+    "DataLocationResource": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "CatalogId",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "CatalogIdString"
+          }
+        },
+        {
+          "name": "ResourceArn",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "ResourceArnString"
+          }
+        }
+      ]
+    },
+    "DataCellsFilterResource": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "TableCatalogId",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "CatalogIdString"
+          }
+        },
+        {
+          "name": "DatabaseName",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "NameString"
+          }
+        },
+        {
+          "name": "TableName",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "NameString"
+          }
+        },
+        {
+          "name": "Name",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "NameString"
+          }
+        }
+      ]
+    },
+    "LFTagKeyResource": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "CatalogId",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "CatalogIdString"
+          }
+        },
+        {
+          "name": "TagKey",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "NameString"
+          }
+        },
+        {
+          "name": "TagValues",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "TagValueList"
+          }
+        }
+      ]
+    },
+    "LFTagPolicyResource": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "CatalogId",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "CatalogIdString"
+          }
+        },
+        {
+          "name": "ResourceType",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "ResourceType"
+          }
+        },
+        {
+          "name": "Expression",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "Expression"
+          }
+        }
+      ]
+    },
+    "Resource": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Catalog",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "CatalogResource"
+          }
+        },
+        {
+          "name": "Database",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DatabaseResource"
+          }
+        },
+        {
+          "name": "Table",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "TableResource"
+          }
+        },
+        {
+          "name": "TableWithColumns",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "TableWithColumnsResource"
+          }
+        },
+        {
+          "name": "DataLocation",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DataLocationResource"
+          }
+        },
+        {
+          "name": "DataCellsFilter",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DataCellsFilterResource"
+          }
+        },
+        {
+          "name": "LFTag",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "LFTagKeyResource"
+          }
+        },
+        {
+          "name": "LFTagPolicy",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "LFTagPolicyResource"
+          }
+        }
+      ]
+    },
+    "NullableBoolean": {
+      "type": "union",
+      "types": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Permission": {
+      "type": "string",
+      "allowedValues": [
+        "ALL",
+        "SELECT",
+        "ALTER",
+        "DROP",
+        "DELETE",
+        "INSERT",
+        "DESCRIBE",
+        "CREATE_DATABASE",
+        "CREATE_TABLE",
+        "DATA_LOCATION_ACCESS",
+        "CREATE_TAG",
+        "ASSOCIATE"
+      ]
+    },
+    "LFTagKey": {
+      "type": "string",
+      "maxLength": 128,
+      "minLength": 1
+    },
+    "LFTagValue": {
+      "type": "string",
+      "maxLength": 256,
+      "minLength": 0
+    },
+    "DataLakePrincipalList": {
+      "type": "array",
+      "itemType": {
+        "type": "ref",
+        "typeName": "DataLakePrincipal"
+      }
+    },
+    "PermissionList": {
+      "type": "array",
+      "itemType": {
+        "type": "ref",
+        "typeName": "Permission"
+      }
+    },
+    "TagValueList": {
+      "type": "array",
+      "itemType": {
+        "type": "ref",
+        "typeName": "LFTagValue"
+      },
+      "maxLength": 50,
+      "minLength": 1
+    },
+    "PrincipalResourcePair": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Principal",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "DataLakePrincipal"
+          }
+        },
+        {
+          "name": "Resource",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "Resource"
+          }
+        }
+      ]
+    },
+    "PrincipalPermissions": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "DataLakePrincipal",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DataLakePrincipal"
+          }
+        },
+        {
+          "name": "PermissionList",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PermissionList"
+          }
+        }
+      ]
+    },
+    "PrincipalPermissionsList": {
+      "type": "array",
+      "itemType": {
+        "type": "ref",
+        "typeName": "PrincipalPermissions"
+      }
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "A resource schema representing a Lake Formation Permission.",
+    "properties": [
+      {
+        "name": "Catalog",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "CatalogIdString"
+        }
+      },
+      {
+        "name": "Principal",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "DataLakePrincipal"
+        }
+      },
+      {
+        "name": "Resource",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "Resource"
+        }
+      },
+      {
+        "name": "Permissions",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "PermissionList"
+        }
+      },
+      {
+        "name": "PermissionsWithGrantOption",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "PermissionList"
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "A resource schema representing a Lake Formation Permission.",
+    "properties": [
+      {
+        "name": "PrincipalIdentifier",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "ResourceIdentifier",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      }
+    ]
+  },
+  "$hash": "522370c1f71d058d10055bc4d2d4d93257408e7c"
+}

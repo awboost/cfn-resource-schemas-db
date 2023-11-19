@@ -1,0 +1,285 @@
+{
+  "definitions": {
+    "NameNode": {
+      "type": "object",
+      "description": "HDFS Name Node IP and port information.",
+      "properties": [
+        {
+          "name": "Hostname",
+          "description": "The DNS name or IP address of the Name Node in the customer's on premises HDFS cluster.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The DNS name or IP address of the Name Node in the customer's on premises HDFS cluster.",
+            "maxLength": 255,
+            "pattern": "^(([a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9\\-]*[A-Za-z0-9])$"
+          }
+        },
+        {
+          "name": "Port",
+          "description": "The port on which the Name Node is listening on for client requests.",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "description": "The port on which the Name Node is listening on for client requests.",
+            "isInteger": true,
+            "maximum": 65536,
+            "minimum": 1
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "description": "A key-value pair to associate with a resource.",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+            "maxLength": 256,
+            "minLength": 0
+          }
+        }
+      ]
+    },
+    "QopConfiguration": {
+      "type": "object",
+      "description": "Configuration information for RPC Protection and Data Transfer Protection. These parameters can be set to AUTHENTICATION, INTEGRITY, or PRIVACY. The default value is PRIVACY.",
+      "properties": [
+        {
+          "name": "RpcProtection",
+          "description": "Configuration for RPC Protection.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Configuration for RPC Protection.",
+            "allowedValues": [
+              "AUTHENTICATION",
+              "INTEGRITY",
+              "PRIVACY",
+              "DISABLED"
+            ]
+          }
+        },
+        {
+          "name": "DataTransferProtection",
+          "description": "Configuration for Data Transfer Protection.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Configuration for Data Transfer Protection.",
+            "allowedValues": [
+              "AUTHENTICATION",
+              "INTEGRITY",
+              "PRIVACY",
+              "DISABLED"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource schema for AWS::DataSync::LocationHDFS.",
+    "properties": [
+      {
+        "name": "NameNodes",
+        "description": "An array of Name Node(s) of the HDFS location.",
+        "optional": false,
+        "type": {
+          "type": "array",
+          "description": "An array of Name Node(s) of the HDFS location.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "NameNode"
+          },
+          "minLength": 1
+        }
+      },
+      {
+        "name": "BlockSize",
+        "description": "Size of chunks (blocks) in bytes that the data is divided into when stored in the HDFS cluster.",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "Size of chunks (blocks) in bytes that the data is divided into when stored in the HDFS cluster.",
+          "isInteger": true,
+          "maximum": 1073741824,
+          "minimum": 1048576
+        }
+      },
+      {
+        "name": "ReplicationFactor",
+        "description": "Number of copies of each block that exists inside the HDFS cluster.",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "Number of copies of each block that exists inside the HDFS cluster.",
+          "isInteger": true,
+          "maximum": 512,
+          "minimum": 1
+        }
+      },
+      {
+        "name": "KmsKeyProviderUri",
+        "description": "The identifier for the Key Management Server where the encryption keys that encrypt data inside HDFS clusters are stored.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The identifier for the Key Management Server where the encryption keys that encrypt data inside HDFS clusters are stored.",
+          "maxLength": 255,
+          "minLength": 1,
+          "pattern": "^kms:\\/\\/http[s]?@(([a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9\\-]*[A-Za-z0-9])(;(([a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9\\-]*[A-Za-z0-9]))*:[0-9]{1,5}\\/kms$"
+        }
+      },
+      {
+        "name": "QopConfiguration",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "QopConfiguration"
+        }
+      },
+      {
+        "name": "AuthenticationType",
+        "description": "The authentication mode used to determine identity of user.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The authentication mode used to determine identity of user.",
+          "allowedValues": ["SIMPLE", "KERBEROS"]
+        }
+      },
+      {
+        "name": "SimpleUser",
+        "description": "The user name that has read and write permissions on the specified HDFS cluster.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The user name that has read and write permissions on the specified HDFS cluster.",
+          "maxLength": 256,
+          "minLength": 1,
+          "pattern": "^[_.A-Za-z0-9][-_.A-Za-z0-9]*$"
+        }
+      },
+      {
+        "name": "KerberosPrincipal",
+        "description": "The unique identity, or principal, to which Kerberos can assign tickets.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The unique identity, or principal, to which Kerberos can assign tickets.",
+          "maxLength": 256,
+          "minLength": 1,
+          "pattern": "^.+$"
+        }
+      },
+      {
+        "name": "KerberosKeytab",
+        "description": "The Base64 string representation of the Keytab file.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Base64 string representation of the Keytab file.",
+          "maxLength": 87384
+        }
+      },
+      {
+        "name": "KerberosKrb5Conf",
+        "description": "The string representation of the Krb5Conf file, or the presigned URL to access the Krb5.conf file within an S3 bucket.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The string representation of the Krb5Conf file, or the presigned URL to access the Krb5.conf file within an S3 bucket.",
+          "maxLength": 174764
+        }
+      },
+      {
+        "name": "Tags",
+        "description": "An array of key-value pairs to apply to this resource.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "An array of key-value pairs to apply to this resource.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          },
+          "maxLength": 50
+        }
+      },
+      {
+        "name": "AgentArns",
+        "description": "ARN(s) of the agent(s) to use for an HDFS location.",
+        "optional": false,
+        "type": {
+          "type": "array",
+          "description": "ARN(s) of the agent(s) to use for an HDFS location.",
+          "itemType": {
+            "type": "string",
+            "maxLength": 128,
+            "pattern": "^arn:(aws|aws-cn|aws-us-gov|aws-iso|aws-iso-b):datasync:[a-z\\-0-9]+:[0-9]{12}:agent/agent-[0-9a-z]{17}$"
+          },
+          "maxLength": 4,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "Subdirectory",
+        "description": "The subdirectory in HDFS that is used to read data from the HDFS source location or write data to the HDFS destination.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The subdirectory in HDFS that is used to read data from the HDFS source location or write data to the HDFS destination.",
+          "maxLength": 4096,
+          "pattern": "^[a-zA-Z0-9_\\-\\+\\./\\(\\)\\$\\p{Zs}]+$"
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Resource schema for AWS::DataSync::LocationHDFS.",
+    "properties": [
+      {
+        "name": "LocationArn",
+        "description": "The Amazon Resource Name (ARN) of the HDFS location.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) of the HDFS location.",
+          "maxLength": 128,
+          "pattern": "^arn:(aws|aws-cn|aws-us-gov|aws-iso|aws-iso-b):datasync:[a-z\\-0-9]+:[0-9]{12}:location/loc-[0-9a-z]{17}$"
+        }
+      },
+      {
+        "name": "LocationUri",
+        "description": "The URL of the HDFS location that was described.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The URL of the HDFS location that was described.",
+          "maxLength": 4356,
+          "pattern": "^(efs|nfs|s3|smb|fsxw|hdfs)://[a-zA-Z0-9.:/\\-]+$"
+        }
+      }
+    ]
+  },
+  "$hash": "e9d0117fab422dfabe1db4393dcb7396ad580265"
+}

@@ -1,0 +1,407 @@
+{
+  "definitions": {
+    "EntityName": {
+      "type": "string",
+      "maxLength": 255,
+      "minLength": 0,
+      "pattern": "^[a-zA-Z_0-9-]*$"
+    },
+    "Description": {
+      "type": "string",
+      "maxLength": 255,
+      "minLength": 0
+    },
+    "AttributeName": {
+      "type": "string",
+      "maxLength": 255,
+      "minLength": 0,
+      "pattern": "^[a-zA-Z_0-9- \\t]*$"
+    },
+    "SchemaMappingArn": {
+      "type": "string",
+      "description": "The SchemaMapping arn associated with the Schema",
+      "pattern": "^arn:(aws|aws-us-gov|aws-cn):entityresolution:.*:[0-9]+:(schemamapping/.*)$"
+    },
+    "KMSArn": {
+      "type": "string",
+      "pattern": "^arn:(aws|aws-us-gov|aws-cn):kms:.*:[0-9]+:.*$"
+    },
+    "MatchingWorkflowArn": {
+      "type": "string",
+      "description": "The default MatchingWorkflow arn",
+      "pattern": "^arn:(aws|aws-us-gov|aws-cn):entityresolution:.*:[0-9]+:(matchingworkflow/.*)$"
+    },
+    "CreatedAt": {
+      "type": "string",
+      "description": "The time of this MatchingWorkflow got created"
+    },
+    "UpdatedAt": {
+      "type": "string",
+      "description": "The time of this MatchingWorkflow got last updated at"
+    },
+    "InputSource": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "InputSourceARN",
+          "description": "An Glue table ARN for the input source table",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "An Glue table ARN for the input source table",
+            "pattern": "arn:(aws|aws-us-gov|aws-cn):.*:.*:[0-9]+:.*$"
+          }
+        },
+        {
+          "name": "SchemaArn",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "SchemaMappingArn"
+          }
+        },
+        {
+          "name": "ApplyNormalization",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        }
+      ]
+    },
+    "OutputSource": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "OutputS3Path",
+          "description": "The S3 path to which Entity Resolution will write the output table",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The S3 path to which Entity Resolution will write the output table",
+            "pattern": "^s3://([^/]+)/?(.*?([^/]+)/?)$"
+          }
+        },
+        {
+          "name": "Output",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "OutputAttribute"
+            },
+            "maxLength": 750,
+            "minLength": 0
+          }
+        },
+        {
+          "name": "KMSArn",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "KMSArn"
+          }
+        },
+        {
+          "name": "ApplyNormalization",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        }
+      ]
+    },
+    "OutputAttribute": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Name",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "AttributeName"
+          }
+        },
+        {
+          "name": "Hashed",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        }
+      ]
+    },
+    "ResolutionTechniques": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ResolutionType",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": ["RULE_MATCHING", "ML_MATCHING", "PROVIDER"]
+          }
+        },
+        {
+          "name": "RuleBasedProperties",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "RuleBasedProperties"
+          }
+        },
+        {
+          "name": "ProviderProperties",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ProviderProperties"
+          }
+        }
+      ]
+    },
+    "RuleBasedProperties": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Rules",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Rule"
+            },
+            "maxLength": 15,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "AttributeMatchingModel",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "allowedValues": ["ONE_TO_ONE", "MANY_TO_MANY"]
+          }
+        }
+      ]
+    },
+    "Rule": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "RuleName",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 0,
+            "pattern": "^[a-zA-Z_0-9- \\t]*$"
+          }
+        },
+        {
+          "name": "MatchingKeys",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "AttributeName"
+            },
+            "maxLength": 15,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "ProviderProperties": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ProviderServiceArn",
+          "description": "Arn of the Provider service being used.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Arn of the Provider service being used."
+          }
+        },
+        {
+          "name": "ProviderConfiguration",
+          "description": "Additional Provider configuration that would be required for the provider service. The Configuration must be in JSON string format",
+          "optional": true,
+          "type": {
+            "type": "record",
+            "description": "Additional Provider configuration that would be required for the provider service. The Configuration must be in JSON string format",
+            "valueType": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "name": "IntermediateSourceConfiguration",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "IntermediateSourceConfiguration"
+          }
+        }
+      ]
+    },
+    "IntermediateSourceConfiguration": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "IntermediateS3Path",
+          "description": "The s3 path that would be used to stage the intermediate data being generated during workflow execution.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The s3 path that would be used to stage the intermediate data being generated during workflow execution."
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "description": "A key-value pair to associate with a resource",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+            "maxLength": 256,
+            "minLength": 0
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "MatchingWorkflow defined in AWS Entity Resolution service",
+    "properties": [
+      {
+        "name": "WorkflowName",
+        "description": "The name of the MatchingWorkflow",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "description": "The name of the MatchingWorkflow",
+          "typeName": "EntityName"
+        }
+      },
+      {
+        "name": "Description",
+        "description": "The description of the MatchingWorkflow",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "The description of the MatchingWorkflow",
+          "typeName": "Description"
+        }
+      },
+      {
+        "name": "InputSourceConfig",
+        "optional": false,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "InputSource"
+          },
+          "maxLength": 20,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "OutputSourceConfig",
+        "optional": false,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "OutputSource"
+          },
+          "maxLength": 1,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "ResolutionTechniques",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "ResolutionTechniques"
+        }
+      },
+      {
+        "name": "RoleArn",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "pattern": "^arn:(aws|aws-us-gov|aws-cn):iam::\\d{12}:role/?[a-zA-Z_0-9+=,.@\\-_/]+$"
+        }
+      },
+      {
+        "name": "Tags",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          },
+          "maxLength": 200,
+          "minLength": 0
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "MatchingWorkflow defined in AWS Entity Resolution service",
+    "properties": [
+      {
+        "name": "WorkflowArn",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "MatchingWorkflowArn"
+        }
+      },
+      {
+        "name": "CreatedAt",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "CreatedAt"
+        }
+      },
+      {
+        "name": "UpdatedAt",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "UpdatedAt"
+        }
+      }
+    ]
+  },
+  "$hash": "b54f95e9b991fba11de03684e30d52b1f22fa198"
+}

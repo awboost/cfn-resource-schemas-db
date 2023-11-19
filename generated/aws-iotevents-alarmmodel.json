@@ -1,0 +1,794 @@
+{
+  "definitions": {
+    "AlarmRule": {
+      "type": "object",
+      "description": "Defines when your alarm is invoked.",
+      "properties": [
+        {
+          "name": "SimpleRule",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "SimpleRule"
+          }
+        }
+      ]
+    },
+    "SimpleRule": {
+      "type": "object",
+      "description": "A rule that compares an input property value to a threshold value with a comparison operator.",
+      "properties": [
+        {
+          "name": "InputProperty",
+          "description": "The value on the left side of the comparison operator. You can specify an AWS IoT Events input attribute as an input property.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The value on the left side of the comparison operator. You can specify an AWS IoT Events input attribute as an input property.",
+            "maxLength": 512,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "ComparisonOperator",
+          "description": "The comparison operator.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The comparison operator.",
+            "allowedValues": [
+              "GREATER",
+              "GREATER_OR_EQUAL",
+              "LESS",
+              "LESS_OR_EQUAL",
+              "EQUAL",
+              "NOT_EQUAL"
+            ]
+          }
+        },
+        {
+          "name": "Threshold",
+          "description": "The value on the right side of the comparison operator. You can enter a number or specify an AWS IoT Events input attribute.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The value on the right side of the comparison operator. You can enter a number or specify an AWS IoT Events input attribute.",
+            "maxLength": 512,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "AlarmEventActions": {
+      "type": "object",
+      "description": "Contains information about one or more alarm actions.",
+      "properties": [
+        {
+          "name": "AlarmActions",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "AlarmActions"
+          }
+        }
+      ]
+    },
+    "AlarmCapabilities": {
+      "type": "object",
+      "description": "Contains the configuration information of alarm state changes",
+      "properties": [
+        {
+          "name": "InitializationConfiguration",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "InitializationConfiguration"
+          }
+        },
+        {
+          "name": "AcknowledgeFlow",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "AcknowledgeFlow"
+          }
+        }
+      ]
+    },
+    "AlarmActions": {
+      "type": "array",
+      "description": "Specifies one or more supported actions to receive notifications when the alarm state changes.",
+      "itemType": {
+        "type": "ref",
+        "typeName": "AlarmAction"
+      }
+    },
+    "AlarmAction": {
+      "type": "object",
+      "description": "The actions to be performed.",
+      "properties": [
+        {
+          "name": "DynamoDB",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DynamoDB"
+          }
+        },
+        {
+          "name": "DynamoDBv2",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DynamoDBv2"
+          }
+        },
+        {
+          "name": "Firehose",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Firehose"
+          }
+        },
+        {
+          "name": "IotEvents",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "IotEvents"
+          }
+        },
+        {
+          "name": "IotSiteWise",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "IotSiteWise"
+          }
+        },
+        {
+          "name": "IotTopicPublish",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "IotTopicPublish"
+          }
+        },
+        {
+          "name": "Lambda",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Lambda"
+          }
+        },
+        {
+          "name": "Sns",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Sns"
+          }
+        },
+        {
+          "name": "Sqs",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Sqs"
+          }
+        }
+      ]
+    },
+    "DynamoDB": {
+      "type": "object",
+      "description": "Writes to the DynamoDB table that you created. The default action payload contains all attribute-value pairs that have the information about the alarm model instance and the event that triggered the action. You can also customize the [payload](https://docs.aws.amazon.com/iotevents/latest/apireference/API_Payload.html). One column of the DynamoDB table receives all attribute-value pairs in the payload that you specify. For more information, see [Actions](https://docs.aws.amazon.com/iotevents/latest/developerguide/iotevents-event-actions.html) in *AWS IoT Events Developer Guide*.",
+      "properties": [
+        {
+          "name": "HashKeyField",
+          "description": "The name of the hash key (also called the partition key).",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The name of the hash key (also called the partition key)."
+          }
+        },
+        {
+          "name": "HashKeyType",
+          "description": "The data type for the hash key (also called the partition key). You can specify the following values:\n\n* `STRING` - The hash key is a string.\n\n* `NUMBER` - The hash key is a number.\n\nIf you don't specify `hashKeyType`, the default value is `STRING`.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The data type for the hash key (also called the partition key). You can specify the following values:\n\n* `STRING` - The hash key is a string.\n\n* `NUMBER` - The hash key is a number.\n\nIf you don't specify `hashKeyType`, the default value is `STRING`."
+          }
+        },
+        {
+          "name": "HashKeyValue",
+          "description": "The value of the hash key (also called the partition key).",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The value of the hash key (also called the partition key)."
+          }
+        },
+        {
+          "name": "Operation",
+          "description": "The type of operation to perform. You can specify the following values:\n\n* `INSERT` - Insert data as a new item into the DynamoDB table. This item uses the specified hash key as a partition key. If you specified a range key, the item uses the range key as a sort key.\n\n* `UPDATE` - Update an existing item of the DynamoDB table with new data. This item's partition key must match the specified hash key. If you specified a range key, the range key must match the item's sort key.\n\n* `DELETE` - Delete an existing item of the DynamoDB table. This item's partition key must match the specified hash key. If you specified a range key, the range key must match the item's sort key.\n\nIf you don't specify this parameter, AWS IoT Events triggers the `INSERT` operation.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The type of operation to perform. You can specify the following values:\n\n* `INSERT` - Insert data as a new item into the DynamoDB table. This item uses the specified hash key as a partition key. If you specified a range key, the item uses the range key as a sort key.\n\n* `UPDATE` - Update an existing item of the DynamoDB table with new data. This item's partition key must match the specified hash key. If you specified a range key, the range key must match the item's sort key.\n\n* `DELETE` - Delete an existing item of the DynamoDB table. This item's partition key must match the specified hash key. If you specified a range key, the range key must match the item's sort key.\n\nIf you don't specify this parameter, AWS IoT Events triggers the `INSERT` operation."
+          }
+        },
+        {
+          "name": "Payload",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Payload"
+          }
+        },
+        {
+          "name": "PayloadField",
+          "description": "The name of the DynamoDB column that receives the action payload.\n\nIf you don't specify this parameter, the name of the DynamoDB column is `payload`.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The name of the DynamoDB column that receives the action payload.\n\nIf you don't specify this parameter, the name of the DynamoDB column is `payload`."
+          }
+        },
+        {
+          "name": "RangeKeyField",
+          "description": "The name of the range key (also called the sort key).",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The name of the range key (also called the sort key)."
+          }
+        },
+        {
+          "name": "RangeKeyType",
+          "description": "The data type for the range key (also called the sort key), You can specify the following values:\n\n* `STRING` - The range key is a string.\n\n* `NUMBER` - The range key is number.\n\nIf you don't specify `rangeKeyField`, the default value is `STRING`.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The data type for the range key (also called the sort key), You can specify the following values:\n\n* `STRING` - The range key is a string.\n\n* `NUMBER` - The range key is number.\n\nIf you don't specify `rangeKeyField`, the default value is `STRING`."
+          }
+        },
+        {
+          "name": "RangeKeyValue",
+          "description": "The value of the range key (also called the sort key).",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The value of the range key (also called the sort key)."
+          }
+        },
+        {
+          "name": "TableName",
+          "description": "The name of the DynamoDB table.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The name of the DynamoDB table."
+          }
+        }
+      ]
+    },
+    "DynamoDBv2": {
+      "type": "object",
+      "description": "Defines an action to write to the Amazon DynamoDB table that you created. The default action payload contains all attribute-value pairs that have the information about the alarm model instance and the event that triggered the action. You can also customize the [payload](https://docs.aws.amazon.com/iotevents/latest/apireference/API_Payload.html). A separate column of the DynamoDB table receives one attribute-value pair in the payload that you specify.\n\nYou can use expressions for parameters that are strings. For more information, see [Expressions](https://docs.aws.amazon.com/iotevents/latest/developerguide/iotevents-expressions.html) in the *AWS IoT Events Developer Guide*.",
+      "properties": [
+        {
+          "name": "Payload",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Payload"
+          }
+        },
+        {
+          "name": "TableName",
+          "description": "The name of the DynamoDB table.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The name of the DynamoDB table."
+          }
+        }
+      ]
+    },
+    "Firehose": {
+      "type": "object",
+      "description": "Sends information about the alarm model instance and the event that triggered the action to an Amazon Kinesis Data Firehose delivery stream.",
+      "properties": [
+        {
+          "name": "DeliveryStreamName",
+          "description": "The name of the Kinesis Data Firehose delivery stream where the data is written.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The name of the Kinesis Data Firehose delivery stream where the data is written."
+          }
+        },
+        {
+          "name": "Payload",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Payload"
+          }
+        },
+        {
+          "name": "Separator",
+          "description": "A character separator that is used to separate records written to the Kinesis Data Firehose delivery stream. Valid values are: '\\n' (newline), '\\t' (tab), '\\r\\n' (Windows newline), ',' (comma).",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "A character separator that is used to separate records written to the Kinesis Data Firehose delivery stream. Valid values are: '\\n' (newline), '\\t' (tab), '\\r\\n' (Windows newline), ',' (comma).",
+            "pattern": "([\\n\\t])|(\\r\\n)|(,)"
+          }
+        }
+      ]
+    },
+    "IotEvents": {
+      "type": "object",
+      "description": "Sends an AWS IoT Events input, passing in information about the alarm model instance and the event that triggered the action.",
+      "properties": [
+        {
+          "name": "InputName",
+          "description": "The name of the AWS IoT Events input where the data is sent.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The name of the AWS IoT Events input where the data is sent.",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$"
+          }
+        },
+        {
+          "name": "Payload",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Payload"
+          }
+        }
+      ]
+    },
+    "IotSiteWise": {
+      "type": "object",
+      "description": "Sends information about the alarm model instance and the event that triggered the action to a specified asset property in AWS IoT SiteWise.",
+      "properties": [
+        {
+          "name": "AssetId",
+          "description": "The ID of the asset that has the specified property. You can specify an expression.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The ID of the asset that has the specified property. You can specify an expression."
+          }
+        },
+        {
+          "name": "EntryId",
+          "description": "A unique identifier for this entry. You can use the entry ID to track which data entry causes an error in case of failure. The default is a new unique identifier. You can also specify an expression.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "A unique identifier for this entry. You can use the entry ID to track which data entry causes an error in case of failure. The default is a new unique identifier. You can also specify an expression."
+          }
+        },
+        {
+          "name": "PropertyAlias",
+          "description": "The alias of the asset property. You can also specify an expression.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The alias of the asset property. You can also specify an expression."
+          }
+        },
+        {
+          "name": "PropertyId",
+          "description": "The ID of the asset property. You can specify an expression.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The ID of the asset property. You can specify an expression."
+          }
+        },
+        {
+          "name": "PropertyValue",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "AssetPropertyValue"
+          }
+        }
+      ]
+    },
+    "IotTopicPublish": {
+      "type": "object",
+      "description": "Information required to publish the MQTT message through the AWS IoT message broker.",
+      "properties": [
+        {
+          "name": "MqttTopic",
+          "description": "The MQTT topic of the message. You can use a string expression that includes variables (`$variable.<variable-name>`) and input values (`$input.<input-name>.<path-to-datum>`) as the topic string.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The MQTT topic of the message. You can use a string expression that includes variables (`$variable.<variable-name>`) and input values (`$input.<input-name>.<path-to-datum>`) as the topic string.",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Payload",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Payload"
+          }
+        }
+      ]
+    },
+    "Lambda": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "FunctionArn",
+          "description": "The ARN of the Lambda function that is executed.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The ARN of the Lambda function that is executed.",
+            "maxLength": 2048,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Payload",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Payload"
+          }
+        }
+      ]
+    },
+    "Sns": {
+      "type": "object",
+      "description": "Information required to publish the Amazon SNS message.",
+      "properties": [
+        {
+          "name": "Payload",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Payload"
+          }
+        },
+        {
+          "name": "TargetArn",
+          "description": "The ARN of the Amazon SNS target where the message is sent.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The ARN of the Amazon SNS target where the message is sent.",
+            "maxLength": 2048,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "Sqs": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Payload",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Payload"
+          }
+        },
+        {
+          "name": "QueueUrl",
+          "description": "The URL of the SQS queue where the data is written.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The URL of the SQS queue where the data is written."
+          }
+        },
+        {
+          "name": "UseBase64",
+          "description": "Set this to `TRUE` if you want the data to be base-64 encoded before it is written to the queue. Otherwise, set this to `FALSE`.",
+          "optional": true,
+          "type": {
+            "type": "boolean",
+            "description": "Set this to `TRUE` if you want the data to be base-64 encoded before it is written to the queue. Otherwise, set this to `FALSE`."
+          }
+        }
+      ]
+    },
+    "Payload": {
+      "type": "object",
+      "description": "Information needed to configure the payload.\n\nBy default, AWS IoT Events generates a standard payload in JSON for any action. This action payload contains all attribute-value pairs that have the information about the alarm model instance and the event triggered the action. To configure the action payload, you can use `contentExpression`.",
+      "properties": [
+        {
+          "name": "ContentExpression",
+          "description": "The content of the payload. You can use a string expression that includes quoted strings (`'<string>'`), variables (`$variable.<variable-name>`), input values (`$input.<input-name>.<path-to-datum>`), string concatenations, and quoted strings that contain `${}` as the content. The recommended maximum size of a content expression is 1 KB.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The content of the payload. You can use a string expression that includes quoted strings (`'<string>'`), variables (`$variable.<variable-name>`), input values (`$input.<input-name>.<path-to-datum>`), string concatenations, and quoted strings that contain `${}` as the content. The recommended maximum size of a content expression is 1 KB.",
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Type",
+          "description": "The value of the payload type can be either `STRING` or `JSON`.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The value of the payload type can be either `STRING` or `JSON`."
+          }
+        }
+      ]
+    },
+    "InitializationConfiguration": {
+      "type": "object",
+      "description": "Specifies the default alarm state. The configuration applies to all alarms that were created based on this alarm model.",
+      "properties": [
+        {
+          "name": "DisabledOnInitialization",
+          "description": "The value must be TRUE or FALSE. If FALSE, all alarm instances created based on the alarm model are activated. The default value is TRUE.",
+          "optional": false,
+          "type": {
+            "type": "boolean",
+            "description": "The value must be TRUE or FALSE. If FALSE, all alarm instances created based on the alarm model are activated. The default value is TRUE."
+          }
+        }
+      ]
+    },
+    "AcknowledgeFlow": {
+      "type": "object",
+      "description": "Specifies whether to get notified for alarm state changes.",
+      "properties": [
+        {
+          "name": "Enabled",
+          "description": "The value must be TRUE or FALSE. If TRUE, you receive a notification when the alarm state changes. You must choose to acknowledge the notification before the alarm state can return to NORMAL. If FALSE, you won't receive notifications. The alarm automatically changes to the NORMAL state when the input property value returns to the specified range.",
+          "optional": true,
+          "type": {
+            "type": "boolean",
+            "description": "The value must be TRUE or FALSE. If TRUE, you receive a notification when the alarm state changes. You must choose to acknowledge the notification before the alarm state can return to NORMAL. If FALSE, you won't receive notifications. The alarm automatically changes to the NORMAL state when the input property value returns to the specified range."
+          }
+        }
+      ]
+    },
+    "AssetPropertyValue": {
+      "type": "object",
+      "description": "A structure that contains value information. For more information, see [AssetPropertyValue](https://docs.aws.amazon.com/iot-sitewise/latest/APIReference/API_AssetPropertyValue.html) in the *AWS IoT SiteWise API Reference*.",
+      "properties": [
+        {
+          "name": "Quality",
+          "description": "The quality of the asset property value. The value must be `GOOD`, `BAD`, or `UNCERTAIN`. You can also specify an expression.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The quality of the asset property value. The value must be `GOOD`, `BAD`, or `UNCERTAIN`. You can also specify an expression."
+          }
+        },
+        {
+          "name": "Timestamp",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "AssetPropertyTimestamp"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "AssetPropertyVariant"
+          }
+        }
+      ]
+    },
+    "AssetPropertyTimestamp": {
+      "type": "object",
+      "description": "A structure that contains timestamp information. For more information, see [TimeInNanos](https://docs.aws.amazon.com/iot-sitewise/latest/APIReference/API_TimeInNanos.html) in the *AWS IoT SiteWise API Reference*.",
+      "properties": [
+        {
+          "name": "OffsetInNanos",
+          "description": "The timestamp, in seconds, in the Unix epoch format. The valid range is between `1-31556889864403199`. You can also specify an expression.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The timestamp, in seconds, in the Unix epoch format. The valid range is between `1-31556889864403199`. You can also specify an expression."
+          }
+        },
+        {
+          "name": "TimeInSeconds",
+          "description": "The nanosecond offset converted from `timeInSeconds`. The valid range is between `0-999999999`. You can also specify an expression.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The nanosecond offset converted from `timeInSeconds`. The valid range is between `0-999999999`. You can also specify an expression."
+          }
+        }
+      ]
+    },
+    "AssetPropertyVariant": {
+      "type": "object",
+      "description": "A structure that contains an asset property value. For more information, see [Variant](https://docs.aws.amazon.com/iot-sitewise/latest/APIReference/API_Variant.html) in the *AWS IoT SiteWise API Reference*.",
+      "properties": [
+        {
+          "name": "BooleanValue",
+          "description": "The asset property value is a Boolean value that must be `TRUE` or `FALSE`. You can also specify an expression. If you use an expression, the evaluated result should be a Boolean value.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The asset property value is a Boolean value that must be `TRUE` or `FALSE`. You can also specify an expression. If you use an expression, the evaluated result should be a Boolean value."
+          }
+        },
+        {
+          "name": "DoubleValue",
+          "description": "The asset property value is a double. You can also specify an expression. If you use an expression, the evaluated result should be a double.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The asset property value is a double. You can also specify an expression. If you use an expression, the evaluated result should be a double."
+          }
+        },
+        {
+          "name": "IntegerValue",
+          "description": "The asset property value is an integer. You can also specify an expression. If you use an expression, the evaluated result should be an integer.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The asset property value is an integer. You can also specify an expression. If you use an expression, the evaluated result should be an integer."
+          }
+        },
+        {
+          "name": "StringValue",
+          "description": "The asset property value is a string. You can also specify an expression. If you use an expression, the evaluated result should be a string.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The asset property value is a string. You can also specify an expression. If you use an expression, the evaluated result should be a string."
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "description": "Tags to be applied to Input.",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "Key of the Tag.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Key of the Tag."
+          }
+        },
+        {
+          "name": "Value",
+          "description": "Value of the Tag.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Value of the Tag."
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "The AWS::IoTEvents::AlarmModel resource creates a alarm model. AWS IoT Events alarms help you monitor your data for changes. The data can be metrics that you measure for your equipment and processes. You can create alarms that send notifications when a threshold is breached. Alarms help you detect issues, streamline maintenance, and optimize performance of your equipment and processes.\n\nAlarms are instances of alarm models. The alarm model specifies what to detect, when to send notifications, who gets notified, and more. You can also specify one or more supported actions that occur when the alarm state changes. AWS IoT Events routes input attributes derived from your data to the appropriate alarms. If the data that you're monitoring is outside the specified range, the alarm is invoked. You can also acknowledge the alarms or set them to the snooze mode.",
+    "properties": [
+      {
+        "name": "AlarmModelName",
+        "description": "The name of the alarm model.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The name of the alarm model.",
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[a-zA-Z0-9_-]+$"
+        }
+      },
+      {
+        "name": "AlarmModelDescription",
+        "description": "A brief description of the alarm model.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "A brief description of the alarm model.",
+          "maxLength": 128
+        }
+      },
+      {
+        "name": "RoleArn",
+        "description": "The ARN of the role that grants permission to AWS IoT Events to perform its operations.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The ARN of the role that grants permission to AWS IoT Events to perform its operations.",
+          "maxLength": 2048,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "Key",
+        "description": "The value used to identify a alarm instance. When a device or system sends input, a new alarm instance with a unique key value is created. AWS IoT Events can continue to route input to its corresponding alarm instance based on this identifying information.\n\nThis parameter uses a JSON-path expression to select the attribute-value pair in the message payload that is used for identification. To route the message to the correct alarm instance, the device must send a message payload that contains the same attribute-value.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The value used to identify a alarm instance. When a device or system sends input, a new alarm instance with a unique key value is created. AWS IoT Events can continue to route input to its corresponding alarm instance based on this identifying information.\n\nThis parameter uses a JSON-path expression to select the attribute-value pair in the message payload that is used for identification. To route the message to the correct alarm instance, the device must send a message payload that contains the same attribute-value.",
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^((`[\\w\\- ]+`)|([\\w\\-]+))(\\.((`[\\w\\- ]+`)|([\\w\\-]+)))*$"
+        }
+      },
+      {
+        "name": "Severity",
+        "description": "A non-negative integer that reflects the severity level of the alarm.\n\n",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "A non-negative integer that reflects the severity level of the alarm.\n\n",
+          "isInteger": true,
+          "maximum": 2147483647,
+          "minimum": 0
+        }
+      },
+      {
+        "name": "AlarmRule",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "AlarmRule"
+        }
+      },
+      {
+        "name": "AlarmEventActions",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "AlarmEventActions"
+        }
+      },
+      {
+        "name": "AlarmCapabilities",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "AlarmCapabilities"
+        }
+      },
+      {
+        "name": "Tags",
+        "description": "An array of key-value pairs to apply to this resource.\n\nFor more information, see [Tag](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html).",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "An array of key-value pairs to apply to this resource.\n\nFor more information, see [Tag](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html).",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          }
+        }
+      }
+    ]
+  },
+  "$hash": "47d235c087436c2460eba7ece6d48a94ee8766f8"
+}

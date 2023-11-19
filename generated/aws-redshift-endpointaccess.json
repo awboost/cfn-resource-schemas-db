@@ -1,0 +1,226 @@
+{
+  "definitions": {
+    "VpcSecurityGroup": {
+      "type": "object",
+      "description": "Describes the members of a VPC security group.",
+      "properties": [
+        {
+          "name": "VpcSecurityGroupId",
+          "description": "The identifier of the VPC security group.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The identifier of the VPC security group."
+          }
+        },
+        {
+          "name": "Status",
+          "description": "The status of the VPC security group.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The status of the VPC security group."
+          }
+        }
+      ]
+    },
+    "NetworkInterface": {
+      "type": "object",
+      "description": "Describes a network interface.",
+      "properties": [
+        {
+          "name": "NetworkInterfaceId",
+          "description": "The network interface identifier.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The network interface identifier."
+          }
+        },
+        {
+          "name": "SubnetId",
+          "description": "The subnet identifier.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The subnet identifier."
+          }
+        },
+        {
+          "name": "PrivateIpAddress",
+          "description": "The IPv4 address of the network interface within the subnet.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The IPv4 address of the network interface within the subnet."
+          }
+        },
+        {
+          "name": "AvailabilityZone",
+          "description": "The Availability Zone.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The Availability Zone."
+          }
+        }
+      ]
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource schema for a Redshift-managed VPC endpoint.",
+    "properties": [
+      {
+        "name": "ClusterIdentifier",
+        "description": "A unique identifier for the cluster. You use this identifier to refer to the cluster for any subsequent cluster operations such as deleting or modifying. All alphabetical characters must be lower case, no hypens at the end, no two consecutive hyphens. Cluster name should be unique for all clusters within an AWS account",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "A unique identifier for the cluster. You use this identifier to refer to the cluster for any subsequent cluster operations such as deleting or modifying. All alphabetical characters must be lower case, no hypens at the end, no two consecutive hyphens. Cluster name should be unique for all clusters within an AWS account"
+        }
+      },
+      {
+        "name": "ResourceOwner",
+        "description": "The AWS account ID of the owner of the cluster.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The AWS account ID of the owner of the cluster.",
+          "pattern": "^\\d{12}$"
+        }
+      },
+      {
+        "name": "EndpointName",
+        "description": "The name of the endpoint.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The name of the endpoint.",
+          "pattern": "^(?=^[a-z][a-z0-9]*(-[a-z0-9]+)*$).{1,30}$"
+        }
+      },
+      {
+        "name": "SubnetGroupName",
+        "description": "The subnet group name where Amazon Redshift chooses to deploy the endpoint.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The subnet group name where Amazon Redshift chooses to deploy the endpoint.",
+          "pattern": "^(?=^[a-zA-Z0-9-]+$).{1,255}$"
+        }
+      },
+      {
+        "name": "VpcSecurityGroupIds",
+        "description": "A list of vpc security group ids to apply to the created endpoint access.",
+        "optional": false,
+        "type": {
+          "type": "array",
+          "description": "A list of vpc security group ids to apply to the created endpoint access.",
+          "itemType": {
+            "type": "string"
+          }
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "type": "object",
+    "description": "Resource schema for a Redshift-managed VPC endpoint.",
+    "properties": [
+      {
+        "name": "Address",
+        "description": "The DNS address of the endpoint.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The DNS address of the endpoint."
+        }
+      },
+      {
+        "name": "VpcSecurityGroups",
+        "description": "A list of Virtual Private Cloud (VPC) security groups to be associated with the endpoint.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "A list of Virtual Private Cloud (VPC) security groups to be associated with the endpoint.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "VpcSecurityGroup"
+          }
+        }
+      },
+      {
+        "name": "EndpointStatus",
+        "description": "The status of the endpoint.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The status of the endpoint."
+        }
+      },
+      {
+        "name": "EndpointCreateTime",
+        "description": "The time (UTC) that the endpoint was created.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The time (UTC) that the endpoint was created."
+        }
+      },
+      {
+        "name": "Port",
+        "description": "The port number on which the cluster accepts incoming connections.",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "The port number on which the cluster accepts incoming connections.",
+          "isInteger": true
+        }
+      },
+      {
+        "name": "VpcEndpoint",
+        "description": "The connection endpoint for connecting to an Amazon Redshift cluster through the proxy.",
+        "optional": true,
+        "type": {
+          "type": "object",
+          "description": "The connection endpoint for connecting to an Amazon Redshift cluster through the proxy.",
+          "properties": [
+            {
+              "name": "VpcEndpointId",
+              "description": "The connection endpoint ID for connecting an Amazon Redshift cluster through the proxy.",
+              "optional": true,
+              "type": {
+                "type": "string",
+                "description": "The connection endpoint ID for connecting an Amazon Redshift cluster through the proxy."
+              }
+            },
+            {
+              "name": "VpcId",
+              "description": "The VPC identifier that the endpoint is associated.",
+              "optional": true,
+              "type": {
+                "type": "string",
+                "description": "The VPC identifier that the endpoint is associated."
+              }
+            },
+            {
+              "name": "NetworkInterfaces",
+              "description": "One or more network interfaces of the endpoint. Also known as an interface endpoint.",
+              "optional": true,
+              "type": {
+                "type": "array",
+                "description": "One or more network interfaces of the endpoint. Also known as an interface endpoint.",
+                "itemType": {
+                  "type": "ref",
+                  "typeName": "NetworkInterface"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "$hash": "e5b2b0a1a8b87551ce14abfb2b3c4e73745990ac"
+}
