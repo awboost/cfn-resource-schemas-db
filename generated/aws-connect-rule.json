@@ -1,122 +1,56 @@
 {
   "definitions": {
-    "UserArn": {
-      "type": "string",
-      "description": "The Amazon Resource Name (ARN) of the user.",
-      "pattern": "^$|arn:aws[-a-z0-9]*:connect:[-a-z0-9]*:[0-9]{12}:instance/[-a-zA-Z0-9]*/agent/[-a-zA-Z0-9]*$"
-    },
-    "NotificationRecipientType": {
+    "Actions": {
       "type": "object",
-      "description": "The type of notification recipient.",
+      "description": "The list of actions that will be executed when a rule is triggered.",
       "properties": [
         {
-          "name": "UserTags",
-          "description": "The collection of recipients who are identified by user tags",
+          "name": "AssignContactCategoryActions",
           "optional": true,
           "type": {
-            "type": "record",
-            "description": "The collection of recipients who are identified by user tags",
-            "valueType": {
-              "type": "string"
-            }
+            "type": "ref",
+            "typeName": "AssignContactCategoryActions"
           }
         },
         {
-          "name": "UserArns",
-          "description": "The list of recipients by user arns.",
+          "name": "EventBridgeActions",
           "optional": true,
           "type": {
-            "type": "array",
-            "description": "The list of recipients by user arns.",
-            "itemType": {
-              "type": "ref",
-              "typeName": "UserArn"
-            },
-            "maxLength": 5,
-            "minLength": 1
+            "type": "ref",
+            "typeName": "EventBridgeActions"
+          }
+        },
+        {
+          "name": "SendNotificationActions",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "SendNotificationActions"
+          }
+        },
+        {
+          "name": "TaskActions",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "TaskActions"
           }
         }
       ]
     },
-    "Reference": {
-      "type": "object",
-      "description": "A contact reference.",
-      "properties": [
-        {
-          "name": "Value",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "pattern": "^(/|https:)"
-          }
-        },
-        {
-          "name": "Type",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "allowedValues": [
-              "URL",
-              "ATTACHMENT",
-              "NUMBER",
-              "STRING",
-              "DATE",
-              "EMAIL"
-            ]
-          }
-        }
-      ]
+    "AssignContactCategoryAction": {
+      "type": "record",
+      "description": "The definition for assigning contact category action."
     },
-    "TaskAction": {
-      "type": "object",
-      "description": "The definition of task action.",
-      "properties": [
-        {
-          "name": "Name",
-          "description": "The name which appears in the agent's Contact Control Panel (CCP).",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The name which appears in the agent's Contact Control Panel (CCP).",
-            "maxLength": 512,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "Description",
-          "description": "The description which appears in the agent's Contact Control Panel (CCP).",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The description which appears in the agent's Contact Control Panel (CCP).",
-            "maxLength": 4096,
-            "minLength": 0
-          }
-        },
-        {
-          "name": "ContactFlowArn",
-          "description": "The Amazon Resource Name (ARN) of the contact flow.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The Amazon Resource Name (ARN) of the contact flow.",
-            "pattern": "^$|arn:aws[-a-z0-9]*:connect:[-a-z0-9]*:[0-9]{12}:instance/[-a-zA-Z0-9]*/contact-flow/[-a-zA-Z0-9]*$"
-          }
-        },
-        {
-          "name": "References",
-          "description": "A formatted URL that is shown to an agent in the Contact Control Panel (CCP).",
-          "optional": true,
-          "type": {
-            "type": "record",
-            "description": "A formatted URL that is shown to an agent in the Contact Control Panel (CCP).",
-            "valueType": {
-              "type": "ref",
-              "typeName": "Reference"
-            }
-          }
-        }
-      ]
+    "AssignContactCategoryActions": {
+      "type": "array",
+      "description": "This action will assign contact category when a rule is triggered.",
+      "itemType": {
+        "type": "ref",
+        "typeName": "AssignContactCategoryAction"
+      },
+      "maxLength": 1,
+      "minLength": 1
     },
     "EventBridgeAction": {
       "type": "object",
@@ -134,76 +68,6 @@
         }
       ]
     },
-    "AssignContactCategoryAction": {
-      "type": "record",
-      "description": "The definition for assigning contact category action."
-    },
-    "SendNotificationAction": {
-      "type": "object",
-      "description": "The definition for sending notification action.",
-      "properties": [
-        {
-          "name": "DeliveryMethod",
-          "description": "The means of delivery.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The means of delivery.",
-            "allowedValues": ["EMAIL"]
-          }
-        },
-        {
-          "name": "Subject",
-          "description": "The subject of notification.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The subject of notification.",
-            "maxLength": 200,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "Content",
-          "description": "The content of notification.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The content of notification.",
-            "maxLength": 1024,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "ContentType",
-          "description": "The type of content.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The type of content.",
-            "allowedValues": ["PLAIN_TEXT"]
-          }
-        },
-        {
-          "name": "Recipient",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "NotificationRecipientType"
-          }
-        }
-      ]
-    },
-    "AssignContactCategoryActions": {
-      "type": "array",
-      "description": "This action will assign contact category when a rule is triggered.",
-      "itemType": {
-        "type": "ref",
-        "typeName": "AssignContactCategoryAction"
-      },
-      "maxLength": 1,
-      "minLength": 1
-    },
     "EventBridgeActions": {
       "type": "array",
       "description": "This action will send event bridge notification when a rule is triggered.",
@@ -213,6 +77,68 @@
       },
       "maxLength": 1,
       "minLength": 1
+    },
+    "NotificationRecipientType": {
+      "type": "object",
+      "description": "The type of notification recipient.",
+      "properties": [
+        {
+          "name": "UserArns",
+          "description": "The list of recipients by user arns.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "The list of recipients by user arns.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "UserArn"
+            },
+            "maxLength": 5,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "UserTags",
+          "description": "The collection of recipients who are identified by user tags",
+          "optional": true,
+          "type": {
+            "type": "record",
+            "description": "The collection of recipients who are identified by user tags",
+            "valueType": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "Reference": {
+      "type": "object",
+      "description": "A contact reference.",
+      "properties": [
+        {
+          "name": "Type",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "allowedValues": [
+              "URL",
+              "ATTACHMENT",
+              "NUMBER",
+              "STRING",
+              "DATE",
+              "EMAIL"
+            ]
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "pattern": "^(/|https:)"
+          }
+        }
+      ]
     },
     "RuleTriggerEventSource": {
       "type": "object",
@@ -249,15 +175,61 @@
         }
       ]
     },
-    "TaskActions": {
-      "type": "array",
-      "description": "This action will generate a task when a rule is triggered.",
-      "itemType": {
-        "type": "ref",
-        "typeName": "TaskAction"
-      },
-      "maxLength": 1,
-      "minLength": 1
+    "SendNotificationAction": {
+      "type": "object",
+      "description": "The definition for sending notification action.",
+      "properties": [
+        {
+          "name": "Content",
+          "description": "The content of notification.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The content of notification.",
+            "maxLength": 1024,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "ContentType",
+          "description": "The type of content.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The type of content.",
+            "allowedValues": ["PLAIN_TEXT"]
+          }
+        },
+        {
+          "name": "DeliveryMethod",
+          "description": "The means of delivery.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The means of delivery.",
+            "allowedValues": ["EMAIL"]
+          }
+        },
+        {
+          "name": "Recipient",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "NotificationRecipientType"
+          }
+        },
+        {
+          "name": "Subject",
+          "description": "The subject of notification.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The subject of notification.",
+            "maxLength": 200,
+            "minLength": 1
+          }
+        }
+      ]
     },
     "SendNotificationActions": {
       "type": "array",
@@ -268,44 +240,6 @@
       },
       "maxLength": 1,
       "minLength": 1
-    },
-    "Actions": {
-      "type": "object",
-      "description": "The list of actions that will be executed when a rule is triggered.",
-      "properties": [
-        {
-          "name": "AssignContactCategoryActions",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "AssignContactCategoryActions"
-          }
-        },
-        {
-          "name": "EventBridgeActions",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "EventBridgeActions"
-          }
-        },
-        {
-          "name": "TaskActions",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "TaskActions"
-          }
-        },
-        {
-          "name": "SendNotificationActions",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "SendNotificationActions"
-          }
-        }
-      ]
     },
     "Tag": {
       "type": "object",
@@ -334,6 +268,72 @@
           }
         }
       ]
+    },
+    "TaskAction": {
+      "type": "object",
+      "description": "The definition of task action.",
+      "properties": [
+        {
+          "name": "ContactFlowArn",
+          "description": "The Amazon Resource Name (ARN) of the contact flow.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the contact flow.",
+            "pattern": "^$|arn:aws[-a-z0-9]*:connect:[-a-z0-9]*:[0-9]{12}:instance/[-a-zA-Z0-9]*/contact-flow/[-a-zA-Z0-9]*$"
+          }
+        },
+        {
+          "name": "Description",
+          "description": "The description which appears in the agent's Contact Control Panel (CCP).",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The description which appears in the agent's Contact Control Panel (CCP).",
+            "maxLength": 4096,
+            "minLength": 0
+          }
+        },
+        {
+          "name": "Name",
+          "description": "The name which appears in the agent's Contact Control Panel (CCP).",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The name which appears in the agent's Contact Control Panel (CCP).",
+            "maxLength": 512,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "References",
+          "description": "A formatted URL that is shown to an agent in the Contact Control Panel (CCP).",
+          "optional": true,
+          "type": {
+            "type": "record",
+            "description": "A formatted URL that is shown to an agent in the Contact Control Panel (CCP).",
+            "valueType": {
+              "type": "ref",
+              "typeName": "Reference"
+            }
+          }
+        }
+      ]
+    },
+    "TaskActions": {
+      "type": "array",
+      "description": "This action will generate a task when a rule is triggered.",
+      "itemType": {
+        "type": "ref",
+        "typeName": "TaskAction"
+      },
+      "maxLength": 1,
+      "minLength": 1
+    },
+    "UserArn": {
+      "type": "string",
+      "description": "The Amazon Resource Name (ARN) of the user.",
+      "pattern": "^$|arn:aws[-a-z0-9]*:connect:[-a-z0-9]*:[0-9]{12}:instance/[-a-zA-Z0-9]*/agent/[-a-zA-Z0-9]*$"
     }
   },
   "resource": {
@@ -341,13 +341,22 @@
     "description": "Resource Type definition for AWS:Connect::Rule",
     "properties": [
       {
-        "name": "Name",
-        "description": "The name of the rule.",
+        "name": "Actions",
+        "description": "The list of actions that will be executed when a rule is triggered.",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "description": "The list of actions that will be executed when a rule is triggered.",
+          "typeName": "Actions"
+        }
+      },
+      {
+        "name": "Function",
+        "description": "The conditions of a rule.",
         "optional": false,
         "type": {
           "type": "string",
-          "description": "The name of the rule.",
-          "pattern": "^[a-zA-Z0-9._-]{1,200}$"
+          "description": "The conditions of a rule."
         }
       },
       {
@@ -361,32 +370,13 @@
         }
       },
       {
-        "name": "TriggerEventSource",
-        "description": "The event source that triggers the rule.",
-        "optional": false,
-        "type": {
-          "type": "ref",
-          "description": "The event source that triggers the rule.",
-          "typeName": "RuleTriggerEventSource"
-        }
-      },
-      {
-        "name": "Function",
-        "description": "The conditions of a rule.",
+        "name": "Name",
+        "description": "The name of the rule.",
         "optional": false,
         "type": {
           "type": "string",
-          "description": "The conditions of a rule."
-        }
-      },
-      {
-        "name": "Actions",
-        "description": "The list of actions that will be executed when a rule is triggered.",
-        "optional": false,
-        "type": {
-          "type": "ref",
-          "description": "The list of actions that will be executed when a rule is triggered.",
-          "typeName": "Actions"
+          "description": "The name of the rule.",
+          "pattern": "^[a-zA-Z0-9._-]{1,200}$"
         }
       },
       {
@@ -412,6 +402,16 @@
           },
           "maxLength": 50
         }
+      },
+      {
+        "name": "TriggerEventSource",
+        "description": "The event source that triggers the rule.",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "description": "The event source that triggers the rule.",
+          "typeName": "RuleTriggerEventSource"
+        }
       }
     ]
   },
@@ -431,5 +431,5 @@
       }
     ]
   },
-  "$hash": "beeebdc8498e5efa9bb27e4220153ff9e5dee61a"
+  "$hash": "fa8e7671a0d2c781a0577dd10af5f15783640566"
 }

@@ -4,6 +4,14 @@
       "type": "object",
       "properties": [
         {
+          "name": "Constraints",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "ScalingConstraints"
+          }
+        },
+        {
           "name": "Rules",
           "optional": false,
           "type": {
@@ -13,50 +21,6 @@
               "typeName": "ScalingRule"
             }
           }
-        },
-        {
-          "name": "Constraints",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "ScalingConstraints"
-          }
-        }
-      ]
-    },
-    "VolumeSpecification": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "SizeInGB",
-          "optional": false,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        },
-        {
-          "name": "Throughput",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        },
-        {
-          "name": "VolumeType",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Iops",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
         }
       ]
     },
@@ -64,22 +28,8 @@
       "type": "object",
       "properties": [
         {
-          "name": "MetricName",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
           "name": "ComparisonOperator",
           "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Statistic",
-          "optional": true,
           "type": {
             "type": "string"
           }
@@ -96,14 +46,6 @@
           }
         },
         {
-          "name": "Period",
-          "optional": false,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        },
-        {
           "name": "EvaluationPeriods",
           "optional": true,
           "type": {
@@ -112,8 +54,8 @@
           }
         },
         {
-          "name": "Unit",
-          "optional": true,
+          "name": "MetricName",
+          "optional": false,
           "type": {
             "type": "string"
           }
@@ -126,11 +68,87 @@
           }
         },
         {
+          "name": "Period",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "Statistic",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
           "name": "Threshold",
           "optional": false,
           "type": {
             "type": "number",
             "isInteger": false
+          }
+        },
+        {
+          "name": "Unit",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "Configuration": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Classification",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "ConfigurationProperties",
+          "optional": true,
+          "type": {
+            "type": "record",
+            "valueType": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "name": "Configurations",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Configuration"
+            }
+          }
+        }
+      ]
+    },
+    "EbsBlockDeviceConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "VolumeSpecification",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "VolumeSpecification"
+          }
+        },
+        {
+          "name": "VolumesPerInstance",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
           }
         }
       ]
@@ -158,33 +176,19 @@
         }
       ]
     },
-    "Configuration": {
+    "MetricDimension": {
       "type": "object",
       "properties": [
         {
-          "name": "ConfigurationProperties",
-          "optional": true,
+          "name": "Key",
+          "optional": false,
           "type": {
-            "type": "record",
-            "valueType": {
-              "type": "string"
-            }
+            "type": "string"
           }
         },
         {
-          "name": "Configurations",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "Configuration"
-            }
-          }
-        },
-        {
-          "name": "Classification",
-          "optional": true,
+          "name": "Value",
+          "optional": false,
           "type": {
             "type": "string"
           }
@@ -211,45 +215,9 @@
         }
       ]
     },
-    "SimpleScalingPolicyConfiguration": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "ScalingAdjustment",
-          "optional": false,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        },
-        {
-          "name": "CoolDown",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        },
-        {
-          "name": "AdjustmentType",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
     "ScalingConstraints": {
       "type": "object",
       "properties": [
-        {
-          "name": "MinCapacity",
-          "optional": false,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        },
         {
           "name": "MaxCapacity",
           "optional": false,
@@ -257,39 +225,13 @@
             "type": "number",
             "isInteger": true
           }
-        }
-      ]
-    },
-    "EbsBlockDeviceConfig": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "VolumeSpecification",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "VolumeSpecification"
-          }
         },
         {
-          "name": "VolumesPerInstance",
-          "optional": true,
+          "name": "MinCapacity",
+          "optional": false,
           "type": {
             "type": "number",
             "isInteger": true
-          }
-        }
-      ]
-    },
-    "ScalingTrigger": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "CloudWatchAlarmDefinition",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "CloudWatchAlarmDefinition"
           }
         }
       ]
@@ -313,34 +255,92 @@
           }
         },
         {
+          "name": "Name",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
           "name": "Trigger",
           "optional": false,
           "type": {
             "type": "ref",
             "typeName": "ScalingTrigger"
           }
-        },
+        }
+      ]
+    },
+    "ScalingTrigger": {
+      "type": "object",
+      "properties": [
         {
-          "name": "Name",
+          "name": "CloudWatchAlarmDefinition",
           "optional": false,
           "type": {
-            "type": "string"
+            "type": "ref",
+            "typeName": "CloudWatchAlarmDefinition"
           }
         }
       ]
     },
-    "MetricDimension": {
+    "SimpleScalingPolicyConfiguration": {
       "type": "object",
       "properties": [
         {
-          "name": "Value",
-          "optional": false,
+          "name": "AdjustmentType",
+          "optional": true,
           "type": {
             "type": "string"
           }
         },
         {
-          "name": "Key",
+          "name": "CoolDown",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "ScalingAdjustment",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        }
+      ]
+    },
+    "VolumeSpecification": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Iops",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "SizeInGB",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "Throughput",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "VolumeType",
           "optional": false,
           "type": {
             "type": "string"
@@ -354,13 +354,6 @@
     "description": "Resource Type definition for AWS::EMR::InstanceGroupConfig",
     "properties": [
       {
-        "name": "JobFlowId",
-        "optional": false,
-        "type": {
-          "type": "string"
-        }
-      },
-      {
         "name": "AutoScalingPolicy",
         "optional": true,
         "type": {
@@ -370,36 +363,6 @@
       },
       {
         "name": "BidPrice",
-        "optional": true,
-        "type": {
-          "type": "string"
-        }
-      },
-      {
-        "name": "InstanceCount",
-        "optional": false,
-        "type": {
-          "type": "number",
-          "isInteger": true
-        }
-      },
-      {
-        "name": "EbsConfiguration",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "EbsConfiguration"
-        }
-      },
-      {
-        "name": "InstanceRole",
-        "optional": false,
-        "type": {
-          "type": "string"
-        }
-      },
-      {
-        "name": "CustomAmiId",
         "optional": true,
         "type": {
           "type": "string"
@@ -417,7 +380,44 @@
         }
       },
       {
+        "name": "CustomAmiId",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "EbsConfiguration",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "EbsConfiguration"
+        }
+      },
+      {
+        "name": "InstanceCount",
+        "optional": false,
+        "type": {
+          "type": "number",
+          "isInteger": true
+        }
+      },
+      {
+        "name": "InstanceRole",
+        "optional": false,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
         "name": "InstanceType",
+        "optional": false,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "JobFlowId",
         "optional": false,
         "type": {
           "type": "string"
@@ -452,5 +452,5 @@
       }
     ]
   },
-  "$hash": "ce9ca606069f536ad413438ffa589861c16f826c"
+  "$hash": "23655eed05ee7120d12222a674533d7074760e96"
 }

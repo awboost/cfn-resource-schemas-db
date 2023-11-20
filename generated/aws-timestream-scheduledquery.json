@@ -6,29 +6,235 @@
       "maxLength": 2048,
       "minLength": 1
     },
-    "ScheduledQueryName": {
+    "BucketName": {
       "type": "string",
-      "description": "The name of the scheduled query. Scheduled query names must be unique within each Region.",
-      "maxLength": 64,
-      "minLength": 1,
-      "pattern": "[a-zA-Z0-9_.-]+"
+      "description": "Name of the S3 bucket under which error reports will be created.",
+      "maxLength": 63,
+      "minLength": 3,
+      "pattern": "[a-z0-9][\\.\\-a-z0-9]{1,61}[a-z0-9]"
     },
-    "QueryString": {
+    "ClientToken": {
       "type": "string",
-      "description": "The query string to run. Parameter names can be specified in the query string @ character followed by an identifier. The named Parameter @scheduled_runtime is reserved and can be used in the query to get the time at which the query is scheduled to run. The timestamp calculated according to the ScheduleConfiguration parameter, will be the value of @scheduled_runtime paramater for each query run. For example, consider an instance of a scheduled query executing on 2021-12-01 00:00:00. For this instance, the @scheduled_runtime parameter is initialized to the timestamp 2021-12-01 00:00:00 when invoking the query.",
-      "maxLength": 262144,
-      "minLength": 1
+      "description": "Using a ClientToken makes the call to CreateScheduledQuery idempotent, in other words, making the same request repeatedly will produce the same result. Making multiple identical CreateScheduledQuery requests has the same effect as making a single request. If CreateScheduledQuery is called without a ClientToken, the Query SDK generates a ClientToken on your behalf. After 8 hours, any request with the same ClientToken is treated as a new request.",
+      "maxLength": 128,
+      "minLength": 32
     },
-    "ScheduleConfiguration": {
+    "DatabaseName": {
+      "type": "string",
+      "description": "Name of Timestream database to which the query result will be written."
+    },
+    "DimensionMapping": {
       "type": "object",
-      "description": "Configuration for when the scheduled query is executed.",
+      "description": "This type is used to map column(s) from the query result to a dimension in the destination table.",
       "properties": [
         {
-          "name": "ScheduleExpression",
+          "name": "DimensionValueType",
           "optional": false,
           "type": {
             "type": "ref",
-            "typeName": "ScheduleExpression"
+            "typeName": "DimensionValueType"
+          }
+        },
+        {
+          "name": "Name",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "DimensionMappingName"
+          }
+        }
+      ]
+    },
+    "DimensionMappingName": {
+      "type": "string",
+      "description": "Column name from query result."
+    },
+    "DimensionMappings": {
+      "type": "array",
+      "description": "This is to allow mapping column(s) from the query result to the dimension in the destination table.",
+      "itemType": {
+        "type": "ref",
+        "typeName": "DimensionMapping"
+      }
+    },
+    "DimensionValueType": {
+      "type": "string",
+      "description": "Type for the dimension.",
+      "allowedValues": ["VARCHAR"]
+    },
+    "EncryptionOption": {
+      "type": "string",
+      "description": "Encryption at rest options for the error reports. If no encryption option is specified, Timestream will choose SSE_S3 as default.",
+      "allowedValues": ["SSE_S3", "SSE_KMS"]
+    },
+    "ErrorReportConfiguration": {
+      "type": "object",
+      "description": "Configuration for error reporting. Error reports will be generated when a problem is encountered when writing the query results.",
+      "properties": [
+        {
+          "name": "S3Configuration",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "S3Configuration"
+          }
+        }
+      ]
+    },
+    "Key": {
+      "type": "string",
+      "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+      "maxLength": 128,
+      "minLength": 1
+    },
+    "KmsKeyId": {
+      "type": "string",
+      "description": "The Amazon KMS key used to encrypt the scheduled query resource, at-rest. If the Amazon KMS key is not specified, the scheduled query resource will be encrypted with a Timestream owned Amazon KMS key. To specify a KMS key, use the key ID, key ARN, alias name, or alias ARN. When using an alias name, prefix the name with alias/. If ErrorReportConfiguration uses SSE_KMS as encryption type, the same KmsKeyId is used to encrypt the error report at rest.",
+      "maxLength": 2048,
+      "minLength": 1
+    },
+    "MeasureNameColumn": {
+      "type": "string",
+      "description": "Name of the measure name column from the query result."
+    },
+    "MixedMeasureMapping": {
+      "type": "object",
+      "description": "MixedMeasureMappings are mappings that can be used to ingest data into a mixture of narrow and multi measures in the derived table.",
+      "properties": [
+        {
+          "name": "MeasureName",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "MixedMeasureMappingMeasureName"
+          }
+        },
+        {
+          "name": "MeasureValueType",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "MixedMeasureMappingMeasureValueType"
+          }
+        },
+        {
+          "name": "MultiMeasureAttributeMappings",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "MultiMeasureAttributeMappingList"
+          }
+        },
+        {
+          "name": "SourceColumn",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "MixedMeasureMappingSourceColumn"
+          }
+        },
+        {
+          "name": "TargetMeasureName",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "MixedMeasureMappingTargetMeasureName"
+          }
+        }
+      ]
+    },
+    "MixedMeasureMappingMeasureName": {
+      "type": "string",
+      "description": "Refers to the value of the measure name in a result row. This field is required if MeasureNameColumn is provided."
+    },
+    "MixedMeasureMappingMeasureValueType": {
+      "type": "string",
+      "description": "Type of the value that is to be read from SourceColumn. If the mapping is for MULTI, use MeasureValueType.MULTI.",
+      "allowedValues": ["BIGINT", "BOOLEAN", "DOUBLE", "VARCHAR", "MULTI"]
+    },
+    "MixedMeasureMappingSourceColumn": {
+      "type": "string",
+      "description": "This field refers to the source column from which the measure value is to be read for result materialization."
+    },
+    "MixedMeasureMappingTargetMeasureName": {
+      "type": "string",
+      "description": "Target measure name to be used. If not provided, the target measure name by default would be MeasureName if provided, or SourceColumn otherwise."
+    },
+    "MixedMeasureMappings": {
+      "type": "array",
+      "description": "Specifies how to map measures to multi-measure records.",
+      "itemType": {
+        "type": "ref",
+        "typeName": "MixedMeasureMapping"
+      },
+      "minLength": 1
+    },
+    "MultiMeasureAttributeMapping": {
+      "type": "object",
+      "description": "An attribute mapping to be used for mapping query results to ingest data for multi-measure attributes.",
+      "properties": [
+        {
+          "name": "MeasureValueType",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "MultiMeasureAttributeMappingMeasureValueType"
+          }
+        },
+        {
+          "name": "SourceColumn",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "MultiMeasureAttributeMappingSourceColumn"
+          }
+        },
+        {
+          "name": "TargetMultiMeasureAttributeName",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "TargetMultiMeasureAttributeName"
+          }
+        }
+      ]
+    },
+    "MultiMeasureAttributeMappingList": {
+      "type": "array",
+      "description": "Required. Attribute mappings to be used for mapping query results to ingest data for multi-measure attributes.",
+      "itemType": {
+        "type": "ref",
+        "typeName": "MultiMeasureAttributeMapping"
+      },
+      "minLength": 1
+    },
+    "MultiMeasureAttributeMappingMeasureValueType": {
+      "type": "string",
+      "description": "Value type of the measure value column to be read from the query result.",
+      "allowedValues": ["BIGINT", "BOOLEAN", "DOUBLE", "VARCHAR", "TIMESTAMP"]
+    },
+    "MultiMeasureAttributeMappingSourceColumn": {
+      "type": "string",
+      "description": "Source measure value column in the query result where the attribute value is to be read."
+    },
+    "MultiMeasureMappings": {
+      "type": "object",
+      "description": "Only one of MixedMeasureMappings or MultiMeasureMappings is to be provided. MultiMeasureMappings can be used to ingest data as multi measures in the derived table.",
+      "properties": [
+        {
+          "name": "MultiMeasureAttributeMappings",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "MultiMeasureAttributeMappingList"
+          }
+        },
+        {
+          "name": "TargetMultiMeasureName",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "TargetMultiMeasureName"
           }
         }
       ]
@@ -47,11 +253,68 @@
         }
       ]
     },
-    "ClientToken": {
+    "ObjectKeyPrefix": {
       "type": "string",
-      "description": "Using a ClientToken makes the call to CreateScheduledQuery idempotent, in other words, making the same request repeatedly will produce the same result. Making multiple identical CreateScheduledQuery requests has the same effect as making a single request. If CreateScheduledQuery is called without a ClientToken, the Query SDK generates a ClientToken on your behalf. After 8 hours, any request with the same ClientToken is treated as a new request.",
-      "maxLength": 128,
-      "minLength": 32
+      "description": "Prefix for error report keys.",
+      "maxLength": 896,
+      "minLength": 1,
+      "pattern": "[a-zA-Z0-9|!\\-_*'\\(\\)]([a-zA-Z0-9]|[!\\-_*'\\(\\)\\/.])+"
+    },
+    "QueryString": {
+      "type": "string",
+      "description": "The query string to run. Parameter names can be specified in the query string @ character followed by an identifier. The named Parameter @scheduled_runtime is reserved and can be used in the query to get the time at which the query is scheduled to run. The timestamp calculated according to the ScheduleConfiguration parameter, will be the value of @scheduled_runtime paramater for each query run. For example, consider an instance of a scheduled query executing on 2021-12-01 00:00:00. For this instance, the @scheduled_runtime parameter is initialized to the timestamp 2021-12-01 00:00:00 when invoking the query.",
+      "maxLength": 262144,
+      "minLength": 1
+    },
+    "S3Configuration": {
+      "type": "object",
+      "description": "Details on S3 location for error reports that result from running a query.",
+      "properties": [
+        {
+          "name": "BucketName",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "BucketName"
+          }
+        },
+        {
+          "name": "EncryptionOption",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "EncryptionOption"
+          }
+        },
+        {
+          "name": "ObjectKeyPrefix",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ObjectKeyPrefix"
+          }
+        }
+      ]
+    },
+    "ScheduleConfiguration": {
+      "type": "object",
+      "description": "Configuration for when the scheduled query is executed.",
+      "properties": [
+        {
+          "name": "ScheduleExpression",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "ScheduleExpression"
+          }
+        }
+      ]
+    },
+    "ScheduleExpression": {
+      "type": "string",
+      "description": "An expression that denotes when to trigger the scheduled query run. This can be a cron expression or a rate expression.",
+      "maxLength": 256,
+      "minLength": 1
     },
     "ScheduledQueryExecutionRoleArn": {
       "type": "string",
@@ -59,54 +322,12 @@
       "maxLength": 2048,
       "minLength": 1
     },
-    "TargetConfiguration": {
-      "type": "object",
-      "description": "Configuration of target store where scheduled query results are written to.",
-      "properties": [
-        {
-          "name": "TimestreamConfiguration",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "TimestreamConfiguration"
-          }
-        }
-      ]
-    },
-    "ErrorReportConfiguration": {
-      "type": "object",
-      "description": "Configuration for error reporting. Error reports will be generated when a problem is encountered when writing the query results.",
-      "properties": [
-        {
-          "name": "S3Configuration",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "S3Configuration"
-          }
-        }
-      ]
-    },
-    "KmsKeyId": {
+    "ScheduledQueryName": {
       "type": "string",
-      "description": "The Amazon KMS key used to encrypt the scheduled query resource, at-rest. If the Amazon KMS key is not specified, the scheduled query resource will be encrypted with a Timestream owned Amazon KMS key. To specify a KMS key, use the key ID, key ARN, alias name, or alias ARN. When using an alias name, prefix the name with alias/. If ErrorReportConfiguration uses SSE_KMS as encryption type, the same KmsKeyId is used to encrypt the error report at rest.",
-      "maxLength": 2048,
-      "minLength": 1
-    },
-    "Tags": {
-      "type": "array",
-      "description": "A list of key-value pairs to label the scheduled query.",
-      "itemType": {
-        "type": "ref",
-        "typeName": "Tag"
-      },
-      "maxLength": 200
-    },
-    "ScheduleExpression": {
-      "type": "string",
-      "description": "An expression that denotes when to trigger the scheduled query run. This can be a cron expression or a rate expression.",
-      "maxLength": 256,
-      "minLength": 1
+      "description": "The name of the scheduled query. Scheduled query names must be unique within each Region.",
+      "maxLength": 64,
+      "minLength": 1,
+      "pattern": "[a-zA-Z0-9_.-]+"
     },
     "SnsConfiguration": {
       "type": "object",
@@ -122,327 +343,9 @@
         }
       ]
     },
-    "TopicArn": {
-      "type": "string",
-      "description": "SNS topic ARN that the scheduled query status notifications will be sent to.",
-      "maxLength": 2048,
-      "minLength": 1
-    },
-    "TimestreamConfiguration": {
-      "type": "object",
-      "description": "Configuration needed to write data into the Timestream database and table.",
-      "properties": [
-        {
-          "name": "DatabaseName",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "DatabaseName"
-          }
-        },
-        {
-          "name": "TableName",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "TableName"
-          }
-        },
-        {
-          "name": "TimeColumn",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "TimeColumn"
-          }
-        },
-        {
-          "name": "DimensionMappings",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "DimensionMappings"
-          }
-        },
-        {
-          "name": "MultiMeasureMappings",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "MultiMeasureMappings"
-          }
-        },
-        {
-          "name": "MixedMeasureMappings",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "MixedMeasureMappings"
-          }
-        },
-        {
-          "name": "MeasureNameColumn",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "MeasureNameColumn"
-          }
-        }
-      ]
-    },
-    "DatabaseName": {
-      "type": "string",
-      "description": "Name of Timestream database to which the query result will be written."
-    },
     "TableName": {
       "type": "string",
       "description": "Name of Timestream table that the query result will be written to. The table should be within the same database that is provided in Timestream configuration."
-    },
-    "TimeColumn": {
-      "type": "string",
-      "description": "Column from query result that should be used as the time column in destination table. Column type for this should be TIMESTAMP."
-    },
-    "DimensionMappings": {
-      "type": "array",
-      "description": "This is to allow mapping column(s) from the query result to the dimension in the destination table.",
-      "itemType": {
-        "type": "ref",
-        "typeName": "DimensionMapping"
-      }
-    },
-    "DimensionMapping": {
-      "type": "object",
-      "description": "This type is used to map column(s) from the query result to a dimension in the destination table.",
-      "properties": [
-        {
-          "name": "Name",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "DimensionMappingName"
-          }
-        },
-        {
-          "name": "DimensionValueType",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "DimensionValueType"
-          }
-        }
-      ]
-    },
-    "DimensionMappingName": {
-      "type": "string",
-      "description": "Column name from query result."
-    },
-    "DimensionValueType": {
-      "type": "string",
-      "description": "Type for the dimension.",
-      "allowedValues": ["VARCHAR"]
-    },
-    "MultiMeasureMappings": {
-      "type": "object",
-      "description": "Only one of MixedMeasureMappings or MultiMeasureMappings is to be provided. MultiMeasureMappings can be used to ingest data as multi measures in the derived table.",
-      "properties": [
-        {
-          "name": "TargetMultiMeasureName",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "TargetMultiMeasureName"
-          }
-        },
-        {
-          "name": "MultiMeasureAttributeMappings",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "MultiMeasureAttributeMappingList"
-          }
-        }
-      ]
-    },
-    "TargetMultiMeasureName": {
-      "type": "string",
-      "description": "Name of the target multi-measure in the derived table. Required if MeasureNameColumn is not provided. If MeasureNameColumn is provided then the value from that column will be used as the multi-measure name."
-    },
-    "MultiMeasureAttributeMappingList": {
-      "type": "array",
-      "description": "Required. Attribute mappings to be used for mapping query results to ingest data for multi-measure attributes.",
-      "itemType": {
-        "type": "ref",
-        "typeName": "MultiMeasureAttributeMapping"
-      },
-      "minLength": 1
-    },
-    "MultiMeasureAttributeMapping": {
-      "type": "object",
-      "description": "An attribute mapping to be used for mapping query results to ingest data for multi-measure attributes.",
-      "properties": [
-        {
-          "name": "SourceColumn",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "MultiMeasureAttributeMappingSourceColumn"
-          }
-        },
-        {
-          "name": "MeasureValueType",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "MultiMeasureAttributeMappingMeasureValueType"
-          }
-        },
-        {
-          "name": "TargetMultiMeasureAttributeName",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "TargetMultiMeasureAttributeName"
-          }
-        }
-      ]
-    },
-    "MultiMeasureAttributeMappingSourceColumn": {
-      "type": "string",
-      "description": "Source measure value column in the query result where the attribute value is to be read."
-    },
-    "MultiMeasureAttributeMappingMeasureValueType": {
-      "type": "string",
-      "description": "Value type of the measure value column to be read from the query result.",
-      "allowedValues": ["BIGINT", "BOOLEAN", "DOUBLE", "VARCHAR", "TIMESTAMP"]
-    },
-    "TargetMultiMeasureAttributeName": {
-      "type": "string",
-      "description": "Custom name to be used for attribute name in derived table. If not provided, source column name would be used."
-    },
-    "MixedMeasureMappings": {
-      "type": "array",
-      "description": "Specifies how to map measures to multi-measure records.",
-      "itemType": {
-        "type": "ref",
-        "typeName": "MixedMeasureMapping"
-      },
-      "minLength": 1
-    },
-    "MixedMeasureMapping": {
-      "type": "object",
-      "description": "MixedMeasureMappings are mappings that can be used to ingest data into a mixture of narrow and multi measures in the derived table.",
-      "properties": [
-        {
-          "name": "MeasureName",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "MixedMeasureMappingMeasureName"
-          }
-        },
-        {
-          "name": "SourceColumn",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "MixedMeasureMappingSourceColumn"
-          }
-        },
-        {
-          "name": "TargetMeasureName",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "MixedMeasureMappingTargetMeasureName"
-          }
-        },
-        {
-          "name": "MeasureValueType",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "MixedMeasureMappingMeasureValueType"
-          }
-        },
-        {
-          "name": "MultiMeasureAttributeMappings",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "MultiMeasureAttributeMappingList"
-          }
-        }
-      ]
-    },
-    "MixedMeasureMappingMeasureName": {
-      "type": "string",
-      "description": "Refers to the value of the measure name in a result row. This field is required if MeasureNameColumn is provided."
-    },
-    "MixedMeasureMappingSourceColumn": {
-      "type": "string",
-      "description": "This field refers to the source column from which the measure value is to be read for result materialization."
-    },
-    "MixedMeasureMappingTargetMeasureName": {
-      "type": "string",
-      "description": "Target measure name to be used. If not provided, the target measure name by default would be MeasureName if provided, or SourceColumn otherwise."
-    },
-    "MixedMeasureMappingMeasureValueType": {
-      "type": "string",
-      "description": "Type of the value that is to be read from SourceColumn. If the mapping is for MULTI, use MeasureValueType.MULTI.",
-      "allowedValues": ["BIGINT", "BOOLEAN", "DOUBLE", "VARCHAR", "MULTI"]
-    },
-    "MeasureNameColumn": {
-      "type": "string",
-      "description": "Name of the measure name column from the query result."
-    },
-    "S3Configuration": {
-      "type": "object",
-      "description": "Details on S3 location for error reports that result from running a query.",
-      "properties": [
-        {
-          "name": "BucketName",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "BucketName"
-          }
-        },
-        {
-          "name": "ObjectKeyPrefix",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ObjectKeyPrefix"
-          }
-        },
-        {
-          "name": "EncryptionOption",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "EncryptionOption"
-          }
-        }
-      ]
-    },
-    "BucketName": {
-      "type": "string",
-      "description": "Name of the S3 bucket under which error reports will be created.",
-      "maxLength": 63,
-      "minLength": 3,
-      "pattern": "[a-z0-9][\\.\\-a-z0-9]{1,61}[a-z0-9]"
-    },
-    "ObjectKeyPrefix": {
-      "type": "string",
-      "description": "Prefix for error report keys.",
-      "maxLength": 896,
-      "minLength": 1,
-      "pattern": "[a-zA-Z0-9|!\\-_*'\\(\\)]([a-zA-Z0-9]|[!\\-_*'\\(\\)\\/.])+"
-    },
-    "EncryptionOption": {
-      "type": "string",
-      "description": "Encryption at rest options for the error reports. If no encryption option is specified, Timestream will choose SSE_S3 as default.",
-      "allowedValues": ["SSE_S3", "SSE_KMS"]
     },
     "Tag": {
       "type": "object",
@@ -466,10 +369,107 @@
         }
       ]
     },
-    "Key": {
+    "Tags": {
+      "type": "array",
+      "description": "A list of key-value pairs to label the scheduled query.",
+      "itemType": {
+        "type": "ref",
+        "typeName": "Tag"
+      },
+      "maxLength": 200
+    },
+    "TargetConfiguration": {
+      "type": "object",
+      "description": "Configuration of target store where scheduled query results are written to.",
+      "properties": [
+        {
+          "name": "TimestreamConfiguration",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "TimestreamConfiguration"
+          }
+        }
+      ]
+    },
+    "TargetMultiMeasureAttributeName": {
       "type": "string",
-      "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
-      "maxLength": 128,
+      "description": "Custom name to be used for attribute name in derived table. If not provided, source column name would be used."
+    },
+    "TargetMultiMeasureName": {
+      "type": "string",
+      "description": "Name of the target multi-measure in the derived table. Required if MeasureNameColumn is not provided. If MeasureNameColumn is provided then the value from that column will be used as the multi-measure name."
+    },
+    "TimeColumn": {
+      "type": "string",
+      "description": "Column from query result that should be used as the time column in destination table. Column type for this should be TIMESTAMP."
+    },
+    "TimestreamConfiguration": {
+      "type": "object",
+      "description": "Configuration needed to write data into the Timestream database and table.",
+      "properties": [
+        {
+          "name": "DatabaseName",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "DatabaseName"
+          }
+        },
+        {
+          "name": "DimensionMappings",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "DimensionMappings"
+          }
+        },
+        {
+          "name": "MeasureNameColumn",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "MeasureNameColumn"
+          }
+        },
+        {
+          "name": "MixedMeasureMappings",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "MixedMeasureMappings"
+          }
+        },
+        {
+          "name": "MultiMeasureMappings",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "MultiMeasureMappings"
+          }
+        },
+        {
+          "name": "TableName",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "TableName"
+          }
+        },
+        {
+          "name": "TimeColumn",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "TimeColumn"
+          }
+        }
+      ]
+    },
+    "TopicArn": {
+      "type": "string",
+      "description": "SNS topic ARN that the scheduled query status notifications will be sent to.",
+      "maxLength": 2048,
       "minLength": 1
     },
     "Value": {
@@ -484,59 +484,11 @@
     "description": "The AWS::Timestream::ScheduledQuery resource creates a Timestream Scheduled Query.",
     "properties": [
       {
-        "name": "ScheduledQueryName",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "ScheduledQueryName"
-        }
-      },
-      {
-        "name": "QueryString",
-        "optional": false,
-        "type": {
-          "type": "ref",
-          "typeName": "QueryString"
-        }
-      },
-      {
-        "name": "ScheduleConfiguration",
-        "optional": false,
-        "type": {
-          "type": "ref",
-          "typeName": "ScheduleConfiguration"
-        }
-      },
-      {
-        "name": "NotificationConfiguration",
-        "optional": false,
-        "type": {
-          "type": "ref",
-          "typeName": "NotificationConfiguration"
-        }
-      },
-      {
         "name": "ClientToken",
         "optional": true,
         "type": {
           "type": "ref",
           "typeName": "ClientToken"
-        }
-      },
-      {
-        "name": "ScheduledQueryExecutionRoleArn",
-        "optional": false,
-        "type": {
-          "type": "ref",
-          "typeName": "ScheduledQueryExecutionRoleArn"
-        }
-      },
-      {
-        "name": "TargetConfiguration",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "TargetConfiguration"
         }
       },
       {
@@ -556,11 +508,59 @@
         }
       },
       {
+        "name": "NotificationConfiguration",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "NotificationConfiguration"
+        }
+      },
+      {
+        "name": "QueryString",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "QueryString"
+        }
+      },
+      {
+        "name": "ScheduleConfiguration",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "ScheduleConfiguration"
+        }
+      },
+      {
+        "name": "ScheduledQueryExecutionRoleArn",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "ScheduledQueryExecutionRoleArn"
+        }
+      },
+      {
+        "name": "ScheduledQueryName",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "ScheduledQueryName"
+        }
+      },
+      {
         "name": "Tags",
         "optional": true,
         "type": {
           "type": "ref",
           "typeName": "Tags"
+        }
+      },
+      {
+        "name": "TargetConfiguration",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "TargetConfiguration"
         }
       }
     ]
@@ -578,12 +578,39 @@
         }
       },
       {
+        "name": "SQErrorReportConfiguration",
+        "description": "Configuration for error reporting. Error reports will be generated when a problem is encountered when writing the query results.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Configuration for error reporting. Error reports will be generated when a problem is encountered when writing the query results."
+        }
+      },
+      {
+        "name": "SQKmsKeyId",
+        "description": "The Amazon KMS key used to encrypt the scheduled query resource, at-rest. If the Amazon KMS key is not specified, the scheduled query resource will be encrypted with a Timestream owned Amazon KMS key. To specify a KMS key, use the key ID, key ARN, alias name, or alias ARN. When using an alias name, prefix the name with alias/. If ErrorReportConfiguration uses SSE_KMS as encryption type, the same KmsKeyId is used to encrypt the error report at rest.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Amazon KMS key used to encrypt the scheduled query resource, at-rest. If the Amazon KMS key is not specified, the scheduled query resource will be encrypted with a Timestream owned Amazon KMS key. To specify a KMS key, use the key ID, key ARN, alias name, or alias ARN. When using an alias name, prefix the name with alias/. If ErrorReportConfiguration uses SSE_KMS as encryption type, the same KmsKeyId is used to encrypt the error report at rest."
+        }
+      },
+      {
         "name": "SQName",
         "description": "The name of the scheduled query. Scheduled query names must be unique within each Region.",
         "optional": true,
         "type": {
           "type": "string",
           "description": "The name of the scheduled query. Scheduled query names must be unique within each Region."
+        }
+      },
+      {
+        "name": "SQNotificationConfiguration",
+        "description": "Notification configuration for the scheduled query. A notification is sent by Timestream when a query run finishes, when the state is updated or when you delete it.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Notification configuration for the scheduled query. A notification is sent by Timestream when a query run finishes, when the state is updated or when you delete it."
         }
       },
       {
@@ -605,15 +632,6 @@
         }
       },
       {
-        "name": "SQNotificationConfiguration",
-        "description": "Notification configuration for the scheduled query. A notification is sent by Timestream when a query run finishes, when the state is updated or when you delete it.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "Notification configuration for the scheduled query. A notification is sent by Timestream when a query run finishes, when the state is updated or when you delete it."
-        }
-      },
-      {
         "name": "SQScheduledQueryExecutionRoleArn",
         "description": "The ARN for the IAM role that Timestream will assume when running the scheduled query.",
         "optional": true,
@@ -630,26 +648,8 @@
           "type": "string",
           "description": "Configuration of target store where scheduled query results are written to."
         }
-      },
-      {
-        "name": "SQErrorReportConfiguration",
-        "description": "Configuration for error reporting. Error reports will be generated when a problem is encountered when writing the query results.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "Configuration for error reporting. Error reports will be generated when a problem is encountered when writing the query results."
-        }
-      },
-      {
-        "name": "SQKmsKeyId",
-        "description": "The Amazon KMS key used to encrypt the scheduled query resource, at-rest. If the Amazon KMS key is not specified, the scheduled query resource will be encrypted with a Timestream owned Amazon KMS key. To specify a KMS key, use the key ID, key ARN, alias name, or alias ARN. When using an alias name, prefix the name with alias/. If ErrorReportConfiguration uses SSE_KMS as encryption type, the same KmsKeyId is used to encrypt the error report at rest.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The Amazon KMS key used to encrypt the scheduled query resource, at-rest. If the Amazon KMS key is not specified, the scheduled query resource will be encrypted with a Timestream owned Amazon KMS key. To specify a KMS key, use the key ID, key ARN, alias name, or alias ARN. When using an alias name, prefix the name with alias/. If ErrorReportConfiguration uses SSE_KMS as encryption type, the same KmsKeyId is used to encrypt the error report at rest."
-        }
       }
     ]
   },
-  "$hash": "1725edac08d28f882bc858e4d773ccbf6db62cee"
+  "$hash": "a85997015d885e41de9b95f4f9eb02bc38c64c4f"
 }

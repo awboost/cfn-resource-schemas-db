@@ -1,74 +1,151 @@
 {
   "definitions": {
-    "FailoverConfig": {
+    "BridgeFlowSource": {
       "type": "object",
-      "description": "The settings for source failover.",
+      "description": "The source of the bridge. A flow source originates in MediaConnect as an existing cloud flow.",
       "properties": [
         {
-          "name": "State",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "FailoverConfigStateEnum"
-          }
-        },
-        {
-          "name": "FailoverMode",
-          "description": "The type of failover you choose for this flow. FAILOVER allows switching between different streams.",
+          "name": "FlowArn",
+          "description": "The ARN of the cloud flow used as a source of this bridge.",
           "optional": false,
           "type": {
-            "type": "ref",
-            "description": "The type of failover you choose for this flow. FAILOVER allows switching between different streams.",
-            "typeName": "FailoverModeEnum"
+            "type": "string",
+            "description": "The ARN of the cloud flow used as a source of this bridge."
           }
         },
         {
-          "name": "SourcePriority",
-          "description": "The priority you want to assign to a source. You can have a primary stream and a backup stream or two equally prioritized streams.",
+          "name": "FlowVpcInterfaceAttachment",
+          "description": "The name of the VPC interface attachment to use for this source.",
           "optional": true,
           "type": {
             "type": "ref",
-            "description": "The priority you want to assign to a source. You can have a primary stream and a backup stream or two equally prioritized streams.",
-            "typeName": "SourcePriority"
+            "description": "The name of the VPC interface attachment to use for this source.",
+            "typeName": "VpcInterfaceAttachment"
+          }
+        },
+        {
+          "name": "Name",
+          "description": "The name of the flow source.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The name of the flow source."
           }
         }
       ]
     },
-    "BridgeStateEnum": {
-      "type": "string",
-      "allowedValues": [
-        "CREATING",
-        "STANDBY",
-        "STARTING",
-        "DEPLOYING",
-        "ACTIVE",
-        "STOPPING",
-        "DELETING",
-        "DELETED",
-        "START_FAILED",
-        "START_PENDING",
-        "UPDATING"
-      ]
-    },
-    "FailoverConfigStateEnum": {
-      "type": "string",
-      "allowedValues": ["ENABLED", "DISABLED"]
-    },
-    "FailoverModeEnum": {
-      "type": "string",
-      "allowedValues": ["FAILOVER"]
-    },
-    "SourcePriority": {
+    "BridgeNetworkOutput": {
       "type": "object",
-      "description": "The priority you want to assign to a source. You can have a primary stream and a backup stream or two equally prioritized streams.",
+      "description": "The output of the bridge. A network output is delivered to your premises.",
       "properties": [
         {
-          "name": "PrimarySource",
-          "description": "The name of the source you choose as the primary source for this flow.",
-          "optional": true,
+          "name": "IpAddress",
+          "description": "The network output IP Address.",
+          "optional": false,
           "type": {
             "type": "string",
-            "description": "The name of the source you choose as the primary source for this flow."
+            "description": "The network output IP Address."
+          }
+        },
+        {
+          "name": "Name",
+          "description": "The network output name.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The network output name."
+          }
+        },
+        {
+          "name": "NetworkName",
+          "description": "The network output's gateway network name.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The network output's gateway network name."
+          }
+        },
+        {
+          "name": "Port",
+          "description": "The network output port.",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "description": "The network output port.",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "Protocol",
+          "description": "The network output protocol.",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "description": "The network output protocol.",
+            "typeName": "ProtocolEnum"
+          }
+        },
+        {
+          "name": "Ttl",
+          "description": "The network output TTL.",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "description": "The network output TTL.",
+            "isInteger": true
+          }
+        }
+      ]
+    },
+    "BridgeNetworkSource": {
+      "type": "object",
+      "description": "The source of the bridge. A network source originates at your premises.",
+      "properties": [
+        {
+          "name": "MulticastIp",
+          "description": "The network source multicast IP.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The network source multicast IP."
+          }
+        },
+        {
+          "name": "Name",
+          "description": "The name of the network source.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The name of the network source."
+          }
+        },
+        {
+          "name": "NetworkName",
+          "description": "The network source's gateway network name.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The network source's gateway network name."
+          }
+        },
+        {
+          "name": "Port",
+          "description": "The network source port.",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "description": "The network source port.",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "Protocol",
+          "description": "The network source protocol.",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "description": "The network source protocol.",
+            "typeName": "ProtocolEnum"
           }
         }
       ]
@@ -83,69 +160,6 @@
           "type": {
             "type": "ref",
             "typeName": "BridgeNetworkOutput"
-          }
-        }
-      ]
-    },
-    "BridgeNetworkOutput": {
-      "type": "object",
-      "description": "The output of the bridge. A network output is delivered to your premises.",
-      "properties": [
-        {
-          "name": "Name",
-          "description": "The network output name.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The network output name."
-          }
-        },
-        {
-          "name": "Protocol",
-          "description": "The network output protocol.",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "description": "The network output protocol.",
-            "typeName": "ProtocolEnum"
-          }
-        },
-        {
-          "name": "IpAddress",
-          "description": "The network output IP Address.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The network output IP Address."
-          }
-        },
-        {
-          "name": "Port",
-          "description": "The network output port.",
-          "optional": false,
-          "type": {
-            "type": "number",
-            "description": "The network output port.",
-            "isInteger": true
-          }
-        },
-        {
-          "name": "NetworkName",
-          "description": "The network output's gateway network name.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The network output's gateway network name."
-          }
-        },
-        {
-          "name": "Ttl",
-          "description": "The network output TTL.",
-          "optional": false,
-          "type": {
-            "type": "number",
-            "description": "The network output TTL.",
-            "isInteger": true
           }
         }
       ]
@@ -172,111 +186,78 @@
         }
       ]
     },
-    "BridgeFlowSource": {
-      "type": "object",
-      "description": "The source of the bridge. A flow source originates in MediaConnect as an existing cloud flow.",
-      "properties": [
-        {
-          "name": "Name",
-          "description": "The name of the flow source.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The name of the flow source."
-          }
-        },
-        {
-          "name": "FlowArn",
-          "description": "The ARN of the cloud flow used as a source of this bridge.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The ARN of the cloud flow used as a source of this bridge."
-          }
-        },
-        {
-          "name": "FlowVpcInterfaceAttachment",
-          "description": "The name of the VPC interface attachment to use for this source.",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "The name of the VPC interface attachment to use for this source.",
-            "typeName": "VpcInterfaceAttachment"
-          }
-        }
+    "BridgeStateEnum": {
+      "type": "string",
+      "allowedValues": [
+        "CREATING",
+        "STANDBY",
+        "STARTING",
+        "DEPLOYING",
+        "ACTIVE",
+        "STOPPING",
+        "DELETING",
+        "DELETED",
+        "START_FAILED",
+        "START_PENDING",
+        "UPDATING"
       ]
     },
-    "VpcInterfaceAttachment": {
+    "EgressGatewayBridge": {
       "type": "object",
-      "description": "The settings for attaching a VPC interface to an resource.",
       "properties": [
         {
-          "name": "VpcInterfaceName",
-          "description": "The name of the VPC interface to use for this resource.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The name of the VPC interface to use for this resource."
-          }
-        }
-      ]
-    },
-    "BridgeNetworkSource": {
-      "type": "object",
-      "description": "The source of the bridge. A network source originates at your premises.",
-      "properties": [
-        {
-          "name": "Name",
-          "description": "The name of the network source.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The name of the network source."
-          }
-        },
-        {
-          "name": "Protocol",
-          "description": "The network source protocol.",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "description": "The network source protocol.",
-            "typeName": "ProtocolEnum"
-          }
-        },
-        {
-          "name": "MulticastIp",
-          "description": "The network source multicast IP.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The network source multicast IP."
-          }
-        },
-        {
-          "name": "Port",
-          "description": "The network source port.",
+          "name": "MaxBitrate",
+          "description": "The maximum expected bitrate of the egress bridge.",
           "optional": false,
           "type": {
             "type": "number",
-            "description": "The network source port.",
+            "description": "The maximum expected bitrate of the egress bridge.",
             "isInteger": true
-          }
-        },
-        {
-          "name": "NetworkName",
-          "description": "The network source's gateway network name.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The network source's gateway network name."
           }
         }
       ]
     },
-    "ProtocolEnum": {
+    "FailoverConfig": {
+      "type": "object",
+      "description": "The settings for source failover.",
+      "properties": [
+        {
+          "name": "FailoverMode",
+          "description": "The type of failover you choose for this flow. FAILOVER allows switching between different streams.",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "description": "The type of failover you choose for this flow. FAILOVER allows switching between different streams.",
+            "typeName": "FailoverModeEnum"
+          }
+        },
+        {
+          "name": "SourcePriority",
+          "description": "The priority you want to assign to a source. You can have a primary stream and a backup stream or two equally prioritized streams.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The priority you want to assign to a source. You can have a primary stream and a backup stream or two equally prioritized streams.",
+            "typeName": "SourcePriority"
+          }
+        },
+        {
+          "name": "State",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "FailoverConfigStateEnum"
+          }
+        }
+      ]
+    },
+    "FailoverConfigStateEnum": {
       "type": "string",
-      "allowedValues": ["rtp-fec", "rtp", "udp"]
+      "allowedValues": ["ENABLED", "DISABLED"]
+    },
+    "FailoverModeEnum": {
+      "type": "string",
+      "allowedValues": ["FAILOVER"]
     },
     "IngressGatewayBridge": {
       "type": "object",
@@ -303,17 +284,36 @@
         }
       ]
     },
-    "EgressGatewayBridge": {
+    "ProtocolEnum": {
+      "type": "string",
+      "allowedValues": ["rtp-fec", "rtp", "udp"]
+    },
+    "SourcePriority": {
       "type": "object",
+      "description": "The priority you want to assign to a source. You can have a primary stream and a backup stream or two equally prioritized streams.",
       "properties": [
         {
-          "name": "MaxBitrate",
-          "description": "The maximum expected bitrate of the egress bridge.",
-          "optional": false,
+          "name": "PrimarySource",
+          "description": "The name of the source you choose as the primary source for this flow.",
+          "optional": true,
           "type": {
-            "type": "number",
-            "description": "The maximum expected bitrate of the egress bridge.",
-            "isInteger": true
+            "type": "string",
+            "description": "The name of the source you choose as the primary source for this flow."
+          }
+        }
+      ]
+    },
+    "VpcInterfaceAttachment": {
+      "type": "object",
+      "description": "The settings for attaching a VPC interface to an resource.",
+      "properties": [
+        {
+          "name": "VpcInterfaceName",
+          "description": "The name of the VPC interface to use for this resource.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The name of the VPC interface to use for this resource."
           }
         }
       ]
@@ -324,12 +324,43 @@
     "description": "Resource schema for AWS::MediaConnect::Bridge",
     "properties": [
       {
+        "name": "EgressGatewayBridge",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "EgressGatewayBridge"
+        }
+      },
+      {
+        "name": "IngressGatewayBridge",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "IngressGatewayBridge"
+        }
+      },
+      {
         "name": "Name",
         "description": "The name of the bridge.",
         "optional": false,
         "type": {
           "type": "string",
           "description": "The name of the bridge."
+        }
+      },
+      {
+        "name": "Outputs",
+        "description": "The outputs on this bridge.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "The outputs on this bridge.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "BridgeOutput"
+          },
+          "maxLength": 2,
+          "minLength": 0
         }
       },
       {
@@ -350,21 +381,6 @@
         }
       },
       {
-        "name": "Outputs",
-        "description": "The outputs on this bridge.",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "description": "The outputs on this bridge.",
-          "itemType": {
-            "type": "ref",
-            "typeName": "BridgeOutput"
-          },
-          "maxLength": 2,
-          "minLength": 0
-        }
-      },
-      {
         "name": "Sources",
         "description": "The sources on this bridge.",
         "optional": false,
@@ -377,22 +393,6 @@
           },
           "maxLength": 2,
           "minLength": 0
-        }
-      },
-      {
-        "name": "IngressGatewayBridge",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "IngressGatewayBridge"
-        }
-      },
-      {
-        "name": "EgressGatewayBridge",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "EgressGatewayBridge"
         }
       }
     ]
@@ -420,5 +420,5 @@
       }
     ]
   },
-  "$hash": "930e5a64743907e8b6c1f19f87620471da1edf49"
+  "$hash": "bdf762aed90a36131507539ecc794832b528d315"
 }

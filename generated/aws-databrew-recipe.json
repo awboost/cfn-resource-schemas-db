@@ -1,113 +1,5 @@
 {
   "definitions": {
-    "SecondaryInput": {
-      "type": "object",
-      "description": "Secondary input",
-      "properties": [
-        {
-          "name": "S3InputDefinition",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "S3Location"
-          }
-        },
-        {
-          "name": "DataCatalogInputDefinition",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "DataCatalogInputDefinition"
-          }
-        }
-      ]
-    },
-    "S3Location": {
-      "type": "object",
-      "description": "Input location",
-      "properties": [
-        {
-          "name": "Bucket",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Key",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "DataCatalogInputDefinition": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "CatalogId",
-          "description": "Catalog id",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Catalog id"
-          }
-        },
-        {
-          "name": "DatabaseName",
-          "description": "Database name",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Database name"
-          }
-        },
-        {
-          "name": "TableName",
-          "description": "Table name",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Table name"
-          }
-        },
-        {
-          "name": "TempDirectory",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "S3Location"
-          }
-        }
-      ]
-    },
-    "RecipeStep": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Action",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "Action"
-          }
-        },
-        {
-          "name": "ConditionExpressions",
-          "description": "Condition expressions applied to the step action",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "description": "Condition expressions applied to the step action",
-            "itemType": {
-              "type": "ref",
-              "typeName": "ConditionExpression"
-            }
-          }
-        }
-      ]
-    },
     "Action": {
       "type": "object",
       "properties": [
@@ -153,15 +45,6 @@
           }
         },
         {
-          "name": "Value",
-          "description": "Value of the condition",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Value of the condition"
-          }
-        },
-        {
           "name": "TargetColumn",
           "description": "Name of the target column",
           "optional": false,
@@ -169,8 +52,63 @@
             "type": "string",
             "description": "Name of the target column"
           }
+        },
+        {
+          "name": "Value",
+          "description": "Value of the condition",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Value of the condition"
+          }
         }
       ]
+    },
+    "DataCatalogInputDefinition": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "CatalogId",
+          "description": "Catalog id",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Catalog id"
+          }
+        },
+        {
+          "name": "DatabaseName",
+          "description": "Database name",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Database name"
+          }
+        },
+        {
+          "name": "TableName",
+          "description": "Table name",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Table name"
+          }
+        },
+        {
+          "name": "TempDirectory",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "S3Location"
+          }
+        }
+      ]
+    },
+    "ParameterMap": {
+      "type": "record",
+      "valueType": {
+        "type": "string"
+      }
     },
     "RecipeParameters": {
       "type": "object",
@@ -376,6 +314,33 @@
           "optional": true,
           "type": {
             "type": "string"
+          }
+        },
+        {
+          "name": "Input",
+          "description": "Input",
+          "optional": true,
+          "type": {
+            "type": "object",
+            "description": "Input",
+            "properties": [
+              {
+                "name": "DataCatalogInputDefinition",
+                "optional": true,
+                "type": {
+                  "type": "ref",
+                  "typeName": "DataCatalogInputDefinition"
+                }
+              },
+              {
+                "name": "S3InputDefinition",
+                "optional": true,
+                "type": {
+                  "type": "ref",
+                  "typeName": "S3Location"
+                }
+              }
+            ]
           }
         },
         {
@@ -656,6 +621,31 @@
           }
         },
         {
+          "name": "SheetIndexes",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "number",
+              "isInteger": true
+            },
+            "maxLength": 1,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "SheetNames",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            },
+            "maxLength": 1,
+            "minLength": 1
+          }
+        },
+        {
           "name": "SourceColumn",
           "optional": true,
           "type": {
@@ -744,31 +734,6 @@
           "optional": true,
           "type": {
             "type": "string"
-          }
-        },
-        {
-          "name": "SheetNames",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "string"
-            },
-            "maxLength": 1,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "SheetIndexes",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "number",
-              "isInteger": true
-            },
-            "maxLength": 1,
-            "minLength": 1
           }
         },
         {
@@ -889,41 +854,76 @@
           "type": {
             "type": "string"
           }
+        }
+      ]
+    },
+    "RecipeStep": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Action",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "Action"
+          }
         },
         {
-          "name": "Input",
-          "description": "Input",
+          "name": "ConditionExpressions",
+          "description": "Condition expressions applied to the step action",
           "optional": true,
           "type": {
-            "type": "object",
-            "description": "Input",
-            "properties": [
-              {
-                "name": "S3InputDefinition",
-                "optional": true,
-                "type": {
-                  "type": "ref",
-                  "typeName": "S3Location"
-                }
-              },
-              {
-                "name": "DataCatalogInputDefinition",
-                "optional": true,
-                "type": {
-                  "type": "ref",
-                  "typeName": "DataCatalogInputDefinition"
-                }
-              }
-            ]
+            "type": "array",
+            "description": "Condition expressions applied to the step action",
+            "itemType": {
+              "type": "ref",
+              "typeName": "ConditionExpression"
+            }
           }
         }
       ]
     },
-    "ParameterMap": {
-      "type": "record",
-      "valueType": {
-        "type": "string"
-      }
+    "S3Location": {
+      "type": "object",
+      "description": "Input location",
+      "properties": [
+        {
+          "name": "Bucket",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Key",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "SecondaryInput": {
+      "type": "object",
+      "description": "Secondary input",
+      "properties": [
+        {
+          "name": "DataCatalogInputDefinition",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DataCatalogInputDefinition"
+          }
+        },
+        {
+          "name": "S3InputDefinition",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "S3Location"
+          }
+        }
+      ]
     },
     "Tag": {
       "type": "object",
@@ -1000,5 +1000,5 @@
       }
     ]
   },
-  "$hash": "c688fa74dafe0d4a9d4ad17cc0b41705da5caae9"
+  "$hash": "b62c72f94817eb34bda6669fe8c78be44fdf52f2"
 }

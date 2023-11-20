@@ -1,33 +1,51 @@
 {
   "definitions": {
-    "VolumeSpecification": {
+    "Configuration": {
       "type": "object",
       "properties": [
         {
-          "name": "SizeInGB",
-          "optional": false,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        },
-        {
-          "name": "Throughput",
+          "name": "Classification",
           "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        },
-        {
-          "name": "VolumeType",
-          "optional": false,
           "type": {
             "type": "string"
           }
         },
         {
-          "name": "Iops",
+          "name": "ConfigurationProperties",
+          "optional": true,
+          "type": {
+            "type": "record",
+            "valueType": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "name": "Configurations",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Configuration"
+            }
+          }
+        }
+      ]
+    },
+    "EbsBlockDeviceConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "VolumeSpecification",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "VolumeSpecification"
+          }
+        },
+        {
+          "name": "VolumesPerInstance",
           "optional": true,
           "type": {
             "type": "number",
@@ -59,50 +77,9 @@
         }
       ]
     },
-    "Configuration": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "ConfigurationProperties",
-          "optional": true,
-          "type": {
-            "type": "record",
-            "valueType": {
-              "type": "string"
-            }
-          }
-        },
-        {
-          "name": "Configurations",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "Configuration"
-            }
-          }
-        },
-        {
-          "name": "Classification",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
     "InstanceFleetProvisioningSpecifications": {
       "type": "object",
       "properties": [
-        {
-          "name": "SpotSpecification",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "SpotProvisioningSpecification"
-          }
-        },
         {
           "name": "OnDemandSpecification",
           "optional": true,
@@ -110,38 +87,13 @@
             "type": "ref",
             "typeName": "OnDemandProvisioningSpecification"
           }
-        }
-      ]
-    },
-    "OnDemandProvisioningSpecification": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "AllocationStrategy",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "EbsBlockDeviceConfig": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "VolumeSpecification",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "VolumeSpecification"
-          }
         },
         {
-          "name": "VolumesPerInstance",
+          "name": "SpotSpecification",
           "optional": true,
           "type": {
-            "type": "number",
-            "isInteger": true
+            "type": "ref",
+            "typeName": "SpotProvisioningSpecification"
           }
         }
       ]
@@ -157,34 +109,11 @@
           }
         },
         {
-          "name": "WeightedCapacity",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        },
-        {
-          "name": "EbsConfiguration",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "EbsConfiguration"
-          }
-        },
-        {
           "name": "BidPriceAsPercentageOfOnDemandPrice",
           "optional": true,
           "type": {
             "type": "number",
             "isInteger": false
-          }
-        },
-        {
-          "name": "CustomAmiId",
-          "optional": true,
-          "type": {
-            "type": "string"
           }
         },
         {
@@ -199,7 +128,42 @@
           }
         },
         {
+          "name": "CustomAmiId",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "EbsConfiguration",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "EbsConfiguration"
+          }
+        },
+        {
           "name": "InstanceType",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "WeightedCapacity",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        }
+      ]
+    },
+    "OnDemandProvisioningSpecification": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "AllocationStrategy",
           "optional": false,
           "type": {
             "type": "string"
@@ -218,8 +182,8 @@
           }
         },
         {
-          "name": "TimeoutDurationMinutes",
-          "optional": false,
+          "name": "BlockDurationMinutes",
+          "optional": true,
           "type": {
             "type": "number",
             "isInteger": true
@@ -233,11 +197,47 @@
           }
         },
         {
-          "name": "BlockDurationMinutes",
+          "name": "TimeoutDurationMinutes",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        }
+      ]
+    },
+    "VolumeSpecification": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Iops",
           "optional": true,
           "type": {
             "type": "number",
             "isInteger": true
+          }
+        },
+        {
+          "name": "SizeInGB",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "Throughput",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "VolumeType",
+          "optional": false,
+          "type": {
+            "type": "string"
           }
         }
       ]
@@ -248,21 +248,6 @@
     "description": "Resource Type definition for AWS::EMR::InstanceFleetConfig",
     "properties": [
       {
-        "name": "InstanceFleetType",
-        "optional": false,
-        "type": {
-          "type": "string"
-        }
-      },
-      {
-        "name": "TargetOnDemandCapacity",
-        "optional": true,
-        "type": {
-          "type": "number",
-          "isInteger": true
-        }
-      },
-      {
         "name": "ClusterId",
         "optional": false,
         "type": {
@@ -270,19 +255,10 @@
         }
       },
       {
-        "name": "TargetSpotCapacity",
-        "optional": true,
+        "name": "InstanceFleetType",
+        "optional": false,
         "type": {
-          "type": "number",
-          "isInteger": true
-        }
-      },
-      {
-        "name": "LaunchSpecifications",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "InstanceFleetProvisioningSpecifications"
+          "type": "string"
         }
       },
       {
@@ -297,10 +273,34 @@
         }
       },
       {
+        "name": "LaunchSpecifications",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "InstanceFleetProvisioningSpecifications"
+        }
+      },
+      {
         "name": "Name",
         "optional": true,
         "type": {
           "type": "string"
+        }
+      },
+      {
+        "name": "TargetOnDemandCapacity",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "isInteger": true
+        }
+      },
+      {
+        "name": "TargetSpotCapacity",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "isInteger": true
         }
       }
     ]
@@ -318,5 +318,5 @@
       }
     ]
   },
-  "$hash": "5542c608c38eb0995652572047a2248a2c32a379"
+  "$hash": "44de5a780a478164ff5cf9780fd72894953dcf06"
 }

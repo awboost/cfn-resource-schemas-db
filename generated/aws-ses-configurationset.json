@@ -1,16 +1,17 @@
 {
   "definitions": {
-    "TrackingOptions": {
+    "DashboardOptions": {
       "type": "object",
-      "description": "An object that defines the open and click tracking options for emails that you send using the configuration set.",
+      "description": "Preferences regarding the Dashboard feature.",
       "properties": [
         {
-          "name": "CustomRedirectDomain",
-          "description": "The domain to use for tracking open and click events.",
-          "optional": true,
+          "name": "EngagementMetrics",
+          "description": "Whether emails sent with this configuration set have engagement tracking enabled.",
+          "optional": false,
           "type": {
             "type": "string",
-            "description": "The domain to use for tracking open and click events."
+            "description": "Whether emails sent with this configuration set have engagement tracking enabled.",
+            "pattern": "ENABLED|DISABLED"
           }
         }
       ]
@@ -20,6 +21,15 @@
       "description": "An object that defines the dedicated IP pool that is used to send emails that you send using the configuration set.",
       "properties": [
         {
+          "name": "SendingPoolName",
+          "description": "The name of the dedicated IP pool to associate with the configuration set.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The name of the dedicated IP pool to associate with the configuration set."
+          }
+        },
+        {
           "name": "TlsPolicy",
           "description": "Specifies whether messages that use the configuration set are required to use Transport Layer Security (TLS). If the value is Require , messages are only delivered if a TLS connection can be established. If the value is Optional , messages can be delivered in plain text if a TLS connection can't be established.",
           "optional": true,
@@ -28,14 +38,21 @@
             "description": "Specifies whether messages that use the configuration set are required to use Transport Layer Security (TLS). If the value is Require , messages are only delivered if a TLS connection can be established. If the value is Optional , messages can be delivered in plain text if a TLS connection can't be established.",
             "pattern": "REQUIRE|OPTIONAL"
           }
-        },
+        }
+      ]
+    },
+    "GuardianOptions": {
+      "type": "object",
+      "description": "Preferences regarding the Guardian feature.",
+      "properties": [
         {
-          "name": "SendingPoolName",
-          "description": "The name of the dedicated IP pool to associate with the configuration set.",
-          "optional": true,
+          "name": "OptimizedSharedDelivery",
+          "description": "Whether emails sent with this configuration set have optimized delivery algorithm enabled.",
+          "optional": false,
           "type": {
             "type": "string",
-            "description": "The name of the dedicated IP pool to associate with the configuration set."
+            "description": "Whether emails sent with this configuration set have optimized delivery algorithm enabled.",
+            "pattern": "ENABLED|DISABLED"
           }
         }
       ]
@@ -88,34 +105,17 @@
         }
       ]
     },
-    "DashboardOptions": {
+    "TrackingOptions": {
       "type": "object",
-      "description": "Preferences regarding the Dashboard feature.",
+      "description": "An object that defines the open and click tracking options for emails that you send using the configuration set.",
       "properties": [
         {
-          "name": "EngagementMetrics",
-          "description": "Whether emails sent with this configuration set have engagement tracking enabled.",
-          "optional": false,
+          "name": "CustomRedirectDomain",
+          "description": "The domain to use for tracking open and click events.",
+          "optional": true,
           "type": {
             "type": "string",
-            "description": "Whether emails sent with this configuration set have engagement tracking enabled.",
-            "pattern": "ENABLED|DISABLED"
-          }
-        }
-      ]
-    },
-    "GuardianOptions": {
-      "type": "object",
-      "description": "Preferences regarding the Guardian feature.",
-      "properties": [
-        {
-          "name": "OptimizedSharedDelivery",
-          "description": "Whether emails sent with this configuration set have optimized delivery algorithm enabled.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "Whether emails sent with this configuration set have optimized delivery algorithm enabled.",
-            "pattern": "ENABLED|DISABLED"
+            "description": "The domain to use for tracking open and click events."
           }
         }
       ]
@@ -148,6 +148,14 @@
     "description": "Resource schema for AWS::SES::ConfigurationSet.",
     "properties": [
       {
+        "name": "DeliveryOptions",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "DeliveryOptions"
+        }
+      },
+      {
         "name": "Name",
         "description": "The name of the configuration set.",
         "optional": true,
@@ -155,22 +163,6 @@
           "type": "string",
           "description": "The name of the configuration set.",
           "pattern": "^[a-zA-Z0-9_-]{1,64}$"
-        }
-      },
-      {
-        "name": "TrackingOptions",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "TrackingOptions"
-        }
-      },
-      {
-        "name": "DeliveryOptions",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "DeliveryOptions"
         }
       },
       {
@@ -198,6 +190,14 @@
         }
       },
       {
+        "name": "TrackingOptions",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "TrackingOptions"
+        }
+      },
+      {
         "name": "VdmOptions",
         "optional": true,
         "type": {
@@ -207,5 +207,5 @@
       }
     ]
   },
-  "$hash": "479ff2a2a8a7b1ebc558c0a2793e609a971574af"
+  "$hash": "2c9aca8634cff935febab261eb2b21f6145e7cb3"
 }

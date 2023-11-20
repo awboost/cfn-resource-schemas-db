@@ -1,5 +1,30 @@
 {
   "definitions": {
+    "AdditionalInstanceConfiguration": {
+      "type": "object",
+      "description": "Specify additional settings and launch scripts for your build instances.",
+      "properties": [
+        {
+          "name": "SystemsManagerAgent",
+          "description": "Contains settings for the SSM agent on your build instance.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "Contains settings for the SSM agent on your build instance.",
+            "typeName": "SystemsManagerAgent"
+          }
+        },
+        {
+          "name": "UserDataOverride",
+          "description": "Use this property to provide commands or a command script to run when you launch your build instance.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Use this property to provide commands or a command script to run when you launch your build instance."
+          }
+        }
+      ]
+    },
     "ComponentConfiguration": {
       "type": "object",
       "description": "Configuration details of the component.",
@@ -28,45 +53,29 @@
         }
       ]
     },
-    "InstanceBlockDeviceMapping": {
+    "ComponentParameter": {
       "type": "object",
-      "description": "Defines block device mappings for the instance used to configure your image. ",
+      "description": "Contains a key/value pair that sets the named component parameter.",
       "properties": [
         {
-          "name": "DeviceName",
-          "description": "The device to which these mappings apply.",
-          "optional": true,
+          "name": "Name",
+          "description": "The name of the component parameter to set.",
+          "optional": false,
           "type": {
             "type": "string",
-            "description": "The device to which these mappings apply."
+            "description": "The name of the component parameter to set."
           }
         },
         {
-          "name": "VirtualName",
-          "description": "Use to manage instance ephemeral devices.",
-          "optional": true,
+          "name": "Value",
+          "description": "Sets the value for the named component parameter.",
+          "optional": false,
           "type": {
-            "type": "string",
-            "description": "Use to manage instance ephemeral devices."
-          }
-        },
-        {
-          "name": "NoDevice",
-          "description": "Use to remove a mapping from the parent image.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Use to remove a mapping from the parent image."
-          }
-        },
-        {
-          "name": "Ebs",
-          "description": "Use to manage Amazon EBS-specific configuration for this mapping.",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "Use to manage Amazon EBS-specific configuration for this mapping.",
-            "typeName": "EbsInstanceBlockDeviceSpecification"
+            "type": "array",
+            "description": "Sets the value for the named component parameter.",
+            "itemType": {
+              "type": "string"
+            }
           }
         }
       ]
@@ -76,21 +85,21 @@
       "description": "Amazon EBS-specific block device mapping specifications. ",
       "properties": [
         {
-          "name": "Encrypted",
-          "description": "Use to configure device encryption.",
-          "optional": true,
-          "type": {
-            "type": "boolean",
-            "description": "Use to configure device encryption."
-          }
-        },
-        {
           "name": "DeleteOnTermination",
           "description": "Use to configure delete on termination of the associated device.",
           "optional": true,
           "type": {
             "type": "boolean",
             "description": "Use to configure delete on termination of the associated device."
+          }
+        },
+        {
+          "name": "Encrypted",
+          "description": "Use to configure device encryption.",
+          "optional": true,
+          "type": {
+            "type": "boolean",
+            "description": "Use to configure device encryption."
           }
         },
         {
@@ -161,27 +170,45 @@
         }
       ]
     },
-    "AdditionalInstanceConfiguration": {
+    "InstanceBlockDeviceMapping": {
       "type": "object",
-      "description": "Specify additional settings and launch scripts for your build instances.",
+      "description": "Defines block device mappings for the instance used to configure your image. ",
       "properties": [
         {
-          "name": "SystemsManagerAgent",
-          "description": "Contains settings for the SSM agent on your build instance.",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "Contains settings for the SSM agent on your build instance.",
-            "typeName": "SystemsManagerAgent"
-          }
-        },
-        {
-          "name": "UserDataOverride",
-          "description": "Use this property to provide commands or a command script to run when you launch your build instance.",
+          "name": "DeviceName",
+          "description": "The device to which these mappings apply.",
           "optional": true,
           "type": {
             "type": "string",
-            "description": "Use this property to provide commands or a command script to run when you launch your build instance."
+            "description": "The device to which these mappings apply."
+          }
+        },
+        {
+          "name": "Ebs",
+          "description": "Use to manage Amazon EBS-specific configuration for this mapping.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "Use to manage Amazon EBS-specific configuration for this mapping.",
+            "typeName": "EbsInstanceBlockDeviceSpecification"
+          }
+        },
+        {
+          "name": "NoDevice",
+          "description": "Use to remove a mapping from the parent image.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Use to remove a mapping from the parent image."
+          }
+        },
+        {
+          "name": "VirtualName",
+          "description": "Use to manage instance ephemeral devices.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Use to manage instance ephemeral devices."
           }
         }
       ]
@@ -200,33 +227,6 @@
           }
         }
       ]
-    },
-    "ComponentParameter": {
-      "type": "object",
-      "description": "Contains a key/value pair that sets the named component parameter.",
-      "properties": [
-        {
-          "name": "Name",
-          "description": "The name of the component parameter to set.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The name of the component parameter to set."
-          }
-        },
-        {
-          "name": "Value",
-          "description": "Sets the value for the named component parameter.",
-          "optional": false,
-          "type": {
-            "type": "array",
-            "description": "Sets the value for the named component parameter.",
-            "itemType": {
-              "type": "string"
-            }
-          }
-        }
-      ]
     }
   },
   "resource": {
@@ -234,43 +234,13 @@
     "description": "Resource schema for AWS::ImageBuilder::ImageRecipe",
     "properties": [
       {
-        "name": "Name",
-        "description": "The name of the image recipe.",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "description": "The name of the image recipe."
-        }
-      },
-      {
-        "name": "Description",
-        "description": "The description of the image recipe.",
+        "name": "AdditionalInstanceConfiguration",
+        "description": "Specify additional settings and launch scripts for your build instances.",
         "optional": true,
         "type": {
-          "type": "string",
-          "description": "The description of the image recipe."
-        }
-      },
-      {
-        "name": "Version",
-        "description": "The version of the image recipe.",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "description": "The version of the image recipe."
-        }
-      },
-      {
-        "name": "Components",
-        "description": "The components of the image recipe.",
-        "optional": false,
-        "type": {
-          "type": "array",
-          "description": "The components of the image recipe.",
-          "itemType": {
-            "type": "ref",
-            "typeName": "ComponentConfiguration"
-          }
+          "type": "ref",
+          "description": "Specify additional settings and launch scripts for your build instances.",
+          "typeName": "AdditionalInstanceConfiguration"
         }
       },
       {
@@ -287,31 +257,43 @@
         }
       },
       {
+        "name": "Components",
+        "description": "The components of the image recipe.",
+        "optional": false,
+        "type": {
+          "type": "array",
+          "description": "The components of the image recipe.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "ComponentConfiguration"
+          }
+        }
+      },
+      {
+        "name": "Description",
+        "description": "The description of the image recipe.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The description of the image recipe."
+        }
+      },
+      {
+        "name": "Name",
+        "description": "The name of the image recipe.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The name of the image recipe."
+        }
+      },
+      {
         "name": "ParentImage",
         "description": "The parent image of the image recipe.",
         "optional": false,
         "type": {
           "type": "string",
           "description": "The parent image of the image recipe."
-        }
-      },
-      {
-        "name": "WorkingDirectory",
-        "description": "The working directory to be used during build and test workflows.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The working directory to be used during build and test workflows."
-        }
-      },
-      {
-        "name": "AdditionalInstanceConfiguration",
-        "description": "Specify additional settings and launch scripts for your build instances.",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "description": "Specify additional settings and launch scripts for your build instances.",
-          "typeName": "AdditionalInstanceConfiguration"
         }
       },
       {
@@ -324,6 +306,24 @@
           "valueType": {
             "type": "string"
           }
+        }
+      },
+      {
+        "name": "Version",
+        "description": "The version of the image recipe.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The version of the image recipe."
+        }
+      },
+      {
+        "name": "WorkingDirectory",
+        "description": "The working directory to be used during build and test workflows.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The working directory to be used during build and test workflows."
         }
       }
     ]
@@ -343,5 +343,5 @@
       }
     ]
   },
-  "$hash": "c07119a879601ba68272be82c6d67ca225cd40bf"
+  "$hash": "b91bf71cbbde82b9540cab96d03bc7fc7cd86bf1"
 }

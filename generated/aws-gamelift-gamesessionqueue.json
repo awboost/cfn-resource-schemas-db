@@ -1,29 +1,26 @@
 {
   "definitions": {
-    "Tag": {
+    "AllowedLocations": {
+      "type": "array",
+      "description": "A list of locations to allow game session placement in, in the form of AWS Region codes such as us-west-2.",
+      "itemType": {
+        "type": "string",
+        "maxLength": 64,
+        "minLength": 1,
+        "pattern": "^[a-z]+(-([a-z]+|\\d))*"
+      },
+      "maxLength": 100,
+      "minLength": 1
+    },
+    "FilterConfiguration": {
       "type": "object",
-      "description": "A key-value pair to associate with a resource.",
       "properties": [
         {
-          "name": "Key",
-          "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length.",
-          "optional": false,
+          "name": "AllowedLocations",
+          "optional": true,
           "type": {
-            "type": "string",
-            "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length.",
-            "maxLength": 128,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "Value",
-          "description": "The value for the tag. You can specify a value that is 1 to 256 Unicode characters in length.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The value for the tag. You can specify a value that is 1 to 256 Unicode characters in length.",
-            "maxLength": 256,
-            "minLength": 1
+            "type": "ref",
+            "typeName": "AllowedLocations"
           }
         }
       ]
@@ -43,6 +40,18 @@
           }
         }
       ]
+    },
+    "LocationOrder": {
+      "type": "array",
+      "description": "The prioritization order to use for fleet locations, when the PriorityOrder property includes LOCATION.",
+      "itemType": {
+        "type": "string",
+        "maxLength": 64,
+        "minLength": 1,
+        "pattern": "^[A-Za-z0-9\\-]+"
+      },
+      "maxLength": 100,
+      "minLength": 1
     },
     "PlayerLatencyPolicy": {
       "type": "object",
@@ -72,53 +81,6 @@
         }
       ]
     },
-    "AllowedLocations": {
-      "type": "array",
-      "description": "A list of locations to allow game session placement in, in the form of AWS Region codes such as us-west-2.",
-      "itemType": {
-        "type": "string",
-        "maxLength": 64,
-        "minLength": 1,
-        "pattern": "^[a-z]+(-([a-z]+|\\d))*"
-      },
-      "maxLength": 100,
-      "minLength": 1
-    },
-    "FilterConfiguration": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "AllowedLocations",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "AllowedLocations"
-          }
-        }
-      ]
-    },
-    "LocationOrder": {
-      "type": "array",
-      "description": "The prioritization order to use for fleet locations, when the PriorityOrder property includes LOCATION.",
-      "itemType": {
-        "type": "string",
-        "maxLength": 64,
-        "minLength": 1,
-        "pattern": "^[A-Za-z0-9\\-]+"
-      },
-      "maxLength": 100,
-      "minLength": 1
-    },
-    "PriorityOrder": {
-      "type": "array",
-      "description": "The recommended sequence to use when prioritizing where to place new game sessions.",
-      "itemType": {
-        "type": "string",
-        "allowedValues": ["LATENCY", "COST", "DESTINATION", "LOCATION"]
-      },
-      "maxLength": 4,
-      "minLength": 1
-    },
     "PriorityConfiguration": {
       "type": "object",
       "properties": [
@@ -139,6 +101,44 @@
           }
         }
       ]
+    },
+    "PriorityOrder": {
+      "type": "array",
+      "description": "The recommended sequence to use when prioritizing where to place new game sessions.",
+      "itemType": {
+        "type": "string",
+        "allowedValues": ["LATENCY", "COST", "DESTINATION", "LOCATION"]
+      },
+      "maxLength": 4,
+      "minLength": 1
+    },
+    "Tag": {
+      "type": "object",
+      "description": "A key-value pair to associate with a resource.",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length.",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "description": "The value for the tag. You can specify a value that is 1 to 256 Unicode characters in length.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The value for the tag. You can specify a value that is 1 to 256 Unicode characters in length.",
+            "maxLength": 256,
+            "minLength": 1
+          }
+        }
+      ]
     }
   },
   "resource": {
@@ -146,26 +146,15 @@
     "description": "The AWS::GameLift::GameSessionQueue resource creates an Amazon GameLift (GameLift) game session queue.",
     "properties": [
       {
-        "name": "Name",
-        "description": "A descriptive label that is associated with game session queue. Queue names must be unique within each Region.",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "description": "A descriptive label that is associated with game session queue. Queue names must be unique within each Region.",
-          "maxLength": 128,
-          "minLength": 1,
-          "pattern": "[a-zA-Z0-9-]+"
-        }
-      },
-      {
-        "name": "TimeoutInSeconds",
-        "description": "The maximum time, in seconds, that a new game session placement request remains in the queue.",
+        "name": "CustomEventData",
+        "description": "Information that is added to all events that are related to this game session queue.",
         "optional": true,
         "type": {
-          "type": "number",
-          "description": "The maximum time, in seconds, that a new game session placement request remains in the queue.",
-          "isInteger": true,
-          "minimum": 0
+          "type": "string",
+          "description": "Information that is added to all events that are related to this game session queue.",
+          "maxLength": 256,
+          "minLength": 1,
+          "pattern": "[\\s\\S]*"
         }
       },
       {
@@ -182,28 +171,25 @@
         }
       },
       {
-        "name": "PlayerLatencyPolicies",
-        "description": "A set of policies that act as a sliding cap on player latency.",
+        "name": "FilterConfiguration",
+        "description": "A list of locations where a queue is allowed to place new game sessions.",
         "optional": true,
         "type": {
-          "type": "array",
-          "description": "A set of policies that act as a sliding cap on player latency.",
-          "itemType": {
-            "type": "ref",
-            "typeName": "PlayerLatencyPolicy"
-          }
+          "type": "ref",
+          "description": "A list of locations where a queue is allowed to place new game sessions.",
+          "typeName": "FilterConfiguration"
         }
       },
       {
-        "name": "CustomEventData",
-        "description": "Information that is added to all events that are related to this game session queue.",
-        "optional": true,
+        "name": "Name",
+        "description": "A descriptive label that is associated with game session queue. Queue names must be unique within each Region.",
+        "optional": false,
         "type": {
           "type": "string",
-          "description": "Information that is added to all events that are related to this game session queue.",
-          "maxLength": 256,
+          "description": "A descriptive label that is associated with game session queue. Queue names must be unique within each Region.",
+          "maxLength": 128,
           "minLength": 1,
-          "pattern": "[\\s\\S]*"
+          "pattern": "[a-zA-Z0-9-]+"
         }
       },
       {
@@ -219,13 +205,16 @@
         }
       },
       {
-        "name": "FilterConfiguration",
-        "description": "A list of locations where a queue is allowed to place new game sessions.",
+        "name": "PlayerLatencyPolicies",
+        "description": "A set of policies that act as a sliding cap on player latency.",
         "optional": true,
         "type": {
-          "type": "ref",
-          "description": "A list of locations where a queue is allowed to place new game sessions.",
-          "typeName": "FilterConfiguration"
+          "type": "array",
+          "description": "A set of policies that act as a sliding cap on player latency.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "PlayerLatencyPolicy"
+          }
         }
       },
       {
@@ -251,6 +240,17 @@
           },
           "maxLength": 200
         }
+      },
+      {
+        "name": "TimeoutInSeconds",
+        "description": "The maximum time, in seconds, that a new game session placement request remains in the queue.",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "The maximum time, in seconds, that a new game session placement request remains in the queue.",
+          "isInteger": true,
+          "minimum": 0
+        }
       }
     ]
   },
@@ -272,5 +272,5 @@
       }
     ]
   },
-  "$hash": "5d01a92293ab3a2a7f22e76ac470bbc205a2874a"
+  "$hash": "55ce98e5b8bcc5f7fffefddbfbe9f9f4fa025de5"
 }

@@ -1,5 +1,10 @@
 {
   "definitions": {
+    "BehaviorType": {
+      "type": "string",
+      "description": "Specifies the other channels that can be routed to an agent handling their current channel.",
+      "allowedValues": ["ROUTE_CURRENT_CHANNEL_ONLY", "ROUTE_ANY_CHANNEL"]
+    },
     "Channel": {
       "type": "string",
       "description": "The channels that agents can handle in the Contact Control Panel (CCP).",
@@ -11,11 +16,6 @@
       "isInteger": true,
       "maximum": 10,
       "minimum": 1
-    },
-    "BehaviorType": {
-      "type": "string",
-      "description": "Specifies the other channels that can be routed to an agent handling their current channel.",
-      "allowedValues": ["ROUTE_CURRENT_CHANNEL_ONLY", "ROUTE_ANY_CHANNEL"]
     },
     "CrossChannelBehavior": {
       "type": "object",
@@ -30,6 +30,13 @@
           }
         }
       ]
+    },
+    "Delay": {
+      "type": "number",
+      "description": "The delay, in seconds, a contact should wait in the queue before they are routed to an available agent.",
+      "isInteger": true,
+      "maximum": 9999,
+      "minimum": 0
     },
     "MediaConcurrency": {
       "type": "object",
@@ -61,13 +68,6 @@
         }
       ]
     },
-    "Delay": {
-      "type": "number",
-      "description": "The delay, in seconds, a contact should wait in the queue before they are routed to an available agent.",
-      "isInteger": true,
-      "maximum": 9999,
-      "minimum": 0
-    },
     "Priority": {
       "type": "number",
       "description": "The order in which contacts are to be handled for the queue.",
@@ -79,28 +79,6 @@
       "type": "string",
       "description": "The Amazon Resource Name (ARN) for the queue.",
       "pattern": "^arn:aws[-a-z0-9]*:connect:[-a-z0-9]*:[0-9]{12}:instance/[-a-zA-Z0-9]*/queue/[-a-zA-Z0-9]*$"
-    },
-    "RoutingProfileQueueReference": {
-      "type": "object",
-      "description": "Contains the channel and queue identifier for a routing profile.",
-      "properties": [
-        {
-          "name": "Channel",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "Channel"
-          }
-        },
-        {
-          "name": "QueueArn",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "QueueArn"
-          }
-        }
-      ]
     },
     "RoutingProfileQueueConfig": {
       "type": "object",
@@ -128,6 +106,28 @@
           "type": {
             "type": "ref",
             "typeName": "RoutingProfileQueueReference"
+          }
+        }
+      ]
+    },
+    "RoutingProfileQueueReference": {
+      "type": "object",
+      "description": "Contains the channel and queue identifier for a routing profile.",
+      "properties": [
+        {
+          "name": "Channel",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "Channel"
+          }
+        },
+        {
+          "name": "QueueArn",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "QueueArn"
           }
         }
       ]
@@ -166,24 +166,26 @@
     "description": "Resource Type definition for AWS::Connect::RoutingProfile",
     "properties": [
       {
-        "name": "InstanceArn",
-        "description": "The identifier of the Amazon Connect instance.",
-        "optional": false,
+        "name": "AgentAvailabilityTimer",
+        "description": "Whether agents with this routing profile will have their routing order calculated based on longest idle time or time since their last inbound contact.",
+        "optional": true,
         "type": {
           "type": "string",
-          "description": "The identifier of the Amazon Connect instance.",
-          "pattern": "^arn:aws[-a-z0-9]*:connect:[-a-z0-9]*:[0-9]{12}:instance/[-a-zA-Z0-9]*$"
+          "description": "Whether agents with this routing profile will have their routing order calculated based on longest idle time or time since their last inbound contact.",
+          "allowedValues": [
+            "TIME_SINCE_LAST_ACTIVITY",
+            "TIME_SINCE_LAST_INBOUND"
+          ]
         }
       },
       {
-        "name": "Name",
-        "description": "The name of the routing profile.",
+        "name": "DefaultOutboundQueueArn",
+        "description": "The identifier of the default outbound queue for this routing profile.",
         "optional": false,
         "type": {
           "type": "string",
-          "description": "The name of the routing profile.",
-          "maxLength": 127,
-          "minLength": 1
+          "description": "The identifier of the default outbound queue for this routing profile.",
+          "pattern": "^arn:aws[-a-z0-9]*:connect:[-a-z0-9]*:[0-9]{12}:instance/[-a-zA-Z0-9]*/queue/[-a-zA-Z0-9]*$"
         }
       },
       {
@@ -195,6 +197,16 @@
           "description": "The description of the routing profile.",
           "maxLength": 250,
           "minLength": 1
+        }
+      },
+      {
+        "name": "InstanceArn",
+        "description": "The identifier of the Amazon Connect instance.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The identifier of the Amazon Connect instance.",
+          "pattern": "^arn:aws[-a-z0-9]*:connect:[-a-z0-9]*:[0-9]{12}:instance/[-a-zA-Z0-9]*$"
         }
       },
       {
@@ -211,13 +223,14 @@
         }
       },
       {
-        "name": "DefaultOutboundQueueArn",
-        "description": "The identifier of the default outbound queue for this routing profile.",
+        "name": "Name",
+        "description": "The name of the routing profile.",
         "optional": false,
         "type": {
           "type": "string",
-          "description": "The identifier of the default outbound queue for this routing profile.",
-          "pattern": "^arn:aws[-a-z0-9]*:connect:[-a-z0-9]*:[0-9]{12}:instance/[-a-zA-Z0-9]*/queue/[-a-zA-Z0-9]*$"
+          "description": "The name of the routing profile.",
+          "maxLength": 127,
+          "minLength": 1
         }
       },
       {
@@ -248,19 +261,6 @@
           },
           "maxLength": 50
         }
-      },
-      {
-        "name": "AgentAvailabilityTimer",
-        "description": "Whether agents with this routing profile will have their routing order calculated based on longest idle time or time since their last inbound contact.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "Whether agents with this routing profile will have their routing order calculated based on longest idle time or time since their last inbound contact.",
-          "allowedValues": [
-            "TIME_SINCE_LAST_ACTIVITY",
-            "TIME_SINCE_LAST_INBOUND"
-          ]
-        }
       }
     ]
   },
@@ -280,5 +280,5 @@
       }
     ]
   },
-  "$hash": "d357a6b76134fd890889ef17bdb4a64d6413f0a3"
+  "$hash": "1ccfcb15bb0aba15d510c718cf00191f697a98a7"
 }

@@ -1,277 +1,9 @@
 {
   "definitions": {
-    "ExperimentTemplateActionItemDescription": {
-      "type": "string",
-      "description": "A description for the action.",
-      "maxLength": 512
-    },
-    "StopConditionSource": {
-      "type": "string",
-      "maxLength": 64
-    },
-    "ExperimentTemplateStopCondition": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Value",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "StopConditionValue"
-          }
-        },
-        {
-          "name": "Source",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "StopConditionSource"
-          }
-        }
-      ]
-    },
-    "ExperimentTemplateActionItemStartAfter": {
-      "type": "string",
-      "maxLength": 64
-    },
-    "ExperimentTemplateLogConfiguration": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "S3Configuration",
-          "optional": true,
-          "type": {
-            "type": "object",
-            "properties": [
-              {
-                "name": "BucketName",
-                "optional": false,
-                "type": {
-                  "type": "string",
-                  "maxLength": 63,
-                  "minLength": 3
-                }
-              },
-              {
-                "name": "Prefix",
-                "optional": true,
-                "type": {
-                  "type": "string",
-                  "maxLength": 1024,
-                  "minLength": 1
-                }
-              }
-            ]
-          }
-        },
-        {
-          "name": "LogSchemaVersion",
-          "optional": false,
-          "type": {
-            "type": "number",
-            "isInteger": true,
-            "minimum": 1
-          }
-        },
-        {
-          "name": "CloudWatchLogsConfiguration",
-          "optional": true,
-          "type": {
-            "type": "object",
-            "properties": [
-              {
-                "name": "LogGroupArn",
-                "optional": false,
-                "type": {
-                  "type": "string",
-                  "maxLength": 2048,
-                  "minLength": 20
-                }
-              }
-            ]
-          }
-        }
-      ]
-    },
-    "ExperimentTemplateId": {
-      "type": "string"
-    },
-    "ExperimentTemplateTargetSelectionMode": {
-      "type": "string",
-      "description": "Scopes the identified resources to a specific number of the resources at random, or a percentage of the resources.",
-      "maxLength": 64
-    },
-    "ExperimentTemplateDescription": {
-      "type": "string",
-      "description": "A description for the experiment template.",
-      "maxLength": 512
-    },
-    "ExperimentTemplateTargetFilterList": {
-      "type": "array",
-      "itemType": {
-        "type": "ref",
-        "typeName": "ExperimentTemplateTargetFilter"
-      }
-    },
-    "StopConditionValue": {
-      "type": "string",
-      "maxLength": 2048,
-      "minLength": 20
-    },
-    "ExperimentTemplateTarget": {
-      "type": "object",
-      "description": "Specifies a target for an experiment.",
-      "properties": [
-        {
-          "name": "Filters",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ExperimentTemplateTargetFilterList"
-          }
-        },
-        {
-          "name": "Parameters",
-          "optional": true,
-          "type": {
-            "type": "record",
-            "valueType": {
-              "type": "string",
-              "maxLength": 1024
-            }
-          }
-        },
-        {
-          "name": "ResourceTags",
-          "optional": true,
-          "type": {
-            "type": "record",
-            "valueType": {
-              "type": "string",
-              "maxLength": 256
-            }
-          }
-        },
-        {
-          "name": "ResourceType",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "ResourceType"
-          }
-        },
-        {
-          "name": "ResourceArns",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ResourceArnList"
-          }
-        },
-        {
-          "name": "SelectionMode",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "ExperimentTemplateTargetSelectionMode"
-          }
-        }
-      ]
-    },
-    "ExperimentTemplateActionItemTarget": {
-      "type": "string",
-      "maxLength": 64
-    },
-    "ExperimentTemplateTargetMap": {
-      "type": "record",
-      "description": "The targets for the experiment.",
-      "valueType": {
-        "type": "ref",
-        "typeName": "ExperimentTemplateTarget"
-      }
-    },
-    "ExperimentTemplateActionItemStartAfterList": {
-      "type": "array",
-      "description": "The names of the actions that must be completed before the current action starts.",
-      "itemType": {
-        "type": "ref",
-        "typeName": "ExperimentTemplateActionItemStartAfter"
-      }
-    },
-    "ExperimentTemplateTargetFilterPath": {
-      "type": "string",
-      "description": "The attribute path for the filter.",
-      "maxLength": 256
-    },
-    "ExperimentTemplateActionItemParameter": {
-      "type": "string",
-      "maxLength": 1024
-    },
-    "ExperimentTemplateTargetFilter": {
-      "type": "object",
-      "description": "Describes a filter used for the target resource input in an experiment template.",
-      "properties": [
-        {
-          "name": "Path",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "ExperimentTemplateTargetFilterPath"
-          }
-        },
-        {
-          "name": "Values",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "ExperimentTemplateTargetFilterValues"
-          }
-        }
-      ]
-    },
-    "ResourceType": {
-      "type": "string",
-      "description": "The AWS resource type. The resource type must be supported for the specified action.",
-      "maxLength": 64
-    },
-    "ExperimentTemplateActionMap": {
-      "type": "record",
-      "description": "The actions for the experiment.",
-      "valueType": {
-        "type": "ref",
-        "typeName": "ExperimentTemplateAction"
-      }
-    },
-    "RoleArn": {
-      "type": "string",
-      "description": "The Amazon Resource Name (ARN) of an IAM role that grants the AWS FIS service permission to perform service actions on your behalf.",
-      "maxLength": 1224
-    },
-    "ResourceArnList": {
-      "type": "array",
-      "description": "The Amazon Resource Names (ARNs) of the target resources.",
-      "itemType": {
-        "type": "ref",
-        "typeName": "ResourceArn"
-      }
-    },
-    "ResourceArn": {
-      "type": "string",
-      "maxLength": 2048,
-      "minLength": 20
-    },
     "ActionId": {
       "type": "string",
       "description": "The ID of the action.",
       "maxLength": 64
-    },
-    "ExperimentTemplateStopConditionList": {
-      "type": "array",
-      "description": "One or more stop conditions.",
-      "itemType": {
-        "type": "ref",
-        "typeName": "ExperimentTemplateStopCondition"
-      }
     },
     "ExperimentTemplateAction": {
       "type": "object",
@@ -307,6 +39,14 @@
           }
         },
         {
+          "name": "StartAfter",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ExperimentTemplateActionItemStartAfterList"
+          }
+        },
+        {
           "name": "Targets",
           "description": "One or more targets for the action.",
           "optional": true,
@@ -318,16 +58,235 @@
               "typeName": "ExperimentTemplateActionItemTarget"
             }
           }
-        },
+        }
+      ]
+    },
+    "ExperimentTemplateActionItemDescription": {
+      "type": "string",
+      "description": "A description for the action.",
+      "maxLength": 512
+    },
+    "ExperimentTemplateActionItemParameter": {
+      "type": "string",
+      "maxLength": 1024
+    },
+    "ExperimentTemplateActionItemStartAfter": {
+      "type": "string",
+      "maxLength": 64
+    },
+    "ExperimentTemplateActionItemStartAfterList": {
+      "type": "array",
+      "description": "The names of the actions that must be completed before the current action starts.",
+      "itemType": {
+        "type": "ref",
+        "typeName": "ExperimentTemplateActionItemStartAfter"
+      }
+    },
+    "ExperimentTemplateActionItemTarget": {
+      "type": "string",
+      "maxLength": 64
+    },
+    "ExperimentTemplateActionMap": {
+      "type": "record",
+      "description": "The actions for the experiment.",
+      "valueType": {
+        "type": "ref",
+        "typeName": "ExperimentTemplateAction"
+      }
+    },
+    "ExperimentTemplateDescription": {
+      "type": "string",
+      "description": "A description for the experiment template.",
+      "maxLength": 512
+    },
+    "ExperimentTemplateId": {
+      "type": "string"
+    },
+    "ExperimentTemplateLogConfiguration": {
+      "type": "object",
+      "properties": [
         {
-          "name": "StartAfter",
+          "name": "CloudWatchLogsConfiguration",
           "optional": true,
           "type": {
-            "type": "ref",
-            "typeName": "ExperimentTemplateActionItemStartAfterList"
+            "type": "object",
+            "properties": [
+              {
+                "name": "LogGroupArn",
+                "optional": false,
+                "type": {
+                  "type": "string",
+                  "maxLength": 2048,
+                  "minLength": 20
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "LogSchemaVersion",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "minimum": 1
+          }
+        },
+        {
+          "name": "S3Configuration",
+          "optional": true,
+          "type": {
+            "type": "object",
+            "properties": [
+              {
+                "name": "BucketName",
+                "optional": false,
+                "type": {
+                  "type": "string",
+                  "maxLength": 63,
+                  "minLength": 3
+                }
+              },
+              {
+                "name": "Prefix",
+                "optional": true,
+                "type": {
+                  "type": "string",
+                  "maxLength": 1024,
+                  "minLength": 1
+                }
+              }
+            ]
           }
         }
       ]
+    },
+    "ExperimentTemplateStopCondition": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Source",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "StopConditionSource"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "StopConditionValue"
+          }
+        }
+      ]
+    },
+    "ExperimentTemplateStopConditionList": {
+      "type": "array",
+      "description": "One or more stop conditions.",
+      "itemType": {
+        "type": "ref",
+        "typeName": "ExperimentTemplateStopCondition"
+      }
+    },
+    "ExperimentTemplateTarget": {
+      "type": "object",
+      "description": "Specifies a target for an experiment.",
+      "properties": [
+        {
+          "name": "Filters",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ExperimentTemplateTargetFilterList"
+          }
+        },
+        {
+          "name": "Parameters",
+          "optional": true,
+          "type": {
+            "type": "record",
+            "valueType": {
+              "type": "string",
+              "maxLength": 1024
+            }
+          }
+        },
+        {
+          "name": "ResourceArns",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ResourceArnList"
+          }
+        },
+        {
+          "name": "ResourceTags",
+          "optional": true,
+          "type": {
+            "type": "record",
+            "valueType": {
+              "type": "string",
+              "maxLength": 256
+            }
+          }
+        },
+        {
+          "name": "ResourceType",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "ResourceType"
+          }
+        },
+        {
+          "name": "SelectionMode",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "ExperimentTemplateTargetSelectionMode"
+          }
+        }
+      ]
+    },
+    "ExperimentTemplateTargetFilter": {
+      "type": "object",
+      "description": "Describes a filter used for the target resource input in an experiment template.",
+      "properties": [
+        {
+          "name": "Path",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "ExperimentTemplateTargetFilterPath"
+          }
+        },
+        {
+          "name": "Values",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "ExperimentTemplateTargetFilterValues"
+          }
+        }
+      ]
+    },
+    "ExperimentTemplateTargetFilterList": {
+      "type": "array",
+      "itemType": {
+        "type": "ref",
+        "typeName": "ExperimentTemplateTargetFilter"
+      }
+    },
+    "ExperimentTemplateTargetFilterPath": {
+      "type": "string",
+      "description": "The attribute path for the filter.",
+      "maxLength": 256
+    },
+    "ExperimentTemplateTargetFilterValue": {
+      "type": "string",
+      "maxLength": 128
     },
     "ExperimentTemplateTargetFilterValues": {
       "type": "array",
@@ -337,23 +296,56 @@
         "typeName": "ExperimentTemplateTargetFilterValue"
       }
     },
-    "ExperimentTemplateTargetFilterValue": {
+    "ExperimentTemplateTargetMap": {
+      "type": "record",
+      "description": "The targets for the experiment.",
+      "valueType": {
+        "type": "ref",
+        "typeName": "ExperimentTemplateTarget"
+      }
+    },
+    "ExperimentTemplateTargetSelectionMode": {
       "type": "string",
-      "maxLength": 128
+      "description": "Scopes the identified resources to a specific number of the resources at random, or a percentage of the resources.",
+      "maxLength": 64
+    },
+    "ResourceArn": {
+      "type": "string",
+      "maxLength": 2048,
+      "minLength": 20
+    },
+    "ResourceArnList": {
+      "type": "array",
+      "description": "The Amazon Resource Names (ARNs) of the target resources.",
+      "itemType": {
+        "type": "ref",
+        "typeName": "ResourceArn"
+      }
+    },
+    "ResourceType": {
+      "type": "string",
+      "description": "The AWS resource type. The resource type must be supported for the specified action.",
+      "maxLength": 64
+    },
+    "RoleArn": {
+      "type": "string",
+      "description": "The Amazon Resource Name (ARN) of an IAM role that grants the AWS FIS service permission to perform service actions on your behalf.",
+      "maxLength": 1224
+    },
+    "StopConditionSource": {
+      "type": "string",
+      "maxLength": 64
+    },
+    "StopConditionValue": {
+      "type": "string",
+      "maxLength": 2048,
+      "minLength": 20
     }
   },
   "resource": {
     "type": "object",
     "description": "Resource schema for AWS::FIS::ExperimentTemplate",
     "properties": [
-      {
-        "name": "Description",
-        "optional": false,
-        "type": {
-          "type": "ref",
-          "typeName": "ExperimentTemplateDescription"
-        }
-      },
       {
         "name": "Actions",
         "optional": true,
@@ -363,19 +355,11 @@
         }
       },
       {
-        "name": "StopConditions",
+        "name": "Description",
         "optional": false,
         "type": {
           "type": "ref",
-          "typeName": "ExperimentTemplateStopConditionList"
-        }
-      },
-      {
-        "name": "Targets",
-        "optional": false,
-        "type": {
-          "type": "ref",
-          "typeName": "ExperimentTemplateTargetMap"
+          "typeName": "ExperimentTemplateDescription"
         }
       },
       {
@@ -395,6 +379,14 @@
         }
       },
       {
+        "name": "StopConditions",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "ExperimentTemplateStopConditionList"
+        }
+      },
+      {
         "name": "Tags",
         "optional": false,
         "type": {
@@ -403,6 +395,14 @@
             "type": "string",
             "maxLength": 256
           }
+        }
+      },
+      {
+        "name": "Targets",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "ExperimentTemplateTargetMap"
         }
       }
     ]
@@ -421,5 +421,5 @@
       }
     ]
   },
-  "$hash": "6c725442332836197d3618d5eec1fb1e1c3db541"
+  "$hash": "cead8b51512b64a94215135a1daf8b41734093db"
 }

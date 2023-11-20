@@ -1,5 +1,64 @@
 {
   "definitions": {
+    "FileConfiguration": {
+      "type": "object",
+      "description": "The configuration for what files should be pulled from the source.",
+      "properties": [
+        {
+          "name": "Filters",
+          "description": "Restrictions for what files should be pulled from the source.",
+          "optional": true,
+          "type": {
+            "type": "record",
+            "description": "Restrictions for what files should be pulled from the source.",
+            "valueType": {
+              "type": "array",
+              "itemType": {
+                "type": "string",
+                "maxLength": 255,
+                "minLength": 1
+              },
+              "maxLength": 2048,
+              "minLength": 1
+            }
+          }
+        },
+        {
+          "name": "Folders",
+          "description": "Identifiers for the source folders to pull all files from recursively.",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "description": "Identifiers for the source folders to pull all files from recursively.",
+            "itemType": {
+              "type": "string",
+              "maxLength": 200,
+              "minLength": 1,
+              "pattern": ".*\\S.*"
+            },
+            "maxLength": 10,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "ObjectConfiguration": {
+      "type": "record",
+      "description": "The configuration for what data should be pulled from the source.",
+      "valueType": {
+        "type": "record",
+        "valueType": {
+          "type": "array",
+          "itemType": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          },
+          "maxLength": 2048,
+          "minLength": 1
+        }
+      }
+    },
     "ScheduleConfig": {
       "type": "object",
       "properties": [
@@ -69,65 +128,6 @@
           }
         }
       ]
-    },
-    "FileConfiguration": {
-      "type": "object",
-      "description": "The configuration for what files should be pulled from the source.",
-      "properties": [
-        {
-          "name": "Folders",
-          "description": "Identifiers for the source folders to pull all files from recursively.",
-          "optional": false,
-          "type": {
-            "type": "array",
-            "description": "Identifiers for the source folders to pull all files from recursively.",
-            "itemType": {
-              "type": "string",
-              "maxLength": 200,
-              "minLength": 1,
-              "pattern": ".*\\S.*"
-            },
-            "maxLength": 10,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "Filters",
-          "description": "Restrictions for what files should be pulled from the source.",
-          "optional": true,
-          "type": {
-            "type": "record",
-            "description": "Restrictions for what files should be pulled from the source.",
-            "valueType": {
-              "type": "array",
-              "itemType": {
-                "type": "string",
-                "maxLength": 255,
-                "minLength": 1
-              },
-              "maxLength": 2048,
-              "minLength": 1
-            }
-          }
-        }
-      ]
-    },
-    "ObjectConfiguration": {
-      "type": "record",
-      "description": "The configuration for what data should be pulled from the source.",
-      "valueType": {
-        "type": "record",
-        "valueType": {
-          "type": "array",
-          "itemType": {
-            "type": "string",
-            "maxLength": 255,
-            "minLength": 1
-          },
-          "maxLength": 2048,
-          "minLength": 1
-        }
-      }
     }
   },
   "resource": {
@@ -146,15 +146,13 @@
         }
       },
       {
-        "name": "Name",
-        "description": "The name of the data integration.",
-        "optional": false,
+        "name": "FileConfiguration",
+        "description": "The configuration for what files should be pulled from the source.",
+        "optional": true,
         "type": {
-          "type": "string",
-          "description": "The name of the data integration.",
-          "maxLength": 255,
-          "minLength": 1,
-          "pattern": "^[a-zA-Z0-9/\\._\\-]+$"
+          "type": "ref",
+          "description": "The configuration for what files should be pulled from the source.",
+          "typeName": "FileConfiguration"
         }
       },
       {
@@ -167,6 +165,28 @@
           "maxLength": 255,
           "minLength": 1,
           "pattern": ".*\\S.*"
+        }
+      },
+      {
+        "name": "Name",
+        "description": "The name of the data integration.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The name of the data integration.",
+          "maxLength": 255,
+          "minLength": 1,
+          "pattern": "^[a-zA-Z0-9/\\._\\-]+$"
+        }
+      },
+      {
+        "name": "ObjectConfiguration",
+        "description": "The configuration for what data should be pulled from the source.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "The configuration for what data should be pulled from the source.",
+          "typeName": "ObjectConfiguration"
         }
       },
       {
@@ -205,26 +225,6 @@
           "maxLength": 200,
           "minLength": 0
         }
-      },
-      {
-        "name": "FileConfiguration",
-        "description": "The configuration for what files should be pulled from the source.",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "description": "The configuration for what files should be pulled from the source.",
-          "typeName": "FileConfiguration"
-        }
-      },
-      {
-        "name": "ObjectConfiguration",
-        "description": "The configuration for what data should be pulled from the source.",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "description": "The configuration for what data should be pulled from the source.",
-          "typeName": "ObjectConfiguration"
-        }
       }
     ]
   },
@@ -232,18 +232,6 @@
     "type": "object",
     "description": "Resource Type definition for AWS::AppIntegrations::DataIntegration",
     "properties": [
-      {
-        "name": "Id",
-        "description": "The unique identifer of the data integration.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The unique identifer of the data integration.",
-          "maxLength": 255,
-          "minLength": 1,
-          "pattern": "[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}"
-        }
-      },
       {
         "name": "DataIntegrationArn",
         "description": "The Amazon Resource Name (ARN) of the data integration.",
@@ -255,8 +243,20 @@
           "minLength": 1,
           "pattern": "^arn:aws[-a-z]*:[A-Za-z0-9][A-Za-z0-9_/.-]{0,62}:[A-Za-z0-9_/.-]{0,63}:[A-Za-z0-9_/.-]{0,63}:[A-Za-z0-9][A-Za-z0-9:_/+=,@.-]{0,1023}$"
         }
+      },
+      {
+        "name": "Id",
+        "description": "The unique identifer of the data integration.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The unique identifer of the data integration.",
+          "maxLength": 255,
+          "minLength": 1,
+          "pattern": "[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}"
+        }
       }
     ]
   },
-  "$hash": "7cc31574f35424281e78add0d86ec843ed251686"
+  "$hash": "1ddfa7eebab11501df1801b05bf61befbc4b474e"
 }

@@ -1,5 +1,67 @@
 {
   "definitions": {
+    "InstanceAssociationOutputLocation": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "S3Location",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "S3OutputLocation"
+          }
+        }
+      ]
+    },
+    "ParameterValues": {
+      "type": "array",
+      "itemType": {
+        "type": "string"
+      }
+    },
+    "S3BucketName": {
+      "type": "string",
+      "maxLength": 63,
+      "minLength": 3
+    },
+    "S3KeyPrefix": {
+      "type": "string",
+      "maxLength": 1024
+    },
+    "S3OutputLocation": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "OutputS3BucketName",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "S3BucketName"
+          }
+        },
+        {
+          "name": "OutputS3KeyPrefix",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "S3KeyPrefix"
+          }
+        },
+        {
+          "name": "OutputS3Region",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "S3Region"
+          }
+        }
+      ]
+    },
+    "S3Region": {
+      "type": "string",
+      "maxLength": 20,
+      "minLength": 3
+    },
     "Target": {
       "type": "object",
       "properties": [
@@ -24,74 +86,19 @@
           }
         }
       ]
-    },
-    "ParameterValues": {
-      "type": "array",
-      "itemType": {
-        "type": "string"
-      }
-    },
-    "S3Region": {
-      "type": "string",
-      "maxLength": 20,
-      "minLength": 3
-    },
-    "S3BucketName": {
-      "type": "string",
-      "maxLength": 63,
-      "minLength": 3
-    },
-    "S3KeyPrefix": {
-      "type": "string",
-      "maxLength": 1024
-    },
-    "S3OutputLocation": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "OutputS3Region",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "S3Region"
-          }
-        },
-        {
-          "name": "OutputS3BucketName",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "S3BucketName"
-          }
-        },
-        {
-          "name": "OutputS3KeyPrefix",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "S3KeyPrefix"
-          }
-        }
-      ]
-    },
-    "InstanceAssociationOutputLocation": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "S3Location",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "S3OutputLocation"
-          }
-        }
-      ]
     }
   },
   "resource": {
     "type": "object",
     "description": "The AWS::SSM::Association resource associates an SSM document in AWS Systems Manager with EC2 instances that contain a configuration agent to process the document.",
     "properties": [
+      {
+        "name": "ApplyOnlyAtCronInterval",
+        "optional": true,
+        "type": {
+          "type": "boolean"
+        }
+      },
       {
         "name": "AssociationName",
         "description": "The name of the association.",
@@ -100,6 +107,33 @@
           "type": "string",
           "description": "The name of the association.",
           "pattern": "^[a-zA-Z0-9_\\-.]{3,128}$"
+        }
+      },
+      {
+        "name": "AutomationTargetParameterName",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 50,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "CalendarNames",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "string"
+          }
+        }
+      },
+      {
+        "name": "ComplianceSeverity",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "allowedValues": ["CRITICAL", "HIGH", "MEDIUM", "LOW", "UNSPECIFIED"]
         }
       },
       {
@@ -123,6 +157,22 @@
         }
       },
       {
+        "name": "MaxConcurrency",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "pattern": "^([1-9][0-9]{0,6}|[1-9][0-9]%|[1-9]%|100%)$"
+        }
+      },
+      {
+        "name": "MaxErrors",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "pattern": "^([1-9][0-9]{0,6}|[0]|[1-9][0-9]%|[0-9]%|100%)$"
+        }
+      },
+      {
         "name": "Name",
         "description": "The name of the SSM document.",
         "optional": false,
@@ -130,6 +180,14 @@
           "type": "string",
           "description": "The name of the SSM document.",
           "pattern": "^[a-zA-Z0-9_\\-.:/]{3,200}$"
+        }
+      },
+      {
+        "name": "OutputLocation",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "InstanceAssociationOutputLocation"
         }
       },
       {
@@ -157,6 +215,24 @@
         }
       },
       {
+        "name": "ScheduleOffset",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "isInteger": true,
+          "maximum": 6,
+          "minimum": 1
+        }
+      },
+      {
+        "name": "SyncCompliance",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "allowedValues": ["AUTO", "MANUAL"]
+        }
+      },
+      {
         "name": "Targets",
         "description": "The targets that the SSM document sends commands to.",
         "optional": true,
@@ -172,55 +248,6 @@
         }
       },
       {
-        "name": "OutputLocation",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "InstanceAssociationOutputLocation"
-        }
-      },
-      {
-        "name": "AutomationTargetParameterName",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "maxLength": 50,
-          "minLength": 1
-        }
-      },
-      {
-        "name": "MaxErrors",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "pattern": "^([1-9][0-9]{0,6}|[0]|[1-9][0-9]%|[0-9]%|100%)$"
-        }
-      },
-      {
-        "name": "MaxConcurrency",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "pattern": "^([1-9][0-9]{0,6}|[1-9][0-9]%|[1-9]%|100%)$"
-        }
-      },
-      {
-        "name": "ComplianceSeverity",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "allowedValues": ["CRITICAL", "HIGH", "MEDIUM", "LOW", "UNSPECIFIED"]
-        }
-      },
-      {
-        "name": "SyncCompliance",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "allowedValues": ["AUTO", "MANUAL"]
-        }
-      },
-      {
         "name": "WaitForSuccessTimeoutSeconds",
         "optional": true,
         "type": {
@@ -228,33 +255,6 @@
           "isInteger": true,
           "maximum": 172800,
           "minimum": 15
-        }
-      },
-      {
-        "name": "ApplyOnlyAtCronInterval",
-        "optional": true,
-        "type": {
-          "type": "boolean"
-        }
-      },
-      {
-        "name": "CalendarNames",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "itemType": {
-            "type": "string"
-          }
-        }
-      },
-      {
-        "name": "ScheduleOffset",
-        "optional": true,
-        "type": {
-          "type": "number",
-          "isInteger": true,
-          "maximum": 6,
-          "minimum": 1
         }
       }
     ]
@@ -275,5 +275,5 @@
       }
     ]
   },
-  "$hash": "b53bd17e7949e49580b0699b1dbb0b06236c0542"
+  "$hash": "5a972e0539fc21bebd3a5afa857c57a36f13228d"
 }

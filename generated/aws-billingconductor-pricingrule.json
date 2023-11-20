@@ -1,5 +1,18 @@
 {
   "definitions": {
+    "FreeTier": {
+      "type": "object",
+      "description": "The possible customizable free tier configurations.",
+      "properties": [
+        {
+          "name": "Activated",
+          "optional": false,
+          "type": {
+            "type": "boolean"
+          }
+        }
+      ]
+    },
     "Tag": {
       "type": "object",
       "properties": [
@@ -22,19 +35,6 @@
           }
         }
       ]
-    },
-    "FreeTier": {
-      "type": "object",
-      "description": "The possible customizable free tier configurations.",
-      "properties": [
-        {
-          "name": "Activated",
-          "optional": false,
-          "type": {
-            "type": "boolean"
-          }
-        }
-      ]
     }
   },
   "resource": {
@@ -42,15 +42,13 @@
     "description": "A markup/discount that is defined for a specific set of services that can later be associated with a pricing plan.",
     "properties": [
       {
-        "name": "Name",
-        "description": "Pricing rule name",
-        "optional": false,
+        "name": "BillingEntity",
+        "description": "The seller of services provided by AWS, their affiliates, or third-party providers selling services via AWS Marketplaces. Supported billing entities are AWS, AWS Marketplace, and AISPL.",
+        "optional": true,
         "type": {
           "type": "string",
-          "description": "Pricing rule name",
-          "maxLength": 128,
-          "minLength": 1,
-          "pattern": "[a-zA-Z0-9_\\+=\\.\\-@]+"
+          "description": "The seller of services provided by AWS, their affiliates, or third-party providers selling services via AWS Marketplaces. Supported billing entities are AWS, AWS Marketplace, and AISPL.",
+          "allowedValues": ["AWS", "AWS Marketplace", "AISPL"]
         }
       },
       {
@@ -64,26 +62,6 @@
         }
       },
       {
-        "name": "Scope",
-        "description": "A term used to categorize the granularity of a Pricing Rule.",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "description": "A term used to categorize the granularity of a Pricing Rule.",
-          "allowedValues": ["GLOBAL", "SERVICE", "BILLING_ENTITY", "SKU"]
-        }
-      },
-      {
-        "name": "Type",
-        "description": "One of MARKUP, DISCOUNT or TIERING that describes the behaviour of the pricing rule.",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "description": "One of MARKUP, DISCOUNT or TIERING that describes the behaviour of the pricing rule.",
-          "allowedValues": ["MARKUP", "DISCOUNT", "TIERING"]
-        }
-      },
-      {
         "name": "ModifierPercentage",
         "description": "Pricing rule modifier percentage",
         "optional": true,
@@ -92,6 +70,40 @@
           "description": "Pricing rule modifier percentage",
           "isInteger": false,
           "minimum": 0
+        }
+      },
+      {
+        "name": "Name",
+        "description": "Pricing rule name",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "Pricing rule name",
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "[a-zA-Z0-9_\\+=\\.\\-@]+"
+        }
+      },
+      {
+        "name": "Operation",
+        "description": "The Operation which a SKU pricing rule is modifying",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Operation which a SKU pricing rule is modifying",
+          "maxLength": 256,
+          "minLength": 1,
+          "pattern": "^\\S+$"
+        }
+      },
+      {
+        "name": "Scope",
+        "description": "A term used to categorize the granularity of a Pricing Rule.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "A term used to categorize the granularity of a Pricing Rule.",
+          "allowedValues": ["GLOBAL", "SERVICE", "BILLING_ENTITY", "SKU"]
         }
       },
       {
@@ -107,13 +119,14 @@
         }
       },
       {
-        "name": "BillingEntity",
-        "description": "The seller of services provided by AWS, their affiliates, or third-party providers selling services via AWS Marketplaces. Supported billing entities are AWS, AWS Marketplace, and AISPL.",
+        "name": "Tags",
         "optional": true,
         "type": {
-          "type": "string",
-          "description": "The seller of services provided by AWS, their affiliates, or third-party providers selling services via AWS Marketplaces. Supported billing entities are AWS, AWS Marketplace, and AISPL.",
-          "allowedValues": ["AWS", "AWS Marketplace", "AISPL"]
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          }
         }
       },
       {
@@ -136,6 +149,16 @@
         }
       },
       {
+        "name": "Type",
+        "description": "One of MARKUP, DISCOUNT or TIERING that describes the behaviour of the pricing rule.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "One of MARKUP, DISCOUNT or TIERING that describes the behaviour of the pricing rule.",
+          "allowedValues": ["MARKUP", "DISCOUNT", "TIERING"]
+        }
+      },
+      {
         "name": "UsageType",
         "description": "The UsageType which a SKU pricing rule is modifying",
         "optional": true,
@@ -145,29 +168,6 @@
           "maxLength": 256,
           "minLength": 1,
           "pattern": "^\\S+$"
-        }
-      },
-      {
-        "name": "Operation",
-        "description": "The Operation which a SKU pricing rule is modifying",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The Operation which a SKU pricing rule is modifying",
-          "maxLength": 256,
-          "minLength": 1,
-          "pattern": "^\\S+$"
-        }
-      },
-      {
-        "name": "Tags",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "itemType": {
-            "type": "ref",
-            "typeName": "Tag"
-          }
         }
       }
     ]
@@ -219,5 +219,5 @@
       }
     ]
   },
-  "$hash": "ed0d618b17e37f9ff3c3a30bc7c7e013b7cc448c"
+  "$hash": "435067e5f0a6c5f1929dfe3cd8090aedcebe0150"
 }

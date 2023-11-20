@@ -1,18 +1,111 @@
 {
   "definitions": {
+    "AmiDistributionConfiguration": {
+      "type": "object",
+      "description": "The specific AMI settings (for example, launch permissions, AMI tags).",
+      "properties": [
+        {
+          "name": "AmiTags",
+          "description": "The tags to apply to AMIs distributed to this Region.",
+          "optional": true,
+          "type": {
+            "type": "record",
+            "description": "The tags to apply to AMIs distributed to this Region.",
+            "valueType": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "name": "Description",
+          "description": "The description of the AMI distribution configuration.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The description of the AMI distribution configuration."
+          }
+        },
+        {
+          "name": "KmsKeyId",
+          "description": "The KMS key identifier used to encrypt the distributed image.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The KMS key identifier used to encrypt the distributed image."
+          }
+        },
+        {
+          "name": "LaunchPermissionConfiguration",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "LaunchPermissionConfiguration"
+          }
+        },
+        {
+          "name": "Name",
+          "description": "The name of the AMI distribution configuration.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The name of the AMI distribution configuration."
+          }
+        },
+        {
+          "name": "TargetAccountIds",
+          "description": "The ID of accounts to which you want to distribute an image.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "The ID of accounts to which you want to distribute an image.",
+            "itemType": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "ContainerDistributionConfiguration": {
+      "type": "object",
+      "description": "Container distribution settings for encryption, licensing, and sharing in a specific Region.",
+      "properties": [
+        {
+          "name": "ContainerTags",
+          "description": "Tags that are attached to the container distribution configuration.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "Tags that are attached to the container distribution configuration.",
+            "itemType": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "name": "Description",
+          "description": "The description of the container distribution configuration.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The description of the container distribution configuration."
+          }
+        },
+        {
+          "name": "TargetRepository",
+          "description": "The destination repository for the container distribution configuration.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The destination repository for the container distribution configuration.",
+            "typeName": "TargetContainerRepository"
+          }
+        }
+      ]
+    },
     "Distribution": {
       "type": "object",
       "description": "The distributions of the distribution configuration.",
       "properties": [
-        {
-          "name": "Region",
-          "description": "region",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "region"
-          }
-        },
         {
           "name": "AmiDistributionConfiguration",
           "optional": true,
@@ -30,15 +123,15 @@
           }
         },
         {
-          "name": "LicenseConfigurationArns",
-          "description": "The License Manager Configuration to associate with the AMI in the specified Region.",
+          "name": "FastLaunchConfigurations",
+          "description": "The Windows faster-launching configurations to use for AMI distribution.",
           "optional": true,
           "type": {
             "type": "array",
-            "description": "The License Manager Configuration to associate with the AMI in the specified Region.",
+            "description": "The Windows faster-launching configurations to use for AMI distribution.",
             "itemType": {
               "type": "ref",
-              "typeName": "LicenseConfigurationArn"
+              "typeName": "FastLaunchConfiguration"
             }
           }
         },
@@ -56,151 +149,25 @@
           }
         },
         {
-          "name": "FastLaunchConfigurations",
-          "description": "The Windows faster-launching configurations to use for AMI distribution.",
+          "name": "LicenseConfigurationArns",
+          "description": "The License Manager Configuration to associate with the AMI in the specified Region.",
           "optional": true,
           "type": {
             "type": "array",
-            "description": "The Windows faster-launching configurations to use for AMI distribution.",
+            "description": "The License Manager Configuration to associate with the AMI in the specified Region.",
             "itemType": {
               "type": "ref",
-              "typeName": "FastLaunchConfiguration"
-            }
-          }
-        }
-      ]
-    },
-    "AmiDistributionConfiguration": {
-      "type": "object",
-      "description": "The specific AMI settings (for example, launch permissions, AMI tags).",
-      "properties": [
-        {
-          "name": "Name",
-          "description": "The name of the AMI distribution configuration.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The name of the AMI distribution configuration."
-          }
-        },
-        {
-          "name": "KmsKeyId",
-          "description": "The KMS key identifier used to encrypt the distributed image.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The KMS key identifier used to encrypt the distributed image."
-          }
-        },
-        {
-          "name": "Description",
-          "description": "The description of the AMI distribution configuration.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The description of the AMI distribution configuration."
-          }
-        },
-        {
-          "name": "AmiTags",
-          "description": "The tags to apply to AMIs distributed to this Region.",
-          "optional": true,
-          "type": {
-            "type": "record",
-            "description": "The tags to apply to AMIs distributed to this Region.",
-            "valueType": {
-              "type": "string"
+              "typeName": "LicenseConfigurationArn"
             }
           }
         },
         {
-          "name": "TargetAccountIds",
-          "description": "The ID of accounts to which you want to distribute an image.",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "description": "The ID of accounts to which you want to distribute an image.",
-            "itemType": {
-              "type": "string"
-            }
-          }
-        },
-        {
-          "name": "LaunchPermissionConfiguration",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "LaunchPermissionConfiguration"
-          }
-        }
-      ]
-    },
-    "ContainerDistributionConfiguration": {
-      "type": "object",
-      "description": "Container distribution settings for encryption, licensing, and sharing in a specific Region.",
-      "properties": [
-        {
-          "name": "Description",
-          "description": "The description of the container distribution configuration.",
-          "optional": true,
+          "name": "Region",
+          "description": "region",
+          "optional": false,
           "type": {
             "type": "string",
-            "description": "The description of the container distribution configuration."
-          }
-        },
-        {
-          "name": "ContainerTags",
-          "description": "Tags that are attached to the container distribution configuration.",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "description": "Tags that are attached to the container distribution configuration.",
-            "itemType": {
-              "type": "string"
-            }
-          }
-        },
-        {
-          "name": "TargetRepository",
-          "description": "The destination repository for the container distribution configuration.",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "The destination repository for the container distribution configuration.",
-            "typeName": "TargetContainerRepository"
-          }
-        }
-      ]
-    },
-    "LaunchTemplateConfiguration": {
-      "type": "object",
-      "description": "launchTemplateConfiguration settings that apply to image distribution.",
-      "properties": [
-        {
-          "name": "LaunchTemplateId",
-          "description": "Identifies the EC2 launch template to use.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Identifies the EC2 launch template to use."
-          }
-        },
-        {
-          "name": "AccountId",
-          "description": "The account ID that this configuration applies to.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The account ID that this configuration applies to."
-          }
-        },
-        {
-          "name": "SetDefaultVersion",
-          "description": "Set the specified EC2 launch template as the default launch template for the specified account.",
-          "optional": true,
-          "type": {
-            "type": "boolean",
-            "description": "Set the specified EC2 launch template as the default launch template for the specified account."
+            "description": "region"
           }
         }
       ]
@@ -259,89 +226,6 @@
         }
       ]
     },
-    "LaunchPermissionConfiguration": {
-      "type": "object",
-      "description": "Launch permissions can be used to configure which AWS accounts can use the AMI to launch instances.",
-      "properties": [
-        {
-          "name": "UserIds",
-          "description": "The AWS account ID.",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "description": "The AWS account ID.",
-            "itemType": {
-              "type": "string"
-            }
-          }
-        },
-        {
-          "name": "UserGroups",
-          "description": "The name of the group.",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "description": "The name of the group.",
-            "itemType": {
-              "type": "string"
-            }
-          }
-        },
-        {
-          "name": "OrganizationArns",
-          "description": "The ARN for an Amazon Web Services Organization that you want to share your AMI with.",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "description": "The ARN for an Amazon Web Services Organization that you want to share your AMI with.",
-            "itemType": {
-              "type": "string"
-            }
-          }
-        },
-        {
-          "name": "OrganizationalUnitArns",
-          "description": "The ARN for an Organizations organizational unit (OU) that you want to share your AMI with.",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "description": "The ARN for an Organizations organizational unit (OU) that you want to share your AMI with.",
-            "itemType": {
-              "type": "string"
-            }
-          }
-        }
-      ]
-    },
-    "LicenseConfigurationArn": {
-      "type": "string",
-      "description": "The Amazon Resource Name (ARN) of the License Manager configuration."
-    },
-    "TargetContainerRepository": {
-      "type": "object",
-      "description": "The destination repository for the container image.",
-      "properties": [
-        {
-          "name": "Service",
-          "description": "The service of target container repository.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The service of target container repository.",
-            "allowedValues": ["ECR"]
-          }
-        },
-        {
-          "name": "RepositoryName",
-          "description": "The repository name of target container repository.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The repository name of target container repository."
-          }
-        }
-      ]
-    },
     "FastLaunchLaunchTemplateSpecification": {
       "type": "object",
       "description": "The launch template that the fast-launch enabled Windows AMI uses when it launches Windows instances to create pre-provisioned snapshots.",
@@ -390,21 +274,128 @@
           }
         }
       ]
+    },
+    "LaunchPermissionConfiguration": {
+      "type": "object",
+      "description": "Launch permissions can be used to configure which AWS accounts can use the AMI to launch instances.",
+      "properties": [
+        {
+          "name": "OrganizationArns",
+          "description": "The ARN for an Amazon Web Services Organization that you want to share your AMI with.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "The ARN for an Amazon Web Services Organization that you want to share your AMI with.",
+            "itemType": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "name": "OrganizationalUnitArns",
+          "description": "The ARN for an Organizations organizational unit (OU) that you want to share your AMI with.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "The ARN for an Organizations organizational unit (OU) that you want to share your AMI with.",
+            "itemType": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "name": "UserGroups",
+          "description": "The name of the group.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "The name of the group.",
+            "itemType": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "name": "UserIds",
+          "description": "The AWS account ID.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "The AWS account ID.",
+            "itemType": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "LaunchTemplateConfiguration": {
+      "type": "object",
+      "description": "launchTemplateConfiguration settings that apply to image distribution.",
+      "properties": [
+        {
+          "name": "AccountId",
+          "description": "The account ID that this configuration applies to.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The account ID that this configuration applies to."
+          }
+        },
+        {
+          "name": "LaunchTemplateId",
+          "description": "Identifies the EC2 launch template to use.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Identifies the EC2 launch template to use."
+          }
+        },
+        {
+          "name": "SetDefaultVersion",
+          "description": "Set the specified EC2 launch template as the default launch template for the specified account.",
+          "optional": true,
+          "type": {
+            "type": "boolean",
+            "description": "Set the specified EC2 launch template as the default launch template for the specified account."
+          }
+        }
+      ]
+    },
+    "LicenseConfigurationArn": {
+      "type": "string",
+      "description": "The Amazon Resource Name (ARN) of the License Manager configuration."
+    },
+    "TargetContainerRepository": {
+      "type": "object",
+      "description": "The destination repository for the container image.",
+      "properties": [
+        {
+          "name": "RepositoryName",
+          "description": "The repository name of target container repository.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The repository name of target container repository."
+          }
+        },
+        {
+          "name": "Service",
+          "description": "The service of target container repository.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The service of target container repository.",
+            "allowedValues": ["ECR"]
+          }
+        }
+      ]
     }
   },
   "resource": {
     "type": "object",
     "description": "Resource schema for AWS::ImageBuilder::DistributionConfiguration",
     "properties": [
-      {
-        "name": "Name",
-        "description": "The name of the distribution configuration.",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "description": "The name of the distribution configuration."
-        }
-      },
       {
         "name": "Description",
         "description": "The description of the distribution configuration.",
@@ -425,6 +416,15 @@
             "type": "ref",
             "typeName": "Distribution"
           }
+        }
+      },
+      {
+        "name": "Name",
+        "description": "The name of the distribution configuration.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The name of the distribution configuration."
         }
       },
       {
@@ -456,5 +456,5 @@
       }
     ]
   },
-  "$hash": "fd740d26e0247e8038bbffd29c32cf725404b282"
+  "$hash": "cad1d18de233259daec8bb50eca2d1adca7448c2"
 }

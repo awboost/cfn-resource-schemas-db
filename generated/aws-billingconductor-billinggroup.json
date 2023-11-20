@@ -1,5 +1,29 @@
 {
   "definitions": {
+    "AccountGrouping": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "AutoAssociate",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "LinkedAccountIds",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string",
+              "pattern": "[0-9]{12}"
+            },
+            "minLength": 1
+          }
+        }
+      ]
+    },
     "BillingGroupStatus": {
       "type": "string",
       "allowedValues": ["ACTIVE", "PRIMARY_ACCOUNT_MISSING"]
@@ -15,30 +39,6 @@
             "type": "string",
             "description": "ARN of the attached pricing plan",
             "pattern": "arn:aws(-cn)?:billingconductor::[0-9]{12}:pricingplan/[a-zA-Z0-9]{10}"
-          }
-        }
-      ]
-    },
-    "AccountGrouping": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "LinkedAccountIds",
-          "optional": false,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "string",
-              "pattern": "[0-9]{12}"
-            },
-            "minLength": 1
-          }
-        },
-        {
-          "name": "AutoAssociate",
-          "optional": true,
-          "type": {
-            "type": "boolean"
           }
         }
       ]
@@ -72,31 +72,11 @@
     "description": "A billing group is a set of linked account which belong to the same end customer. It can be seen as a virtual consolidated billing family.",
     "properties": [
       {
-        "name": "Name",
+        "name": "AccountGrouping",
         "optional": false,
         "type": {
-          "type": "string",
-          "maxLength": 128,
-          "minLength": 1,
-          "pattern": "[a-zA-Z0-9_\\+=\\.\\-@]+"
-        }
-      },
-      {
-        "name": "Description",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "maxLength": 1024
-        }
-      },
-      {
-        "name": "PrimaryAccountId",
-        "description": "This account will act as a virtual payer account of the billing group",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "description": "This account will act as a virtual payer account of the billing group",
-          "pattern": "[0-9]{12}"
+          "type": "ref",
+          "typeName": "AccountGrouping"
         }
       },
       {
@@ -108,11 +88,31 @@
         }
       },
       {
-        "name": "AccountGrouping",
+        "name": "Description",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 1024
+        }
+      },
+      {
+        "name": "Name",
         "optional": false,
         "type": {
-          "type": "ref",
-          "typeName": "AccountGrouping"
+          "type": "string",
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "[a-zA-Z0-9_\\+=\\.\\-@]+"
+        }
+      },
+      {
+        "name": "PrimaryAccountId",
+        "description": "This account will act as a virtual payer account of the billing group",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "This account will act as a virtual payer account of the billing group",
+          "pattern": "[0-9]{12}"
         }
       },
       {
@@ -143,6 +143,26 @@
         }
       },
       {
+        "name": "CreationTime",
+        "description": "Creation timestamp in UNIX epoch time format",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "Creation timestamp in UNIX epoch time format",
+          "isInteger": true
+        }
+      },
+      {
+        "name": "LastModifiedTime",
+        "description": "Latest modified timestamp in UNIX epoch time format",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "Latest modified timestamp in UNIX epoch time format",
+          "isInteger": true
+        }
+      },
+      {
         "name": "Size",
         "description": "Number of accounts in the billing group",
         "optional": true,
@@ -166,28 +186,8 @@
         "type": {
           "type": "string"
         }
-      },
-      {
-        "name": "CreationTime",
-        "description": "Creation timestamp in UNIX epoch time format",
-        "optional": true,
-        "type": {
-          "type": "number",
-          "description": "Creation timestamp in UNIX epoch time format",
-          "isInteger": true
-        }
-      },
-      {
-        "name": "LastModifiedTime",
-        "description": "Latest modified timestamp in UNIX epoch time format",
-        "optional": true,
-        "type": {
-          "type": "number",
-          "description": "Latest modified timestamp in UNIX epoch time format",
-          "isInteger": true
-        }
       }
     ]
   },
-  "$hash": "99526c8750112e7afde4f35f75bfdffc6d7c44d8"
+  "$hash": "c487bf6147677356813e7e8aa5e424586fbaa2c8"
 }

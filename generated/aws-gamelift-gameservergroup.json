@@ -1,5 +1,12 @@
 {
   "definitions": {
+    "AutoScalingGroupArn": {
+      "type": "string",
+      "description": "A generated unique ID for the EC2 Auto Scaling group that is associated with this game server group.",
+      "maxLength": 256,
+      "minLength": 0,
+      "pattern": "[ -퟿-�𐀀-􏿿\r\n\t]*"
+    },
     "AutoScalingPolicy": {
       "type": "object",
       "description": "Configuration settings to define a scaling policy for the Auto Scaling group that is optimized for game hosting",
@@ -22,205 +29,24 @@
         }
       ]
     },
-    "EstimatedInstanceWarmup": {
-      "type": "number",
-      "description": "Length of time, in seconds, it takes for a new instance to start new game server processes and register with GameLift FleetIQ.",
-      "isInteger": false
-    },
-    "TargetTrackingConfiguration": {
-      "type": "object",
-      "description": "Settings for a target-based scaling policy applied to Auto Scaling group.",
-      "properties": [
-        {
-          "name": "TargetValue",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "TargetValue"
-          }
-        }
-      ]
-    },
-    "TargetValue": {
-      "type": "number",
-      "description": "Desired value to use with a game server group target-based scaling policy.",
-      "isInteger": false
-    },
     "BalancingStrategy": {
       "type": "string",
       "description": "The fallback balancing method to use for the game server group when Spot Instances in a Region become unavailable or are not viable for game hosting.",
       "allowedValues": ["SPOT_ONLY", "SPOT_PREFERRED", "ON_DEMAND_ONLY"]
+    },
+    "CreationTime": {
+      "type": "string",
+      "description": "A timestamp that indicates when this data object was created."
     },
     "DeleteOption": {
       "type": "string",
       "description": "The type of delete to perform.",
       "allowedValues": ["SAFE_DELETE", "FORCE_DELETE", "RETAIN"]
     },
-    "GameServerGroupName": {
-      "type": "string",
-      "description": "An identifier for the new game server group.",
-      "maxLength": 128,
-      "minLength": 1,
-      "pattern": "[a-zA-Z0-9-\\.]+"
-    },
-    "GameServerProtectionPolicy": {
-      "type": "string",
-      "description": "A flag that indicates whether instances in the game server group are protected from early termination.",
-      "allowedValues": ["NO_PROTECTION", "FULL_PROTECTION"]
-    },
-    "GameServerGroupArn": {
-      "type": "string",
-      "description": "A generated unique ID for the game server group.",
-      "maxLength": 256,
-      "minLength": 1,
-      "pattern": "^arn:.*:gameservergroup\\/[a-zA-Z0-9-\\.]*"
-    },
-    "InstanceDefinitions": {
-      "type": "array",
-      "description": "A set of EC2 instance types to use when creating instances in the group.",
-      "itemType": {
-        "type": "ref",
-        "typeName": "InstanceDefinition"
-      },
-      "maxLength": 20,
-      "minLength": 2
-    },
-    "InstanceDefinition": {
-      "type": "object",
-      "description": "An allowed instance type for your game server group.",
-      "properties": [
-        {
-          "name": "InstanceType",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "InstanceType"
-          }
-        },
-        {
-          "name": "WeightedCapacity",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "WeightedCapacity"
-          }
-        }
-      ]
-    },
-    "InstanceType": {
-      "type": "string",
-      "description": "An EC2 instance type designation."
-    },
-    "WeightedCapacity": {
-      "type": "string",
-      "description": "Instance weighting that indicates how much this instance type contributes to the total capacity of a game server group.",
-      "pattern": "^[\\u0031-\\u0039][\\u0030-\\u0039]{0,2}$"
-    },
-    "LaunchTemplate": {
-      "type": "object",
-      "description": "The EC2 launch template that contains configuration settings and game server code to be deployed to all instances in the game server group.",
-      "properties": [
-        {
-          "name": "LaunchTemplateId",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "LaunchTemplateId"
-          }
-        },
-        {
-          "name": "LaunchTemplateName",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "LaunchTemplateName"
-          }
-        },
-        {
-          "name": "Version",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "Version"
-          }
-        }
-      ]
-    },
-    "LaunchTemplateId": {
-      "type": "string",
-      "description": "A unique identifier for an existing EC2 launch template."
-    },
-    "LaunchTemplateName": {
-      "type": "string",
-      "description": "A readable identifier for an existing EC2 launch template."
-    },
-    "Version": {
-      "type": "string",
-      "description": "The version of the EC2 launch template to use."
-    },
-    "MaxSize": {
+    "EstimatedInstanceWarmup": {
       "type": "number",
-      "description": "The maximum number of instances allowed in the EC2 Auto Scaling group.",
-      "isInteger": false,
-      "minimum": 1
-    },
-    "MinSize": {
-      "type": "number",
-      "description": "The minimum number of instances allowed in the EC2 Auto Scaling group.",
-      "isInteger": false,
-      "minimum": 0
-    },
-    "RoleArn": {
-      "type": "string",
-      "description": "The Amazon Resource Name (ARN) for an IAM role that allows Amazon GameLift to access your EC2 Auto Scaling groups.",
-      "maxLength": 256,
-      "minLength": 1,
-      "pattern": "^arn:.*:role\\/[\\w+=,.@-]+"
-    },
-    "Tags": {
-      "type": "array",
-      "description": "A list of labels to assign to the new game server group resource.",
-      "itemType": {
-        "type": "ref",
-        "typeName": "Tag"
-      },
-      "maxLength": 200,
-      "minLength": 0
-    },
-    "Tag": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Key",
-          "description": "The key for a developer-defined key:value pair for tagging an AWS resource.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The key for a developer-defined key:value pair for tagging an AWS resource."
-          }
-        },
-        {
-          "name": "Value",
-          "description": "The value for a developer-defined key:value pair for tagging an AWS resource.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The value for a developer-defined key:value pair for tagging an AWS resource."
-          }
-        }
-      ]
-    },
-    "VpcSubnets": {
-      "type": "array",
-      "description": "A list of virtual private cloud (VPC) subnets to use with instances in the game server group.",
-      "itemType": {
-        "type": "string",
-        "maxLength": 24,
-        "minLength": 15,
-        "pattern": "^subnet-[0-9a-z]+$"
-      },
-      "maxLength": 20,
-      "minLength": 1
+      "description": "Length of time, in seconds, it takes for a new instance to start new game server processes and register with GameLift FleetIQ.",
+      "isInteger": false
     },
     "GameServerGroup": {
       "type": "object",
@@ -324,20 +150,121 @@
         }
       ]
     },
-    "AutoScalingGroupArn": {
+    "GameServerGroupArn": {
       "type": "string",
-      "description": "A generated unique ID for the EC2 Auto Scaling group that is associated with this game server group.",
+      "description": "A generated unique ID for the game server group.",
       "maxLength": 256,
-      "minLength": 0,
-      "pattern": "[ -퟿-�𐀀-􏿿\r\n\t]*"
+      "minLength": 1,
+      "pattern": "^arn:.*:gameservergroup\\/[a-zA-Z0-9-\\.]*"
     },
-    "CreationTime": {
+    "GameServerGroupName": {
       "type": "string",
-      "description": "A timestamp that indicates when this data object was created."
+      "description": "An identifier for the new game server group.",
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "[a-zA-Z0-9-\\.]+"
+    },
+    "GameServerProtectionPolicy": {
+      "type": "string",
+      "description": "A flag that indicates whether instances in the game server group are protected from early termination.",
+      "allowedValues": ["NO_PROTECTION", "FULL_PROTECTION"]
+    },
+    "InstanceDefinition": {
+      "type": "object",
+      "description": "An allowed instance type for your game server group.",
+      "properties": [
+        {
+          "name": "InstanceType",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "InstanceType"
+          }
+        },
+        {
+          "name": "WeightedCapacity",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "WeightedCapacity"
+          }
+        }
+      ]
+    },
+    "InstanceDefinitions": {
+      "type": "array",
+      "description": "A set of EC2 instance types to use when creating instances in the group.",
+      "itemType": {
+        "type": "ref",
+        "typeName": "InstanceDefinition"
+      },
+      "maxLength": 20,
+      "minLength": 2
+    },
+    "InstanceType": {
+      "type": "string",
+      "description": "An EC2 instance type designation."
     },
     "LastUpdatedTime": {
       "type": "string",
       "description": "A timestamp that indicates when this game server group was last updated."
+    },
+    "LaunchTemplate": {
+      "type": "object",
+      "description": "The EC2 launch template that contains configuration settings and game server code to be deployed to all instances in the game server group.",
+      "properties": [
+        {
+          "name": "LaunchTemplateId",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "LaunchTemplateId"
+          }
+        },
+        {
+          "name": "LaunchTemplateName",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "LaunchTemplateName"
+          }
+        },
+        {
+          "name": "Version",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Version"
+          }
+        }
+      ]
+    },
+    "LaunchTemplateId": {
+      "type": "string",
+      "description": "A unique identifier for an existing EC2 launch template."
+    },
+    "LaunchTemplateName": {
+      "type": "string",
+      "description": "A readable identifier for an existing EC2 launch template."
+    },
+    "MaxSize": {
+      "type": "number",
+      "description": "The maximum number of instances allowed in the EC2 Auto Scaling group.",
+      "isInteger": false,
+      "minimum": 1
+    },
+    "MinSize": {
+      "type": "number",
+      "description": "The minimum number of instances allowed in the EC2 Auto Scaling group.",
+      "isInteger": false,
+      "minimum": 0
+    },
+    "RoleArn": {
+      "type": "string",
+      "description": "The Amazon Resource Name (ARN) for an IAM role that allows Amazon GameLift to access your EC2 Auto Scaling groups.",
+      "maxLength": 256,
+      "minLength": 1,
+      "pattern": "^arn:.*:role\\/[\\w+=,.@-]+"
     },
     "Status": {
       "type": "string",
@@ -364,6 +291,79 @@
         "type": "string",
         "allowedValues": ["REPLACE_INSTANCE_TYPES"]
       }
+    },
+    "Tag": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "The key for a developer-defined key:value pair for tagging an AWS resource.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The key for a developer-defined key:value pair for tagging an AWS resource."
+          }
+        },
+        {
+          "name": "Value",
+          "description": "The value for a developer-defined key:value pair for tagging an AWS resource.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The value for a developer-defined key:value pair for tagging an AWS resource."
+          }
+        }
+      ]
+    },
+    "Tags": {
+      "type": "array",
+      "description": "A list of labels to assign to the new game server group resource.",
+      "itemType": {
+        "type": "ref",
+        "typeName": "Tag"
+      },
+      "maxLength": 200,
+      "minLength": 0
+    },
+    "TargetTrackingConfiguration": {
+      "type": "object",
+      "description": "Settings for a target-based scaling policy applied to Auto Scaling group.",
+      "properties": [
+        {
+          "name": "TargetValue",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "TargetValue"
+          }
+        }
+      ]
+    },
+    "TargetValue": {
+      "type": "number",
+      "description": "Desired value to use with a game server group target-based scaling policy.",
+      "isInteger": false
+    },
+    "Version": {
+      "type": "string",
+      "description": "The version of the EC2 launch template to use."
+    },
+    "VpcSubnets": {
+      "type": "array",
+      "description": "A list of virtual private cloud (VPC) subnets to use with instances in the game server group.",
+      "itemType": {
+        "type": "string",
+        "maxLength": 24,
+        "minLength": 15,
+        "pattern": "^subnet-[0-9a-z]+$"
+      },
+      "maxLength": 20,
+      "minLength": 1
+    },
+    "WeightedCapacity": {
+      "type": "string",
+      "description": "Instance weighting that indicates how much this instance type contributes to the total capacity of a game server group.",
+      "pattern": "^[\\u0031-\\u0039][\\u0030-\\u0039]{0,2}$"
     }
   },
   "resource": {

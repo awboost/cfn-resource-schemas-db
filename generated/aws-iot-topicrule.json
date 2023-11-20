@@ -1,57 +1,5 @@
 {
   "definitions": {
-    "TopicRulePayload": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "RuleDisabled",
-          "optional": true,
-          "type": {
-            "type": "boolean"
-          }
-        },
-        {
-          "name": "ErrorAction",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "Action"
-          }
-        },
-        {
-          "name": "Description",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "AwsIotSqlVersion",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Actions",
-          "optional": false,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "Action"
-            }
-          }
-        },
-        {
-          "name": "Sql",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
     "Action": {
       "type": "object",
       "properties": [
@@ -233,18 +181,111 @@
         }
       ]
     },
+    "AssetPropertyTimestamp": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "OffsetInNanos",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "TimeInSeconds",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "AssetPropertyValue": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Quality",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Timestamp",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "AssetPropertyTimestamp"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "AssetPropertyVariant"
+          }
+        }
+      ]
+    },
+    "AssetPropertyVariant": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "BooleanValue",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "DoubleValue",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "IntegerValue",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "StringValue",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "CannedAccessControlList": {
+      "type": "string",
+      "allowedValues": [
+        "private",
+        "public-read",
+        "public-read-write",
+        "aws-exec-read",
+        "authenticated-read",
+        "bucket-owner-read",
+        "bucket-owner-full-control",
+        "log-delivery-write"
+      ]
+    },
     "CloudwatchAlarmAction": {
       "type": "object",
       "properties": [
         {
-          "name": "StateValue",
+          "name": "AlarmName",
           "optional": false,
           "type": {
             "type": "string"
           }
         },
         {
-          "name": "AlarmName",
+          "name": "RoleArn",
           "optional": false,
           "type": {
             "type": "string"
@@ -258,7 +299,7 @@
           }
         },
         {
-          "name": "RoleArn",
+          "name": "StateValue",
           "optional": false,
           "type": {
             "type": "string"
@@ -269,6 +310,13 @@
     "CloudwatchLogsAction": {
       "type": "object",
       "properties": [
+        {
+          "name": "BatchMode",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
         {
           "name": "LogGroupName",
           "optional": false,
@@ -281,13 +329,6 @@
           "optional": false,
           "type": {
             "type": "string"
-          }
-        },
-        {
-          "name": "BatchMode",
-          "optional": true,
-          "type": {
-            "type": "boolean"
           }
         }
       ]
@@ -303,15 +344,15 @@
           }
         },
         {
-          "name": "MetricValue",
+          "name": "MetricNamespace",
           "optional": false,
           "type": {
             "type": "string"
           }
         },
         {
-          "name": "MetricNamespace",
-          "optional": false,
+          "name": "MetricTimestamp",
+          "optional": true,
           "type": {
             "type": "string"
           }
@@ -324,15 +365,15 @@
           }
         },
         {
-          "name": "RoleArn",
+          "name": "MetricValue",
           "optional": false,
           "type": {
             "type": "string"
           }
         },
         {
-          "name": "MetricTimestamp",
-          "optional": true,
+          "name": "RoleArn",
+          "optional": false,
           "type": {
             "type": "string"
           }
@@ -343,7 +384,21 @@
       "type": "object",
       "properties": [
         {
-          "name": "TableName",
+          "name": "HashKeyField",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "HashKeyType",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "HashKeyValue",
           "optional": false,
           "type": {
             "type": "string"
@@ -364,8 +419,8 @@
           }
         },
         {
-          "name": "HashKeyField",
-          "optional": false,
+          "name": "RangeKeyType",
+          "optional": true,
           "type": {
             "type": "string"
           }
@@ -378,28 +433,14 @@
           }
         },
         {
-          "name": "RangeKeyType",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "HashKeyType",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "HashKeyValue",
+          "name": "RoleArn",
           "optional": false,
           "type": {
             "type": "string"
           }
         },
         {
-          "name": "RoleArn",
+          "name": "TableName",
           "optional": false,
           "type": {
             "type": "string"
@@ -427,30 +468,11 @@
         }
       ]
     },
-    "PutItemInput": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "TableName",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
     "ElasticsearchAction": {
       "type": "object",
       "properties": [
         {
-          "name": "Type",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Index",
+          "name": "Endpoint",
           "optional": false,
           "type": {
             "type": "string"
@@ -464,7 +486,7 @@
           }
         },
         {
-          "name": "Endpoint",
+          "name": "Index",
           "optional": false,
           "type": {
             "type": "string"
@@ -476,12 +498,26 @@
           "type": {
             "type": "string"
           }
+        },
+        {
+          "name": "Type",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
         }
       ]
     },
     "FirehoseAction": {
       "type": "object",
       "properties": [
+        {
+          "name": "BatchMode",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
         {
           "name": "DeliveryStreamName",
           "optional": false,
@@ -502,19 +538,20 @@
           "type": {
             "type": "string"
           }
-        },
-        {
-          "name": "BatchMode",
-          "optional": true,
-          "type": {
-            "type": "boolean"
-          }
         }
       ]
     },
     "HttpAction": {
       "type": "object",
       "properties": [
+        {
+          "name": "Auth",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "HttpAuthorization"
+          }
+        },
         {
           "name": "ConfirmationUrl",
           "optional": true,
@@ -539,14 +576,6 @@
           "type": {
             "type": "string"
           }
-        },
-        {
-          "name": "Auth",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "HttpAuthorization"
-          }
         }
       ]
     },
@@ -554,14 +583,14 @@
       "type": "object",
       "properties": [
         {
-          "name": "Value",
+          "name": "Key",
           "optional": false,
           "type": {
             "type": "string"
           }
         },
         {
-          "name": "Key",
+          "name": "Value",
           "optional": false,
           "type": {
             "type": "string"
@@ -582,40 +611,14 @@
         }
       ]
     },
-    "SigV4Authorization": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "ServiceName",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "SigningRegion",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "RoleArn",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
     "IotAnalyticsAction": {
       "type": "object",
       "properties": [
         {
-          "name": "RoleArn",
-          "optional": false,
+          "name": "BatchMode",
+          "optional": true,
           "type": {
-            "type": "string"
+            "type": "boolean"
           }
         },
         {
@@ -626,10 +629,10 @@
           }
         },
         {
-          "name": "BatchMode",
-          "optional": true,
+          "name": "RoleArn",
+          "optional": false,
           "type": {
-            "type": "boolean"
+            "type": "string"
           }
         }
       ]
@@ -638,14 +641,14 @@
       "type": "object",
       "properties": [
         {
-          "name": "InputName",
-          "optional": false,
+          "name": "BatchMode",
+          "optional": true,
           "type": {
-            "type": "string"
+            "type": "boolean"
           }
         },
         {
-          "name": "RoleArn",
+          "name": "InputName",
           "optional": false,
           "type": {
             "type": "string"
@@ -659,10 +662,10 @@
           }
         },
         {
-          "name": "BatchMode",
-          "optional": true,
+          "name": "RoleArn",
+          "optional": false,
           "type": {
-            "type": "boolean"
+            "type": "string"
           }
         }
       ]
@@ -670,13 +673,6 @@
     "IotSiteWiseAction": {
       "type": "object",
       "properties": [
-        {
-          "name": "RoleArn",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
         {
           "name": "PutAssetPropertyValueEntries",
           "optional": false,
@@ -687,127 +683,10 @@
               "typeName": "PutAssetPropertyValueEntry"
             }
           }
-        }
-      ]
-    },
-    "PutAssetPropertyValueEntry": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "PropertyAlias",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
         },
         {
-          "name": "PropertyValues",
+          "name": "RoleArn",
           "optional": false,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "AssetPropertyValue"
-            }
-          }
-        },
-        {
-          "name": "AssetId",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "EntryId",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "PropertyId",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "AssetPropertyValue": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Value",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "AssetPropertyVariant"
-          }
-        },
-        {
-          "name": "Timestamp",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "AssetPropertyTimestamp"
-          }
-        },
-        {
-          "name": "Quality",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "AssetPropertyVariant": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "StringValue",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "DoubleValue",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "BooleanValue",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "IntegerValue",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "AssetPropertyTimestamp": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "TimeInSeconds",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "OffsetInNanos",
-          "optional": true,
           "type": {
             "type": "string"
           }
@@ -818,6 +697,16 @@
       "type": "object",
       "properties": [
         {
+          "name": "ClientProperties",
+          "optional": false,
+          "type": {
+            "type": "record",
+            "valueType": {
+              "type": "string"
+            }
+          }
+        },
+        {
           "name": "DestinationArn",
           "optional": false,
           "type": {
@@ -825,10 +714,14 @@
           }
         },
         {
-          "name": "Topic",
-          "optional": false,
+          "name": "Headers",
+          "optional": true,
           "type": {
-            "type": "string"
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "KafkaActionHeader"
+            }
           }
         },
         {
@@ -846,24 +739,10 @@
           }
         },
         {
-          "name": "ClientProperties",
+          "name": "Topic",
           "optional": false,
           "type": {
-            "type": "record",
-            "valueType": {
-              "type": "string"
-            }
-          }
-        },
-        {
-          "name": "Headers",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "KafkaActionHeader"
-            }
+            "type": "string"
           }
         }
       ]
@@ -872,14 +751,14 @@
       "type": "object",
       "properties": [
         {
-          "name": "Value",
+          "name": "Key",
           "optional": false,
           "type": {
             "type": "string"
           }
         },
         {
-          "name": "Key",
+          "name": "Value",
           "optional": false,
           "type": {
             "type": "string"
@@ -898,14 +777,14 @@
           }
         },
         {
-          "name": "StreamName",
+          "name": "RoleArn",
           "optional": false,
           "type": {
             "type": "string"
           }
         },
         {
-          "name": "RoleArn",
+          "name": "StreamName",
           "optional": false,
           "type": {
             "type": "string"
@@ -929,20 +808,6 @@
       "type": "object",
       "properties": [
         {
-          "name": "RoleArn",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "TrackerName",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
           "name": "DeviceId",
           "optional": false,
           "type": {
@@ -964,28 +829,23 @@
           }
         },
         {
-          "name": "Timestamp",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "Timestamp"
-          }
-        }
-      ]
-    },
-    "Timestamp": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Value",
+          "name": "RoleArn",
           "optional": false,
           "type": {
             "type": "string"
           }
         },
         {
-          "name": "Unit",
+          "name": "Timestamp",
           "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Timestamp"
+          }
+        },
+        {
+          "name": "TrackerName",
+          "optional": false,
           "type": {
             "type": "string"
           }
@@ -996,14 +856,7 @@
       "type": "object",
       "properties": [
         {
-          "name": "Type",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Index",
+          "name": "Endpoint",
           "optional": false,
           "type": {
             "type": "string"
@@ -1017,7 +870,7 @@
           }
         },
         {
-          "name": "Endpoint",
+          "name": "Index",
           "optional": false,
           "type": {
             "type": "string"
@@ -1025,6 +878,69 @@
         },
         {
           "name": "RoleArn",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Type",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "PutAssetPropertyValueEntry": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "AssetId",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "EntryId",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "PropertyAlias",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "PropertyId",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "PropertyValues",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "AssetPropertyValue"
+            }
+          }
+        }
+      ]
+    },
+    "PutItemInput": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "TableName",
           "optional": false,
           "type": {
             "type": "string"
@@ -1036,18 +952,19 @@
       "type": "object",
       "properties": [
         {
+          "name": "Headers",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "RepublishActionHeaders"
+          }
+        },
+        {
           "name": "Qos",
           "optional": true,
           "type": {
             "type": "number",
             "isInteger": true
-          }
-        },
-        {
-          "name": "Topic",
-          "optional": false,
-          "type": {
-            "type": "string"
           }
         },
         {
@@ -1058,11 +975,10 @@
           }
         },
         {
-          "name": "Headers",
-          "optional": true,
+          "name": "Topic",
+          "optional": false,
           "type": {
-            "type": "ref",
-            "typeName": "RepublishActionHeaders"
+            "type": "string"
           }
         }
       ]
@@ -1071,25 +987,7 @@
       "type": "object",
       "properties": [
         {
-          "name": "PayloadFormatIndicator",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "maxLength": 1024,
-            "minLength": 0
-          }
-        },
-        {
           "name": "ContentType",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "maxLength": 1024,
-            "minLength": 0
-          }
-        },
-        {
-          "name": "ResponseTopic",
           "optional": true,
           "type": {
             "type": "string",
@@ -1116,11 +1014,349 @@
           }
         },
         {
+          "name": "PayloadFormatIndicator",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 1024,
+            "minLength": 0
+          }
+        },
+        {
+          "name": "ResponseTopic",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 1024,
+            "minLength": 0
+          }
+        },
+        {
           "name": "UserProperties",
           "optional": true,
           "type": {
             "type": "ref",
             "typeName": "UserProperties"
+          }
+        }
+      ]
+    },
+    "RoleArn": {
+      "type": "string"
+    },
+    "S3Action": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "BucketName",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "CannedAcl",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "CannedAccessControlList"
+          }
+        },
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "RoleArn",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "SigV4Authorization": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "RoleArn",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "ServiceName",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "SigningRegion",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "SnsAction": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "MessageFormat",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "RoleArn",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "TargetArn",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "SqsAction": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "QueueUrl",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "RoleArn",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "UseBase64",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        }
+      ]
+    },
+    "StepFunctionsAction": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ExecutionNamePrefix",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "RoleArn",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "StateMachineName",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "Timestamp": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Unit",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "TimestreamAction": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "DatabaseName",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Dimensions",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "TimestreamDimensionsList"
+          }
+        },
+        {
+          "name": "RoleArn",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "TableName",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Timestamp",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "TimestreamTimestamp"
+          }
+        }
+      ]
+    },
+    "TimestreamDimension": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Name",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "TimestreamDimensionsList": {
+      "type": "array",
+      "itemType": {
+        "type": "ref",
+        "typeName": "TimestreamDimension"
+      },
+      "maxLength": 128,
+      "minLength": 1
+    },
+    "TimestreamTimestamp": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Unit",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "TopicRulePayload": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Actions",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Action"
+            }
+          }
+        },
+        {
+          "name": "AwsIotSqlVersion",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Description",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "ErrorAction",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Action"
+          }
+        },
+        {
+          "name": "RuleDisabled",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "Sql",
+          "optional": false,
+          "type": {
+            "type": "string"
           }
         }
       ]
@@ -1156,242 +1392,6 @@
           }
         }
       ]
-    },
-    "S3Action": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "BucketName",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Key",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "RoleArn",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "CannedAcl",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "CannedAccessControlList"
-          }
-        }
-      ]
-    },
-    "CannedAccessControlList": {
-      "type": "string",
-      "allowedValues": [
-        "private",
-        "public-read",
-        "public-read-write",
-        "aws-exec-read",
-        "authenticated-read",
-        "bucket-owner-read",
-        "bucket-owner-full-control",
-        "log-delivery-write"
-      ]
-    },
-    "SnsAction": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "TargetArn",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "MessageFormat",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "RoleArn",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "StepFunctionsAction": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "ExecutionNamePrefix",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "StateMachineName",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "RoleArn",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "SqsAction": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "RoleArn",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "UseBase64",
-          "optional": true,
-          "type": {
-            "type": "boolean"
-          }
-        },
-        {
-          "name": "QueueUrl",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "TimestreamAction": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "RoleArn",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "DatabaseName",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "TableName",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Dimensions",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "TimestreamDimensionsList"
-          }
-        },
-        {
-          "name": "Timestamp",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "TimestreamTimestamp"
-          }
-        }
-      ]
-    },
-    "TimestreamDimensionsList": {
-      "type": "array",
-      "itemType": {
-        "type": "ref",
-        "typeName": "TimestreamDimension"
-      },
-      "maxLength": 128,
-      "minLength": 1
-    },
-    "TimestreamDimension": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Name",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Value",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "TimestreamTimestamp": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Value",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Unit",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "RoleArn": {
-      "type": "string"
-    },
-    "Tag": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Key",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Value",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
     }
   },
   "resource": {
@@ -1406,14 +1406,6 @@
         }
       },
       {
-        "name": "TopicRulePayload",
-        "optional": false,
-        "type": {
-          "type": "ref",
-          "typeName": "TopicRulePayload"
-        }
-      },
-      {
         "name": "Tags",
         "optional": true,
         "type": {
@@ -1422,6 +1414,14 @@
             "type": "ref",
             "typeName": "Tag"
           }
+        }
+      },
+      {
+        "name": "TopicRulePayload",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "TopicRulePayload"
         }
       }
     ]
@@ -1439,5 +1439,5 @@
       }
     ]
   },
-  "$hash": "540b2c91fab8890b22db34fd56203af22426748c"
+  "$hash": "2bd78fe57e6ab0ec6743e407507132772d841e75"
 }

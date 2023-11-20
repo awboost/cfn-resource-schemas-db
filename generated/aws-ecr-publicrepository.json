@@ -1,29 +1,13 @@
 {
   "definitions": {
-    "RegistryId": {
+    "AboutText": {
       "type": "string",
-      "description": "The AWS account ID associated with the registry that contains the repository. If you do not specify a registry, the default registry is assumed. ",
-      "maxLength": 12,
-      "minLength": 12,
-      "pattern": "^[0-9]{12}$"
+      "description": "Provide a detailed description of the repository. Identify what is included in the repository, any licensing details, or other relevant information.",
+      "maxLength": 10240
     },
-    "RepositoryDescription": {
+    "Architecture": {
       "type": "string",
-      "description": "The description of the public repository.",
-      "maxLength": 1024
-    },
-    "OperatingSystemList": {
-      "type": "array",
-      "description": "Select the operating systems that the images in your repository are compatible with.",
-      "itemType": {
-        "type": "ref",
-        "typeName": "OperatingSystem"
-      },
-      "maxLength": 50
-    },
-    "OperatingSystem": {
-      "type": "string",
-      "description": "The name of the operating system.",
+      "description": "The name of the architecture.",
       "maxLength": 50,
       "minLength": 1
     },
@@ -36,21 +20,32 @@
       },
       "maxLength": 50
     },
-    "Architecture": {
+    "OperatingSystem": {
       "type": "string",
-      "description": "The name of the architecture.",
+      "description": "The name of the operating system.",
       "maxLength": 50,
       "minLength": 1
     },
-    "UsageText": {
-      "type": "string",
-      "description": "Provide detailed information about how to use the images in the repository. This provides context, support information, and additional usage details for users of the repository.",
-      "maxLength": 10240
+    "OperatingSystemList": {
+      "type": "array",
+      "description": "Select the operating systems that the images in your repository are compatible with.",
+      "itemType": {
+        "type": "ref",
+        "typeName": "OperatingSystem"
+      },
+      "maxLength": 50
     },
-    "AboutText": {
+    "RegistryId": {
       "type": "string",
-      "description": "Provide a detailed description of the repository. Identify what is included in the repository, any licensing details, or other relevant information.",
-      "maxLength": 10240
+      "description": "The AWS account ID associated with the registry that contains the repository. If you do not specify a registry, the default registry is assumed. ",
+      "maxLength": 12,
+      "minLength": 12,
+      "pattern": "^[0-9]{12}$"
+    },
+    "RepositoryDescription": {
+      "type": "string",
+      "description": "The description of the public repository.",
+      "maxLength": 1024
     },
     "Tag": {
       "type": "object",
@@ -79,12 +74,68 @@
           }
         }
       ]
+    },
+    "UsageText": {
+      "type": "string",
+      "description": "Provide detailed information about how to use the images in the repository. This provides context, support information, and additional usage details for users of the repository.",
+      "maxLength": 10240
     }
   },
   "resource": {
     "type": "object",
     "description": "The AWS::ECR::PublicRepository resource specifies an Amazon Elastic Container Public Registry (Amazon Public ECR) repository, where users can push and pull Docker images. For more information, see https://docs.aws.amazon.com/AmazonECR",
     "properties": [
+      {
+        "name": "RepositoryCatalogData",
+        "description": "The CatalogData property type specifies Catalog data for ECR Public Repository. For information about Catalog Data, see <link>",
+        "optional": true,
+        "type": {
+          "type": "object",
+          "description": "The CatalogData property type specifies Catalog data for ECR Public Repository. For information about Catalog Data, see <link>",
+          "properties": [
+            {
+              "name": "AboutText",
+              "optional": true,
+              "type": {
+                "type": "ref",
+                "typeName": "AboutText"
+              }
+            },
+            {
+              "name": "Architectures",
+              "optional": true,
+              "type": {
+                "type": "ref",
+                "typeName": "ArchitectureList"
+              }
+            },
+            {
+              "name": "OperatingSystems",
+              "optional": true,
+              "type": {
+                "type": "ref",
+                "typeName": "OperatingSystemList"
+              }
+            },
+            {
+              "name": "RepositoryDescription",
+              "optional": true,
+              "type": {
+                "type": "ref",
+                "typeName": "RepositoryDescription"
+              }
+            },
+            {
+              "name": "UsageText",
+              "optional": true,
+              "type": {
+                "type": "ref",
+                "typeName": "UsageText"
+              }
+            }
+          ]
+        }
+      },
       {
         "name": "RepositoryName",
         "description": "The name to use for the repository. The repository name may be specified on its own (such as nginx-web-app) or it can be prepended with a namespace to group the repository into a category (such as project-a/nginx-web-app). If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the repository name. For more information, see https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html.",
@@ -111,57 +162,6 @@
             {
               "type": "string",
               "description": "The JSON repository policy text to apply to the repository. For more information, see https://docs.aws.amazon.com/AmazonECR/latest/userguide/RepositoryPolicyExamples.html in the Amazon Elastic Container Registry User Guide. "
-            }
-          ]
-        }
-      },
-      {
-        "name": "RepositoryCatalogData",
-        "description": "The CatalogData property type specifies Catalog data for ECR Public Repository. For information about Catalog Data, see <link>",
-        "optional": true,
-        "type": {
-          "type": "object",
-          "description": "The CatalogData property type specifies Catalog data for ECR Public Repository. For information about Catalog Data, see <link>",
-          "properties": [
-            {
-              "name": "RepositoryDescription",
-              "optional": true,
-              "type": {
-                "type": "ref",
-                "typeName": "RepositoryDescription"
-              }
-            },
-            {
-              "name": "Architectures",
-              "optional": true,
-              "type": {
-                "type": "ref",
-                "typeName": "ArchitectureList"
-              }
-            },
-            {
-              "name": "OperatingSystems",
-              "optional": true,
-              "type": {
-                "type": "ref",
-                "typeName": "OperatingSystemList"
-              }
-            },
-            {
-              "name": "AboutText",
-              "optional": true,
-              "type": {
-                "type": "ref",
-                "typeName": "AboutText"
-              }
-            },
-            {
-              "name": "UsageText",
-              "optional": true,
-              "type": {
-                "type": "ref",
-                "typeName": "UsageText"
-              }
             }
           ]
         }
@@ -195,5 +195,5 @@
       }
     ]
   },
-  "$hash": "c5fb1d2920daa2f295dfdcafdfd1d70f80f6d22f"
+  "$hash": "d8d3f40ddd70e82fc9663a7b215065ee0e461375"
 }

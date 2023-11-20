@@ -1,29 +1,231 @@
 {
   "definitions": {
-    "Tag": {
+    "Alarm": {
       "type": "object",
-      "description": "A key-value pair to associate with a resource.",
+      "description": "A CloudWatch alarm to be monitored for the component.",
       "properties": [
         {
-          "name": "Key",
-          "description": "The key name of the tag. You can specify a value that is 1 to 127 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
+          "name": "AlarmName",
+          "description": "The name of the CloudWatch alarm to be monitored for the component.",
           "optional": false,
           "type": {
             "type": "string",
-            "description": "The key name of the tag. You can specify a value that is 1 to 127 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
-            "maxLength": 128,
+            "description": "The name of the CloudWatch alarm to be monitored for the component.",
+            "maxLength": 255,
             "minLength": 1
           }
         },
         {
-          "name": "Value",
-          "description": "The value for the tag. You can specify a value that is 1 to 255 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
+          "name": "Severity",
+          "description": "Indicates the degree of outage when the alarm goes off.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Indicates the degree of outage when the alarm goes off.",
+            "allowedValues": ["HIGH", "MEDIUM", "LOW"]
+          }
+        }
+      ]
+    },
+    "AlarmMetric": {
+      "type": "object",
+      "description": "A metric to be monitored for the component.",
+      "properties": [
+        {
+          "name": "AlarmMetricName",
+          "description": "The name of the metric to be monitored for the component.",
           "optional": false,
           "type": {
             "type": "string",
-            "description": "The value for the tag. You can specify a value that is 1 to 255 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
-            "maxLength": 256,
-            "minLength": 0
+            "description": "The name of the metric to be monitored for the component."
+          }
+        }
+      ]
+    },
+    "ComponentConfiguration": {
+      "type": "object",
+      "description": "The configuration settings of the component.",
+      "properties": [
+        {
+          "name": "ConfigurationDetails",
+          "description": "The configuration settings",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The configuration settings",
+            "typeName": "ConfigurationDetails"
+          }
+        },
+        {
+          "name": "SubComponentTypeConfigurations",
+          "description": "Sub component configurations of the component.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "Sub component configurations of the component.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "SubComponentTypeConfiguration"
+            },
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "ComponentMonitoringSetting": {
+      "type": "object",
+      "description": "The monitoring setting of the component.",
+      "properties": [
+        {
+          "name": "ComponentARN",
+          "description": "The ARN of the compnonent.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The ARN of the compnonent.",
+            "maxLength": 300,
+            "minLength": 20,
+            "pattern": "^arn:aws(-[\\w]+)*:[\\w\\d-]+:([\\w\\d-]*)?:[\\w\\d_-]*([:/].+)*$"
+          }
+        },
+        {
+          "name": "ComponentConfigurationMode",
+          "description": "The component monitoring configuration mode.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The component monitoring configuration mode.",
+            "allowedValues": ["DEFAULT", "DEFAULT_WITH_OVERWRITE", "CUSTOM"]
+          }
+        },
+        {
+          "name": "ComponentName",
+          "description": "The name of the component.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The name of the component.",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^[\\d\\w\\-_.+]*$"
+          }
+        },
+        {
+          "name": "CustomComponentConfiguration",
+          "description": "The monitoring configuration of the component.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The monitoring configuration of the component.",
+            "typeName": "ComponentConfiguration"
+          }
+        },
+        {
+          "name": "DefaultOverwriteComponentConfiguration",
+          "description": "The overwritten settings on default component monitoring configuration.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The overwritten settings on default component monitoring configuration.",
+            "typeName": "ComponentConfiguration"
+          }
+        },
+        {
+          "name": "Tier",
+          "description": "The tier of the application component.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The tier of the application component.",
+            "pattern": "^[A-Z][[A-Z]_]*$"
+          }
+        }
+      ]
+    },
+    "ConfigurationDetails": {
+      "type": "object",
+      "description": "The configuration settings.",
+      "properties": [
+        {
+          "name": "AlarmMetrics",
+          "description": "A list of metrics to monitor for the component.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "A list of metrics to monitor for the component.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "AlarmMetric"
+            }
+          }
+        },
+        {
+          "name": "Alarms",
+          "description": "A list of alarms to monitor for the component.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "A list of alarms to monitor for the component.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Alarm"
+            }
+          }
+        },
+        {
+          "name": "HAClusterPrometheusExporter",
+          "description": "The HA cluster Prometheus Exporter settings.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The HA cluster Prometheus Exporter settings.",
+            "typeName": "HAClusterPrometheusExporter"
+          }
+        },
+        {
+          "name": "HANAPrometheusExporter",
+          "description": "The HANA DB Prometheus Exporter settings.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The HANA DB Prometheus Exporter settings.",
+            "typeName": "HANAPrometheusExporter"
+          }
+        },
+        {
+          "name": "JMXPrometheusExporter",
+          "description": "The JMX Prometheus Exporter settings.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The JMX Prometheus Exporter settings.",
+            "typeName": "JMXPrometheusExporter"
+          }
+        },
+        {
+          "name": "Logs",
+          "description": "A list of logs to monitor for the component.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "A list of logs to monitor for the component.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Log"
+            }
+          }
+        },
+        {
+          "name": "WindowsEvents",
+          "description": "A list of Windows Events to log.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "A list of Windows Events to log.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "WindowsEvent"
+            }
           }
         }
       ]
@@ -62,34 +264,174 @@
         }
       ]
     },
-    "LogPatternSet": {
+    "EventLevel": {
+      "type": "string",
+      "description": "The level of event to log.",
+      "allowedValues": [
+        "INFORMATION",
+        "WARNING",
+        "ERROR",
+        "CRITICAL",
+        "VERBOSE"
+      ]
+    },
+    "HAClusterPrometheusExporter": {
       "type": "object",
-      "description": "The log pattern set.",
+      "description": "The HA cluster Prometheus Exporter settings.",
       "properties": [
         {
-          "name": "PatternSetName",
-          "description": "The name of the log pattern set.",
+          "name": "PrometheusPort",
+          "description": "Prometheus exporter port.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Prometheus exporter port."
+          }
+        }
+      ]
+    },
+    "HANAPrometheusExporter": {
+      "type": "object",
+      "description": "The HANA DB Prometheus Exporter settings.",
+      "properties": [
+        {
+          "name": "AgreeToInstallHANADBClient",
+          "description": "A flag which indicates agreeing to install SAP HANA DB client.",
           "optional": false,
+          "type": {
+            "type": "boolean",
+            "description": "A flag which indicates agreeing to install SAP HANA DB client."
+          }
+        },
+        {
+          "name": "HANAPort",
+          "description": "The HANA DB port.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The HANA DB port."
+          }
+        },
+        {
+          "name": "HANASID",
+          "description": "HANA DB SID.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "HANA DB SID."
+          }
+        },
+        {
+          "name": "HANASecretName",
+          "description": "The secret name which manages the HANA DB credentials e.g. {\n  \"username\": \"<>\",\n  \"password\": \"<>\"\n}.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The secret name which manages the HANA DB credentials e.g. {\n  \"username\": \"<>\",\n  \"password\": \"<>\"\n}."
+          }
+        },
+        {
+          "name": "PrometheusPort",
+          "description": "Prometheus exporter port.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Prometheus exporter port."
+          }
+        }
+      ]
+    },
+    "JMXPrometheusExporter": {
+      "type": "object",
+      "description": "The JMX Prometheus Exporter settings.",
+      "properties": [
+        {
+          "name": "HostPort",
+          "description": "Java agent host port",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Java agent host port"
+          }
+        },
+        {
+          "name": "JMXURL",
+          "description": "JMX service URL.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "JMX service URL."
+          }
+        },
+        {
+          "name": "PrometheusPort",
+          "description": "Prometheus exporter port.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Prometheus exporter port."
+          }
+        }
+      ]
+    },
+    "Log": {
+      "type": "object",
+      "description": "A log to be monitored for the component.",
+      "properties": [
+        {
+          "name": "Encoding",
+          "description": "The type of encoding of the logs to be monitored.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The type of encoding of the logs to be monitored.",
+            "allowedValues": ["utf-8", "utf-16", "ascii"]
+          }
+        },
+        {
+          "name": "LogGroupName",
+          "description": "The CloudWatch log group name to be associated to the monitored log.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The CloudWatch log group name to be associated to the monitored log.",
+            "maxLength": 512,
+            "minLength": 1,
+            "pattern": "[\\.\\-_/#A-Za-z0-9]+"
+          }
+        },
+        {
+          "name": "LogPath",
+          "description": "The path of the logs to be monitored.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The path of the logs to be monitored.",
+            "maxLength": 260,
+            "minLength": 1,
+            "pattern": "^([a-zA-Z]:\\\\[\\\\\\S|*\\S]?.*|/[^\"']*)$"
+          }
+        },
+        {
+          "name": "LogType",
+          "description": "The log type decides the log patterns against which Application Insights analyzes the log.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The log type decides the log patterns against which Application Insights analyzes the log.",
+            "pattern": "^[A-Z][[A-Z]_]*$"
+          }
+        },
+        {
+          "name": "PatternSet",
+          "description": "The name of the log pattern set.",
+          "optional": true,
           "type": {
             "type": "string",
             "description": "The name of the log pattern set.",
             "maxLength": 30,
             "minLength": 1,
             "pattern": "[a-zA-Z0-9.-_]*"
-          }
-        },
-        {
-          "name": "LogPatterns",
-          "description": "The log patterns of a set.",
-          "optional": false,
-          "type": {
-            "type": "array",
-            "description": "The log patterns of a set.",
-            "itemType": {
-              "type": "ref",
-              "typeName": "LogPattern"
-            },
-            "minLength": 1
           }
         }
       ]
@@ -98,6 +440,17 @@
       "type": "object",
       "description": "The log pattern.",
       "properties": [
+        {
+          "name": "Pattern",
+          "description": "The log pattern.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The log pattern.",
+            "maxLength": 50,
+            "minLength": 1
+          }
+        },
         {
           "name": "PatternName",
           "description": "The name of the log pattern.",
@@ -108,17 +461,6 @@
             "maxLength": 50,
             "minLength": 1,
             "pattern": "[a-zA-Z0-9.-_]*"
-          }
-        },
-        {
-          "name": "Pattern",
-          "description": "The log pattern.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The log pattern.",
-            "maxLength": 50,
-            "minLength": 1
           }
         },
         {
@@ -133,190 +475,34 @@
         }
       ]
     },
-    "ComponentMonitoringSetting": {
+    "LogPatternSet": {
       "type": "object",
-      "description": "The monitoring setting of the component.",
+      "description": "The log pattern set.",
       "properties": [
         {
-          "name": "ComponentName",
-          "description": "The name of the component.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The name of the component.",
-            "maxLength": 128,
-            "minLength": 1,
-            "pattern": "^[\\d\\w\\-_.+]*$"
-          }
-        },
-        {
-          "name": "ComponentARN",
-          "description": "The ARN of the compnonent.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The ARN of the compnonent.",
-            "maxLength": 300,
-            "minLength": 20,
-            "pattern": "^arn:aws(-[\\w]+)*:[\\w\\d-]+:([\\w\\d-]*)?:[\\w\\d_-]*([:/].+)*$"
-          }
-        },
-        {
-          "name": "Tier",
-          "description": "The tier of the application component.",
+          "name": "LogPatterns",
+          "description": "The log patterns of a set.",
           "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The tier of the application component.",
-            "pattern": "^[A-Z][[A-Z]_]*$"
-          }
-        },
-        {
-          "name": "ComponentConfigurationMode",
-          "description": "The component monitoring configuration mode.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The component monitoring configuration mode.",
-            "allowedValues": ["DEFAULT", "DEFAULT_WITH_OVERWRITE", "CUSTOM"]
-          }
-        },
-        {
-          "name": "DefaultOverwriteComponentConfiguration",
-          "description": "The overwritten settings on default component monitoring configuration.",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "The overwritten settings on default component monitoring configuration.",
-            "typeName": "ComponentConfiguration"
-          }
-        },
-        {
-          "name": "CustomComponentConfiguration",
-          "description": "The monitoring configuration of the component.",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "The monitoring configuration of the component.",
-            "typeName": "ComponentConfiguration"
-          }
-        }
-      ]
-    },
-    "ComponentConfiguration": {
-      "type": "object",
-      "description": "The configuration settings of the component.",
-      "properties": [
-        {
-          "name": "ConfigurationDetails",
-          "description": "The configuration settings",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "The configuration settings",
-            "typeName": "ConfigurationDetails"
-          }
-        },
-        {
-          "name": "SubComponentTypeConfigurations",
-          "description": "Sub component configurations of the component.",
-          "optional": true,
           "type": {
             "type": "array",
-            "description": "Sub component configurations of the component.",
+            "description": "The log patterns of a set.",
             "itemType": {
               "type": "ref",
-              "typeName": "SubComponentTypeConfiguration"
+              "typeName": "LogPattern"
             },
             "minLength": 1
           }
-        }
-      ]
-    },
-    "ConfigurationDetails": {
-      "type": "object",
-      "description": "The configuration settings.",
-      "properties": [
-        {
-          "name": "AlarmMetrics",
-          "description": "A list of metrics to monitor for the component.",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "description": "A list of metrics to monitor for the component.",
-            "itemType": {
-              "type": "ref",
-              "typeName": "AlarmMetric"
-            }
-          }
         },
         {
-          "name": "Logs",
-          "description": "A list of logs to monitor for the component.",
-          "optional": true,
+          "name": "PatternSetName",
+          "description": "The name of the log pattern set.",
+          "optional": false,
           "type": {
-            "type": "array",
-            "description": "A list of logs to monitor for the component.",
-            "itemType": {
-              "type": "ref",
-              "typeName": "Log"
-            }
-          }
-        },
-        {
-          "name": "WindowsEvents",
-          "description": "A list of Windows Events to log.",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "description": "A list of Windows Events to log.",
-            "itemType": {
-              "type": "ref",
-              "typeName": "WindowsEvent"
-            }
-          }
-        },
-        {
-          "name": "Alarms",
-          "description": "A list of alarms to monitor for the component.",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "description": "A list of alarms to monitor for the component.",
-            "itemType": {
-              "type": "ref",
-              "typeName": "Alarm"
-            }
-          }
-        },
-        {
-          "name": "JMXPrometheusExporter",
-          "description": "The JMX Prometheus Exporter settings.",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "The JMX Prometheus Exporter settings.",
-            "typeName": "JMXPrometheusExporter"
-          }
-        },
-        {
-          "name": "HANAPrometheusExporter",
-          "description": "The HANA DB Prometheus Exporter settings.",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "The HANA DB Prometheus Exporter settings.",
-            "typeName": "HANAPrometheusExporter"
-          }
-        },
-        {
-          "name": "HAClusterPrometheusExporter",
-          "description": "The HA cluster Prometheus Exporter settings.",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "The HA cluster Prometheus Exporter settings.",
-            "typeName": "HAClusterPrometheusExporter"
+            "type": "string",
+            "description": "The name of the log pattern set.",
+            "maxLength": 30,
+            "minLength": 1,
+            "pattern": "[a-zA-Z0-9.-_]*"
           }
         }
       ]
@@ -366,178 +552,56 @@
         }
       ]
     },
-    "JMXPrometheusExporter": {
+    "SubComponentTypeConfiguration": {
       "type": "object",
-      "description": "The JMX Prometheus Exporter settings.",
+      "description": "One type sub component configurations for the component.",
       "properties": [
         {
-          "name": "JMXURL",
-          "description": "JMX service URL.",
-          "optional": true,
+          "name": "SubComponentConfigurationDetails",
+          "description": "The configuration settings of sub components.",
+          "optional": false,
           "type": {
-            "type": "string",
-            "description": "JMX service URL."
+            "type": "ref",
+            "description": "The configuration settings of sub components.",
+            "typeName": "SubComponentConfigurationDetails"
           }
         },
         {
-          "name": "HostPort",
-          "description": "Java agent host port",
-          "optional": true,
+          "name": "SubComponentType",
+          "description": "The sub component type.",
+          "optional": false,
           "type": {
             "type": "string",
-            "description": "Java agent host port"
-          }
-        },
-        {
-          "name": "PrometheusPort",
-          "description": "Prometheus exporter port.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Prometheus exporter port."
+            "description": "The sub component type.",
+            "allowedValues": ["AWS::EC2::Instance", "AWS::EC2::Volume"]
           }
         }
       ]
     },
-    "HANAPrometheusExporter": {
+    "Tag": {
       "type": "object",
-      "description": "The HANA DB Prometheus Exporter settings.",
+      "description": "A key-value pair to associate with a resource.",
       "properties": [
         {
-          "name": "HANASID",
-          "description": "HANA DB SID.",
+          "name": "Key",
+          "description": "The key name of the tag. You can specify a value that is 1 to 127 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
           "optional": false,
           "type": {
             "type": "string",
-            "description": "HANA DB SID."
+            "description": "The key name of the tag. You can specify a value that is 1 to 127 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
+            "maxLength": 128,
+            "minLength": 1
           }
         },
         {
-          "name": "HANAPort",
-          "description": "The HANA DB port.",
+          "name": "Value",
+          "description": "The value for the tag. You can specify a value that is 1 to 255 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
           "optional": false,
           "type": {
             "type": "string",
-            "description": "The HANA DB port."
-          }
-        },
-        {
-          "name": "HANASecretName",
-          "description": "The secret name which manages the HANA DB credentials e.g. {\n  \"username\": \"<>\",\n  \"password\": \"<>\"\n}.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The secret name which manages the HANA DB credentials e.g. {\n  \"username\": \"<>\",\n  \"password\": \"<>\"\n}."
-          }
-        },
-        {
-          "name": "AgreeToInstallHANADBClient",
-          "description": "A flag which indicates agreeing to install SAP HANA DB client.",
-          "optional": false,
-          "type": {
-            "type": "boolean",
-            "description": "A flag which indicates agreeing to install SAP HANA DB client."
-          }
-        },
-        {
-          "name": "PrometheusPort",
-          "description": "Prometheus exporter port.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Prometheus exporter port."
-          }
-        }
-      ]
-    },
-    "HAClusterPrometheusExporter": {
-      "type": "object",
-      "description": "The HA cluster Prometheus Exporter settings.",
-      "properties": [
-        {
-          "name": "PrometheusPort",
-          "description": "Prometheus exporter port.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Prometheus exporter port."
-          }
-        }
-      ]
-    },
-    "AlarmMetric": {
-      "type": "object",
-      "description": "A metric to be monitored for the component.",
-      "properties": [
-        {
-          "name": "AlarmMetricName",
-          "description": "The name of the metric to be monitored for the component.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The name of the metric to be monitored for the component."
-          }
-        }
-      ]
-    },
-    "Log": {
-      "type": "object",
-      "description": "A log to be monitored for the component.",
-      "properties": [
-        {
-          "name": "LogGroupName",
-          "description": "The CloudWatch log group name to be associated to the monitored log.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The CloudWatch log group name to be associated to the monitored log.",
-            "maxLength": 512,
-            "minLength": 1,
-            "pattern": "[\\.\\-_/#A-Za-z0-9]+"
-          }
-        },
-        {
-          "name": "LogPath",
-          "description": "The path of the logs to be monitored.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The path of the logs to be monitored.",
-            "maxLength": 260,
-            "minLength": 1,
-            "pattern": "^([a-zA-Z]:\\\\[\\\\\\S|*\\S]?.*|/[^\"']*)$"
-          }
-        },
-        {
-          "name": "LogType",
-          "description": "The log type decides the log patterns against which Application Insights analyzes the log.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The log type decides the log patterns against which Application Insights analyzes the log.",
-            "pattern": "^[A-Z][[A-Z]_]*$"
-          }
-        },
-        {
-          "name": "Encoding",
-          "description": "The type of encoding of the logs to be monitored.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The type of encoding of the logs to be monitored.",
-            "allowedValues": ["utf-8", "utf-16", "ascii"]
-          }
-        },
-        {
-          "name": "PatternSet",
-          "description": "The name of the log pattern set.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The name of the log pattern set.",
-            "maxLength": 30,
-            "minLength": 1,
-            "pattern": "[a-zA-Z0-9.-_]*"
+            "description": "The value for the tag. You can specify a value that is 1 to 255 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
+            "maxLength": 256,
+            "minLength": 0
           }
         }
       ]
@@ -546,30 +610,6 @@
       "type": "object",
       "description": "A Windows Event to be monitored for the component.",
       "properties": [
-        {
-          "name": "LogGroupName",
-          "description": "The CloudWatch log group name to be associated to the monitored log.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The CloudWatch log group name to be associated to the monitored log.",
-            "maxLength": 512,
-            "minLength": 1,
-            "pattern": "[\\.\\-_/#A-Za-z0-9]+"
-          }
-        },
-        {
-          "name": "EventName",
-          "description": "The type of Windows Events to log.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The type of Windows Events to log.",
-            "maxLength": 260,
-            "minLength": 1,
-            "pattern": "^[a-zA-Z0-9_ \\\\/-]+$"
-          }
-        },
         {
           "name": "EventLevels",
           "description": "The levels of event to log. ",
@@ -585,6 +625,30 @@
           }
         },
         {
+          "name": "EventName",
+          "description": "The type of Windows Events to log.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The type of Windows Events to log.",
+            "maxLength": 260,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9_ \\\\/-]+$"
+          }
+        },
+        {
+          "name": "LogGroupName",
+          "description": "The CloudWatch log group name to be associated to the monitored log.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The CloudWatch log group name to be associated to the monitored log.",
+            "maxLength": 512,
+            "minLength": 1,
+            "pattern": "[\\.\\-_/#A-Za-z0-9]+"
+          }
+        },
+        {
           "name": "PatternSet",
           "description": "The name of the log pattern set.",
           "optional": true,
@@ -597,70 +661,6 @@
           }
         }
       ]
-    },
-    "EventLevel": {
-      "type": "string",
-      "description": "The level of event to log.",
-      "allowedValues": [
-        "INFORMATION",
-        "WARNING",
-        "ERROR",
-        "CRITICAL",
-        "VERBOSE"
-      ]
-    },
-    "Alarm": {
-      "type": "object",
-      "description": "A CloudWatch alarm to be monitored for the component.",
-      "properties": [
-        {
-          "name": "AlarmName",
-          "description": "The name of the CloudWatch alarm to be monitored for the component.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The name of the CloudWatch alarm to be monitored for the component.",
-            "maxLength": 255,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "Severity",
-          "description": "Indicates the degree of outage when the alarm goes off.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Indicates the degree of outage when the alarm goes off.",
-            "allowedValues": ["HIGH", "MEDIUM", "LOW"]
-          }
-        }
-      ]
-    },
-    "SubComponentTypeConfiguration": {
-      "type": "object",
-      "description": "One type sub component configurations for the component.",
-      "properties": [
-        {
-          "name": "SubComponentType",
-          "description": "The sub component type.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The sub component type.",
-            "allowedValues": ["AWS::EC2::Instance", "AWS::EC2::Volume"]
-          }
-        },
-        {
-          "name": "SubComponentConfigurationDetails",
-          "description": "The configuration settings of sub components.",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "description": "The configuration settings of sub components.",
-            "typeName": "SubComponentConfigurationDetails"
-          }
-        }
-      ]
     }
   },
   "resource": {
@@ -668,15 +668,12 @@
     "description": "Resource schema for AWS::ApplicationInsights::Application",
     "properties": [
       {
-        "name": "ResourceGroupName",
-        "description": "The name of the resource group.",
-        "optional": false,
+        "name": "AutoConfigurationEnabled",
+        "description": "If set to true, application will be configured with recommended monitoring configuration.",
+        "optional": true,
         "type": {
-          "type": "string",
-          "description": "The name of the resource group.",
-          "maxLength": 256,
-          "minLength": 1,
-          "pattern": "[a-zA-Z0-9.-_]*"
+          "type": "boolean",
+          "description": "If set to true, application will be configured with recommended monitoring configuration."
         }
       },
       {
@@ -686,6 +683,58 @@
         "type": {
           "type": "boolean",
           "description": "Indicates whether Application Insights can listen to CloudWatch events for the application resources."
+        }
+      },
+      {
+        "name": "ComponentMonitoringSettings",
+        "description": "The monitoring settings of the components.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "The monitoring settings of the components.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "ComponentMonitoringSetting"
+          },
+          "minLength": 1
+        }
+      },
+      {
+        "name": "CustomComponents",
+        "description": "The custom grouped components.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "The custom grouped components.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "CustomComponent"
+          },
+          "minLength": 1
+        }
+      },
+      {
+        "name": "GroupingType",
+        "description": "The grouping type of the application",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The grouping type of the application",
+          "allowedValues": ["ACCOUNT_BASED"]
+        }
+      },
+      {
+        "name": "LogPatternSets",
+        "description": "The log pattern sets.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "The log pattern sets.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "LogPatternSet"
+          },
+          "minLength": 1
         }
       },
       {
@@ -710,6 +759,18 @@
         }
       },
       {
+        "name": "ResourceGroupName",
+        "description": "The name of the resource group.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The name of the resource group.",
+          "maxLength": 256,
+          "minLength": 1,
+          "pattern": "[a-zA-Z0-9.-_]*"
+        }
+      },
+      {
         "name": "Tags",
         "description": "The tags of Application Insights application.",
         "optional": true,
@@ -721,67 +782,6 @@
             "typeName": "Tag"
           },
           "minLength": 1
-        }
-      },
-      {
-        "name": "CustomComponents",
-        "description": "The custom grouped components.",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "description": "The custom grouped components.",
-          "itemType": {
-            "type": "ref",
-            "typeName": "CustomComponent"
-          },
-          "minLength": 1
-        }
-      },
-      {
-        "name": "LogPatternSets",
-        "description": "The log pattern sets.",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "description": "The log pattern sets.",
-          "itemType": {
-            "type": "ref",
-            "typeName": "LogPatternSet"
-          },
-          "minLength": 1
-        }
-      },
-      {
-        "name": "AutoConfigurationEnabled",
-        "description": "If set to true, application will be configured with recommended monitoring configuration.",
-        "optional": true,
-        "type": {
-          "type": "boolean",
-          "description": "If set to true, application will be configured with recommended monitoring configuration."
-        }
-      },
-      {
-        "name": "ComponentMonitoringSettings",
-        "description": "The monitoring settings of the components.",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "description": "The monitoring settings of the components.",
-          "itemType": {
-            "type": "ref",
-            "typeName": "ComponentMonitoringSetting"
-          },
-          "minLength": 1
-        }
-      },
-      {
-        "name": "GroupingType",
-        "description": "The grouping type of the application",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The grouping type of the application",
-          "allowedValues": ["ACCOUNT_BASED"]
         }
       }
     ]
@@ -801,5 +801,5 @@
       }
     ]
   },
-  "$hash": "3b8ac6559bdbdf2f63ac1ea0203a52d39f0b8cc0"
+  "$hash": "0feef4f93263e321373de5b35078f28bdab719d5"
 }

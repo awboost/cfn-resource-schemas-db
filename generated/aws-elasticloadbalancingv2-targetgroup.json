@@ -23,6 +23,29 @@
         }
       ]
     },
+    "Tag": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "The value for the tag. ",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The value for the tag. "
+          }
+        },
+        {
+          "name": "Value",
+          "description": "The key name of the tag. ",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The key name of the tag. "
+          }
+        }
+      ]
+    },
     "TargetDescription": {
       "type": "object",
       "properties": [
@@ -60,15 +83,6 @@
       "type": "object",
       "properties": [
         {
-          "name": "Value",
-          "description": "The name of the attribute.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The name of the attribute."
-          }
-        },
-        {
           "name": "Key",
           "description": "The value of the attribute.",
           "optional": true,
@@ -76,28 +90,14 @@
             "type": "string",
             "description": "The value of the attribute."
           }
-        }
-      ]
-    },
-    "Tag": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Value",
-          "description": "The key name of the tag. ",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The key name of the tag. "
-          }
         },
         {
-          "name": "Key",
-          "description": "The value for the tag. ",
-          "optional": false,
+          "name": "Value",
+          "description": "The name of the attribute.",
+          "optional": true,
           "type": {
             "type": "string",
-            "description": "The value for the tag. "
+            "description": "The name of the attribute."
           }
         }
       ]
@@ -108,12 +108,12 @@
     "description": "Resource Type definition for AWS::ElasticLoadBalancingV2::TargetGroup",
     "properties": [
       {
-        "name": "IpAddressType",
-        "description": "The type of IP address used for this target group. The possible values are ipv4 and ipv6. ",
+        "name": "HealthCheckEnabled",
+        "description": "Indicates whether health checks are enabled. If the target type is lambda, health checks are disabled by default but can be enabled. If the target type is instance, ip, or alb, health checks are always enabled and cannot be disabled.",
         "optional": true,
         "type": {
-          "type": "string",
-          "description": "The type of IP address used for this target group. The possible values are ipv4 and ipv6. "
+          "type": "boolean",
+          "description": "Indicates whether health checks are enabled. If the target type is lambda, health checks are disabled by default but can be enabled. If the target type is instance, ip, or alb, health checks are always enabled and cannot be disabled."
         }
       },
       {
@@ -127,16 +127,6 @@
         }
       },
       {
-        "name": "Matcher",
-        "description": "[HTTP/HTTPS health checks] The HTTP or gRPC codes to use when checking for a successful response from a target.",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "description": "[HTTP/HTTPS health checks] The HTTP or gRPC codes to use when checking for a successful response from a target.",
-          "typeName": "Matcher"
-        }
-      },
-      {
         "name": "HealthCheckPath",
         "description": "[HTTP/HTTPS health checks] The destination for health checks on the targets. [HTTP1 or HTTP2 protocol version] The ping path. The default is /. [GRPC protocol version] The path of a custom health check method with the format /package.service/method. The default is /AWS.ALB/healthcheck.",
         "optional": true,
@@ -146,54 +136,21 @@
         }
       },
       {
-        "name": "Port",
-        "description": "The port on which the targets receive traffic. This port is used unless you specify a port override when registering the target. If the target is a Lambda function, this parameter does not apply. If the protocol is GENEVE, the supported port is 6081.",
-        "optional": true,
-        "type": {
-          "type": "number",
-          "description": "The port on which the targets receive traffic. This port is used unless you specify a port override when registering the target. If the target is a Lambda function, this parameter does not apply. If the protocol is GENEVE, the supported port is 6081.",
-          "isInteger": true
-        }
-      },
-      {
-        "name": "Targets",
-        "description": "The targets.",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "description": "The targets.",
-          "itemType": {
-            "type": "ref",
-            "typeName": "TargetDescription"
-          }
-        }
-      },
-      {
-        "name": "HealthCheckEnabled",
-        "description": "Indicates whether health checks are enabled. If the target type is lambda, health checks are disabled by default but can be enabled. If the target type is instance, ip, or alb, health checks are always enabled and cannot be disabled.",
-        "optional": true,
-        "type": {
-          "type": "boolean",
-          "description": "Indicates whether health checks are enabled. If the target type is lambda, health checks are disabled by default but can be enabled. If the target type is instance, ip, or alb, health checks are always enabled and cannot be disabled."
-        }
-      },
-      {
-        "name": "ProtocolVersion",
-        "description": "[HTTP/HTTPS protocol] The protocol version. The possible values are GRPC, HTTP1, and HTTP2.",
+        "name": "HealthCheckPort",
+        "description": "The port the load balancer uses when performing health checks on targets. ",
         "optional": true,
         "type": {
           "type": "string",
-          "description": "[HTTP/HTTPS protocol] The protocol version. The possible values are GRPC, HTTP1, and HTTP2."
+          "description": "The port the load balancer uses when performing health checks on targets. "
         }
       },
       {
-        "name": "UnhealthyThresholdCount",
-        "description": "The number of consecutive health check failures required before considering a target unhealthy.",
+        "name": "HealthCheckProtocol",
+        "description": "The protocol the load balancer uses when performing health checks on targets. ",
         "optional": true,
         "type": {
-          "type": "number",
-          "description": "The number of consecutive health check failures required before considering a target unhealthy.",
-          "isInteger": true
+          "type": "string",
+          "description": "The protocol the load balancer uses when performing health checks on targets. "
         }
       },
       {
@@ -207,24 +164,6 @@
         }
       },
       {
-        "name": "Name",
-        "description": "The name of the target group.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The name of the target group."
-        }
-      },
-      {
-        "name": "VpcId",
-        "description": "The identifier of the virtual private cloud (VPC). If the target is a Lambda function, this parameter does not apply.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The identifier of the virtual private cloud (VPC). If the target is a Lambda function, this parameter does not apply."
-        }
-      },
-      {
         "name": "HealthyThresholdCount",
         "description": "The number of consecutive health checks successes required before considering an unhealthy target healthy. ",
         "optional": true,
@@ -235,12 +174,72 @@
         }
       },
       {
-        "name": "HealthCheckProtocol",
-        "description": "The protocol the load balancer uses when performing health checks on targets. ",
+        "name": "IpAddressType",
+        "description": "The type of IP address used for this target group. The possible values are ipv4 and ipv6. ",
         "optional": true,
         "type": {
           "type": "string",
-          "description": "The protocol the load balancer uses when performing health checks on targets. "
+          "description": "The type of IP address used for this target group. The possible values are ipv4 and ipv6. "
+        }
+      },
+      {
+        "name": "Matcher",
+        "description": "[HTTP/HTTPS health checks] The HTTP or gRPC codes to use when checking for a successful response from a target.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "[HTTP/HTTPS health checks] The HTTP or gRPC codes to use when checking for a successful response from a target.",
+          "typeName": "Matcher"
+        }
+      },
+      {
+        "name": "Name",
+        "description": "The name of the target group.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The name of the target group."
+        }
+      },
+      {
+        "name": "Port",
+        "description": "The port on which the targets receive traffic. This port is used unless you specify a port override when registering the target. If the target is a Lambda function, this parameter does not apply. If the protocol is GENEVE, the supported port is 6081.",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "The port on which the targets receive traffic. This port is used unless you specify a port override when registering the target. If the target is a Lambda function, this parameter does not apply. If the protocol is GENEVE, the supported port is 6081.",
+          "isInteger": true
+        }
+      },
+      {
+        "name": "Protocol",
+        "description": "The protocol to use for routing traffic to the targets.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The protocol to use for routing traffic to the targets."
+        }
+      },
+      {
+        "name": "ProtocolVersion",
+        "description": "[HTTP/HTTPS protocol] The protocol version. The possible values are GRPC, HTTP1, and HTTP2.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "[HTTP/HTTPS protocol] The protocol version. The possible values are GRPC, HTTP1, and HTTP2."
+        }
+      },
+      {
+        "name": "Tags",
+        "description": "The tags.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "The tags.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          }
         }
       },
       {
@@ -266,34 +265,35 @@
         }
       },
       {
-        "name": "HealthCheckPort",
-        "description": "The port the load balancer uses when performing health checks on targets. ",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The port the load balancer uses when performing health checks on targets. "
-        }
-      },
-      {
-        "name": "Protocol",
-        "description": "The protocol to use for routing traffic to the targets.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The protocol to use for routing traffic to the targets."
-        }
-      },
-      {
-        "name": "Tags",
-        "description": "The tags.",
+        "name": "Targets",
+        "description": "The targets.",
         "optional": true,
         "type": {
           "type": "array",
-          "description": "The tags.",
+          "description": "The targets.",
           "itemType": {
             "type": "ref",
-            "typeName": "Tag"
+            "typeName": "TargetDescription"
           }
+        }
+      },
+      {
+        "name": "UnhealthyThresholdCount",
+        "description": "The number of consecutive health check failures required before considering a target unhealthy.",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "The number of consecutive health check failures required before considering a target unhealthy.",
+          "isInteger": true
+        }
+      },
+      {
+        "name": "VpcId",
+        "description": "The identifier of the virtual private cloud (VPC). If the target is a Lambda function, this parameter does not apply.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The identifier of the virtual private cloud (VPC). If the target is a Lambda function, this parameter does not apply."
         }
       }
     ]
@@ -315,21 +315,21 @@
         }
       },
       {
-        "name": "TargetGroupFullName",
-        "description": "The full name of the target group.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The full name of the target group."
-        }
-      },
-      {
         "name": "TargetGroupArn",
         "description": "The ARN of the Target Group",
         "optional": true,
         "type": {
           "type": "string",
           "description": "The ARN of the Target Group"
+        }
+      },
+      {
+        "name": "TargetGroupFullName",
+        "description": "The full name of the target group.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The full name of the target group."
         }
       },
       {
@@ -343,5 +343,5 @@
       }
     ]
   },
-  "$hash": "ceed89f0061d72aa3fd974f25f7af636f283e825"
+  "$hash": "4bcb8797b59bec2aef7b53db38232c4a8bddedfe"
 }

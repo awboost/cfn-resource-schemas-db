@@ -1,25 +1,25 @@
 {
   "definitions": {
-    "Tag": {
+    "AWSLocation": {
       "type": "object",
-      "description": "A key-value pair to associate with a device resource.",
+      "description": "The Amazon Web Services location of the device, if applicable.",
       "properties": [
         {
-          "name": "Key",
-          "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
-          "optional": false,
+          "name": "SubnetArn",
+          "description": "The Amazon Resource Name (ARN) of the subnet that the device is located in.",
+          "optional": true,
           "type": {
             "type": "string",
-            "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -."
+            "description": "The Amazon Resource Name (ARN) of the subnet that the device is located in."
           }
         },
         {
-          "name": "Value",
-          "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
-          "optional": false,
+          "name": "Zone",
+          "description": "The Zone that the device is located in. Specify the ID of an Availability Zone, Local Zone, Wavelength Zone, or an Outpost.",
+          "optional": true,
           "type": {
             "type": "string",
-            "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -."
+            "description": "The Zone that the device is located in. Specify the ID of an Availability Zone, Local Zone, Wavelength Zone, or an Outpost."
           }
         }
       ]
@@ -57,26 +57,26 @@
         }
       ]
     },
-    "AWSLocation": {
+    "Tag": {
       "type": "object",
-      "description": "The Amazon Web Services location of the device, if applicable.",
+      "description": "A key-value pair to associate with a device resource.",
       "properties": [
         {
-          "name": "Zone",
-          "description": "The Zone that the device is located in. Specify the ID of an Availability Zone, Local Zone, Wavelength Zone, or an Outpost.",
-          "optional": true,
+          "name": "Key",
+          "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+          "optional": false,
           "type": {
             "type": "string",
-            "description": "The Zone that the device is located in. Specify the ID of an Availability Zone, Local Zone, Wavelength Zone, or an Outpost."
+            "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -."
           }
         },
         {
-          "name": "SubnetArn",
-          "description": "The Amazon Resource Name (ARN) of the subnet that the device is located in.",
-          "optional": true,
+          "name": "Value",
+          "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+          "optional": false,
           "type": {
             "type": "string",
-            "description": "The Amazon Resource Name (ARN) of the subnet that the device is located in."
+            "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -."
           }
         }
       ]
@@ -87,6 +87,16 @@
     "description": "The AWS::NetworkManager::Device type describes a device.",
     "properties": [
       {
+        "name": "AWSLocation",
+        "description": "The Amazon Web Services location of the device, if applicable.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "The Amazon Web Services location of the device, if applicable.",
+          "typeName": "AWSLocation"
+        }
+      },
+      {
         "name": "Description",
         "description": "The description of the device.",
         "optional": true,
@@ -96,35 +106,12 @@
         }
       },
       {
-        "name": "Tags",
-        "description": "The tags for the device.",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "description": "The tags for the device.",
-          "itemType": {
-            "type": "ref",
-            "typeName": "Tag"
-          }
-        }
-      },
-      {
         "name": "GlobalNetworkId",
         "description": "The ID of the global network.",
         "optional": false,
         "type": {
           "type": "string",
           "description": "The ID of the global network."
-        }
-      },
-      {
-        "name": "AWSLocation",
-        "description": "The Amazon Web Services location of the device, if applicable.",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "description": "The Amazon Web Services location of the device, if applicable.",
-          "typeName": "AWSLocation"
         }
       },
       {
@@ -165,6 +152,19 @@
         }
       },
       {
+        "name": "Tags",
+        "description": "The tags for the device.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "The tags for the device.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          }
+        }
+      },
+      {
         "name": "Type",
         "description": "The device type.",
         "optional": true,
@@ -189,6 +189,15 @@
     "description": "The AWS::NetworkManager::Device type describes a device.",
     "properties": [
       {
+        "name": "CreatedAt",
+        "description": "The date and time that the device was created.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The date and time that the device was created."
+        }
+      },
+      {
         "name": "DeviceArn",
         "description": "The Amazon Resource Name (ARN) of the device.",
         "optional": true,
@@ -207,15 +216,6 @@
         }
       },
       {
-        "name": "CreatedAt",
-        "description": "The date and time that the device was created.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The date and time that the device was created."
-        }
-      },
-      {
         "name": "State",
         "description": "The state of the device.",
         "optional": true,
@@ -226,5 +226,5 @@
       }
     ]
   },
-  "$hash": "a35fc9b40aa5283c8a5a3e411ebc387881cb21f5"
+  "$hash": "543d0a2cad98d86baca78932953ff817d36b1e4a"
 }

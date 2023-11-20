@@ -1,25 +1,47 @@
 {
   "definitions": {
-    "ConnectionLogOptions": {
+    "CertificateAuthenticationRequest": {
       "type": "object",
       "properties": [
         {
-          "name": "Enabled",
+          "name": "ClientRootCertificateChainArn",
           "optional": false,
-          "type": {
-            "type": "boolean"
-          }
-        },
-        {
-          "name": "CloudwatchLogGroup",
-          "optional": true,
           "type": {
             "type": "string"
           }
+        }
+      ]
+    },
+    "ClientAuthenticationRequest": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ActiveDirectory",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DirectoryServiceAuthenticationRequest"
+          }
         },
         {
-          "name": "CloudwatchLogStream",
+          "name": "FederatedAuthentication",
           "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "FederatedAuthenticationRequest"
+          }
+        },
+        {
+          "name": "MutualAuthentication",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "CertificateAuthenticationRequest"
+          }
+        },
+        {
+          "name": "Type",
+          "optional": false,
           "type": {
             "type": "string"
           }
@@ -45,6 +67,63 @@
         }
       ]
     },
+    "ClientLoginBannerOptions": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "BannerText",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Enabled",
+          "optional": false,
+          "type": {
+            "type": "boolean"
+          }
+        }
+      ]
+    },
+    "ConnectionLogOptions": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "CloudwatchLogGroup",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "CloudwatchLogStream",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Enabled",
+          "optional": false,
+          "type": {
+            "type": "boolean"
+          }
+        }
+      ]
+    },
+    "DirectoryServiceAuthenticationRequest": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "DirectoryId",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
     "FederatedAuthenticationRequest": {
       "type": "object",
       "properties": [
@@ -64,97 +143,18 @@
         }
       ]
     },
-    "ClientLoginBannerOptions": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Enabled",
-          "optional": false,
-          "type": {
-            "type": "boolean"
-          }
-        },
-        {
-          "name": "BannerText",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "DirectoryServiceAuthenticationRequest": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "DirectoryId",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "CertificateAuthenticationRequest": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "ClientRootCertificateChainArn",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "ClientAuthenticationRequest": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "MutualAuthentication",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "CertificateAuthenticationRequest"
-          }
-        },
-        {
-          "name": "Type",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "ActiveDirectory",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "DirectoryServiceAuthenticationRequest"
-          }
-        },
-        {
-          "name": "FederatedAuthentication",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "FederatedAuthenticationRequest"
-          }
-        }
-      ]
-    },
     "Tag": {
       "type": "object",
       "properties": [
         {
-          "name": "Value",
+          "name": "Key",
           "optional": false,
           "type": {
             "type": "string"
           }
         },
         {
-          "name": "Key",
+          "name": "Value",
           "optional": false,
           "type": {
             "type": "string"
@@ -191,6 +191,17 @@
     "description": "Resource Type definition for AWS::EC2::ClientVpnEndpoint",
     "properties": [
       {
+        "name": "AuthenticationOptions",
+        "optional": false,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "ClientAuthenticationRequest"
+          }
+        }
+      },
+      {
         "name": "ClientCidrBlock",
         "optional": false,
         "type": {
@@ -206,47 +217,26 @@
         }
       },
       {
+        "name": "ClientLoginBannerOptions",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "ClientLoginBannerOptions"
+        }
+      },
+      {
+        "name": "ConnectionLogOptions",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "ConnectionLogOptions"
+        }
+      },
+      {
         "name": "Description",
         "optional": true,
         "type": {
           "type": "string"
-        }
-      },
-      {
-        "name": "TagSpecifications",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "itemType": {
-            "type": "ref",
-            "typeName": "TagSpecification"
-          }
-        }
-      },
-      {
-        "name": "AuthenticationOptions",
-        "optional": false,
-        "type": {
-          "type": "array",
-          "itemType": {
-            "type": "ref",
-            "typeName": "ClientAuthenticationRequest"
-          }
-        }
-      },
-      {
-        "name": "ServerCertificateArn",
-        "optional": false,
-        "type": {
-          "type": "string"
-        }
-      },
-      {
-        "name": "SessionTimeoutHours",
-        "optional": true,
-        "type": {
-          "type": "number",
-          "isInteger": true
         }
       },
       {
@@ -270,11 +260,25 @@
         }
       },
       {
-        "name": "ConnectionLogOptions",
+        "name": "SelfServicePortal",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "ServerCertificateArn",
         "optional": false,
         "type": {
-          "type": "ref",
-          "typeName": "ConnectionLogOptions"
+          "type": "string"
+        }
+      },
+      {
+        "name": "SessionTimeoutHours",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "isInteger": true
         }
       },
       {
@@ -285,29 +289,25 @@
         }
       },
       {
-        "name": "ClientLoginBannerOptions",
+        "name": "TagSpecifications",
         "optional": true,
         "type": {
-          "type": "ref",
-          "typeName": "ClientLoginBannerOptions"
-        }
-      },
-      {
-        "name": "VpcId",
-        "optional": true,
-        "type": {
-          "type": "string"
-        }
-      },
-      {
-        "name": "SelfServicePortal",
-        "optional": true,
-        "type": {
-          "type": "string"
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "TagSpecification"
+          }
         }
       },
       {
         "name": "TransportProtocol",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "VpcId",
         "optional": true,
         "type": {
           "type": "string"
@@ -336,5 +336,5 @@
       }
     ]
   },
-  "$hash": "569c95e7367eef91022076709b9aa5f39e3062d3"
+  "$hash": "ec586af6bd05d5dbbc2f4a5f7009cc6e4f887766"
 }

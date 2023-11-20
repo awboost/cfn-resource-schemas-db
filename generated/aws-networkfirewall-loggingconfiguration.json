@@ -1,11 +1,39 @@
 {
   "definitions": {
-    "ResourceArn": {
-      "type": "string",
-      "description": "A resource ARN.",
-      "maxLength": 256,
-      "minLength": 1,
-      "pattern": "^arn:aws.*$"
+    "LogDestinationConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "LogDestination",
+          "description": "A key-value pair to configure the logDestinations.",
+          "optional": false,
+          "type": {
+            "type": "record",
+            "description": "A key-value pair to configure the logDestinations.",
+            "valueType": {
+              "type": "string",
+              "maxLength": 1024,
+              "minLength": 1
+            }
+          }
+        },
+        {
+          "name": "LogDestinationType",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "allowedValues": ["S3", "CloudWatchLogs", "KinesisDataFirehose"]
+          }
+        },
+        {
+          "name": "LogType",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "allowedValues": ["ALERT", "FLOW"]
+          }
+        }
+      ]
     },
     "LoggingConfiguration": {
       "type": "object",
@@ -24,46 +52,26 @@
         }
       ]
     },
-    "LogDestinationConfig": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "LogType",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "allowedValues": ["ALERT", "FLOW"]
-          }
-        },
-        {
-          "name": "LogDestinationType",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "allowedValues": ["S3", "CloudWatchLogs", "KinesisDataFirehose"]
-          }
-        },
-        {
-          "name": "LogDestination",
-          "description": "A key-value pair to configure the logDestinations.",
-          "optional": false,
-          "type": {
-            "type": "record",
-            "description": "A key-value pair to configure the logDestinations.",
-            "valueType": {
-              "type": "string",
-              "maxLength": 1024,
-              "minLength": 1
-            }
-          }
-        }
-      ]
+    "ResourceArn": {
+      "type": "string",
+      "description": "A resource ARN.",
+      "maxLength": 256,
+      "minLength": 1,
+      "pattern": "^arn:aws.*$"
     }
   },
   "resource": {
     "type": "object",
     "description": "Resource type definition for AWS::NetworkFirewall::LoggingConfiguration",
     "properties": [
+      {
+        "name": "FirewallArn",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "ResourceArn"
+        }
+      },
       {
         "name": "FirewallName",
         "optional": true,
@@ -72,14 +80,6 @@
           "maxLength": 128,
           "minLength": 1,
           "pattern": "^[a-zA-Z0-9-]+$"
-        }
-      },
-      {
-        "name": "FirewallArn",
-        "optional": false,
-        "type": {
-          "type": "ref",
-          "typeName": "ResourceArn"
         }
       },
       {
@@ -92,5 +92,5 @@
       }
     ]
   },
-  "$hash": "f37eaea0ceafeebe6f0a9fb335c6fc76247e22eb"
+  "$hash": "7b6cce2a1bd5440b068ccc6dd6bf85cfe7aaabb7"
 }

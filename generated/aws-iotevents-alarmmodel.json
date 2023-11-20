@@ -1,107 +1,19 @@
 {
   "definitions": {
-    "AlarmRule": {
+    "AcknowledgeFlow": {
       "type": "object",
-      "description": "Defines when your alarm is invoked.",
+      "description": "Specifies whether to get notified for alarm state changes.",
       "properties": [
         {
-          "name": "SimpleRule",
+          "name": "Enabled",
+          "description": "The value must be TRUE or FALSE. If TRUE, you receive a notification when the alarm state changes. You must choose to acknowledge the notification before the alarm state can return to NORMAL. If FALSE, you won't receive notifications. The alarm automatically changes to the NORMAL state when the input property value returns to the specified range.",
           "optional": true,
           "type": {
-            "type": "ref",
-            "typeName": "SimpleRule"
+            "type": "boolean",
+            "description": "The value must be TRUE or FALSE. If TRUE, you receive a notification when the alarm state changes. You must choose to acknowledge the notification before the alarm state can return to NORMAL. If FALSE, you won't receive notifications. The alarm automatically changes to the NORMAL state when the input property value returns to the specified range."
           }
         }
       ]
-    },
-    "SimpleRule": {
-      "type": "object",
-      "description": "A rule that compares an input property value to a threshold value with a comparison operator.",
-      "properties": [
-        {
-          "name": "InputProperty",
-          "description": "The value on the left side of the comparison operator. You can specify an AWS IoT Events input attribute as an input property.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The value on the left side of the comparison operator. You can specify an AWS IoT Events input attribute as an input property.",
-            "maxLength": 512,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "ComparisonOperator",
-          "description": "The comparison operator.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The comparison operator.",
-            "allowedValues": [
-              "GREATER",
-              "GREATER_OR_EQUAL",
-              "LESS",
-              "LESS_OR_EQUAL",
-              "EQUAL",
-              "NOT_EQUAL"
-            ]
-          }
-        },
-        {
-          "name": "Threshold",
-          "description": "The value on the right side of the comparison operator. You can enter a number or specify an AWS IoT Events input attribute.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The value on the right side of the comparison operator. You can enter a number or specify an AWS IoT Events input attribute.",
-            "maxLength": 512,
-            "minLength": 1
-          }
-        }
-      ]
-    },
-    "AlarmEventActions": {
-      "type": "object",
-      "description": "Contains information about one or more alarm actions.",
-      "properties": [
-        {
-          "name": "AlarmActions",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "AlarmActions"
-          }
-        }
-      ]
-    },
-    "AlarmCapabilities": {
-      "type": "object",
-      "description": "Contains the configuration information of alarm state changes",
-      "properties": [
-        {
-          "name": "InitializationConfiguration",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "InitializationConfiguration"
-          }
-        },
-        {
-          "name": "AcknowledgeFlow",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "AcknowledgeFlow"
-          }
-        }
-      ]
-    },
-    "AlarmActions": {
-      "type": "array",
-      "description": "Specifies one or more supported actions to receive notifications when the alarm state changes.",
-      "itemType": {
-        "type": "ref",
-        "typeName": "AlarmAction"
-      }
     },
     "AlarmAction": {
       "type": "object",
@@ -177,6 +89,161 @@
           "type": {
             "type": "ref",
             "typeName": "Sqs"
+          }
+        }
+      ]
+    },
+    "AlarmActions": {
+      "type": "array",
+      "description": "Specifies one or more supported actions to receive notifications when the alarm state changes.",
+      "itemType": {
+        "type": "ref",
+        "typeName": "AlarmAction"
+      }
+    },
+    "AlarmCapabilities": {
+      "type": "object",
+      "description": "Contains the configuration information of alarm state changes",
+      "properties": [
+        {
+          "name": "AcknowledgeFlow",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "AcknowledgeFlow"
+          }
+        },
+        {
+          "name": "InitializationConfiguration",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "InitializationConfiguration"
+          }
+        }
+      ]
+    },
+    "AlarmEventActions": {
+      "type": "object",
+      "description": "Contains information about one or more alarm actions.",
+      "properties": [
+        {
+          "name": "AlarmActions",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "AlarmActions"
+          }
+        }
+      ]
+    },
+    "AlarmRule": {
+      "type": "object",
+      "description": "Defines when your alarm is invoked.",
+      "properties": [
+        {
+          "name": "SimpleRule",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "SimpleRule"
+          }
+        }
+      ]
+    },
+    "AssetPropertyTimestamp": {
+      "type": "object",
+      "description": "A structure that contains timestamp information. For more information, see [TimeInNanos](https://docs.aws.amazon.com/iot-sitewise/latest/APIReference/API_TimeInNanos.html) in the *AWS IoT SiteWise API Reference*.",
+      "properties": [
+        {
+          "name": "OffsetInNanos",
+          "description": "The timestamp, in seconds, in the Unix epoch format. The valid range is between `1-31556889864403199`. You can also specify an expression.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The timestamp, in seconds, in the Unix epoch format. The valid range is between `1-31556889864403199`. You can also specify an expression."
+          }
+        },
+        {
+          "name": "TimeInSeconds",
+          "description": "The nanosecond offset converted from `timeInSeconds`. The valid range is between `0-999999999`. You can also specify an expression.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The nanosecond offset converted from `timeInSeconds`. The valid range is between `0-999999999`. You can also specify an expression."
+          }
+        }
+      ]
+    },
+    "AssetPropertyValue": {
+      "type": "object",
+      "description": "A structure that contains value information. For more information, see [AssetPropertyValue](https://docs.aws.amazon.com/iot-sitewise/latest/APIReference/API_AssetPropertyValue.html) in the *AWS IoT SiteWise API Reference*.",
+      "properties": [
+        {
+          "name": "Quality",
+          "description": "The quality of the asset property value. The value must be `GOOD`, `BAD`, or `UNCERTAIN`. You can also specify an expression.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The quality of the asset property value. The value must be `GOOD`, `BAD`, or `UNCERTAIN`. You can also specify an expression."
+          }
+        },
+        {
+          "name": "Timestamp",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "AssetPropertyTimestamp"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "AssetPropertyVariant"
+          }
+        }
+      ]
+    },
+    "AssetPropertyVariant": {
+      "type": "object",
+      "description": "A structure that contains an asset property value. For more information, see [Variant](https://docs.aws.amazon.com/iot-sitewise/latest/APIReference/API_Variant.html) in the *AWS IoT SiteWise API Reference*.",
+      "properties": [
+        {
+          "name": "BooleanValue",
+          "description": "The asset property value is a Boolean value that must be `TRUE` or `FALSE`. You can also specify an expression. If you use an expression, the evaluated result should be a Boolean value.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The asset property value is a Boolean value that must be `TRUE` or `FALSE`. You can also specify an expression. If you use an expression, the evaluated result should be a Boolean value."
+          }
+        },
+        {
+          "name": "DoubleValue",
+          "description": "The asset property value is a double. You can also specify an expression. If you use an expression, the evaluated result should be a double.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The asset property value is a double. You can also specify an expression. If you use an expression, the evaluated result should be a double."
+          }
+        },
+        {
+          "name": "IntegerValue",
+          "description": "The asset property value is an integer. You can also specify an expression. If you use an expression, the evaluated result should be an integer.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The asset property value is an integer. You can also specify an expression. If you use an expression, the evaluated result should be an integer."
+          }
+        },
+        {
+          "name": "StringValue",
+          "description": "The asset property value is a string. You can also specify an expression. If you use an expression, the evaluated result should be a string.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The asset property value is a string. You can also specify an expression. If you use an expression, the evaluated result should be a string."
           }
         }
       ]
@@ -332,6 +399,21 @@
         }
       ]
     },
+    "InitializationConfiguration": {
+      "type": "object",
+      "description": "Specifies the default alarm state. The configuration applies to all alarms that were created based on this alarm model.",
+      "properties": [
+        {
+          "name": "DisabledOnInitialization",
+          "description": "The value must be TRUE or FALSE. If FALSE, all alarm instances created based on the alarm model are activated. The default value is TRUE.",
+          "optional": false,
+          "type": {
+            "type": "boolean",
+            "description": "The value must be TRUE or FALSE. If FALSE, all alarm instances created based on the alarm model are activated. The default value is TRUE."
+          }
+        }
+      ]
+    },
     "IotEvents": {
       "type": "object",
       "description": "Sends an AWS IoT Events input, passing in information about the alarm model instance and the event that triggered the action.",
@@ -457,6 +539,76 @@
         }
       ]
     },
+    "Payload": {
+      "type": "object",
+      "description": "Information needed to configure the payload.\n\nBy default, AWS IoT Events generates a standard payload in JSON for any action. This action payload contains all attribute-value pairs that have the information about the alarm model instance and the event triggered the action. To configure the action payload, you can use `contentExpression`.",
+      "properties": [
+        {
+          "name": "ContentExpression",
+          "description": "The content of the payload. You can use a string expression that includes quoted strings (`'<string>'`), variables (`$variable.<variable-name>`), input values (`$input.<input-name>.<path-to-datum>`), string concatenations, and quoted strings that contain `${}` as the content. The recommended maximum size of a content expression is 1 KB.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The content of the payload. You can use a string expression that includes quoted strings (`'<string>'`), variables (`$variable.<variable-name>`), input values (`$input.<input-name>.<path-to-datum>`), string concatenations, and quoted strings that contain `${}` as the content. The recommended maximum size of a content expression is 1 KB.",
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Type",
+          "description": "The value of the payload type can be either `STRING` or `JSON`.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The value of the payload type can be either `STRING` or `JSON`."
+          }
+        }
+      ]
+    },
+    "SimpleRule": {
+      "type": "object",
+      "description": "A rule that compares an input property value to a threshold value with a comparison operator.",
+      "properties": [
+        {
+          "name": "ComparisonOperator",
+          "description": "The comparison operator.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The comparison operator.",
+            "allowedValues": [
+              "GREATER",
+              "GREATER_OR_EQUAL",
+              "LESS",
+              "LESS_OR_EQUAL",
+              "EQUAL",
+              "NOT_EQUAL"
+            ]
+          }
+        },
+        {
+          "name": "InputProperty",
+          "description": "The value on the left side of the comparison operator. You can specify an AWS IoT Events input attribute as an input property.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The value on the left side of the comparison operator. You can specify an AWS IoT Events input attribute as an input property.",
+            "maxLength": 512,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Threshold",
+          "description": "The value on the right side of the comparison operator. You can enter a number or specify an AWS IoT Events input attribute.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The value on the right side of the comparison operator. You can enter a number or specify an AWS IoT Events input attribute.",
+            "maxLength": 512,
+            "minLength": 1
+          }
+        }
+      ]
+    },
     "Sns": {
       "type": "object",
       "description": "Information required to publish the Amazon SNS message.",
@@ -513,158 +665,6 @@
         }
       ]
     },
-    "Payload": {
-      "type": "object",
-      "description": "Information needed to configure the payload.\n\nBy default, AWS IoT Events generates a standard payload in JSON for any action. This action payload contains all attribute-value pairs that have the information about the alarm model instance and the event triggered the action. To configure the action payload, you can use `contentExpression`.",
-      "properties": [
-        {
-          "name": "ContentExpression",
-          "description": "The content of the payload. You can use a string expression that includes quoted strings (`'<string>'`), variables (`$variable.<variable-name>`), input values (`$input.<input-name>.<path-to-datum>`), string concatenations, and quoted strings that contain `${}` as the content. The recommended maximum size of a content expression is 1 KB.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The content of the payload. You can use a string expression that includes quoted strings (`'<string>'`), variables (`$variable.<variable-name>`), input values (`$input.<input-name>.<path-to-datum>`), string concatenations, and quoted strings that contain `${}` as the content. The recommended maximum size of a content expression is 1 KB.",
-            "minLength": 1
-          }
-        },
-        {
-          "name": "Type",
-          "description": "The value of the payload type can be either `STRING` or `JSON`.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The value of the payload type can be either `STRING` or `JSON`."
-          }
-        }
-      ]
-    },
-    "InitializationConfiguration": {
-      "type": "object",
-      "description": "Specifies the default alarm state. The configuration applies to all alarms that were created based on this alarm model.",
-      "properties": [
-        {
-          "name": "DisabledOnInitialization",
-          "description": "The value must be TRUE or FALSE. If FALSE, all alarm instances created based on the alarm model are activated. The default value is TRUE.",
-          "optional": false,
-          "type": {
-            "type": "boolean",
-            "description": "The value must be TRUE or FALSE. If FALSE, all alarm instances created based on the alarm model are activated. The default value is TRUE."
-          }
-        }
-      ]
-    },
-    "AcknowledgeFlow": {
-      "type": "object",
-      "description": "Specifies whether to get notified for alarm state changes.",
-      "properties": [
-        {
-          "name": "Enabled",
-          "description": "The value must be TRUE or FALSE. If TRUE, you receive a notification when the alarm state changes. You must choose to acknowledge the notification before the alarm state can return to NORMAL. If FALSE, you won't receive notifications. The alarm automatically changes to the NORMAL state when the input property value returns to the specified range.",
-          "optional": true,
-          "type": {
-            "type": "boolean",
-            "description": "The value must be TRUE or FALSE. If TRUE, you receive a notification when the alarm state changes. You must choose to acknowledge the notification before the alarm state can return to NORMAL. If FALSE, you won't receive notifications. The alarm automatically changes to the NORMAL state when the input property value returns to the specified range."
-          }
-        }
-      ]
-    },
-    "AssetPropertyValue": {
-      "type": "object",
-      "description": "A structure that contains value information. For more information, see [AssetPropertyValue](https://docs.aws.amazon.com/iot-sitewise/latest/APIReference/API_AssetPropertyValue.html) in the *AWS IoT SiteWise API Reference*.",
-      "properties": [
-        {
-          "name": "Quality",
-          "description": "The quality of the asset property value. The value must be `GOOD`, `BAD`, or `UNCERTAIN`. You can also specify an expression.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The quality of the asset property value. The value must be `GOOD`, `BAD`, or `UNCERTAIN`. You can also specify an expression."
-          }
-        },
-        {
-          "name": "Timestamp",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "AssetPropertyTimestamp"
-          }
-        },
-        {
-          "name": "Value",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "AssetPropertyVariant"
-          }
-        }
-      ]
-    },
-    "AssetPropertyTimestamp": {
-      "type": "object",
-      "description": "A structure that contains timestamp information. For more information, see [TimeInNanos](https://docs.aws.amazon.com/iot-sitewise/latest/APIReference/API_TimeInNanos.html) in the *AWS IoT SiteWise API Reference*.",
-      "properties": [
-        {
-          "name": "OffsetInNanos",
-          "description": "The timestamp, in seconds, in the Unix epoch format. The valid range is between `1-31556889864403199`. You can also specify an expression.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The timestamp, in seconds, in the Unix epoch format. The valid range is between `1-31556889864403199`. You can also specify an expression."
-          }
-        },
-        {
-          "name": "TimeInSeconds",
-          "description": "The nanosecond offset converted from `timeInSeconds`. The valid range is between `0-999999999`. You can also specify an expression.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The nanosecond offset converted from `timeInSeconds`. The valid range is between `0-999999999`. You can also specify an expression."
-          }
-        }
-      ]
-    },
-    "AssetPropertyVariant": {
-      "type": "object",
-      "description": "A structure that contains an asset property value. For more information, see [Variant](https://docs.aws.amazon.com/iot-sitewise/latest/APIReference/API_Variant.html) in the *AWS IoT SiteWise API Reference*.",
-      "properties": [
-        {
-          "name": "BooleanValue",
-          "description": "The asset property value is a Boolean value that must be `TRUE` or `FALSE`. You can also specify an expression. If you use an expression, the evaluated result should be a Boolean value.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The asset property value is a Boolean value that must be `TRUE` or `FALSE`. You can also specify an expression. If you use an expression, the evaluated result should be a Boolean value."
-          }
-        },
-        {
-          "name": "DoubleValue",
-          "description": "The asset property value is a double. You can also specify an expression. If you use an expression, the evaluated result should be a double.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The asset property value is a double. You can also specify an expression. If you use an expression, the evaluated result should be a double."
-          }
-        },
-        {
-          "name": "IntegerValue",
-          "description": "The asset property value is an integer. You can also specify an expression. If you use an expression, the evaluated result should be an integer.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The asset property value is an integer. You can also specify an expression. If you use an expression, the evaluated result should be an integer."
-          }
-        },
-        {
-          "name": "StringValue",
-          "description": "The asset property value is a string. You can also specify an expression. If you use an expression, the evaluated result should be a string.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The asset property value is a string. You can also specify an expression. If you use an expression, the evaluated result should be a string."
-          }
-        }
-      ]
-    },
     "Tag": {
       "type": "object",
       "description": "Tags to be applied to Input.",
@@ -695,15 +695,19 @@
     "description": "The AWS::IoTEvents::AlarmModel resource creates a alarm model. AWS IoT Events alarms help you monitor your data for changes. The data can be metrics that you measure for your equipment and processes. You can create alarms that send notifications when a threshold is breached. Alarms help you detect issues, streamline maintenance, and optimize performance of your equipment and processes.\n\nAlarms are instances of alarm models. The alarm model specifies what to detect, when to send notifications, who gets notified, and more. You can also specify one or more supported actions that occur when the alarm state changes. AWS IoT Events routes input attributes derived from your data to the appropriate alarms. If the data that you're monitoring is outside the specified range, the alarm is invoked. You can also acknowledge the alarms or set them to the snooze mode.",
     "properties": [
       {
-        "name": "AlarmModelName",
-        "description": "The name of the alarm model.",
+        "name": "AlarmCapabilities",
         "optional": true,
         "type": {
-          "type": "string",
-          "description": "The name of the alarm model.",
-          "maxLength": 128,
-          "minLength": 1,
-          "pattern": "^[a-zA-Z0-9_-]+$"
+          "type": "ref",
+          "typeName": "AlarmCapabilities"
+        }
+      },
+      {
+        "name": "AlarmEventActions",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "AlarmEventActions"
         }
       },
       {
@@ -717,14 +721,23 @@
         }
       },
       {
-        "name": "RoleArn",
-        "description": "The ARN of the role that grants permission to AWS IoT Events to perform its operations.",
-        "optional": false,
+        "name": "AlarmModelName",
+        "description": "The name of the alarm model.",
+        "optional": true,
         "type": {
           "type": "string",
-          "description": "The ARN of the role that grants permission to AWS IoT Events to perform its operations.",
-          "maxLength": 2048,
-          "minLength": 1
+          "description": "The name of the alarm model.",
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[a-zA-Z0-9_-]+$"
+        }
+      },
+      {
+        "name": "AlarmRule",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "AlarmRule"
         }
       },
       {
@@ -740,6 +753,17 @@
         }
       },
       {
+        "name": "RoleArn",
+        "description": "The ARN of the role that grants permission to AWS IoT Events to perform its operations.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The ARN of the role that grants permission to AWS IoT Events to perform its operations.",
+          "maxLength": 2048,
+          "minLength": 1
+        }
+      },
+      {
         "name": "Severity",
         "description": "A non-negative integer that reflects the severity level of the alarm.\n\n",
         "optional": true,
@@ -749,30 +773,6 @@
           "isInteger": true,
           "maximum": 2147483647,
           "minimum": 0
-        }
-      },
-      {
-        "name": "AlarmRule",
-        "optional": false,
-        "type": {
-          "type": "ref",
-          "typeName": "AlarmRule"
-        }
-      },
-      {
-        "name": "AlarmEventActions",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "AlarmEventActions"
-        }
-      },
-      {
-        "name": "AlarmCapabilities",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "AlarmCapabilities"
         }
       },
       {
@@ -790,5 +790,5 @@
       }
     ]
   },
-  "$hash": "47d235c087436c2460eba7ece6d48a94ee8766f8"
+  "$hash": "e6e77906d820ac5c05ef2bcd895e38fc537b3e5e"
 }

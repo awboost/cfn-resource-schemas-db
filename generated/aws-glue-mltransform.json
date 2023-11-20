@@ -1,8 +1,50 @@
 {
   "definitions": {
+    "FindMatchesParameters": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "AccuracyCostTradeoff",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": false
+          }
+        },
+        {
+          "name": "EnforceProvidedLabels",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "PrecisionRecallTradeoff",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": false
+          }
+        },
+        {
+          "name": "PrimaryKeyColumnName",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
     "GlueTables": {
       "type": "object",
       "properties": [
+        {
+          "name": "CatalogId",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
         {
           "name": "ConnectionName",
           "optional": true,
@@ -23,32 +65,21 @@
           "type": {
             "type": "string"
           }
-        },
-        {
-          "name": "CatalogId",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
         }
       ]
     },
-    "TransformEncryption": {
+    "InputRecordTables": {
       "type": "object",
       "properties": [
         {
-          "name": "TaskRunSecurityConfigurationName",
+          "name": "GlueTables",
           "optional": true,
           "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "MLUserDataEncryption",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "MLUserDataEncryption"
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "GlueTables"
+            }
           }
         }
       ]
@@ -72,16 +103,29 @@
         }
       ]
     },
-    "TransformParameters": {
+    "TransformEncryption": {
       "type": "object",
       "properties": [
         {
-          "name": "TransformType",
-          "optional": false,
+          "name": "MLUserDataEncryption",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "MLUserDataEncryption"
+          }
+        },
+        {
+          "name": "TaskRunSecurityConfigurationName",
+          "optional": true,
           "type": {
             "type": "string"
           }
-        },
+        }
+      ]
+    },
+    "TransformParameters": {
+      "type": "object",
+      "properties": [
         {
           "name": "FindMatchesParameters",
           "optional": true,
@@ -89,56 +133,12 @@
             "type": "ref",
             "typeName": "FindMatchesParameters"
           }
-        }
-      ]
-    },
-    "InputRecordTables": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "GlueTables",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "GlueTables"
-            }
-          }
-        }
-      ]
-    },
-    "FindMatchesParameters": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "PrecisionRecallTradeoff",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": false
-          }
         },
         {
-          "name": "EnforceProvidedLabels",
-          "optional": true,
-          "type": {
-            "type": "boolean"
-          }
-        },
-        {
-          "name": "PrimaryKeyColumnName",
+          "name": "TransformType",
           "optional": false,
           "type": {
             "type": "string"
-          }
-        },
-        {
-          "name": "AccuracyCostTradeoff",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": false
           }
         }
       ]
@@ -149,14 +149,6 @@
     "description": "Resource Type definition for AWS::Glue::MLTransform",
     "properties": [
       {
-        "name": "MaxRetries",
-        "optional": true,
-        "type": {
-          "type": "number",
-          "isInteger": true
-        }
-      },
-      {
         "name": "Description",
         "optional": true,
         "type": {
@@ -164,15 +156,30 @@
         }
       },
       {
-        "name": "TransformEncryption",
+        "name": "GlueVersion",
         "optional": true,
         "type": {
-          "type": "ref",
-          "typeName": "TransformEncryption"
+          "type": "string"
         }
       },
       {
-        "name": "Timeout",
+        "name": "InputRecordTables",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "InputRecordTables"
+        }
+      },
+      {
+        "name": "MaxCapacity",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "isInteger": false
+        }
+      },
+      {
+        "name": "MaxRetries",
         "optional": true,
         "type": {
           "type": "number",
@@ -187,6 +194,14 @@
         }
       },
       {
+        "name": "NumberOfWorkers",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "isInteger": true
+        }
+      },
+      {
         "name": "Role",
         "optional": false,
         "type": {
@@ -194,17 +209,26 @@
         }
       },
       {
-        "name": "WorkerType",
+        "name": "Tags",
         "optional": true,
         "type": {
-          "type": "string"
+          "type": "record"
         }
       },
       {
-        "name": "GlueVersion",
+        "name": "Timeout",
         "optional": true,
         "type": {
-          "type": "string"
+          "type": "number",
+          "isInteger": true
+        }
+      },
+      {
+        "name": "TransformEncryption",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "TransformEncryption"
         }
       },
       {
@@ -216,34 +240,10 @@
         }
       },
       {
-        "name": "InputRecordTables",
-        "optional": false,
-        "type": {
-          "type": "ref",
-          "typeName": "InputRecordTables"
-        }
-      },
-      {
-        "name": "NumberOfWorkers",
+        "name": "WorkerType",
         "optional": true,
         "type": {
-          "type": "number",
-          "isInteger": true
-        }
-      },
-      {
-        "name": "Tags",
-        "optional": true,
-        "type": {
-          "type": "record"
-        }
-      },
-      {
-        "name": "MaxCapacity",
-        "optional": true,
-        "type": {
-          "type": "number",
-          "isInteger": false
+          "type": "string"
         }
       }
     ]
@@ -261,5 +261,5 @@
       }
     ]
   },
-  "$hash": "3c653176d0c1c3e82f765c88b768a7d0f5720ed8"
+  "$hash": "e90c8e7c13576129cf20cd285eb571674d08535e"
 }

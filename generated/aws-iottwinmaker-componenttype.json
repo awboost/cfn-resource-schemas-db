@@ -1,35 +1,5 @@
 {
   "definitions": {
-    "DateTimeFormat": {
-      "type": "string"
-    },
-    "ParentComponentType": {
-      "type": "string",
-      "pattern": "[a-zA-Z_\\.\\-0-9:]+"
-    },
-    "PropertyName": {
-      "type": "string",
-      "pattern": "[a-zA-Z_\\-0-9]+"
-    },
-    "RequiredProperty": {
-      "type": "string",
-      "pattern": "[a-zA-Z_\\-0-9]+"
-    },
-    "LambdaFunction": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Arn",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 128,
-            "minLength": 1,
-            "pattern": "arn:((aws)|(aws-cn)|(aws-us-gov)):lambda:[a-z0-9-]+:[0-9]{12}:function:[\\/a-zA-Z0-9_-]+"
-          }
-        }
-      ]
-    },
     "DataConnector": {
       "type": "object",
       "description": "The data connector.",
@@ -51,205 +21,6 @@
             "type": "ref",
             "description": "The Lambda function associated with this data connector.",
             "typeName": "LambdaFunction"
-          }
-        }
-      ]
-    },
-    "Function": {
-      "type": "object",
-      "description": "The function of component type.",
-      "properties": [
-        {
-          "name": "ImplementedBy",
-          "description": "The data connector.",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "The data connector.",
-            "typeName": "DataConnector"
-          }
-        },
-        {
-          "name": "RequiredProperties",
-          "description": "The required properties of the function.",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "description": "The required properties of the function.",
-            "itemType": {
-              "type": "ref",
-              "typeName": "RequiredProperty"
-            },
-            "maxLength": 256,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "Scope",
-          "description": "The scope of the function.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The scope of the function.",
-            "allowedValues": ["ENTITY", "WORKSPACE"]
-          }
-        }
-      ]
-    },
-    "DataValue": {
-      "type": "object",
-      "description": "An object that specifies a value for a property.",
-      "properties": [
-        {
-          "name": "BooleanValue",
-          "description": "A Boolean value.",
-          "optional": true,
-          "type": {
-            "type": "boolean",
-            "description": "A Boolean value."
-          }
-        },
-        {
-          "name": "DoubleValue",
-          "description": "A double value.",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "description": "A double value.",
-            "isInteger": false
-          }
-        },
-        {
-          "name": "Expression",
-          "description": "An expression that produces the value.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "An expression that produces the value.",
-            "maxLength": 316,
-            "minLength": 1,
-            "pattern": "(^\\$\\{Parameters\\.[a-zA-z]+([a-zA-z_0-9]*)}$)"
-          }
-        },
-        {
-          "name": "IntegerValue",
-          "description": "An integer value.",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "description": "An integer value.",
-            "isInteger": true
-          }
-        },
-        {
-          "name": "ListValue",
-          "description": "A list of multiple values.",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "description": "A list of multiple values.",
-            "itemType": {
-              "type": "ref",
-              "typeName": "DataValue"
-            },
-            "maxLength": 50,
-            "minLength": 0
-          }
-        },
-        {
-          "name": "LongValue",
-          "description": "A long value.",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "description": "A long value.",
-            "isInteger": false
-          }
-        },
-        {
-          "name": "StringValue",
-          "description": "A string value.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "A string value.",
-            "maxLength": 256,
-            "minLength": 1,
-            "pattern": ".*"
-          }
-        },
-        {
-          "name": "MapValue",
-          "description": "An object that maps strings to multiple DataValue objects. \n\n",
-          "optional": true,
-          "type": {
-            "type": "record",
-            "description": "An object that maps strings to multiple DataValue objects. \n\n",
-            "valueType": {
-              "type": "ref",
-              "typeName": "DataValue"
-            }
-          }
-        },
-        {
-          "name": "RelationshipValue",
-          "description": "A value that relates a component to another component.",
-          "optional": true,
-          "type": {
-            "type": "object",
-            "description": "A value that relates a component to another component.",
-            "properties": [
-              {
-                "name": "TargetComponentName",
-                "optional": true,
-                "type": {
-                  "type": "string",
-                  "maxLength": 256,
-                  "minLength": 1,
-                  "pattern": "[a-zA-Z_\\-0-9]+"
-                }
-              },
-              {
-                "name": "TargetEntityId",
-                "optional": true,
-                "type": {
-                  "type": "string",
-                  "maxLength": 128,
-                  "minLength": 1,
-                  "pattern": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}|^[a-zA-Z0-9][a-zA-Z_\\-0-9.:]*[a-zA-Z0-9]+"
-                }
-              }
-            ]
-          }
-        }
-      ]
-    },
-    "Relationship": {
-      "type": "object",
-      "description": "The type of the relationship.",
-      "properties": [
-        {
-          "name": "RelationshipType",
-          "description": "The type of the relationship.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The type of the relationship.",
-            "maxLength": 256,
-            "minLength": 1,
-            "pattern": ".*"
-          }
-        },
-        {
-          "name": "TargetComponentTypeId",
-          "description": "The ID of the target component type associated with this relationship.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The ID of the target component type associated with this relationship.",
-            "maxLength": 256,
-            "minLength": 1,
-            "pattern": "[a-zA-Z_\\.\\-0-9:]+"
           }
         }
       ]
@@ -325,6 +96,197 @@
           }
         }
       ]
+    },
+    "DataValue": {
+      "type": "object",
+      "description": "An object that specifies a value for a property.",
+      "properties": [
+        {
+          "name": "BooleanValue",
+          "description": "A Boolean value.",
+          "optional": true,
+          "type": {
+            "type": "boolean",
+            "description": "A Boolean value."
+          }
+        },
+        {
+          "name": "DoubleValue",
+          "description": "A double value.",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "A double value.",
+            "isInteger": false
+          }
+        },
+        {
+          "name": "Expression",
+          "description": "An expression that produces the value.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "An expression that produces the value.",
+            "maxLength": 316,
+            "minLength": 1,
+            "pattern": "(^\\$\\{Parameters\\.[a-zA-z]+([a-zA-z_0-9]*)}$)"
+          }
+        },
+        {
+          "name": "IntegerValue",
+          "description": "An integer value.",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "An integer value.",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "ListValue",
+          "description": "A list of multiple values.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "A list of multiple values.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "DataValue"
+            },
+            "maxLength": 50,
+            "minLength": 0
+          }
+        },
+        {
+          "name": "LongValue",
+          "description": "A long value.",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "A long value.",
+            "isInteger": false
+          }
+        },
+        {
+          "name": "MapValue",
+          "description": "An object that maps strings to multiple DataValue objects. \n\n",
+          "optional": true,
+          "type": {
+            "type": "record",
+            "description": "An object that maps strings to multiple DataValue objects. \n\n",
+            "valueType": {
+              "type": "ref",
+              "typeName": "DataValue"
+            }
+          }
+        },
+        {
+          "name": "RelationshipValue",
+          "description": "A value that relates a component to another component.",
+          "optional": true,
+          "type": {
+            "type": "object",
+            "description": "A value that relates a component to another component.",
+            "properties": [
+              {
+                "name": "TargetComponentName",
+                "optional": true,
+                "type": {
+                  "type": "string",
+                  "maxLength": 256,
+                  "minLength": 1,
+                  "pattern": "[a-zA-Z_\\-0-9]+"
+                }
+              },
+              {
+                "name": "TargetEntityId",
+                "optional": true,
+                "type": {
+                  "type": "string",
+                  "maxLength": 128,
+                  "minLength": 1,
+                  "pattern": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}|^[a-zA-Z0-9][a-zA-Z_\\-0-9.:]*[a-zA-Z0-9]+"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "StringValue",
+          "description": "A string value.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "A string value.",
+            "maxLength": 256,
+            "minLength": 1,
+            "pattern": ".*"
+          }
+        }
+      ]
+    },
+    "DateTimeFormat": {
+      "type": "string"
+    },
+    "Function": {
+      "type": "object",
+      "description": "The function of component type.",
+      "properties": [
+        {
+          "name": "ImplementedBy",
+          "description": "The data connector.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The data connector.",
+            "typeName": "DataConnector"
+          }
+        },
+        {
+          "name": "RequiredProperties",
+          "description": "The required properties of the function.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "The required properties of the function.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "RequiredProperty"
+            },
+            "maxLength": 256,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Scope",
+          "description": "The scope of the function.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The scope of the function.",
+            "allowedValues": ["ENTITY", "WORKSPACE"]
+          }
+        }
+      ]
+    },
+    "LambdaFunction": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Arn",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "arn:((aws)|(aws-cn)|(aws-us-gov)):lambda:[a-z0-9-]+:[0-9]{12}:function:[\\/a-zA-Z0-9_-]+"
+          }
+        }
+      ]
+    },
+    "ParentComponentType": {
+      "type": "string",
+      "pattern": "[a-zA-Z_\\.\\-0-9:]+"
     },
     "PropertyDefinition": {
       "type": "object",
@@ -434,23 +396,47 @@
         }
       ]
     },
-    "Status": {
+    "PropertyName": {
+      "type": "string",
+      "pattern": "[a-zA-Z_\\-0-9]+"
+    },
+    "Relationship": {
       "type": "object",
+      "description": "The type of the relationship.",
       "properties": [
         {
-          "name": "State",
+          "name": "RelationshipType",
+          "description": "The type of the relationship.",
           "optional": true,
           "type": {
             "type": "string",
-            "allowedValues": [
-              "CREATING",
-              "UPDATING",
-              "DELETING",
-              "ACTIVE",
-              "ERROR"
-            ]
+            "description": "The type of the relationship.",
+            "maxLength": 256,
+            "minLength": 1,
+            "pattern": ".*"
           }
         },
+        {
+          "name": "TargetComponentTypeId",
+          "description": "The ID of the target component type associated with this relationship.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The ID of the target component type associated with this relationship.",
+            "maxLength": 256,
+            "minLength": 1,
+            "pattern": "[a-zA-Z_\\.\\-0-9:]+"
+          }
+        }
+      ]
+    },
+    "RequiredProperty": {
+      "type": "string",
+      "pattern": "[a-zA-Z_\\-0-9]+"
+    },
+    "Status": {
+      "type": "object",
+      "properties": [
         {
           "name": "Error",
           "optional": true,
@@ -466,6 +452,14 @@
                 "description": "Error object with Message and Code.",
                 "properties": [
                   {
+                    "name": "Code",
+                    "optional": true,
+                    "type": {
+                      "type": "string",
+                      "allowedValues": ["VALIDATION_ERROR", "INTERNAL_FAILURE"]
+                    }
+                  },
+                  {
                     "name": "Message",
                     "optional": true,
                     "type": {
@@ -473,17 +467,23 @@
                       "maxLength": 2048,
                       "minLength": 0
                     }
-                  },
-                  {
-                    "name": "Code",
-                    "optional": true,
-                    "type": {
-                      "type": "string",
-                      "allowedValues": ["VALIDATION_ERROR", "INTERNAL_FAILURE"]
-                    }
                   }
                 ]
               }
+            ]
+          }
+        },
+        {
+          "name": "State",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": [
+              "CREATING",
+              "UPDATING",
+              "DELETING",
+              "ACTIVE",
+              "ERROR"
             ]
           }
         }
@@ -494,18 +494,6 @@
     "type": "object",
     "description": "Resource schema for AWS::IoTTwinMaker::ComponentType",
     "properties": [
-      {
-        "name": "WorkspaceId",
-        "description": "The ID of the workspace that contains the component type.",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "description": "The ID of the workspace that contains the component type.",
-          "maxLength": 128,
-          "minLength": 1,
-          "pattern": "[a-zA-Z_0-9][a-zA-Z_\\-0-9]*[a-zA-Z0-9]+"
-        }
-      },
       {
         "name": "ComponentTypeId",
         "description": "The ID of the component type.",
@@ -605,6 +593,18 @@
             "minLength": 1
           }
         }
+      },
+      {
+        "name": "WorkspaceId",
+        "description": "The ID of the workspace that contains the component type.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The ID of the workspace that contains the component type.",
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "[a-zA-Z_0-9][a-zA-Z_\\-0-9]*[a-zA-Z0-9]+"
+        }
       }
     ]
   },
@@ -635,26 +635,6 @@
         }
       },
       {
-        "name": "UpdateDateTime",
-        "description": "The last date and time when the component type was updated.",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "description": "The last date and time when the component type was updated.",
-          "typeName": "DateTimeFormat"
-        }
-      },
-      {
-        "name": "Status",
-        "description": "The current status of the component type.",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "description": "The current status of the component type.",
-          "typeName": "Status"
-        }
-      },
-      {
         "name": "IsAbstract",
         "description": "A Boolean value that specifies whether the component type is abstract.",
         "optional": true,
@@ -671,8 +651,28 @@
           "type": "boolean",
           "description": "A Boolean value that specifies whether the component type has a schema initializer and that the schema initializer has run."
         }
+      },
+      {
+        "name": "Status",
+        "description": "The current status of the component type.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "The current status of the component type.",
+          "typeName": "Status"
+        }
+      },
+      {
+        "name": "UpdateDateTime",
+        "description": "The last date and time when the component type was updated.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "The last date and time when the component type was updated.",
+          "typeName": "DateTimeFormat"
+        }
       }
     ]
   },
-  "$hash": "f9ff0d5ec950013db6a811324587ecb0867ffdd5"
+  "$hash": "d5b2efa3a43f8a9a99ea5ec47f92b907b1928566"
 }

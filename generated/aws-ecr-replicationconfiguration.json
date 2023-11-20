@@ -1,5 +1,25 @@
 {
   "definitions": {
+    "Filter": {
+      "type": "string",
+      "description": "The repository filter to be applied for replication.",
+      "pattern": "^(?:[a-z0-9]+(?:[._-][a-z0-9]*)*/)*[a-z0-9]*(?:[._-][a-z0-9]*)*$"
+    },
+    "FilterType": {
+      "type": "string",
+      "description": "Type of repository filter",
+      "allowedValues": ["PREFIX_MATCH"]
+    },
+    "Region": {
+      "type": "string",
+      "description": "A Region to replicate to.",
+      "pattern": "[0-9a-z-]{2,25}"
+    },
+    "RegistryId": {
+      "type": "string",
+      "description": "The account ID of the destination registry to replicate to.",
+      "pattern": "^[0-9]{12}$"
+    },
     "ReplicationConfiguration": {
       "type": "object",
       "description": "An object representing the replication configuration for a registry.",
@@ -21,25 +41,32 @@
         }
       ]
     },
-    "ReplicationRule": {
+    "ReplicationDestination": {
       "type": "object",
       "description": "An array of objects representing the details of a replication destination.",
       "properties": [
         {
-          "name": "RepositoryFilters",
-          "description": "An array of objects representing the details of a repository filter.",
-          "optional": true,
+          "name": "Region",
+          "optional": false,
           "type": {
-            "type": "array",
-            "description": "An array of objects representing the details of a repository filter.",
-            "itemType": {
-              "type": "ref",
-              "typeName": "RepositoryFilter"
-            },
-            "maxLength": 100,
-            "minLength": 0
+            "type": "ref",
+            "typeName": "Region"
           }
         },
+        {
+          "name": "RegistryId",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "RegistryId"
+          }
+        }
+      ]
+    },
+    "ReplicationRule": {
+      "type": "object",
+      "description": "An array of objects representing the details of a replication destination.",
+      "properties": [
         {
           "name": "Destinations",
           "description": "An array of objects representing the details of a replication destination.",
@@ -53,6 +80,21 @@
             },
             "maxLength": 25,
             "minLength": 1
+          }
+        },
+        {
+          "name": "RepositoryFilters",
+          "description": "An array of objects representing the details of a repository filter.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "An array of objects representing the details of a repository filter.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "RepositoryFilter"
+            },
+            "maxLength": 100,
+            "minLength": 0
           }
         }
       ]
@@ -78,48 +120,6 @@
           }
         }
       ]
-    },
-    "Filter": {
-      "type": "string",
-      "description": "The repository filter to be applied for replication.",
-      "pattern": "^(?:[a-z0-9]+(?:[._-][a-z0-9]*)*/)*[a-z0-9]*(?:[._-][a-z0-9]*)*$"
-    },
-    "FilterType": {
-      "type": "string",
-      "description": "Type of repository filter",
-      "allowedValues": ["PREFIX_MATCH"]
-    },
-    "ReplicationDestination": {
-      "type": "object",
-      "description": "An array of objects representing the details of a replication destination.",
-      "properties": [
-        {
-          "name": "Region",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "Region"
-          }
-        },
-        {
-          "name": "RegistryId",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "RegistryId"
-          }
-        }
-      ]
-    },
-    "RegistryId": {
-      "type": "string",
-      "description": "The account ID of the destination registry to replicate to.",
-      "pattern": "^[0-9]{12}$"
-    },
-    "Region": {
-      "type": "string",
-      "description": "A Region to replicate to.",
-      "pattern": "[0-9a-z-]{2,25}"
     }
   },
   "resource": {
@@ -151,5 +151,5 @@
       }
     ]
   },
-  "$hash": "d22769fc19ea255f665b002ce78837016d881b3b"
+  "$hash": "c378c6bc496691ec966cc066eeda5ada030b9723"
 }

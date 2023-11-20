@@ -29,16 +29,6 @@
       "maxLength": 100,
       "minLength": 1
     },
-    "ExposeHeaders": {
-      "type": "array",
-      "itemType": {
-        "type": "string",
-        "maxLength": 1024,
-        "minLength": 1
-      },
-      "maxLength": 100,
-      "minLength": 1
-    },
     "Cors": {
       "type": "object",
       "properties": [
@@ -102,6 +92,16 @@
           }
         }
       ]
+    },
+    "ExposeHeaders": {
+      "type": "array",
+      "itemType": {
+        "type": "string",
+        "maxLength": 1024,
+        "minLength": 1
+      },
+      "maxLength": 100,
+      "minLength": 1
     }
   },
   "resource": {
@@ -109,13 +109,31 @@
     "description": "Resource Type definition for AWS::Lambda::Url",
     "properties": [
       {
-        "name": "TargetFunctionArn",
-        "description": "The Amazon Resource Name (ARN) of the function associated with the Function URL.",
+        "name": "AuthType",
+        "description": "Can be either AWS_IAM if the requests are authorized via IAM, or NONE if no authorization is configured on the Function URL.",
         "optional": false,
         "type": {
           "type": "string",
-          "description": "The Amazon Resource Name (ARN) of the function associated with the Function URL.",
-          "pattern": "^(arn:(aws[a-zA-Z-]*)?:lambda:)?([a-z]{2}((-gov)|(-iso(b?)))?-[a-z]+-\\d{1}:)?(\\d{12}:)?(function:)?([a-zA-Z0-9-_]+)(:((?!\\d+)[0-9a-zA-Z-_]+))?$"
+          "description": "Can be either AWS_IAM if the requests are authorized via IAM, or NONE if no authorization is configured on the Function URL.",
+          "allowedValues": ["AWS_IAM", "NONE"]
+        }
+      },
+      {
+        "name": "Cors",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "Cors"
+        }
+      },
+      {
+        "name": "InvokeMode",
+        "description": "The invocation mode for the function’s URL. Set to BUFFERED if you want to buffer responses before returning them to the client. Set to RESPONSE_STREAM if you want to stream responses, allowing faster time to first byte and larger response payload sizes. If not set, defaults to BUFFERED.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The invocation mode for the function’s URL. Set to BUFFERED if you want to buffer responses before returning them to the client. Set to RESPONSE_STREAM if you want to stream responses, allowing faster time to first byte and larger response payload sizes. If not set, defaults to BUFFERED.",
+          "allowedValues": ["BUFFERED", "RESPONSE_STREAM"]
         }
       },
       {
@@ -131,31 +149,13 @@
         }
       },
       {
-        "name": "AuthType",
-        "description": "Can be either AWS_IAM if the requests are authorized via IAM, or NONE if no authorization is configured on the Function URL.",
+        "name": "TargetFunctionArn",
+        "description": "The Amazon Resource Name (ARN) of the function associated with the Function URL.",
         "optional": false,
         "type": {
           "type": "string",
-          "description": "Can be either AWS_IAM if the requests are authorized via IAM, or NONE if no authorization is configured on the Function URL.",
-          "allowedValues": ["AWS_IAM", "NONE"]
-        }
-      },
-      {
-        "name": "InvokeMode",
-        "description": "The invocation mode for the function’s URL. Set to BUFFERED if you want to buffer responses before returning them to the client. Set to RESPONSE_STREAM if you want to stream responses, allowing faster time to first byte and larger response payload sizes. If not set, defaults to BUFFERED.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The invocation mode for the function’s URL. Set to BUFFERED if you want to buffer responses before returning them to the client. Set to RESPONSE_STREAM if you want to stream responses, allowing faster time to first byte and larger response payload sizes. If not set, defaults to BUFFERED.",
-          "allowedValues": ["BUFFERED", "RESPONSE_STREAM"]
-        }
-      },
-      {
-        "name": "Cors",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "Cors"
+          "description": "The Amazon Resource Name (ARN) of the function associated with the Function URL.",
+          "pattern": "^(arn:(aws[a-zA-Z-]*)?:lambda:)?([a-z]{2}((-gov)|(-iso(b?)))?-[a-z]+-\\d{1}:)?(\\d{12}:)?(function:)?([a-zA-Z0-9-_]+)(:((?!\\d+)[0-9a-zA-Z-_]+))?$"
         }
       }
     ]
@@ -185,5 +185,5 @@
       }
     ]
   },
-  "$hash": "30e49116b84fc860829733cb7216350c484773ba"
+  "$hash": "517f01be8791fd438156d840c0f5585e988211ad"
 }

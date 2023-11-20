@@ -1,19 +1,22 @@
 {
   "definitions": {
-    "Forward": {
+    "Action": {
       "type": "object",
       "properties": [
         {
-          "name": "TargetGroups",
-          "optional": false,
+          "name": "FixedResponse",
+          "optional": true,
           "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "WeightedTargetGroup"
-            },
-            "maxLength": 2,
-            "minLength": 1
+            "type": "ref",
+            "typeName": "FixedResponse"
+          }
+        },
+        {
+          "name": "Forward",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Forward"
           }
         }
       ]
@@ -33,16 +36,32 @@
         }
       ]
     },
+    "Forward": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "TargetGroups",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "WeightedTargetGroup"
+            },
+            "maxLength": 2,
+            "minLength": 1
+          }
+        }
+      ]
+    },
     "HeaderMatch": {
       "type": "object",
       "properties": [
         {
-          "name": "Name",
-          "optional": false,
+          "name": "CaseSensitive",
+          "optional": true,
           "type": {
-            "type": "string",
-            "maxLength": 40,
-            "minLength": 1
+            "type": "boolean"
           }
         },
         {
@@ -54,10 +73,12 @@
           }
         },
         {
-          "name": "CaseSensitive",
-          "optional": true,
+          "name": "Name",
+          "optional": false,
           "type": {
-            "type": "boolean"
+            "type": "string",
+            "maxLength": 40,
+            "minLength": 1
           }
         }
       ]
@@ -65,6 +86,15 @@
     "HeaderMatchType": {
       "type": "object",
       "properties": [
+        {
+          "name": "Contains",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
         {
           "name": "Exact",
           "optional": true,
@@ -82,21 +112,24 @@
             "maxLength": 128,
             "minLength": 1
           }
-        },
-        {
-          "name": "Contains",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "maxLength": 128,
-            "minLength": 1
-          }
         }
       ]
     },
     "HttpMatch": {
       "type": "object",
       "properties": [
+        {
+          "name": "HeaderMatches",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "HeaderMatch"
+            },
+            "maxLength": 5
+          }
+        },
         {
           "name": "Method",
           "optional": true,
@@ -121,17 +154,18 @@
             "type": "ref",
             "typeName": "PathMatch"
           }
-        },
+        }
+      ]
+    },
+    "Match": {
+      "type": "object",
+      "properties": [
         {
-          "name": "HeaderMatches",
-          "optional": true,
+          "name": "HttpMatch",
+          "optional": false,
           "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "HeaderMatch"
-            },
-            "maxLength": 5
+            "type": "ref",
+            "typeName": "HttpMatch"
           }
         }
       ]
@@ -140,18 +174,18 @@
       "type": "object",
       "properties": [
         {
+          "name": "CaseSensitive",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
           "name": "Match",
           "optional": false,
           "type": {
             "type": "ref",
             "typeName": "PathMatchType"
-          }
-        },
-        {
-          "name": "CaseSensitive",
-          "optional": true,
-          "type": {
-            "type": "boolean"
           }
         }
       ]
@@ -181,36 +215,25 @@
         }
       ]
     },
-    "Action": {
+    "Tag": {
       "type": "object",
       "properties": [
         {
-          "name": "Forward",
-          "optional": true,
+          "name": "Key",
+          "optional": false,
           "type": {
-            "type": "ref",
-            "typeName": "Forward"
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1
           }
         },
         {
-          "name": "FixedResponse",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "FixedResponse"
-          }
-        }
-      ]
-    },
-    "Match": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "HttpMatch",
+          "name": "Value",
           "optional": false,
           "type": {
-            "type": "ref",
-            "typeName": "HttpMatch"
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1
           }
         }
       ]
@@ -236,29 +259,6 @@
             "isInteger": true,
             "maximum": 999,
             "minimum": 1
-          }
-        }
-      ]
-    },
-    "Tag": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Key",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 128,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "Value",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 256,
-            "minLength": 1
           }
         }
       ]
@@ -365,5 +365,5 @@
       }
     ]
   },
-  "$hash": "4871d0d854bc50787d744084778f6d27bf4e6f5f"
+  "$hash": "2f2a1cb8990630abc7b5f93fbbe0c8df08a10a01"
 }

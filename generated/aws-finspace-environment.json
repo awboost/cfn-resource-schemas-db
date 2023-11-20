@@ -1,43 +1,13 @@
 {
   "definitions": {
+    "DataBundleArn": {
+      "type": "string",
+      "pattern": "^arn:aws:finspace:[A-Za-z0-9_/.-]{0,63}:\\d*:data-bundle/[0-9A-Za-z_-]{1,128}$"
+    },
     "FederationParameters": {
       "type": "object",
       "description": "Additional parameters to identify Federation mode",
       "properties": [
-        {
-          "name": "SamlMetadataURL",
-          "description": "SAML metadata URL to link with the Environment",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "SAML metadata URL to link with the Environment",
-            "pattern": "^https?://[-a-zA-Z0-9+&amp;@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&amp;@#/%=~_|]{1,1000}"
-          }
-        },
-        {
-          "name": "FederationProviderName",
-          "description": "Federation provider name to link with the Environment",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Federation provider name to link with the Environment",
-            "maxLength": 32,
-            "minLength": 1,
-            "pattern": "[^_\\p{Z}][\\p{L}\\p{M}\\p{S}\\p{N}\\p{P}][^_\\p{Z}]+"
-          }
-        },
-        {
-          "name": "SamlMetadataDocument",
-          "description": "SAML metadata document to link the federation provider to the Environment",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "SAML metadata document to link the federation provider to the Environment",
-            "maxLength": 10000000,
-            "minLength": 1000,
-            "pattern": ".*"
-          }
-        },
         {
           "name": "ApplicationCallBackURL",
           "description": "SAML metadata URL to link with the Environment",
@@ -46,15 +16,6 @@
             "type": "string",
             "description": "SAML metadata URL to link with the Environment",
             "pattern": "^https?://[-a-zA-Z0-9+&amp;@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&amp;@#/%=~_|]{1,1000}"
-          }
-        },
-        {
-          "name": "FederationURN",
-          "description": "SAML metadata URL to link with the Environment",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "SAML metadata URL to link with the Environment"
           }
         },
         {
@@ -92,6 +53,49 @@
               ]
             }
           }
+        },
+        {
+          "name": "FederationProviderName",
+          "description": "Federation provider name to link with the Environment",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Federation provider name to link with the Environment",
+            "maxLength": 32,
+            "minLength": 1,
+            "pattern": "[^_\\p{Z}][\\p{L}\\p{M}\\p{S}\\p{N}\\p{P}][^_\\p{Z}]+"
+          }
+        },
+        {
+          "name": "FederationURN",
+          "description": "SAML metadata URL to link with the Environment",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "SAML metadata URL to link with the Environment"
+          }
+        },
+        {
+          "name": "SamlMetadataDocument",
+          "description": "SAML metadata document to link the federation provider to the Environment",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "SAML metadata document to link the federation provider to the Environment",
+            "maxLength": 10000000,
+            "minLength": 1000,
+            "pattern": ".*"
+          }
+        },
+        {
+          "name": "SamlMetadataURL",
+          "description": "SAML metadata URL to link with the Environment",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "SAML metadata URL to link with the Environment",
+            "pattern": "^https?://[-a-zA-Z0-9+&amp;@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&amp;@#/%=~_|]{1,1000}"
+          }
         }
       ]
     },
@@ -99,6 +103,18 @@
       "type": "object",
       "description": "Parameters of the first Superuser for the FinSpace Environment",
       "properties": [
+        {
+          "name": "EmailAddress",
+          "description": "Email address",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Email address",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+[.]+[A-Za-z]+"
+          }
+        },
         {
           "name": "FirstName",
           "description": "First name",
@@ -122,24 +138,8 @@
             "minLength": 1,
             "pattern": "^[a-zA-Z0-9]{1,50}$"
           }
-        },
-        {
-          "name": "EmailAddress",
-          "description": "Email address",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Email address",
-            "maxLength": 128,
-            "minLength": 1,
-            "pattern": "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+[.]+[A-Za-z]+"
-          }
         }
       ]
-    },
-    "DataBundleArn": {
-      "type": "string",
-      "pattern": "^arn:aws:finspace:[A-Za-z0-9_/.-]{0,63}:\\d*:data-bundle/[0-9A-Za-z_-]{1,128}$"
     },
     "Tag": {
       "type": "object",
@@ -175,13 +175,16 @@
     "description": "An example resource schema demonstrating some basic constructs and validation rules.",
     "properties": [
       {
-        "name": "Name",
-        "description": "Name of the Environment",
-        "optional": false,
+        "name": "DataBundles",
+        "description": "ARNs of FinSpace Data Bundles to install",
+        "optional": true,
         "type": {
-          "type": "string",
-          "description": "Name of the Environment",
-          "pattern": "^[a-zA-Z0-9]+[a-zA-Z0-9-]*[a-zA-Z0-9]{1,255}$"
+          "type": "array",
+          "description": "ARNs of FinSpace Data Bundles to install",
+          "itemType": {
+            "type": "ref",
+            "typeName": "DataBundleArn"
+          }
         }
       },
       {
@@ -192,16 +195,6 @@
           "type": "string",
           "description": "Description of the Environment",
           "pattern": "^[a-zA-Z0-9. ]{1,1000}$"
-        }
-      },
-      {
-        "name": "KmsKeyId",
-        "description": "KMS key used to encrypt customer data within FinSpace Environment infrastructure",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "KMS key used to encrypt customer data within FinSpace Environment infrastructure",
-          "pattern": "^[a-zA-Z-0-9-:\\/]*{1,1000}$"
         }
       },
       {
@@ -223,24 +216,31 @@
         }
       },
       {
+        "name": "KmsKeyId",
+        "description": "KMS key used to encrypt customer data within FinSpace Environment infrastructure",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "KMS key used to encrypt customer data within FinSpace Environment infrastructure",
+          "pattern": "^[a-zA-Z-0-9-:\\/]*{1,1000}$"
+        }
+      },
+      {
+        "name": "Name",
+        "description": "Name of the Environment",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "Name of the Environment",
+          "pattern": "^[a-zA-Z0-9]+[a-zA-Z0-9-]*[a-zA-Z0-9]{1,255}$"
+        }
+      },
+      {
         "name": "SuperuserParameters",
         "optional": true,
         "type": {
           "type": "ref",
           "typeName": "SuperuserParameters"
-        }
-      },
-      {
-        "name": "DataBundles",
-        "description": "ARNs of FinSpace Data Bundles to install",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "description": "ARNs of FinSpace Data Bundles to install",
-          "itemType": {
-            "type": "ref",
-            "typeName": "DataBundleArn"
-          }
         }
       },
       {
@@ -263,6 +263,36 @@
     "description": "An example resource schema demonstrating some basic constructs and validation rules.",
     "properties": [
       {
+        "name": "AwsAccountId",
+        "description": "AWS account ID associated with the Environment",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "AWS account ID associated with the Environment",
+          "pattern": "^[a-zA-Z0-9]{1,26}$"
+        }
+      },
+      {
+        "name": "DedicatedServiceAccountId",
+        "description": "ID for FinSpace created account used to store Environment artifacts",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "ID for FinSpace created account used to store Environment artifacts",
+          "pattern": "^[a-zA-Z0-9]{1,26}$"
+        }
+      },
+      {
+        "name": "EnvironmentArn",
+        "description": "ARN of the Environment",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "ARN of the Environment",
+          "pattern": "^arn:aws:finspace:[A-Za-z0-9_/.-]{0,63}:\\d+:environment/[0-9A-Za-z_-]{1,128}$"
+        }
+      },
+      {
         "name": "EnvironmentId",
         "description": "Unique identifier for representing FinSpace Environment",
         "optional": true,
@@ -273,13 +303,23 @@
         }
       },
       {
-        "name": "AwsAccountId",
-        "description": "AWS account ID associated with the Environment",
+        "name": "EnvironmentUrl",
+        "description": "URL used to login to the Environment",
         "optional": true,
         "type": {
           "type": "string",
-          "description": "AWS account ID associated with the Environment",
-          "pattern": "^[a-zA-Z0-9]{1,26}$"
+          "description": "URL used to login to the Environment",
+          "pattern": "^[-a-zA-Z0-9+&amp;@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&amp;@#/%=~_|]{1,1000}"
+        }
+      },
+      {
+        "name": "SageMakerStudioDomainUrl",
+        "description": "SageMaker Studio Domain URL associated with the Environment",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "SageMaker Studio Domain URL associated with the Environment",
+          "pattern": "^[a-zA-Z-0-9-:\\/.]*{1,1000}$"
         }
       },
       {
@@ -302,48 +342,8 @@
             "SUSPENDED"
           ]
         }
-      },
-      {
-        "name": "EnvironmentUrl",
-        "description": "URL used to login to the Environment",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "URL used to login to the Environment",
-          "pattern": "^[-a-zA-Z0-9+&amp;@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&amp;@#/%=~_|]{1,1000}"
-        }
-      },
-      {
-        "name": "EnvironmentArn",
-        "description": "ARN of the Environment",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "ARN of the Environment",
-          "pattern": "^arn:aws:finspace:[A-Za-z0-9_/.-]{0,63}:\\d+:environment/[0-9A-Za-z_-]{1,128}$"
-        }
-      },
-      {
-        "name": "SageMakerStudioDomainUrl",
-        "description": "SageMaker Studio Domain URL associated with the Environment",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "SageMaker Studio Domain URL associated with the Environment",
-          "pattern": "^[a-zA-Z-0-9-:\\/.]*{1,1000}$"
-        }
-      },
-      {
-        "name": "DedicatedServiceAccountId",
-        "description": "ID for FinSpace created account used to store Environment artifacts",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "ID for FinSpace created account used to store Environment artifacts",
-          "pattern": "^[a-zA-Z0-9]{1,26}$"
-        }
       }
     ]
   },
-  "$hash": "5c5d7463b68d3d91fd5ec8c5af3c87e95cea6f62"
+  "$hash": "7679762b8b86e71a0aedcc84713823ce80bfca35"
 }

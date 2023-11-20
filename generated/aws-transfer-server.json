@@ -1,18 +1,60 @@
 {
   "definitions": {
-    "StructuredLogDestination": {
+    "As2Transport": {
       "type": "record"
     },
-    "IdentityProviderDetails": {
+    "EndpointDetails": {
       "type": "object",
       "properties": [
         {
-          "name": "Function",
+          "name": "AddressAllocationIds",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "name": "SecurityGroupIds",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "name": "SubnetIds",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "name": "VpcEndpointId",
           "optional": true,
           "type": {
             "type": "string"
           }
         },
+        {
+          "name": "VpcId",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "IdentityProviderDetails": {
+      "type": "object",
+      "properties": [
         {
           "name": "DirectoryId",
           "optional": true,
@@ -21,7 +63,7 @@
           }
         },
         {
-          "name": "Url",
+          "name": "Function",
           "optional": true,
           "type": {
             "type": "string"
@@ -40,8 +82,18 @@
           "type": {
             "type": "string"
           }
+        },
+        {
+          "name": "Url",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
         }
       ]
+    },
+    "Protocol": {
+      "type": "record"
     },
     "ProtocolDetails": {
       "type": "object",
@@ -80,20 +132,50 @@
         }
       ]
     },
-    "WorkflowDetails": {
+    "StructuredLogDestination": {
+      "type": "record"
+    },
+    "Tag": {
       "type": "object",
       "properties": [
         {
-          "name": "OnUpload",
-          "optional": true,
+          "name": "Key",
+          "optional": false,
           "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "WorkflowDetail"
-            }
+            "type": "string"
           }
         },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "WorkflowDetail": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ExecutionRole",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "WorkflowId",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "WorkflowDetails": {
+      "type": "object",
+      "properties": [
         {
           "name": "OnPartialUpload",
           "optional": true,
@@ -104,101 +186,19 @@
               "typeName": "WorkflowDetail"
             }
           }
-        }
-      ]
-    },
-    "WorkflowDetail": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "WorkflowId",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
         },
         {
-          "name": "ExecutionRole",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "Tag": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Value",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Key",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "Protocol": {
-      "type": "record"
-    },
-    "EndpointDetails": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "AddressAllocationIds",
+          "name": "OnUpload",
           "optional": true,
           "type": {
             "type": "array",
             "itemType": {
-              "type": "string"
-            }
-          }
-        },
-        {
-          "name": "VpcId",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "VpcEndpointId",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "SecurityGroupIds",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "string"
-            }
-          }
-        },
-        {
-          "name": "SubnetIds",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "string"
+              "type": "ref",
+              "typeName": "WorkflowDetail"
             }
           }
         }
       ]
-    },
-    "As2Transport": {
-      "type": "record"
     }
   },
   "resource": {
@@ -206,29 +206,17 @@
     "description": "Resource Type definition for AWS::Transfer::Server",
     "properties": [
       {
-        "name": "LoggingRole",
+        "name": "Certificate",
         "optional": true,
         "type": {
           "type": "string"
         }
       },
       {
-        "name": "Protocols",
+        "name": "Domain",
         "optional": true,
         "type": {
-          "type": "array",
-          "itemType": {
-            "type": "ref",
-            "typeName": "Protocol"
-          }
-        }
-      },
-      {
-        "name": "IdentityProviderDetails",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "IdentityProviderDetails"
+          "type": "string"
         }
       },
       {
@@ -240,18 +228,29 @@
         }
       },
       {
-        "name": "StructuredLogDestinations",
+        "name": "EndpointType",
         "optional": true,
         "type": {
-          "type": "array",
-          "itemType": {
-            "type": "ref",
-            "typeName": "StructuredLogDestination"
-          }
+          "type": "string"
         }
       },
       {
-        "name": "PreAuthenticationLoginBanner",
+        "name": "IdentityProviderDetails",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "IdentityProviderDetails"
+        }
+      },
+      {
+        "name": "IdentityProviderType",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "LoggingRole",
         "optional": true,
         "type": {
           "type": "string"
@@ -265,14 +264,7 @@
         }
       },
       {
-        "name": "EndpointType",
-        "optional": true,
-        "type": {
-          "type": "string"
-        }
-      },
-      {
-        "name": "SecurityPolicyName",
+        "name": "PreAuthenticationLoginBanner",
         "optional": true,
         "type": {
           "type": "string"
@@ -287,25 +279,32 @@
         }
       },
       {
-        "name": "WorkflowDetails",
+        "name": "Protocols",
         "optional": true,
         "type": {
-          "type": "ref",
-          "typeName": "WorkflowDetails"
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Protocol"
+          }
         }
       },
       {
-        "name": "Domain",
+        "name": "SecurityPolicyName",
         "optional": true,
         "type": {
           "type": "string"
         }
       },
       {
-        "name": "IdentityProviderType",
+        "name": "StructuredLogDestinations",
         "optional": true,
         "type": {
-          "type": "string"
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "StructuredLogDestination"
+          }
         }
       },
       {
@@ -320,10 +319,11 @@
         }
       },
       {
-        "name": "Certificate",
+        "name": "WorkflowDetails",
         "optional": true,
         "type": {
-          "type": "string"
+          "type": "ref",
+          "typeName": "WorkflowDetails"
         }
       }
     ]
@@ -333,14 +333,14 @@
     "description": "Resource Type definition for AWS::Transfer::Server",
     "properties": [
       {
-        "name": "ServerId",
+        "name": "Arn",
         "optional": true,
         "type": {
           "type": "string"
         }
       },
       {
-        "name": "Arn",
+        "name": "ServerId",
         "optional": true,
         "type": {
           "type": "string"
@@ -348,5 +348,5 @@
       }
     ]
   },
-  "$hash": "c7b21c94f961f58b1e76248b32832b997511c00d"
+  "$hash": "cb11ca32cfbce30988553000c09c4c1c46db35ee"
 }

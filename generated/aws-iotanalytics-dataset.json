@@ -1,43 +1,5 @@
 {
   "definitions": {
-    "DatasetContentVersionValue": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "DatasetName",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 128,
-            "minLength": 1,
-            "pattern": "(^(?!_{2}))(^[a-zA-Z0-9_]+$)"
-          }
-        }
-      ]
-    },
-    "GlueConfiguration": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "DatabaseName",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 150,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "TableName",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 150,
-            "minLength": 1
-          }
-        }
-      ]
-    },
     "Action": {
       "type": "object",
       "properties": [
@@ -69,49 +31,172 @@
         }
       ]
     },
-    "Variable": {
+    "ContainerAction": {
       "type": "object",
       "properties": [
         {
-          "name": "VariableName",
+          "name": "ExecutionRoleArn",
           "optional": false,
           "type": {
             "type": "string",
-            "maxLength": 256,
+            "maxLength": 2048,
+            "minLength": 20
+          }
+        },
+        {
+          "name": "Image",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 255
+          }
+        },
+        {
+          "name": "ResourceConfiguration",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "ResourceConfiguration"
+          }
+        },
+        {
+          "name": "Variables",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Variable"
+            },
+            "maxLength": 50,
+            "minLength": 0
+          }
+        }
+      ]
+    },
+    "DatasetContentDeliveryRule": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Destination",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "DatasetContentDeliveryRuleDestination"
+          }
+        },
+        {
+          "name": "EntryName",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "DatasetContentDeliveryRuleDestination": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "IotEventsDestinationConfiguration",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "IotEventsDestinationConfiguration"
+          }
+        },
+        {
+          "name": "S3DestinationConfiguration",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "S3DestinationConfiguration"
+          }
+        }
+      ]
+    },
+    "DatasetContentVersionValue": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "DatasetName",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "(^(?!_{2}))(^[a-zA-Z0-9_]+$)"
+          }
+        }
+      ]
+    },
+    "DeltaTime": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "OffsetSeconds",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "TimeExpression",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "DeltaTimeSessionWindowConfiguration": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "TimeoutInMinutes",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 60,
+            "minimum": 1
+          }
+        }
+      ]
+    },
+    "Filter": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "DeltaTime",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DeltaTime"
+          }
+        }
+      ]
+    },
+    "GlueConfiguration": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "DatabaseName",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 150,
             "minLength": 1
           }
         },
         {
-          "name": "DatasetContentVersionValue",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "DatasetContentVersionValue"
-          }
-        },
-        {
-          "name": "StringValue",
-          "optional": true,
+          "name": "TableName",
+          "optional": false,
           "type": {
             "type": "string",
-            "maxLength": 1024,
-            "minLength": 0
-          }
-        },
-        {
-          "name": "DoubleValue",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": false
-          }
-        },
-        {
-          "name": "OutputFileUriValue",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "OutputFileUriValue"
+            "maxLength": 150,
+            "minLength": 1
           }
         }
       ]
@@ -163,17 +248,28 @@
         }
       ]
     },
-    "DeltaTimeSessionWindowConfiguration": {
+    "LateDataRuleConfiguration": {
       "type": "object",
       "properties": [
         {
-          "name": "TimeoutInMinutes",
+          "name": "DeltaTimeSessionWindowConfiguration",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DeltaTimeSessionWindowConfiguration"
+          }
+        }
+      ]
+    },
+    "OutputFileUriValue": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "FileName",
           "optional": false,
           "type": {
-            "type": "number",
-            "isInteger": true,
-            "maximum": 60,
-            "minimum": 1
+            "type": "string",
+            "pattern": "^[\\w\\.-]{1,255}$"
           }
         }
       ]
@@ -203,23 +299,24 @@
         }
       ]
     },
-    "VersioningConfiguration": {
+    "ResourceConfiguration": {
       "type": "object",
       "properties": [
         {
-          "name": "Unlimited",
-          "optional": true,
+          "name": "ComputeType",
+          "optional": false,
           "type": {
-            "type": "boolean"
+            "type": "string",
+            "allowedValues": ["ACU_1", "ACU_2"]
           }
         },
         {
-          "name": "MaxVersions",
-          "optional": true,
+          "name": "VolumeSizeInGB",
+          "optional": false,
           "type": {
             "type": "number",
             "isInteger": true,
-            "maximum": 1000,
+            "maximum": 50,
             "minimum": 1
           }
         }
@@ -247,182 +344,9 @@
         }
       ]
     },
-    "ResourceConfiguration": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "VolumeSizeInGB",
-          "optional": false,
-          "type": {
-            "type": "number",
-            "isInteger": true,
-            "maximum": 50,
-            "minimum": 1
-          }
-        },
-        {
-          "name": "ComputeType",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "allowedValues": ["ACU_1", "ACU_2"]
-          }
-        }
-      ]
-    },
-    "DatasetContentDeliveryRule": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Destination",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "DatasetContentDeliveryRuleDestination"
-          }
-        },
-        {
-          "name": "EntryName",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "Trigger": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "TriggeringDataset",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "TriggeringDataset"
-          }
-        },
-        {
-          "name": "Schedule",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "Schedule"
-          }
-        }
-      ]
-    },
-    "DeltaTime": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "OffsetSeconds",
-          "optional": false,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        },
-        {
-          "name": "TimeExpression",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "ContainerAction": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Variables",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "Variable"
-            },
-            "maxLength": 50,
-            "minLength": 0
-          }
-        },
-        {
-          "name": "ExecutionRoleArn",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 2048,
-            "minLength": 20
-          }
-        },
-        {
-          "name": "Image",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 255
-          }
-        },
-        {
-          "name": "ResourceConfiguration",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "ResourceConfiguration"
-          }
-        }
-      ]
-    },
-    "Filter": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "DeltaTime",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "DeltaTime"
-          }
-        }
-      ]
-    },
-    "OutputFileUriValue": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "FileName",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "pattern": "^[\\w\\.-]{1,255}$"
-          }
-        }
-      ]
-    },
-    "Schedule": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "ScheduleExpression",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
     "S3DestinationConfiguration": {
       "type": "object",
       "properties": [
-        {
-          "name": "GlueConfiguration",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "GlueConfiguration"
-          }
-        },
         {
           "name": "Bucket",
           "optional": false,
@@ -431,6 +355,14 @@
             "maxLength": 255,
             "minLength": 3,
             "pattern": "^[a-zA-Z0-9.\\-_]*$"
+          }
+        },
+        {
+          "name": "GlueConfiguration",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "GlueConfiguration"
           }
         },
         {
@@ -454,15 +386,14 @@
         }
       ]
     },
-    "LateDataRuleConfiguration": {
+    "Schedule": {
       "type": "object",
       "properties": [
         {
-          "name": "DeltaTimeSessionWindowConfiguration",
-          "optional": true,
+          "name": "ScheduleExpression",
+          "optional": false,
           "type": {
-            "type": "ref",
-            "typeName": "DeltaTimeSessionWindowConfiguration"
+            "type": "string"
           }
         }
       ]
@@ -490,23 +421,23 @@
         }
       ]
     },
-    "DatasetContentDeliveryRuleDestination": {
+    "Trigger": {
       "type": "object",
       "properties": [
         {
-          "name": "IotEventsDestinationConfiguration",
+          "name": "Schedule",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "IotEventsDestinationConfiguration"
+            "typeName": "Schedule"
           }
         },
         {
-          "name": "S3DestinationConfiguration",
+          "name": "TriggeringDataset",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "S3DestinationConfiguration"
+            "typeName": "TriggeringDataset"
           }
         }
       ]
@@ -522,6 +453,75 @@
             "maxLength": 128,
             "minLength": 1,
             "pattern": "(^(?!_{2}))(^[a-zA-Z0-9_]+$)"
+          }
+        }
+      ]
+    },
+    "Variable": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "DatasetContentVersionValue",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DatasetContentVersionValue"
+          }
+        },
+        {
+          "name": "DoubleValue",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": false
+          }
+        },
+        {
+          "name": "OutputFileUriValue",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "OutputFileUriValue"
+          }
+        },
+        {
+          "name": "StringValue",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 1024,
+            "minLength": 0
+          }
+        },
+        {
+          "name": "VariableName",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "VersioningConfiguration": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "MaxVersions",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 1000,
+            "minimum": 1
+          }
+        },
+        {
+          "name": "Unlimited",
+          "optional": true,
+          "type": {
+            "type": "boolean"
           }
         }
       ]
@@ -545,29 +545,6 @@
         }
       },
       {
-        "name": "LateDataRules",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "itemType": {
-            "type": "ref",
-            "typeName": "LateDataRule"
-          },
-          "maxLength": 1,
-          "minLength": 1
-        }
-      },
-      {
-        "name": "DatasetName",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "maxLength": 128,
-          "minLength": 1,
-          "pattern": "(^(?!_{2}))(^[a-zA-Z0-9_]+$)"
-        }
-      },
-      {
         "name": "ContentDeliveryRules",
         "optional": true,
         "type": {
@@ -581,24 +558,26 @@
         }
       },
       {
-        "name": "Triggers",
+        "name": "DatasetName",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "(^(?!_{2}))(^[a-zA-Z0-9_]+$)"
+        }
+      },
+      {
+        "name": "LateDataRules",
         "optional": true,
         "type": {
           "type": "array",
           "itemType": {
             "type": "ref",
-            "typeName": "Trigger"
+            "typeName": "LateDataRule"
           },
-          "maxLength": 5,
-          "minLength": 0
-        }
-      },
-      {
-        "name": "VersioningConfiguration",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "VersioningConfiguration"
+          "maxLength": 1,
+          "minLength": 1
         }
       },
       {
@@ -621,6 +600,27 @@
           "maxLength": 50,
           "minLength": 1
         }
+      },
+      {
+        "name": "Triggers",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Trigger"
+          },
+          "maxLength": 5,
+          "minLength": 0
+        }
+      },
+      {
+        "name": "VersioningConfiguration",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "VersioningConfiguration"
+        }
       }
     ]
   },
@@ -637,5 +637,5 @@
       }
     ]
   },
-  "$hash": "4cad7575432f7aadcafea06b170546ed569f6186"
+  "$hash": "d90e0fa4d3858481b0721ef3141b73b07b6911cf"
 }

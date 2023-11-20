@@ -30,26 +30,6 @@
         }
       ]
     },
-    "Tag": {
-      "type": "object",
-      "description": "",
-      "properties": [
-        {
-          "name": "Key",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Value",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
     "S3Location": {
       "type": "object",
       "description": "``S3Location`` is a property of the [AWS::ApiGateway::RestApi](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-restapi.html) resource that specifies the Amazon S3 location of a OpenAPI (formerly Swagger) file that defines a set of RESTful APIs in JSON or YAML.\n On January 1, 2016, the Swagger Specification was donated to the [OpenAPI initiative](https://docs.aws.amazon.com/https://www.openapis.org/), becoming the foundation of the OpenAPI Specification.",
@@ -73,6 +53,15 @@
           }
         },
         {
+          "name": "Key",
+          "description": "The file name of the OpenAPI file (Amazon S3 object name).",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The file name of the OpenAPI file (Amazon S3 object name)."
+          }
+        },
+        {
           "name": "Version",
           "description": "For versioning-enabled buckets, a specific version of the OpenAPI file.",
           "optional": true,
@@ -80,14 +69,25 @@
             "type": "string",
             "description": "For versioning-enabled buckets, a specific version of the OpenAPI file."
           }
-        },
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "description": "",
+      "properties": [
         {
           "name": "Key",
-          "description": "The file name of the OpenAPI file (Amazon S3 object name).",
-          "optional": true,
+          "optional": false,
           "type": {
-            "type": "string",
-            "description": "The file name of the OpenAPI file (Amazon S3 object name)."
+            "type": "string"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string"
           }
         }
       ]
@@ -156,16 +156,6 @@
         }
       },
       {
-        "name": "EndpointConfiguration",
-        "description": "A list of the endpoint types of the API. Use this property when creating an API. When importing an existing API, specify the endpoint configuration types using the ``Parameters`` property.",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "description": "A list of the endpoint types of the API. Use this property when creating an API. When importing an existing API, specify the endpoint configuration types using the ``Parameters`` property.",
-          "typeName": "EndpointConfiguration"
-        }
-      },
-      {
         "name": "Description",
         "description": "The description of the RestApi.",
         "optional": true,
@@ -184,21 +174,22 @@
         }
       },
       {
+        "name": "EndpointConfiguration",
+        "description": "A list of the endpoint types of the API. Use this property when creating an API. When importing an existing API, specify the endpoint configuration types using the ``Parameters`` property.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "A list of the endpoint types of the API. Use this property when creating an API. When importing an existing API, specify the endpoint configuration types using the ``Parameters`` property.",
+          "typeName": "EndpointConfiguration"
+        }
+      },
+      {
         "name": "FailOnWarnings",
         "description": "A query parameter to indicate whether to rollback the API update (``true``) or not (``false``) when a warning is encountered. The default value is ``false``.",
         "optional": true,
         "type": {
           "type": "boolean",
           "description": "A query parameter to indicate whether to rollback the API update (``true``) or not (``false``) when a warning is encountered. The default value is ``false``."
-        }
-      },
-      {
-        "name": "Name",
-        "description": "The name of the RestApi. A name is required if the REST API is not based on an OpenAPI specification.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The name of the RestApi. A name is required if the REST API is not based on an OpenAPI specification."
         }
       },
       {
@@ -221,21 +212,12 @@
         }
       },
       {
-        "name": "Policy",
-        "description": "A policy document that contains the permissions for the ``RestApi`` resource. To set the ARN for the policy, use the ``!Join`` intrinsic function with ``\"\"`` as delimiter and values of ``\"execute-api:/\"`` and ``\"*\"``.",
+        "name": "Name",
+        "description": "The name of the RestApi. A name is required if the REST API is not based on an OpenAPI specification.",
         "optional": true,
         "type": {
-          "type": "union",
-          "types": [
-            {
-              "type": "record",
-              "description": "A policy document that contains the permissions for the ``RestApi`` resource. To set the ARN for the policy, use the ``!Join`` intrinsic function with ``\"\"`` as delimiter and values of ``\"execute-api:/\"`` and ``\"*\"``."
-            },
-            {
-              "type": "string",
-              "description": "A policy document that contains the permissions for the ``RestApi`` resource. To set the ARN for the policy, use the ``!Join`` intrinsic function with ``\"\"`` as delimiter and values of ``\"execute-api:/\"`` and ``\"*\"``."
-            }
-          ]
+          "type": "string",
+          "description": "The name of the RestApi. A name is required if the REST API is not based on an OpenAPI specification."
         }
       },
       {
@@ -255,6 +237,24 @@
             {
               "type": "string",
               "description": "Custom header parameters as part of the request. For example, to exclude DocumentationParts from an imported API, set ``ignore=documentation`` as a ``parameters`` value, as in the AWS CLI command of ``aws apigateway import-rest-api --parameters ignore=documentation --body 'file:///path/to/imported-api-body.json'``."
+            }
+          ]
+        }
+      },
+      {
+        "name": "Policy",
+        "description": "A policy document that contains the permissions for the ``RestApi`` resource. To set the ARN for the policy, use the ``!Join`` intrinsic function with ``\"\"`` as delimiter and values of ``\"execute-api:/\"`` and ``\"*\"``.",
+        "optional": true,
+        "type": {
+          "type": "union",
+          "types": [
+            {
+              "type": "record",
+              "description": "A policy document that contains the permissions for the ``RestApi`` resource. To set the ARN for the policy, use the ``!Join`` intrinsic function with ``\"\"`` as delimiter and values of ``\"execute-api:/\"`` and ``\"*\"``."
+            },
+            {
+              "type": "string",
+              "description": "A policy document that contains the permissions for the ``RestApi`` resource. To set the ARN for the policy, use the ``!Join`` intrinsic function with ``\"\"`` as delimiter and values of ``\"execute-api:/\"`` and ``\"*\"``."
             }
           ]
         }
@@ -298,5 +298,5 @@
       }
     ]
   },
-  "$hash": "972f21c65679223eb9431295ee7af6debc7b27d8"
+  "$hash": "cfc547ac42c8265c25203019e0dfb7b2d54f2c48"
 }

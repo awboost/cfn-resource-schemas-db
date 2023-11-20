@@ -1,27 +1,40 @@
 {
   "definitions": {
-    "SpaceSettings": {
+    "CustomImage": {
       "type": "object",
-      "description": "A collection of settings that apply to spaces of Amazon SageMaker Studio. These settings are specified when the CreateSpace API is called.",
+      "description": "A custom SageMaker image.",
       "properties": [
         {
-          "name": "JupyterServerAppSettings",
-          "description": "The Jupyter server's app settings.",
-          "optional": true,
+          "name": "AppImageConfigName",
+          "description": "The Name of the AppImageConfig.",
+          "optional": false,
           "type": {
-            "type": "ref",
-            "description": "The Jupyter server's app settings.",
-            "typeName": "JupyterServerAppSettings"
+            "type": "string",
+            "description": "The Name of the AppImageConfig.",
+            "maxLength": 63,
+            "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9]){0,62}"
           }
         },
         {
-          "name": "KernelGatewayAppSettings",
-          "description": "The kernel gateway app settings.",
+          "name": "ImageName",
+          "description": "The name of the CustomImage. Must be unique to your account.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The name of the CustomImage. Must be unique to your account.",
+            "maxLength": 63,
+            "pattern": "^[a-zA-Z0-9]([-.]?[a-zA-Z0-9]){0,62}$"
+          }
+        },
+        {
+          "name": "ImageVersionNumber",
+          "description": "The version number of the CustomImage.",
           "optional": true,
           "type": {
-            "type": "ref",
-            "description": "The kernel gateway app settings.",
-            "typeName": "KernelGatewayAppSettings"
+            "type": "number",
+            "description": "The version number of the CustomImage.",
+            "isInteger": true,
+            "minimum": 0
           }
         }
       ]
@@ -35,6 +48,37 @@
           "optional": true,
           "type": {
             "type": "ref",
+            "typeName": "ResourceSpec"
+          }
+        }
+      ]
+    },
+    "KernelGatewayAppSettings": {
+      "type": "object",
+      "description": "The kernel gateway app settings.",
+      "properties": [
+        {
+          "name": "CustomImages",
+          "description": "A list of custom SageMaker images that are configured to run as a KernelGateway app.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "A list of custom SageMaker images that are configured to run as a KernelGateway app.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "CustomImage"
+            },
+            "maxLength": 30,
+            "minLength": 0
+          }
+        },
+        {
+          "name": "DefaultResourceSpec",
+          "description": "The default instance type and the Amazon Resource Name (ARN) of the default SageMaker image used by the KernelGateway app.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The default instance type and the Amazon Resource Name (ARN) of the default SageMaker image used by the KernelGateway app.",
             "typeName": "ResourceSpec"
           }
         }
@@ -138,72 +182,28 @@
         }
       ]
     },
-    "KernelGatewayAppSettings": {
+    "SpaceSettings": {
       "type": "object",
-      "description": "The kernel gateway app settings.",
+      "description": "A collection of settings that apply to spaces of Amazon SageMaker Studio. These settings are specified when the CreateSpace API is called.",
       "properties": [
         {
-          "name": "CustomImages",
-          "description": "A list of custom SageMaker images that are configured to run as a KernelGateway app.",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "description": "A list of custom SageMaker images that are configured to run as a KernelGateway app.",
-            "itemType": {
-              "type": "ref",
-              "typeName": "CustomImage"
-            },
-            "maxLength": 30,
-            "minLength": 0
-          }
-        },
-        {
-          "name": "DefaultResourceSpec",
-          "description": "The default instance type and the Amazon Resource Name (ARN) of the default SageMaker image used by the KernelGateway app.",
+          "name": "JupyterServerAppSettings",
+          "description": "The Jupyter server's app settings.",
           "optional": true,
           "type": {
             "type": "ref",
-            "description": "The default instance type and the Amazon Resource Name (ARN) of the default SageMaker image used by the KernelGateway app.",
-            "typeName": "ResourceSpec"
-          }
-        }
-      ]
-    },
-    "CustomImage": {
-      "type": "object",
-      "description": "A custom SageMaker image.",
-      "properties": [
-        {
-          "name": "AppImageConfigName",
-          "description": "The Name of the AppImageConfig.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The Name of the AppImageConfig.",
-            "maxLength": 63,
-            "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9]){0,62}"
+            "description": "The Jupyter server's app settings.",
+            "typeName": "JupyterServerAppSettings"
           }
         },
         {
-          "name": "ImageName",
-          "description": "The name of the CustomImage. Must be unique to your account.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The name of the CustomImage. Must be unique to your account.",
-            "maxLength": 63,
-            "pattern": "^[a-zA-Z0-9]([-.]?[a-zA-Z0-9]){0,62}$"
-          }
-        },
-        {
-          "name": "ImageVersionNumber",
-          "description": "The version number of the CustomImage.",
+          "name": "KernelGatewayAppSettings",
+          "description": "The kernel gateway app settings.",
           "optional": true,
           "type": {
-            "type": "number",
-            "description": "The version number of the CustomImage.",
-            "isInteger": true,
-            "minimum": 0
+            "type": "ref",
+            "description": "The kernel gateway app settings.",
+            "typeName": "KernelGatewayAppSettings"
           }
         }
       ]
@@ -212,7 +212,7 @@
       "type": "object",
       "properties": [
         {
-          "name": "Value",
+          "name": "Key",
           "optional": false,
           "type": {
             "type": "string",
@@ -221,7 +221,7 @@
           }
         },
         {
-          "name": "Key",
+          "name": "Value",
           "optional": false,
           "type": {
             "type": "string",
@@ -302,5 +302,5 @@
       }
     ]
   },
-  "$hash": "a4fb34a97bbf6743c0e768b48abc5a3cd5bdaccf"
+  "$hash": "89dc77dde1f345084ebf99955a4cd96d0f2aca9b"
 }

@@ -1,5 +1,71 @@
 {
   "definitions": {
+    "Description": {
+      "type": "string",
+      "description": "Description of the FAQ",
+      "maxLength": 1000,
+      "minLength": 1
+    },
+    "FaqName": {
+      "type": "string",
+      "maxLength": 100,
+      "minLength": 1
+    },
+    "FileFormat": {
+      "type": "string",
+      "description": "Format of the input file",
+      "allowedValues": ["CSV", "CSV_WITH_HEADER", "JSON"]
+    },
+    "Id": {
+      "type": "string",
+      "description": "Unique ID of the FAQ",
+      "maxLength": 100,
+      "minLength": 1
+    },
+    "IndexId": {
+      "type": "string",
+      "description": "Unique ID of Index",
+      "maxLength": 36,
+      "minLength": 36
+    },
+    "RoleArn": {
+      "type": "string",
+      "maxLength": 1284,
+      "minLength": 1,
+      "pattern": "arn:[a-z0-9-\\.]{1,63}:[a-z0-9-\\.]{0,63}:[a-z0-9-\\.]{0,63}:[a-z0-9-\\.]{0,63}:[^/].{0,1023}"
+    },
+    "S3BucketName": {
+      "type": "string",
+      "maxLength": 63,
+      "minLength": 3,
+      "pattern": "[a-z0-9][\\.\\-a-z0-9]{1,61}[a-z0-9]"
+    },
+    "S3ObjectKey": {
+      "type": "string",
+      "maxLength": 1024,
+      "minLength": 1
+    },
+    "S3Path": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Bucket",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "S3BucketName"
+          }
+        },
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "S3ObjectKey"
+          }
+        }
+      ]
+    },
     "Tag": {
       "type": "object",
       "description": "A label for tagging Kendra resources",
@@ -36,98 +102,12 @@
         "typeName": "Tag"
       },
       "maxLength": 200
-    },
-    "IndexId": {
-      "type": "string",
-      "description": "Unique ID of Index",
-      "maxLength": 36,
-      "minLength": 36
-    },
-    "Description": {
-      "type": "string",
-      "description": "Description of the FAQ",
-      "maxLength": 1000,
-      "minLength": 1
-    },
-    "FileFormat": {
-      "type": "string",
-      "description": "Format of the input file",
-      "allowedValues": ["CSV", "CSV_WITH_HEADER", "JSON"]
-    },
-    "S3Path": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Bucket",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "S3BucketName"
-          }
-        },
-        {
-          "name": "Key",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "S3ObjectKey"
-          }
-        }
-      ]
-    },
-    "S3BucketName": {
-      "type": "string",
-      "maxLength": 63,
-      "minLength": 3,
-      "pattern": "[a-z0-9][\\.\\-a-z0-9]{1,61}[a-z0-9]"
-    },
-    "S3ObjectKey": {
-      "type": "string",
-      "maxLength": 1024,
-      "minLength": 1
-    },
-    "FaqName": {
-      "type": "string",
-      "maxLength": 100,
-      "minLength": 1
-    },
-    "RoleArn": {
-      "type": "string",
-      "maxLength": 1284,
-      "minLength": 1,
-      "pattern": "arn:[a-z0-9-\\.]{1,63}:[a-z0-9-\\.]{0,63}:[a-z0-9-\\.]{0,63}:[a-z0-9-\\.]{0,63}:[^/].{0,1023}"
-    },
-    "Id": {
-      "type": "string",
-      "description": "Unique ID of the FAQ",
-      "maxLength": 100,
-      "minLength": 1
     }
   },
   "resource": {
     "type": "object",
     "description": "A Kendra FAQ resource",
     "properties": [
-      {
-        "name": "IndexId",
-        "description": "Index ID",
-        "optional": false,
-        "type": {
-          "type": "ref",
-          "description": "Index ID",
-          "typeName": "IndexId"
-        }
-      },
-      {
-        "name": "Name",
-        "description": "FAQ name",
-        "optional": false,
-        "type": {
-          "type": "ref",
-          "description": "FAQ name",
-          "typeName": "FaqName"
-        }
-      },
       {
         "name": "Description",
         "description": "FAQ description",
@@ -149,13 +129,23 @@
         }
       },
       {
-        "name": "S3Path",
-        "description": "FAQ S3 path",
+        "name": "IndexId",
+        "description": "Index ID",
         "optional": false,
         "type": {
           "type": "ref",
-          "description": "FAQ S3 path",
-          "typeName": "S3Path"
+          "description": "Index ID",
+          "typeName": "IndexId"
+        }
+      },
+      {
+        "name": "Name",
+        "description": "FAQ name",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "description": "FAQ name",
+          "typeName": "FaqName"
         }
       },
       {
@@ -166,6 +156,16 @@
           "type": "ref",
           "description": "FAQ role ARN",
           "typeName": "RoleArn"
+        }
+      },
+      {
+        "name": "S3Path",
+        "description": "FAQ S3 path",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "description": "FAQ S3 path",
+          "typeName": "S3Path"
         }
       },
       {
@@ -185,22 +185,22 @@
     "description": "A Kendra FAQ resource",
     "properties": [
       {
-        "name": "Id",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "Id"
-        }
-      },
-      {
         "name": "Arn",
         "optional": true,
         "type": {
           "type": "string",
           "maxLength": 1000
         }
+      },
+      {
+        "name": "Id",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "Id"
+        }
       }
     ]
   },
-  "$hash": "e0321e90bf663394221f06ecb1afc28b3c4cc857"
+  "$hash": "53f40e913e0206d24ec70fbb7d485a9707252dae"
 }

@@ -1,24 +1,10 @@
 {
   "definitions": {
-    "TableIdentifier": {
+    "Column": {
       "type": "object",
       "properties": [
         {
-          "name": "DatabaseName",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Region",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "CatalogId",
+          "name": "Comment",
           "optional": true,
           "type": {
             "type": "string"
@@ -26,9 +12,52 @@
         },
         {
           "name": "Name",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Type",
           "optional": true,
           "type": {
             "type": "string"
+          }
+        }
+      ]
+    },
+    "IcebergInput": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "MetadataOperation",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "MetadataOperation"
+          }
+        },
+        {
+          "name": "Version",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "MetadataOperation": {
+      "type": "record"
+    },
+    "OpenTableFormatInput": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "IcebergInput",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "IcebergInput"
           }
         }
       ]
@@ -49,6 +78,32 @@
           "type": {
             "type": "number",
             "isInteger": true
+          }
+        }
+      ]
+    },
+    "SchemaId": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "RegistryName",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "SchemaArn",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "SchemaName",
+          "optional": true,
+          "type": {
+            "type": "string"
           }
         }
       ]
@@ -81,32 +136,11 @@
         }
       ]
     },
-    "TableInput": {
+    "SerdeInfo": {
       "type": "object",
       "properties": [
         {
-          "name": "Owner",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "ViewOriginalText",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Description",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "TableType",
+          "name": "Name",
           "optional": true,
           "type": {
             "type": "string"
@@ -120,26 +154,219 @@
           }
         },
         {
-          "name": "ViewExpandedText",
+          "name": "SerializationLibrary",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "SkewedInfo": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "SkewedColumnNames",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "name": "SkewedColumnValueLocationMaps",
+          "optional": true,
+          "type": {
+            "type": "record"
+          }
+        },
+        {
+          "name": "SkewedColumnValues",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "StorageDescriptor": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "BucketColumns",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "name": "Columns",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Column"
+            }
+          }
+        },
+        {
+          "name": "Compressed",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "InputFormat",
           "optional": true,
           "type": {
             "type": "string"
           }
         },
         {
-          "name": "StorageDescriptor",
+          "name": "Location",
           "optional": true,
           "type": {
-            "type": "ref",
-            "typeName": "StorageDescriptor"
+            "type": "string"
           }
         },
         {
-          "name": "TargetTable",
+          "name": "NumberOfBuckets",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "OutputFormat",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Parameters",
+          "optional": true,
+          "type": {
+            "type": "record"
+          }
+        },
+        {
+          "name": "SchemaReference",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "TableIdentifier"
+            "typeName": "SchemaReference"
+          }
+        },
+        {
+          "name": "SerdeInfo",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "SerdeInfo"
+          }
+        },
+        {
+          "name": "SkewedInfo",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "SkewedInfo"
+          }
+        },
+        {
+          "name": "SortColumns",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Order"
+            }
+          }
+        },
+        {
+          "name": "StoredAsSubDirectories",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        }
+      ]
+    },
+    "TableIdentifier": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "CatalogId",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "DatabaseName",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Name",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Region",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "TableInput": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Description",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Name",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Owner",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Parameters",
+          "optional": true,
+          "type": {
+            "type": "record"
           }
         },
         {
@@ -162,264 +389,37 @@
           }
         },
         {
-          "name": "Name",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "MetadataOperation": {
-      "type": "record"
-    },
-    "OpenTableFormatInput": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "IcebergInput",
+          "name": "StorageDescriptor",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "IcebergInput"
-          }
-        }
-      ]
-    },
-    "SkewedInfo": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "SkewedColumnValues",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "string"
-            }
+            "typeName": "StorageDescriptor"
           }
         },
         {
-          "name": "SkewedColumnValueLocationMaps",
-          "optional": true,
-          "type": {
-            "type": "record"
-          }
-        },
-        {
-          "name": "SkewedColumnNames",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "string"
-            }
-          }
-        }
-      ]
-    },
-    "Column": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Comment",
+          "name": "TableType",
           "optional": true,
           "type": {
             "type": "string"
           }
         },
         {
-          "name": "Type",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Name",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "StorageDescriptor": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "StoredAsSubDirectories",
-          "optional": true,
-          "type": {
-            "type": "boolean"
-          }
-        },
-        {
-          "name": "Parameters",
-          "optional": true,
-          "type": {
-            "type": "record"
-          }
-        },
-        {
-          "name": "BucketColumns",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "string"
-            }
-          }
-        },
-        {
-          "name": "NumberOfBuckets",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        },
-        {
-          "name": "OutputFormat",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Columns",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "Column"
-            }
-          }
-        },
-        {
-          "name": "SerdeInfo",
+          "name": "TargetTable",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "SerdeInfo"
+            "typeName": "TableIdentifier"
           }
         },
         {
-          "name": "SortColumns",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "Order"
-            }
-          }
-        },
-        {
-          "name": "Compressed",
-          "optional": true,
-          "type": {
-            "type": "boolean"
-          }
-        },
-        {
-          "name": "SchemaReference",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "SchemaReference"
-          }
-        },
-        {
-          "name": "SkewedInfo",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "SkewedInfo"
-          }
-        },
-        {
-          "name": "InputFormat",
+          "name": "ViewExpandedText",
           "optional": true,
           "type": {
             "type": "string"
           }
         },
         {
-          "name": "Location",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "SchemaId": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "RegistryName",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "SchemaName",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "SchemaArn",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "IcebergInput": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "MetadataOperation",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "MetadataOperation"
-          }
-        },
-        {
-          "name": "Version",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "SerdeInfo": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Parameters",
-          "optional": true,
-          "type": {
-            "type": "record"
-          }
-        },
-        {
-          "name": "SerializationLibrary",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Name",
+          "name": "ViewOriginalText",
           "optional": true,
           "type": {
             "type": "string"
@@ -433,18 +433,17 @@
     "description": "Resource Type definition for AWS::Glue::Table",
     "properties": [
       {
-        "name": "DatabaseName",
+        "name": "CatalogId",
         "optional": false,
         "type": {
           "type": "string"
         }
       },
       {
-        "name": "TableInput",
+        "name": "DatabaseName",
         "optional": false,
         "type": {
-          "type": "ref",
-          "typeName": "TableInput"
+          "type": "string"
         }
       },
       {
@@ -456,10 +455,11 @@
         }
       },
       {
-        "name": "CatalogId",
+        "name": "TableInput",
         "optional": false,
         "type": {
-          "type": "string"
+          "type": "ref",
+          "typeName": "TableInput"
         }
       }
     ]
@@ -477,5 +477,5 @@
       }
     ]
   },
-  "$hash": "3911f803e609baca846ca58456cabc95382ee3f7"
+  "$hash": "33175a768625c11030a609c73e22193475273e90"
 }

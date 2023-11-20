@@ -1,42 +1,5 @@
 {
   "definitions": {
-    "Tags": {
-      "type": "array",
-      "itemType": {
-        "type": "ref",
-        "typeName": "Tag"
-      }
-    },
-    "Tag": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Key",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Value",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "IpAddress": {
-      "type": "string"
-    },
-    "Protocol": {
-      "type": "string",
-      "allowedValues": ["tcp", "udp"]
-    },
-    "Port": {
-      "type": "number",
-      "isInteger": true
-    },
     "FilterPortRange": {
       "type": "object",
       "properties": [
@@ -58,25 +21,12 @@
         }
       ]
     },
+    "IpAddress": {
+      "type": "string"
+    },
     "PathFilter": {
       "type": "object",
       "properties": [
-        {
-          "name": "SourceAddress",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "IpAddress"
-          }
-        },
-        {
-          "name": "SourcePortRange",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "FilterPortRange"
-          }
-        },
         {
           "name": "DestinationAddress",
           "optional": true,
@@ -92,8 +42,58 @@
             "type": "ref",
             "typeName": "FilterPortRange"
           }
+        },
+        {
+          "name": "SourceAddress",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "IpAddress"
+          }
+        },
+        {
+          "name": "SourcePortRange",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "FilterPortRange"
+          }
         }
       ]
+    },
+    "Port": {
+      "type": "number",
+      "isInteger": true
+    },
+    "Protocol": {
+      "type": "string",
+      "allowedValues": ["tcp", "udp"]
+    },
+    "Tag": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "Tags": {
+      "type": "array",
+      "itemType": {
+        "type": "ref",
+        "typeName": "Tag"
+      }
     }
   },
   "resource": {
@@ -101,27 +101,10 @@
     "description": "Resource schema for AWS::EC2::NetworkInsightsPath",
     "properties": [
       {
-        "name": "SourceIp",
+        "name": "Destination",
         "optional": true,
         "type": {
-          "type": "ref",
-          "typeName": "IpAddress"
-        }
-      },
-      {
-        "name": "FilterAtSource",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "PathFilter"
-        }
-      },
-      {
-        "name": "FilterAtDestination",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "PathFilter"
+          "type": "string"
         }
       },
       {
@@ -133,17 +116,27 @@
         }
       },
       {
-        "name": "Source",
-        "optional": false,
+        "name": "DestinationPort",
+        "optional": true,
         "type": {
-          "type": "string"
+          "type": "ref",
+          "typeName": "Port"
         }
       },
       {
-        "name": "Destination",
+        "name": "FilterAtDestination",
         "optional": true,
         "type": {
-          "type": "string"
+          "type": "ref",
+          "typeName": "PathFilter"
+        }
+      },
+      {
+        "name": "FilterAtSource",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "PathFilter"
         }
       },
       {
@@ -155,11 +148,18 @@
         }
       },
       {
-        "name": "DestinationPort",
+        "name": "Source",
+        "optional": false,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "SourceIp",
         "optional": true,
         "type": {
           "type": "ref",
-          "typeName": "Port"
+          "typeName": "IpAddress"
         }
       },
       {
@@ -180,7 +180,14 @@
     "description": "Resource schema for AWS::EC2::NetworkInsightsPath",
     "properties": [
       {
-        "name": "NetworkInsightsPathId",
+        "name": "CreatedDate",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "DestinationArn",
         "optional": true,
         "type": {
           "type": "string"
@@ -194,7 +201,7 @@
         }
       },
       {
-        "name": "CreatedDate",
+        "name": "NetworkInsightsPathId",
         "optional": true,
         "type": {
           "type": "string"
@@ -206,15 +213,8 @@
         "type": {
           "type": "string"
         }
-      },
-      {
-        "name": "DestinationArn",
-        "optional": true,
-        "type": {
-          "type": "string"
-        }
       }
     ]
   },
-  "$hash": "b6d65758e517fa569b78c2d38ac18129e6e12819"
+  "$hash": "6dfdd2b0f358561e41837a3422720983f5508ea2"
 }

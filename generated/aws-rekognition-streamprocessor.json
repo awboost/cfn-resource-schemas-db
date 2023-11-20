@@ -5,75 +5,51 @@
       "description": "The ARN of the stream processor",
       "maxLength": 2048
     },
-    "KinesisVideoStream": {
+    "BoundingBox": {
       "type": "object",
-      "description": "The Kinesis Video Stream that streams the source video.",
+      "description": "A bounding box denoting a region of interest in the frame to be analyzed.",
       "properties": [
         {
-          "name": "Arn",
-          "description": "ARN of the Kinesis Video Stream that streams the source video.",
+          "name": "Height",
           "optional": false,
           "type": {
-            "type": "string",
-            "description": "ARN of the Kinesis Video Stream that streams the source video.",
-            "maxLength": 2048,
-            "pattern": "(^arn:([a-z\\d-]+):kinesisvideo:([a-z\\d-]+):\\d{12}:.+$)"
-          }
-        }
-      ]
-    },
-    "S3Destination": {
-      "type": "object",
-      "description": "The S3 location in customer's account where inference output & artifacts are stored, as part of connected home feature.",
-      "properties": [
-        {
-          "name": "BucketName",
-          "description": "Name of the S3 bucket.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "Name of the S3 bucket.",
-            "maxLength": 63
+            "type": "number",
+            "isInteger": false,
+            "maximum": 100,
+            "minimum": 0
           }
         },
         {
-          "name": "ObjectKeyPrefix",
-          "description": "The object key prefix path where the results will be stored. Default is no prefix path",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The object key prefix path where the results will be stored. Default is no prefix path",
-            "maxLength": 256
-          }
-        }
-      ]
-    },
-    "KinesisDataStream": {
-      "type": "object",
-      "description": "The Amazon Kinesis Data Stream stream to which the Amazon Rekognition stream processor streams the analysis results, as part of face search feature.",
-      "properties": [
-        {
-          "name": "Arn",
-          "description": "ARN of the Kinesis Data Stream stream.",
+          "name": "Left",
           "optional": false,
           "type": {
-            "type": "string",
-            "description": "ARN of the Kinesis Data Stream stream.",
-            "maxLength": 2048,
-            "pattern": "(^arn:([a-z\\d-]+):kinesis:([a-z\\d-]+):\\d{12}:.+$)"
+            "type": "number",
+            "isInteger": false,
+            "maximum": 100,
+            "minimum": 0
+          }
+        },
+        {
+          "name": "Top",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": false,
+            "maximum": 100,
+            "minimum": 0
+          }
+        },
+        {
+          "name": "Width",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": false,
+            "maximum": 100,
+            "minimum": 0
           }
         }
       ]
-    },
-    "Labels": {
-      "type": "array",
-      "description": "List of labels that need to be detected in the video stream. Current supported values are PERSON, PET, PACKAGE, ALL.",
-      "itemType": {
-        "type": "string",
-        "maxLength": 128,
-        "minLength": 1
-      },
-      "minLength": 1
     },
     "ConnectedHomeSettings": {
       "type": "object",
@@ -97,6 +73,21 @@
             "isInteger": false,
             "maximum": 100,
             "minimum": 0
+          }
+        }
+      ]
+    },
+    "DataSharingPreference": {
+      "type": "object",
+      "description": "Indicates whether Rekognition is allowed to store the video stream data for model-training.",
+      "properties": [
+        {
+          "name": "OptIn",
+          "description": "Flag to enable data-sharing",
+          "optional": false,
+          "type": {
+            "type": "boolean",
+            "description": "Flag to enable data-sharing"
           }
         }
       ]
@@ -129,6 +120,50 @@
           }
         }
       ]
+    },
+    "KinesisDataStream": {
+      "type": "object",
+      "description": "The Amazon Kinesis Data Stream stream to which the Amazon Rekognition stream processor streams the analysis results, as part of face search feature.",
+      "properties": [
+        {
+          "name": "Arn",
+          "description": "ARN of the Kinesis Data Stream stream.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "ARN of the Kinesis Data Stream stream.",
+            "maxLength": 2048,
+            "pattern": "(^arn:([a-z\\d-]+):kinesis:([a-z\\d-]+):\\d{12}:.+$)"
+          }
+        }
+      ]
+    },
+    "KinesisVideoStream": {
+      "type": "object",
+      "description": "The Kinesis Video Stream that streams the source video.",
+      "properties": [
+        {
+          "name": "Arn",
+          "description": "ARN of the Kinesis Video Stream that streams the source video.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "ARN of the Kinesis Video Stream that streams the source video.",
+            "maxLength": 2048,
+            "pattern": "(^arn:([a-z\\d-]+):kinesisvideo:([a-z\\d-]+):\\d{12}:.+$)"
+          }
+        }
+      ]
+    },
+    "Labels": {
+      "type": "array",
+      "description": "List of labels that need to be detected in the video stream. Current supported values are PERSON, PET, PACKAGE, ALL.",
+      "itemType": {
+        "type": "string",
+        "maxLength": 128,
+        "minLength": 1
+      },
+      "minLength": 1
     },
     "NotificationChannel": {
       "type": "object",
@@ -181,63 +216,28 @@
       },
       "minLength": 3
     },
-    "BoundingBox": {
+    "S3Destination": {
       "type": "object",
-      "description": "A bounding box denoting a region of interest in the frame to be analyzed.",
+      "description": "The S3 location in customer's account where inference output & artifacts are stored, as part of connected home feature.",
       "properties": [
         {
-          "name": "Height",
+          "name": "BucketName",
+          "description": "Name of the S3 bucket.",
           "optional": false,
           "type": {
-            "type": "number",
-            "isInteger": false,
-            "maximum": 100,
-            "minimum": 0
+            "type": "string",
+            "description": "Name of the S3 bucket.",
+            "maxLength": 63
           }
         },
         {
-          "name": "Width",
-          "optional": false,
+          "name": "ObjectKeyPrefix",
+          "description": "The object key prefix path where the results will be stored. Default is no prefix path",
+          "optional": true,
           "type": {
-            "type": "number",
-            "isInteger": false,
-            "maximum": 100,
-            "minimum": 0
-          }
-        },
-        {
-          "name": "Left",
-          "optional": false,
-          "type": {
-            "type": "number",
-            "isInteger": false,
-            "maximum": 100,
-            "minimum": 0
-          }
-        },
-        {
-          "name": "Top",
-          "optional": false,
-          "type": {
-            "type": "number",
-            "isInteger": false,
-            "maximum": 100,
-            "minimum": 0
-          }
-        }
-      ]
-    },
-    "DataSharingPreference": {
-      "type": "object",
-      "description": "Indicates whether Rekognition is allowed to store the video stream data for model-training.",
-      "properties": [
-        {
-          "name": "OptIn",
-          "description": "Flag to enable data-sharing",
-          "optional": false,
-          "type": {
-            "type": "boolean",
-            "description": "Flag to enable data-sharing"
+            "type": "string",
+            "description": "The object key prefix path where the results will be stored. Default is no prefix path",
+            "maxLength": 256
           }
         }
       ]
@@ -278,15 +278,57 @@
     "description": "The AWS::Rekognition::StreamProcessor type is used to create an Amazon Rekognition StreamProcessor that you can use to analyze streaming videos.\n\n",
     "properties": [
       {
-        "name": "Name",
-        "description": "Name of the stream processor. It's an identifier you assign to the stream processor. You can use it to manage the stream processor.",
+        "name": "BoundingBoxRegionsOfInterest",
+        "description": "The BoundingBoxRegionsOfInterest specifies an array of bounding boxes of interest in the video frames to analyze, as part of connected home feature. If an object is partially in a region of interest, Rekognition will tag it as detected if the overlap of the object with the region-of-interest is greater than 20%.",
         "optional": true,
         "type": {
-          "type": "string",
-          "description": "Name of the stream processor. It's an identifier you assign to the stream processor. You can use it to manage the stream processor.",
-          "maxLength": 128,
-          "minLength": 1,
-          "pattern": "[a-zA-Z0-9_.\\-]+"
+          "type": "array",
+          "description": "The BoundingBoxRegionsOfInterest specifies an array of bounding boxes of interest in the video frames to analyze, as part of connected home feature. If an object is partially in a region of interest, Rekognition will tag it as detected if the overlap of the object with the region-of-interest is greater than 20%.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "BoundingBox"
+          },
+          "minLength": 0
+        }
+      },
+      {
+        "name": "ConnectedHomeSettings",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "ConnectedHomeSettings"
+        }
+      },
+      {
+        "name": "DataSharingPreference",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "DataSharingPreference"
+        }
+      },
+      {
+        "name": "FaceSearchSettings",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "FaceSearchSettings"
+        }
+      },
+      {
+        "name": "KinesisDataStream",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "KinesisDataStream"
+        }
+      },
+      {
+        "name": "KinesisVideoStream",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "KinesisVideoStream"
         }
       },
       {
@@ -299,54 +341,15 @@
         }
       },
       {
-        "name": "RoleArn",
-        "description": "ARN of the IAM role that allows access to the stream processor, and provides Rekognition read permissions for KVS stream and write permissions to S3 bucket and SNS topic.",
-        "optional": false,
+        "name": "Name",
+        "description": "Name of the stream processor. It's an identifier you assign to the stream processor. You can use it to manage the stream processor.",
+        "optional": true,
         "type": {
           "type": "string",
-          "description": "ARN of the IAM role that allows access to the stream processor, and provides Rekognition read permissions for KVS stream and write permissions to S3 bucket and SNS topic.",
-          "maxLength": 2048,
-          "pattern": "arn:aws(-[\\w]+)*:iam::[0-9]{12}:role/.*"
-        }
-      },
-      {
-        "name": "KinesisVideoStream",
-        "optional": false,
-        "type": {
-          "type": "ref",
-          "typeName": "KinesisVideoStream"
-        }
-      },
-      {
-        "name": "FaceSearchSettings",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "FaceSearchSettings"
-        }
-      },
-      {
-        "name": "ConnectedHomeSettings",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "ConnectedHomeSettings"
-        }
-      },
-      {
-        "name": "KinesisDataStream",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "KinesisDataStream"
-        }
-      },
-      {
-        "name": "S3Destination",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "S3Destination"
+          "description": "Name of the stream processor. It's an identifier you assign to the stream processor. You can use it to manage the stream processor.",
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "[a-zA-Z0-9_.\\-]+"
         }
       },
       {
@@ -355,14 +358,6 @@
         "type": {
           "type": "ref",
           "typeName": "NotificationChannel"
-        }
-      },
-      {
-        "name": "DataSharingPreference",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "DataSharingPreference"
         }
       },
       {
@@ -380,17 +375,22 @@
         }
       },
       {
-        "name": "BoundingBoxRegionsOfInterest",
-        "description": "The BoundingBoxRegionsOfInterest specifies an array of bounding boxes of interest in the video frames to analyze, as part of connected home feature. If an object is partially in a region of interest, Rekognition will tag it as detected if the overlap of the object with the region-of-interest is greater than 20%.",
+        "name": "RoleArn",
+        "description": "ARN of the IAM role that allows access to the stream processor, and provides Rekognition read permissions for KVS stream and write permissions to S3 bucket and SNS topic.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "ARN of the IAM role that allows access to the stream processor, and provides Rekognition read permissions for KVS stream and write permissions to S3 bucket and SNS topic.",
+          "maxLength": 2048,
+          "pattern": "arn:aws(-[\\w]+)*:iam::[0-9]{12}:role/.*"
+        }
+      },
+      {
+        "name": "S3Destination",
         "optional": true,
         "type": {
-          "type": "array",
-          "description": "The BoundingBoxRegionsOfInterest specifies an array of bounding boxes of interest in the video frames to analyze, as part of connected home feature. If an object is partially in a region of interest, Rekognition will tag it as detected if the overlap of the object with the region-of-interest is greater than 20%.",
-          "itemType": {
-            "type": "ref",
-            "typeName": "BoundingBox"
-          },
-          "minLength": 0
+          "type": "ref",
+          "typeName": "S3Destination"
         }
       },
       {
@@ -442,5 +442,5 @@
       }
     ]
   },
-  "$hash": "50eeae60c7abef2876bf9d85ae94e7fff22b17f4"
+  "$hash": "dfd629fb5649c0a61e93cce72db56b94ac0ff060"
 }

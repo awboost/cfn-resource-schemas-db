@@ -1,240 +1,5 @@
 {
   "definitions": {
-    "DataQualityBaselineConfig": {
-      "type": "object",
-      "description": "Baseline configuration used to validate that the data conforms to the specified constraints and statistics.",
-      "properties": [
-        {
-          "name": "BaseliningJobName",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ProcessingJobName"
-          }
-        },
-        {
-          "name": "ConstraintsResource",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ConstraintsResource"
-          }
-        },
-        {
-          "name": "StatisticsResource",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "StatisticsResource"
-          }
-        }
-      ]
-    },
-    "ConstraintsResource": {
-      "type": "object",
-      "description": "The baseline constraints resource for a monitoring job.",
-      "properties": [
-        {
-          "name": "S3Uri",
-          "description": "The Amazon S3 URI for baseline constraint file in Amazon S3 that the current monitoring job should validated against.",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "The Amazon S3 URI for baseline constraint file in Amazon S3 that the current monitoring job should validated against.",
-            "typeName": "S3Uri"
-          }
-        }
-      ]
-    },
-    "StatisticsResource": {
-      "type": "object",
-      "description": "The baseline statistics resource for a monitoring job.",
-      "properties": [
-        {
-          "name": "S3Uri",
-          "description": "The Amazon S3 URI for the baseline statistics file in Amazon S3 that the current monitoring job should be validated against.",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "The Amazon S3 URI for the baseline statistics file in Amazon S3 that the current monitoring job should be validated against.",
-            "typeName": "S3Uri"
-          }
-        }
-      ]
-    },
-    "S3Uri": {
-      "type": "string",
-      "description": "The Amazon S3 URI.",
-      "maxLength": 1024,
-      "pattern": "^(https|s3)://([^/]+)/?(.*)$"
-    },
-    "DataQualityAppSpecification": {
-      "type": "object",
-      "description": "Container image configuration object for the monitoring job.",
-      "properties": [
-        {
-          "name": "ContainerArguments",
-          "description": "An array of arguments for the container used to run the monitoring job.",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "description": "An array of arguments for the container used to run the monitoring job.",
-            "itemType": {
-              "type": "string",
-              "maxLength": 256,
-              "minLength": 1
-            },
-            "maxLength": 50
-          }
-        },
-        {
-          "name": "ContainerEntrypoint",
-          "description": "Specifies the entrypoint for a container used to run the monitoring job.",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "description": "Specifies the entrypoint for a container used to run the monitoring job.",
-            "itemType": {
-              "type": "string",
-              "maxLength": 256,
-              "minLength": 1
-            },
-            "maxLength": 100
-          }
-        },
-        {
-          "name": "ImageUri",
-          "description": "The container image to be run by the monitoring job.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The container image to be run by the monitoring job.",
-            "maxLength": 255,
-            "pattern": ".*"
-          }
-        },
-        {
-          "name": "PostAnalyticsProcessorSourceUri",
-          "description": "An Amazon S3 URI to a script that is called after analysis has been performed. Applicable only for the built-in (first party) containers.",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "An Amazon S3 URI to a script that is called after analysis has been performed. Applicable only for the built-in (first party) containers.",
-            "typeName": "S3Uri"
-          }
-        },
-        {
-          "name": "RecordPreprocessorSourceUri",
-          "description": "An Amazon S3 URI to a script that is called per row prior to running analysis. It can base64 decode the payload and convert it into a flatted json so that the built-in container can use the converted data. Applicable only for the built-in (first party) containers",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "An Amazon S3 URI to a script that is called per row prior to running analysis. It can base64 decode the payload and convert it into a flatted json so that the built-in container can use the converted data. Applicable only for the built-in (first party) containers",
-            "typeName": "S3Uri"
-          }
-        },
-        {
-          "name": "Environment",
-          "description": "Sets the environment variables in the Docker container",
-          "optional": true,
-          "type": {
-            "type": "record",
-            "description": "Sets the environment variables in the Docker container",
-            "valueType": {
-              "type": "union",
-              "types": [
-                {
-                  "type": "string",
-                  "maxLength": 256,
-                  "minLength": 1
-                },
-                {
-                  "type": "string",
-                  "maxLength": 256
-                }
-              ]
-            }
-          }
-        }
-      ]
-    },
-    "DataQualityJobInput": {
-      "type": "object",
-      "description": "The inputs for a monitoring job.",
-      "properties": [
-        {
-          "name": "EndpointInput",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "EndpointInput"
-          }
-        },
-        {
-          "name": "BatchTransformInput",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "BatchTransformInput"
-          }
-        }
-      ]
-    },
-    "EndpointInput": {
-      "type": "object",
-      "description": "The endpoint for a monitoring job.",
-      "properties": [
-        {
-          "name": "EndpointName",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "EndpointName"
-          }
-        },
-        {
-          "name": "LocalPath",
-          "description": "Path to the filesystem where the endpoint data is available to the container.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "Path to the filesystem where the endpoint data is available to the container.",
-            "maxLength": 256,
-            "pattern": ".*"
-          }
-        },
-        {
-          "name": "S3DataDistributionType",
-          "description": "Whether input data distributed in Amazon S3 is fully replicated or sharded by an S3 key. Defauts to FullyReplicated",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Whether input data distributed in Amazon S3 is fully replicated or sharded by an S3 key. Defauts to FullyReplicated",
-            "allowedValues": ["FullyReplicated", "ShardedByS3Key"]
-          }
-        },
-        {
-          "name": "S3InputMode",
-          "description": "Whether the Pipe or File is used as the input mode for transfering data for the monitoring job. Pipe mode is recommended for large datasets. File mode is useful for small files that fit in memory. Defaults to File.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Whether the Pipe or File is used as the input mode for transfering data for the monitoring job. Pipe mode is recommended for large datasets. File mode is useful for small files that fit in memory. Defaults to File.",
-            "allowedValues": ["Pipe", "File"]
-          }
-        },
-        {
-          "name": "ExcludeFeaturesAttribute",
-          "description": "Indexes or names of the features to be excluded from analysis",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Indexes or names of the features to be excluded from analysis",
-            "maxLength": 100
-          }
-        }
-      ]
-    },
     "BatchTransformInput": {
       "type": "object",
       "description": "The batch transform input for a monitoring job.",
@@ -259,6 +24,16 @@
           }
         },
         {
+          "name": "ExcludeFeaturesAttribute",
+          "description": "Indexes or names of the features to be excluded from analysis",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Indexes or names of the features to be excluded from analysis",
+            "maxLength": 100
+          }
+        },
+        {
           "name": "LocalPath",
           "description": "Path to the filesystem where the endpoint data is available to the container.",
           "optional": false,
@@ -287,112 +62,6 @@
             "type": "string",
             "description": "Whether the Pipe or File is used as the input mode for transfering data for the monitoring job. Pipe mode is recommended for large datasets. File mode is useful for small files that fit in memory. Defaults to File.",
             "allowedValues": ["Pipe", "File"]
-          }
-        },
-        {
-          "name": "ExcludeFeaturesAttribute",
-          "description": "Indexes or names of the features to be excluded from analysis",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Indexes or names of the features to be excluded from analysis",
-            "maxLength": 100
-          }
-        }
-      ]
-    },
-    "MonitoringOutputConfig": {
-      "type": "object",
-      "description": "The output configuration for monitoring jobs.",
-      "properties": [
-        {
-          "name": "KmsKeyId",
-          "description": "The AWS Key Management Service (AWS KMS) key that Amazon SageMaker uses to encrypt the model artifacts at rest using Amazon S3 server-side encryption.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The AWS Key Management Service (AWS KMS) key that Amazon SageMaker uses to encrypt the model artifacts at rest using Amazon S3 server-side encryption.",
-            "maxLength": 2048,
-            "pattern": ".*"
-          }
-        },
-        {
-          "name": "MonitoringOutputs",
-          "description": "Monitoring outputs for monitoring jobs. This is where the output of the periodic monitoring jobs is uploaded.",
-          "optional": false,
-          "type": {
-            "type": "array",
-            "description": "Monitoring outputs for monitoring jobs. This is where the output of the periodic monitoring jobs is uploaded.",
-            "itemType": {
-              "type": "ref",
-              "typeName": "MonitoringOutput"
-            }
-          }
-        }
-      ]
-    },
-    "MonitoringOutput": {
-      "type": "object",
-      "description": "The output object for a monitoring job.",
-      "properties": [
-        {
-          "name": "S3Output",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "S3Output"
-          }
-        }
-      ]
-    },
-    "S3Output": {
-      "type": "object",
-      "description": "Information about where and how to store the results of a monitoring job.",
-      "properties": [
-        {
-          "name": "LocalPath",
-          "description": "The local path to the Amazon S3 storage location where Amazon SageMaker saves the results of a monitoring job. LocalPath is an absolute path for the output data.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The local path to the Amazon S3 storage location where Amazon SageMaker saves the results of a monitoring job. LocalPath is an absolute path for the output data.",
-            "maxLength": 256,
-            "pattern": ".*"
-          }
-        },
-        {
-          "name": "S3UploadMode",
-          "description": "Whether to upload the results of the monitoring job continuously or after the job completes.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Whether to upload the results of the monitoring job continuously or after the job completes.",
-            "allowedValues": ["Continuous", "EndOfJob"]
-          }
-        },
-        {
-          "name": "S3Uri",
-          "description": "A URI that identifies the Amazon S3 storage location where Amazon SageMaker saves the results of a monitoring job.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "A URI that identifies the Amazon S3 storage location where Amazon SageMaker saves the results of a monitoring job.",
-            "maxLength": 512,
-            "pattern": "^(https|s3)://([^/]+)/?(.*)$"
-          }
-        }
-      ]
-    },
-    "MonitoringResources": {
-      "type": "object",
-      "description": "Identifies the resources to deploy for a monitoring job.",
-      "properties": [
-        {
-          "name": "ClusterConfig",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "ClusterConfig"
           }
         }
       ]
@@ -445,6 +114,349 @@
         }
       ]
     },
+    "ConstraintsResource": {
+      "type": "object",
+      "description": "The baseline constraints resource for a monitoring job.",
+      "properties": [
+        {
+          "name": "S3Uri",
+          "description": "The Amazon S3 URI for baseline constraint file in Amazon S3 that the current monitoring job should validated against.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The Amazon S3 URI for baseline constraint file in Amazon S3 that the current monitoring job should validated against.",
+            "typeName": "S3Uri"
+          }
+        }
+      ]
+    },
+    "Csv": {
+      "type": "object",
+      "description": "The CSV format",
+      "properties": [
+        {
+          "name": "Header",
+          "description": "A boolean flag indicating if given CSV has header",
+          "optional": true,
+          "type": {
+            "type": "boolean",
+            "description": "A boolean flag indicating if given CSV has header"
+          }
+        }
+      ]
+    },
+    "DataQualityAppSpecification": {
+      "type": "object",
+      "description": "Container image configuration object for the monitoring job.",
+      "properties": [
+        {
+          "name": "ContainerArguments",
+          "description": "An array of arguments for the container used to run the monitoring job.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "An array of arguments for the container used to run the monitoring job.",
+            "itemType": {
+              "type": "string",
+              "maxLength": 256,
+              "minLength": 1
+            },
+            "maxLength": 50
+          }
+        },
+        {
+          "name": "ContainerEntrypoint",
+          "description": "Specifies the entrypoint for a container used to run the monitoring job.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "Specifies the entrypoint for a container used to run the monitoring job.",
+            "itemType": {
+              "type": "string",
+              "maxLength": 256,
+              "minLength": 1
+            },
+            "maxLength": 100
+          }
+        },
+        {
+          "name": "Environment",
+          "description": "Sets the environment variables in the Docker container",
+          "optional": true,
+          "type": {
+            "type": "record",
+            "description": "Sets the environment variables in the Docker container",
+            "valueType": {
+              "type": "union",
+              "types": [
+                {
+                  "type": "string",
+                  "maxLength": 256
+                },
+                {
+                  "type": "string",
+                  "maxLength": 256,
+                  "minLength": 1
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "ImageUri",
+          "description": "The container image to be run by the monitoring job.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The container image to be run by the monitoring job.",
+            "maxLength": 255,
+            "pattern": ".*"
+          }
+        },
+        {
+          "name": "PostAnalyticsProcessorSourceUri",
+          "description": "An Amazon S3 URI to a script that is called after analysis has been performed. Applicable only for the built-in (first party) containers.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "An Amazon S3 URI to a script that is called after analysis has been performed. Applicable only for the built-in (first party) containers.",
+            "typeName": "S3Uri"
+          }
+        },
+        {
+          "name": "RecordPreprocessorSourceUri",
+          "description": "An Amazon S3 URI to a script that is called per row prior to running analysis. It can base64 decode the payload and convert it into a flatted json so that the built-in container can use the converted data. Applicable only for the built-in (first party) containers",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "An Amazon S3 URI to a script that is called per row prior to running analysis. It can base64 decode the payload and convert it into a flatted json so that the built-in container can use the converted data. Applicable only for the built-in (first party) containers",
+            "typeName": "S3Uri"
+          }
+        }
+      ]
+    },
+    "DataQualityBaselineConfig": {
+      "type": "object",
+      "description": "Baseline configuration used to validate that the data conforms to the specified constraints and statistics.",
+      "properties": [
+        {
+          "name": "BaseliningJobName",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ProcessingJobName"
+          }
+        },
+        {
+          "name": "ConstraintsResource",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ConstraintsResource"
+          }
+        },
+        {
+          "name": "StatisticsResource",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "StatisticsResource"
+          }
+        }
+      ]
+    },
+    "DataQualityJobInput": {
+      "type": "object",
+      "description": "The inputs for a monitoring job.",
+      "properties": [
+        {
+          "name": "BatchTransformInput",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "BatchTransformInput"
+          }
+        },
+        {
+          "name": "EndpointInput",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "EndpointInput"
+          }
+        }
+      ]
+    },
+    "DatasetFormat": {
+      "type": "object",
+      "description": "The dataset format of the data to monitor",
+      "properties": [
+        {
+          "name": "Csv",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Csv"
+          }
+        },
+        {
+          "name": "Json",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Json"
+          }
+        },
+        {
+          "name": "Parquet",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Parquet"
+          }
+        }
+      ]
+    },
+    "EndpointInput": {
+      "type": "object",
+      "description": "The endpoint for a monitoring job.",
+      "properties": [
+        {
+          "name": "EndpointName",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "EndpointName"
+          }
+        },
+        {
+          "name": "ExcludeFeaturesAttribute",
+          "description": "Indexes or names of the features to be excluded from analysis",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Indexes or names of the features to be excluded from analysis",
+            "maxLength": 100
+          }
+        },
+        {
+          "name": "LocalPath",
+          "description": "Path to the filesystem where the endpoint data is available to the container.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Path to the filesystem where the endpoint data is available to the container.",
+            "maxLength": 256,
+            "pattern": ".*"
+          }
+        },
+        {
+          "name": "S3DataDistributionType",
+          "description": "Whether input data distributed in Amazon S3 is fully replicated or sharded by an S3 key. Defauts to FullyReplicated",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Whether input data distributed in Amazon S3 is fully replicated or sharded by an S3 key. Defauts to FullyReplicated",
+            "allowedValues": ["FullyReplicated", "ShardedByS3Key"]
+          }
+        },
+        {
+          "name": "S3InputMode",
+          "description": "Whether the Pipe or File is used as the input mode for transfering data for the monitoring job. Pipe mode is recommended for large datasets. File mode is useful for small files that fit in memory. Defaults to File.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Whether the Pipe or File is used as the input mode for transfering data for the monitoring job. Pipe mode is recommended for large datasets. File mode is useful for small files that fit in memory. Defaults to File.",
+            "allowedValues": ["Pipe", "File"]
+          }
+        }
+      ]
+    },
+    "EndpointName": {
+      "type": "string",
+      "description": "The name of the endpoint used to run the monitoring job.",
+      "maxLength": 63,
+      "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9])*"
+    },
+    "JobDefinitionName": {
+      "type": "string",
+      "description": "The name of the job definition.",
+      "maxLength": 63,
+      "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9])*$"
+    },
+    "Json": {
+      "type": "object",
+      "description": "The Json format",
+      "properties": [
+        {
+          "name": "Line",
+          "description": "A boolean flag indicating if it is JSON line format",
+          "optional": true,
+          "type": {
+            "type": "boolean",
+            "description": "A boolean flag indicating if it is JSON line format"
+          }
+        }
+      ]
+    },
+    "MonitoringOutput": {
+      "type": "object",
+      "description": "The output object for a monitoring job.",
+      "properties": [
+        {
+          "name": "S3Output",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "S3Output"
+          }
+        }
+      ]
+    },
+    "MonitoringOutputConfig": {
+      "type": "object",
+      "description": "The output configuration for monitoring jobs.",
+      "properties": [
+        {
+          "name": "KmsKeyId",
+          "description": "The AWS Key Management Service (AWS KMS) key that Amazon SageMaker uses to encrypt the model artifacts at rest using Amazon S3 server-side encryption.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The AWS Key Management Service (AWS KMS) key that Amazon SageMaker uses to encrypt the model artifacts at rest using Amazon S3 server-side encryption.",
+            "maxLength": 2048,
+            "pattern": ".*"
+          }
+        },
+        {
+          "name": "MonitoringOutputs",
+          "description": "Monitoring outputs for monitoring jobs. This is where the output of the periodic monitoring jobs is uploaded.",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "description": "Monitoring outputs for monitoring jobs. This is where the output of the periodic monitoring jobs is uploaded.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "MonitoringOutput"
+            }
+          }
+        }
+      ]
+    },
+    "MonitoringResources": {
+      "type": "object",
+      "description": "Identifies the resources to deploy for a monitoring job.",
+      "properties": [
+        {
+          "name": "ClusterConfig",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "ClusterConfig"
+          }
+        }
+      ]
+    },
     "NetworkConfig": {
       "type": "object",
       "description": "Networking options for a job, such as network traffic encryption between containers, whether to allow inbound and outbound network calls to and from containers, and the VPC subnets and security groups to use for VPC-enabled jobs.",
@@ -477,40 +489,73 @@
         }
       ]
     },
-    "VpcConfig": {
+    "Parquet": {
+      "type": "boolean",
+      "description": "A flag indicate if the dataset format is Parquet"
+    },
+    "ProcessingJobName": {
+      "type": "string",
+      "description": "The name of a processing job",
+      "maxLength": 63,
+      "minLength": 1,
+      "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9])*$"
+    },
+    "S3Output": {
       "type": "object",
-      "description": "Specifies a VPC that your training jobs and hosted models have access to. Control access to and from your training and model containers by configuring the VPC.",
+      "description": "Information about where and how to store the results of a monitoring job.",
       "properties": [
         {
-          "name": "SecurityGroupIds",
-          "description": "The VPC security group IDs, in the form sg-xxxxxxxx. Specify the security groups for the VPC that is specified in the Subnets field.",
+          "name": "LocalPath",
+          "description": "The local path to the Amazon S3 storage location where Amazon SageMaker saves the results of a monitoring job. LocalPath is an absolute path for the output data.",
           "optional": false,
           "type": {
-            "type": "array",
-            "description": "The VPC security group IDs, in the form sg-xxxxxxxx. Specify the security groups for the VPC that is specified in the Subnets field.",
-            "itemType": {
-              "type": "string",
-              "maxLength": 32,
-              "pattern": "[-0-9a-zA-Z]+"
-            },
-            "maxLength": 5,
-            "minLength": 1
+            "type": "string",
+            "description": "The local path to the Amazon S3 storage location where Amazon SageMaker saves the results of a monitoring job. LocalPath is an absolute path for the output data.",
+            "maxLength": 256,
+            "pattern": ".*"
           }
         },
         {
-          "name": "Subnets",
-          "description": "The ID of the subnets in the VPC to which you want to connect to your monitoring jobs.",
+          "name": "S3UploadMode",
+          "description": "Whether to upload the results of the monitoring job continuously or after the job completes.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Whether to upload the results of the monitoring job continuously or after the job completes.",
+            "allowedValues": ["Continuous", "EndOfJob"]
+          }
+        },
+        {
+          "name": "S3Uri",
+          "description": "A URI that identifies the Amazon S3 storage location where Amazon SageMaker saves the results of a monitoring job.",
           "optional": false,
           "type": {
-            "type": "array",
-            "description": "The ID of the subnets in the VPC to which you want to connect to your monitoring jobs.",
-            "itemType": {
-              "type": "string",
-              "maxLength": 32,
-              "pattern": "[-0-9a-zA-Z]+"
-            },
-            "maxLength": 16,
-            "minLength": 1
+            "type": "string",
+            "description": "A URI that identifies the Amazon S3 storage location where Amazon SageMaker saves the results of a monitoring job.",
+            "maxLength": 512,
+            "pattern": "^(https|s3)://([^/]+)/?(.*)$"
+          }
+        }
+      ]
+    },
+    "S3Uri": {
+      "type": "string",
+      "description": "The Amazon S3 URI.",
+      "maxLength": 1024,
+      "pattern": "^(https|s3)://([^/]+)/?(.*)$"
+    },
+    "StatisticsResource": {
+      "type": "object",
+      "description": "The baseline statistics resource for a monitoring job.",
+      "properties": [
+        {
+          "name": "S3Uri",
+          "description": "The Amazon S3 URI for the baseline statistics file in Amazon S3 that the current monitoring job should be validated against.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The Amazon S3 URI for the baseline statistics file in Amazon S3 that the current monitoring job should be validated against.",
+            "typeName": "S3Uri"
           }
         }
       ]
@@ -562,88 +607,43 @@
         }
       ]
     },
-    "EndpointName": {
-      "type": "string",
-      "description": "The name of the endpoint used to run the monitoring job.",
-      "maxLength": 63,
-      "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9])*"
-    },
-    "JobDefinitionName": {
-      "type": "string",
-      "description": "The name of the job definition.",
-      "maxLength": 63,
-      "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9])*$"
-    },
-    "ProcessingJobName": {
-      "type": "string",
-      "description": "The name of a processing job",
-      "maxLength": 63,
-      "minLength": 1,
-      "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9])*$"
-    },
-    "DatasetFormat": {
+    "VpcConfig": {
       "type": "object",
-      "description": "The dataset format of the data to monitor",
+      "description": "Specifies a VPC that your training jobs and hosted models have access to. Control access to and from your training and model containers by configuring the VPC.",
       "properties": [
         {
-          "name": "Csv",
-          "optional": true,
+          "name": "SecurityGroupIds",
+          "description": "The VPC security group IDs, in the form sg-xxxxxxxx. Specify the security groups for the VPC that is specified in the Subnets field.",
+          "optional": false,
           "type": {
-            "type": "ref",
-            "typeName": "Csv"
+            "type": "array",
+            "description": "The VPC security group IDs, in the form sg-xxxxxxxx. Specify the security groups for the VPC that is specified in the Subnets field.",
+            "itemType": {
+              "type": "string",
+              "maxLength": 32,
+              "pattern": "[-0-9a-zA-Z]+"
+            },
+            "maxLength": 5,
+            "minLength": 1
           }
         },
         {
-          "name": "Json",
-          "optional": true,
+          "name": "Subnets",
+          "description": "The ID of the subnets in the VPC to which you want to connect to your monitoring jobs.",
+          "optional": false,
           "type": {
-            "type": "ref",
-            "typeName": "Json"
-          }
-        },
-        {
-          "name": "Parquet",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "Parquet"
-          }
-        }
-      ]
-    },
-    "Csv": {
-      "type": "object",
-      "description": "The CSV format",
-      "properties": [
-        {
-          "name": "Header",
-          "description": "A boolean flag indicating if given CSV has header",
-          "optional": true,
-          "type": {
-            "type": "boolean",
-            "description": "A boolean flag indicating if given CSV has header"
+            "type": "array",
+            "description": "The ID of the subnets in the VPC to which you want to connect to your monitoring jobs.",
+            "itemType": {
+              "type": "string",
+              "maxLength": 32,
+              "pattern": "[-0-9a-zA-Z]+"
+            },
+            "maxLength": 16,
+            "minLength": 1
           }
         }
       ]
-    },
-    "Json": {
-      "type": "object",
-      "description": "The Json format",
-      "properties": [
-        {
-          "name": "Line",
-          "description": "A boolean flag indicating if it is JSON line format",
-          "optional": true,
-          "type": {
-            "type": "boolean",
-            "description": "A boolean flag indicating if it is JSON line format"
-          }
-        }
-      ]
-    },
-    "Parquet": {
-      "type": "boolean",
-      "description": "A flag indicate if the dataset format is Parquet"
     }
   },
   "resource": {
@@ -651,11 +651,11 @@
     "description": "Resource Type definition for AWS::SageMaker::DataQualityJobDefinition",
     "properties": [
       {
-        "name": "JobDefinitionName",
-        "optional": true,
+        "name": "DataQualityAppSpecification",
+        "optional": false,
         "type": {
           "type": "ref",
-          "typeName": "JobDefinitionName"
+          "typeName": "DataQualityAppSpecification"
         }
       },
       {
@@ -664,14 +664,6 @@
         "type": {
           "type": "ref",
           "typeName": "DataQualityBaselineConfig"
-        }
-      },
-      {
-        "name": "DataQualityAppSpecification",
-        "optional": false,
-        "type": {
-          "type": "ref",
-          "typeName": "DataQualityAppSpecification"
         }
       },
       {
@@ -691,6 +683,22 @@
         }
       },
       {
+        "name": "EndpointName",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "EndpointName"
+        }
+      },
+      {
+        "name": "JobDefinitionName",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "JobDefinitionName"
+        }
+      },
+      {
         "name": "JobResources",
         "optional": false,
         "type": {
@@ -704,14 +712,6 @@
         "type": {
           "type": "ref",
           "typeName": "NetworkConfig"
-        }
-      },
-      {
-        "name": "EndpointName",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "EndpointName"
         }
       },
       {
@@ -755,6 +755,15 @@
     "description": "Resource Type definition for AWS::SageMaker::DataQualityJobDefinition",
     "properties": [
       {
+        "name": "CreationTime",
+        "description": "The time at which the job definition was created.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The time at which the job definition was created."
+        }
+      },
+      {
         "name": "JobDefinitionArn",
         "description": "The Amazon Resource Name (ARN) of job definition.",
         "optional": true,
@@ -764,17 +773,8 @@
           "maxLength": 256,
           "minLength": 1
         }
-      },
-      {
-        "name": "CreationTime",
-        "description": "The time at which the job definition was created.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The time at which the job definition was created."
-        }
       }
     ]
   },
-  "$hash": "61f4494dde8d3270ea928bde1d9bd72a9ad0fda6"
+  "$hash": "febf4df888c11c54206d04ed4d7e60fb4731fa9a"
 }

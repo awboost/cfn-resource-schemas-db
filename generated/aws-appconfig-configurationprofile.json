@@ -1,31 +1,5 @@
 {
   "definitions": {
-    "Validators": {
-      "type": "object",
-      "description": "A list of methods for validating the configuration.",
-      "properties": [
-        {
-          "name": "Type",
-          "description": "AWS AppConfig supports validators of type JSON_SCHEMA and LAMBDA.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "AWS AppConfig supports validators of type JSON_SCHEMA and LAMBDA."
-          }
-        },
-        {
-          "name": "Content",
-          "description": "Either the JSON Schema content or the Amazon Resource Name (ARN) of an Lambda function.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Either the JSON Schema content or the Amazon Resource Name (ARN) of an Lambda function.",
-            "maxLength": 32768,
-            "minLength": 0
-          }
-        }
-      ]
-    },
     "Tags": {
       "type": "object",
       "description": "Metadata to assign to the configuration profile. Tags help organize and categorize your AWS AppConfig resources. Each tag consists of a key and an optional value, both of which you define.",
@@ -54,6 +28,32 @@
           }
         }
       ]
+    },
+    "Validators": {
+      "type": "object",
+      "description": "A list of methods for validating the configuration.",
+      "properties": [
+        {
+          "name": "Content",
+          "description": "Either the JSON Schema content or the Amazon Resource Name (ARN) of an Lambda function.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Either the JSON Schema content or the Amazon Resource Name (ARN) of an Lambda function.",
+            "maxLength": 32768,
+            "minLength": 0
+          }
+        },
+        {
+          "name": "Type",
+          "description": "AWS AppConfig supports validators of type JSON_SCHEMA and LAMBDA.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "AWS AppConfig supports validators of type JSON_SCHEMA and LAMBDA."
+          }
+        }
+      ]
     }
   },
   "resource": {
@@ -61,24 +61,13 @@
     "description": "An example resource schema demonstrating some basic constructs and validation rules.",
     "properties": [
       {
-        "name": "LocationUri",
-        "description": "A URI to locate the configuration. You can specify the AWS AppConfig hosted configuration store, Systems Manager (SSM) document, an SSM Parameter Store parameter, or an Amazon S3 object.",
+        "name": "ApplicationId",
+        "description": "The application ID.",
         "optional": false,
         "type": {
           "type": "string",
-          "description": "A URI to locate the configuration. You can specify the AWS AppConfig hosted configuration store, Systems Manager (SSM) document, an SSM Parameter Store parameter, or an Amazon S3 object.",
-          "maxLength": 2048,
-          "minLength": 1
-        }
-      },
-      {
-        "name": "Type",
-        "description": "The type of configurations contained in the profile. When calling this API, enter one of the following values for Type: AWS.AppConfig.FeatureFlags, AWS.Freeform",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The type of configurations contained in the profile. When calling this API, enter one of the following values for Type: AWS.AppConfig.FeatureFlags, AWS.Freeform",
-          "pattern": "^[a-zA-Z\\.]+"
+          "description": "The application ID.",
+          "pattern": "[a-z0-9]{4,7}"
         }
       },
       {
@@ -93,17 +82,35 @@
         }
       },
       {
-        "name": "Validators",
-        "description": "A list of methods for validating the configuration.",
+        "name": "KmsKeyIdentifier",
+        "description": "The AWS Key Management Service key identifier (key ID, key alias, or key ARN) provided when the resource was created or updated.",
         "optional": true,
         "type": {
-          "type": "array",
-          "description": "A list of methods for validating the configuration.",
-          "itemType": {
-            "type": "ref",
-            "typeName": "Validators"
-          },
-          "maxLength": 2
+          "type": "string",
+          "description": "The AWS Key Management Service key identifier (key ID, key alias, or key ARN) provided when the resource was created or updated.",
+          "pattern": "^[\\da-f]{8}-[\\da-f]{4}-[\\da-f]{4}-[\\da-f]{4}-[\\da-f]{12}|alias/[a-zA-Z0-9/_-]{1,250}|arn:aws[a-zA-Z-]*:kms:[a-z]{2}(-gov|-iso(b?))?-[a-z]+-\\d{1}:\\d{12}:(key/[0-9a-f-]{36}|alias/[a-zA-Z0-9/_-]{1,250})$"
+        }
+      },
+      {
+        "name": "LocationUri",
+        "description": "A URI to locate the configuration. You can specify the AWS AppConfig hosted configuration store, Systems Manager (SSM) document, an SSM Parameter Store parameter, or an Amazon S3 object.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "A URI to locate the configuration. You can specify the AWS AppConfig hosted configuration store, Systems Manager (SSM) document, an SSM Parameter Store parameter, or an Amazon S3 object.",
+          "maxLength": 2048,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "Name",
+        "description": "A name for the configuration profile.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "A name for the configuration profile.",
+          "maxLength": 128,
+          "minLength": 1
         }
       },
       {
@@ -116,16 +123,6 @@
           "maxLength": 2048,
           "minLength": 20,
           "pattern": "^((arn):(aws|aws-cn|aws-iso|aws-iso-[a-z]{1}|aws-us-gov):(iam)::\\d{12}:role[/].*)$"
-        }
-      },
-      {
-        "name": "ApplicationId",
-        "description": "The application ID.",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "description": "The application ID.",
-          "pattern": "[a-z0-9]{4,7}"
         }
       },
       {
@@ -142,24 +139,27 @@
         }
       },
       {
-        "name": "Name",
-        "description": "A name for the configuration profile.",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "description": "A name for the configuration profile.",
-          "maxLength": 128,
-          "minLength": 1
-        }
-      },
-      {
-        "name": "KmsKeyIdentifier",
-        "description": "The AWS Key Management Service key identifier (key ID, key alias, or key ARN) provided when the resource was created or updated.",
+        "name": "Type",
+        "description": "The type of configurations contained in the profile. When calling this API, enter one of the following values for Type: AWS.AppConfig.FeatureFlags, AWS.Freeform",
         "optional": true,
         "type": {
           "type": "string",
-          "description": "The AWS Key Management Service key identifier (key ID, key alias, or key ARN) provided when the resource was created or updated.",
-          "pattern": "^[\\da-f]{8}-[\\da-f]{4}-[\\da-f]{4}-[\\da-f]{4}-[\\da-f]{12}|alias/[a-zA-Z0-9/_-]{1,250}|arn:aws[a-zA-Z-]*:kms:[a-z]{2}(-gov|-iso(b?))?-[a-z]+-\\d{1}:\\d{12}:(key/[0-9a-f-]{36}|alias/[a-zA-Z0-9/_-]{1,250})$"
+          "description": "The type of configurations contained in the profile. When calling this API, enter one of the following values for Type: AWS.AppConfig.FeatureFlags, AWS.Freeform",
+          "pattern": "^[a-zA-Z\\.]+"
+        }
+      },
+      {
+        "name": "Validators",
+        "description": "A list of methods for validating the configuration.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "A list of methods for validating the configuration.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Validators"
+          },
+          "maxLength": 2
         }
       }
     ]
@@ -191,5 +191,5 @@
       }
     ]
   },
-  "$hash": "56dd5291642a5e3a6df7a04450689f54fd03a86c"
+  "$hash": "b6b4681db5b4c1fe31f68ef721183ffb38cd935b"
 }

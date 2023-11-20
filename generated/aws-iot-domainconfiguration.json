@@ -52,19 +52,6 @@
         }
       ]
     },
-    "TlsConfig": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "SecurityPolicy",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "maxLength": 128
-          }
-        }
-      ]
-    },
     "Tag": {
       "type": "object",
       "properties": [
@@ -83,12 +70,33 @@
           }
         }
       ]
+    },
+    "TlsConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "SecurityPolicy",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 128
+          }
+        }
+      ]
     }
   },
   "resource": {
     "type": "object",
     "description": "Create and manage a Domain Configuration",
     "properties": [
+      {
+        "name": "AuthorizerConfig",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "AuthorizerConfig"
+        }
+      },
       {
         "name": "DomainConfigurationName",
         "optional": true,
@@ -100,11 +108,11 @@
         }
       },
       {
-        "name": "AuthorizerConfig",
+        "name": "DomainConfigurationStatus",
         "optional": true,
         "type": {
-          "type": "ref",
-          "typeName": "AuthorizerConfig"
+          "type": "string",
+          "allowedValues": ["ENABLED", "DISABLED"]
         }
       },
       {
@@ -140,19 +148,14 @@
         }
       },
       {
-        "name": "ValidationCertificateArn",
+        "name": "Tags",
         "optional": true,
         "type": {
-          "type": "string",
-          "pattern": "^arn:aws(-cn|-us-gov|-iso-b|-iso)?:acm:[a-z]{2}-(gov-|iso-|isob-)?[a-z]{4,9}-\\d{1}:\\d{12}:certificate/[a-zA-Z0-9/-]+$"
-        }
-      },
-      {
-        "name": "DomainConfigurationStatus",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "allowedValues": ["ENABLED", "DISABLED"]
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          }
         }
       },
       {
@@ -164,14 +167,11 @@
         }
       },
       {
-        "name": "Tags",
+        "name": "ValidationCertificateArn",
         "optional": true,
         "type": {
-          "type": "array",
-          "itemType": {
-            "type": "ref",
-            "typeName": "Tag"
-          }
+          "type": "string",
+          "pattern": "^arn:aws(-cn|-us-gov|-iso-b|-iso)?:acm:[a-z]{2}-(gov-|iso-|isob-)?[a-z]{4,9}-\\d{1}:\\d{12}:certificate/[a-zA-Z0-9/-]+$"
         }
       }
     ]
@@ -208,5 +208,5 @@
       }
     ]
   },
-  "$hash": "5c60edaf0073af332c860bbd8f0f42cf6bc74480"
+  "$hash": "5bad9942488267bbcbdf2fcfb9f78cd0d93d5006"
 }

@@ -1,15 +1,14 @@
 {
   "definitions": {
+    "FactoryPresetFreq": {
+      "type": "number",
+      "isInteger": true,
+      "maximum": 16700000,
+      "minimum": 1000000
+    },
     "LoRaWANDeviceProfile": {
       "type": "object",
       "properties": [
-        {
-          "name": "SupportsClassB",
-          "optional": true,
-          "type": {
-            "type": "boolean"
-          }
-        },
         {
           "name": "ClassBTimeout",
           "optional": true,
@@ -21,13 +20,53 @@
           }
         },
         {
-          "name": "PingSlotPeriod",
+          "name": "ClassCTimeout",
           "optional": true,
           "type": {
             "type": "number",
             "isInteger": true,
-            "maximum": 4096,
-            "minimum": 128
+            "maximum": 1000,
+            "minimum": 0
+          }
+        },
+        {
+          "name": "FactoryPresetFreqsList",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "FactoryPresetFreq"
+            },
+            "maxLength": 20
+          }
+        },
+        {
+          "name": "MacVersion",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 64
+          }
+        },
+        {
+          "name": "MaxDutyCycle",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 100,
+            "minimum": 0
+          }
+        },
+        {
+          "name": "MaxEirp",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 15,
+            "minimum": 0
           }
         },
         {
@@ -51,28 +90,13 @@
           }
         },
         {
-          "name": "SupportsClassC",
-          "optional": true,
-          "type": {
-            "type": "boolean"
-          }
-        },
-        {
-          "name": "ClassCTimeout",
+          "name": "PingSlotPeriod",
           "optional": true,
           "type": {
             "type": "number",
             "isInteger": true,
-            "maximum": 1000,
-            "minimum": 0
-          }
-        },
-        {
-          "name": "MacVersion",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "maxLength": 64
+            "maximum": 4096,
+            "minimum": 128
           }
         },
         {
@@ -81,6 +105,24 @@
           "type": {
             "type": "string",
             "maxLength": 64
+          }
+        },
+        {
+          "name": "RfRegion",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 64
+          }
+        },
+        {
+          "name": "RxDataRate2",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 15,
+            "minimum": 0
           }
         },
         {
@@ -114,64 +156,28 @@
           }
         },
         {
-          "name": "RxDataRate2",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true,
-            "maximum": 15,
-            "minimum": 0
-          }
-        },
-        {
-          "name": "FactoryPresetFreqsList",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "FactoryPresetFreq"
-            },
-            "maxLength": 20
-          }
-        },
-        {
-          "name": "MaxEirp",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true,
-            "maximum": 15,
-            "minimum": 0
-          }
-        },
-        {
-          "name": "MaxDutyCycle",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true,
-            "maximum": 100,
-            "minimum": 0
-          }
-        },
-        {
-          "name": "SupportsJoin",
+          "name": "Supports32BitFCnt",
           "optional": true,
           "type": {
             "type": "boolean"
           }
         },
         {
-          "name": "RfRegion",
+          "name": "SupportsClassB",
           "optional": true,
           "type": {
-            "type": "string",
-            "maxLength": 64
+            "type": "boolean"
           }
         },
         {
-          "name": "Supports32BitFCnt",
+          "name": "SupportsClassC",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "SupportsJoin",
           "optional": true,
           "type": {
             "type": "boolean"
@@ -201,28 +207,12 @@
           }
         }
       ]
-    },
-    "FactoryPresetFreq": {
-      "type": "number",
-      "isInteger": true,
-      "maximum": 16700000,
-      "minimum": 1000000
     }
   },
   "resource": {
     "type": "object",
     "description": "Device Profile's resource schema demonstrating some basic constructs and validation rules.",
     "properties": [
-      {
-        "name": "Name",
-        "description": "Name of service profile",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "Name of service profile",
-          "maxLength": 256
-        }
-      },
       {
         "name": "LoRaWAN",
         "description": "LoRaWANDeviceProfile supports all LoRa specific attributes for service profile for CreateDeviceProfile operation",
@@ -231,6 +221,16 @@
           "type": "ref",
           "description": "LoRaWANDeviceProfile supports all LoRa specific attributes for service profile for CreateDeviceProfile operation",
           "typeName": "LoRaWANDeviceProfile"
+        }
+      },
+      {
+        "name": "Name",
+        "description": "Name of service profile",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Name of service profile",
+          "maxLength": 256
         }
       },
       {
@@ -274,5 +274,5 @@
       }
     ]
   },
-  "$hash": "55846e7e08e977748606421b14036bf0e48edf72"
+  "$hash": "cb791357ce6406ca5200bf7142b4b2781f9f722e"
 }

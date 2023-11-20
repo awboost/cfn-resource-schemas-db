@@ -1,39 +1,17 @@
 {
   "definitions": {
-    "PolicyDetail": {
-      "type": "object",
-      "description": "The policy detail of the lifecycle policy.",
-      "properties": [
-        {
-          "name": "Action",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "Action"
-          }
-        },
-        {
-          "name": "Filter",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "Filter"
-          }
-        },
-        {
-          "name": "ExclusionRules",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ExclusionRules"
-          }
-        }
-      ]
-    },
     "Action": {
       "type": "object",
       "description": "The action of the policy detail.",
       "properties": [
+        {
+          "name": "IncludeResources",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "IncludeResources"
+          }
+        },
         {
           "name": "Type",
           "description": "The action type of the policy detail.",
@@ -43,13 +21,92 @@
             "description": "The action type of the policy detail.",
             "allowedValues": ["DELETE", "DEPRECATE", "DISABLE"]
           }
+        }
+      ]
+    },
+    "AmiExclusionRules": {
+      "type": "object",
+      "description": "The AMI exclusion rules for the policy detail.",
+      "properties": [
+        {
+          "name": "IsPublic",
+          "description": "Use to apply lifecycle policy actions on whether the AMI is public.",
+          "optional": true,
+          "type": {
+            "type": "boolean",
+            "description": "Use to apply lifecycle policy actions on whether the AMI is public."
+          }
         },
         {
-          "name": "IncludeResources",
+          "name": "LastLaunched",
+          "description": "Use to apply lifecycle policy actions on AMIs launched before a certain time.",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "IncludeResources"
+            "description": "Use to apply lifecycle policy actions on AMIs launched before a certain time.",
+            "typeName": "LastLaunched"
+          }
+        },
+        {
+          "name": "Regions",
+          "description": "Use to apply lifecycle policy actions on AMIs distributed to a set of regions.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "Use to apply lifecycle policy actions on AMIs distributed to a set of regions.",
+            "itemType": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "name": "SharedAccounts",
+          "description": "Use to apply lifecycle policy actions on AMIs shared with a set of regions.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "Use to apply lifecycle policy actions on AMIs shared with a set of regions.",
+            "itemType": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "name": "TagMap",
+          "description": "The AMIs to select by tag.",
+          "optional": true,
+          "type": {
+            "type": "record",
+            "description": "The AMIs to select by tag.",
+            "valueType": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "ExclusionRules": {
+      "type": "object",
+      "description": "The exclusion rules to apply of the policy detail.",
+      "properties": [
+        {
+          "name": "Amis",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "AmiExclusionRules"
+          }
+        },
+        {
+          "name": "TagMap",
+          "description": "The Image Builder tags to filter on.",
+          "optional": true,
+          "type": {
+            "type": "record",
+            "description": "The Image Builder tags to filter on.",
+            "valueType": {
+              "type": "string"
+            }
           }
         }
       ]
@@ -59,6 +116,16 @@
       "description": "The filters to apply of the policy detail.",
       "properties": [
         {
+          "name": "RetainAtLeast",
+          "description": "The minimum number of Image Builder resources to retain.",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "The minimum number of Image Builder resources to retain.",
+            "isInteger": true
+          }
+        },
+        {
           "name": "Type",
           "description": "The filter type.",
           "optional": false,
@@ -66,16 +133,6 @@
             "type": "string",
             "description": "The filter type.",
             "allowedValues": ["AGE", "COUNT"]
-          }
-        },
-        {
-          "name": "Value",
-          "description": "The filter value.",
-          "optional": false,
-          "type": {
-            "type": "number",
-            "description": "The filter value.",
-            "isInteger": true
           }
         },
         {
@@ -89,47 +146,16 @@
           }
         },
         {
-          "name": "RetainAtLeast",
-          "description": "The minimum number of Image Builder resources to retain.",
-          "optional": true,
+          "name": "Value",
+          "description": "The filter value.",
+          "optional": false,
           "type": {
             "type": "number",
-            "description": "The minimum number of Image Builder resources to retain.",
+            "description": "The filter value.",
             "isInteger": true
           }
         }
       ]
-    },
-    "ExclusionRules": {
-      "type": "object",
-      "description": "The exclusion rules to apply of the policy detail.",
-      "properties": [
-        {
-          "name": "TagMap",
-          "description": "The Image Builder tags to filter on.",
-          "optional": true,
-          "type": {
-            "type": "record",
-            "description": "The Image Builder tags to filter on.",
-            "valueType": {
-              "type": "string"
-            }
-          }
-        },
-        {
-          "name": "Amis",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "AmiExclusionRules"
-          }
-        }
-      ]
-    },
-    "TimeUnit": {
-      "type": "string",
-      "description": "A time unit.",
-      "allowedValues": ["DAYS", "WEEKS", "MONTHS", "YEARS"]
     },
     "IncludeResources": {
       "type": "object",
@@ -164,71 +190,20 @@
         }
       ]
     },
-    "AmiExclusionRules": {
-      "type": "object",
-      "description": "The AMI exclusion rules for the policy detail.",
-      "properties": [
-        {
-          "name": "IsPublic",
-          "description": "Use to apply lifecycle policy actions on whether the AMI is public.",
-          "optional": true,
-          "type": {
-            "type": "boolean",
-            "description": "Use to apply lifecycle policy actions on whether the AMI is public."
-          }
-        },
-        {
-          "name": "Regions",
-          "description": "Use to apply lifecycle policy actions on AMIs distributed to a set of regions.",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "description": "Use to apply lifecycle policy actions on AMIs distributed to a set of regions.",
-            "itemType": {
-              "type": "string"
-            }
-          }
-        },
-        {
-          "name": "SharedAccounts",
-          "description": "Use to apply lifecycle policy actions on AMIs shared with a set of regions.",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "description": "Use to apply lifecycle policy actions on AMIs shared with a set of regions.",
-            "itemType": {
-              "type": "string"
-            }
-          }
-        },
-        {
-          "name": "LastLaunched",
-          "description": "Use to apply lifecycle policy actions on AMIs launched before a certain time.",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "Use to apply lifecycle policy actions on AMIs launched before a certain time.",
-            "typeName": "LastLaunched"
-          }
-        },
-        {
-          "name": "TagMap",
-          "description": "The AMIs to select by tag.",
-          "optional": true,
-          "type": {
-            "type": "record",
-            "description": "The AMIs to select by tag.",
-            "valueType": {
-              "type": "string"
-            }
-          }
-        }
-      ]
-    },
     "LastLaunched": {
       "type": "object",
       "description": "The last launched time of a resource.",
       "properties": [
+        {
+          "name": "Unit",
+          "description": "The value's time unit.",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "description": "The value's time unit.",
+            "typeName": "TimeUnit"
+          }
+        },
         {
           "name": "Value",
           "description": "The last launched value.",
@@ -238,15 +213,59 @@
             "description": "The last launched value.",
             "isInteger": true
           }
-        },
+        }
+      ]
+    },
+    "PolicyDetail": {
+      "type": "object",
+      "description": "The policy detail of the lifecycle policy.",
+      "properties": [
         {
-          "name": "Unit",
-          "description": "The value's time unit.",
+          "name": "Action",
           "optional": false,
           "type": {
             "type": "ref",
-            "description": "The value's time unit.",
-            "typeName": "TimeUnit"
+            "typeName": "Action"
+          }
+        },
+        {
+          "name": "ExclusionRules",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ExclusionRules"
+          }
+        },
+        {
+          "name": "Filter",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "Filter"
+          }
+        }
+      ]
+    },
+    "RecipeSelection": {
+      "type": "object",
+      "description": "The recipe to apply the lifecycle policy for.",
+      "properties": [
+        {
+          "name": "Name",
+          "description": "The recipe name.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The recipe name."
+          }
+        },
+        {
+          "name": "SemanticVersion",
+          "description": "The recipe version.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The recipe version."
           }
         }
       ]
@@ -282,29 +301,10 @@
         }
       ]
     },
-    "RecipeSelection": {
-      "type": "object",
-      "description": "The recipe to apply the lifecycle policy for.",
-      "properties": [
-        {
-          "name": "Name",
-          "description": "The recipe name.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The recipe name."
-          }
-        },
-        {
-          "name": "SemanticVersion",
-          "description": "The recipe version.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The recipe version."
-          }
-        }
-      ]
+    "TimeUnit": {
+      "type": "string",
+      "description": "A time unit.",
+      "allowedValues": ["DAYS", "WEEKS", "MONTHS", "YEARS"]
     }
   },
   "resource": {
@@ -312,31 +312,12 @@
     "description": "Resource schema for AWS::ImageBuilder::LifecyclePolicy",
     "properties": [
       {
-        "name": "Name",
-        "description": "The name of the lifecycle policy.",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "description": "The name of the lifecycle policy."
-        }
-      },
-      {
         "name": "Description",
         "description": "The description of the lifecycle policy.",
         "optional": true,
         "type": {
           "type": "string",
           "description": "The description of the lifecycle policy."
-        }
-      },
-      {
-        "name": "Status",
-        "description": "The status of the lifecycle policy.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The status of the lifecycle policy.",
-          "allowedValues": ["DISABLED", "ENABLED"]
         }
       },
       {
@@ -349,13 +330,12 @@
         }
       },
       {
-        "name": "ResourceType",
-        "description": "The resource type of the lifecycle policy.",
+        "name": "Name",
+        "description": "The name of the lifecycle policy.",
         "optional": false,
         "type": {
           "type": "string",
-          "description": "The resource type of the lifecycle policy.",
-          "allowedValues": ["AMI_IMAGE", "CONTAINER_IMAGE"]
+          "description": "The name of the lifecycle policy."
         }
       },
       {
@@ -379,6 +359,26 @@
           "type": "ref",
           "description": "The resource selection of the lifecycle policy.",
           "typeName": "ResourceSelection"
+        }
+      },
+      {
+        "name": "ResourceType",
+        "description": "The resource type of the lifecycle policy.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The resource type of the lifecycle policy.",
+          "allowedValues": ["AMI_IMAGE", "CONTAINER_IMAGE"]
+        }
+      },
+      {
+        "name": "Status",
+        "description": "The status of the lifecycle policy.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The status of the lifecycle policy.",
+          "allowedValues": ["DISABLED", "ENABLED"]
         }
       },
       {
@@ -410,5 +410,5 @@
       }
     ]
   },
-  "$hash": "151ef5a26c056a8851f4bbeadbf974fe16e68b50"
+  "$hash": "4e2a5e509cf5c25d97546962e604140a45a4f8a4"
 }

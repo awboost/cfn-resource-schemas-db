@@ -1,33 +1,18 @@
 {
   "definitions": {
-    "VpcSecurityGroup": {
-      "type": "object",
-      "description": "Describes the members of a VPC security group.",
-      "properties": [
-        {
-          "name": "VpcSecurityGroupId",
-          "description": "The identifier of the VPC security group.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The identifier of the VPC security group."
-          }
-        },
-        {
-          "name": "Status",
-          "description": "The status of the VPC security group.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The status of the VPC security group."
-          }
-        }
-      ]
-    },
     "NetworkInterface": {
       "type": "object",
       "description": "Describes a network interface.",
       "properties": [
+        {
+          "name": "AvailabilityZone",
+          "description": "The Availability Zone.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The Availability Zone."
+          }
+        },
         {
           "name": "NetworkInterfaceId",
           "description": "The network interface identifier.",
@@ -35,15 +20,6 @@
           "type": {
             "type": "string",
             "description": "The network interface identifier."
-          }
-        },
-        {
-          "name": "SubnetId",
-          "description": "The subnet identifier.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The subnet identifier."
           }
         },
         {
@@ -56,12 +32,36 @@
           }
         },
         {
-          "name": "AvailabilityZone",
-          "description": "The Availability Zone.",
+          "name": "SubnetId",
+          "description": "The subnet identifier.",
           "optional": true,
           "type": {
             "type": "string",
-            "description": "The Availability Zone."
+            "description": "The subnet identifier."
+          }
+        }
+      ]
+    },
+    "VpcSecurityGroup": {
+      "type": "object",
+      "description": "Describes the members of a VPC security group.",
+      "properties": [
+        {
+          "name": "Status",
+          "description": "The status of the VPC security group.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The status of the VPC security group."
+          }
+        },
+        {
+          "name": "VpcSecurityGroupId",
+          "description": "The identifier of the VPC security group.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The identifier of the VPC security group."
           }
         }
       ]
@@ -81,16 +81,6 @@
         }
       },
       {
-        "name": "ResourceOwner",
-        "description": "The AWS account ID of the owner of the cluster.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The AWS account ID of the owner of the cluster.",
-          "pattern": "^\\d{12}$"
-        }
-      },
-      {
         "name": "EndpointName",
         "description": "The name of the endpoint.",
         "optional": false,
@@ -98,6 +88,16 @@
           "type": "string",
           "description": "The name of the endpoint.",
           "pattern": "^(?=^[a-z][a-z0-9]*(-[a-z0-9]+)*$).{1,30}$"
+        }
+      },
+      {
+        "name": "ResourceOwner",
+        "description": "The AWS account ID of the owner of the cluster.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The AWS account ID of the owner of the cluster.",
+          "pattern": "^\\d{12}$"
         }
       },
       {
@@ -138,16 +138,12 @@
         }
       },
       {
-        "name": "VpcSecurityGroups",
-        "description": "A list of Virtual Private Cloud (VPC) security groups to be associated with the endpoint.",
+        "name": "EndpointCreateTime",
+        "description": "The time (UTC) that the endpoint was created.",
         "optional": true,
         "type": {
-          "type": "array",
-          "description": "A list of Virtual Private Cloud (VPC) security groups to be associated with the endpoint.",
-          "itemType": {
-            "type": "ref",
-            "typeName": "VpcSecurityGroup"
-          }
+          "type": "string",
+          "description": "The time (UTC) that the endpoint was created."
         }
       },
       {
@@ -157,15 +153,6 @@
         "type": {
           "type": "string",
           "description": "The status of the endpoint."
-        }
-      },
-      {
-        "name": "EndpointCreateTime",
-        "description": "The time (UTC) that the endpoint was created.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The time (UTC) that the endpoint was created."
         }
       },
       {
@@ -187,6 +174,19 @@
           "description": "The connection endpoint for connecting to an Amazon Redshift cluster through the proxy.",
           "properties": [
             {
+              "name": "NetworkInterfaces",
+              "description": "One or more network interfaces of the endpoint. Also known as an interface endpoint.",
+              "optional": true,
+              "type": {
+                "type": "array",
+                "description": "One or more network interfaces of the endpoint. Also known as an interface endpoint.",
+                "itemType": {
+                  "type": "ref",
+                  "typeName": "NetworkInterface"
+                }
+              }
+            },
+            {
               "name": "VpcEndpointId",
               "description": "The connection endpoint ID for connecting an Amazon Redshift cluster through the proxy.",
               "optional": true,
@@ -203,24 +203,24 @@
                 "type": "string",
                 "description": "The VPC identifier that the endpoint is associated."
               }
-            },
-            {
-              "name": "NetworkInterfaces",
-              "description": "One or more network interfaces of the endpoint. Also known as an interface endpoint.",
-              "optional": true,
-              "type": {
-                "type": "array",
-                "description": "One or more network interfaces of the endpoint. Also known as an interface endpoint.",
-                "itemType": {
-                  "type": "ref",
-                  "typeName": "NetworkInterface"
-                }
-              }
             }
           ]
+        }
+      },
+      {
+        "name": "VpcSecurityGroups",
+        "description": "A list of Virtual Private Cloud (VPC) security groups to be associated with the endpoint.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "A list of Virtual Private Cloud (VPC) security groups to be associated with the endpoint.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "VpcSecurityGroup"
+          }
         }
       }
     ]
   },
-  "$hash": "e5b2b0a1a8b87551ce14abfb2b3c4e73745990ac"
+  "$hash": "407497b2658652bfbc5f3a92ad7a5fa1819539cd"
 }

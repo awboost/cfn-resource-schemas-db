@@ -1,21 +1,38 @@
 {
   "definitions": {
-    "EntityName": {
+    "AttributeName": {
       "type": "string",
       "maxLength": 255,
       "minLength": 0,
-      "pattern": "^[a-zA-Z_0-9-]*$"
+      "pattern": "^[a-zA-Z_0-9- \\t]*$"
+    },
+    "CreatedAt": {
+      "type": "string",
+      "description": "The time of this SchemaMapping got created"
     },
     "Description": {
       "type": "string",
       "maxLength": 255,
       "minLength": 0
     },
-    "AttributeName": {
+    "EntityName": {
       "type": "string",
       "maxLength": 255,
       "minLength": 0,
-      "pattern": "^[a-zA-Z_0-9- \\t]*$"
+      "pattern": "^[a-zA-Z_0-9-]*$"
+    },
+    "HasWorkflows": {
+      "type": "boolean",
+      "description": "The boolean value that indicates whether or not a SchemaMapping has MatchingWorkflows that are associated with"
+    },
+    "MappedInputFields": {
+      "type": "array",
+      "itemType": {
+        "type": "ref",
+        "typeName": "SchemaInputAttribute"
+      },
+      "maxLength": 25,
+      "minLength": 2
     },
     "SchemaAttributeType": {
       "type": "string",
@@ -42,15 +59,6 @@
         "PROVIDER_ID"
       ]
     },
-    "MappedInputFields": {
-      "type": "array",
-      "itemType": {
-        "type": "ref",
-        "typeName": "SchemaInputAttribute"
-      },
-      "maxLength": 25,
-      "minLength": 2
-    },
     "SchemaInputAttribute": {
       "type": "object",
       "properties": [
@@ -60,23 +68,6 @@
           "type": {
             "type": "ref",
             "typeName": "AttributeName"
-          }
-        },
-        {
-          "name": "Type",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "SchemaAttributeType"
-          }
-        },
-        {
-          "name": "SubType",
-          "description": "The subtype of the Attribute. Would be required only when type is PROVIDER_ID",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The subtype of the Attribute. Would be required only when type is PROVIDER_ID"
           }
         },
         {
@@ -94,6 +85,23 @@
             "type": "ref",
             "typeName": "AttributeName"
           }
+        },
+        {
+          "name": "SubType",
+          "description": "The subtype of the Attribute. Would be required only when type is PROVIDER_ID",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The subtype of the Attribute. Would be required only when type is PROVIDER_ID"
+          }
+        },
+        {
+          "name": "Type",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "SchemaAttributeType"
+          }
         }
       ]
     },
@@ -101,18 +109,6 @@
       "type": "string",
       "description": "The SchemaMapping arn associated with the Schema",
       "pattern": "^arn:(aws|aws-us-gov|aws-cn):entityresolution:.*:[0-9]+:(schemamapping/.*)$"
-    },
-    "CreatedAt": {
-      "type": "string",
-      "description": "The time of this SchemaMapping got created"
-    },
-    "UpdatedAt": {
-      "type": "string",
-      "description": "The time of this SchemaMapping got last updated at"
-    },
-    "HasWorkflows": {
-      "type": "boolean",
-      "description": "The boolean value that indicates whether or not a SchemaMapping has MatchingWorkflows that are associated with"
     },
     "Tag": {
       "type": "object",
@@ -141,22 +137,16 @@
           }
         }
       ]
+    },
+    "UpdatedAt": {
+      "type": "string",
+      "description": "The time of this SchemaMapping got last updated at"
     }
   },
   "resource": {
     "type": "object",
     "description": "SchemaMapping defined in AWS Entity Resolution service",
     "properties": [
-      {
-        "name": "SchemaName",
-        "description": "The name of the SchemaMapping",
-        "optional": false,
-        "type": {
-          "type": "ref",
-          "description": "The name of the SchemaMapping",
-          "typeName": "EntityName"
-        }
-      },
       {
         "name": "Description",
         "description": "The description of the SchemaMapping",
@@ -175,6 +165,16 @@
           "type": "ref",
           "description": "The SchemaMapping attributes input",
           "typeName": "MappedInputFields"
+        }
+      },
+      {
+        "name": "SchemaName",
+        "description": "The name of the SchemaMapping",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "description": "The name of the SchemaMapping",
+          "typeName": "EntityName"
         }
       },
       {
@@ -197,27 +197,11 @@
     "description": "SchemaMapping defined in AWS Entity Resolution service",
     "properties": [
       {
-        "name": "SchemaArn",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "SchemaMappingArn"
-        }
-      },
-      {
         "name": "CreatedAt",
         "optional": true,
         "type": {
           "type": "ref",
           "typeName": "CreatedAt"
-        }
-      },
-      {
-        "name": "UpdatedAt",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "UpdatedAt"
         }
       },
       {
@@ -227,8 +211,24 @@
           "type": "ref",
           "typeName": "HasWorkflows"
         }
+      },
+      {
+        "name": "SchemaArn",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "SchemaMappingArn"
+        }
+      },
+      {
+        "name": "UpdatedAt",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "UpdatedAt"
+        }
       }
     ]
   },
-  "$hash": "0a678950ad6b6c51990be6cc7b67d4005ca6337d"
+  "$hash": "7e848a0379748dc6077d868e1969fd79e20ea9e8"
 }

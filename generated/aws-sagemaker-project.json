@@ -1,33 +1,23 @@
 {
   "definitions": {
-    "Tag": {
-      "type": "object",
-      "description": "A key-value pair to associate with a resource.",
-      "properties": [
-        {
-          "name": "Key",
-          "description": "The key name of the tag. You can specify a value that is 1 to 127 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The key name of the tag. You can specify a value that is 1 to 127 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
-            "maxLength": 128,
-            "minLength": 1,
-            "pattern": "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$"
-          }
-        },
-        {
-          "name": "Value",
-          "description": "The value for the tag. You can specify a value that is 1 to 255 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The value for the tag. You can specify a value that is 1 to 255 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
-            "maxLength": 256,
-            "pattern": "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$"
-          }
-        }
-      ]
+    "PathId": {
+      "type": "string",
+      "description": "The path identifier of the product.",
+      "maxLength": 100,
+      "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9])*$"
+    },
+    "ProductId": {
+      "type": "string",
+      "description": "Service Catalog product identifier.",
+      "maxLength": 100,
+      "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9])*$"
+    },
+    "ProjectArn": {
+      "type": "string",
+      "description": "The Amazon Resource Name (ARN) of the Project.",
+      "maxLength": 2048,
+      "minLength": 1,
+      "pattern": "arn:aws[a-z\\-]*:sagemaker:[a-z0-9\\-]*:[0-9]{12}:project.*"
     },
     "ProjectDescription": {
       "type": "string",
@@ -41,10 +31,6 @@
       "maxLength": 20,
       "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9])*"
     },
-    "ProvisionedProductStatusMessage": {
-      "type": "string",
-      "description": "Provisioned Product Status Message"
-    },
     "ProjectName": {
       "type": "string",
       "description": "The name of the project.",
@@ -52,28 +38,13 @@
       "minLength": 1,
       "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9])*$"
     },
-    "ProjectArn": {
+    "ProvisionedProductStatusMessage": {
       "type": "string",
-      "description": "The Amazon Resource Name (ARN) of the Project.",
-      "maxLength": 2048,
-      "minLength": 1,
-      "pattern": "arn:aws[a-z\\-]*:sagemaker:[a-z0-9\\-]*:[0-9]{12}:project.*"
-    },
-    "ProductId": {
-      "type": "string",
-      "description": "Service Catalog product identifier.",
-      "maxLength": 100,
-      "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9])*$"
+      "description": "Provisioned Product Status Message"
     },
     "ProvisioningArtifactId": {
       "type": "string",
       "description": "The identifier of the provisioning artifact (also known as a version).",
-      "maxLength": 100,
-      "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9])*$"
-    },
-    "PathId": {
-      "type": "string",
-      "description": "The path identifier of the product.",
       "maxLength": 100,
       "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9])*$"
     },
@@ -105,34 +76,41 @@
           }
         }
       ]
+    },
+    "Tag": {
+      "type": "object",
+      "description": "A key-value pair to associate with a resource.",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "The key name of the tag. You can specify a value that is 1 to 127 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The key name of the tag. You can specify a value that is 1 to 127 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$"
+          }
+        },
+        {
+          "name": "Value",
+          "description": "The value for the tag. You can specify a value that is 1 to 255 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The value for the tag. You can specify a value that is 1 to 255 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
+            "maxLength": 256,
+            "pattern": "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$"
+          }
+        }
+      ]
     }
   },
   "resource": {
     "type": "object",
     "description": "Resource Type definition for AWS::SageMaker::Project",
     "properties": [
-      {
-        "name": "Tags",
-        "description": "An array of key-value pairs to apply to this resource.",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "description": "An array of key-value pairs to apply to this resource.",
-          "itemType": {
-            "type": "ref",
-            "typeName": "Tag"
-          },
-          "maxLength": 40
-        }
-      },
-      {
-        "name": "ProjectName",
-        "optional": false,
-        "type": {
-          "type": "ref",
-          "typeName": "ProjectName"
-        }
-      },
       {
         "name": "ProjectDescription",
         "optional": true,
@@ -142,51 +120,11 @@
         }
       },
       {
-        "name": "ServiceCatalogProvisioningDetails",
-        "description": "Input ServiceCatalog Provisioning Details",
+        "name": "ProjectName",
         "optional": false,
         "type": {
-          "type": "object",
-          "description": "Input ServiceCatalog Provisioning Details",
-          "properties": [
-            {
-              "name": "ProductId",
-              "optional": false,
-              "type": {
-                "type": "ref",
-                "typeName": "ProductId"
-              }
-            },
-            {
-              "name": "ProvisioningArtifactId",
-              "optional": true,
-              "type": {
-                "type": "ref",
-                "typeName": "ProvisioningArtifactId"
-              }
-            },
-            {
-              "name": "PathId",
-              "optional": true,
-              "type": {
-                "type": "ref",
-                "typeName": "PathId"
-              }
-            },
-            {
-              "name": "ProvisioningParameters",
-              "description": "Parameters specified by the administrator that are required for provisioning the product.",
-              "optional": true,
-              "type": {
-                "type": "array",
-                "description": "Parameters specified by the administrator that are required for provisioning the product.",
-                "itemType": {
-                  "type": "ref",
-                  "typeName": "ProvisioningParameter"
-                }
-              }
-            }
-          ]
+          "type": "ref",
+          "typeName": "ProjectName"
         }
       },
       {
@@ -215,6 +153,68 @@
             }
           ]
         }
+      },
+      {
+        "name": "ServiceCatalogProvisioningDetails",
+        "description": "Input ServiceCatalog Provisioning Details",
+        "optional": false,
+        "type": {
+          "type": "object",
+          "description": "Input ServiceCatalog Provisioning Details",
+          "properties": [
+            {
+              "name": "PathId",
+              "optional": true,
+              "type": {
+                "type": "ref",
+                "typeName": "PathId"
+              }
+            },
+            {
+              "name": "ProductId",
+              "optional": false,
+              "type": {
+                "type": "ref",
+                "typeName": "ProductId"
+              }
+            },
+            {
+              "name": "ProvisioningArtifactId",
+              "optional": true,
+              "type": {
+                "type": "ref",
+                "typeName": "ProvisioningArtifactId"
+              }
+            },
+            {
+              "name": "ProvisioningParameters",
+              "description": "Parameters specified by the administrator that are required for provisioning the product.",
+              "optional": true,
+              "type": {
+                "type": "array",
+                "description": "Parameters specified by the administrator that are required for provisioning the product.",
+                "itemType": {
+                  "type": "ref",
+                  "typeName": "ProvisioningParameter"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "Tags",
+        "description": "An array of key-value pairs to apply to this resource.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "An array of key-value pairs to apply to this resource.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          },
+          "maxLength": 40
+        }
       }
     ]
   },
@@ -222,6 +222,15 @@
     "type": "object",
     "description": "Resource Type definition for AWS::SageMaker::Project",
     "properties": [
+      {
+        "name": "CreationTime",
+        "description": "The time at which the project was created.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The time at which the project was created."
+        }
+      },
       {
         "name": "ProjectArn",
         "optional": true,
@@ -236,15 +245,6 @@
         "type": {
           "type": "ref",
           "typeName": "ProjectId"
-        }
-      },
-      {
-        "name": "CreationTime",
-        "description": "The time at which the project was created.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The time at which the project was created."
         }
       },
       {
@@ -267,5 +267,5 @@
       }
     ]
   },
-  "$hash": "13782ccbde3c10460c12e0d494d63238e3413754"
+  "$hash": "719d1df3af07d199d07850f45e866bcac35517ed"
 }

@@ -1,26 +1,77 @@
 {
   "definitions": {
-    "Status": {
+    "ClientToken": {
       "type": "string",
-      "description": "The status of the task template",
-      "allowedValues": ["ACTIVE", "INACTIVE"]
+      "description": "the client token string in uuid format",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$"
     },
-    "FieldType": {
-      "type": "string",
-      "description": "The type of the task template's field",
-      "allowedValues": [
-        "NAME",
-        "DESCRIPTION",
-        "SCHEDULED_TIME",
-        "QUICK_CONNECT",
-        "URL",
-        "NUMBER",
-        "TEXT",
-        "TEXT_AREA",
-        "DATE_TIME",
-        "BOOLEAN",
-        "SINGLE_SELECT",
-        "EMAIL"
+    "DefaultFieldValue": {
+      "type": "object",
+      "description": "the default value for the task template's field",
+      "properties": [
+        {
+          "name": "DefaultValue",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "FieldValue"
+          }
+        },
+        {
+          "name": "Id",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "FieldIdentifier"
+          }
+        }
+      ]
+    },
+    "Field": {
+      "type": "object",
+      "description": "A task template field object.",
+      "properties": [
+        {
+          "name": "Description",
+          "description": "The description of the task template's field",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The description of the task template's field",
+            "maxLength": 255,
+            "minLength": 0
+          }
+        },
+        {
+          "name": "Id",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "FieldIdentifier"
+          }
+        },
+        {
+          "name": "SingleSelectOptions",
+          "description": "list of field options to be used with single select",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "list of field options to be used with single select",
+            "itemType": {
+              "type": "ref",
+              "typeName": "FieldOption"
+            },
+            "maxLength": 50
+          }
+        },
+        {
+          "name": "Type",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "FieldType"
+          }
+        }
       ]
     },
     "FieldIdentifier": {
@@ -47,52 +98,29 @@
       "minLength": 1,
       "pattern": "^[A-Za-z0-9](?:[A-Za-z0-9_.,\\s-]*[A-Za-z0-9_.,-])?$"
     },
-    "Field": {
-      "type": "object",
-      "description": "A task template field object.",
-      "properties": [
-        {
-          "name": "Id",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "FieldIdentifier"
-          }
-        },
-        {
-          "name": "Description",
-          "description": "The description of the task template's field",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The description of the task template's field",
-            "maxLength": 255,
-            "minLength": 0
-          }
-        },
-        {
-          "name": "Type",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "FieldType"
-          }
-        },
-        {
-          "name": "SingleSelectOptions",
-          "description": "list of field options to be used with single select",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "description": "list of field options to be used with single select",
-            "itemType": {
-              "type": "ref",
-              "typeName": "FieldOption"
-            },
-            "maxLength": 50
-          }
-        }
+    "FieldType": {
+      "type": "string",
+      "description": "The type of the task template's field",
+      "allowedValues": [
+        "NAME",
+        "DESCRIPTION",
+        "SCHEDULED_TIME",
+        "QUICK_CONNECT",
+        "URL",
+        "NUMBER",
+        "TEXT",
+        "TEXT_AREA",
+        "DATE_TIME",
+        "BOOLEAN",
+        "SINGLE_SELECT",
+        "EMAIL"
       ]
+    },
+    "FieldValue": {
+      "type": "string",
+      "description": "the default value for the task template's field",
+      "maxLength": 4096,
+      "minLength": 1
     },
     "InvisibleFieldInfo": {
       "type": "object",
@@ -163,38 +191,10 @@
       },
       "maxLength": 50
     },
-    "FieldValue": {
+    "Status": {
       "type": "string",
-      "description": "the default value for the task template's field",
-      "maxLength": 4096,
-      "minLength": 1
-    },
-    "DefaultFieldValue": {
-      "type": "object",
-      "description": "the default value for the task template's field",
-      "properties": [
-        {
-          "name": "Id",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "FieldIdentifier"
-          }
-        },
-        {
-          "name": "DefaultValue",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "FieldValue"
-          }
-        }
-      ]
-    },
-    "ClientToken": {
-      "type": "string",
-      "description": "the client token string in uuid format",
-      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      "description": "The status of the task template",
+      "allowedValues": ["ACTIVE", "INACTIVE"]
     },
     "Tag": {
       "type": "object",
@@ -230,6 +230,98 @@
     "description": "Resource Type definition for AWS::Connect::TaskTemplate.",
     "properties": [
       {
+        "name": "ClientToken",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "ClientToken"
+        }
+      },
+      {
+        "name": "Constraints",
+        "description": "The constraints for the task template",
+        "optional": true,
+        "type": {
+          "type": "object",
+          "description": "The constraints for the task template",
+          "properties": [
+            {
+              "name": "InvisibleFields",
+              "optional": true,
+              "type": {
+                "type": "ref",
+                "typeName": "InvisibleTaskTemplateFields"
+              }
+            },
+            {
+              "name": "ReadOnlyFields",
+              "optional": true,
+              "type": {
+                "type": "ref",
+                "typeName": "ReadOnlyTaskTemplateFields"
+              }
+            },
+            {
+              "name": "RequiredFields",
+              "optional": true,
+              "type": {
+                "type": "ref",
+                "typeName": "RequiredTaskTemplateFields"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "ContactFlowArn",
+        "description": "The identifier of the contact flow.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The identifier of the contact flow.",
+          "pattern": "^arn:aws[-a-z0-9]*:connect:[-a-z0-9]*:[0-9]{12}:instance/[-a-zA-Z0-9]*/contact-flow/[-a-zA-Z0-9]*$"
+        }
+      },
+      {
+        "name": "Defaults",
+        "description": "",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "",
+          "itemType": {
+            "type": "ref",
+            "typeName": "DefaultFieldValue"
+          },
+          "maxLength": 50
+        }
+      },
+      {
+        "name": "Description",
+        "description": "The description of the task template.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The description of the task template.",
+          "maxLength": 255,
+          "minLength": 0
+        }
+      },
+      {
+        "name": "Fields",
+        "description": "The list of task template's fields",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "The list of task template's fields",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Field"
+          },
+          "maxLength": 50
+        }
+      },
+      {
         "name": "InstanceArn",
         "description": "The identifier (arn) of the instance.",
         "optional": false,
@@ -251,103 +343,11 @@
         }
       },
       {
-        "name": "Description",
-        "description": "The description of the task template.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The description of the task template.",
-          "maxLength": 255,
-          "minLength": 0
-        }
-      },
-      {
-        "name": "ContactFlowArn",
-        "description": "The identifier of the contact flow.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The identifier of the contact flow.",
-          "pattern": "^arn:aws[-a-z0-9]*:connect:[-a-z0-9]*:[0-9]{12}:instance/[-a-zA-Z0-9]*/contact-flow/[-a-zA-Z0-9]*$"
-        }
-      },
-      {
-        "name": "Constraints",
-        "description": "The constraints for the task template",
-        "optional": true,
-        "type": {
-          "type": "object",
-          "description": "The constraints for the task template",
-          "properties": [
-            {
-              "name": "InvisibleFields",
-              "optional": true,
-              "type": {
-                "type": "ref",
-                "typeName": "InvisibleTaskTemplateFields"
-              }
-            },
-            {
-              "name": "RequiredFields",
-              "optional": true,
-              "type": {
-                "type": "ref",
-                "typeName": "RequiredTaskTemplateFields"
-              }
-            },
-            {
-              "name": "ReadOnlyFields",
-              "optional": true,
-              "type": {
-                "type": "ref",
-                "typeName": "ReadOnlyTaskTemplateFields"
-              }
-            }
-          ]
-        }
-      },
-      {
-        "name": "Defaults",
-        "description": "",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "description": "",
-          "itemType": {
-            "type": "ref",
-            "typeName": "DefaultFieldValue"
-          },
-          "maxLength": 50
-        }
-      },
-      {
-        "name": "Fields",
-        "description": "The list of task template's fields",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "description": "The list of task template's fields",
-          "itemType": {
-            "type": "ref",
-            "typeName": "Field"
-          },
-          "maxLength": 50
-        }
-      },
-      {
         "name": "Status",
         "optional": true,
         "type": {
           "type": "ref",
           "typeName": "Status"
-        }
-      },
-      {
-        "name": "ClientToken",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "ClientToken"
         }
       },
       {
@@ -382,5 +382,5 @@
       }
     ]
   },
-  "$hash": "6cc739efd504d3ee8947e0142ba87140516f7dc7"
+  "$hash": "c4695fed8c4975d7437f5d14e83bf6dc7252b0f0"
 }

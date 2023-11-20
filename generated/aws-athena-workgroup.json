@@ -1,11 +1,259 @@
 {
   "definitions": {
-    "Tags": {
-      "type": "array",
-      "itemType": {
-        "type": "ref",
-        "typeName": "Tag"
-      }
+    "AclConfiguration": {
+      "type": "object",
+      "description": "Indicates that an Amazon S3 canned ACL should be set to control ownership of stored query results",
+      "properties": [
+        {
+          "name": "S3AclOption",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "S3AclOption"
+          }
+        }
+      ]
+    },
+    "AdditionalConfiguration": {
+      "type": "string",
+      "description": "Additional Configuration that are passed to Athena Spark Calculations running in this workgroup"
+    },
+    "BytesScannedCutoffPerQuery": {
+      "type": "number",
+      "description": "The upper data usage limit (cutoff) for the amount of bytes a single query in a workgroup is allowed to scan.",
+      "isInteger": true,
+      "minimum": 10000000
+    },
+    "CustomerContentEncryptionConfiguration": {
+      "type": "object",
+      "description": "Indicates the KMS key for encrypting notebook content.",
+      "properties": [
+        {
+          "name": "KmsKey",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "KmsKey"
+          }
+        }
+      ]
+    },
+    "EffectiveEngineVersion": {
+      "type": "string",
+      "description": "Read only. The engine version on which the query runs. If the user requests a valid engine version other than Auto, the effective engine version is the same as the engine version that the user requested. If the user requests Auto, the effective engine version is chosen by Athena. When a request to update the engine version is made by a CreateWorkGroup or UpdateWorkGroup operation, the EffectiveEngineVersion field is ignored."
+    },
+    "EncryptionConfiguration": {
+      "type": "object",
+      "description": "If query results are encrypted in Amazon S3, indicates the encryption option used (for example, SSE-KMS or CSE-KMS) and key information.",
+      "properties": [
+        {
+          "name": "EncryptionOption",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "EncryptionOption"
+          }
+        },
+        {
+          "name": "KmsKey",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "KmsKey"
+          }
+        }
+      ]
+    },
+    "EncryptionOption": {
+      "type": "string",
+      "description": "Indicates whether Amazon S3 server-side encryption with Amazon S3-managed keys (SSE-S3), server-side encryption with KMS-managed keys (SSE-KMS), or client-side encryption with KMS-managed keys (CSE-KMS) is used.",
+      "allowedValues": ["SSE_S3", "SSE_KMS", "CSE_KMS"]
+    },
+    "EnforceWorkGroupConfiguration": {
+      "type": "boolean",
+      "description": "If set to \"true\", the settings for the workgroup override client-side settings. If set to \"false\", client-side settings are used"
+    },
+    "EngineVersion": {
+      "type": "object",
+      "description": "The Athena engine version for running queries.",
+      "properties": [
+        {
+          "name": "EffectiveEngineVersion",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "EffectiveEngineVersion"
+          }
+        },
+        {
+          "name": "SelectedEngineVersion",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "SelectedEngineVersion"
+          }
+        }
+      ]
+    },
+    "ExecutionRole": {
+      "type": "string",
+      "description": "Execution Role ARN required to run Athena Spark Calculations"
+    },
+    "ExpectedBucketOwner": {
+      "type": "string",
+      "description": "The AWS account ID of the owner of S3 bucket where query results are stored"
+    },
+    "KmsKey": {
+      "type": "string",
+      "description": "For SSE-KMS and CSE-KMS, this is the KMS key ARN or ID. "
+    },
+    "OutputLocation": {
+      "type": "string",
+      "description": "The location in Amazon S3 where your query results are stored, such as s3://path/to/query/bucket/. To run the query, you must specify the query results location using one of the ways: either for individual queries using either this setting (client-side), or in the workgroup, using WorkGroupConfiguration"
+    },
+    "PublishCloudWatchMetricsEnabled": {
+      "type": "boolean",
+      "description": "Indicates that the Amazon CloudWatch metrics are enabled for the workgroup."
+    },
+    "RemoveAclConfiguration": {
+      "type": "boolean"
+    },
+    "RemoveBytesScannedCutoffPerQuery": {
+      "type": "boolean",
+      "description": "Indicates that the data usage control limit per query is removed."
+    },
+    "RemoveCustomerContentEncryptionConfiguration": {
+      "type": "boolean"
+    },
+    "RemoveEncryptionConfiguration": {
+      "type": "boolean"
+    },
+    "RemoveExpectedBucketOwner": {
+      "type": "boolean"
+    },
+    "RemoveOutputLocation": {
+      "type": "boolean"
+    },
+    "RequesterPaysEnabled": {
+      "type": "boolean",
+      "description": "If set to true, allows members assigned to a workgroup to reference Amazon S3 Requester Pays buckets in queries. If set to false, workgroup members cannot query data from Requester Pays buckets, and queries that retrieve data from Requester Pays buckets cause an error. "
+    },
+    "ResultConfiguration": {
+      "type": "object",
+      "description": "The location in Amazon S3 where query results are stored and the encryption option, if any, used for query results. These are known as \"client-side settings\". If workgroup settings override client-side settings, then the query uses the workgroup settings.\n",
+      "properties": [
+        {
+          "name": "AclConfiguration",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "AclConfiguration"
+          }
+        },
+        {
+          "name": "EncryptionConfiguration",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "EncryptionConfiguration"
+          }
+        },
+        {
+          "name": "ExpectedBucketOwner",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ExpectedBucketOwner"
+          }
+        },
+        {
+          "name": "OutputLocation",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "OutputLocation"
+          }
+        }
+      ]
+    },
+    "ResultConfigurationUpdates": {
+      "type": "object",
+      "description": "The result configuration information about the queries in this workgroup that will be updated. Includes the updated results location and an updated option for encrypting query results. ",
+      "properties": [
+        {
+          "name": "AclConfiguration",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "AclConfiguration"
+          }
+        },
+        {
+          "name": "EncryptionConfiguration",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "EncryptionConfiguration"
+          }
+        },
+        {
+          "name": "ExpectedBucketOwner",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ExpectedBucketOwner"
+          }
+        },
+        {
+          "name": "OutputLocation",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "OutputLocation"
+          }
+        },
+        {
+          "name": "RemoveAclConfiguration",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "RemoveAclConfiguration"
+          }
+        },
+        {
+          "name": "RemoveEncryptionConfiguration",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "RemoveEncryptionConfiguration"
+          }
+        },
+        {
+          "name": "RemoveExpectedBucketOwner",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "RemoveExpectedBucketOwner"
+          }
+        },
+        {
+          "name": "RemoveOutputLocation",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "RemoveOutputLocation"
+          }
+        }
+      ]
+    },
+    "S3AclOption": {
+      "type": "string",
+      "description": "The Amazon S3 canned ACL that Athena should specify when storing query results. Currently the only supported canned ACL is BUCKET_OWNER_FULL_CONTROL",
+      "allowedValues": ["BUCKET_OWNER_FULL_CONTROL"]
+    },
+    "SelectedEngineVersion": {
+      "type": "string",
+      "description": "The engine version requested by the user. Possible values are determined by the output of ListEngineVersions, including Auto. The default is Auto."
     },
     "Tag": {
       "type": "object",
@@ -30,264 +278,24 @@
         }
       ]
     },
-    "SelectedEngineVersion": {
-      "type": "string",
-      "description": "The engine version requested by the user. Possible values are determined by the output of ListEngineVersions, including Auto. The default is Auto."
-    },
-    "EffectiveEngineVersion": {
-      "type": "string",
-      "description": "Read only. The engine version on which the query runs. If the user requests a valid engine version other than Auto, the effective engine version is the same as the engine version that the user requested. If the user requests Auto, the effective engine version is chosen by Athena. When a request to update the engine version is made by a CreateWorkGroup or UpdateWorkGroup operation, the EffectiveEngineVersion field is ignored."
-    },
-    "EngineVersion": {
-      "type": "object",
-      "description": "The Athena engine version for running queries.",
-      "properties": [
-        {
-          "name": "SelectedEngineVersion",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "SelectedEngineVersion"
-          }
-        },
-        {
-          "name": "EffectiveEngineVersion",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "EffectiveEngineVersion"
-          }
-        }
-      ]
-    },
-    "BytesScannedCutoffPerQuery": {
-      "type": "number",
-      "description": "The upper data usage limit (cutoff) for the amount of bytes a single query in a workgroup is allowed to scan.",
-      "isInteger": true,
-      "minimum": 10000000
-    },
-    "EnforceWorkGroupConfiguration": {
-      "type": "boolean",
-      "description": "If set to \"true\", the settings for the workgroup override client-side settings. If set to \"false\", client-side settings are used"
-    },
-    "PublishCloudWatchMetricsEnabled": {
-      "type": "boolean",
-      "description": "Indicates that the Amazon CloudWatch metrics are enabled for the workgroup."
-    },
-    "RequesterPaysEnabled": {
-      "type": "boolean",
-      "description": "If set to true, allows members assigned to a workgroup to reference Amazon S3 Requester Pays buckets in queries. If set to false, workgroup members cannot query data from Requester Pays buckets, and queries that retrieve data from Requester Pays buckets cause an error. "
-    },
-    "OutputLocation": {
-      "type": "string",
-      "description": "The location in Amazon S3 where your query results are stored, such as s3://path/to/query/bucket/. To run the query, you must specify the query results location using one of the ways: either for individual queries using either this setting (client-side), or in the workgroup, using WorkGroupConfiguration"
-    },
-    "KmsKey": {
-      "type": "string",
-      "description": "For SSE-KMS and CSE-KMS, this is the KMS key ARN or ID. "
-    },
-    "EncryptionOption": {
-      "type": "string",
-      "description": "Indicates whether Amazon S3 server-side encryption with Amazon S3-managed keys (SSE-S3), server-side encryption with KMS-managed keys (SSE-KMS), or client-side encryption with KMS-managed keys (CSE-KMS) is used.",
-      "allowedValues": ["SSE_S3", "SSE_KMS", "CSE_KMS"]
-    },
-    "RemoveBytesScannedCutoffPerQuery": {
-      "type": "boolean",
-      "description": "Indicates that the data usage control limit per query is removed."
-    },
-    "EncryptionConfiguration": {
-      "type": "object",
-      "description": "If query results are encrypted in Amazon S3, indicates the encryption option used (for example, SSE-KMS or CSE-KMS) and key information.",
-      "properties": [
-        {
-          "name": "EncryptionOption",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "EncryptionOption"
-          }
-        },
-        {
-          "name": "KmsKey",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "KmsKey"
-          }
-        }
-      ]
-    },
-    "RemoveEncryptionConfiguration": {
-      "type": "boolean"
-    },
-    "AdditionalConfiguration": {
-      "type": "string",
-      "description": "Additional Configuration that are passed to Athena Spark Calculations running in this workgroup"
-    },
-    "ExecutionRole": {
-      "type": "string",
-      "description": "Execution Role ARN required to run Athena Spark Calculations"
-    },
-    "RemoveOutputLocation": {
-      "type": "boolean"
-    },
-    "ExpectedBucketOwner": {
-      "type": "string",
-      "description": "The AWS account ID of the owner of S3 bucket where query results are stored"
-    },
-    "RemoveExpectedBucketOwner": {
-      "type": "boolean"
-    },
-    "S3AclOption": {
-      "type": "string",
-      "description": "The Amazon S3 canned ACL that Athena should specify when storing query results. Currently the only supported canned ACL is BUCKET_OWNER_FULL_CONTROL",
-      "allowedValues": ["BUCKET_OWNER_FULL_CONTROL"]
-    },
-    "AclConfiguration": {
-      "type": "object",
-      "description": "Indicates that an Amazon S3 canned ACL should be set to control ownership of stored query results",
-      "properties": [
-        {
-          "name": "S3AclOption",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "S3AclOption"
-          }
-        }
-      ]
-    },
-    "RemoveAclConfiguration": {
-      "type": "boolean"
-    },
-    "CustomerContentEncryptionConfiguration": {
-      "type": "object",
-      "description": "Indicates the KMS key for encrypting notebook content.",
-      "properties": [
-        {
-          "name": "KmsKey",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "KmsKey"
-          }
-        }
-      ]
-    },
-    "RemoveCustomerContentEncryptionConfiguration": {
-      "type": "boolean"
-    },
-    "ResultConfiguration": {
-      "type": "object",
-      "description": "The location in Amazon S3 where query results are stored and the encryption option, if any, used for query results. These are known as \"client-side settings\". If workgroup settings override client-side settings, then the query uses the workgroup settings.\n",
-      "properties": [
-        {
-          "name": "EncryptionConfiguration",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "EncryptionConfiguration"
-          }
-        },
-        {
-          "name": "OutputLocation",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "OutputLocation"
-          }
-        },
-        {
-          "name": "ExpectedBucketOwner",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ExpectedBucketOwner"
-          }
-        },
-        {
-          "name": "AclConfiguration",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "AclConfiguration"
-          }
-        }
-      ]
-    },
-    "ResultConfigurationUpdates": {
-      "type": "object",
-      "description": "The result configuration information about the queries in this workgroup that will be updated. Includes the updated results location and an updated option for encrypting query results. ",
-      "properties": [
-        {
-          "name": "EncryptionConfiguration",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "EncryptionConfiguration"
-          }
-        },
-        {
-          "name": "OutputLocation",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "OutputLocation"
-          }
-        },
-        {
-          "name": "ExpectedBucketOwner",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ExpectedBucketOwner"
-          }
-        },
-        {
-          "name": "AclConfiguration",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "AclConfiguration"
-          }
-        },
-        {
-          "name": "RemoveEncryptionConfiguration",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "RemoveEncryptionConfiguration"
-          }
-        },
-        {
-          "name": "RemoveOutputLocation",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "RemoveOutputLocation"
-          }
-        },
-        {
-          "name": "RemoveExpectedBucketOwner",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "RemoveExpectedBucketOwner"
-          }
-        },
-        {
-          "name": "RemoveAclConfiguration",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "RemoveAclConfiguration"
-          }
-        }
-      ]
+    "Tags": {
+      "type": "array",
+      "itemType": {
+        "type": "ref",
+        "typeName": "Tag"
+      }
     },
     "WorkGroupConfiguration": {
       "type": "object",
       "properties": [
+        {
+          "name": "AdditionalConfiguration",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "AdditionalConfiguration"
+          }
+        },
         {
           "name": "BytesScannedCutoffPerQuery",
           "optional": true,
@@ -297,11 +305,35 @@
           }
         },
         {
+          "name": "CustomerContentEncryptionConfiguration",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "CustomerContentEncryptionConfiguration"
+          }
+        },
+        {
           "name": "EnforceWorkGroupConfiguration",
           "optional": true,
           "type": {
             "type": "ref",
             "typeName": "EnforceWorkGroupConfiguration"
+          }
+        },
+        {
+          "name": "EngineVersion",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "EngineVersion"
+          }
+        },
+        {
+          "name": "ExecutionRole",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ExecutionRole"
           }
         },
         {
@@ -327,15 +359,13 @@
             "type": "ref",
             "typeName": "ResultConfiguration"
           }
-        },
-        {
-          "name": "EngineVersion",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "EngineVersion"
-          }
-        },
+        }
+      ]
+    },
+    "WorkGroupConfigurationUpdates": {
+      "type": "object",
+      "description": "The configuration information that will be updated for this workgroup, which includes the location in Amazon S3 where query results are stored, the encryption option, if any, used for query results, whether the Amazon CloudWatch Metrics are enabled for the workgroup, whether the workgroup settings override the client-side settings, and the data usage limit for the amount of bytes scanned per query, if it is specified. ",
+      "properties": [
         {
           "name": "AdditionalConfiguration",
           "optional": true,
@@ -345,11 +375,11 @@
           }
         },
         {
-          "name": "ExecutionRole",
+          "name": "BytesScannedCutoffPerQuery",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "ExecutionRole"
+            "typeName": "BytesScannedCutoffPerQuery"
           }
         },
         {
@@ -358,20 +388,6 @@
           "type": {
             "type": "ref",
             "typeName": "CustomerContentEncryptionConfiguration"
-          }
-        }
-      ]
-    },
-    "WorkGroupConfigurationUpdates": {
-      "type": "object",
-      "description": "The configuration information that will be updated for this workgroup, which includes the location in Amazon S3 where query results are stored, the encryption option, if any, used for query results, whether the Amazon CloudWatch Metrics are enabled for the workgroup, whether the workgroup settings override the client-side settings, and the data usage limit for the amount of bytes scanned per query, if it is specified. ",
-      "properties": [
-        {
-          "name": "BytesScannedCutoffPerQuery",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "BytesScannedCutoffPerQuery"
           }
         },
         {
@@ -383,11 +399,43 @@
           }
         },
         {
+          "name": "EngineVersion",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "EngineVersion"
+          }
+        },
+        {
+          "name": "ExecutionRole",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ExecutionRole"
+          }
+        },
+        {
           "name": "PublishCloudWatchMetricsEnabled",
           "optional": true,
           "type": {
             "type": "ref",
             "typeName": "PublishCloudWatchMetricsEnabled"
+          }
+        },
+        {
+          "name": "RemoveBytesScannedCutoffPerQuery",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "RemoveBytesScannedCutoffPerQuery"
+          }
+        },
+        {
+          "name": "RemoveCustomerContentEncryptionConfiguration",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "RemoveCustomerContentEncryptionConfiguration"
           }
         },
         {
@@ -405,54 +453,6 @@
             "type": "ref",
             "typeName": "ResultConfigurationUpdates"
           }
-        },
-        {
-          "name": "RemoveBytesScannedCutoffPerQuery",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "RemoveBytesScannedCutoffPerQuery"
-          }
-        },
-        {
-          "name": "EngineVersion",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "EngineVersion"
-          }
-        },
-        {
-          "name": "AdditionalConfiguration",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "AdditionalConfiguration"
-          }
-        },
-        {
-          "name": "ExecutionRole",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ExecutionRole"
-          }
-        },
-        {
-          "name": "CustomerContentEncryptionConfiguration",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "CustomerContentEncryptionConfiguration"
-          }
-        },
-        {
-          "name": "RemoveCustomerContentEncryptionConfiguration",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "RemoveCustomerContentEncryptionConfiguration"
-          }
         }
       ]
     }
@@ -461,6 +461,17 @@
     "type": "object",
     "description": "Resource schema for AWS::Athena::WorkGroup",
     "properties": [
+      {
+        "name": "Description",
+        "description": "The workgroup description.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The workgroup description.",
+          "maxLength": 1024,
+          "minLength": 0
+        }
+      },
       {
         "name": "Name",
         "description": "The workGroup name.",
@@ -472,14 +483,22 @@
         }
       },
       {
-        "name": "Description",
-        "description": "The workgroup description.",
+        "name": "RecursiveDeleteOption",
+        "description": "The option to delete the workgroup and its contents even if the workgroup contains any named queries.",
+        "optional": true,
+        "type": {
+          "type": "boolean",
+          "description": "The option to delete the workgroup and its contents even if the workgroup contains any named queries."
+        }
+      },
+      {
+        "name": "State",
+        "description": "The state of the workgroup: ENABLED or DISABLED.",
         "optional": true,
         "type": {
           "type": "string",
-          "description": "The workgroup description.",
-          "maxLength": 1024,
-          "minLength": 0
+          "description": "The state of the workgroup: ENABLED or DISABLED.",
+          "allowedValues": ["ENABLED", "DISABLED"]
         }
       },
       {
@@ -511,25 +530,6 @@
           "description": "The workgroup configuration update object",
           "typeName": "WorkGroupConfigurationUpdates"
         }
-      },
-      {
-        "name": "State",
-        "description": "The state of the workgroup: ENABLED or DISABLED.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The state of the workgroup: ENABLED or DISABLED.",
-          "allowedValues": ["ENABLED", "DISABLED"]
-        }
-      },
-      {
-        "name": "RecursiveDeleteOption",
-        "description": "The option to delete the workgroup and its contents even if the workgroup contains any named queries.",
-        "optional": true,
-        "type": {
-          "type": "boolean",
-          "description": "The option to delete the workgroup and its contents even if the workgroup contains any named queries."
-        }
       }
     ]
   },
@@ -548,5 +548,5 @@
       }
     ]
   },
-  "$hash": "dcbed277a7d1d547a304b52690da34af2e980c6f"
+  "$hash": "9933dfc22b24ee7af91838b5ad6c1f320461b174"
 }

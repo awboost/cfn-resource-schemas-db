@@ -1,30 +1,6 @@
 {
   "definitions": {
-    "StreamSpecification": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "StreamViewType",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "KinesisStreamSpecification": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "StreamArn",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "KeySchema": {
+    "AttributeDefinition": {
       "type": "object",
       "properties": [
         {
@@ -37,7 +13,7 @@
           }
         },
         {
-          "name": "KeyType",
+          "name": "AttributeType",
           "optional": false,
           "type": {
             "type": "string"
@@ -45,155 +21,54 @@
         }
       ]
     },
-    "PointInTimeRecoverySpecification": {
+    "CapacityAutoScalingSettings": {
       "type": "object",
       "properties": [
         {
-          "name": "PointInTimeRecoveryEnabled",
-          "optional": true,
-          "type": {
-            "type": "boolean"
-          }
-        }
-      ]
-    },
-    "ReplicaSpecification": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Region",
+          "name": "MaxCapacity",
           "optional": false,
           "type": {
-            "type": "string"
+            "type": "number",
+            "isInteger": true,
+            "minimum": 1
           }
         },
         {
-          "name": "GlobalSecondaryIndexes",
+          "name": "MinCapacity",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "minimum": 1
+          }
+        },
+        {
+          "name": "SeedCapacity",
           "optional": true,
           "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "ReplicaGlobalSecondaryIndexSpecification"
-            }
+            "type": "number",
+            "isInteger": true,
+            "minimum": 1
           }
         },
         {
-          "name": "ContributorInsightsSpecification",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ContributorInsightsSpecification"
-          }
-        },
-        {
-          "name": "PointInTimeRecoverySpecification",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "PointInTimeRecoverySpecification"
-          }
-        },
-        {
-          "name": "TableClass",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "DeletionProtectionEnabled",
-          "optional": true,
-          "type": {
-            "type": "boolean"
-          }
-        },
-        {
-          "name": "SSESpecification",
-          "optional": true,
+          "name": "TargetTrackingScalingPolicyConfiguration",
+          "optional": false,
           "type": {
             "type": "ref",
-            "typeName": "ReplicaSSESpecification"
-          }
-        },
-        {
-          "name": "Tags",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "Tag"
-            }
-          }
-        },
-        {
-          "name": "ReadProvisionedThroughputSettings",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ReadProvisionedThroughputSettings"
-          }
-        },
-        {
-          "name": "KinesisStreamSpecification",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "KinesisStreamSpecification"
+            "typeName": "TargetTrackingScalingPolicyConfiguration"
           }
         }
       ]
     },
-    "TimeToLiveSpecification": {
+    "ContributorInsightsSpecification": {
       "type": "object",
       "properties": [
-        {
-          "name": "AttributeName",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
         {
           "name": "Enabled",
           "optional": false,
           "type": {
             "type": "boolean"
-          }
-        }
-      ]
-    },
-    "LocalSecondaryIndex": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "IndexName",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 255,
-            "minLength": 3
-          }
-        },
-        {
-          "name": "KeySchema",
-          "optional": false,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "KeySchema"
-            },
-            "maxLength": 2
-          }
-        },
-        {
-          "name": "Projection",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "Projection"
           }
         }
       ]
@@ -241,38 +116,7 @@
         }
       ]
     },
-    "SSESpecification": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "SSEEnabled",
-          "optional": false,
-          "type": {
-            "type": "boolean"
-          }
-        },
-        {
-          "name": "SSEType",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "ReplicaSSESpecification": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "KMSMasterKeyId",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "AttributeDefinition": {
+    "KeySchema": {
       "type": "object",
       "properties": [
         {
@@ -285,7 +129,7 @@
           }
         },
         {
-          "name": "AttributeType",
+          "name": "KeyType",
           "optional": false,
           "type": {
             "type": "string"
@@ -293,21 +137,60 @@
         }
       ]
     },
-    "Tag": {
+    "KinesisStreamSpecification": {
       "type": "object",
       "properties": [
         {
-          "name": "Key",
+          "name": "StreamArn",
           "optional": false,
           "type": {
             "type": "string"
           }
-        },
+        }
+      ]
+    },
+    "LocalSecondaryIndex": {
+      "type": "object",
+      "properties": [
         {
-          "name": "Value",
+          "name": "IndexName",
           "optional": false,
           "type": {
-            "type": "string"
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 3
+          }
+        },
+        {
+          "name": "KeySchema",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "KeySchema"
+            },
+            "maxLength": 2
+          }
+        },
+        {
+          "name": "Projection",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "Projection"
+          }
+        }
+      ]
+    },
+    "PointInTimeRecoverySpecification": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "PointInTimeRecoveryEnabled",
+          "optional": true,
+          "type": {
+            "type": "boolean"
           }
         }
       ]
@@ -335,9 +218,39 @@
         }
       ]
     },
+    "ReadProvisionedThroughputSettings": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ReadCapacityAutoScalingSettings",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "CapacityAutoScalingSettings"
+          }
+        },
+        {
+          "name": "ReadCapacityUnits",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "minimum": 1
+          }
+        }
+      ]
+    },
     "ReplicaGlobalSecondaryIndexSpecification": {
       "type": "object",
       "properties": [
+        {
+          "name": "ContributorInsightsSpecification",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ContributorInsightsSpecification"
+          }
+        },
         {
           "name": "IndexName",
           "optional": false,
@@ -345,14 +258,6 @@
             "type": "string",
             "maxLength": 255,
             "minLength": 3
-          }
-        },
-        {
-          "name": "ContributorInsightsSpecification",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ContributorInsightsSpecification"
           }
         },
         {
@@ -365,89 +270,152 @@
         }
       ]
     },
-    "ContributorInsightsSpecification": {
+    "ReplicaSSESpecification": {
       "type": "object",
       "properties": [
         {
-          "name": "Enabled",
+          "name": "KMSMasterKeyId",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "ReplicaSpecification": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ContributorInsightsSpecification",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ContributorInsightsSpecification"
+          }
+        },
+        {
+          "name": "DeletionProtectionEnabled",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "GlobalSecondaryIndexes",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "ReplicaGlobalSecondaryIndexSpecification"
+            }
+          }
+        },
+        {
+          "name": "KinesisStreamSpecification",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "KinesisStreamSpecification"
+          }
+        },
+        {
+          "name": "PointInTimeRecoverySpecification",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PointInTimeRecoverySpecification"
+          }
+        },
+        {
+          "name": "ReadProvisionedThroughputSettings",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ReadProvisionedThroughputSettings"
+          }
+        },
+        {
+          "name": "Region",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "SSESpecification",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ReplicaSSESpecification"
+          }
+        },
+        {
+          "name": "TableClass",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Tags",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Tag"
+            }
+          }
+        }
+      ]
+    },
+    "SSESpecification": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "SSEEnabled",
           "optional": false,
           "type": {
             "type": "boolean"
           }
-        }
-      ]
-    },
-    "ReadProvisionedThroughputSettings": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "ReadCapacityUnits",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true,
-            "minimum": 1
-          }
         },
         {
-          "name": "ReadCapacityAutoScalingSettings",
+          "name": "SSEType",
           "optional": true,
           "type": {
-            "type": "ref",
-            "typeName": "CapacityAutoScalingSettings"
+            "type": "string"
           }
         }
       ]
     },
-    "WriteProvisionedThroughputSettings": {
+    "StreamSpecification": {
       "type": "object",
       "properties": [
         {
-          "name": "WriteCapacityAutoScalingSettings",
-          "optional": true,
+          "name": "StreamViewType",
+          "optional": false,
           "type": {
-            "type": "ref",
-            "typeName": "CapacityAutoScalingSettings"
+            "type": "string"
           }
         }
       ]
     },
-    "CapacityAutoScalingSettings": {
+    "Tag": {
       "type": "object",
       "properties": [
         {
-          "name": "MinCapacity",
+          "name": "Key",
           "optional": false,
           "type": {
-            "type": "number",
-            "isInteger": true,
-            "minimum": 1
+            "type": "string"
           }
         },
         {
-          "name": "MaxCapacity",
+          "name": "Value",
           "optional": false,
           "type": {
-            "type": "number",
-            "isInteger": true,
-            "minimum": 1
-          }
-        },
-        {
-          "name": "SeedCapacity",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true,
-            "minimum": 1
-          }
-        },
-        {
-          "name": "TargetTrackingScalingPolicyConfiguration",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "TargetTrackingScalingPolicyConfiguration"
+            "type": "string"
           }
         }
       ]
@@ -486,6 +454,38 @@
           "type": {
             "type": "number",
             "isInteger": false
+          }
+        }
+      ]
+    },
+    "TimeToLiveSpecification": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "AttributeName",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Enabled",
+          "optional": false,
+          "type": {
+            "type": "boolean"
+          }
+        }
+      ]
+    },
+    "WriteProvisionedThroughputSettings": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "WriteCapacityAutoScalingSettings",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "CapacityAutoScalingSettings"
           }
         }
       ]
@@ -550,14 +550,6 @@
         }
       },
       {
-        "name": "WriteProvisionedThroughputSettings",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "WriteProvisionedThroughputSettings"
-        }
-      },
-      {
         "name": "Replicas",
         "optional": false,
         "type": {
@@ -599,6 +591,14 @@
           "type": "ref",
           "typeName": "TimeToLiveSpecification"
         }
+      },
+      {
+        "name": "WriteProvisionedThroughputSettings",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "WriteProvisionedThroughputSettings"
+        }
       }
     ]
   },
@@ -629,5 +629,5 @@
       }
     ]
   },
-  "$hash": "290673d6268c578c7937fb564654e33d242b2715"
+  "$hash": "947a31133c5dbfc2b7bf258ea352abcc5eceba33"
 }

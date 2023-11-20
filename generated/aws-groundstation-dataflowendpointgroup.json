@@ -1,25 +1,5 @@
 {
   "definitions": {
-    "SocketAddress": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Name",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Port",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        }
-      ]
-    },
     "AgentStatus": {
       "type": "string",
       "description": "The status of AgentEndpoint.",
@@ -30,10 +10,148 @@
       "description": "The results of the audit.",
       "allowedValues": ["HEALTHY", "UNHEALTHY"]
     },
+    "AwsGroundStationAgentEndpoint": {
+      "type": "object",
+      "description": "Information about AwsGroundStationAgentEndpoint.",
+      "properties": [
+        {
+          "name": "AgentStatus",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "AgentStatus"
+          }
+        },
+        {
+          "name": "AuditResults",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "AuditResults"
+          }
+        },
+        {
+          "name": "EgressAddress",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ConnectionDetails"
+          }
+        },
+        {
+          "name": "IngressAddress",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "RangedConnectionDetails"
+          }
+        },
+        {
+          "name": "Name",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "pattern": "^[ a-zA-Z0-9_:-]{1,256}$"
+          }
+        }
+      ]
+    },
+    "ConnectionDetails": {
+      "type": "object",
+      "description": "Egress address of AgentEndpoint with an optional mtu.",
+      "properties": [
+        {
+          "name": "Mtu",
+          "description": "Maximum transmission unit (MTU) size in bytes of a dataflow endpoint.",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "Maximum transmission unit (MTU) size in bytes of a dataflow endpoint.",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "SocketAddress",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "SocketAddress"
+          }
+        }
+      ]
+    },
+    "DataflowEndpoint": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Address",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "SocketAddress"
+          }
+        },
+        {
+          "name": "Mtu",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "Name",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "pattern": "^[ a-zA-Z0-9_:-]{1,256}$"
+          }
+        }
+      ]
+    },
+    "EndpointDetails": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "AwsGroundStationAgentEndpoint",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "AwsGroundStationAgentEndpoint"
+          }
+        },
+        {
+          "name": "Endpoint",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DataflowEndpoint"
+          }
+        },
+        {
+          "name": "SecurityDetails",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "SecurityDetails"
+          }
+        }
+      ]
+    },
     "IntegerRange": {
       "type": "object",
       "description": "An integer range that has a minimum and maximum value.",
       "properties": [
+        {
+          "name": "Maximum",
+          "description": "A maximum value.",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "A maximum value.",
+            "isInteger": true
+          }
+        },
         {
           "name": "Minimum",
           "description": "A minimum value.",
@@ -43,15 +161,29 @@
             "description": "A minimum value.",
             "isInteger": true
           }
-        },
+        }
+      ]
+    },
+    "RangedConnectionDetails": {
+      "type": "object",
+      "description": "Ingress address of AgentEndpoint with a port range and an optional mtu.",
+      "properties": [
         {
-          "name": "Maximum",
-          "description": "A maximum value.",
+          "name": "Mtu",
+          "description": "Maximum transmission unit (MTU) size in bytes of a dataflow endpoint.",
           "optional": true,
           "type": {
             "type": "number",
-            "description": "A maximum value.",
+            "description": "Maximum transmission unit (MTU) size in bytes of a dataflow endpoint.",
             "isInteger": true
+          }
+        },
+        {
+          "name": "SocketAddress",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "RangedSocketAddress"
           }
         }
       ]
@@ -81,140 +213,14 @@
         }
       ]
     },
-    "ConnectionDetails": {
-      "type": "object",
-      "description": "Egress address of AgentEndpoint with an optional mtu.",
-      "properties": [
-        {
-          "name": "SocketAddress",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "SocketAddress"
-          }
-        },
-        {
-          "name": "Mtu",
-          "description": "Maximum transmission unit (MTU) size in bytes of a dataflow endpoint.",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "description": "Maximum transmission unit (MTU) size in bytes of a dataflow endpoint.",
-            "isInteger": true
-          }
-        }
-      ]
-    },
-    "RangedConnectionDetails": {
-      "type": "object",
-      "description": "Ingress address of AgentEndpoint with a port range and an optional mtu.",
-      "properties": [
-        {
-          "name": "SocketAddress",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "RangedSocketAddress"
-          }
-        },
-        {
-          "name": "Mtu",
-          "description": "Maximum transmission unit (MTU) size in bytes of a dataflow endpoint.",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "description": "Maximum transmission unit (MTU) size in bytes of a dataflow endpoint.",
-            "isInteger": true
-          }
-        }
-      ]
-    },
-    "AwsGroundStationAgentEndpoint": {
-      "type": "object",
-      "description": "Information about AwsGroundStationAgentEndpoint.",
-      "properties": [
-        {
-          "name": "Name",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "pattern": "^[ a-zA-Z0-9_:-]{1,256}$"
-          }
-        },
-        {
-          "name": "EgressAddress",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ConnectionDetails"
-          }
-        },
-        {
-          "name": "IngressAddress",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "RangedConnectionDetails"
-          }
-        },
-        {
-          "name": "AgentStatus",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "AgentStatus"
-          }
-        },
-        {
-          "name": "AuditResults",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "AuditResults"
-          }
-        }
-      ]
-    },
-    "DataflowEndpoint": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Name",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "pattern": "^[ a-zA-Z0-9_:-]{1,256}$"
-          }
-        },
-        {
-          "name": "Address",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "SocketAddress"
-          }
-        },
-        {
-          "name": "Mtu",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        }
-      ]
-    },
     "SecurityDetails": {
       "type": "object",
       "properties": [
         {
-          "name": "SubnetIds",
+          "name": "RoleArn",
           "optional": true,
           "type": {
-            "type": "array",
-            "itemType": {
-              "type": "string"
-            }
+            "type": "string"
           }
         },
         {
@@ -228,39 +234,33 @@
           }
         },
         {
-          "name": "RoleArn",
+          "name": "SubnetIds",
           "optional": true,
           "type": {
-            "type": "string"
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            }
           }
         }
       ]
     },
-    "EndpointDetails": {
+    "SocketAddress": {
       "type": "object",
       "properties": [
         {
-          "name": "SecurityDetails",
+          "name": "Name",
           "optional": true,
           "type": {
-            "type": "ref",
-            "typeName": "SecurityDetails"
+            "type": "string"
           }
         },
         {
-          "name": "Endpoint",
+          "name": "Port",
           "optional": true,
           "type": {
-            "type": "ref",
-            "typeName": "DataflowEndpoint"
-          }
-        },
-        {
-          "name": "AwsGroundStationAgentEndpoint",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "AwsGroundStationAgentEndpoint"
+            "type": "number",
+            "isInteger": true
           }
         }
       ]
@@ -292,15 +292,13 @@
     "description": "AWS Ground Station DataflowEndpointGroup schema for CloudFormation",
     "properties": [
       {
-        "name": "EndpointDetails",
-        "optional": false,
+        "name": "ContactPostPassDurationSeconds",
+        "description": "Amount of time, in seconds, after a contact ends that the Ground Station Dataflow Endpoint Group will be in a POSTPASS state. A Ground Station Dataflow Endpoint Group State Change event will be emitted when the Dataflow Endpoint Group enters and exits the POSTPASS state.",
+        "optional": true,
         "type": {
-          "type": "array",
-          "itemType": {
-            "type": "ref",
-            "typeName": "EndpointDetails"
-          },
-          "minLength": 1
+          "type": "number",
+          "description": "Amount of time, in seconds, after a contact ends that the Ground Station Dataflow Endpoint Group will be in a POSTPASS state. A Ground Station Dataflow Endpoint Group State Change event will be emitted when the Dataflow Endpoint Group enters and exits the POSTPASS state.",
+          "isInteger": true
         }
       },
       {
@@ -314,13 +312,15 @@
         }
       },
       {
-        "name": "ContactPostPassDurationSeconds",
-        "description": "Amount of time, in seconds, after a contact ends that the Ground Station Dataflow Endpoint Group will be in a POSTPASS state. A Ground Station Dataflow Endpoint Group State Change event will be emitted when the Dataflow Endpoint Group enters and exits the POSTPASS state.",
-        "optional": true,
+        "name": "EndpointDetails",
+        "optional": false,
         "type": {
-          "type": "number",
-          "description": "Amount of time, in seconds, after a contact ends that the Ground Station Dataflow Endpoint Group will be in a POSTPASS state. A Ground Station Dataflow Endpoint Group State Change event will be emitted when the Dataflow Endpoint Group enters and exits the POSTPASS state.",
-          "isInteger": true
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "EndpointDetails"
+          },
+          "minLength": 1
         }
       },
       {
@@ -341,14 +341,14 @@
     "description": "AWS Ground Station DataflowEndpointGroup schema for CloudFormation",
     "properties": [
       {
-        "name": "Id",
+        "name": "Arn",
         "optional": true,
         "type": {
           "type": "string"
         }
       },
       {
-        "name": "Arn",
+        "name": "Id",
         "optional": true,
         "type": {
           "type": "string"
@@ -356,5 +356,5 @@
       }
     ]
   },
-  "$hash": "d565b2705f47e70b5c246e60e6df2c63d4ff6616"
+  "$hash": "3863a216195f23d004588b678d79576d2a0c0cce"
 }

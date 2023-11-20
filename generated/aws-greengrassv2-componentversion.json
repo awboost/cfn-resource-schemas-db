@@ -1,58 +1,21 @@
 {
   "definitions": {
-    "LambdaFunctionRecipeSource": {
+    "ComponentDependencyRequirement": {
       "type": "object",
       "properties": [
         {
-          "name": "LambdaArn",
+          "name": "DependencyType",
           "optional": true,
           "type": {
             "type": "string",
-            "pattern": "^arn:[^:]*:lambda:(([a-z]+-)+[0-9])?:([0-9]{12})?:[^.]+$"
+            "allowedValues": ["SOFT", "HARD"]
           }
         },
         {
-          "name": "ComponentName",
+          "name": "VersionRequirement",
           "optional": true,
           "type": {
             "type": "string"
-          }
-        },
-        {
-          "name": "ComponentVersion",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "ComponentPlatforms",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "ComponentPlatform"
-            }
-          }
-        },
-        {
-          "name": "ComponentDependencies",
-          "optional": true,
-          "type": {
-            "type": "record",
-            "valueType": {
-              "type": "ref",
-              "typeName": "ComponentDependencyRequirement"
-            }
-          }
-        },
-        {
-          "name": "ComponentLambdaParameters",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "LambdaExecutionParameters"
           }
         }
       ]
@@ -60,13 +23,6 @@
     "ComponentPlatform": {
       "type": "object",
       "properties": [
-        {
-          "name": "Name",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
         {
           "name": "Attributes",
           "optional": true,
@@ -76,172 +32,36 @@
               "type": "string"
             }
           }
-        }
-      ]
-    },
-    "ComponentDependencyRequirement": {
-      "type": "object",
-      "properties": [
+        },
         {
-          "name": "VersionRequirement",
+          "name": "Name",
           "optional": true,
           "type": {
             "type": "string"
           }
-        },
-        {
-          "name": "DependencyType",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "allowedValues": ["SOFT", "HARD"]
-          }
         }
       ]
     },
-    "LambdaExecutionParameters": {
+    "FilesystemPath": {
+      "type": "string"
+    },
+    "LambdaAddGroupOwnerBoolean": {
+      "type": "boolean"
+    },
+    "LambdaContainerParams": {
       "type": "object",
       "properties": [
         {
-          "name": "EventSources",
+          "name": "Devices",
           "optional": true,
           "type": {
             "type": "array",
             "itemType": {
               "type": "ref",
-              "typeName": "LambdaEventSource"
+              "typeName": "LambdaDeviceMount"
             }
           }
         },
-        {
-          "name": "MaxQueueSize",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        },
-        {
-          "name": "MaxInstancesCount",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        },
-        {
-          "name": "MaxIdleTimeInSeconds",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        },
-        {
-          "name": "TimeoutInSeconds",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        },
-        {
-          "name": "StatusTimeoutInSeconds",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        },
-        {
-          "name": "Pinned",
-          "optional": true,
-          "type": {
-            "type": "boolean"
-          }
-        },
-        {
-          "name": "InputPayloadEncodingType",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "allowedValues": ["json", "binary"]
-          }
-        },
-        {
-          "name": "ExecArgs",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "string"
-            }
-          }
-        },
-        {
-          "name": "EnvironmentVariables",
-          "optional": true,
-          "type": {
-            "type": "record",
-            "valueType": {
-              "type": "string"
-            }
-          }
-        },
-        {
-          "name": "LinuxProcessParams",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "LambdaLinuxProcessParams"
-          }
-        }
-      ]
-    },
-    "LambdaEventSource": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Topic",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Type",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "allowedValues": ["PUB_SUB", "IOT_CORE"]
-          }
-        }
-      ]
-    },
-    "LambdaLinuxProcessParams": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "IsolationMode",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "allowedValues": ["GreengrassContainer", "NoContainer"]
-          }
-        },
-        {
-          "name": "ContainerParams",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "LambdaContainerParams"
-          }
-        }
-      ]
-    },
-    "LambdaContainerParams": {
-      "type": "object",
-      "properties": [
         {
           "name": "MemorySizeInKB",
           "optional": true,
@@ -267,16 +87,235 @@
               "typeName": "LambdaVolumeMount"
             }
           }
+        }
+      ]
+    },
+    "LambdaDeviceMount": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "AddGroupOwner",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "LambdaAddGroupOwnerBoolean"
+          }
         },
         {
-          "name": "Devices",
+          "name": "Path",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "FilesystemPath"
+          }
+        },
+        {
+          "name": "Permission",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "LambdaFilesystemPermission"
+          }
+        }
+      ]
+    },
+    "LambdaEventSource": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Topic",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Type",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": ["PUB_SUB", "IOT_CORE"]
+          }
+        }
+      ]
+    },
+    "LambdaExecutionParameters": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "EnvironmentVariables",
+          "optional": true,
+          "type": {
+            "type": "record",
+            "valueType": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "name": "EventSources",
           "optional": true,
           "type": {
             "type": "array",
             "itemType": {
               "type": "ref",
-              "typeName": "LambdaDeviceMount"
+              "typeName": "LambdaEventSource"
             }
+          }
+        },
+        {
+          "name": "ExecArgs",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "name": "InputPayloadEncodingType",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": ["json", "binary"]
+          }
+        },
+        {
+          "name": "LinuxProcessParams",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "LambdaLinuxProcessParams"
+          }
+        },
+        {
+          "name": "MaxIdleTimeInSeconds",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "MaxInstancesCount",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "MaxQueueSize",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "Pinned",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "StatusTimeoutInSeconds",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "TimeoutInSeconds",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        }
+      ]
+    },
+    "LambdaFilesystemPermission": {
+      "type": "string",
+      "allowedValues": ["ro", "rw"]
+    },
+    "LambdaFunctionRecipeSource": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ComponentDependencies",
+          "optional": true,
+          "type": {
+            "type": "record",
+            "valueType": {
+              "type": "ref",
+              "typeName": "ComponentDependencyRequirement"
+            }
+          }
+        },
+        {
+          "name": "ComponentLambdaParameters",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "LambdaExecutionParameters"
+          }
+        },
+        {
+          "name": "ComponentName",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "ComponentPlatforms",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "ComponentPlatform"
+            }
+          }
+        },
+        {
+          "name": "ComponentVersion",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "LambdaArn",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "pattern": "^arn:[^:]*:lambda:(([a-z]+-)+[0-9])?:([0-9]{12})?:[^.]+$"
+          }
+        }
+      ]
+    },
+    "LambdaLinuxProcessParams": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ContainerParams",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "LambdaContainerParams"
+          }
+        },
+        {
+          "name": "IsolationMode",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": ["GreengrassContainer", "NoContainer"]
           }
         }
       ]
@@ -285,11 +324,11 @@
       "type": "object",
       "properties": [
         {
-          "name": "SourcePath",
+          "name": "AddGroupOwner",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "FilesystemPath"
+            "typeName": "LambdaAddGroupOwnerBoolean"
           }
         },
         {
@@ -309,53 +348,14 @@
           }
         },
         {
-          "name": "AddGroupOwner",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "LambdaAddGroupOwnerBoolean"
-          }
-        }
-      ]
-    },
-    "LambdaDeviceMount": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Path",
+          "name": "SourcePath",
           "optional": true,
           "type": {
             "type": "ref",
             "typeName": "FilesystemPath"
           }
-        },
-        {
-          "name": "Permission",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "LambdaFilesystemPermission"
-          }
-        },
-        {
-          "name": "AddGroupOwner",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "LambdaAddGroupOwnerBoolean"
-          }
         }
       ]
-    },
-    "FilesystemPath": {
-      "type": "string"
-    },
-    "LambdaFilesystemPermission": {
-      "type": "string",
-      "allowedValues": ["ro", "rw"]
-    },
-    "LambdaAddGroupOwnerBoolean": {
-      "type": "boolean"
     }
   },
   "resource": {
@@ -417,5 +417,5 @@
       }
     ]
   },
-  "$hash": "7c0e940b6c9f26835ec66955d3ea4c9517d92f64"
+  "$hash": "bc80c3c3f3d58de094b9d6aca034770bfdca681a"
 }

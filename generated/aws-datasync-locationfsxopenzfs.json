@@ -1,5 +1,49 @@
 {
   "definitions": {
+    "MountOptions": {
+      "type": "object",
+      "description": "The NFS mount options that DataSync can use to mount your NFS share.",
+      "properties": [
+        {
+          "name": "Version",
+          "description": "The specific NFS version that you want DataSync to use to mount your NFS share.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The specific NFS version that you want DataSync to use to mount your NFS share.",
+            "allowedValues": ["AUTOMATIC", "NFS3", "NFS4_0", "NFS4_1"]
+          }
+        }
+      ]
+    },
+    "NFS": {
+      "type": "object",
+      "description": "FSx OpenZFS file system NFS protocol information",
+      "properties": [
+        {
+          "name": "MountOptions",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "MountOptions"
+          }
+        }
+      ]
+    },
+    "Protocol": {
+      "type": "object",
+      "description": "Configuration settings for an NFS or SMB protocol, currently only support NFS",
+      "properties": [
+        {
+          "name": "NFS",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "NFS"
+          }
+        }
+      ]
+    },
     "Tag": {
       "type": "object",
       "description": "A key-value pair to associate with a resource.",
@@ -29,50 +73,6 @@
           }
         }
       ]
-    },
-    "Protocol": {
-      "type": "object",
-      "description": "Configuration settings for an NFS or SMB protocol, currently only support NFS",
-      "properties": [
-        {
-          "name": "NFS",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "NFS"
-          }
-        }
-      ]
-    },
-    "NFS": {
-      "type": "object",
-      "description": "FSx OpenZFS file system NFS protocol information",
-      "properties": [
-        {
-          "name": "MountOptions",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "MountOptions"
-          }
-        }
-      ]
-    },
-    "MountOptions": {
-      "type": "object",
-      "description": "The NFS mount options that DataSync can use to mount your NFS share.",
-      "properties": [
-        {
-          "name": "Version",
-          "description": "The specific NFS version that you want DataSync to use to mount your NFS share.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The specific NFS version that you want DataSync to use to mount your NFS share.",
-            "allowedValues": ["AUTOMATIC", "NFS3", "NFS4_0", "NFS4_1"]
-          }
-        }
-      ]
     }
   },
   "resource": {
@@ -91,6 +91,14 @@
         }
       },
       {
+        "name": "Protocol",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "Protocol"
+        }
+      },
+      {
         "name": "SecurityGroupArns",
         "description": "The ARNs of the security groups that are to use to configure the FSx OpenZFS file system.",
         "optional": false,
@@ -104,14 +112,6 @@
           },
           "maxLength": 5,
           "minLength": 1
-        }
-      },
-      {
-        "name": "Protocol",
-        "optional": false,
-        "type": {
-          "type": "ref",
-          "typeName": "Protocol"
         }
       },
       {
@@ -170,5 +170,5 @@
       }
     ]
   },
-  "$hash": "f54fa3677006ea25ae8da5ace78572591331dbdd"
+  "$hash": "86022c83481a2cb1ea0ebef8dbb3ec186dd41104"
 }

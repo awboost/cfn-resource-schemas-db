@@ -1,28 +1,5 @@
 {
   "definitions": {
-    "TagsEntry": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Key",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 128,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "Value",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 256,
-            "minLength": 1
-          }
-        }
-      ]
-    },
     "CloudWatchLogsLogGroup": {
       "type": "object",
       "properties": [
@@ -36,6 +13,27 @@
           }
         }
       ]
+    },
+    "Definition": {
+      "type": "record"
+    },
+    "DefinitionSubstitutions": {
+      "type": "record",
+      "valueType": {
+        "type": "union",
+        "types": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "number",
+            "isInteger": true
+          },
+          {
+            "type": "boolean"
+          }
+        ]
+      }
     },
     "LogDestination": {
       "type": "object",
@@ -54,21 +52,6 @@
       "type": "object",
       "properties": [
         {
-          "name": "Level",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "allowedValues": ["ALL", "ERROR", "FATAL", "OFF"]
-          }
-        },
-        {
-          "name": "IncludeExecutionData",
-          "optional": true,
-          "type": {
-            "type": "boolean"
-          }
-        },
-        {
           "name": "Destinations",
           "optional": true,
           "type": {
@@ -79,17 +62,20 @@
             },
             "minLength": 1
           }
-        }
-      ]
-    },
-    "TracingConfiguration": {
-      "type": "object",
-      "properties": [
+        },
         {
-          "name": "Enabled",
+          "name": "IncludeExecutionData",
           "optional": true,
           "type": {
             "type": "boolean"
+          }
+        },
+        {
+          "name": "Level",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": ["ALL", "ERROR", "FATAL", "OFF"]
           }
         }
       ]
@@ -120,26 +106,40 @@
         }
       ]
     },
-    "DefinitionSubstitutions": {
-      "type": "record",
-      "valueType": {
-        "type": "union",
-        "types": [
-          {
-            "type": "string"
-          },
-          {
-            "type": "number",
-            "isInteger": true
-          },
-          {
+    "TagsEntry": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "TracingConfiguration": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Enabled",
+          "optional": true,
+          "type": {
             "type": "boolean"
           }
-        ]
-      }
-    },
-    "Definition": {
-      "type": "record"
+        }
+      ]
     }
   },
   "resource": {
@@ -147,12 +147,44 @@
     "description": "Resource schema for StateMachine",
     "properties": [
       {
+        "name": "Definition",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "Definition"
+        }
+      },
+      {
+        "name": "DefinitionS3Location",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "S3Location"
+        }
+      },
+      {
         "name": "DefinitionString",
         "optional": true,
         "type": {
           "type": "string",
           "maxLength": 1048576,
           "minLength": 1
+        }
+      },
+      {
+        "name": "DefinitionSubstitutions",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "DefinitionSubstitutions"
+        }
+      },
+      {
+        "name": "LoggingConfiguration",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "LoggingConfiguration"
         }
       },
       {
@@ -182,46 +214,6 @@
         }
       },
       {
-        "name": "LoggingConfiguration",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "LoggingConfiguration"
-        }
-      },
-      {
-        "name": "TracingConfiguration",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "TracingConfiguration"
-        }
-      },
-      {
-        "name": "DefinitionS3Location",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "S3Location"
-        }
-      },
-      {
-        "name": "DefinitionSubstitutions",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "DefinitionSubstitutions"
-        }
-      },
-      {
-        "name": "Definition",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "Definition"
-        }
-      },
-      {
         "name": "Tags",
         "optional": true,
         "type": {
@@ -230,6 +222,14 @@
             "type": "ref",
             "typeName": "TagsEntry"
           }
+        }
+      },
+      {
+        "name": "TracingConfiguration",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "TracingConfiguration"
         }
       }
     ]
@@ -267,5 +267,5 @@
       }
     ]
   },
-  "$hash": "f04a9da5596c1a977a9f66cca88e3d2856d4ec80"
+  "$hash": "48b8a959ff5af217584c0138230662fbe630a4d4"
 }

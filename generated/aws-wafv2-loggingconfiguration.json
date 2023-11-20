@@ -1,44 +1,5 @@
 {
   "definitions": {
-    "Filter": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Behavior",
-          "description": "How to handle logs that satisfy the filter's conditions and requirement. ",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "How to handle logs that satisfy the filter's conditions and requirement. ",
-            "allowedValues": ["KEEP", "DROP"]
-          }
-        },
-        {
-          "name": "Conditions",
-          "description": "Match conditions for the filter.",
-          "optional": false,
-          "type": {
-            "type": "array",
-            "description": "Match conditions for the filter.",
-            "itemType": {
-              "type": "ref",
-              "typeName": "Condition"
-            },
-            "minLength": 1
-          }
-        },
-        {
-          "name": "Requirement",
-          "description": "Logic to apply to the filtering conditions. You can specify that, in order to satisfy the filter, a log must match all conditions or must match at least one condition.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "Logic to apply to the filtering conditions. You can specify that, in order to satisfy the filter, a log must match all conditions or must match at least one condition.",
-            "allowedValues": ["MEETS_ALL", "MEETS_ANY"]
-          }
-        }
-      ]
-    },
     "Condition": {
       "type": "object",
       "properties": [
@@ -209,21 +170,51 @@
           }
         }
       ]
+    },
+    "Filter": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Behavior",
+          "description": "How to handle logs that satisfy the filter's conditions and requirement. ",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "How to handle logs that satisfy the filter's conditions and requirement. ",
+            "allowedValues": ["KEEP", "DROP"]
+          }
+        },
+        {
+          "name": "Conditions",
+          "description": "Match conditions for the filter.",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "description": "Match conditions for the filter.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Condition"
+            },
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Requirement",
+          "description": "Logic to apply to the filtering conditions. You can specify that, in order to satisfy the filter, a log must match all conditions or must match at least one condition.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Logic to apply to the filtering conditions. You can specify that, in order to satisfy the filter, a log must match all conditions or must match at least one condition.",
+            "allowedValues": ["MEETS_ALL", "MEETS_ANY"]
+          }
+        }
+      ]
     }
   },
   "resource": {
     "type": "object",
     "description": "A WAFv2 Logging Configuration Resource Provider",
     "properties": [
-      {
-        "name": "ResourceArn",
-        "description": "The Amazon Resource Name (ARN) of the web ACL that you want to associate with LogDestinationConfigs.",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "description": "The Amazon Resource Name (ARN) of the web ACL that you want to associate with LogDestinationConfigs."
-        }
-      },
       {
         "name": "LogDestinationConfigs",
         "description": "The Amazon Resource Names (ARNs) of the logging destinations that you want to associate with the web ACL.",
@@ -233,19 +224,6 @@
           "description": "The Amazon Resource Names (ARNs) of the logging destinations that you want to associate with the web ACL.",
           "itemType": {
             "type": "string"
-          }
-        }
-      },
-      {
-        "name": "RedactedFields",
-        "description": "The parts of the request that you want to keep out of the logs. For example, if you redact the HEADER field, the HEADER field in the firehose will be xxx.",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "description": "The parts of the request that you want to keep out of the logs. For example, if you redact the HEADER field, the HEADER field in the firehose will be xxx.",
-          "itemType": {
-            "type": "ref",
-            "typeName": "FieldToMatch"
           }
         }
       },
@@ -283,6 +261,28 @@
             }
           ]
         }
+      },
+      {
+        "name": "RedactedFields",
+        "description": "The parts of the request that you want to keep out of the logs. For example, if you redact the HEADER field, the HEADER field in the firehose will be xxx.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "The parts of the request that you want to keep out of the logs. For example, if you redact the HEADER field, the HEADER field in the firehose will be xxx.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "FieldToMatch"
+          }
+        }
+      },
+      {
+        "name": "ResourceArn",
+        "description": "The Amazon Resource Name (ARN) of the web ACL that you want to associate with LogDestinationConfigs.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) of the web ACL that you want to associate with LogDestinationConfigs."
+        }
       }
     ]
   },
@@ -301,5 +301,5 @@
       }
     ]
   },
-  "$hash": "f42f2300ddbe6bc0ba95e48f317aea7751f70074"
+  "$hash": "ed9ab14d8feb726b4287a7f2f47f38074d767c7e"
 }

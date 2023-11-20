@@ -1,5 +1,107 @@
 {
   "definitions": {
+    "Column": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Comment",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Name",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Type",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "Order": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Column",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "SortOrder",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        }
+      ]
+    },
+    "PartitionInput": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Parameters",
+          "optional": true,
+          "type": {
+            "type": "record"
+          }
+        },
+        {
+          "name": "StorageDescriptor",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "StorageDescriptor"
+          }
+        },
+        {
+          "name": "Values",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "SchemaId": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "RegistryName",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "SchemaArn",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "SchemaName",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
     "SchemaReference": {
       "type": "object",
       "properties": [
@@ -28,22 +130,28 @@
         }
       ]
     },
-    "Order": {
+    "SerdeInfo": {
       "type": "object",
       "properties": [
         {
-          "name": "Column",
-          "optional": false,
+          "name": "Name",
+          "optional": true,
           "type": {
             "type": "string"
           }
         },
         {
-          "name": "SortOrder",
+          "name": "Parameters",
           "optional": true,
           "type": {
-            "type": "number",
-            "isInteger": true
+            "type": "record"
+          }
+        },
+        {
+          "name": "SerializationLibrary",
+          "optional": true,
+          "type": {
+            "type": "string"
           }
         }
       ]
@@ -52,7 +160,7 @@
       "type": "object",
       "properties": [
         {
-          "name": "SkewedColumnValues",
+          "name": "SkewedColumnNames",
           "optional": true,
           "type": {
             "type": "array",
@@ -69,39 +177,13 @@
           }
         },
         {
-          "name": "SkewedColumnNames",
+          "name": "SkewedColumnValues",
           "optional": true,
           "type": {
             "type": "array",
             "itemType": {
               "type": "string"
             }
-          }
-        }
-      ]
-    },
-    "Column": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Comment",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Type",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Name",
-          "optional": false,
-          "type": {
-            "type": "string"
           }
         }
       ]
@@ -110,20 +192,6 @@
       "type": "object",
       "properties": [
         {
-          "name": "StoredAsSubDirectories",
-          "optional": true,
-          "type": {
-            "type": "boolean"
-          }
-        },
-        {
-          "name": "Parameters",
-          "optional": true,
-          "type": {
-            "type": "record"
-          }
-        },
-        {
           "name": "BucketColumns",
           "optional": true,
           "type": {
@@ -131,6 +199,38 @@
             "itemType": {
               "type": "string"
             }
+          }
+        },
+        {
+          "name": "Columns",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Column"
+            }
+          }
+        },
+        {
+          "name": "Compressed",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "InputFormat",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Location",
+          "optional": true,
+          "type": {
+            "type": "string"
           }
         },
         {
@@ -149,14 +249,18 @@
           }
         },
         {
-          "name": "Columns",
+          "name": "Parameters",
           "optional": true,
           "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "Column"
-            }
+            "type": "record"
+          }
+        },
+        {
+          "name": "SchemaReference",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "SchemaReference"
           }
         },
         {
@@ -165,6 +269,14 @@
           "type": {
             "type": "ref",
             "typeName": "SerdeInfo"
+          }
+        },
+        {
+          "name": "SkewedInfo",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "SkewedInfo"
           }
         },
         {
@@ -179,122 +291,10 @@
           }
         },
         {
-          "name": "Compressed",
+          "name": "StoredAsSubDirectories",
           "optional": true,
           "type": {
             "type": "boolean"
-          }
-        },
-        {
-          "name": "SchemaReference",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "SchemaReference"
-          }
-        },
-        {
-          "name": "SkewedInfo",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "SkewedInfo"
-          }
-        },
-        {
-          "name": "InputFormat",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Location",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "SchemaId": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "RegistryName",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "SchemaName",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "SchemaArn",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "SerdeInfo": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Parameters",
-          "optional": true,
-          "type": {
-            "type": "record"
-          }
-        },
-        {
-          "name": "SerializationLibrary",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Name",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "PartitionInput": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "StorageDescriptor",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "StorageDescriptor"
-          }
-        },
-        {
-          "name": "Values",
-          "optional": false,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "string"
-            }
-          }
-        },
-        {
-          "name": "Parameters",
-          "optional": true,
-          "type": {
-            "type": "record"
           }
         }
       ]
@@ -305,21 +305,14 @@
     "description": "Resource Type definition for AWS::Glue::Partition",
     "properties": [
       {
-        "name": "DatabaseName",
-        "optional": false,
-        "type": {
-          "type": "string"
-        }
-      },
-      {
-        "name": "TableName",
-        "optional": false,
-        "type": {
-          "type": "string"
-        }
-      },
-      {
         "name": "CatalogId",
+        "optional": false,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "DatabaseName",
         "optional": false,
         "type": {
           "type": "string"
@@ -331,6 +324,13 @@
         "type": {
           "type": "ref",
           "typeName": "PartitionInput"
+        }
+      },
+      {
+        "name": "TableName",
+        "optional": false,
+        "type": {
+          "type": "string"
         }
       }
     ]
@@ -348,5 +348,5 @@
       }
     ]
   },
-  "$hash": "85ee373def93ade13e3415695caa1f168675424a"
+  "$hash": "bf60e3fd41a468a5d1a702ee7427c23c4e157b64"
 }

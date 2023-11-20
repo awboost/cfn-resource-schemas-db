@@ -1,20 +1,13 @@
 {
   "definitions": {
-    "PrivateIpAddressSpecification": {
+    "InstanceIpv6Address": {
       "type": "object",
       "properties": [
         {
-          "name": "PrivateIpAddress",
+          "name": "Ipv6Address",
           "optional": false,
           "type": {
             "type": "string"
-          }
-        },
-        {
-          "name": "Primary",
-          "optional": false,
-          "type": {
-            "type": "boolean"
           }
         }
       ]
@@ -24,18 +17,6 @@
       "properties": [
         {
           "name": "Ipv4Prefix",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "InstanceIpv6Address": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Ipv6Address",
           "optional": false,
           "type": {
             "type": "string"
@@ -55,18 +36,37 @@
         }
       ]
     },
+    "PrivateIpAddressSpecification": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Primary",
+          "optional": false,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "PrivateIpAddress",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
     "Tag": {
       "type": "object",
       "properties": [
         {
-          "name": "Value",
+          "name": "Key",
           "optional": false,
           "type": {
             "type": "string"
           }
         },
         {
-          "name": "Key",
+          "name": "Value",
           "optional": false,
           "type": {
             "type": "string"
@@ -86,6 +86,96 @@
         "type": {
           "type": "string",
           "description": "A description for the network interface."
+        }
+      },
+      {
+        "name": "GroupSet",
+        "description": "A list of security group IDs associated with this network interface.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "A list of security group IDs associated with this network interface.",
+          "itemType": {
+            "type": "string"
+          }
+        }
+      },
+      {
+        "name": "InterfaceType",
+        "description": "Indicates the type of network interface.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Indicates the type of network interface."
+        }
+      },
+      {
+        "name": "Ipv4PrefixCount",
+        "description": "The number of IPv4 prefixes to assign to a network interface. When you specify a number of IPv4 prefixes, Amazon EC2 selects these prefixes from your existing subnet CIDR reservations, if available, or from free spaces in the subnet. By default, these will be /28 prefixes. You can't specify a count of IPv4 prefixes if you've specified one of the following: specific IPv4 prefixes, specific private IPv4 addresses, or a count of private IPv4 addresses.",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "The number of IPv4 prefixes to assign to a network interface. When you specify a number of IPv4 prefixes, Amazon EC2 selects these prefixes from your existing subnet CIDR reservations, if available, or from free spaces in the subnet. By default, these will be /28 prefixes. You can't specify a count of IPv4 prefixes if you've specified one of the following: specific IPv4 prefixes, specific private IPv4 addresses, or a count of private IPv4 addresses.",
+          "isInteger": true
+        }
+      },
+      {
+        "name": "Ipv4Prefixes",
+        "description": "Assigns a list of IPv4 prefixes to the network interface. If you want EC2 to automatically assign IPv4 prefixes, use the Ipv4PrefixCount property and do not specify this property. Presently, only /28 prefixes are supported. You can't specify IPv4 prefixes if you've specified one of the following: a count of IPv4 prefixes, specific private IPv4 addresses, or a count of private IPv4 addresses.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "Assigns a list of IPv4 prefixes to the network interface. If you want EC2 to automatically assign IPv4 prefixes, use the Ipv4PrefixCount property and do not specify this property. Presently, only /28 prefixes are supported. You can't specify IPv4 prefixes if you've specified one of the following: a count of IPv4 prefixes, specific private IPv4 addresses, or a count of private IPv4 addresses.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Ipv4PrefixSpecification"
+          }
+        }
+      },
+      {
+        "name": "Ipv6AddressCount",
+        "description": "The number of IPv6 addresses to assign to a network interface. Amazon EC2 automatically selects the IPv6 addresses from the subnet range. To specify specific IPv6 addresses, use the Ipv6Addresses property and don't specify this property.",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "The number of IPv6 addresses to assign to a network interface. Amazon EC2 automatically selects the IPv6 addresses from the subnet range. To specify specific IPv6 addresses, use the Ipv6Addresses property and don't specify this property.",
+          "isInteger": true
+        }
+      },
+      {
+        "name": "Ipv6Addresses",
+        "description": "One or more specific IPv6 addresses from the IPv6 CIDR block range of your subnet to associate with the network interface. If you're specifying a number of IPv6 addresses, use the Ipv6AddressCount property and don't specify this property.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "One or more specific IPv6 addresses from the IPv6 CIDR block range of your subnet to associate with the network interface. If you're specifying a number of IPv6 addresses, use the Ipv6AddressCount property and don't specify this property.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "InstanceIpv6Address"
+          }
+        }
+      },
+      {
+        "name": "Ipv6PrefixCount",
+        "description": "The number of IPv6 prefixes to assign to a network interface. When you specify a number of IPv6 prefixes, Amazon EC2 selects these prefixes from your existing subnet CIDR reservations, if available, or from free spaces in the subnet. By default, these will be /80 prefixes. You can't specify a count of IPv6 prefixes if you've specified one of the following: specific IPv6 prefixes, specific IPv6 addresses, or a count of IPv6 addresses.",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "The number of IPv6 prefixes to assign to a network interface. When you specify a number of IPv6 prefixes, Amazon EC2 selects these prefixes from your existing subnet CIDR reservations, if available, or from free spaces in the subnet. By default, these will be /80 prefixes. You can't specify a count of IPv6 prefixes if you've specified one of the following: specific IPv6 prefixes, specific IPv6 addresses, or a count of IPv6 addresses.",
+          "isInteger": true
+        }
+      },
+      {
+        "name": "Ipv6Prefixes",
+        "description": "Assigns a list of IPv6 prefixes to the network interface. If you want EC2 to automatically assign IPv6 prefixes, use the Ipv6PrefixCount property and do not specify this property. Presently, only /80 prefixes are supported. You can't specify IPv6 prefixes if you've specified one of the following: a count of IPv6 prefixes, specific IPv6 addresses, or a count of IPv6 addresses.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "Assigns a list of IPv6 prefixes to the network interface. If you want EC2 to automatically assign IPv6 prefixes, use the Ipv6PrefixCount property and do not specify this property. Presently, only /80 prefixes are supported. You can't specify IPv6 prefixes if you've specified one of the following: a count of IPv6 prefixes, specific IPv6 addresses, or a count of IPv6 addresses.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Ipv6PrefixSpecification"
+          }
         }
       },
       {
@@ -121,86 +211,6 @@
         }
       },
       {
-        "name": "Ipv6PrefixCount",
-        "description": "The number of IPv6 prefixes to assign to a network interface. When you specify a number of IPv6 prefixes, Amazon EC2 selects these prefixes from your existing subnet CIDR reservations, if available, or from free spaces in the subnet. By default, these will be /80 prefixes. You can't specify a count of IPv6 prefixes if you've specified one of the following: specific IPv6 prefixes, specific IPv6 addresses, or a count of IPv6 addresses.",
-        "optional": true,
-        "type": {
-          "type": "number",
-          "description": "The number of IPv6 prefixes to assign to a network interface. When you specify a number of IPv6 prefixes, Amazon EC2 selects these prefixes from your existing subnet CIDR reservations, if available, or from free spaces in the subnet. By default, these will be /80 prefixes. You can't specify a count of IPv6 prefixes if you've specified one of the following: specific IPv6 prefixes, specific IPv6 addresses, or a count of IPv6 addresses.",
-          "isInteger": true
-        }
-      },
-      {
-        "name": "Ipv4Prefixes",
-        "description": "Assigns a list of IPv4 prefixes to the network interface. If you want EC2 to automatically assign IPv4 prefixes, use the Ipv4PrefixCount property and do not specify this property. Presently, only /28 prefixes are supported. You can't specify IPv4 prefixes if you've specified one of the following: a count of IPv4 prefixes, specific private IPv4 addresses, or a count of private IPv4 addresses.",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "description": "Assigns a list of IPv4 prefixes to the network interface. If you want EC2 to automatically assign IPv4 prefixes, use the Ipv4PrefixCount property and do not specify this property. Presently, only /28 prefixes are supported. You can't specify IPv4 prefixes if you've specified one of the following: a count of IPv4 prefixes, specific private IPv4 addresses, or a count of private IPv4 addresses.",
-          "itemType": {
-            "type": "ref",
-            "typeName": "Ipv4PrefixSpecification"
-          }
-        }
-      },
-      {
-        "name": "Ipv4PrefixCount",
-        "description": "The number of IPv4 prefixes to assign to a network interface. When you specify a number of IPv4 prefixes, Amazon EC2 selects these prefixes from your existing subnet CIDR reservations, if available, or from free spaces in the subnet. By default, these will be /28 prefixes. You can't specify a count of IPv4 prefixes if you've specified one of the following: specific IPv4 prefixes, specific private IPv4 addresses, or a count of private IPv4 addresses.",
-        "optional": true,
-        "type": {
-          "type": "number",
-          "description": "The number of IPv4 prefixes to assign to a network interface. When you specify a number of IPv4 prefixes, Amazon EC2 selects these prefixes from your existing subnet CIDR reservations, if available, or from free spaces in the subnet. By default, these will be /28 prefixes. You can't specify a count of IPv4 prefixes if you've specified one of the following: specific IPv4 prefixes, specific private IPv4 addresses, or a count of private IPv4 addresses.",
-          "isInteger": true
-        }
-      },
-      {
-        "name": "GroupSet",
-        "description": "A list of security group IDs associated with this network interface.",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "description": "A list of security group IDs associated with this network interface.",
-          "itemType": {
-            "type": "string"
-          }
-        }
-      },
-      {
-        "name": "Ipv6Addresses",
-        "description": "One or more specific IPv6 addresses from the IPv6 CIDR block range of your subnet to associate with the network interface. If you're specifying a number of IPv6 addresses, use the Ipv6AddressCount property and don't specify this property.",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "description": "One or more specific IPv6 addresses from the IPv6 CIDR block range of your subnet to associate with the network interface. If you're specifying a number of IPv6 addresses, use the Ipv6AddressCount property and don't specify this property.",
-          "itemType": {
-            "type": "ref",
-            "typeName": "InstanceIpv6Address"
-          }
-        }
-      },
-      {
-        "name": "Ipv6Prefixes",
-        "description": "Assigns a list of IPv6 prefixes to the network interface. If you want EC2 to automatically assign IPv6 prefixes, use the Ipv6PrefixCount property and do not specify this property. Presently, only /80 prefixes are supported. You can't specify IPv6 prefixes if you've specified one of the following: a count of IPv6 prefixes, specific IPv6 addresses, or a count of IPv6 addresses.",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "description": "Assigns a list of IPv6 prefixes to the network interface. If you want EC2 to automatically assign IPv6 prefixes, use the Ipv6PrefixCount property and do not specify this property. Presently, only /80 prefixes are supported. You can't specify IPv6 prefixes if you've specified one of the following: a count of IPv6 prefixes, specific IPv6 addresses, or a count of IPv6 addresses.",
-          "itemType": {
-            "type": "ref",
-            "typeName": "Ipv6PrefixSpecification"
-          }
-        }
-      },
-      {
-        "name": "SubnetId",
-        "description": "The ID of the subnet to associate with the network interface.",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "description": "The ID of the subnet to associate with the network interface."
-        }
-      },
-      {
         "name": "SourceDestCheck",
         "description": "Indicates whether traffic to or from the instance is validated.",
         "optional": true,
@@ -210,22 +220,12 @@
         }
       },
       {
-        "name": "InterfaceType",
-        "description": "Indicates the type of network interface.",
-        "optional": true,
+        "name": "SubnetId",
+        "description": "The ID of the subnet to associate with the network interface.",
+        "optional": false,
         "type": {
           "type": "string",
-          "description": "Indicates the type of network interface."
-        }
-      },
-      {
-        "name": "Ipv6AddressCount",
-        "description": "The number of IPv6 addresses to assign to a network interface. Amazon EC2 automatically selects the IPv6 addresses from the subnet range. To specify specific IPv6 addresses, use the Ipv6Addresses property and don't specify this property.",
-        "optional": true,
-        "type": {
-          "type": "number",
-          "description": "The number of IPv6 addresses to assign to a network interface. Amazon EC2 automatically selects the IPv6 addresses from the subnet range. To specify specific IPv6 addresses, use the Ipv6Addresses property and don't specify this property.",
-          "isInteger": true
+          "description": "The ID of the subnet to associate with the network interface."
         }
       },
       {
@@ -248,6 +248,15 @@
     "description": "The AWS::EC2::NetworkInterface resource creates network interface",
     "properties": [
       {
+        "name": "Id",
+        "description": "Network interface id.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Network interface id."
+        }
+      },
+      {
         "name": "PrimaryPrivateIpAddress",
         "description": "Returns the primary private IP address of the network interface.",
         "optional": true,
@@ -267,17 +276,8 @@
             "type": "string"
           }
         }
-      },
-      {
-        "name": "Id",
-        "description": "Network interface id.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "Network interface id."
-        }
       }
     ]
   },
-  "$hash": "31cd58a58046d60ee23fd58c2a027bbfc18fd5fd"
+  "$hash": "c888e135fbc339315c0daf390b869ff500e0d6c7"
 }

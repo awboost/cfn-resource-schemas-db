@@ -1,25 +1,39 @@
 {
   "definitions": {
-    "VpcOptions": {
+    "ProposedSegmentChange": {
       "type": "object",
-      "description": "Vpc options of the attachment.",
+      "description": "The attachment to move from one segment to another.",
       "properties": [
         {
-          "name": "Ipv6Support",
-          "description": "Indicates whether to enable Ipv6 Support for Vpc Attachment. Valid Values: enable | disable",
+          "name": "AttachmentPolicyRuleNumber",
+          "description": "The rule number in the policy document that applies to this change.",
           "optional": true,
           "type": {
-            "type": "boolean",
-            "description": "Indicates whether to enable Ipv6 Support for Vpc Attachment. Valid Values: enable | disable"
+            "type": "number",
+            "description": "The rule number in the policy document that applies to this change.",
+            "isInteger": true
           }
         },
         {
-          "name": "ApplianceModeSupport",
-          "description": "Indicates whether to enable ApplianceModeSupport Support for Vpc Attachment. Valid Values: true | false",
+          "name": "SegmentName",
+          "description": "The name of the segment to change.",
           "optional": true,
           "type": {
-            "type": "boolean",
-            "description": "Indicates whether to enable ApplianceModeSupport Support for Vpc Attachment. Valid Values: true | false"
+            "type": "string",
+            "description": "The name of the segment to change."
+          }
+        },
+        {
+          "name": "Tags",
+          "description": "The key-value tags that changed for the segment.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "The key-value tags that changed for the segment.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Tag"
+            }
           }
         }
       ]
@@ -48,40 +62,26 @@
         }
       ]
     },
-    "ProposedSegmentChange": {
+    "VpcOptions": {
       "type": "object",
-      "description": "The attachment to move from one segment to another.",
+      "description": "Vpc options of the attachment.",
       "properties": [
         {
-          "name": "Tags",
-          "description": "The key-value tags that changed for the segment.",
+          "name": "ApplianceModeSupport",
+          "description": "Indicates whether to enable ApplianceModeSupport Support for Vpc Attachment. Valid Values: true | false",
           "optional": true,
           "type": {
-            "type": "array",
-            "description": "The key-value tags that changed for the segment.",
-            "itemType": {
-              "type": "ref",
-              "typeName": "Tag"
-            }
+            "type": "boolean",
+            "description": "Indicates whether to enable ApplianceModeSupport Support for Vpc Attachment. Valid Values: true | false"
           }
         },
         {
-          "name": "AttachmentPolicyRuleNumber",
-          "description": "The rule number in the policy document that applies to this change.",
+          "name": "Ipv6Support",
+          "description": "Indicates whether to enable Ipv6 Support for Vpc Attachment. Valid Values: enable | disable",
           "optional": true,
           "type": {
-            "type": "number",
-            "description": "The rule number in the policy document that applies to this change.",
-            "isInteger": true
-          }
-        },
-        {
-          "name": "SegmentName",
-          "description": "The name of the segment to change.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The name of the segment to change."
+            "type": "boolean",
+            "description": "Indicates whether to enable Ipv6 Support for Vpc Attachment. Valid Values: enable | disable"
           }
         }
       ]
@@ -101,12 +101,13 @@
         }
       },
       {
-        "name": "VpcArn",
-        "description": "The ARN of the VPC.",
-        "optional": false,
+        "name": "Options",
+        "description": "Vpc options of the attachment.",
+        "optional": true,
         "type": {
-          "type": "string",
-          "description": "The ARN of the VPC."
+          "type": "ref",
+          "description": "Vpc options of the attachment.",
+          "typeName": "VpcOptions"
         }
       },
       {
@@ -117,6 +118,18 @@
           "type": "ref",
           "description": "The attachment to move from one segment to another.",
           "typeName": "ProposedSegmentChange"
+        }
+      },
+      {
+        "name": "SubnetArns",
+        "description": "Subnet Arn list",
+        "optional": false,
+        "type": {
+          "type": "array",
+          "description": "Subnet Arn list",
+          "itemType": {
+            "type": "string"
+          }
         }
       },
       {
@@ -133,25 +146,12 @@
         }
       },
       {
-        "name": "SubnetArns",
-        "description": "Subnet Arn list",
+        "name": "VpcArn",
+        "description": "The ARN of the VPC.",
         "optional": false,
         "type": {
-          "type": "array",
-          "description": "Subnet Arn list",
-          "itemType": {
-            "type": "string"
-          }
-        }
-      },
-      {
-        "name": "Options",
-        "description": "Vpc options of the attachment.",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "description": "Vpc options of the attachment.",
-          "typeName": "VpcOptions"
+          "type": "string",
+          "description": "The ARN of the VPC."
         }
       }
     ]
@@ -161,66 +161,12 @@
     "description": "AWS::NetworkManager::VpcAttachment Resoruce Type",
     "properties": [
       {
-        "name": "CoreNetworkArn",
-        "description": "The ARN of a core network for the VPC attachment.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The ARN of a core network for the VPC attachment."
-        }
-      },
-      {
         "name": "AttachmentId",
         "description": "Id of the attachment.",
         "optional": true,
         "type": {
           "type": "string",
           "description": "Id of the attachment."
-        }
-      },
-      {
-        "name": "OwnerAccountId",
-        "description": "Owner account of the attachment.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "Owner account of the attachment."
-        }
-      },
-      {
-        "name": "AttachmentType",
-        "description": "Attachment type.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "Attachment type."
-        }
-      },
-      {
-        "name": "State",
-        "description": "State of the attachment.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "State of the attachment."
-        }
-      },
-      {
-        "name": "EdgeLocation",
-        "description": "The Region where the edge is located.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The Region where the edge is located."
-        }
-      },
-      {
-        "name": "ResourceArn",
-        "description": "The ARN of the Resource.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The ARN of the Resource."
         }
       },
       {
@@ -234,12 +180,21 @@
         }
       },
       {
-        "name": "SegmentName",
-        "description": "The name of the segment attachment..",
+        "name": "AttachmentType",
+        "description": "Attachment type.",
         "optional": true,
         "type": {
           "type": "string",
-          "description": "The name of the segment attachment.."
+          "description": "Attachment type."
+        }
+      },
+      {
+        "name": "CoreNetworkArn",
+        "description": "The ARN of a core network for the VPC attachment.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The ARN of a core network for the VPC attachment."
         }
       },
       {
@@ -249,6 +204,51 @@
         "type": {
           "type": "string",
           "description": "Creation time of the attachment."
+        }
+      },
+      {
+        "name": "EdgeLocation",
+        "description": "The Region where the edge is located.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Region where the edge is located."
+        }
+      },
+      {
+        "name": "OwnerAccountId",
+        "description": "Owner account of the attachment.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Owner account of the attachment."
+        }
+      },
+      {
+        "name": "ResourceArn",
+        "description": "The ARN of the Resource.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The ARN of the Resource."
+        }
+      },
+      {
+        "name": "SegmentName",
+        "description": "The name of the segment attachment..",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The name of the segment attachment.."
+        }
+      },
+      {
+        "name": "State",
+        "description": "State of the attachment.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "State of the attachment."
         }
       },
       {
@@ -262,5 +262,5 @@
       }
     ]
   },
-  "$hash": "090e5f9daf54e1a809a95746a972db1ba79e892b"
+  "$hash": "6bfbd3555e641304b2623c53624f5ae1404d8839"
 }

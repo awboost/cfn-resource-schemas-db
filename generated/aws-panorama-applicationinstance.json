@@ -1,18 +1,15 @@
 {
   "definitions": {
-    "DefaultRuntimeContextDevice": {
+    "ApplicationInstanceArn": {
       "type": "string",
       "maxLength": 255,
-      "minLength": 1,
-      "pattern": "^[a-zA-Z0-9\\-\\_]+$"
+      "minLength": 1
     },
-    "Description": {
+    "ApplicationInstanceHealthStatus": {
       "type": "string",
-      "maxLength": 255,
-      "minLength": 0,
-      "pattern": "^.*$"
+      "allowedValues": ["RUNNING", "ERROR", "NOT_AVAILABLE"]
     },
-    "DeviceId": {
+    "ApplicationInstanceId": {
       "type": "string",
       "maxLength": 255,
       "minLength": 1,
@@ -33,6 +30,35 @@
         "REMOVAL_SUCCEEDED"
       ]
     },
+    "ApplicationInstanceStatusDescription": {
+      "type": "string",
+      "maxLength": 255,
+      "minLength": 1
+    },
+    "DefaultRuntimeContextDevice": {
+      "type": "string",
+      "maxLength": 255,
+      "minLength": 1,
+      "pattern": "^[a-zA-Z0-9\\-\\_]+$"
+    },
+    "Description": {
+      "type": "string",
+      "maxLength": 255,
+      "minLength": 0,
+      "pattern": "^.*$"
+    },
+    "DeviceId": {
+      "type": "string",
+      "maxLength": 255,
+      "minLength": 1,
+      "pattern": "^[a-zA-Z0-9\\-\\_]+$"
+    },
+    "DeviceName": {
+      "type": "string",
+      "maxLength": 255,
+      "minLength": 1,
+      "pattern": "^[a-zA-Z0-9\\-\\_]+$"
+    },
     "ManifestOverridesPayload": {
       "type": "object",
       "properties": [
@@ -46,56 +72,11 @@
         }
       ]
     },
-    "RuntimeRoleArn": {
-      "type": "string",
-      "maxLength": 255,
-      "minLength": 1,
-      "pattern": "^arn:[a-z0-9][-.a-z0-9]{0,62}:iam::[0-9]{12}:role/.+$"
-    },
-    "Timestamp": {
-      "type": "number",
-      "isInteger": true
-    },
-    "Name": {
-      "type": "string",
-      "maxLength": 255,
-      "minLength": 1,
-      "pattern": "^[a-zA-Z0-9\\-\\_]+$"
-    },
-    "ApplicationInstanceId": {
-      "type": "string",
-      "maxLength": 255,
-      "minLength": 1,
-      "pattern": "^[a-zA-Z0-9\\-\\_]+$"
-    },
-    "ManifestPayloadData": {
+    "ManifestOverridesPayloadData": {
       "type": "string",
       "maxLength": 51200,
-      "minLength": 1,
+      "minLength": 0,
       "pattern": "^.+$"
-    },
-    "ApplicationInstanceHealthStatus": {
-      "type": "string",
-      "allowedValues": ["RUNNING", "ERROR", "NOT_AVAILABLE"]
-    },
-    "StatusFilter": {
-      "type": "string",
-      "allowedValues": [
-        "DEPLOYMENT_SUCCEEDED",
-        "DEPLOYMENT_ERROR",
-        "REMOVAL_SUCCEEDED",
-        "REMOVAL_FAILED",
-        "PROCESSING_DEPLOYMENT",
-        "PROCESSING_REMOVAL"
-      ]
-    },
-    "TagList": {
-      "type": "array",
-      "description": "List of tags",
-      "itemType": {
-        "type": "ref",
-        "typeName": "Tag"
-      }
     },
     "ManifestPayload": {
       "type": "object",
@@ -110,37 +91,38 @@
         }
       ]
     },
-    "ApplicationInstanceArn": {
-      "type": "string",
-      "maxLength": 255,
-      "minLength": 1
-    },
-    "ManifestOverridesPayloadData": {
+    "ManifestPayloadData": {
       "type": "string",
       "maxLength": 51200,
-      "minLength": 0,
+      "minLength": 1,
       "pattern": "^.+$"
     },
-    "ApplicationInstanceStatusDescription": {
+    "Name": {
       "type": "string",
       "maxLength": 255,
-      "minLength": 1
+      "minLength": 1,
+      "pattern": "^[a-zA-Z0-9\\-\\_]+$"
+    },
+    "RuntimeRoleArn": {
+      "type": "string",
+      "maxLength": 255,
+      "minLength": 1,
+      "pattern": "^arn:[a-z0-9][-.a-z0-9]{0,62}:iam::[0-9]{12}:role/.+$"
+    },
+    "StatusFilter": {
+      "type": "string",
+      "allowedValues": [
+        "DEPLOYMENT_SUCCEEDED",
+        "DEPLOYMENT_ERROR",
+        "REMOVAL_SUCCEEDED",
+        "REMOVAL_FAILED",
+        "PROCESSING_DEPLOYMENT",
+        "PROCESSING_REMOVAL"
+      ]
     },
     "Tag": {
       "type": "object",
       "properties": [
-        {
-          "name": "Value",
-          "description": "A string containing the value for the tag",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "A string containing the value for the tag",
-            "maxLength": 256,
-            "minLength": 0,
-            "pattern": "^.+$"
-          }
-        },
         {
           "name": "Key",
           "description": "A string used to identify this tag",
@@ -152,20 +134,46 @@
             "minLength": 1,
             "pattern": "^.+$"
           }
+        },
+        {
+          "name": "Value",
+          "description": "A string containing the value for the tag",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "A string containing the value for the tag",
+            "maxLength": 256,
+            "minLength": 0,
+            "pattern": "^.+$"
+          }
         }
       ]
     },
-    "DeviceName": {
-      "type": "string",
-      "maxLength": 255,
-      "minLength": 1,
-      "pattern": "^[a-zA-Z0-9\\-\\_]+$"
+    "TagList": {
+      "type": "array",
+      "description": "List of tags",
+      "itemType": {
+        "type": "ref",
+        "typeName": "Tag"
+      }
+    },
+    "Timestamp": {
+      "type": "number",
+      "isInteger": true
     }
   },
   "resource": {
     "type": "object",
     "description": "Schema for ApplicationInstance CloudFormation Resource",
     "properties": [
+      {
+        "name": "ApplicationInstanceIdToReplace",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "ApplicationInstanceId"
+        }
+      },
       {
         "name": "DefaultRuntimeContextDevice",
         "optional": false,
@@ -183,14 +191,6 @@
         }
       },
       {
-        "name": "ApplicationInstanceIdToReplace",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "ApplicationInstanceId"
-        }
-      },
-      {
         "name": "ManifestOverridesPayload",
         "optional": true,
         "type": {
@@ -199,11 +199,11 @@
         }
       },
       {
-        "name": "RuntimeRoleArn",
-        "optional": true,
+        "name": "ManifestPayload",
+        "optional": false,
         "type": {
           "type": "ref",
-          "typeName": "RuntimeRoleArn"
+          "typeName": "ManifestPayload"
         }
       },
       {
@@ -215,11 +215,11 @@
         }
       },
       {
-        "name": "ManifestPayload",
-        "optional": false,
+        "name": "RuntimeRoleArn",
+        "optional": true,
         "type": {
           "type": "ref",
-          "typeName": "ManifestPayload"
+          "typeName": "RuntimeRoleArn"
         }
       },
       {
@@ -237,19 +237,19 @@
     "description": "Schema for ApplicationInstance CloudFormation Resource",
     "properties": [
       {
-        "name": "DefaultRuntimeContextDeviceName",
+        "name": "ApplicationInstanceId",
         "optional": true,
         "type": {
           "type": "ref",
-          "typeName": "DeviceName"
+          "typeName": "ApplicationInstanceId"
         }
       },
       {
-        "name": "Status",
+        "name": "Arn",
         "optional": true,
         "type": {
           "type": "ref",
-          "typeName": "ApplicationInstanceStatus"
+          "typeName": "ApplicationInstanceArn"
         }
       },
       {
@@ -258,6 +258,14 @@
         "type": {
           "type": "ref",
           "typeName": "Timestamp"
+        }
+      },
+      {
+        "name": "DefaultRuntimeContextDeviceName",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "DeviceName"
         }
       },
       {
@@ -277,11 +285,11 @@
         }
       },
       {
-        "name": "ApplicationInstanceId",
+        "name": "Status",
         "optional": true,
         "type": {
           "type": "ref",
-          "typeName": "ApplicationInstanceId"
+          "typeName": "ApplicationInstanceStatus"
         }
       },
       {
@@ -291,16 +299,8 @@
           "type": "ref",
           "typeName": "ApplicationInstanceStatusDescription"
         }
-      },
-      {
-        "name": "Arn",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "ApplicationInstanceArn"
-        }
       }
     ]
   },
-  "$hash": "2291f35241a9ef3deced76b3a47be6fd21004c8d"
+  "$hash": "cd1bc4bdff5517dace6524a0e5831d53a3d3c2fe"
 }

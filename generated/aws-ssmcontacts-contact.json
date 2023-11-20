@@ -1,29 +1,5 @@
 {
   "definitions": {
-    "ContactTargetInfo": {
-      "type": "object",
-      "description": "The contact that SSM Incident Manager is engaging during an incident.",
-      "properties": [
-        {
-          "name": "ContactId",
-          "description": "The Amazon Resource Name (ARN) of the contact.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The Amazon Resource Name (ARN) of the contact."
-          }
-        },
-        {
-          "name": "IsEssential",
-          "description": "A Boolean value determining if the contact's acknowledgement stops the progress of stages in the plan.",
-          "optional": false,
-          "type": {
-            "type": "boolean",
-            "description": "A Boolean value determining if the contact's acknowledgement stops the progress of stages in the plan."
-          }
-        }
-      ]
-    },
     "ChannelTargetInfo": {
       "type": "object",
       "description": "Information about the contact channel that SSM Incident Manager uses to engage the contact.",
@@ -49,6 +25,30 @@
         }
       ]
     },
+    "ContactTargetInfo": {
+      "type": "object",
+      "description": "The contact that SSM Incident Manager is engaging during an incident.",
+      "properties": [
+        {
+          "name": "ContactId",
+          "description": "The Amazon Resource Name (ARN) of the contact.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the contact."
+          }
+        },
+        {
+          "name": "IsEssential",
+          "description": "A Boolean value determining if the contact's acknowledgement stops the progress of stages in the plan.",
+          "optional": false,
+          "type": {
+            "type": "boolean",
+            "description": "A Boolean value determining if the contact's acknowledgement stops the progress of stages in the plan."
+          }
+        }
+      ]
+    },
     "Stage": {
       "type": "object",
       "description": "A set amount of time that an escalation plan or engagement plan engages the specified contacts or contact methods.",
@@ -64,6 +64,18 @@
           }
         },
         {
+          "name": "RotationIds",
+          "description": "List of Rotation Ids to associate with Contact",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "List of Rotation Ids to associate with Contact",
+            "itemType": {
+              "type": "string"
+            }
+          }
+        },
+        {
           "name": "Targets",
           "description": "The contacts or contact methods that the escalation plan or engagement plan is engaging.",
           "optional": true,
@@ -75,18 +87,6 @@
               "typeName": "Targets"
             }
           }
-        },
-        {
-          "name": "RotationIds",
-          "description": "List of Rotation Ids to associate with Contact",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "description": "List of Rotation Ids to associate with Contact",
-            "itemType": {
-              "type": "string"
-            }
-          }
         }
       ]
     },
@@ -95,19 +95,19 @@
       "description": "The contacts or contact methods that the escalation plan or engagement plan is engaging.",
       "properties": [
         {
-          "name": "ContactTargetInfo",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ContactTargetInfo"
-          }
-        },
-        {
           "name": "ChannelTargetInfo",
           "optional": true,
           "type": {
             "type": "ref",
             "typeName": "ChannelTargetInfo"
+          }
+        },
+        {
+          "name": "ContactTargetInfo",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ContactTargetInfo"
           }
         }
       ]
@@ -142,6 +142,19 @@
         }
       },
       {
+        "name": "Plan",
+        "description": "The stages that an escalation plan or engagement plan engages contacts and contact methods in.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "The stages that an escalation plan or engagement plan engages contacts and contact methods in.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Stage"
+          }
+        }
+      },
+      {
         "name": "Type",
         "description": "Contact type, which specify type of contact. Currently supported values: “PERSONAL”, “SHARED”, “OTHER“.",
         "optional": false,
@@ -155,19 +168,6 @@
             "ESCALATION",
             "ONCALL_SCHEDULE"
           ]
-        }
-      },
-      {
-        "name": "Plan",
-        "description": "The stages that an escalation plan or engagement plan engages contacts and contact methods in.",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "description": "The stages that an escalation plan or engagement plan engages contacts and contact methods in.",
-          "itemType": {
-            "type": "ref",
-            "typeName": "Stage"
-          }
         }
       }
     ]
@@ -187,5 +187,5 @@
       }
     ]
   },
-  "$hash": "526c08aa4b816035c247c41bafd8b59ef71f8866"
+  "$hash": "d8365daae9e0212fc736e0bc191eaa7aedd0b8a8"
 }

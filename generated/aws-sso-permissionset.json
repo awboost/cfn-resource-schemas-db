@@ -1,37 +1,5 @@
 {
   "definitions": {
-    "Tag": {
-      "type": "object",
-      "description": "The metadata that you apply to the permission set to help you categorize and organize them.",
-      "properties": [
-        {
-          "name": "Key",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 128,
-            "minLength": 1,
-            "pattern": "[\\w+=,.@-]+"
-          }
-        },
-        {
-          "name": "Value",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 256,
-            "minLength": 0,
-            "pattern": "[\\w+=,.@-]+"
-          }
-        }
-      ]
-    },
-    "ManagedPolicyArn": {
-      "type": "string",
-      "description": "The managed policy to attach.",
-      "maxLength": 2048,
-      "minLength": 20
-    },
     "CustomerManagedPolicyReference": {
       "type": "object",
       "properties": [
@@ -57,6 +25,12 @@
         }
       ]
     },
+    "ManagedPolicyArn": {
+      "type": "string",
+      "description": "The managed policy to attach.",
+      "maxLength": 2048,
+      "minLength": 20
+    },
     "PermissionsBoundary": {
       "type": "object",
       "properties": [
@@ -77,6 +51,32 @@
           }
         }
       ]
+    },
+    "Tag": {
+      "type": "object",
+      "description": "The metadata that you apply to the permission set to help you categorize and organize them.",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "[\\w+=,.@-]+"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 0,
+            "pattern": "[\\w+=,.@-]+"
+          }
+        }
+      ]
     }
   },
   "resource": {
@@ -84,15 +84,15 @@
     "description": "Resource Type definition for SSO PermissionSet",
     "properties": [
       {
-        "name": "Name",
-        "description": "The name you want to assign to this permission set.",
-        "optional": false,
+        "name": "CustomerManagedPolicyReferences",
+        "optional": true,
         "type": {
-          "type": "string",
-          "description": "The name you want to assign to this permission set.",
-          "maxLength": 32,
-          "minLength": 1,
-          "pattern": "[\\w+=,.@-]+"
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "CustomerManagedPolicyReference"
+          },
+          "maxLength": 20
         }
       },
       {
@@ -105,54 +105,6 @@
           "maxLength": 700,
           "minLength": 1,
           "pattern": "[\\u0009\\u000A\\u000D\\u0020-\\u007E\\u00A1-\\u00FF]*"
-        }
-      },
-      {
-        "name": "InstanceArn",
-        "description": "The sso instance arn that the permission set is owned.",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "description": "The sso instance arn that the permission set is owned.",
-          "maxLength": 1224,
-          "minLength": 10,
-          "pattern": "arn:(aws|aws-us-gov|aws-cn|aws-iso|aws-iso-b):sso:::instance/(sso)?ins-[a-zA-Z0-9-.]{16}"
-        }
-      },
-      {
-        "name": "SessionDuration",
-        "description": "The length of time that a user can be signed in to an AWS account.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The length of time that a user can be signed in to an AWS account.",
-          "maxLength": 100,
-          "minLength": 1,
-          "pattern": "^(-?)P(?=\\d|T\\d)(?:(\\d+)Y)?(?:(\\d+)M)?(?:(\\d+)([DW]))?(?:T(?:(\\d+)H)?(?:(\\d+)M)?(?:(\\d+(?:\\.\\d+)?)S)?)?$"
-        }
-      },
-      {
-        "name": "RelayStateType",
-        "description": "The relay state URL that redirect links to any service in the AWS Management Console.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The relay state URL that redirect links to any service in the AWS Management Console.",
-          "maxLength": 240,
-          "minLength": 1,
-          "pattern": "[a-zA-Z0-9&amp;$@#\\/%?=~\\-_'&quot;|!:,.;*+\\[\\]\\ \\(\\)\\{\\}]+"
-        }
-      },
-      {
-        "name": "ManagedPolicies",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "itemType": {
-            "type": "ref",
-            "typeName": "ManagedPolicyArn"
-          },
-          "maxLength": 20
         }
       },
       {
@@ -174,6 +126,74 @@
         }
       },
       {
+        "name": "InstanceArn",
+        "description": "The sso instance arn that the permission set is owned.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The sso instance arn that the permission set is owned.",
+          "maxLength": 1224,
+          "minLength": 10,
+          "pattern": "arn:(aws|aws-us-gov|aws-cn|aws-iso|aws-iso-b):sso:::instance/(sso)?ins-[a-zA-Z0-9-.]{16}"
+        }
+      },
+      {
+        "name": "ManagedPolicies",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "ManagedPolicyArn"
+          },
+          "maxLength": 20
+        }
+      },
+      {
+        "name": "Name",
+        "description": "The name you want to assign to this permission set.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The name you want to assign to this permission set.",
+          "maxLength": 32,
+          "minLength": 1,
+          "pattern": "[\\w+=,.@-]+"
+        }
+      },
+      {
+        "name": "PermissionsBoundary",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "PermissionsBoundary"
+        }
+      },
+      {
+        "name": "RelayStateType",
+        "description": "The relay state URL that redirect links to any service in the AWS Management Console.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The relay state URL that redirect links to any service in the AWS Management Console.",
+          "maxLength": 240,
+          "minLength": 1,
+          "pattern": "[a-zA-Z0-9&amp;$@#\\/%?=~\\-_'&quot;|!:,.;*+\\[\\]\\ \\(\\)\\{\\}]+"
+        }
+      },
+      {
+        "name": "SessionDuration",
+        "description": "The length of time that a user can be signed in to an AWS account.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The length of time that a user can be signed in to an AWS account.",
+          "maxLength": 100,
+          "minLength": 1,
+          "pattern": "^(-?)P(?=\\d|T\\d)(?:(\\d+)Y)?(?:(\\d+)M)?(?:(\\d+)([DW]))?(?:T(?:(\\d+)H)?(?:(\\d+)M)?(?:(\\d+(?:\\.\\d+)?)S)?)?$"
+        }
+      },
+      {
         "name": "Tags",
         "optional": true,
         "type": {
@@ -183,26 +203,6 @@
             "typeName": "Tag"
           },
           "maxLength": 50
-        }
-      },
-      {
-        "name": "CustomerManagedPolicyReferences",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "itemType": {
-            "type": "ref",
-            "typeName": "CustomerManagedPolicyReference"
-          },
-          "maxLength": 20
-        }
-      },
-      {
-        "name": "PermissionsBoundary",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "PermissionsBoundary"
         }
       }
     ]
@@ -225,5 +225,5 @@
       }
     ]
   },
-  "$hash": "776be6aa438b6791db6dfb96ecbc6de6277f6323"
+  "$hash": "f8e7d83e9d06d999a74910284459c72db28a8558"
 }

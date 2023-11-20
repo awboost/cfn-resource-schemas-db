@@ -1,17 +1,30 @@
 {
   "definitions": {
+    "AppConfigResourceObject": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ApplicationId",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "pattern": "[a-z0-9]{4,7}"
+          }
+        },
+        {
+          "name": "EnvironmentId",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "pattern": "[a-z0-9]{4,7}"
+          }
+        }
+      ]
+    },
     "DataDeliveryObject": {
       "type": "object",
       "description": "Destinations for data.",
       "properties": [
-        {
-          "name": "S3",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "S3Destination"
-          }
-        },
         {
           "name": "LogGroup",
           "optional": true,
@@ -20,6 +33,14 @@
             "maxLength": 512,
             "minLength": 1,
             "pattern": "^[-a-zA-Z0-9._/]+$"
+          }
+        },
+        {
+          "name": "S3",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "S3Destination"
           }
         }
       ]
@@ -45,27 +66,6 @@
             "maxLength": 1024,
             "minLength": 1,
             "pattern": "^[-a-zA-Z0-9!_.*'()/]*$"
-          }
-        }
-      ]
-    },
-    "AppConfigResourceObject": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "ApplicationId",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "pattern": "[a-z0-9]{4,7}"
-          }
-        },
-        {
-          "name": "EnvironmentId",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "pattern": "[a-z0-9]{4,7}"
           }
         }
       ]
@@ -105,13 +105,19 @@
     "description": "Resource Type definition for AWS::Evidently::Project",
     "properties": [
       {
-        "name": "Name",
-        "optional": false,
+        "name": "AppConfigResource",
+        "optional": true,
         "type": {
-          "type": "string",
-          "maxLength": 127,
-          "minLength": 1,
-          "pattern": "[-a-zA-Z0-9._]*"
+          "type": "ref",
+          "typeName": "AppConfigResourceObject"
+        }
+      },
+      {
+        "name": "DataDelivery",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "DataDeliveryObject"
         }
       },
       {
@@ -124,19 +130,13 @@
         }
       },
       {
-        "name": "DataDelivery",
-        "optional": true,
+        "name": "Name",
+        "optional": false,
         "type": {
-          "type": "ref",
-          "typeName": "DataDeliveryObject"
-        }
-      },
-      {
-        "name": "AppConfigResource",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "AppConfigResourceObject"
+          "type": "string",
+          "maxLength": 127,
+          "minLength": 1,
+          "pattern": "[-a-zA-Z0-9._]*"
         }
       },
       {
@@ -170,5 +170,5 @@
       }
     ]
   },
-  "$hash": "58436b03d66b158527c8d984759c5426d3c91c2c"
+  "$hash": "d4bdeb9a9ffbee89eebccc25d81b1c3302f3e636"
 }

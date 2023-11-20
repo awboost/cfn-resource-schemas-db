@@ -1,5 +1,24 @@
 {
   "definitions": {
+    "LoadBalancerAttribute": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
     "SubnetMapping": {
       "type": "object",
       "properties": [
@@ -18,34 +37,15 @@
           }
         },
         {
-          "name": "SubnetId",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
           "name": "PrivateIPv4Address",
           "optional": true,
           "type": {
             "type": "string"
           }
-        }
-      ]
-    },
-    "LoadBalancerAttribute": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Value",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
         },
         {
-          "name": "Key",
-          "optional": true,
+          "name": "SubnetId",
+          "optional": false,
           "type": {
             "type": "string"
           }
@@ -56,15 +56,15 @@
       "type": "object",
       "properties": [
         {
-          "name": "Value",
-          "optional": true,
+          "name": "Key",
+          "optional": false,
           "type": {
             "type": "string"
           }
         },
         {
-          "name": "Key",
-          "optional": false,
+          "name": "Value",
+          "optional": true,
           "type": {
             "type": "string"
           }
@@ -87,18 +87,6 @@
         }
       },
       {
-        "name": "SecurityGroups",
-        "description": "The IDs of the security groups for the load balancer.",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "description": "The IDs of the security groups for the load balancer.",
-          "itemType": {
-            "type": "string"
-          }
-        }
-      },
-      {
         "name": "LoadBalancerAttributes",
         "description": "The load balancer attributes.",
         "optional": true,
@@ -112,6 +100,15 @@
         }
       },
       {
+        "name": "Name",
+        "description": "The name of the load balancer.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The name of the load balancer."
+        }
+      },
+      {
         "name": "Scheme",
         "description": "The nodes of an Internet-facing load balancer have public IP addresses. The DNS name of an Internet-facing load balancer is publicly resolvable to the public IP addresses of the nodes. Therefore, Internet-facing load balancers can route requests from clients over the internet. The nodes of an internal load balancer have only private IP addresses. The DNS name of an internal load balancer is publicly resolvable to the private IP addresses of the nodes. Therefore, internal load balancers can route requests only from clients with access to the VPC for the load balancer. The default is an Internet-facing load balancer.",
         "optional": true,
@@ -121,12 +118,28 @@
         }
       },
       {
-        "name": "Name",
-        "description": "The name of the load balancer.",
+        "name": "SecurityGroups",
+        "description": "The IDs of the security groups for the load balancer.",
         "optional": true,
         "type": {
-          "type": "string",
-          "description": "The name of the load balancer."
+          "type": "array",
+          "description": "The IDs of the security groups for the load balancer.",
+          "itemType": {
+            "type": "string"
+          }
+        }
+      },
+      {
+        "name": "SubnetMappings",
+        "description": "The IDs of the public subnets. You can specify only one subnet per Availability Zone. You must specify either subnets or subnet mappings, but not both.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "The IDs of the public subnets. You can specify only one subnet per Availability Zone. You must specify either subnets or subnet mappings, but not both.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "SubnetMapping"
+          }
         }
       },
       {
@@ -139,15 +152,6 @@
           "itemType": {
             "type": "string"
           }
-        }
-      },
-      {
-        "name": "Type",
-        "description": "The type of load balancer. The default is application.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The type of load balancer. The default is application."
         }
       },
       {
@@ -164,16 +168,12 @@
         }
       },
       {
-        "name": "SubnetMappings",
-        "description": "The IDs of the public subnets. You can specify only one subnet per Availability Zone. You must specify either subnets or subnet mappings, but not both.",
+        "name": "Type",
+        "description": "The type of load balancer. The default is application.",
         "optional": true,
         "type": {
-          "type": "array",
-          "description": "The IDs of the public subnets. You can specify only one subnet per Availability Zone. You must specify either subnets or subnet mappings, but not both.",
-          "itemType": {
-            "type": "ref",
-            "typeName": "SubnetMapping"
-          }
+          "type": "string",
+          "description": "The type of load balancer. The default is application."
         }
       }
     ]
@@ -184,30 +184,21 @@
     "documentationUrl": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-loadbalancer.html",
     "properties": [
       {
-        "name": "DNSName",
-        "description": "The public DNS name of the load balancer.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The public DNS name of the load balancer."
-        }
-      },
-      {
-        "name": "LoadBalancerName",
-        "description": "The name of the load balancer.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The name of the load balancer."
-        }
-      },
-      {
         "name": "CanonicalHostedZoneID",
         "description": "The ID of the Amazon Route 53 hosted zone associated with the load balancer.",
         "optional": true,
         "type": {
           "type": "string",
           "description": "The ID of the Amazon Route 53 hosted zone associated with the load balancer."
+        }
+      },
+      {
+        "name": "DNSName",
+        "description": "The public DNS name of the load balancer.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The public DNS name of the load balancer."
         }
       },
       {
@@ -227,8 +218,17 @@
           "type": "string",
           "description": "The full name of the load balancer."
         }
+      },
+      {
+        "name": "LoadBalancerName",
+        "description": "The name of the load balancer.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The name of the load balancer."
+        }
       }
     ]
   },
-  "$hash": "0ad358e75b8ca5dd186841bfc24aa03569270422"
+  "$hash": "e577262bc936feaf7b8d106a9598d5b9a6ae949b"
 }

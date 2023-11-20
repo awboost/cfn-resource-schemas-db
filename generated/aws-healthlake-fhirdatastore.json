@@ -5,15 +5,6 @@
       "description": "The time that a Data Store was created.",
       "properties": [
         {
-          "name": "Seconds",
-          "description": "Seconds since epoch.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "Seconds since epoch."
-          }
-        },
-        {
           "name": "Nanos",
           "description": "Nanoseconds.",
           "optional": false,
@@ -21,6 +12,15 @@
             "type": "number",
             "description": "Nanoseconds.",
             "isInteger": true
+          }
+        },
+        {
+          "name": "Seconds",
+          "description": "Seconds since epoch.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Seconds since epoch."
           }
         }
       ]
@@ -57,32 +57,48 @@
       "description": "The FHIR version. Only R4 version data is supported.",
       "allowedValues": ["R4"]
     },
-    "PreloadDataConfig": {
+    "IdentityProviderConfiguration": {
       "type": "object",
-      "description": "The preloaded data configuration for the Data Store. Only data preloaded from Synthea is supported.",
+      "description": "The identity provider configuration for the datastore",
       "properties": [
         {
-          "name": "PreloadDataType",
-          "description": "The type of preloaded data. Only Synthea preloaded data is supported.",
+          "name": "AuthorizationStrategy",
+          "description": "Type of Authorization Strategy. The two types of supported Authorization strategies are SMART_ON_FHIR_V1 and AWS_AUTH.",
           "optional": false,
           "type": {
             "type": "string",
-            "description": "The type of preloaded data. Only Synthea preloaded data is supported.",
-            "allowedValues": ["SYNTHEA"]
+            "description": "Type of Authorization Strategy. The two types of supported Authorization strategies are SMART_ON_FHIR_V1 and AWS_AUTH.",
+            "allowedValues": ["SMART_ON_FHIR_V1", "AWS_AUTH"]
           }
-        }
-      ]
-    },
-    "SseConfiguration": {
-      "type": "object",
-      "description": "The server-side encryption key configuration for a customer provided encryption key.",
-      "properties": [
+        },
         {
-          "name": "KmsEncryptionConfig",
-          "optional": false,
+          "name": "FineGrainedAuthorizationEnabled",
+          "description": "Flag to indicate if fine-grained authorization will be enabled for the datastore",
+          "optional": true,
           "type": {
-            "type": "ref",
-            "typeName": "KmsEncryptionConfig"
+            "type": "boolean",
+            "description": "Flag to indicate if fine-grained authorization will be enabled for the datastore"
+          }
+        },
+        {
+          "name": "IdpLambdaArn",
+          "description": "The Amazon Resource Name (ARN) of the Lambda function that will be used to decode the access token created by the authorization server.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the Lambda function that will be used to decode the access token created by the authorization server.",
+            "maxLength": 256,
+            "minLength": 49,
+            "pattern": "arn:aws[-a-z]*:lambda:[a-z]{2}-[a-z]+-\\d{1}:\\d{12}:function:[a-zA-Z0-9\\-_\\.]+(:(\\$LATEST|[a-zA-Z0-9\\-_]+))?"
+          }
+        },
+        {
+          "name": "Metadata",
+          "description": "The JSON metadata elements for identity provider configuration.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The JSON metadata elements for identity provider configuration."
           }
         }
       ]
@@ -115,48 +131,32 @@
         }
       ]
     },
-    "IdentityProviderConfiguration": {
+    "PreloadDataConfig": {
       "type": "object",
-      "description": "The identity provider configuration for the datastore",
+      "description": "The preloaded data configuration for the Data Store. Only data preloaded from Synthea is supported.",
       "properties": [
         {
-          "name": "AuthorizationStrategy",
-          "description": "Type of Authorization Strategy. The two types of supported Authorization strategies are SMART_ON_FHIR_V1 and AWS_AUTH.",
+          "name": "PreloadDataType",
+          "description": "The type of preloaded data. Only Synthea preloaded data is supported.",
           "optional": false,
           "type": {
             "type": "string",
-            "description": "Type of Authorization Strategy. The two types of supported Authorization strategies are SMART_ON_FHIR_V1 and AWS_AUTH.",
-            "allowedValues": ["SMART_ON_FHIR_V1", "AWS_AUTH"]
+            "description": "The type of preloaded data. Only Synthea preloaded data is supported.",
+            "allowedValues": ["SYNTHEA"]
           }
-        },
+        }
+      ]
+    },
+    "SseConfiguration": {
+      "type": "object",
+      "description": "The server-side encryption key configuration for a customer provided encryption key.",
+      "properties": [
         {
-          "name": "FineGrainedAuthorizationEnabled",
-          "description": "Flag to indicate if fine-grained authorization will be enabled for the datastore",
-          "optional": true,
+          "name": "KmsEncryptionConfig",
+          "optional": false,
           "type": {
-            "type": "boolean",
-            "description": "Flag to indicate if fine-grained authorization will be enabled for the datastore"
-          }
-        },
-        {
-          "name": "Metadata",
-          "description": "The JSON metadata elements for identity provider configuration.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The JSON metadata elements for identity provider configuration."
-          }
-        },
-        {
-          "name": "IdpLambdaArn",
-          "description": "The Amazon Resource Name (ARN) of the Lambda function that will be used to decode the access token created by the authorization server.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The Amazon Resource Name (ARN) of the Lambda function that will be used to decode the access token created by the authorization server.",
-            "maxLength": 256,
-            "minLength": 49,
-            "pattern": "arn:aws[-a-z]*:lambda:[a-z]{2}-[a-z]+-\\d{1}:\\d{12}:function:[a-zA-Z0-9\\-_\\.]+(:(\\$LATEST|[a-zA-Z0-9\\-_]+))?"
+            "type": "ref",
+            "typeName": "KmsEncryptionConfig"
           }
         }
       ]
@@ -212,6 +212,14 @@
         }
       },
       {
+        "name": "IdentityProviderConfiguration",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "IdentityProviderConfiguration"
+        }
+      },
+      {
         "name": "PreloadDataConfig",
         "optional": true,
         "type": {
@@ -225,14 +233,6 @@
         "type": {
           "type": "ref",
           "typeName": "SseConfiguration"
-        }
-      },
-      {
-        "name": "IdentityProviderConfiguration",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "IdentityProviderConfiguration"
         }
       },
       {
@@ -295,5 +295,5 @@
       }
     ]
   },
-  "$hash": "4b4b3da26325d4c283e129623160e99f48fc0575"
+  "$hash": "ac7597a7eaa471d84a47f06683c1334858933090"
 }

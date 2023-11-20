@@ -1,58 +1,8 @@
 {
   "definitions": {
-    "Tier": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Type",
-          "description": "The type of this environment tier.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The type of this environment tier."
-          }
-        },
-        {
-          "name": "Version",
-          "description": "The version of this environment tier. When you don't set a value to it, Elastic Beanstalk uses the latest compatible worker tier version.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The version of this environment tier. When you don't set a value to it, Elastic Beanstalk uses the latest compatible worker tier version."
-          }
-        },
-        {
-          "name": "Name",
-          "description": "The name of this environment tier.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The name of this environment tier."
-          }
-        }
-      ]
-    },
     "OptionSetting": {
       "type": "object",
       "properties": [
-        {
-          "name": "ResourceName",
-          "description": "A unique resource name for the option setting. Use it for a time–based scaling configuration option.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "A unique resource name for the option setting. Use it for a time–based scaling configuration option."
-          }
-        },
-        {
-          "name": "Value",
-          "description": "The current value for the configuration option.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The current value for the configuration option."
-          }
-        },
         {
           "name": "Namespace",
           "description": "A unique namespace that identifies the option's associated AWS resource.",
@@ -70,12 +20,39 @@
             "type": "string",
             "description": "The name of the configuration option."
           }
+        },
+        {
+          "name": "ResourceName",
+          "description": "A unique resource name for the option setting. Use it for a time–based scaling configuration option.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "A unique resource name for the option setting. Use it for a time–based scaling configuration option."
+          }
+        },
+        {
+          "name": "Value",
+          "description": "The current value for the configuration option.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The current value for the configuration option."
+          }
         }
       ]
     },
     "Tag": {
       "type": "object",
       "properties": [
+        {
+          "name": "Key",
+          "description": "The key name of the tag.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The key name of the tag."
+          }
+        },
         {
           "name": "Value",
           "description": "The value for the tag.",
@@ -84,14 +61,37 @@
             "type": "string",
             "description": "The value for the tag."
           }
-        },
+        }
+      ]
+    },
+    "Tier": {
+      "type": "object",
+      "properties": [
         {
-          "name": "Key",
-          "description": "The key name of the tag.",
-          "optional": false,
+          "name": "Name",
+          "description": "The name of this environment tier.",
+          "optional": true,
           "type": {
             "type": "string",
-            "description": "The key name of the tag."
+            "description": "The name of this environment tier."
+          }
+        },
+        {
+          "name": "Type",
+          "description": "The type of this environment tier.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The type of this environment tier."
+          }
+        },
+        {
+          "name": "Version",
+          "description": "The version of this environment tier. When you don't set a value to it, Elastic Beanstalk uses the latest compatible worker tier version.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The version of this environment tier. When you don't set a value to it, Elastic Beanstalk uses the latest compatible worker tier version."
           }
         }
       ]
@@ -102,21 +102,21 @@
     "description": "Resource Type definition for AWS::ElasticBeanstalk::Environment",
     "properties": [
       {
-        "name": "PlatformArn",
-        "description": "The Amazon Resource Name (ARN) of the custom platform to use with the environment.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The Amazon Resource Name (ARN) of the custom platform to use with the environment."
-        }
-      },
-      {
         "name": "ApplicationName",
         "description": "The name of the application that is associated with this environment.",
         "optional": false,
         "type": {
           "type": "string",
           "description": "The name of the application that is associated with this environment."
+        }
+      },
+      {
+        "name": "CNAMEPrefix",
+        "description": "If specified, the environment attempts to use this value as the prefix for the CNAME in your Elastic Beanstalk environment URL. If not specified, the CNAME is generated automatically by appending a random alphanumeric string to the environment name.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "If specified, the environment attempts to use this value as the prefix for the CNAME in your Elastic Beanstalk environment URL. If not specified, the CNAME is generated automatically by appending a random alphanumeric string to the environment name."
         }
       },
       {
@@ -147,6 +147,59 @@
         }
       },
       {
+        "name": "OptionSettings",
+        "description": "Key-value pairs defining configuration options for this environment, such as the instance type.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "Key-value pairs defining configuration options for this environment, such as the instance type.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "OptionSetting"
+          }
+        }
+      },
+      {
+        "name": "PlatformArn",
+        "description": "The Amazon Resource Name (ARN) of the custom platform to use with the environment.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) of the custom platform to use with the environment."
+        }
+      },
+      {
+        "name": "SolutionStackName",
+        "description": "The name of an Elastic Beanstalk solution stack (platform version) to use with the environment.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The name of an Elastic Beanstalk solution stack (platform version) to use with the environment."
+        }
+      },
+      {
+        "name": "Tags",
+        "description": "Specifies the tags applied to resources in the environment.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "Specifies the tags applied to resources in the environment.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          }
+        }
+      },
+      {
+        "name": "TemplateName",
+        "description": "The name of the Elastic Beanstalk configuration template to use with the environment.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The name of the Elastic Beanstalk configuration template to use with the environment."
+        }
+      },
+      {
         "name": "Tier",
         "description": "Specifies the tier to use in creating this environment. The environment tier that you choose determines whether Elastic Beanstalk provisions resources to support a web application that handles HTTP(S) requests or a web application that handles background-processing tasks.",
         "optional": true,
@@ -164,59 +217,6 @@
           "type": "string",
           "description": "The name of the application version to deploy."
         }
-      },
-      {
-        "name": "OptionSettings",
-        "description": "Key-value pairs defining configuration options for this environment, such as the instance type.",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "description": "Key-value pairs defining configuration options for this environment, such as the instance type.",
-          "itemType": {
-            "type": "ref",
-            "typeName": "OptionSetting"
-          }
-        }
-      },
-      {
-        "name": "TemplateName",
-        "description": "The name of the Elastic Beanstalk configuration template to use with the environment.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The name of the Elastic Beanstalk configuration template to use with the environment."
-        }
-      },
-      {
-        "name": "SolutionStackName",
-        "description": "The name of an Elastic Beanstalk solution stack (platform version) to use with the environment.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The name of an Elastic Beanstalk solution stack (platform version) to use with the environment."
-        }
-      },
-      {
-        "name": "CNAMEPrefix",
-        "description": "If specified, the environment attempts to use this value as the prefix for the CNAME in your Elastic Beanstalk environment URL. If not specified, the CNAME is generated automatically by appending a random alphanumeric string to the environment name.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "If specified, the environment attempts to use this value as the prefix for the CNAME in your Elastic Beanstalk environment URL. If not specified, the CNAME is generated automatically by appending a random alphanumeric string to the environment name."
-        }
-      },
-      {
-        "name": "Tags",
-        "description": "Specifies the tags applied to resources in the environment.",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "description": "Specifies the tags applied to resources in the environment.",
-          "itemType": {
-            "type": "ref",
-            "typeName": "Tag"
-          }
-        }
       }
     ]
   },
@@ -233,5 +233,5 @@
       }
     ]
   },
-  "$hash": "9c870bc8b469a824820a50b264736ade6594dbd6"
+  "$hash": "5e67ace22e66d1d495be518b4fe31e1e91c4ebc7"
 }

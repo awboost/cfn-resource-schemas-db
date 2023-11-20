@@ -1,55 +1,5 @@
 {
   "definitions": {
-    "JsonOptions": {
-      "type": "object",
-      "description": "Json options",
-      "properties": [
-        {
-          "name": "MultiLine",
-          "optional": true,
-          "type": {
-            "type": "boolean"
-          }
-        }
-      ]
-    },
-    "ExcelOptions": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "SheetNames",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "string"
-            },
-            "maxLength": 1,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "SheetIndexes",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "number",
-              "isInteger": true
-            },
-            "maxLength": 1,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "HeaderRow",
-          "optional": true,
-          "type": {
-            "type": "boolean"
-          }
-        }
-      ]
-    },
     "CsvOptions": {
       "type": "object",
       "description": "Csv options",
@@ -68,94 +18,6 @@
           "optional": true,
           "type": {
             "type": "boolean"
-          }
-        }
-      ]
-    },
-    "FormatOptions": {
-      "type": "object",
-      "description": "Format options for dataset",
-      "properties": [
-        {
-          "name": "Json",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "JsonOptions"
-          }
-        },
-        {
-          "name": "Excel",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ExcelOptions"
-          }
-        },
-        {
-          "name": "Csv",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "CsvOptions"
-          }
-        }
-      ]
-    },
-    "Input": {
-      "type": "object",
-      "description": "Input",
-      "properties": [
-        {
-          "name": "S3InputDefinition",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "S3Location"
-          }
-        },
-        {
-          "name": "DataCatalogInputDefinition",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "DataCatalogInputDefinition"
-          }
-        },
-        {
-          "name": "DatabaseInputDefinition",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "DatabaseInputDefinition"
-          }
-        },
-        {
-          "name": "Metadata",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "Metadata"
-          }
-        }
-      ]
-    },
-    "S3Location": {
-      "type": "object",
-      "description": "Input location",
-      "properties": [
-        {
-          "name": "Bucket",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Key",
-          "optional": true,
-          "type": {
-            "type": "string"
           }
         }
       ]
@@ -204,15 +66,6 @@
       "type": "object",
       "properties": [
         {
-          "name": "GlueConnectionName",
-          "description": "Glue connection name",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "Glue connection name"
-          }
-        },
-        {
           "name": "DatabaseTableName",
           "description": "Database table name",
           "optional": true,
@@ -222,11 +75,12 @@
           }
         },
         {
-          "name": "TempDirectory",
-          "optional": true,
+          "name": "GlueConnectionName",
+          "description": "Glue connection name",
+          "optional": false,
           "type": {
-            "type": "ref",
-            "typeName": "S3Location"
+            "type": "string",
+            "description": "Glue connection name"
           }
         },
         {
@@ -236,6 +90,310 @@
           "type": {
             "type": "string",
             "description": "Custom SQL to run against the provided AWS Glue connection. This SQL will be used as the input for DataBrew projects and jobs."
+          }
+        },
+        {
+          "name": "TempDirectory",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "S3Location"
+          }
+        }
+      ]
+    },
+    "DatasetParameter": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "CreateColumn",
+          "description": "Add the value of this parameter as a column in a dataset.",
+          "optional": true,
+          "type": {
+            "type": "boolean",
+            "description": "Add the value of this parameter as a column in a dataset."
+          }
+        },
+        {
+          "name": "DatetimeOptions",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DatetimeOptions"
+          }
+        },
+        {
+          "name": "Filter",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "FilterExpression"
+          }
+        },
+        {
+          "name": "Name",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "PathParameterName"
+          }
+        },
+        {
+          "name": "Type",
+          "description": "Parameter type",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Parameter type",
+            "allowedValues": ["String", "Number", "Datetime"]
+          }
+        }
+      ]
+    },
+    "DatetimeOptions": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Format",
+          "description": "Date/time format of a date parameter",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Date/time format of a date parameter",
+            "maxLength": 100,
+            "minLength": 2
+          }
+        },
+        {
+          "name": "LocaleCode",
+          "description": "Locale code for a date parameter",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Locale code for a date parameter",
+            "maxLength": 100,
+            "minLength": 2,
+            "pattern": "^[A-Za-z0-9_\\.#@\\-]+$"
+          }
+        },
+        {
+          "name": "TimezoneOffset",
+          "description": "Timezone offset",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Timezone offset",
+            "maxLength": 6,
+            "minLength": 1,
+            "pattern": "^(Z|[-+](\\d|\\d{2}|\\d{2}:?\\d{2}))$"
+          }
+        }
+      ]
+    },
+    "ExcelOptions": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "HeaderRow",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "SheetIndexes",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "number",
+              "isInteger": true
+            },
+            "maxLength": 1,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "SheetNames",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            },
+            "maxLength": 1,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "FilesLimit": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "MaxFiles",
+          "description": "Maximum number of files",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "description": "Maximum number of files",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "Order",
+          "description": "Order",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Order",
+            "allowedValues": ["ASCENDING", "DESCENDING"]
+          }
+        },
+        {
+          "name": "OrderedBy",
+          "description": "Ordered by",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Ordered by",
+            "allowedValues": ["LAST_MODIFIED_DATE"]
+          }
+        }
+      ]
+    },
+    "FilterExpression": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Expression",
+          "description": "Filtering expression for a parameter",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Filtering expression for a parameter",
+            "maxLength": 1024,
+            "minLength": 4,
+            "pattern": "^[><0-9A-Za-z_.,:)(!= ]+$"
+          }
+        },
+        {
+          "name": "ValuesMap",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "FilterValue"
+            }
+          }
+        }
+      ]
+    },
+    "FilterValue": {
+      "type": "object",
+      "description": "A key-value pair to associate expression variable names with their values",
+      "properties": [
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 1024,
+            "minLength": 0
+          }
+        },
+        {
+          "name": "ValueReference",
+          "description": "Variable name",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Variable name",
+            "maxLength": 128,
+            "minLength": 2,
+            "pattern": "^:[A-Za-z0-9_]+$"
+          }
+        }
+      ]
+    },
+    "FormatOptions": {
+      "type": "object",
+      "description": "Format options for dataset",
+      "properties": [
+        {
+          "name": "Csv",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "CsvOptions"
+          }
+        },
+        {
+          "name": "Excel",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ExcelOptions"
+          }
+        },
+        {
+          "name": "Json",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "JsonOptions"
+          }
+        }
+      ]
+    },
+    "Input": {
+      "type": "object",
+      "description": "Input",
+      "properties": [
+        {
+          "name": "DataCatalogInputDefinition",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DataCatalogInputDefinition"
+          }
+        },
+        {
+          "name": "DatabaseInputDefinition",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DatabaseInputDefinition"
+          }
+        },
+        {
+          "name": "Metadata",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Metadata"
+          }
+        },
+        {
+          "name": "S3InputDefinition",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "S3Location"
+          }
+        }
+      ]
+    },
+    "JsonOptions": {
+      "type": "object",
+      "description": "Json options",
+      "properties": [
+        {
+          "name": "MultiLine",
+          "optional": true,
+          "type": {
+            "type": "boolean"
           }
         }
       ]
@@ -287,59 +445,24 @@
         }
       ]
     },
-    "FilesLimit": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "MaxFiles",
-          "description": "Maximum number of files",
-          "optional": false,
-          "type": {
-            "type": "number",
-            "description": "Maximum number of files",
-            "isInteger": true
-          }
-        },
-        {
-          "name": "OrderedBy",
-          "description": "Ordered by",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Ordered by",
-            "allowedValues": ["LAST_MODIFIED_DATE"]
-          }
-        },
-        {
-          "name": "Order",
-          "description": "Order",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Order",
-            "allowedValues": ["ASCENDING", "DESCENDING"]
-          }
-        }
-      ]
-    },
     "PathParameter": {
       "type": "object",
       "description": "A key-value pair to associate dataset parameter name with its definition.",
       "properties": [
-        {
-          "name": "PathParameterName",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "PathParameterName"
-          }
-        },
         {
           "name": "DatasetParameter",
           "optional": false,
           "type": {
             "type": "ref",
             "typeName": "DatasetParameter"
+          }
+        },
+        {
+          "name": "PathParameterName",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "PathParameterName"
           }
         }
       ]
@@ -350,145 +473,22 @@
       "maxLength": 255,
       "minLength": 1
     },
-    "DatasetParameter": {
+    "S3Location": {
       "type": "object",
+      "description": "Input location",
       "properties": [
         {
-          "name": "Name",
+          "name": "Bucket",
           "optional": false,
           "type": {
-            "type": "ref",
-            "typeName": "PathParameterName"
+            "type": "string"
           }
         },
         {
-          "name": "Type",
-          "description": "Parameter type",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "Parameter type",
-            "allowedValues": ["String", "Number", "Datetime"]
-          }
-        },
-        {
-          "name": "DatetimeOptions",
+          "name": "Key",
           "optional": true,
           "type": {
-            "type": "ref",
-            "typeName": "DatetimeOptions"
-          }
-        },
-        {
-          "name": "CreateColumn",
-          "description": "Add the value of this parameter as a column in a dataset.",
-          "optional": true,
-          "type": {
-            "type": "boolean",
-            "description": "Add the value of this parameter as a column in a dataset."
-          }
-        },
-        {
-          "name": "Filter",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "FilterExpression"
-          }
-        }
-      ]
-    },
-    "DatetimeOptions": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Format",
-          "description": "Date/time format of a date parameter",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "Date/time format of a date parameter",
-            "maxLength": 100,
-            "minLength": 2
-          }
-        },
-        {
-          "name": "TimezoneOffset",
-          "description": "Timezone offset",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Timezone offset",
-            "maxLength": 6,
-            "minLength": 1,
-            "pattern": "^(Z|[-+](\\d|\\d{2}|\\d{2}:?\\d{2}))$"
-          }
-        },
-        {
-          "name": "LocaleCode",
-          "description": "Locale code for a date parameter",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Locale code for a date parameter",
-            "maxLength": 100,
-            "minLength": 2,
-            "pattern": "^[A-Za-z0-9_\\.#@\\-]+$"
-          }
-        }
-      ]
-    },
-    "FilterExpression": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Expression",
-          "description": "Filtering expression for a parameter",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "Filtering expression for a parameter",
-            "maxLength": 1024,
-            "minLength": 4,
-            "pattern": "^[><0-9A-Za-z_.,:)(!= ]+$"
-          }
-        },
-        {
-          "name": "ValuesMap",
-          "optional": false,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "FilterValue"
-            }
-          }
-        }
-      ]
-    },
-    "FilterValue": {
-      "type": "object",
-      "description": "A key-value pair to associate expression variable names with their values",
-      "properties": [
-        {
-          "name": "ValueReference",
-          "description": "Variable name",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "Variable name",
-            "maxLength": 128,
-            "minLength": 2,
-            "pattern": "^:[A-Za-z0-9_]+$"
-          }
-        },
-        {
-          "name": "Value",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 1024,
-            "minLength": 0
+            "type": "string"
           }
         }
       ]
@@ -523,17 +523,6 @@
     "description": "Resource schema for AWS::DataBrew::Dataset.",
     "properties": [
       {
-        "name": "Name",
-        "description": "Dataset name",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "description": "Dataset name",
-          "maxLength": 255,
-          "minLength": 1
-        }
-      },
-      {
         "name": "Format",
         "description": "Dataset format",
         "optional": true,
@@ -564,6 +553,17 @@
         }
       },
       {
+        "name": "Name",
+        "description": "Dataset name",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "Dataset name",
+          "maxLength": 255,
+          "minLength": 1
+        }
+      },
+      {
         "name": "PathOptions",
         "description": "PathOptions",
         "optional": true,
@@ -586,5 +586,5 @@
       }
     ]
   },
-  "$hash": "16f67c47667f2469170458714de874d0bfd86554"
+  "$hash": "ffc5b4bebce8f92a2c64672ab14230ed45196202"
 }

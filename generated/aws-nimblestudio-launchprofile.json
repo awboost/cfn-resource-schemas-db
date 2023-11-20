@@ -17,6 +17,14 @@
       "description": "<p>A configuration for a streaming session.</p>",
       "properties": [
         {
+          "name": "AutomaticTerminationMode",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "AutomaticTerminationMode"
+          }
+        },
+        {
           "name": "ClipboardMode",
           "optional": false,
           "type": {
@@ -52,23 +60,6 @@
           }
         },
         {
-          "name": "StreamingImageIds",
-          "description": "<p>The streaming images that users can select from when launching a streaming session\n            with this launch profile.</p>",
-          "optional": false,
-          "type": {
-            "type": "array",
-            "description": "<p>The streaming images that users can select from when launching a streaming session\n            with this launch profile.</p>",
-            "itemType": {
-              "type": "string",
-              "maxLength": 22,
-              "minLength": 0,
-              "pattern": "^[a-zA-Z0-9-_]*$"
-            },
-            "maxLength": 20,
-            "minLength": 1
-          }
-        },
-        {
           "name": "MaxStoppedSessionLengthInMinutes",
           "description": "<p>Integer that determines if you can start and stop your sessions and how long a session\n            can stay in the <code>STOPPED</code> state. The default value is 0. The maximum value is\n            5760.</p>\n         <p>This field is allowed only when <code>sessionPersistenceMode</code> is\n                <code>ACTIVATED</code> and <code>automaticTerminationMode</code> is\n                <code>ACTIVATED</code>.</p>\n         <p>If the value is set to 0, your sessions can’t be <code>STOPPED</code>. If you then\n            call <code>StopStreamingSession</code>, the session fails. If the time that a session\n            stays in the <code>READY</code> state exceeds the <code>maxSessionLengthInMinutes</code>\n            value, the session will automatically be terminated (instead of\n            <code>STOPPED</code>).</p>\n         <p>If the value is set to a positive number, the session can be stopped. You can call\n                <code>StopStreamingSession</code> to stop sessions in the <code>READY</code> state.\n            If the time that a session stays in the <code>READY</code> state exceeds the\n                <code>maxSessionLengthInMinutes</code> value, the session will automatically be\n            stopped (instead of terminated).</p>",
           "optional": true,
@@ -78,14 +69,6 @@
             "isInteger": false,
             "maximum": 5760,
             "minimum": 0
-          }
-        },
-        {
-          "name": "SessionStorage",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "StreamConfigurationSessionStorage"
           }
         },
         {
@@ -105,19 +88,36 @@
           }
         },
         {
+          "name": "SessionStorage",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "StreamConfigurationSessionStorage"
+          }
+        },
+        {
+          "name": "StreamingImageIds",
+          "description": "<p>The streaming images that users can select from when launching a streaming session\n            with this launch profile.</p>",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "description": "<p>The streaming images that users can select from when launching a streaming session\n            with this launch profile.</p>",
+            "itemType": {
+              "type": "string",
+              "maxLength": 22,
+              "minLength": 0,
+              "pattern": "^[a-zA-Z0-9-_]*$"
+            },
+            "maxLength": 20,
+            "minLength": 1
+          }
+        },
+        {
           "name": "VolumeConfiguration",
           "optional": true,
           "type": {
             "type": "ref",
             "typeName": "VolumeConfiguration"
-          }
-        },
-        {
-          "name": "AutomaticTerminationMode",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "AutomaticTerminationMode"
           }
         }
       ]
@@ -126,14 +126,6 @@
       "type": "object",
       "description": "<p>Configures how streaming sessions are backed up when launched from this launch\n            profile.</p>",
       "properties": [
-        {
-          "name": "Mode",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "SessionBackupMode"
-          }
-        },
         {
           "name": "MaxBackupsToRetain",
           "description": "<p>The maximum number of backups that each streaming session created from this launch\n            profile can have.</p>",
@@ -145,6 +137,14 @@
             "maximum": 10,
             "minimum": 0
           }
+        },
+        {
+          "name": "Mode",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "SessionBackupMode"
+          }
         }
       ]
     },
@@ -152,14 +152,6 @@
       "type": "object",
       "description": "<p>The configuration for a streaming session’s upload storage.</p>",
       "properties": [
-        {
-          "name": "Root",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "StreamingSessionStorageRoot"
-          }
-        },
         {
           "name": "Mode",
           "description": "<p>Allows artists to upload files to their workstations. The only valid option is\n                <code>UPLOAD</code>.</p>",
@@ -172,6 +164,14 @@
               "typeName": "StreamingSessionStorageMode"
             },
             "minLength": 1
+          }
+        },
+        {
+          "name": "Root",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "StreamingSessionStorageRoot"
           }
         }
       ]
@@ -243,6 +243,18 @@
       "description": "<p>Custom volume configuration for the root volumes that are attached to streaming\n            sessions.</p>\n         <p>This parameter is only allowed when <code>sessionPersistenceMode</code> is\n                <code>ACTIVATED</code>.</p>",
       "properties": [
         {
+          "name": "Iops",
+          "description": "<p>The number of I/O operations per second for the root volume that is attached to\n            streaming session.</p>",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "<p>The number of I/O operations per second for the root volume that is attached to\n            streaming session.</p>",
+            "isInteger": false,
+            "maximum": 16000,
+            "minimum": 3000
+          }
+        },
+        {
           "name": "Size",
           "description": "<p>The size of the root volume that is attached to the streaming session. The root volume\n            size is measured in GiBs.</p>",
           "optional": true,
@@ -264,18 +276,6 @@
             "isInteger": false,
             "maximum": 1000,
             "minimum": 125
-          }
-        },
-        {
-          "name": "Iops",
-          "description": "<p>The number of I/O operations per second for the root volume that is attached to\n            streaming session.</p>",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "description": "<p>The number of I/O operations per second for the root volume that is attached to\n            streaming session.</p>",
-            "isInteger": false,
-            "maximum": 16000,
-            "minimum": 3000
           }
         }
       ]
@@ -391,5 +391,5 @@
       }
     ]
   },
-  "$hash": "de6d38d05dee256437ae64b52761665d998ac6de"
+  "$hash": "fc88e44c87e21aea9855f11e6f88d2ef4030f9d1"
 }

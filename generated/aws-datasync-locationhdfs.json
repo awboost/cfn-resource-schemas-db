@@ -29,6 +29,42 @@
         }
       ]
     },
+    "QopConfiguration": {
+      "type": "object",
+      "description": "Configuration information for RPC Protection and Data Transfer Protection. These parameters can be set to AUTHENTICATION, INTEGRITY, or PRIVACY. The default value is PRIVACY.",
+      "properties": [
+        {
+          "name": "DataTransferProtection",
+          "description": "Configuration for Data Transfer Protection.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Configuration for Data Transfer Protection.",
+            "allowedValues": [
+              "AUTHENTICATION",
+              "INTEGRITY",
+              "PRIVACY",
+              "DISABLED"
+            ]
+          }
+        },
+        {
+          "name": "RpcProtection",
+          "description": "Configuration for RPC Protection.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Configuration for RPC Protection.",
+            "allowedValues": [
+              "AUTHENTICATION",
+              "INTEGRITY",
+              "PRIVACY",
+              "DISABLED"
+            ]
+          }
+        }
+      ]
+    },
     "Tag": {
       "type": "object",
       "description": "A key-value pair to associate with a resource.",
@@ -56,42 +92,6 @@
           }
         }
       ]
-    },
-    "QopConfiguration": {
-      "type": "object",
-      "description": "Configuration information for RPC Protection and Data Transfer Protection. These parameters can be set to AUTHENTICATION, INTEGRITY, or PRIVACY. The default value is PRIVACY.",
-      "properties": [
-        {
-          "name": "RpcProtection",
-          "description": "Configuration for RPC Protection.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Configuration for RPC Protection.",
-            "allowedValues": [
-              "AUTHENTICATION",
-              "INTEGRITY",
-              "PRIVACY",
-              "DISABLED"
-            ]
-          }
-        },
-        {
-          "name": "DataTransferProtection",
-          "description": "Configuration for Data Transfer Protection.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Configuration for Data Transfer Protection.",
-            "allowedValues": [
-              "AUTHENTICATION",
-              "INTEGRITY",
-              "PRIVACY",
-              "DISABLED"
-            ]
-          }
-        }
-      ]
     }
   },
   "resource": {
@@ -99,61 +99,19 @@
     "description": "Resource schema for AWS::DataSync::LocationHDFS.",
     "properties": [
       {
-        "name": "NameNodes",
-        "description": "An array of Name Node(s) of the HDFS location.",
+        "name": "AgentArns",
+        "description": "ARN(s) of the agent(s) to use for an HDFS location.",
         "optional": false,
         "type": {
           "type": "array",
-          "description": "An array of Name Node(s) of the HDFS location.",
+          "description": "ARN(s) of the agent(s) to use for an HDFS location.",
           "itemType": {
-            "type": "ref",
-            "typeName": "NameNode"
+            "type": "string",
+            "maxLength": 128,
+            "pattern": "^arn:(aws|aws-cn|aws-us-gov|aws-iso|aws-iso-b):datasync:[a-z\\-0-9]+:[0-9]{12}:agent/agent-[0-9a-z]{17}$"
           },
+          "maxLength": 4,
           "minLength": 1
-        }
-      },
-      {
-        "name": "BlockSize",
-        "description": "Size of chunks (blocks) in bytes that the data is divided into when stored in the HDFS cluster.",
-        "optional": true,
-        "type": {
-          "type": "number",
-          "description": "Size of chunks (blocks) in bytes that the data is divided into when stored in the HDFS cluster.",
-          "isInteger": true,
-          "maximum": 1073741824,
-          "minimum": 1048576
-        }
-      },
-      {
-        "name": "ReplicationFactor",
-        "description": "Number of copies of each block that exists inside the HDFS cluster.",
-        "optional": true,
-        "type": {
-          "type": "number",
-          "description": "Number of copies of each block that exists inside the HDFS cluster.",
-          "isInteger": true,
-          "maximum": 512,
-          "minimum": 1
-        }
-      },
-      {
-        "name": "KmsKeyProviderUri",
-        "description": "The identifier for the Key Management Server where the encryption keys that encrypt data inside HDFS clusters are stored.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The identifier for the Key Management Server where the encryption keys that encrypt data inside HDFS clusters are stored.",
-          "maxLength": 255,
-          "minLength": 1,
-          "pattern": "^kms:\\/\\/http[s]?@(([a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9\\-]*[A-Za-z0-9])(;(([a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9\\-]*[A-Za-z0-9]))*:[0-9]{1,5}\\/kms$"
-        }
-      },
-      {
-        "name": "QopConfiguration",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "QopConfiguration"
         }
       },
       {
@@ -167,27 +125,15 @@
         }
       },
       {
-        "name": "SimpleUser",
-        "description": "The user name that has read and write permissions on the specified HDFS cluster.",
+        "name": "BlockSize",
+        "description": "Size of chunks (blocks) in bytes that the data is divided into when stored in the HDFS cluster.",
         "optional": true,
         "type": {
-          "type": "string",
-          "description": "The user name that has read and write permissions on the specified HDFS cluster.",
-          "maxLength": 256,
-          "minLength": 1,
-          "pattern": "^[_.A-Za-z0-9][-_.A-Za-z0-9]*$"
-        }
-      },
-      {
-        "name": "KerberosPrincipal",
-        "description": "The unique identity, or principal, to which Kerberos can assign tickets.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The unique identity, or principal, to which Kerberos can assign tickets.",
-          "maxLength": 256,
-          "minLength": 1,
-          "pattern": "^.+$"
+          "type": "number",
+          "description": "Size of chunks (blocks) in bytes that the data is divided into when stored in the HDFS cluster.",
+          "isInteger": true,
+          "maximum": 1073741824,
+          "minimum": 1048576
         }
       },
       {
@@ -211,33 +157,73 @@
         }
       },
       {
-        "name": "Tags",
-        "description": "An array of key-value pairs to apply to this resource.",
+        "name": "KerberosPrincipal",
+        "description": "The unique identity, or principal, to which Kerberos can assign tickets.",
         "optional": true,
         "type": {
-          "type": "array",
-          "description": "An array of key-value pairs to apply to this resource.",
-          "itemType": {
-            "type": "ref",
-            "typeName": "Tag"
-          },
-          "maxLength": 50
+          "type": "string",
+          "description": "The unique identity, or principal, to which Kerberos can assign tickets.",
+          "maxLength": 256,
+          "minLength": 1,
+          "pattern": "^.+$"
         }
       },
       {
-        "name": "AgentArns",
-        "description": "ARN(s) of the agent(s) to use for an HDFS location.",
+        "name": "KmsKeyProviderUri",
+        "description": "The identifier for the Key Management Server where the encryption keys that encrypt data inside HDFS clusters are stored.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The identifier for the Key Management Server where the encryption keys that encrypt data inside HDFS clusters are stored.",
+          "maxLength": 255,
+          "minLength": 1,
+          "pattern": "^kms:\\/\\/http[s]?@(([a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9\\-]*[A-Za-z0-9])(;(([a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9\\-]*[A-Za-z0-9]))*:[0-9]{1,5}\\/kms$"
+        }
+      },
+      {
+        "name": "NameNodes",
+        "description": "An array of Name Node(s) of the HDFS location.",
         "optional": false,
         "type": {
           "type": "array",
-          "description": "ARN(s) of the agent(s) to use for an HDFS location.",
+          "description": "An array of Name Node(s) of the HDFS location.",
           "itemType": {
-            "type": "string",
-            "maxLength": 128,
-            "pattern": "^arn:(aws|aws-cn|aws-us-gov|aws-iso|aws-iso-b):datasync:[a-z\\-0-9]+:[0-9]{12}:agent/agent-[0-9a-z]{17}$"
+            "type": "ref",
+            "typeName": "NameNode"
           },
-          "maxLength": 4,
           "minLength": 1
+        }
+      },
+      {
+        "name": "QopConfiguration",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "QopConfiguration"
+        }
+      },
+      {
+        "name": "ReplicationFactor",
+        "description": "Number of copies of each block that exists inside the HDFS cluster.",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "Number of copies of each block that exists inside the HDFS cluster.",
+          "isInteger": true,
+          "maximum": 512,
+          "minimum": 1
+        }
+      },
+      {
+        "name": "SimpleUser",
+        "description": "The user name that has read and write permissions on the specified HDFS cluster.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The user name that has read and write permissions on the specified HDFS cluster.",
+          "maxLength": 256,
+          "minLength": 1,
+          "pattern": "^[_.A-Za-z0-9][-_.A-Za-z0-9]*$"
         }
       },
       {
@@ -249,6 +235,20 @@
           "description": "The subdirectory in HDFS that is used to read data from the HDFS source location or write data to the HDFS destination.",
           "maxLength": 4096,
           "pattern": "^[a-zA-Z0-9_\\-\\+\\./\\(\\)\\$\\p{Zs}]+$"
+        }
+      },
+      {
+        "name": "Tags",
+        "description": "An array of key-value pairs to apply to this resource.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "An array of key-value pairs to apply to this resource.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          },
+          "maxLength": 50
         }
       }
     ]
@@ -281,5 +281,5 @@
       }
     ]
   },
-  "$hash": "e9d0117fab422dfabe1db4393dcb7396ad580265"
+  "$hash": "ae8a995e270c660cbeda94aae44ef837324b9ac7"
 }

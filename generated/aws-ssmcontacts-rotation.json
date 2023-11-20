@@ -1,50 +1,9 @@
 {
   "definitions": {
-    "Tag": {
-      "type": "object",
-      "description": "A key-value pair to associate with a resource.",
-      "properties": [
-        {
-          "name": "Key",
-          "description": "The key name of the tag",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The key name of the tag",
-            "maxLength": 128,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "Value",
-          "description": "The value for the tag.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The value for the tag.",
-            "maxLength": 256,
-            "minLength": 0
-          }
-        }
-      ]
-    },
-    "HandOffTime": {
-      "type": "string",
-      "description": "Details about when an on-call rotation shift begins or ends. Time of the day in format HH:MM",
-      "pattern": "^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$"
-    },
     "CoverageTime": {
       "type": "object",
       "description": "StartTime and EndTime for the Shift",
       "properties": [
-        {
-          "name": "StartTime",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "HandOffTime"
-          }
-        },
         {
           "name": "EndTime",
           "optional": false,
@@ -52,32 +11,27 @@
             "type": "ref",
             "typeName": "HandOffTime"
           }
-        }
-      ]
-    },
-    "ShiftCoverage": {
-      "type": "object",
-      "description": "Information about the days of the week included in on-call rotation coverage.",
-      "properties": [
+        },
         {
-          "name": "DayOfWeek",
+          "name": "StartTime",
           "optional": false,
           "type": {
             "type": "ref",
-            "typeName": "DayOfWeek"
+            "typeName": "HandOffTime"
           }
-        },
+        }
+      ]
+    },
+    "DailySetting": {
+      "type": "object",
+      "description": "Handoff time for Daily Recurring Rotation.",
+      "properties": [
         {
-          "name": "CoverageTimes",
-          "description": "Information about when an on-call shift begins and ends.",
+          "name": "HandOffTime",
           "optional": false,
           "type": {
-            "type": "array",
-            "description": "Information about when an on-call shift begins and ends.",
-            "itemType": {
-              "type": "ref",
-              "typeName": "CoverageTime"
-            }
+            "type": "ref",
+            "typeName": "HandOffTime"
           }
         }
       ]
@@ -86,6 +40,11 @@
       "type": "string",
       "description": "The day of the week when weekly recurring on-call shift rotations begin. ",
       "allowedValues": ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]
+    },
+    "HandOffTime": {
+      "type": "string",
+      "description": "Details about when an on-call rotation shift begins or ends. Time of the day in format HH:MM",
+      "pattern": "^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$"
     },
     "MonthlySetting": {
       "type": "object",
@@ -113,72 +72,10 @@
         }
       ]
     },
-    "WeeklySetting": {
-      "type": "object",
-      "description": "DayOfWeek for Rotation and HandOff Time for Weekly Recurring Rotation.",
-      "properties": [
-        {
-          "name": "DayOfWeek",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "DayOfWeek"
-          }
-        },
-        {
-          "name": "HandOffTime",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "HandOffTime"
-          }
-        }
-      ]
-    },
-    "DailySetting": {
-      "type": "object",
-      "description": "Handoff time for Daily Recurring Rotation.",
-      "properties": [
-        {
-          "name": "HandOffTime",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "HandOffTime"
-          }
-        }
-      ]
-    },
     "RecurrenceSettings": {
       "type": "object",
       "description": "Information about when an on-call rotation is in effect and how long the rotation period lasts.",
       "properties": [
-        {
-          "name": "MonthlySettings",
-          "description": "Information about on-call rotations that recur monthly.",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "description": "Information about on-call rotations that recur monthly.",
-            "itemType": {
-              "type": "ref",
-              "typeName": "MonthlySetting"
-            }
-          }
-        },
-        {
-          "name": "WeeklySettings",
-          "description": "Information about on-call rotations that recur weekly.",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "description": "Information about on-call rotations that recur weekly.",
-            "itemType": {
-              "type": "ref",
-              "typeName": "WeeklySetting"
-            }
-          }
-        },
         {
           "name": "DailySettings",
           "description": "Information about on-call rotations that recur daily.",
@@ -189,6 +86,19 @@
             "itemType": {
               "type": "ref",
               "typeName": "HandOffTime"
+            }
+          }
+        },
+        {
+          "name": "MonthlySettings",
+          "description": "Information about on-call rotations that recur monthly.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "Information about on-call rotations that recur monthly.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "MonthlySetting"
             }
           }
         },
@@ -227,6 +137,96 @@
               "typeName": "ShiftCoverage"
             }
           }
+        },
+        {
+          "name": "WeeklySettings",
+          "description": "Information about on-call rotations that recur weekly.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "Information about on-call rotations that recur weekly.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "WeeklySetting"
+            }
+          }
+        }
+      ]
+    },
+    "ShiftCoverage": {
+      "type": "object",
+      "description": "Information about the days of the week included in on-call rotation coverage.",
+      "properties": [
+        {
+          "name": "CoverageTimes",
+          "description": "Information about when an on-call shift begins and ends.",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "description": "Information about when an on-call shift begins and ends.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "CoverageTime"
+            }
+          }
+        },
+        {
+          "name": "DayOfWeek",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "DayOfWeek"
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "description": "A key-value pair to associate with a resource.",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "The key name of the tag",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The key name of the tag",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "description": "The value for the tag.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The value for the tag.",
+            "maxLength": 256,
+            "minLength": 0
+          }
+        }
+      ]
+    },
+    "WeeklySetting": {
+      "type": "object",
+      "description": "DayOfWeek for Rotation and HandOff Time for Weekly Recurring Rotation.",
+      "properties": [
+        {
+          "name": "DayOfWeek",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "DayOfWeek"
+          }
+        },
+        {
+          "name": "HandOffTime",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "HandOffTime"
+          }
         }
       ]
     }
@@ -235,16 +235,6 @@
     "type": "object",
     "description": "Resource Type definition for AWS::SSMContacts::Rotation.",
     "properties": [
-      {
-        "name": "Name",
-        "description": "Name of the Rotation",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "description": "Name of the Rotation",
-          "pattern": "^[a-zA-Z0-9_]*$"
-        }
-      },
       {
         "name": "ContactIds",
         "description": "Members of the rotation",
@@ -258,22 +248,13 @@
         }
       },
       {
-        "name": "StartTime",
-        "description": "Start time of the first shift of Oncall Schedule",
+        "name": "Name",
+        "description": "Name of the Rotation",
         "optional": false,
         "type": {
           "type": "string",
-          "description": "Start time of the first shift of Oncall Schedule",
-          "pattern": "^(\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2})$"
-        }
-      },
-      {
-        "name": "TimeZoneId",
-        "description": "TimeZone Identifier for the Oncall Schedule",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "description": "TimeZone Identifier for the Oncall Schedule"
+          "description": "Name of the Rotation",
+          "pattern": "^[a-zA-Z0-9_]*$"
         }
       },
       {
@@ -285,6 +266,16 @@
         }
       },
       {
+        "name": "StartTime",
+        "description": "Start time of the first shift of Oncall Schedule",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "Start time of the first shift of Oncall Schedule",
+          "pattern": "^(\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2})$"
+        }
+      },
+      {
         "name": "Tags",
         "optional": true,
         "type": {
@@ -293,6 +284,15 @@
             "type": "ref",
             "typeName": "Tag"
           }
+        }
+      },
+      {
+        "name": "TimeZoneId",
+        "description": "TimeZone Identifier for the Oncall Schedule",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "TimeZone Identifier for the Oncall Schedule"
         }
       }
     ]
@@ -312,5 +312,5 @@
       }
     ]
   },
-  "$hash": "bea6ff5930a0d930043b6761b10b8f82bb24d29f"
+  "$hash": "2d5d783b0a1be69c5afbe8173ee35b6c3d2d3a99"
 }

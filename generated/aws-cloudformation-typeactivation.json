@@ -34,12 +34,53 @@
     "description": "Enable a resource that has been published in the CloudFormation Registry.",
     "properties": [
       {
+        "name": "AutoUpdate",
+        "description": "Whether to automatically update the extension in this account and region when a new minor version is published by the extension publisher. Major versions released by the publisher must be manually updated.",
+        "optional": true,
+        "type": {
+          "type": "boolean",
+          "description": "Whether to automatically update the extension in this account and region when a new minor version is published by the extension publisher. Major versions released by the publisher must be manually updated."
+        }
+      },
+      {
         "name": "ExecutionRoleArn",
         "description": "The Amazon Resource Name (ARN) of the IAM execution role to use to register the type. If your resource type calls AWS APIs in any of its handlers, you must create an IAM execution role that includes the necessary permissions to call those AWS APIs, and provision that execution role in your account. CloudFormation then assumes that execution role to provide your resource type with the appropriate credentials.",
         "optional": true,
         "type": {
           "type": "string",
           "description": "The Amazon Resource Name (ARN) of the IAM execution role to use to register the type. If your resource type calls AWS APIs in any of its handlers, you must create an IAM execution role that includes the necessary permissions to call those AWS APIs, and provision that execution role in your account. CloudFormation then assumes that execution role to provide your resource type with the appropriate credentials."
+        }
+      },
+      {
+        "name": "LoggingConfig",
+        "description": "Specifies logging configuration information for a type.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "Specifies logging configuration information for a type.",
+          "typeName": "LoggingConfig"
+        }
+      },
+      {
+        "name": "MajorVersion",
+        "description": "The Major Version of the type you want to enable",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Major Version of the type you want to enable",
+          "maxLength": 100000,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "PublicTypeArn",
+        "description": "The Amazon Resource Number (ARN) assigned to the public extension upon publication",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Number (ARN) assigned to the public extension upon publication",
+          "maxLength": 1024,
+          "pattern": "arn:aws[A-Za-z0-9-]{0,64}:cloudformation:[A-Za-z0-9-]{1,64}:([0-9]{12})?:type/.+"
         }
       },
       {
@@ -55,33 +96,23 @@
         }
       },
       {
-        "name": "LoggingConfig",
-        "description": "Specifies logging configuration information for a type.",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "description": "Specifies logging configuration information for a type.",
-          "typeName": "LoggingConfig"
-        }
-      },
-      {
-        "name": "PublicTypeArn",
-        "description": "The Amazon Resource Number (ARN) assigned to the public extension upon publication",
+        "name": "Type",
+        "description": "The kind of extension",
         "optional": true,
         "type": {
           "type": "string",
-          "description": "The Amazon Resource Number (ARN) assigned to the public extension upon publication",
-          "maxLength": 1024,
-          "pattern": "arn:aws[A-Za-z0-9-]{0,64}:cloudformation:[A-Za-z0-9-]{1,64}:([0-9]{12})?:type/.+"
+          "description": "The kind of extension",
+          "allowedValues": ["RESOURCE", "MODULE", "HOOK"]
         }
       },
       {
-        "name": "AutoUpdate",
-        "description": "Whether to automatically update the extension in this account and region when a new minor version is published by the extension publisher. Major versions released by the publisher must be manually updated.",
+        "name": "TypeName",
+        "description": "The name of the type being registered.\n\nWe recommend that type names adhere to the following pattern: company_or_organization::service::type.",
         "optional": true,
         "type": {
-          "type": "boolean",
-          "description": "Whether to automatically update the extension in this account and region when a new minor version is published by the extension publisher. Major versions released by the publisher must be manually updated."
+          "type": "string",
+          "description": "The name of the type being registered.\n\nWe recommend that type names adhere to the following pattern: company_or_organization::service::type.",
+          "pattern": "[A-Za-z0-9]{2,64}::[A-Za-z0-9]{2,64}::[A-Za-z0-9]{2,64}(::MODULE){0,1}"
         }
       },
       {
@@ -105,37 +136,6 @@
           "description": "Manually updates a previously-enabled type to a new major or minor version, if available. You can also use this parameter to update the value of AutoUpdateEnabled",
           "allowedValues": ["MAJOR", "MINOR"]
         }
-      },
-      {
-        "name": "MajorVersion",
-        "description": "The Major Version of the type you want to enable",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The Major Version of the type you want to enable",
-          "maxLength": 100000,
-          "minLength": 1
-        }
-      },
-      {
-        "name": "TypeName",
-        "description": "The name of the type being registered.\n\nWe recommend that type names adhere to the following pattern: company_or_organization::service::type.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The name of the type being registered.\n\nWe recommend that type names adhere to the following pattern: company_or_organization::service::type.",
-          "pattern": "[A-Za-z0-9]{2,64}::[A-Za-z0-9]{2,64}::[A-Za-z0-9]{2,64}(::MODULE){0,1}"
-        }
-      },
-      {
-        "name": "Type",
-        "description": "The kind of extension",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The kind of extension",
-          "allowedValues": ["RESOURCE", "MODULE", "HOOK"]
-        }
       }
     ]
   },
@@ -155,5 +155,5 @@
       }
     ]
   },
-  "$hash": "3a0625999d1aba74b5bfe476ea9702824739ba6b"
+  "$hash": "1bc88cdac1bd9a123c9050962217438b3feab3ec"
 }

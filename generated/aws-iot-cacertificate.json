@@ -4,16 +4,6 @@
       "type": "object",
       "properties": [
         {
-          "name": "TemplateBody",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "maxLength": 10240,
-            "minLength": 0,
-            "pattern": "[\\s\\S]*"
-          }
-        },
-        {
           "name": "RoleArn",
           "optional": true,
           "type": {
@@ -21,6 +11,16 @@
             "maxLength": 2048,
             "minLength": 20,
             "pattern": "arn:(aws[a-zA-Z-]*)?:iam::\\d{12}:role/?[a-zA-Z_0-9+=,.@\\-_/]+"
+          }
+        },
+        {
+          "name": "TemplateBody",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 10240,
+            "minLength": 0,
+            "pattern": "[\\s\\S]*"
           }
         },
         {
@@ -69,6 +69,14 @@
     "description": "Registers a CA Certificate in IoT.",
     "properties": [
       {
+        "name": "AutoRegistrationStatus",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "allowedValues": ["ENABLE", "DISABLE"]
+        }
+      },
+      {
         "name": "CACertificatePem",
         "optional": false,
         "type": {
@@ -76,26 +84,6 @@
           "maxLength": 65536,
           "minLength": 1,
           "pattern": "[\\s\\S]*"
-        }
-      },
-      {
-        "name": "VerificationCertificatePem",
-        "description": "The private key verification certificate.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The private key verification certificate.",
-          "maxLength": 65536,
-          "minLength": 1,
-          "pattern": "[\\s\\S]*"
-        }
-      },
-      {
-        "name": "Status",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "allowedValues": ["ACTIVE", "INACTIVE"]
         }
       },
       {
@@ -107,11 +95,11 @@
         }
       },
       {
-        "name": "AutoRegistrationStatus",
+        "name": "RegistrationConfig",
         "optional": true,
         "type": {
-          "type": "string",
-          "allowedValues": ["ENABLE", "DISABLE"]
+          "type": "ref",
+          "typeName": "RegistrationConfig"
         }
       },
       {
@@ -122,11 +110,11 @@
         }
       },
       {
-        "name": "RegistrationConfig",
-        "optional": true,
+        "name": "Status",
+        "optional": false,
         "type": {
-          "type": "ref",
-          "typeName": "RegistrationConfig"
+          "type": "string",
+          "allowedValues": ["ACTIVE", "INACTIVE"]
         }
       },
       {
@@ -141,6 +129,18 @@
             "typeName": "Tag"
           }
         }
+      },
+      {
+        "name": "VerificationCertificatePem",
+        "description": "The private key verification certificate.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The private key verification certificate.",
+          "maxLength": 65536,
+          "minLength": 1,
+          "pattern": "[\\s\\S]*"
+        }
       }
     ]
   },
@@ -149,14 +149,14 @@
     "description": "Registers a CA Certificate in IoT.",
     "properties": [
       {
-        "name": "Id",
+        "name": "Arn",
         "optional": true,
         "type": {
           "type": "string"
         }
       },
       {
-        "name": "Arn",
+        "name": "Id",
         "optional": true,
         "type": {
           "type": "string"
@@ -164,5 +164,5 @@
       }
     ]
   },
-  "$hash": "cf4706d273014de7c01e419f03ceb4de0a84972e"
+  "$hash": "76355203075295fbd0e34e98e8e4a6d1e89433d7"
 }

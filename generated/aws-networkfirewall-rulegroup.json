@@ -1,289 +1,104 @@
 {
   "definitions": {
-    "ResourceArn": {
-      "type": "string",
-      "description": "A resource ARN.",
-      "maxLength": 256,
-      "minLength": 1,
-      "pattern": "^(arn:aws.*)$"
-    },
-    "Tag": {
+    "ActionDefinition": {
       "type": "object",
       "properties": [
         {
-          "name": "Key",
+          "name": "PublishMetricAction",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PublishMetricAction"
+          }
+        }
+      ]
+    },
+    "Address": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "AddressDefinition",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "pattern": "^([a-fA-F\\d:\\.]+/\\d{1,3})$"
+          }
+        }
+      ]
+    },
+    "CustomAction": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ActionDefinition",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "ActionDefinition"
+          }
+        },
+        {
+          "name": "ActionName",
           "optional": false,
           "type": {
             "type": "string",
             "maxLength": 128,
             "minLength": 1,
-            "pattern": "^.*$"
+            "pattern": "^[a-zA-Z0-9]+$"
           }
-        },
+        }
+      ]
+    },
+    "Dimension": {
+      "type": "object",
+      "properties": [
         {
           "name": "Value",
           "optional": false,
           "type": {
             "type": "string",
-            "maxLength": 255,
-            "minLength": 0,
-            "pattern": "^.*$"
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9-_ ]+$"
           }
         }
       ]
-    },
-    "RulesString": {
-      "type": "string",
-      "maxLength": 1000000,
-      "minLength": 0
-    },
-    "RuleGroup": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "RuleVariables",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "RuleVariables"
-          }
-        },
-        {
-          "name": "ReferenceSets",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ReferenceSets"
-          }
-        },
-        {
-          "name": "RulesSource",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "RulesSource"
-          }
-        },
-        {
-          "name": "StatefulRuleOptions",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "StatefulRuleOptions"
-          }
-        }
-      ]
-    },
-    "RuleVariables": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "IPSets",
-          "optional": true,
-          "type": {
-            "type": "record",
-            "valueType": {
-              "type": "ref",
-              "typeName": "IPSet"
-            }
-          }
-        },
-        {
-          "name": "PortSets",
-          "optional": true,
-          "type": {
-            "type": "record",
-            "valueType": {
-              "type": "ref",
-              "typeName": "PortSet"
-            }
-          }
-        }
-      ]
-    },
-    "IPSet": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Definition",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "VariableDefinition"
-            }
-          }
-        }
-      ]
-    },
-    "PortSet": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Definition",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "VariableDefinition"
-            }
-          }
-        }
-      ]
-    },
-    "VariableDefinition": {
-      "type": "string",
-      "minLength": 1,
-      "pattern": "^.*$"
-    },
-    "ReferenceSets": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "IPSetReferences",
-          "optional": true,
-          "type": {
-            "type": "record",
-            "valueType": {
-              "type": "ref",
-              "typeName": "IPSetReference"
-            }
-          }
-        }
-      ]
-    },
-    "IPSetReference": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "ReferenceArn",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ResourceArn"
-          }
-        }
-      ]
-    },
-    "RulesSource": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "RulesString",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "RulesString"
-          }
-        },
-        {
-          "name": "RulesSourceList",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "RulesSourceList"
-          }
-        },
-        {
-          "name": "StatefulRules",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "StatefulRule"
-            }
-          }
-        },
-        {
-          "name": "StatelessRulesAndCustomActions",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "StatelessRulesAndCustomActions"
-          }
-        }
-      ]
-    },
-    "RulesSourceList": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Targets",
-          "optional": false,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "string"
-            }
-          }
-        },
-        {
-          "name": "TargetTypes",
-          "optional": false,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "TargetType"
-            }
-          }
-        },
-        {
-          "name": "GeneratedRulesType",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "GeneratedRulesType"
-          }
-        }
-      ]
-    },
-    "TargetType": {
-      "type": "string",
-      "allowedValues": ["TLS_SNI", "HTTP_HOST"]
     },
     "GeneratedRulesType": {
       "type": "string",
       "allowedValues": ["ALLOWLIST", "DENYLIST"]
     },
-    "StatefulRule": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Action",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "allowedValues": ["PASS", "DROP", "ALERT", "REJECT"]
-          }
-        },
-        {
-          "name": "Header",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "Header"
-          }
-        },
-        {
-          "name": "RuleOptions",
-          "optional": false,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "RuleOption"
-            }
-          }
-        }
-      ]
-    },
     "Header": {
       "type": "object",
       "properties": [
+        {
+          "name": "Destination",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 1024,
+            "minLength": 1,
+            "pattern": "^.*$"
+          }
+        },
+        {
+          "name": "DestinationPort",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "Port"
+          }
+        },
+        {
+          "name": "Direction",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "allowedValues": ["FORWARD", "ANY"]
+          }
+        },
         {
           "name": "Protocol",
           "optional": false,
@@ -329,31 +144,259 @@
             "type": "ref",
             "typeName": "Port"
           }
-        },
+        }
+      ]
+    },
+    "IPSet": {
+      "type": "object",
+      "properties": [
         {
-          "name": "Direction",
-          "optional": false,
+          "name": "Definition",
+          "optional": true,
           "type": {
-            "type": "string",
-            "allowedValues": ["FORWARD", "ANY"]
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "VariableDefinition"
+            }
+          }
+        }
+      ]
+    },
+    "IPSetReference": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ReferenceArn",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ResourceArn"
+          }
+        }
+      ]
+    },
+    "MatchAttributes": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "DestinationPorts",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "PortRange"
+            }
           }
         },
         {
-          "name": "Destination",
-          "optional": false,
+          "name": "Destinations",
+          "optional": true,
           "type": {
-            "type": "string",
-            "maxLength": 1024,
-            "minLength": 1,
-            "pattern": "^.*$"
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Address"
+            }
           }
         },
         {
-          "name": "DestinationPort",
+          "name": "Protocols",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "ProtocolNumber"
+            }
+          }
+        },
+        {
+          "name": "SourcePorts",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "PortRange"
+            }
+          }
+        },
+        {
+          "name": "Sources",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Address"
+            }
+          }
+        },
+        {
+          "name": "TCPFlags",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "TCPFlagField"
+            }
+          }
+        }
+      ]
+    },
+    "Port": {
+      "type": "string",
+      "maxLength": 1024,
+      "minLength": 1,
+      "pattern": "^.*$"
+    },
+    "PortRange": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "FromPort",
           "optional": false,
           "type": {
             "type": "ref",
-            "typeName": "Port"
+            "typeName": "PortRangeBound"
+          }
+        },
+        {
+          "name": "ToPort",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "PortRangeBound"
+          }
+        }
+      ]
+    },
+    "PortRangeBound": {
+      "type": "number",
+      "isInteger": true,
+      "maximum": 65535,
+      "minimum": 0
+    },
+    "PortSet": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Definition",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "VariableDefinition"
+            }
+          }
+        }
+      ]
+    },
+    "ProtocolNumber": {
+      "type": "number",
+      "isInteger": true,
+      "maximum": 255,
+      "minimum": 0
+    },
+    "PublishMetricAction": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Dimensions",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Dimension"
+            }
+          }
+        }
+      ]
+    },
+    "ReferenceSets": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "IPSetReferences",
+          "optional": true,
+          "type": {
+            "type": "record",
+            "valueType": {
+              "type": "ref",
+              "typeName": "IPSetReference"
+            }
+          }
+        }
+      ]
+    },
+    "ResourceArn": {
+      "type": "string",
+      "description": "A resource ARN.",
+      "maxLength": 256,
+      "minLength": 1,
+      "pattern": "^(arn:aws.*)$"
+    },
+    "RuleDefinition": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Actions",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "name": "MatchAttributes",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "MatchAttributes"
+          }
+        }
+      ]
+    },
+    "RuleGroup": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ReferenceSets",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ReferenceSets"
+          }
+        },
+        {
+          "name": "RuleVariables",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "RuleVariables"
+          }
+        },
+        {
+          "name": "RulesSource",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "RulesSource"
+          }
+        },
+        {
+          "name": "StatefulRuleOptions",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "StatefulRuleOptions"
           }
         }
       ]
@@ -384,81 +427,101 @@
         }
       ]
     },
-    "Setting": {
+    "RuleOrder": {
       "type": "string",
-      "maxLength": 8192,
-      "minLength": 1,
-      "pattern": "^.*$"
+      "allowedValues": ["DEFAULT_ACTION_ORDER", "STRICT_ORDER"]
     },
-    "Port": {
-      "type": "string",
-      "maxLength": 1024,
-      "minLength": 1,
-      "pattern": "^.*$"
-    },
-    "StatelessRulesAndCustomActions": {
+    "RuleVariables": {
       "type": "object",
       "properties": [
         {
-          "name": "StatelessRules",
-          "optional": false,
+          "name": "IPSets",
+          "optional": true,
           "type": {
-            "type": "array",
-            "itemType": {
+            "type": "record",
+            "valueType": {
               "type": "ref",
-              "typeName": "StatelessRule"
+              "typeName": "IPSet"
             }
           }
         },
         {
-          "name": "CustomActions",
+          "name": "PortSets",
+          "optional": true,
+          "type": {
+            "type": "record",
+            "valueType": {
+              "type": "ref",
+              "typeName": "PortSet"
+            }
+          }
+        }
+      ]
+    },
+    "RulesSource": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "RulesSourceList",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "RulesSourceList"
+          }
+        },
+        {
+          "name": "RulesString",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "RulesString"
+          }
+        },
+        {
+          "name": "StatefulRules",
           "optional": true,
           "type": {
             "type": "array",
             "itemType": {
               "type": "ref",
-              "typeName": "CustomAction"
+              "typeName": "StatefulRule"
             }
           }
-        }
-      ]
-    },
-    "StatelessRule": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "RuleDefinition",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "RuleDefinition"
-          }
         },
         {
-          "name": "Priority",
-          "optional": false,
+          "name": "StatelessRulesAndCustomActions",
+          "optional": true,
           "type": {
-            "type": "number",
-            "isInteger": true,
-            "maximum": 65535,
-            "minimum": 1
+            "type": "ref",
+            "typeName": "StatelessRulesAndCustomActions"
           }
         }
       ]
     },
-    "RuleDefinition": {
+    "RulesSourceList": {
       "type": "object",
       "properties": [
         {
-          "name": "MatchAttributes",
+          "name": "GeneratedRulesType",
           "optional": false,
           "type": {
             "type": "ref",
-            "typeName": "MatchAttributes"
+            "typeName": "GeneratedRulesType"
           }
         },
         {
-          "name": "Actions",
+          "name": "TargetTypes",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "TargetType"
+            }
+          }
+        },
+        {
+          "name": "Targets",
           "optional": false,
           "type": {
             "type": "array",
@@ -469,124 +532,115 @@
         }
       ]
     },
-    "MatchAttributes": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Sources",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "Address"
-            }
-          }
-        },
-        {
-          "name": "Destinations",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "Address"
-            }
-          }
-        },
-        {
-          "name": "SourcePorts",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "PortRange"
-            }
-          }
-        },
-        {
-          "name": "DestinationPorts",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "PortRange"
-            }
-          }
-        },
-        {
-          "name": "Protocols",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "ProtocolNumber"
-            }
-          }
-        },
-        {
-          "name": "TCPFlags",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "TCPFlagField"
-            }
-          }
-        }
-      ]
+    "RulesString": {
+      "type": "string",
+      "maxLength": 1000000,
+      "minLength": 0
     },
-    "Address": {
+    "Setting": {
+      "type": "string",
+      "maxLength": 8192,
+      "minLength": 1,
+      "pattern": "^.*$"
+    },
+    "StatefulRule": {
       "type": "object",
       "properties": [
         {
-          "name": "AddressDefinition",
+          "name": "Action",
           "optional": false,
           "type": {
             "type": "string",
-            "maxLength": 255,
-            "minLength": 1,
-            "pattern": "^([a-fA-F\\d:\\.]+/\\d{1,3})$"
-          }
-        }
-      ]
-    },
-    "PortRange": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "FromPort",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "PortRangeBound"
+            "allowedValues": ["PASS", "DROP", "ALERT", "REJECT"]
           }
         },
         {
-          "name": "ToPort",
+          "name": "Header",
           "optional": false,
           "type": {
             "type": "ref",
-            "typeName": "PortRangeBound"
+            "typeName": "Header"
+          }
+        },
+        {
+          "name": "RuleOptions",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "RuleOption"
+            }
           }
         }
       ]
     },
-    "PortRangeBound": {
-      "type": "number",
-      "isInteger": true,
-      "maximum": 65535,
-      "minimum": 0
+    "StatefulRuleOptions": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "RuleOrder",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "RuleOrder"
+          }
+        }
+      ]
     },
-    "ProtocolNumber": {
-      "type": "number",
-      "isInteger": true,
-      "maximum": 255,
-      "minimum": 0
+    "StatelessRule": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Priority",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 65535,
+            "minimum": 1
+          }
+        },
+        {
+          "name": "RuleDefinition",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "RuleDefinition"
+          }
+        }
+      ]
+    },
+    "StatelessRulesAndCustomActions": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "CustomActions",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "CustomAction"
+            }
+          }
+        },
+        {
+          "name": "StatelessRules",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "StatelessRule"
+            }
+          }
+        }
+      ]
+    },
+    "TCPFlag": {
+      "type": "string",
+      "allowedValues": ["FIN", "SYN", "RST", "PSH", "ACK", "URG", "ECE", "CWR"]
     },
     "TCPFlagField": {
       "type": "object",
@@ -615,125 +669,45 @@
         }
       ]
     },
-    "TCPFlag": {
-      "type": "string",
-      "allowedValues": ["FIN", "SYN", "RST", "PSH", "ACK", "URG", "ECE", "CWR"]
-    },
-    "CustomAction": {
+    "Tag": {
       "type": "object",
       "properties": [
         {
-          "name": "ActionName",
+          "name": "Key",
           "optional": false,
           "type": {
             "type": "string",
             "maxLength": 128,
             "minLength": 1,
-            "pattern": "^[a-zA-Z0-9]+$"
+            "pattern": "^.*$"
           }
         },
-        {
-          "name": "ActionDefinition",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "ActionDefinition"
-          }
-        }
-      ]
-    },
-    "ActionDefinition": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "PublishMetricAction",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "PublishMetricAction"
-          }
-        }
-      ]
-    },
-    "PublishMetricAction": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Dimensions",
-          "optional": false,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "Dimension"
-            }
-          }
-        }
-      ]
-    },
-    "Dimension": {
-      "type": "object",
-      "properties": [
         {
           "name": "Value",
           "optional": false,
           "type": {
             "type": "string",
-            "maxLength": 128,
-            "minLength": 1,
-            "pattern": "^[a-zA-Z0-9-_ ]+$"
+            "maxLength": 255,
+            "minLength": 0,
+            "pattern": "^.*$"
           }
         }
       ]
     },
-    "StatefulRuleOptions": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "RuleOrder",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "RuleOrder"
-          }
-        }
-      ]
-    },
-    "RuleOrder": {
+    "TargetType": {
       "type": "string",
-      "allowedValues": ["DEFAULT_ACTION_ORDER", "STRICT_ORDER"]
+      "allowedValues": ["TLS_SNI", "HTTP_HOST"]
+    },
+    "VariableDefinition": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^.*$"
     }
   },
   "resource": {
     "type": "object",
     "description": "Resource type definition for AWS::NetworkFirewall::RuleGroup",
     "properties": [
-      {
-        "name": "RuleGroupName",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "maxLength": 128,
-          "minLength": 1,
-          "pattern": "^[a-zA-Z0-9-]+$"
-        }
-      },
-      {
-        "name": "RuleGroup",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "RuleGroup"
-        }
-      },
-      {
-        "name": "Type",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "allowedValues": ["STATELESS", "STATEFUL"]
-        }
-      },
       {
         "name": "Capacity",
         "optional": false,
@@ -753,6 +727,24 @@
         }
       },
       {
+        "name": "RuleGroup",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "RuleGroup"
+        }
+      },
+      {
+        "name": "RuleGroupName",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[a-zA-Z0-9-]+$"
+        }
+      },
+      {
         "name": "Tags",
         "optional": true,
         "type": {
@@ -761,6 +753,14 @@
             "type": "ref",
             "typeName": "Tag"
           }
+        }
+      },
+      {
+        "name": "Type",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "allowedValues": ["STATELESS", "STATEFUL"]
         }
       }
     ]
@@ -789,5 +789,5 @@
       }
     ]
   },
-  "$hash": "9c308519f41d6186450ac593c5f237403467232d"
+  "$hash": "897bc3f4ff6b5f25407485ff3a73fd654ea56048"
 }

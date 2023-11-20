@@ -1,42 +1,5 @@
 {
   "definitions": {
-    "Destination": {
-      "type": "object",
-      "description": "The resource that receives events arriving from a channel.",
-      "properties": [
-        {
-          "name": "Type",
-          "description": "The type of destination for events arriving from a channel.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The type of destination for events arriving from a channel.",
-            "allowedValues": ["EVENT_DATA_STORE"]
-          }
-        },
-        {
-          "name": "Location",
-          "description": "The ARN of a resource that receives events from a channel.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The ARN of a resource that receives events from a channel.",
-            "maxLength": 1024,
-            "minLength": 3,
-            "pattern": "(^[a-zA-Z0-9._/\\-:]+$)"
-          }
-        }
-      ]
-    },
-    "UUID": {
-      "type": "string",
-      "maxLength": 36,
-      "minLength": 36,
-      "pattern": "(^[a-f0-9\\-]+$)"
-    },
-    "Timestamp": {
-      "type": "string"
-    },
     "ChannelArn": {
       "type": "string",
       "description": "The Amazon Resource Name (ARN) of a channel.",
@@ -50,6 +13,34 @@
       "maxLength": 128,
       "minLength": 3,
       "pattern": "(^[a-zA-Z0-9._\\-]+$)"
+    },
+    "Destination": {
+      "type": "object",
+      "description": "The resource that receives events arriving from a channel.",
+      "properties": [
+        {
+          "name": "Location",
+          "description": "The ARN of a resource that receives events from a channel.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The ARN of a resource that receives events from a channel.",
+            "maxLength": 1024,
+            "minLength": 3,
+            "pattern": "(^[a-zA-Z0-9._/\\-:]+$)"
+          }
+        },
+        {
+          "name": "Type",
+          "description": "The type of destination for events arriving from a channel.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The type of destination for events arriving from a channel.",
+            "allowedValues": ["EVENT_DATA_STORE"]
+          }
+        }
+      ]
     },
     "Tag": {
       "type": "object",
@@ -78,12 +69,35 @@
           }
         }
       ]
+    },
+    "Timestamp": {
+      "type": "string"
+    },
+    "UUID": {
+      "type": "string",
+      "maxLength": 36,
+      "minLength": 36,
+      "pattern": "(^[a-f0-9\\-]+$)"
     }
   },
   "resource": {
     "type": "object",
     "description": "A channel receives events from a specific source (such as an on-premises storage solution or application, or a partner event data source), and delivers the events to one or more event data stores. You use channels to ingest events into CloudTrail from sources outside AWS.",
     "properties": [
+      {
+        "name": "Destinations",
+        "description": "One or more resources to which events arriving through a channel are logged and stored.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "One or more resources to which events arriving through a channel are logged and stored.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Destination"
+          },
+          "maxLength": 10
+        }
+      },
       {
         "name": "Name",
         "optional": true,
@@ -102,20 +116,6 @@
           "maxLength": 256,
           "minLength": 1,
           "pattern": "(.*)"
-        }
-      },
-      {
-        "name": "Destinations",
-        "description": "One or more resources to which events arriving through a channel are logged and stored.",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "description": "One or more resources to which events arriving through a channel are logged and stored.",
-          "itemType": {
-            "type": "ref",
-            "typeName": "Destination"
-          },
-          "maxLength": 10
         }
       },
       {
@@ -147,5 +147,5 @@
       }
     ]
   },
-  "$hash": "7e61eb4aa5424dd65a099ac2d32c17760ebd44a2"
+  "$hash": "5633495c2a8948c91c2b79be259e88148d702855"
 }

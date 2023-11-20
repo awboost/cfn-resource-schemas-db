@@ -1,43 +1,51 @@
 {
   "definitions": {
-    "EntityName": {
-      "type": "string",
-      "maxLength": 255,
-      "minLength": 0,
-      "pattern": "^[a-zA-Z_0-9-]*$"
-    },
-    "Description": {
-      "type": "string",
-      "maxLength": 255,
-      "minLength": 0
-    },
     "AttributeName": {
       "type": "string",
       "maxLength": 255,
       "minLength": 0,
       "pattern": "^[a-zA-Z_0-9- \\t]*$"
     },
-    "SchemaMappingArn": {
+    "CreatedAt": {
       "type": "string",
-      "description": "The SchemaMapping arn associated with the Schema",
-      "pattern": "^arn:(aws|aws-us-gov|aws-cn):entityresolution:.*:[0-9]+:(schemamapping/.*)$"
+      "description": "The time of this IdMappingWorkflow got created"
     },
-    "KMSArn": {
+    "Description": {
       "type": "string",
-      "pattern": "^arn:(aws|aws-us-gov|aws-cn):kms:.*:[0-9]+:.*$"
+      "maxLength": 255,
+      "minLength": 0
+    },
+    "EntityName": {
+      "type": "string",
+      "maxLength": 255,
+      "minLength": 0,
+      "pattern": "^[a-zA-Z_0-9-]*$"
+    },
+    "IdMappingTechniques": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "IdMappingType",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": ["PROVIDER"]
+          }
+        },
+        {
+          "name": "ProviderProperties",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ProviderProperties"
+          }
+        }
+      ]
     },
     "IdMappingWorkflowArn": {
       "type": "string",
       "description": "The default IdMappingWorkflow arn",
       "pattern": "^arn:(aws|aws-us-gov|aws-cn):entityresolution:.*:[0-9]+:(idmappingworkflow/.*)$"
-    },
-    "CreatedAt": {
-      "type": "string",
-      "description": "The time of this IdMappingWorkflow got created"
-    },
-    "UpdatedAt": {
-      "type": "string",
-      "description": "The time of this IdMappingWorkflow got last updated at"
     },
     "IdMappingWorkflowInputSource": {
       "type": "object",
@@ -66,6 +74,14 @@
       "type": "object",
       "properties": [
         {
+          "name": "KMSArn",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "KMSArn"
+          }
+        },
+        {
           "name": "OutputS3Path",
           "description": "The S3 path to which Entity Resolution will write the output table",
           "optional": false,
@@ -73,70 +89,6 @@
             "type": "string",
             "description": "The S3 path to which Entity Resolution will write the output table",
             "pattern": "^s3://([^/]+)/?(.*?([^/]+)/?)$"
-          }
-        },
-        {
-          "name": "KMSArn",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "KMSArn"
-          }
-        }
-      ]
-    },
-    "IdMappingTechniques": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "IdMappingType",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "allowedValues": ["PROVIDER"]
-          }
-        },
-        {
-          "name": "ProviderProperties",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ProviderProperties"
-          }
-        }
-      ]
-    },
-    "ProviderProperties": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "ProviderServiceArn",
-          "description": "Arn of the Provider Service being used.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "Arn of the Provider Service being used.",
-            "pattern": "^arn:(aws|aws-us-gov|aws-cn):entityresolution:([A-Za-z0-9]+(-[A-Za-z0-9]+)+)::providerservice/[A-Za-z0-9]+/[A-Za-z0-9]+$"
-          }
-        },
-        {
-          "name": "ProviderConfiguration",
-          "description": "Additional Provider configuration that would be required for the provider service. The Configuration must be in JSON string format",
-          "optional": true,
-          "type": {
-            "type": "record",
-            "description": "Additional Provider configuration that would be required for the provider service. The Configuration must be in JSON string format",
-            "valueType": {
-              "type": "string"
-            }
-          }
-        },
-        {
-          "name": "IntermediateSourceConfiguration",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "IntermediateSourceConfiguration"
           }
         }
       ]
@@ -154,6 +106,50 @@
           }
         }
       ]
+    },
+    "KMSArn": {
+      "type": "string",
+      "pattern": "^arn:(aws|aws-us-gov|aws-cn):kms:.*:[0-9]+:.*$"
+    },
+    "ProviderProperties": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "IntermediateSourceConfiguration",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "IntermediateSourceConfiguration"
+          }
+        },
+        {
+          "name": "ProviderConfiguration",
+          "description": "Additional Provider configuration that would be required for the provider service. The Configuration must be in JSON string format",
+          "optional": true,
+          "type": {
+            "type": "record",
+            "description": "Additional Provider configuration that would be required for the provider service. The Configuration must be in JSON string format",
+            "valueType": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "name": "ProviderServiceArn",
+          "description": "Arn of the Provider Service being used.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Arn of the Provider Service being used.",
+            "pattern": "^arn:(aws|aws-us-gov|aws-cn):entityresolution:([A-Za-z0-9]+(-[A-Za-z0-9]+)+)::providerservice/[A-Za-z0-9]+/[A-Za-z0-9]+$"
+          }
+        }
+      ]
+    },
+    "SchemaMappingArn": {
+      "type": "string",
+      "description": "The SchemaMapping arn associated with the Schema",
+      "pattern": "^arn:(aws|aws-us-gov|aws-cn):entityresolution:.*:[0-9]+:(schemamapping/.*)$"
     },
     "Tag": {
       "type": "object",
@@ -182,22 +178,16 @@
           }
         }
       ]
+    },
+    "UpdatedAt": {
+      "type": "string",
+      "description": "The time of this IdMappingWorkflow got last updated at"
     }
   },
   "resource": {
     "type": "object",
     "description": "IdMappingWorkflow defined in AWS Entity Resolution service",
     "properties": [
-      {
-        "name": "WorkflowName",
-        "description": "The name of the IdMappingWorkflow",
-        "optional": false,
-        "type": {
-          "type": "ref",
-          "description": "The name of the IdMappingWorkflow",
-          "typeName": "EntityName"
-        }
-      },
       {
         "name": "Description",
         "description": "The description of the IdMappingWorkflow",
@@ -206,6 +196,14 @@
           "type": "ref",
           "description": "The description of the IdMappingWorkflow",
           "typeName": "Description"
+        }
+      },
+      {
+        "name": "IdMappingTechniques",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "IdMappingTechniques"
         }
       },
       {
@@ -235,14 +233,6 @@
         }
       },
       {
-        "name": "IdMappingTechniques",
-        "optional": false,
-        "type": {
-          "type": "ref",
-          "typeName": "IdMappingTechniques"
-        }
-      },
-      {
         "name": "RoleArn",
         "optional": false,
         "type": {
@@ -262,6 +252,16 @@
           "maxLength": 200,
           "minLength": 0
         }
+      },
+      {
+        "name": "WorkflowName",
+        "description": "The name of the IdMappingWorkflow",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "description": "The name of the IdMappingWorkflow",
+          "typeName": "EntityName"
+        }
       }
     ]
   },
@@ -269,14 +269,6 @@
     "type": "object",
     "description": "IdMappingWorkflow defined in AWS Entity Resolution service",
     "properties": [
-      {
-        "name": "WorkflowArn",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "IdMappingWorkflowArn"
-        }
-      },
       {
         "name": "CreatedAt",
         "optional": true,
@@ -292,8 +284,16 @@
           "type": "ref",
           "typeName": "UpdatedAt"
         }
+      },
+      {
+        "name": "WorkflowArn",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "IdMappingWorkflowArn"
+        }
       }
     ]
   },
-  "$hash": "3cbeb210ca64aed07b2c2f4870a6c47ba75123f1"
+  "$hash": "19a901104b212bf2767b35f4c864ae8c8f1d0671"
 }

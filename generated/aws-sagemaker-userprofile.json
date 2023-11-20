@@ -1,73 +1,40 @@
 {
   "definitions": {
-    "UserSettings": {
+    "CustomImage": {
       "type": "object",
-      "description": "A collection of settings that apply to users of Amazon SageMaker Studio. These settings are specified when the CreateUserProfile API is called, and as DefaultUserSettings when the CreateDomain API is called.",
+      "description": "A custom SageMaker image.",
       "properties": [
         {
-          "name": "ExecutionRole",
-          "description": "The user profile Amazon Resource Name (ARN).",
-          "optional": true,
+          "name": "AppImageConfigName",
+          "description": "The Name of the AppImageConfig.",
+          "optional": false,
           "type": {
             "type": "string",
-            "description": "The user profile Amazon Resource Name (ARN).",
-            "maxLength": 2048,
-            "minLength": 20,
-            "pattern": "^arn:aws[a-z\\-]*:iam::\\d{12}:role/?[a-zA-Z_0-9+=,.@\\-_/]+$"
+            "description": "The Name of the AppImageConfig.",
+            "maxLength": 63,
+            "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9]){0,62}"
           }
         },
         {
-          "name": "JupyterServerAppSettings",
-          "description": "The Jupyter server's app settings.",
-          "optional": true,
+          "name": "ImageName",
+          "description": "The name of the CustomImage. Must be unique to your account.",
+          "optional": false,
           "type": {
-            "type": "ref",
-            "description": "The Jupyter server's app settings.",
-            "typeName": "JupyterServerAppSettings"
+            "type": "string",
+            "description": "The name of the CustomImage. Must be unique to your account.",
+            "maxLength": 63,
+            "pattern": "^[a-zA-Z0-9]([-.]?[a-zA-Z0-9]){0,62}$"
           }
         },
         {
-          "name": "KernelGatewayAppSettings",
-          "description": "The kernel gateway app settings.",
+          "name": "ImageVersionNumber",
+          "description": "The version number of the CustomImage.",
           "optional": true,
           "type": {
-            "type": "ref",
-            "description": "The kernel gateway app settings.",
-            "typeName": "KernelGatewayAppSettings"
-          }
-        },
-        {
-          "name": "RStudioServerProAppSettings",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "RStudioServerProAppSettings"
-          }
-        },
-        {
-          "name": "SecurityGroups",
-          "description": "The security groups for the Amazon Virtual Private Cloud (VPC) that Studio uses for communication.",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "description": "The security groups for the Amazon Virtual Private Cloud (VPC) that Studio uses for communication.",
-            "itemType": {
-              "type": "string",
-              "maxLength": 32,
-              "pattern": "[-0-9a-zA-Z]+"
-            },
-            "maxLength": 5,
-            "minLength": 0
-          }
-        },
-        {
-          "name": "SharingSettings",
-          "description": "The sharing settings.",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "The sharing settings.",
-            "typeName": "SharingSettings"
+            "type": "number",
+            "description": "The version number of the CustomImage.",
+            "isInteger": true,
+            "minimum": 0
           }
         }
       ]
@@ -82,6 +49,63 @@
           "type": {
             "type": "ref",
             "typeName": "ResourceSpec"
+          }
+        }
+      ]
+    },
+    "KernelGatewayAppSettings": {
+      "type": "object",
+      "description": "The kernel gateway app settings.",
+      "properties": [
+        {
+          "name": "CustomImages",
+          "description": "A list of custom SageMaker images that are configured to run as a KernelGateway app.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "A list of custom SageMaker images that are configured to run as a KernelGateway app.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "CustomImage"
+            },
+            "maxLength": 30,
+            "minLength": 0
+          }
+        },
+        {
+          "name": "DefaultResourceSpec",
+          "description": "The default instance type and the Amazon Resource Name (ARN) of the default SageMaker image used by the KernelGateway app.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The default instance type and the Amazon Resource Name (ARN) of the default SageMaker image used by the KernelGateway app.",
+            "typeName": "ResourceSpec"
+          }
+        }
+      ]
+    },
+    "RStudioServerProAppSettings": {
+      "type": "object",
+      "description": "A collection of settings that configure user interaction with the RStudioServerPro app.",
+      "properties": [
+        {
+          "name": "AccessStatus",
+          "description": "Indicates whether the current user has access to the RStudioServerPro app.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Indicates whether the current user has access to the RStudioServerPro app.",
+            "allowedValues": ["ENABLED", "DISABLED"]
+          }
+        },
+        {
+          "name": "UserGroup",
+          "description": "The level of permissions that the user has within the RStudioServerPro app. This value defaults to User. The Admin value allows the user access to the RStudio Administrative Dashboard.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The level of permissions that the user has within the RStudioServerPro app. This value defaults to User. The Admin value allows the user access to the RStudio Administrative Dashboard.",
+            "allowedValues": ["R_STUDIO_ADMIN", "R_STUDIO_USER"]
           }
         }
       ]
@@ -184,76 +208,6 @@
         }
       ]
     },
-    "KernelGatewayAppSettings": {
-      "type": "object",
-      "description": "The kernel gateway app settings.",
-      "properties": [
-        {
-          "name": "CustomImages",
-          "description": "A list of custom SageMaker images that are configured to run as a KernelGateway app.",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "description": "A list of custom SageMaker images that are configured to run as a KernelGateway app.",
-            "itemType": {
-              "type": "ref",
-              "typeName": "CustomImage"
-            },
-            "maxLength": 30,
-            "minLength": 0
-          }
-        },
-        {
-          "name": "DefaultResourceSpec",
-          "description": "The default instance type and the Amazon Resource Name (ARN) of the default SageMaker image used by the KernelGateway app.",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "The default instance type and the Amazon Resource Name (ARN) of the default SageMaker image used by the KernelGateway app.",
-            "typeName": "ResourceSpec"
-          }
-        }
-      ]
-    },
-    "CustomImage": {
-      "type": "object",
-      "description": "A custom SageMaker image.",
-      "properties": [
-        {
-          "name": "AppImageConfigName",
-          "description": "The Name of the AppImageConfig.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The Name of the AppImageConfig.",
-            "maxLength": 63,
-            "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9]){0,62}"
-          }
-        },
-        {
-          "name": "ImageName",
-          "description": "The name of the CustomImage. Must be unique to your account.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The name of the CustomImage. Must be unique to your account.",
-            "maxLength": 63,
-            "pattern": "^[a-zA-Z0-9]([-.]?[a-zA-Z0-9]){0,62}$"
-          }
-        },
-        {
-          "name": "ImageVersionNumber",
-          "description": "The version number of the CustomImage.",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "description": "The version number of the CustomImage.",
-            "isInteger": true,
-            "minimum": 0
-          }
-        }
-      ]
-    },
     "SharingSettings": {
       "type": "object",
       "description": "Specifies options when sharing an Amazon SageMaker Studio notebook. These settings are specified as part of DefaultUserSettings when the CreateDomain API is called, and as part of UserSettings when the CreateUserProfile API is called.",
@@ -296,7 +250,7 @@
       "type": "object",
       "properties": [
         {
-          "name": "Value",
+          "name": "Key",
           "optional": false,
           "type": {
             "type": "string",
@@ -305,7 +259,7 @@
           }
         },
         {
-          "name": "Key",
+          "name": "Value",
           "optional": false,
           "type": {
             "type": "string",
@@ -315,28 +269,74 @@
         }
       ]
     },
-    "RStudioServerProAppSettings": {
+    "UserSettings": {
       "type": "object",
-      "description": "A collection of settings that configure user interaction with the RStudioServerPro app.",
+      "description": "A collection of settings that apply to users of Amazon SageMaker Studio. These settings are specified when the CreateUserProfile API is called, and as DefaultUserSettings when the CreateDomain API is called.",
       "properties": [
         {
-          "name": "AccessStatus",
-          "description": "Indicates whether the current user has access to the RStudioServerPro app.",
+          "name": "ExecutionRole",
+          "description": "The user profile Amazon Resource Name (ARN).",
           "optional": true,
           "type": {
             "type": "string",
-            "description": "Indicates whether the current user has access to the RStudioServerPro app.",
-            "allowedValues": ["ENABLED", "DISABLED"]
+            "description": "The user profile Amazon Resource Name (ARN).",
+            "maxLength": 2048,
+            "minLength": 20,
+            "pattern": "^arn:aws[a-z\\-]*:iam::\\d{12}:role/?[a-zA-Z_0-9+=,.@\\-_/]+$"
           }
         },
         {
-          "name": "UserGroup",
-          "description": "The level of permissions that the user has within the RStudioServerPro app. This value defaults to User. The Admin value allows the user access to the RStudio Administrative Dashboard.",
+          "name": "JupyterServerAppSettings",
+          "description": "The Jupyter server's app settings.",
           "optional": true,
           "type": {
-            "type": "string",
-            "description": "The level of permissions that the user has within the RStudioServerPro app. This value defaults to User. The Admin value allows the user access to the RStudio Administrative Dashboard.",
-            "allowedValues": ["R_STUDIO_ADMIN", "R_STUDIO_USER"]
+            "type": "ref",
+            "description": "The Jupyter server's app settings.",
+            "typeName": "JupyterServerAppSettings"
+          }
+        },
+        {
+          "name": "KernelGatewayAppSettings",
+          "description": "The kernel gateway app settings.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The kernel gateway app settings.",
+            "typeName": "KernelGatewayAppSettings"
+          }
+        },
+        {
+          "name": "RStudioServerProAppSettings",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "RStudioServerProAppSettings"
+          }
+        },
+        {
+          "name": "SecurityGroups",
+          "description": "The security groups for the Amazon Virtual Private Cloud (VPC) that Studio uses for communication.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "The security groups for the Amazon Virtual Private Cloud (VPC) that Studio uses for communication.",
+            "itemType": {
+              "type": "string",
+              "maxLength": 32,
+              "pattern": "[-0-9a-zA-Z]+"
+            },
+            "maxLength": 5,
+            "minLength": 0
+          }
+        },
+        {
+          "name": "SharingSettings",
+          "description": "The sharing settings.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The sharing settings.",
+            "typeName": "SharingSettings"
           }
         }
       ]
@@ -379,6 +379,21 @@
         }
       },
       {
+        "name": "Tags",
+        "description": "A list of tags to apply to the user profile.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "A list of tags to apply to the user profile.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          },
+          "maxLength": 50,
+          "minLength": 0
+        }
+      },
+      {
         "name": "UserProfileName",
         "description": "A name for the UserProfile.",
         "optional": false,
@@ -397,21 +412,6 @@
           "type": "ref",
           "description": "A collection of settings.",
           "typeName": "UserSettings"
-        }
-      },
-      {
-        "name": "Tags",
-        "description": "A list of tags to apply to the user profile.",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "description": "A list of tags to apply to the user profile.",
-          "itemType": {
-            "type": "ref",
-            "typeName": "Tag"
-          },
-          "maxLength": 50,
-          "minLength": 0
         }
       }
     ]
@@ -433,5 +433,5 @@
       }
     ]
   },
-  "$hash": "5e3439df1f2f09da385c02a135814c20cce51e1e"
+  "$hash": "00b6adc7107c5c262b32758b70d6ae90cffe4716"
 }

@@ -1,5 +1,20 @@
 {
   "definitions": {
+    "ColumnWildcard": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ExcludedColumnNames",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
     "DataLakePrincipal": {
       "type": "object",
       "properties": [
@@ -12,16 +27,9 @@
         }
       ]
     },
-    "TableResource": {
+    "DataLocationResource": {
       "type": "object",
       "properties": [
-        {
-          "name": "DatabaseName",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
         {
           "name": "CatalogId",
           "optional": true,
@@ -30,55 +38,10 @@
           }
         },
         {
-          "name": "TableWildcard",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "TableWildcard"
-          }
-        },
-        {
-          "name": "Name",
+          "name": "S3Resource",
           "optional": true,
           "type": {
             "type": "string"
-          }
-        }
-      ]
-    },
-    "Resource": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "DatabaseResource",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "DatabaseResource"
-          }
-        },
-        {
-          "name": "DataLocationResource",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "DataLocationResource"
-          }
-        },
-        {
-          "name": "TableWithColumnsResource",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "TableWithColumnsResource"
-          }
-        },
-        {
-          "name": "TableResource",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "TableResource"
           }
         }
       ]
@@ -102,21 +65,73 @@
         }
       ]
     },
-    "DataLocationResource": {
+    "Resource": {
       "type": "object",
       "properties": [
         {
-          "name": "S3Resource",
+          "name": "DataLocationResource",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DataLocationResource"
+          }
+        },
+        {
+          "name": "DatabaseResource",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DatabaseResource"
+          }
+        },
+        {
+          "name": "TableResource",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "TableResource"
+          }
+        },
+        {
+          "name": "TableWithColumnsResource",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "TableWithColumnsResource"
+          }
+        }
+      ]
+    },
+    "TableResource": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "CatalogId",
           "optional": true,
           "type": {
             "type": "string"
           }
         },
         {
-          "name": "CatalogId",
+          "name": "DatabaseName",
           "optional": true,
           "type": {
             "type": "string"
+          }
+        },
+        {
+          "name": "Name",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "TableWildcard",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "TableWildcard"
           }
         }
       ]
@@ -128,7 +143,7 @@
       "type": "object",
       "properties": [
         {
-          "name": "DatabaseName",
+          "name": "CatalogId",
           "optional": true,
           "type": {
             "type": "string"
@@ -145,7 +160,15 @@
           }
         },
         {
-          "name": "CatalogId",
+          "name": "ColumnWildcard",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ColumnWildcard"
+          }
+        },
+        {
+          "name": "DatabaseName",
           "optional": true,
           "type": {
             "type": "string"
@@ -157,29 +180,6 @@
           "type": {
             "type": "string"
           }
-        },
-        {
-          "name": "ColumnWildcard",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ColumnWildcard"
-          }
-        }
-      ]
-    },
-    "ColumnWildcard": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "ExcludedColumnNames",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "string"
-            }
-          }
         }
       ]
     }
@@ -189,11 +189,11 @@
     "description": "Resource Type definition for AWS::LakeFormation::Permissions",
     "properties": [
       {
-        "name": "Resource",
+        "name": "DataLakePrincipal",
         "optional": false,
         "type": {
           "type": "ref",
-          "typeName": "Resource"
+          "typeName": "DataLakePrincipal"
         }
       },
       {
@@ -207,14 +207,6 @@
         }
       },
       {
-        "name": "DataLakePrincipal",
-        "optional": false,
-        "type": {
-          "type": "ref",
-          "typeName": "DataLakePrincipal"
-        }
-      },
-      {
         "name": "PermissionsWithGrantOption",
         "optional": true,
         "type": {
@@ -222,6 +214,14 @@
           "itemType": {
             "type": "string"
           }
+        }
+      },
+      {
+        "name": "Resource",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "Resource"
         }
       }
     ]
@@ -239,5 +239,5 @@
       }
     ]
   },
-  "$hash": "d0227238efb7bc44e086e895d9bf824d00aba1d8"
+  "$hash": "7cb56c085cadcdd7804cab9b0140f022a3bbd13b"
 }

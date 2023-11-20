@@ -1,6 +1,6 @@
 {
   "definitions": {
-    "S3Target": {
+    "CatalogTarget": {
       "type": "object",
       "properties": [
         {
@@ -11,28 +11,10 @@
           }
         },
         {
-          "name": "Path",
+          "name": "DatabaseName",
           "optional": true,
           "type": {
             "type": "string"
-          }
-        },
-        {
-          "name": "SampleSize",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        },
-        {
-          "name": "Exclusions",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "string"
-            }
           }
         },
         {
@@ -48,21 +30,60 @@
           "type": {
             "type": "string"
           }
+        },
+        {
+          "name": "Tables",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            }
+          }
         }
       ]
     },
-    "SchemaChangePolicy": {
+    "DeltaTarget": {
       "type": "object",
       "properties": [
         {
-          "name": "UpdateBehavior",
+          "name": "ConnectionName",
           "optional": true,
           "type": {
             "type": "string"
           }
         },
         {
-          "name": "DeleteBehavior",
+          "name": "CreateNativeDeltaTable",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "DeltaTables",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "name": "WriteManifest",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        }
+      ]
+    },
+    "DynamoDBTarget": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Path",
           "optional": true,
           "type": {
             "type": "string"
@@ -78,16 +99,6 @@
           "optional": true,
           "type": {
             "type": "string"
-          }
-        },
-        {
-          "name": "Paths",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "string"
-            }
           }
         },
         {
@@ -107,26 +118,41 @@
             "type": "number",
             "isInteger": true
           }
-        }
-      ]
-    },
-    "Schedule": {
-      "type": "object",
-      "properties": [
+        },
         {
-          "name": "ScheduleExpression",
+          "name": "Paths",
           "optional": true,
           "type": {
-            "type": "string"
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            }
           }
         }
       ]
     },
-    "RecrawlPolicy": {
+    "JdbcTarget": {
       "type": "object",
       "properties": [
         {
-          "name": "RecrawlBehavior",
+          "name": "ConnectionName",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Exclusions",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "name": "Path",
           "optional": true,
           "type": {
             "type": "string"
@@ -153,43 +179,19 @@
         }
       ]
     },
-    "DeltaTarget": {
+    "RecrawlPolicy": {
       "type": "object",
       "properties": [
         {
-          "name": "ConnectionName",
+          "name": "RecrawlBehavior",
           "optional": true,
           "type": {
             "type": "string"
-          }
-        },
-        {
-          "name": "CreateNativeDeltaTable",
-          "optional": true,
-          "type": {
-            "type": "boolean"
-          }
-        },
-        {
-          "name": "WriteManifest",
-          "optional": true,
-          "type": {
-            "type": "boolean"
-          }
-        },
-        {
-          "name": "DeltaTables",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "string"
-            }
           }
         }
       ]
     },
-    "JdbcTarget": {
+    "S3Target": {
       "type": "object",
       "properties": [
         {
@@ -200,7 +202,14 @@
           }
         },
         {
-          "name": "Path",
+          "name": "DlqEventQueueArn",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "EventQueueArn",
           "optional": true,
           "type": {
             "type": "string"
@@ -215,23 +224,58 @@
               "type": "string"
             }
           }
+        },
+        {
+          "name": "Path",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "SampleSize",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        }
+      ]
+    },
+    "Schedule": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ScheduleExpression",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "SchemaChangePolicy": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "DeleteBehavior",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "UpdateBehavior",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
         }
       ]
     },
     "Targets": {
       "type": "object",
       "properties": [
-        {
-          "name": "S3Targets",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "S3Target"
-            }
-          }
-        },
         {
           "name": "CatalogTargets",
           "optional": true,
@@ -251,28 +295,6 @@
             "itemType": {
               "type": "ref",
               "typeName": "DeltaTarget"
-            }
-          }
-        },
-        {
-          "name": "MongoDBTargets",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "MongoDBTarget"
-            }
-          }
-        },
-        {
-          "name": "JdbcTargets",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "JdbcTarget"
             }
           }
         },
@@ -297,60 +319,38 @@
               "typeName": "IcebergTarget"
             }
           }
-        }
-      ]
-    },
-    "DynamoDBTarget": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Path",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "CatalogTarget": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "ConnectionName",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
         },
         {
-          "name": "DatabaseName",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "DlqEventQueueArn",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Tables",
+          "name": "JdbcTargets",
           "optional": true,
           "type": {
             "type": "array",
             "itemType": {
-              "type": "string"
+              "type": "ref",
+              "typeName": "JdbcTarget"
             }
           }
         },
         {
-          "name": "EventQueueArn",
+          "name": "MongoDBTargets",
           "optional": true,
           "type": {
-            "type": "string"
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "MongoDBTarget"
+            }
+          }
+        },
+        {
+          "name": "S3Targets",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "S3Target"
+            }
           }
         }
       ]
@@ -371,6 +371,27 @@
         }
       },
       {
+        "name": "Configuration",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "CrawlerSecurityConfiguration",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "DatabaseName",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
         "name": "Description",
         "optional": true,
         "type": {
@@ -378,15 +399,7 @@
         }
       },
       {
-        "name": "SchemaChangePolicy",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "SchemaChangePolicy"
-        }
-      },
-      {
-        "name": "Configuration",
+        "name": "Name",
         "optional": true,
         "type": {
           "type": "string"
@@ -398,35 +411,6 @@
         "type": {
           "type": "ref",
           "typeName": "RecrawlPolicy"
-        }
-      },
-      {
-        "name": "DatabaseName",
-        "optional": true,
-        "type": {
-          "type": "string"
-        }
-      },
-      {
-        "name": "Targets",
-        "optional": false,
-        "type": {
-          "type": "ref",
-          "typeName": "Targets"
-        }
-      },
-      {
-        "name": "CrawlerSecurityConfiguration",
-        "optional": true,
-        "type": {
-          "type": "string"
-        }
-      },
-      {
-        "name": "Name",
-        "optional": true,
-        "type": {
-          "type": "string"
         }
       },
       {
@@ -445,6 +429,14 @@
         }
       },
       {
+        "name": "SchemaChangePolicy",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "SchemaChangePolicy"
+        }
+      },
+      {
         "name": "TablePrefix",
         "optional": true,
         "type": {
@@ -456,6 +448,14 @@
         "optional": true,
         "type": {
           "type": "record"
+        }
+      },
+      {
+        "name": "Targets",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "Targets"
         }
       }
     ]
@@ -473,5 +473,5 @@
       }
     ]
   },
-  "$hash": "bd8eed08052870ed8597483a0a07b6fd89ab900c"
+  "$hash": "fa16f8dc43b2e3ac1d6506ce592fd7e593cb5946"
 }

@@ -14,12 +14,10 @@
       "minLength": 22,
       "pattern": "^[a-z0-9A-Z]{22}$"
     },
-    "OrganizationalUnitId": {
+    "FirewallDeploymentModel": {
       "type": "string",
-      "description": "An Organizational Unit ID.",
-      "maxLength": 68,
-      "minLength": 16,
-      "pattern": "^(ou-[0-9a-z]{4,32}-[a-z0-9]{8,32})$"
+      "description": "Firewall deployment mode.",
+      "allowedValues": ["DISTRIBUTED", "CENTRALIZED"]
     },
     "IEMap": {
       "type": "object",
@@ -49,6 +47,55 @@
         }
       ]
     },
+    "ManagedServiceData": {
+      "type": "string",
+      "description": "Firewall managed service data.",
+      "maxLength": 8192,
+      "minLength": 1
+    },
+    "NetworkFirewallPolicy": {
+      "type": "object",
+      "description": "Network firewall policy.",
+      "properties": [
+        {
+          "name": "FirewallDeploymentModel",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "FirewallDeploymentModel"
+          }
+        }
+      ]
+    },
+    "OrganizationalUnitId": {
+      "type": "string",
+      "description": "An Organizational Unit ID.",
+      "maxLength": 68,
+      "minLength": 16,
+      "pattern": "^(ou-[0-9a-z]{4,32}-[a-z0-9]{8,32})$"
+    },
+    "PolicyOption": {
+      "type": "object",
+      "description": "Firewall policy option.",
+      "properties": [
+        {
+          "name": "NetworkFirewallPolicy",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "NetworkFirewallPolicy"
+          }
+        },
+        {
+          "name": "ThirdPartyFirewallPolicy",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ThirdPartyFirewallPolicy"
+          }
+        }
+      ]
+    },
     "PolicyTag": {
       "type": "object",
       "description": "A policy tag.",
@@ -73,6 +120,29 @@
           }
         }
       ]
+    },
+    "PolicyType": {
+      "type": "string",
+      "description": "Firewall policy type.",
+      "allowedValues": [
+        "WAF",
+        "WAFV2",
+        "SHIELD_ADVANCED",
+        "SECURITY_GROUPS_COMMON",
+        "SECURITY_GROUPS_CONTENT_AUDIT",
+        "SECURITY_GROUPS_USAGE_AUDIT",
+        "NETWORK_FIREWALL",
+        "THIRD_PARTY_FIREWALL",
+        "DNS_FIREWALL",
+        "IMPORT_NETWORK_FIREWALL"
+      ]
+    },
+    "ResourceArn": {
+      "type": "string",
+      "description": "A resource ARN.",
+      "maxLength": 1024,
+      "minLength": 1,
+      "pattern": "^([^\\s]*)$"
     },
     "ResourceTag": {
       "type": "object",
@@ -104,13 +174,6 @@
       "minLength": 1,
       "pattern": "^([^\\s]*)$"
     },
-    "ResourceArn": {
-      "type": "string",
-      "description": "A resource ARN.",
-      "maxLength": 1024,
-      "minLength": 1,
-      "pattern": "^([^\\s]*)$"
-    },
     "SecurityServicePolicyData": {
       "type": "object",
       "description": "Firewall security service policy data.",
@@ -124,60 +187,19 @@
           }
         },
         {
-          "name": "Type",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "PolicyType"
-          }
-        },
-        {
           "name": "PolicyOption",
           "optional": true,
           "type": {
             "type": "ref",
             "typeName": "PolicyOption"
           }
-        }
-      ]
-    },
-    "FirewallDeploymentModel": {
-      "type": "string",
-      "description": "Firewall deployment mode.",
-      "allowedValues": ["DISTRIBUTED", "CENTRALIZED"]
-    },
-    "ManagedServiceData": {
-      "type": "string",
-      "description": "Firewall managed service data.",
-      "maxLength": 8192,
-      "minLength": 1
-    },
-    "PolicyType": {
-      "type": "string",
-      "description": "Firewall policy type.",
-      "allowedValues": [
-        "WAF",
-        "WAFV2",
-        "SHIELD_ADVANCED",
-        "SECURITY_GROUPS_COMMON",
-        "SECURITY_GROUPS_CONTENT_AUDIT",
-        "SECURITY_GROUPS_USAGE_AUDIT",
-        "NETWORK_FIREWALL",
-        "THIRD_PARTY_FIREWALL",
-        "DNS_FIREWALL",
-        "IMPORT_NETWORK_FIREWALL"
-      ]
-    },
-    "NetworkFirewallPolicy": {
-      "type": "object",
-      "description": "Network firewall policy.",
-      "properties": [
+        },
         {
-          "name": "FirewallDeploymentModel",
+          "name": "Type",
           "optional": false,
           "type": {
             "type": "ref",
-            "typeName": "FirewallDeploymentModel"
+            "typeName": "PolicyType"
           }
         }
       ]
@@ -195,34 +217,19 @@
           }
         }
       ]
-    },
-    "PolicyOption": {
-      "type": "object",
-      "description": "Firewall policy option.",
-      "properties": [
-        {
-          "name": "NetworkFirewallPolicy",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "NetworkFirewallPolicy"
-          }
-        },
-        {
-          "name": "ThirdPartyFirewallPolicy",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ThirdPartyFirewallPolicy"
-          }
-        }
-      ]
     }
   },
   "resource": {
     "type": "object",
     "description": "Creates an AWS Firewall Manager policy.",
     "properties": [
+      {
+        "name": "DeleteAllPolicyResources",
+        "optional": true,
+        "type": {
+          "type": "boolean"
+        }
+      },
       {
         "name": "ExcludeMap",
         "optional": true,
@@ -247,6 +254,15 @@
         }
       },
       {
+        "name": "PolicyDescription",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 256,
+          "pattern": "^([a-zA-Z0-9_.:/=+\\-@\\s]+)$"
+        }
+      },
+      {
         "name": "PolicyName",
         "optional": false,
         "type": {
@@ -257,19 +273,21 @@
         }
       },
       {
-        "name": "PolicyDescription",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "maxLength": 256,
-          "pattern": "^([a-zA-Z0-9_.:/=+\\-@\\s]+)$"
-        }
-      },
-      {
         "name": "RemediationEnabled",
         "optional": false,
         "type": {
           "type": "boolean"
+        }
+      },
+      {
+        "name": "ResourceSetIds",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Base62Id"
+          }
         }
       },
       {
@@ -304,14 +322,10 @@
         }
       },
       {
-        "name": "ResourceSetIds",
+        "name": "ResourcesCleanUp",
         "optional": true,
         "type": {
-          "type": "array",
-          "itemType": {
-            "type": "ref",
-            "typeName": "Base62Id"
-          }
+          "type": "boolean"
         }
       },
       {
@@ -320,20 +334,6 @@
         "type": {
           "type": "ref",
           "typeName": "SecurityServicePolicyData"
-        }
-      },
-      {
-        "name": "DeleteAllPolicyResources",
-        "optional": true,
-        "type": {
-          "type": "boolean"
-        }
-      },
-      {
-        "name": "ResourcesCleanUp",
-        "optional": true,
-        "type": {
-          "type": "boolean"
         }
       },
       {
@@ -354,6 +354,14 @@
     "description": "Creates an AWS Firewall Manager policy.",
     "properties": [
       {
+        "name": "Arn",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "ResourceArn"
+        }
+      },
+      {
         "name": "Id",
         "optional": true,
         "type": {
@@ -362,16 +370,8 @@
           "minLength": 36,
           "pattern": "^[a-z0-9A-Z-]{36}$"
         }
-      },
-      {
-        "name": "Arn",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "ResourceArn"
-        }
       }
     ]
   },
-  "$hash": "a23f591d5ef9696f73b53f023323cbeea0980ec1"
+  "$hash": "f079ea4231da9b117fede99da0b86aaaec485228"
 }

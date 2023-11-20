@@ -1,5 +1,28 @@
 {
   "definitions": {
+    "AmazonManagedKafkaEventSourceConfig": {
+      "type": "object",
+      "description": "Specific configuration settings for an MSK event source.",
+      "properties": [
+        {
+          "name": "ConsumerGroupId",
+          "description": "The identifier for the Kafka Consumer Group to join.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The identifier for the Kafka Consumer Group to join.",
+            "typeName": "ConsumerGroupId"
+          }
+        }
+      ]
+    },
+    "ConsumerGroupId": {
+      "type": "string",
+      "description": "The identifier for the Kafka Consumer Group to join.",
+      "maxLength": 200,
+      "minLength": 1,
+      "pattern": "[a-zA-Z0-9-\\/*:_+=.@-]*"
+    },
     "DestinationConfig": {
       "type": "object",
       "description": "(Streams) An Amazon SQS queue or Amazon SNS topic destination for discarded records.",
@@ -12,6 +35,86 @@
             "type": "ref",
             "description": "The destination configuration for failed invocations.",
             "typeName": "OnFailure"
+          }
+        }
+      ]
+    },
+    "DocumentDBEventSourceConfig": {
+      "type": "object",
+      "description": "Document db event source config.",
+      "properties": [
+        {
+          "name": "CollectionName",
+          "description": "The collection name to connect to.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The collection name to connect to.",
+            "maxLength": 57,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "DatabaseName",
+          "description": "The database name to connect to.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The database name to connect to.",
+            "maxLength": 63,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "FullDocument",
+          "description": "Include full document in change stream response. The default option will only send the changes made to documents to Lambda. If you want the complete document sent to Lambda, set this to UpdateLookup.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Include full document in change stream response. The default option will only send the changes made to documents to Lambda. If you want the complete document sent to Lambda, set this to UpdateLookup.",
+            "allowedValues": ["UpdateLookup", "Default"]
+          }
+        }
+      ]
+    },
+    "Endpoints": {
+      "type": "object",
+      "description": "The endpoints used by AWS Lambda to access a self-managed event source.",
+      "properties": [
+        {
+          "name": "KafkaBootstrapServers",
+          "description": "A list of Kafka server endpoints.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "A list of Kafka server endpoints.",
+            "itemType": {
+              "type": "string",
+              "description": "The URL of a Kafka server.",
+              "maxLength": 300,
+              "minLength": 1,
+              "pattern": "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9]):[0-9]{1,5}"
+            },
+            "maxLength": 10,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "Filter": {
+      "type": "object",
+      "description": "The filter object that defines parameters for ESM filtering.",
+      "properties": [
+        {
+          "name": "Pattern",
+          "description": "The filter pattern that defines which events should be passed for invocations.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The filter pattern that defines which events should be passed for invocations.",
+            "maxLength": 4096,
+            "minLength": 0,
+            "pattern": ".*"
           }
         }
       ]
@@ -37,23 +140,12 @@
         }
       ]
     },
-    "Filter": {
-      "type": "object",
-      "description": "The filter object that defines parameters for ESM filtering.",
-      "properties": [
-        {
-          "name": "Pattern",
-          "description": "The filter pattern that defines which events should be passed for invocations.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The filter pattern that defines which events should be passed for invocations.",
-            "maxLength": 4096,
-            "minLength": 0,
-            "pattern": ".*"
-          }
-        }
-      ]
+    "MaximumConcurrency": {
+      "type": "number",
+      "description": "The maximum number of concurrent functions that an event source can invoke.",
+      "isInteger": true,
+      "maximum": 1000,
+      "minimum": 2
     },
     "OnFailure": {
       "type": "object",
@@ -69,6 +161,54 @@
             "maxLength": 1024,
             "minLength": 12,
             "pattern": "arn:(aws[a-zA-Z0-9-]*):([a-zA-Z0-9\\-])+:([a-z]{2}(-gov)?-[a-z]+-\\d{1})?:(\\d{12})?:(.*)"
+          }
+        }
+      ]
+    },
+    "ScalingConfig": {
+      "type": "object",
+      "description": "The scaling configuration for the event source.",
+      "properties": [
+        {
+          "name": "MaximumConcurrency",
+          "description": "The maximum number of concurrent functions that the event source can invoke.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The maximum number of concurrent functions that the event source can invoke.",
+            "typeName": "MaximumConcurrency"
+          }
+        }
+      ]
+    },
+    "SelfManagedEventSource": {
+      "type": "object",
+      "description": "The configuration used by AWS Lambda to access a self-managed event source.",
+      "properties": [
+        {
+          "name": "Endpoints",
+          "description": "The endpoints for a self-managed event source.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The endpoints for a self-managed event source.",
+            "typeName": "Endpoints"
+          }
+        }
+      ]
+    },
+    "SelfManagedKafkaEventSourceConfig": {
+      "type": "object",
+      "description": "Specific configuration settings for a Self-Managed Apache Kafka event source.",
+      "properties": [
+        {
+          "name": "ConsumerGroupId",
+          "description": "The identifier for the Kafka Consumer Group to join.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The identifier for the Kafka Consumer Group to join.",
+            "typeName": "ConsumerGroupId"
           }
         }
       ]
@@ -109,152 +249,22 @@
           }
         }
       ]
-    },
-    "SelfManagedEventSource": {
-      "type": "object",
-      "description": "The configuration used by AWS Lambda to access a self-managed event source.",
-      "properties": [
-        {
-          "name": "Endpoints",
-          "description": "The endpoints for a self-managed event source.",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "The endpoints for a self-managed event source.",
-            "typeName": "Endpoints"
-          }
-        }
-      ]
-    },
-    "Endpoints": {
-      "type": "object",
-      "description": "The endpoints used by AWS Lambda to access a self-managed event source.",
-      "properties": [
-        {
-          "name": "KafkaBootstrapServers",
-          "description": "A list of Kafka server endpoints.",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "description": "A list of Kafka server endpoints.",
-            "itemType": {
-              "type": "string",
-              "description": "The URL of a Kafka server.",
-              "maxLength": 300,
-              "minLength": 1,
-              "pattern": "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9]):[0-9]{1,5}"
-            },
-            "maxLength": 10,
-            "minLength": 1
-          }
-        }
-      ]
-    },
-    "ConsumerGroupId": {
-      "type": "string",
-      "description": "The identifier for the Kafka Consumer Group to join.",
-      "maxLength": 200,
-      "minLength": 1,
-      "pattern": "[a-zA-Z0-9-\\/*:_+=.@-]*"
-    },
-    "AmazonManagedKafkaEventSourceConfig": {
-      "type": "object",
-      "description": "Specific configuration settings for an MSK event source.",
-      "properties": [
-        {
-          "name": "ConsumerGroupId",
-          "description": "The identifier for the Kafka Consumer Group to join.",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "The identifier for the Kafka Consumer Group to join.",
-            "typeName": "ConsumerGroupId"
-          }
-        }
-      ]
-    },
-    "SelfManagedKafkaEventSourceConfig": {
-      "type": "object",
-      "description": "Specific configuration settings for a Self-Managed Apache Kafka event source.",
-      "properties": [
-        {
-          "name": "ConsumerGroupId",
-          "description": "The identifier for the Kafka Consumer Group to join.",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "The identifier for the Kafka Consumer Group to join.",
-            "typeName": "ConsumerGroupId"
-          }
-        }
-      ]
-    },
-    "MaximumConcurrency": {
-      "type": "number",
-      "description": "The maximum number of concurrent functions that an event source can invoke.",
-      "isInteger": true,
-      "maximum": 1000,
-      "minimum": 2
-    },
-    "ScalingConfig": {
-      "type": "object",
-      "description": "The scaling configuration for the event source.",
-      "properties": [
-        {
-          "name": "MaximumConcurrency",
-          "description": "The maximum number of concurrent functions that the event source can invoke.",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "The maximum number of concurrent functions that the event source can invoke.",
-            "typeName": "MaximumConcurrency"
-          }
-        }
-      ]
-    },
-    "DocumentDBEventSourceConfig": {
-      "type": "object",
-      "description": "Document db event source config.",
-      "properties": [
-        {
-          "name": "DatabaseName",
-          "description": "The database name to connect to.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The database name to connect to.",
-            "maxLength": 63,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "CollectionName",
-          "description": "The collection name to connect to.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The collection name to connect to.",
-            "maxLength": 57,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "FullDocument",
-          "description": "Include full document in change stream response. The default option will only send the changes made to documents to Lambda. If you want the complete document sent to Lambda, set this to UpdateLookup.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Include full document in change stream response. The default option will only send the changes made to documents to Lambda. If you want the complete document sent to Lambda, set this to UpdateLookup.",
-            "allowedValues": ["UpdateLookup", "Default"]
-          }
-        }
-      ]
     }
   },
   "resource": {
     "type": "object",
     "description": "Resource Type definition for AWS::Lambda::EventSourceMapping",
     "properties": [
+      {
+        "name": "AmazonManagedKafkaEventSourceConfig",
+        "description": "Specific configuration settings for an MSK event source.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "Specific configuration settings for an MSK event source.",
+          "typeName": "AmazonManagedKafkaEventSourceConfig"
+        }
+      },
       {
         "name": "BatchSize",
         "description": "The maximum number of items to retrieve in a single batch.",
@@ -284,6 +294,16 @@
           "type": "ref",
           "description": "(Streams) An Amazon SQS queue or Amazon SNS topic destination for discarded records.",
           "typeName": "DestinationConfig"
+        }
+      },
+      {
+        "name": "DocumentDBEventSourceConfig",
+        "description": "Document db event source config.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "Document db event source config.",
+          "typeName": "DocumentDBEventSourceConfig"
         }
       },
       {
@@ -327,6 +347,19 @@
           "maxLength": 140,
           "minLength": 1,
           "pattern": "(arn:(aws[a-zA-Z-]*)?:lambda:)?([a-z]{2}(-gov)?-[a-z]+-\\d{1}:)?(\\d{12}:)?(function:)?([a-zA-Z0-9-_]+)(:(\\$LATEST|[a-zA-Z0-9-_]+))?"
+        }
+      },
+      {
+        "name": "FunctionResponseTypes",
+        "description": "(Streams) A list of response types supported by the function.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "(Streams) A list of response types supported by the function.",
+          "itemType": {
+            "type": "string",
+            "allowedValues": ["ReportBatchItemFailures"]
+          }
         }
       },
       {
@@ -378,6 +411,68 @@
         }
       },
       {
+        "name": "Queues",
+        "description": "(ActiveMQ) A list of ActiveMQ queues.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "(ActiveMQ) A list of ActiveMQ queues.",
+          "itemType": {
+            "type": "string",
+            "maxLength": 1000,
+            "minLength": 1,
+            "pattern": "[\\s\\S]*"
+          },
+          "maxLength": 1,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "ScalingConfig",
+        "description": "The scaling configuration for the event source.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "The scaling configuration for the event source.",
+          "typeName": "ScalingConfig"
+        }
+      },
+      {
+        "name": "SelfManagedEventSource",
+        "description": "Self-managed event source endpoints.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "Self-managed event source endpoints.",
+          "typeName": "SelfManagedEventSource"
+        }
+      },
+      {
+        "name": "SelfManagedKafkaEventSourceConfig",
+        "description": "Specific configuration settings for a Self-Managed Apache Kafka event source.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "Specific configuration settings for a Self-Managed Apache Kafka event source.",
+          "typeName": "SelfManagedKafkaEventSourceConfig"
+        }
+      },
+      {
+        "name": "SourceAccessConfigurations",
+        "description": "A list of SourceAccessConfiguration.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "A list of SourceAccessConfiguration.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "SourceAccessConfiguration"
+          },
+          "maxLength": 22,
+          "minLength": 1
+        }
+      },
+      {
         "name": "StartingPosition",
         "description": "The position in a stream from which to start reading. Required for Amazon Kinesis and Amazon DynamoDB Streams sources.",
         "optional": true,
@@ -417,38 +512,6 @@
         }
       },
       {
-        "name": "Queues",
-        "description": "(ActiveMQ) A list of ActiveMQ queues.",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "description": "(ActiveMQ) A list of ActiveMQ queues.",
-          "itemType": {
-            "type": "string",
-            "maxLength": 1000,
-            "minLength": 1,
-            "pattern": "[\\s\\S]*"
-          },
-          "maxLength": 1,
-          "minLength": 1
-        }
-      },
-      {
-        "name": "SourceAccessConfigurations",
-        "description": "A list of SourceAccessConfiguration.",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "description": "A list of SourceAccessConfiguration.",
-          "itemType": {
-            "type": "ref",
-            "typeName": "SourceAccessConfiguration"
-          },
-          "maxLength": 22,
-          "minLength": 1
-        }
-      },
-      {
         "name": "TumblingWindowInSeconds",
         "description": "(Streams) Tumbling window (non-overlapping time window) duration to perform aggregations.",
         "optional": true,
@@ -458,69 +521,6 @@
           "isInteger": true,
           "maximum": 900,
           "minimum": 0
-        }
-      },
-      {
-        "name": "FunctionResponseTypes",
-        "description": "(Streams) A list of response types supported by the function.",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "description": "(Streams) A list of response types supported by the function.",
-          "itemType": {
-            "type": "string",
-            "allowedValues": ["ReportBatchItemFailures"]
-          }
-        }
-      },
-      {
-        "name": "SelfManagedEventSource",
-        "description": "Self-managed event source endpoints.",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "description": "Self-managed event source endpoints.",
-          "typeName": "SelfManagedEventSource"
-        }
-      },
-      {
-        "name": "AmazonManagedKafkaEventSourceConfig",
-        "description": "Specific configuration settings for an MSK event source.",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "description": "Specific configuration settings for an MSK event source.",
-          "typeName": "AmazonManagedKafkaEventSourceConfig"
-        }
-      },
-      {
-        "name": "SelfManagedKafkaEventSourceConfig",
-        "description": "Specific configuration settings for a Self-Managed Apache Kafka event source.",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "description": "Specific configuration settings for a Self-Managed Apache Kafka event source.",
-          "typeName": "SelfManagedKafkaEventSourceConfig"
-        }
-      },
-      {
-        "name": "ScalingConfig",
-        "description": "The scaling configuration for the event source.",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "description": "The scaling configuration for the event source.",
-          "typeName": "ScalingConfig"
-        }
-      },
-      {
-        "name": "DocumentDBEventSourceConfig",
-        "description": "Document db event source config.",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "description": "Document db event source config.",
-          "typeName": "DocumentDBEventSourceConfig"
         }
       }
     ]
@@ -543,5 +543,5 @@
       }
     ]
   },
-  "$hash": "2de033e40873fd611fe18036f4f8d2e3b7fdc586"
+  "$hash": "b17e5eec6ca6557011a60ec3cb4c4fcc364ab41c"
 }

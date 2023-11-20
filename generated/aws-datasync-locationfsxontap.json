@@ -1,5 +1,120 @@
 {
   "definitions": {
+    "NFS": {
+      "type": "object",
+      "description": "NFS protocol configuration for FSx ONTAP file system.",
+      "properties": [
+        {
+          "name": "MountOptions",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "NfsMountOptions"
+          }
+        }
+      ]
+    },
+    "NfsMountOptions": {
+      "type": "object",
+      "description": "The NFS mount options that DataSync can use to mount your NFS share.",
+      "properties": [
+        {
+          "name": "Version",
+          "description": "The specific NFS version that you want DataSync to use to mount your NFS share.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The specific NFS version that you want DataSync to use to mount your NFS share.",
+            "allowedValues": ["AUTOMATIC", "NFS3", "NFS4_0", "NFS4_1"]
+          }
+        }
+      ]
+    },
+    "Protocol": {
+      "type": "object",
+      "description": "Configuration settings for NFS or SMB protocol.",
+      "properties": [
+        {
+          "name": "NFS",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "NFS"
+          }
+        },
+        {
+          "name": "SMB",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "SMB"
+          }
+        }
+      ]
+    },
+    "SMB": {
+      "type": "object",
+      "description": "SMB protocol configuration for FSx ONTAP file system.",
+      "properties": [
+        {
+          "name": "Domain",
+          "description": "The name of the Windows domain that the SMB server belongs to.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The name of the Windows domain that the SMB server belongs to.",
+            "maxLength": 253,
+            "pattern": "^([A-Za-z0-9]+[A-Za-z0-9-.]*)*[A-Za-z0-9-]*[A-Za-z0-9]$"
+          }
+        },
+        {
+          "name": "MountOptions",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "SmbMountOptions"
+          }
+        },
+        {
+          "name": "Password",
+          "description": "The password of the user who can mount the share and has the permissions to access files and folders in the SMB share.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The password of the user who can mount the share and has the permissions to access files and folders in the SMB share.",
+            "maxLength": 104,
+            "pattern": "^.{0,104}$"
+          }
+        },
+        {
+          "name": "User",
+          "description": "The user who can mount the share, has the permissions to access files and folders in the SMB share.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The user who can mount the share, has the permissions to access files and folders in the SMB share.",
+            "maxLength": 104,
+            "pattern": "^[^\\x5B\\x5D\\\\/:;|=,+*?]{1,104}$"
+          }
+        }
+      ]
+    },
+    "SmbMountOptions": {
+      "type": "object",
+      "description": "The mount options used by DataSync to access the SMB server.",
+      "properties": [
+        {
+          "name": "Version",
+          "description": "The specific SMB version that you want DataSync to use to mount your SMB share.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The specific SMB version that you want DataSync to use to mount your SMB share.",
+            "allowedValues": ["AUTOMATIC", "SMB2", "SMB3"]
+          }
+        }
+      ]
+    },
     "Tag": {
       "type": "object",
       "description": "A key-value pair to associate with a resource.",
@@ -29,121 +144,6 @@
           }
         }
       ]
-    },
-    "Protocol": {
-      "type": "object",
-      "description": "Configuration settings for NFS or SMB protocol.",
-      "properties": [
-        {
-          "name": "NFS",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "NFS"
-          }
-        },
-        {
-          "name": "SMB",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "SMB"
-          }
-        }
-      ]
-    },
-    "NFS": {
-      "type": "object",
-      "description": "NFS protocol configuration for FSx ONTAP file system.",
-      "properties": [
-        {
-          "name": "MountOptions",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "NfsMountOptions"
-          }
-        }
-      ]
-    },
-    "SMB": {
-      "type": "object",
-      "description": "SMB protocol configuration for FSx ONTAP file system.",
-      "properties": [
-        {
-          "name": "MountOptions",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "SmbMountOptions"
-          }
-        },
-        {
-          "name": "Domain",
-          "description": "The name of the Windows domain that the SMB server belongs to.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The name of the Windows domain that the SMB server belongs to.",
-            "maxLength": 253,
-            "pattern": "^([A-Za-z0-9]+[A-Za-z0-9-.]*)*[A-Za-z0-9-]*[A-Za-z0-9]$"
-          }
-        },
-        {
-          "name": "Password",
-          "description": "The password of the user who can mount the share and has the permissions to access files and folders in the SMB share.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The password of the user who can mount the share and has the permissions to access files and folders in the SMB share.",
-            "maxLength": 104,
-            "pattern": "^.{0,104}$"
-          }
-        },
-        {
-          "name": "User",
-          "description": "The user who can mount the share, has the permissions to access files and folders in the SMB share.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The user who can mount the share, has the permissions to access files and folders in the SMB share.",
-            "maxLength": 104,
-            "pattern": "^[^\\x5B\\x5D\\\\/:;|=,+*?]{1,104}$"
-          }
-        }
-      ]
-    },
-    "NfsMountOptions": {
-      "type": "object",
-      "description": "The NFS mount options that DataSync can use to mount your NFS share.",
-      "properties": [
-        {
-          "name": "Version",
-          "description": "The specific NFS version that you want DataSync to use to mount your NFS share.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The specific NFS version that you want DataSync to use to mount your NFS share.",
-            "allowedValues": ["AUTOMATIC", "NFS3", "NFS4_0", "NFS4_1"]
-          }
-        }
-      ]
-    },
-    "SmbMountOptions": {
-      "type": "object",
-      "description": "The mount options used by DataSync to access the SMB server.",
-      "properties": [
-        {
-          "name": "Version",
-          "description": "The specific SMB version that you want DataSync to use to mount your SMB share.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The specific SMB version that you want DataSync to use to mount your SMB share.",
-            "allowedValues": ["AUTOMATIC", "SMB2", "SMB3"]
-          }
-        }
-      ]
     }
   },
   "resource": {
@@ -151,14 +151,11 @@
     "description": "Resource schema for AWS::DataSync::LocationFSxONTAP.",
     "properties": [
       {
-        "name": "StorageVirtualMachineArn",
-        "description": "The Amazon Resource Name (ARN) for the FSx ONTAP SVM.",
-        "optional": false,
+        "name": "Protocol",
+        "optional": true,
         "type": {
-          "type": "string",
-          "description": "The Amazon Resource Name (ARN) for the FSx ONTAP SVM.",
-          "maxLength": 162,
-          "pattern": "^arn:(aws|aws-cn|aws-us-gov|aws-iso|aws-iso-b):fsx:[a-z\\-0-9]+:[0-9]{12}:storage-virtual-machine/fs-[0-9a-f]+/svm-[0-9a-f]{17,}$"
+          "type": "ref",
+          "typeName": "Protocol"
         }
       },
       {
@@ -178,11 +175,14 @@
         }
       },
       {
-        "name": "Protocol",
-        "optional": true,
+        "name": "StorageVirtualMachineArn",
+        "description": "The Amazon Resource Name (ARN) for the FSx ONTAP SVM.",
+        "optional": false,
         "type": {
-          "type": "ref",
-          "typeName": "Protocol"
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) for the FSx ONTAP SVM.",
+          "maxLength": 162,
+          "pattern": "^arn:(aws|aws-cn|aws-us-gov|aws-iso|aws-iso-b):fsx:[a-z\\-0-9]+:[0-9]{12}:storage-virtual-machine/fs-[0-9a-f]+/svm-[0-9a-f]{17,}$"
         }
       },
       {
@@ -252,5 +252,5 @@
       }
     ]
   },
-  "$hash": "193648050c90f1befce6737b097cbd06be722f9b"
+  "$hash": "62525dfcd77a7cad2f879b02ed993d1197a3c90b"
 }

@@ -1,24 +1,101 @@
 {
   "definitions": {
-    "ValidityDateFormat": {
+    "Arn": {
+      "type": "string",
+      "maxLength": 2048
+    },
+    "BorrowConfiguration": {
       "type": "object",
       "properties": [
         {
-          "name": "Begin",
-          "description": "Validity begin date for the license.",
+          "name": "AllowEarlyCheckIn",
           "optional": false,
           "type": {
-            "type": "string",
-            "description": "Validity begin date for the license."
+            "type": "boolean"
           }
         },
         {
-          "name": "End",
-          "description": "Validity begin date for the license.",
+          "name": "MaxTimeToLiveInMinutes",
           "optional": false,
           "type": {
-            "type": "string",
-            "description": "Validity begin date for the license."
+            "type": "number",
+            "isInteger": true
+          }
+        }
+      ]
+    },
+    "ConsumptionConfiguration": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "BorrowConfiguration",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "BorrowConfiguration"
+          }
+        },
+        {
+          "name": "ProvisionalConfiguration",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ProvisionalConfiguration"
+          }
+        },
+        {
+          "name": "RenewType",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "Entitlement": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "AllowCheckIn",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "MaxCount",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "Name",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Overage",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "Unit",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": true,
+          "type": {
+            "type": "string"
           }
         }
       ]
@@ -42,114 +119,8 @@
         }
       ]
     },
-    "Entitlement": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Name",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Value",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "MaxCount",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        },
-        {
-          "name": "Overage",
-          "optional": true,
-          "type": {
-            "type": "boolean"
-          }
-        },
-        {
-          "name": "Unit",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "AllowCheckIn",
-          "optional": true,
-          "type": {
-            "type": "boolean"
-          }
-        }
-      ]
-    },
-    "ConsumptionConfiguration": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "RenewType",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "ProvisionalConfiguration",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ProvisionalConfiguration"
-          }
-        },
-        {
-          "name": "BorrowConfiguration",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "BorrowConfiguration"
-          }
-        }
-      ]
-    },
-    "ProvisionalConfiguration": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "MaxTimeToLiveInMinutes",
-          "optional": false,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        }
-      ]
-    },
-    "BorrowConfiguration": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "MaxTimeToLiveInMinutes",
-          "optional": false,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        },
-        {
-          "name": "AllowEarlyCheckIn",
-          "optional": false,
-          "type": {
-            "type": "boolean"
-          }
-        }
-      ]
+    "LicenseStatus": {
+      "type": "string"
     },
     "Metadata": {
       "type": "object",
@@ -170,12 +141,41 @@
         }
       ]
     },
-    "LicenseStatus": {
-      "type": "string"
+    "ProvisionalConfiguration": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "MaxTimeToLiveInMinutes",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        }
+      ]
     },
-    "Arn": {
-      "type": "string",
-      "maxLength": 2048
+    "ValidityDateFormat": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Begin",
+          "description": "Validity begin date for the license.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Validity begin date for the license."
+          }
+        },
+        {
+          "name": "End",
+          "description": "Validity begin date for the license.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Validity begin date for the license."
+          }
+        }
+      ]
     }
   },
   "resource": {
@@ -183,14 +183,40 @@
     "description": "Resource Type definition for AWS::LicenseManager::License",
     "properties": [
       {
-        "name": "ProductSKU",
-        "description": "ProductSKU of the license.",
+        "name": "Beneficiary",
+        "description": "Beneficiary of the license.",
         "optional": true,
         "type": {
           "type": "string",
-          "description": "ProductSKU of the license.",
-          "maxLength": 1024,
-          "minLength": 1
+          "description": "Beneficiary of the license."
+        }
+      },
+      {
+        "name": "ConsumptionConfiguration",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "ConsumptionConfiguration"
+        }
+      },
+      {
+        "name": "Entitlements",
+        "optional": false,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Entitlement"
+          }
+        }
+      },
+      {
+        "name": "HomeRegion",
+        "description": "Home region for the created license.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "Home region for the created license."
         }
       },
       {
@@ -199,6 +225,17 @@
         "type": {
           "type": "ref",
           "typeName": "IssuerData"
+        }
+      },
+      {
+        "name": "LicenseMetadata",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Metadata"
+          }
         }
       },
       {
@@ -220,59 +257,14 @@
         }
       },
       {
-        "name": "HomeRegion",
-        "description": "Home region for the created license.",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "description": "Home region for the created license."
-        }
-      },
-      {
-        "name": "Validity",
-        "optional": false,
-        "type": {
-          "type": "ref",
-          "typeName": "ValidityDateFormat"
-        }
-      },
-      {
-        "name": "Entitlements",
-        "optional": false,
-        "type": {
-          "type": "array",
-          "itemType": {
-            "type": "ref",
-            "typeName": "Entitlement"
-          }
-        }
-      },
-      {
-        "name": "Beneficiary",
-        "description": "Beneficiary of the license.",
+        "name": "ProductSKU",
+        "description": "ProductSKU of the license.",
         "optional": true,
         "type": {
           "type": "string",
-          "description": "Beneficiary of the license."
-        }
-      },
-      {
-        "name": "ConsumptionConfiguration",
-        "optional": false,
-        "type": {
-          "type": "ref",
-          "typeName": "ConsumptionConfiguration"
-        }
-      },
-      {
-        "name": "LicenseMetadata",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "itemType": {
-            "type": "ref",
-            "typeName": "Metadata"
-          }
+          "description": "ProductSKU of the license.",
+          "maxLength": 1024,
+          "minLength": 1
         }
       },
       {
@@ -281,6 +273,14 @@
         "type": {
           "type": "ref",
           "typeName": "LicenseStatus"
+        }
+      },
+      {
+        "name": "Validity",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "ValidityDateFormat"
         }
       }
     ]
@@ -310,5 +310,5 @@
       }
     ]
   },
-  "$hash": "52886867ab59d98c7e22b5733c80ccc9fdc333c3"
+  "$hash": "bb1c5c82e938e5587ade82c727934e7d286493d4"
 }

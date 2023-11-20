@@ -1,20 +1,43 @@
 {
   "definitions": {
-    "Schedule": {
+    "ArtifactConfig": {
       "type": "object",
       "properties": [
         {
-          "name": "Expression",
-          "optional": false,
+          "name": "S3Encryption",
+          "description": "Encryption configuration for uploading artifacts to S3",
+          "optional": true,
           "type": {
-            "type": "string"
+            "type": "ref",
+            "description": "Encryption configuration for uploading artifacts to S3",
+            "typeName": "S3Encryption"
+          }
+        }
+      ]
+    },
+    "BaseScreenshot": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "IgnoreCoordinates",
+          "description": "List of coordinates of rectangles to be ignored during visual testing",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "List of coordinates of rectangles to be ignored during visual testing",
+            "itemType": {
+              "type": "string",
+              "description": "Coordinates of a rectangle to be ignored during visual testing"
+            }
           }
         },
         {
-          "name": "DurationInSeconds",
-          "optional": true,
+          "name": "ScreenshotName",
+          "description": "Name of the screenshot to be used as base reference for visual testing",
+          "optional": false,
           "type": {
-            "type": "string"
+            "type": "string",
+            "description": "Name of the screenshot to be used as base reference for visual testing"
           }
         }
       ]
@@ -22,6 +45,13 @@
     "Code": {
       "type": "object",
       "properties": [
+        {
+          "name": "Handler",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
         {
           "name": "S3Bucket",
           "optional": true,
@@ -51,15 +81,96 @@
           }
         },
         {
-          "name": "Handler",
-          "optional": false,
+          "name": "SourceLocationArn",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "RunConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ActiveTracing",
+          "description": "Enable active tracing if set to true",
+          "optional": true,
+          "type": {
+            "type": "boolean",
+            "description": "Enable active tracing if set to true"
+          }
+        },
+        {
+          "name": "EnvironmentVariables",
+          "description": "Environment variable key-value pairs.",
+          "optional": true,
+          "type": {
+            "type": "record",
+            "description": "Environment variable key-value pairs.",
+            "valueType": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "name": "MemoryInMB",
+          "description": "Provide maximum memory available for canary in MB",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "Provide maximum memory available for canary in MB",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "TimeoutInSeconds",
+          "description": "Provide maximum canary timeout per run in seconds",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "Provide maximum canary timeout per run in seconds",
+            "isInteger": true
+          }
+        }
+      ]
+    },
+    "S3Encryption": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "EncryptionMode",
+          "description": "Encryption mode for encrypting artifacts when uploading to S3. Valid values: SSE_S3 and SSE_KMS.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Encryption mode for encrypting artifacts when uploading to S3. Valid values: SSE_S3 and SSE_KMS."
+          }
+        },
+        {
+          "name": "KmsKeyArn",
+          "description": "KMS key Arn for encrypting artifacts when uploading to S3. You must specify KMS key Arn for SSE_KMS encryption mode only.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "KMS key Arn for encrypting artifacts when uploading to S3. You must specify KMS key Arn for SSE_KMS encryption mode only."
+          }
+        }
+      ]
+    },
+    "Schedule": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "DurationInSeconds",
+          "optional": true,
           "type": {
             "type": "string"
           }
         },
         {
-          "name": "SourceLocationArn",
-          "optional": true,
+          "name": "Expression",
+          "optional": false,
           "type": {
             "type": "string"
           }
@@ -98,10 +209,13 @@
       "type": "object",
       "properties": [
         {
-          "name": "VpcId",
-          "optional": true,
+          "name": "SecurityGroupIds",
+          "optional": false,
           "type": {
-            "type": "string"
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            }
           }
         },
         {
@@ -115,59 +229,10 @@
           }
         },
         {
-          "name": "SecurityGroupIds",
-          "optional": false,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "string"
-            }
-          }
-        }
-      ]
-    },
-    "RunConfig": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "TimeoutInSeconds",
-          "description": "Provide maximum canary timeout per run in seconds",
+          "name": "VpcId",
           "optional": true,
           "type": {
-            "type": "number",
-            "description": "Provide maximum canary timeout per run in seconds",
-            "isInteger": true
-          }
-        },
-        {
-          "name": "MemoryInMB",
-          "description": "Provide maximum memory available for canary in MB",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "description": "Provide maximum memory available for canary in MB",
-            "isInteger": true
-          }
-        },
-        {
-          "name": "ActiveTracing",
-          "description": "Enable active tracing if set to true",
-          "optional": true,
-          "type": {
-            "type": "boolean",
-            "description": "Enable active tracing if set to true"
-          }
-        },
-        {
-          "name": "EnvironmentVariables",
-          "description": "Environment variable key-value pairs.",
-          "optional": true,
-          "type": {
-            "type": "record",
-            "description": "Environment variable key-value pairs.",
-            "valueType": {
-              "type": "string"
-            }
+            "type": "string"
           }
         }
       ]
@@ -198,71 +263,6 @@
           }
         }
       ]
-    },
-    "BaseScreenshot": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "ScreenshotName",
-          "description": "Name of the screenshot to be used as base reference for visual testing",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "Name of the screenshot to be used as base reference for visual testing"
-          }
-        },
-        {
-          "name": "IgnoreCoordinates",
-          "description": "List of coordinates of rectangles to be ignored during visual testing",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "description": "List of coordinates of rectangles to be ignored during visual testing",
-            "itemType": {
-              "type": "string",
-              "description": "Coordinates of a rectangle to be ignored during visual testing"
-            }
-          }
-        }
-      ]
-    },
-    "ArtifactConfig": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "S3Encryption",
-          "description": "Encryption configuration for uploading artifacts to S3",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "Encryption configuration for uploading artifacts to S3",
-            "typeName": "S3Encryption"
-          }
-        }
-      ]
-    },
-    "S3Encryption": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "EncryptionMode",
-          "description": "Encryption mode for encrypting artifacts when uploading to S3. Valid values: SSE_S3 and SSE_KMS.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Encryption mode for encrypting artifacts when uploading to S3. Valid values: SSE_S3 and SSE_KMS."
-          }
-        },
-        {
-          "name": "KmsKeyArn",
-          "description": "KMS key Arn for encrypting artifacts when uploading to S3. You must specify KMS key Arn for SSE_KMS encryption mode only.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "KMS key Arn for encrypting artifacts when uploading to S3. You must specify KMS key Arn for SSE_KMS encryption mode only."
-          }
-        }
-      ]
     }
   },
   "resource": {
@@ -270,23 +270,13 @@
     "description": "Resource Type definition for AWS::Synthetics::Canary",
     "properties": [
       {
-        "name": "Name",
-        "description": "Name of the canary.",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "description": "Name of the canary.",
-          "pattern": "^[0-9a-z_\\-]{1,21}$"
-        }
-      },
-      {
-        "name": "Code",
-        "description": "Provide the canary script source",
-        "optional": false,
+        "name": "ArtifactConfig",
+        "description": "Provide artifact configuration",
+        "optional": true,
         "type": {
           "type": "ref",
-          "description": "Provide the canary script source",
-          "typeName": "Code"
+          "description": "Provide artifact configuration",
+          "typeName": "ArtifactConfig"
         }
       },
       {
@@ -300,13 +290,70 @@
         }
       },
       {
-        "name": "ArtifactConfig",
-        "description": "Provide artifact configuration",
+        "name": "Code",
+        "description": "Provide the canary script source",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "description": "Provide the canary script source",
+          "typeName": "Code"
+        }
+      },
+      {
+        "name": "DeleteLambdaResourcesOnCanaryDeletion",
+        "description": "Deletes associated lambda resources created by Synthetics if set to True. Default is False",
+        "optional": true,
+        "type": {
+          "type": "boolean",
+          "description": "Deletes associated lambda resources created by Synthetics if set to True. Default is False"
+        }
+      },
+      {
+        "name": "ExecutionRoleArn",
+        "description": "Lambda Execution role used to run your canaries",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "Lambda Execution role used to run your canaries"
+        }
+      },
+      {
+        "name": "FailureRetentionPeriod",
+        "description": "Retention period of failed canary runs represented in number of days",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "Retention period of failed canary runs represented in number of days",
+          "isInteger": true
+        }
+      },
+      {
+        "name": "Name",
+        "description": "Name of the canary.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "Name of the canary.",
+          "pattern": "^[0-9a-z_\\-]{1,21}$"
+        }
+      },
+      {
+        "name": "RunConfig",
+        "description": "Provide canary run configuration",
         "optional": true,
         "type": {
           "type": "ref",
-          "description": "Provide artifact configuration",
-          "typeName": "ArtifactConfig"
+          "description": "Provide canary run configuration",
+          "typeName": "RunConfig"
+        }
+      },
+      {
+        "name": "RuntimeVersion",
+        "description": "Runtime version of Synthetics Library",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "Runtime version of Synthetics Library"
         }
       },
       {
@@ -320,21 +367,12 @@
         }
       },
       {
-        "name": "ExecutionRoleArn",
-        "description": "Lambda Execution role used to run your canaries",
-        "optional": false,
+        "name": "StartCanaryAfterCreation",
+        "description": "Runs canary if set to True. Default is False",
+        "optional": true,
         "type": {
-          "type": "string",
-          "description": "Lambda Execution role used to run your canaries"
-        }
-      },
-      {
-        "name": "RuntimeVersion",
-        "description": "Runtime version of Synthetics Library",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "description": "Runtime version of Synthetics Library"
+          "type": "boolean",
+          "description": "Runs canary if set to True. Default is False"
         }
       },
       {
@@ -344,16 +382,6 @@
         "type": {
           "type": "number",
           "description": "Retention period of successful canary runs represented in number of days",
-          "isInteger": true
-        }
-      },
-      {
-        "name": "FailureRetentionPeriod",
-        "description": "Retention period of failed canary runs represented in number of days",
-        "optional": true,
-        "type": {
-          "type": "number",
-          "description": "Retention period of failed canary runs represented in number of days",
           "isInteger": true
         }
       },
@@ -379,25 +407,6 @@
         }
       },
       {
-        "name": "RunConfig",
-        "description": "Provide canary run configuration",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "description": "Provide canary run configuration",
-          "typeName": "RunConfig"
-        }
-      },
-      {
-        "name": "StartCanaryAfterCreation",
-        "description": "Runs canary if set to True. Default is False",
-        "optional": true,
-        "type": {
-          "type": "boolean",
-          "description": "Runs canary if set to True. Default is False"
-        }
-      },
-      {
         "name": "VisualReference",
         "description": "Visual reference configuration for visual testing",
         "optional": true,
@@ -405,15 +414,6 @@
           "type": "ref",
           "description": "Visual reference configuration for visual testing",
           "typeName": "VisualReference"
-        }
-      },
-      {
-        "name": "DeleteLambdaResourcesOnCanaryDeletion",
-        "description": "Deletes associated lambda resources created by Synthetics if set to True. Default is False",
-        "optional": true,
-        "type": {
-          "type": "boolean",
-          "description": "Deletes associated lambda resources created by Synthetics if set to True. Default is False"
         }
       }
     ]
@@ -442,5 +442,5 @@
       }
     ]
   },
-  "$hash": "c5af1b55ddf42435b86f5532308d5976d7542395"
+  "$hash": "6c67bc7e859ef34fc9554613e2ccd1ef67373247"
 }

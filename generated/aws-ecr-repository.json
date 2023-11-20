@@ -1,5 +1,56 @@
 {
   "definitions": {
+    "EmptyOnDelete": {
+      "type": "boolean",
+      "description": "If true, deleting the repository force deletes the contents of the repository. Without a force delete, you can only delete empty repositories."
+    },
+    "EncryptionConfiguration": {
+      "type": "object",
+      "description": "The encryption configuration for the repository. This determines how the contents of your repository are encrypted at rest.\n\nBy default, when no encryption configuration is set or the AES256 encryption type is used, Amazon ECR uses server-side encryption with Amazon S3-managed encryption keys which encrypts your data at rest using an AES-256 encryption algorithm. This does not require any action on your part.\n\nFor more information, see https://docs.aws.amazon.com/AmazonECR/latest/userguide/encryption-at-rest.html",
+      "properties": [
+        {
+          "name": "EncryptionType",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "EncryptionType"
+          }
+        },
+        {
+          "name": "KmsKey",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "KmsKey"
+          }
+        }
+      ]
+    },
+    "EncryptionType": {
+      "type": "string",
+      "description": "The encryption type to use.",
+      "allowedValues": ["AES256", "KMS"]
+    },
+    "ImageScanningConfiguration": {
+      "type": "object",
+      "description": "The image scanning configuration for the repository. This setting determines whether images are scanned for known vulnerabilities after being pushed to the repository.",
+      "properties": [
+        {
+          "name": "ScanOnPush",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ScanOnPush"
+          }
+        }
+      ]
+    },
+    "KmsKey": {
+      "type": "string",
+      "description": "If you use the KMS encryption type, specify the CMK to use for encryption. The alias, key ID, or full ARN of the CMK can be specified. The key must exist in the same Region as the repository. If no key is specified, the default AWS managed CMK for Amazon ECR will be used.",
+      "maxLength": 2048,
+      "minLength": 1
+    },
     "LifecyclePolicy": {
       "type": "object",
       "description": "The LifecyclePolicy property type specifies a lifecycle policy. For information about lifecycle policy syntax, see https://docs.aws.amazon.com/AmazonECR/latest/userguide/LifecyclePolicies.html",
@@ -35,6 +86,10 @@
       "minLength": 12,
       "pattern": "^[0-9]{12}$"
     },
+    "ScanOnPush": {
+      "type": "boolean",
+      "description": "The setting that determines whether images are scanned after being pushed to a repository."
+    },
     "Tag": {
       "type": "object",
       "description": "A key-value pair to associate with a resource.",
@@ -62,61 +117,6 @@
           }
         }
       ]
-    },
-    "ImageScanningConfiguration": {
-      "type": "object",
-      "description": "The image scanning configuration for the repository. This setting determines whether images are scanned for known vulnerabilities after being pushed to the repository.",
-      "properties": [
-        {
-          "name": "ScanOnPush",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ScanOnPush"
-          }
-        }
-      ]
-    },
-    "ScanOnPush": {
-      "type": "boolean",
-      "description": "The setting that determines whether images are scanned after being pushed to a repository."
-    },
-    "EncryptionConfiguration": {
-      "type": "object",
-      "description": "The encryption configuration for the repository. This determines how the contents of your repository are encrypted at rest.\n\nBy default, when no encryption configuration is set or the AES256 encryption type is used, Amazon ECR uses server-side encryption with Amazon S3-managed encryption keys which encrypts your data at rest using an AES-256 encryption algorithm. This does not require any action on your part.\n\nFor more information, see https://docs.aws.amazon.com/AmazonECR/latest/userguide/encryption-at-rest.html",
-      "properties": [
-        {
-          "name": "EncryptionType",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "EncryptionType"
-          }
-        },
-        {
-          "name": "KmsKey",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "KmsKey"
-          }
-        }
-      ]
-    },
-    "EncryptionType": {
-      "type": "string",
-      "description": "The encryption type to use.",
-      "allowedValues": ["AES256", "KMS"]
-    },
-    "KmsKey": {
-      "type": "string",
-      "description": "If you use the KMS encryption type, specify the CMK to use for encryption. The alias, key ID, or full ARN of the CMK can be specified. The key must exist in the same Region as the repository. If no key is specified, the default AWS managed CMK for Amazon ECR will be used.",
-      "maxLength": 2048,
-      "minLength": 1
-    },
-    "EmptyOnDelete": {
-      "type": "boolean",
-      "description": "If true, deleting the repository force deletes the contents of the repository. Without a force delete, you can only delete empty repositories."
     }
   },
   "resource": {
@@ -129,6 +129,32 @@
         "type": {
           "type": "ref",
           "typeName": "EmptyOnDelete"
+        }
+      },
+      {
+        "name": "EncryptionConfiguration",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "EncryptionConfiguration"
+        }
+      },
+      {
+        "name": "ImageScanningConfiguration",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "ImageScanningConfiguration"
+        }
+      },
+      {
+        "name": "ImageTagMutability",
+        "description": "The image tag mutability setting for the repository.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The image tag mutability setting for the repository.",
+          "allowedValues": ["MUTABLE", "IMMUTABLE"]
         }
       },
       {
@@ -182,32 +208,6 @@
           },
           "maxLength": 50
         }
-      },
-      {
-        "name": "ImageTagMutability",
-        "description": "The image tag mutability setting for the repository.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The image tag mutability setting for the repository.",
-          "allowedValues": ["MUTABLE", "IMMUTABLE"]
-        }
-      },
-      {
-        "name": "ImageScanningConfiguration",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "ImageScanningConfiguration"
-        }
-      },
-      {
-        "name": "EncryptionConfiguration",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "EncryptionConfiguration"
-        }
       }
     ]
   },
@@ -231,5 +231,5 @@
       }
     ]
   },
-  "$hash": "b5fdd6a8aaf9ec8781bc99258d5202420f469776"
+  "$hash": "206a2f19074f4ac7990167ac2171e47196ff9ddc"
 }

@@ -1,5 +1,92 @@
 {
   "definitions": {
+    "HealthEventsConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "AvailabilityLocalHealthEventsConfig",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "LocalHealthEventsConfig"
+          }
+        },
+        {
+          "name": "AvailabilityScoreThreshold",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": false,
+            "maximum": 100,
+            "minimum": 0
+          }
+        },
+        {
+          "name": "PerformanceLocalHealthEventsConfig",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "LocalHealthEventsConfig"
+          }
+        },
+        {
+          "name": "PerformanceScoreThreshold",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": false,
+            "maximum": 100,
+            "minimum": 0
+          }
+        }
+      ]
+    },
+    "InternetMeasurementsLogDelivery": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "S3Config",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "S3Config"
+          }
+        }
+      ]
+    },
+    "LocalHealthEventsConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "HealthScoreThreshold",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": false,
+            "maximum": 100,
+            "minimum": 0
+          }
+        },
+        {
+          "name": "MinTrafficImpact",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": false,
+            "maximum": 100,
+            "minimum": 0
+          }
+        },
+        {
+          "name": "Status",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": ["ENABLED", "DISABLED"]
+          }
+        }
+      ]
+    },
     "MonitorConfigState": {
       "type": "string",
       "allowedValues": ["PENDING", "ACTIVE", "INACTIVE", "ERROR"]
@@ -13,44 +100,6 @@
         "INSUFFICIENT_DATA",
         "FAULT_SERVICE",
         "FAULT_ACCESS_CLOUDWATCH"
-      ]
-    },
-    "Tag": {
-      "type": "object",
-      "description": "The metadata that you apply to the cluster to help you categorize and organize them. Each tag consists of a key and an optional value, both of which you define.",
-      "properties": [
-        {
-          "name": "Key",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Value",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "iso8601UTC": {
-      "type": "string",
-      "description": "The date value in ISO 8601 format. The timezone is always UTC. (YYYY-MM-DDThh:mm:ssZ)",
-      "pattern": "^([0-2]\\d{3})-(0[0-9]|1[0-2])-([0-2]\\d|3[01])T([01]\\d|2[0-4]):([0-5]\\d):([0-6]\\d)((\\.\\d{3})?)Z$"
-    },
-    "InternetMeasurementsLogDelivery": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "S3Config",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "S3Config"
-          }
-        }
       ]
     },
     "S3Config": {
@@ -81,85 +130,62 @@
         }
       ]
     },
-    "HealthEventsConfig": {
+    "Tag": {
       "type": "object",
+      "description": "The metadata that you apply to the cluster to help you categorize and organize them. Each tag consists of a key and an optional value, both of which you define.",
       "properties": [
         {
-          "name": "AvailabilityScoreThreshold",
+          "name": "Key",
           "optional": true,
           "type": {
-            "type": "number",
-            "isInteger": false,
-            "maximum": 100,
-            "minimum": 0
+            "type": "string"
           }
         },
         {
-          "name": "PerformanceScoreThreshold",
+          "name": "Value",
           "optional": true,
           "type": {
-            "type": "number",
-            "isInteger": false,
-            "maximum": 100,
-            "minimum": 0
-          }
-        },
-        {
-          "name": "AvailabilityLocalHealthEventsConfig",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "LocalHealthEventsConfig"
-          }
-        },
-        {
-          "name": "PerformanceLocalHealthEventsConfig",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "LocalHealthEventsConfig"
+            "type": "string"
           }
         }
       ]
     },
-    "LocalHealthEventsConfig": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Status",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "allowedValues": ["ENABLED", "DISABLED"]
-          }
-        },
-        {
-          "name": "HealthScoreThreshold",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": false,
-            "maximum": 100,
-            "minimum": 0
-          }
-        },
-        {
-          "name": "MinTrafficImpact",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": false,
-            "maximum": 100,
-            "minimum": 0
-          }
-        }
-      ]
+    "iso8601UTC": {
+      "type": "string",
+      "description": "The date value in ISO 8601 format. The timezone is always UTC. (YYYY-MM-DDThh:mm:ssZ)",
+      "pattern": "^([0-2]\\d{3})-(0[0-9]|1[0-2])-([0-2]\\d|3[01])T([01]\\d|2[0-4]):([0-5]\\d):([0-6]\\d)((\\.\\d{3})?)Z$"
     }
   },
   "resource": {
     "type": "object",
     "description": "Represents a monitor, which defines the monitoring boundaries for measurements that Internet Monitor publishes information about for an application",
     "properties": [
+      {
+        "name": "HealthEventsConfig",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "HealthEventsConfig"
+        }
+      },
+      {
+        "name": "InternetMeasurementsLogDelivery",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "InternetMeasurementsLogDelivery"
+        }
+      },
+      {
+        "name": "MaxCityNetworksToMonitor",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "isInteger": true,
+          "maximum": 500000,
+          "minimum": 1
+        }
+      },
       {
         "name": "MonitorName",
         "optional": false,
@@ -227,16 +253,6 @@
         }
       },
       {
-        "name": "MaxCityNetworksToMonitor",
-        "optional": true,
-        "type": {
-          "type": "number",
-          "isInteger": true,
-          "maximum": 500000,
-          "minimum": 1
-        }
-      },
-      {
         "name": "TrafficPercentageToMonitor",
         "optional": true,
         "type": {
@@ -244,22 +260,6 @@
           "isInteger": true,
           "maximum": 100,
           "minimum": 1
-        }
-      },
-      {
-        "name": "InternetMeasurementsLogDelivery",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "InternetMeasurementsLogDelivery"
-        }
-      },
-      {
-        "name": "HealthEventsConfig",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "HealthEventsConfig"
         }
       }
     ]
@@ -311,5 +311,5 @@
       }
     ]
   },
-  "$hash": "b96e60ec2e4a0b100853ee7b738c944fe1e2111e"
+  "$hash": "a39eba17530447769586a954e5514608c6b1253e"
 }

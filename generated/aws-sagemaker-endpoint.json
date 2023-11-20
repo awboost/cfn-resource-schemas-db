@@ -1,86 +1,10 @@
 {
   "definitions": {
-    "CapacitySize": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Value",
-          "optional": false,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        },
-        {
-          "name": "Type",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "RollingUpdatePolicy": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "MaximumExecutionTimeoutInSeconds",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        },
-        {
-          "name": "MaximumBatchSize",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "CapacitySize"
-          }
-        },
-        {
-          "name": "WaitIntervalInSeconds",
-          "optional": false,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        },
-        {
-          "name": "RollbackMaximumBatchSize",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "CapacitySize"
-          }
-        }
-      ]
-    },
     "Alarm": {
       "type": "object",
       "properties": [
         {
           "name": "AlarmName",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "Tag": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Value",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Key",
           "optional": false,
           "type": {
             "type": "string"
@@ -100,35 +24,6 @@
               "type": "ref",
               "typeName": "Alarm"
             }
-          }
-        }
-      ]
-    },
-    "DeploymentConfig": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "AutoRollbackConfiguration",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "AutoRollbackConfig"
-          }
-        },
-        {
-          "name": "RollingUpdatePolicy",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "RollingUpdatePolicy"
-          }
-        },
-        {
-          "name": "BlueGreenUpdatePolicy",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "BlueGreenUpdatePolicy"
           }
         }
       ]
@@ -162,7 +57,7 @@
         }
       ]
     },
-    "TrafficRoutingConfig": {
+    "CapacitySize": {
       "type": "object",
       "properties": [
         {
@@ -170,6 +65,112 @@
           "optional": false,
           "type": {
             "type": "string"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        }
+      ]
+    },
+    "DeploymentConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "AutoRollbackConfiguration",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "AutoRollbackConfig"
+          }
+        },
+        {
+          "name": "BlueGreenUpdatePolicy",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "BlueGreenUpdatePolicy"
+          }
+        },
+        {
+          "name": "RollingUpdatePolicy",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "RollingUpdatePolicy"
+          }
+        }
+      ]
+    },
+    "RollingUpdatePolicy": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "MaximumBatchSize",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "CapacitySize"
+          }
+        },
+        {
+          "name": "MaximumExecutionTimeoutInSeconds",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "RollbackMaximumBatchSize",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "CapacitySize"
+          }
+        },
+        {
+          "name": "WaitIntervalInSeconds",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "TrafficRoutingConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "CanarySize",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "CapacitySize"
           }
         },
         {
@@ -181,11 +182,10 @@
           }
         },
         {
-          "name": "CanarySize",
-          "optional": true,
+          "name": "Type",
+          "optional": false,
           "type": {
-            "type": "ref",
-            "typeName": "CapacitySize"
+            "type": "string"
           }
         },
         {
@@ -216,10 +216,18 @@
     "description": "Resource Type definition for AWS::SageMaker::Endpoint",
     "properties": [
       {
-        "name": "RetainAllVariantProperties",
+        "name": "DeploymentConfig",
         "optional": true,
         "type": {
-          "type": "boolean"
+          "type": "ref",
+          "typeName": "DeploymentConfig"
+        }
+      },
+      {
+        "name": "EndpointConfigName",
+        "optional": false,
+        "type": {
+          "type": "string"
         }
       },
       {
@@ -241,18 +249,10 @@
         }
       },
       {
-        "name": "EndpointConfigName",
-        "optional": false,
-        "type": {
-          "type": "string"
-        }
-      },
-      {
-        "name": "DeploymentConfig",
+        "name": "RetainAllVariantProperties",
         "optional": true,
         "type": {
-          "type": "ref",
-          "typeName": "DeploymentConfig"
+          "type": "boolean"
         }
       },
       {
@@ -288,5 +288,5 @@
       }
     ]
   },
-  "$hash": "37d78a1e42cf9e57336846db1d6a38c0836e3805"
+  "$hash": "52c08894184a1dbbf80bfc0ad45f00bc3cd95894"
 }

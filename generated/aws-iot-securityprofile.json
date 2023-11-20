@@ -1,19 +1,50 @@
 {
   "definitions": {
+    "AlertTarget": {
+      "type": "object",
+      "description": "A structure containing the alert target ARN and the role ARN.",
+      "properties": [
+        {
+          "name": "AlertTargetArn",
+          "description": "The ARN of the notification target to which alerts are sent.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The ARN of the notification target to which alerts are sent.",
+            "maxLength": 2048
+          }
+        },
+        {
+          "name": "RoleArn",
+          "description": "The ARN of the role that grants permission to send alerts to the notification target.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The ARN of the role that grants permission to send alerts to the notification target.",
+            "maxLength": 2048,
+            "minLength": 20
+          }
+        }
+      ]
+    },
     "Behavior": {
       "type": "object",
       "description": "A security profile behavior.",
       "properties": [
         {
-          "name": "Name",
-          "description": "The name for the behavior.",
-          "optional": false,
+          "name": "Criteria",
+          "optional": true,
           "type": {
-            "type": "string",
-            "description": "The name for the behavior.",
-            "maxLength": 128,
-            "minLength": 1,
-            "pattern": "[a-zA-Z0-9:_-]+"
+            "type": "ref",
+            "typeName": "BehaviorCriteria"
+          }
+        },
+        {
+          "name": "ExportMetric",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ExportMetric"
           }
         },
         {
@@ -37,11 +68,15 @@
           }
         },
         {
-          "name": "Criteria",
-          "optional": true,
+          "name": "Name",
+          "description": "The name for the behavior.",
+          "optional": false,
           "type": {
-            "type": "ref",
-            "typeName": "BehaviorCriteria"
+            "type": "string",
+            "description": "The name for the behavior.",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "[a-zA-Z0-9:_-]+"
           }
         },
         {
@@ -51,46 +86,6 @@
           "type": {
             "type": "boolean",
             "description": "Manage Detect alarm SNS notifications by setting behavior notification to on or suppressed. Detect will continue to performing device behavior evaluations. However, suppressed alarms wouldn't be forwarded for SNS notification."
-          }
-        },
-        {
-          "name": "ExportMetric",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ExportMetric"
-          }
-        }
-      ]
-    },
-    "ExportMetric": {
-      "type": "boolean",
-      "description": "Flag to enable/disable metrics export for metric to be retained."
-    },
-    "MetricDimension": {
-      "type": "object",
-      "description": "The dimension of a metric.",
-      "properties": [
-        {
-          "name": "DimensionName",
-          "description": "A unique identifier for the dimension.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "A unique identifier for the dimension.",
-            "maxLength": 128,
-            "minLength": 1,
-            "pattern": "[a-zA-Z0-9:_-]+"
-          }
-        },
-        {
-          "name": "Operator",
-          "description": "Defines how the dimensionValues of a dimension are interpreted.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Defines how the dimensionValues of a dimension are interpreted.",
-            "allowedValues": ["IN", "NOT_IN"]
           }
         }
       ]
@@ -121,24 +116,6 @@
           }
         },
         {
-          "name": "Value",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "MetricValue"
-          }
-        },
-        {
-          "name": "DurationSeconds",
-          "description": "Use this to specify the time duration over which the behavior is evaluated.",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "description": "Use this to specify the time duration over which the behavior is evaluated.",
-            "isInteger": true
-          }
-        },
-        {
           "name": "ConsecutiveDatapointsToAlarm",
           "description": "If a device is in violation of the behavior for the specified number of consecutive datapoints, an alarm occurs. If not specified, the default is 1.",
           "optional": true,
@@ -163,11 +140,13 @@
           }
         },
         {
-          "name": "StatisticalThreshold",
+          "name": "DurationSeconds",
+          "description": "Use this to specify the time duration over which the behavior is evaluated.",
           "optional": true,
           "type": {
-            "type": "ref",
-            "typeName": "StatisticalThreshold"
+            "type": "number",
+            "description": "Use this to specify the time duration over which the behavior is evaluated.",
+            "isInteger": true
           }
         },
         {
@@ -177,6 +156,104 @@
             "type": "ref",
             "typeName": "MachineLearningDetectionConfig"
           }
+        },
+        {
+          "name": "StatisticalThreshold",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "StatisticalThreshold"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "MetricValue"
+          }
+        }
+      ]
+    },
+    "ExportMetric": {
+      "type": "boolean",
+      "description": "Flag to enable/disable metrics export for metric to be retained."
+    },
+    "MachineLearningDetectionConfig": {
+      "type": "object",
+      "description": "The configuration of an ML Detect Security Profile.",
+      "properties": [
+        {
+          "name": "ConfidenceLevel",
+          "description": "The sensitivity of anomalous behavior evaluation. Can be Low, Medium, or High.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The sensitivity of anomalous behavior evaluation. Can be Low, Medium, or High.",
+            "allowedValues": ["LOW", "MEDIUM", "HIGH"]
+          }
+        }
+      ]
+    },
+    "MetricDimension": {
+      "type": "object",
+      "description": "The dimension of a metric.",
+      "properties": [
+        {
+          "name": "DimensionName",
+          "description": "A unique identifier for the dimension.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "A unique identifier for the dimension.",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "[a-zA-Z0-9:_-]+"
+          }
+        },
+        {
+          "name": "Operator",
+          "description": "Defines how the dimensionValues of a dimension are interpreted.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Defines how the dimensionValues of a dimension are interpreted.",
+            "allowedValues": ["IN", "NOT_IN"]
+          }
+        }
+      ]
+    },
+    "MetricToRetain": {
+      "type": "object",
+      "description": "The metric you want to retain. Dimensions are optional.",
+      "properties": [
+        {
+          "name": "ExportMetric",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ExportMetric"
+          }
+        },
+        {
+          "name": "Metric",
+          "description": "What is measured by the behavior.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "What is measured by the behavior.",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "[a-zA-Z0-9:_-]+"
+          }
+        },
+        {
+          "name": "MetricDimension",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "MetricDimension"
+          }
         }
       ]
     },
@@ -184,15 +261,6 @@
       "type": "object",
       "description": "The value to be compared with the metric.",
       "properties": [
-        {
-          "name": "Count",
-          "description": "If the ComparisonOperator calls for a numeric value, use this to specify that (integer) numeric value to be compared with the metric.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "If the ComparisonOperator calls for a numeric value, use this to specify that (integer) numeric value to be compared with the metric."
-          }
-        },
         {
           "name": "Cidrs",
           "description": "If the ComparisonOperator calls for a set of CIDRs, use this to specify that set to be compared with the metric.",
@@ -206,18 +274,12 @@
           }
         },
         {
-          "name": "Ports",
-          "description": "If the ComparisonOperator calls for a set of ports, use this to specify that set to be compared with the metric.",
+          "name": "Count",
+          "description": "If the ComparisonOperator calls for a numeric value, use this to specify that (integer) numeric value to be compared with the metric.",
           "optional": true,
           "type": {
-            "type": "array",
-            "description": "If the ComparisonOperator calls for a set of ports, use this to specify that set to be compared with the metric.",
-            "itemType": {
-              "type": "number",
-              "isInteger": true,
-              "maximum": 65535,
-              "minimum": 0
-            }
+            "type": "string",
+            "description": "If the ComparisonOperator calls for a numeric value, use this to specify that (integer) numeric value to be compared with the metric."
           }
         },
         {
@@ -240,6 +302,21 @@
             "itemType": {
               "type": "number",
               "isInteger": false
+            }
+          }
+        },
+        {
+          "name": "Ports",
+          "description": "If the ComparisonOperator calls for a set of ports, use this to specify that set to be compared with the metric.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "If the ComparisonOperator calls for a set of ports, use this to specify that set to be compared with the metric.",
+            "itemType": {
+              "type": "number",
+              "isInteger": true,
+              "maximum": 65535,
+              "minimum": 0
             }
           }
         },
@@ -286,83 +363,6 @@
         }
       ]
     },
-    "MachineLearningDetectionConfig": {
-      "type": "object",
-      "description": "The configuration of an ML Detect Security Profile.",
-      "properties": [
-        {
-          "name": "ConfidenceLevel",
-          "description": "The sensitivity of anomalous behavior evaluation. Can be Low, Medium, or High.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The sensitivity of anomalous behavior evaluation. Can be Low, Medium, or High.",
-            "allowedValues": ["LOW", "MEDIUM", "HIGH"]
-          }
-        }
-      ]
-    },
-    "AlertTarget": {
-      "type": "object",
-      "description": "A structure containing the alert target ARN and the role ARN.",
-      "properties": [
-        {
-          "name": "AlertTargetArn",
-          "description": "The ARN of the notification target to which alerts are sent.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The ARN of the notification target to which alerts are sent.",
-            "maxLength": 2048
-          }
-        },
-        {
-          "name": "RoleArn",
-          "description": "The ARN of the role that grants permission to send alerts to the notification target.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The ARN of the role that grants permission to send alerts to the notification target.",
-            "maxLength": 2048,
-            "minLength": 20
-          }
-        }
-      ]
-    },
-    "MetricToRetain": {
-      "type": "object",
-      "description": "The metric you want to retain. Dimensions are optional.",
-      "properties": [
-        {
-          "name": "Metric",
-          "description": "What is measured by the behavior.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "What is measured by the behavior.",
-            "maxLength": 128,
-            "minLength": 1,
-            "pattern": "[a-zA-Z0-9:_-]+"
-          }
-        },
-        {
-          "name": "MetricDimension",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "MetricDimension"
-          }
-        },
-        {
-          "name": "ExportMetric",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ExportMetric"
-          }
-        }
-      ]
-    },
     "Tag": {
       "type": "object",
       "description": "A key-value pair to associate with a resource.",
@@ -397,37 +397,15 @@
     "description": "A security profile defines a set of expected behaviors for devices in your account.",
     "properties": [
       {
-        "name": "SecurityProfileName",
-        "description": "A unique identifier for the security profile.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "A unique identifier for the security profile.",
-          "maxLength": 128,
-          "minLength": 1,
-          "pattern": "[a-zA-Z0-9:_-]+"
-        }
-      },
-      {
-        "name": "SecurityProfileDescription",
-        "description": "A description of the security profile.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "A description of the security profile.",
-          "maxLength": 1000
-        }
-      },
-      {
-        "name": "Behaviors",
-        "description": "Specifies the behaviors that, when violated by a device (thing), cause an alert.",
+        "name": "AdditionalMetricsToRetainV2",
+        "description": "A list of metrics whose data is retained (stored). By default, data is retained for any metric used in the profile's behaviors, but it is also retained for any metric specified here.",
         "optional": true,
         "type": {
           "type": "array",
-          "description": "Specifies the behaviors that, when violated by a device (thing), cause an alert.",
+          "description": "A list of metrics whose data is retained (stored). By default, data is retained for any metric used in the profile's behaviors, but it is also retained for any metric specified here.",
           "itemType": {
             "type": "ref",
-            "typeName": "Behavior"
+            "typeName": "MetricToRetain"
           }
         }
       },
@@ -445,15 +423,15 @@
         }
       },
       {
-        "name": "AdditionalMetricsToRetainV2",
-        "description": "A list of metrics whose data is retained (stored). By default, data is retained for any metric used in the profile's behaviors, but it is also retained for any metric specified here.",
+        "name": "Behaviors",
+        "description": "Specifies the behaviors that, when violated by a device (thing), cause an alert.",
         "optional": true,
         "type": {
           "type": "array",
-          "description": "A list of metrics whose data is retained (stored). By default, data is retained for any metric used in the profile's behaviors, but it is also retained for any metric specified here.",
+          "description": "Specifies the behaviors that, when violated by a device (thing), cause an alert.",
           "itemType": {
             "type": "ref",
-            "typeName": "MetricToRetain"
+            "typeName": "Behavior"
           }
         }
       },
@@ -488,6 +466,28 @@
               }
             }
           ]
+        }
+      },
+      {
+        "name": "SecurityProfileDescription",
+        "description": "A description of the security profile.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "A description of the security profile.",
+          "maxLength": 1000
+        }
+      },
+      {
+        "name": "SecurityProfileName",
+        "description": "A unique identifier for the security profile.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "A unique identifier for the security profile.",
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "[a-zA-Z0-9:_-]+"
         }
       },
       {
@@ -535,5 +535,5 @@
       }
     ]
   },
-  "$hash": "476a9f7d2d894cdce82b42bf6c37f6e50b793089"
+  "$hash": "a247d68bde0a149c7df257fda36b19e67502d949"
 }

@@ -1,47 +1,91 @@
 {
   "definitions": {
-    "DateTimeFormat": {
-      "type": "string"
-    },
-    "Relationship": {
+    "Component": {
       "type": "object",
-      "description": "The type of the relationship.",
       "properties": [
         {
-          "name": "RelationshipType",
-          "description": "The type of the relationship.",
+          "name": "ComponentName",
+          "description": "The name of the component.",
           "optional": true,
           "type": {
             "type": "string",
-            "description": "The type of the relationship.",
+            "description": "The name of the component.",
             "maxLength": 256,
             "minLength": 1,
-            "pattern": ".*"
+            "pattern": "[a-zA-Z_\\-0-9]+"
           }
         },
         {
-          "name": "TargetComponentTypeId",
-          "description": "The ID of the target component type associated with this relationship.",
+          "name": "ComponentTypeId",
+          "description": "The ID of the component type.",
           "optional": true,
           "type": {
             "type": "string",
-            "description": "The ID of the target component type associated with this relationship.",
+            "description": "The ID of the component type.",
             "maxLength": 256,
             "minLength": 1,
-            "pattern": "[a-zA-Z_\\.\\-0-9:]+"
+            "pattern": "[a-zA-Z_\\-0-9]+"
+          }
+        },
+        {
+          "name": "DefinedIn",
+          "description": "The name of the property definition set in the component.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The name of the property definition set in the component.",
+            "maxLength": 256,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Description",
+          "description": "The description of the component.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The description of the component.",
+            "maxLength": 512,
+            "minLength": 0
+          }
+        },
+        {
+          "name": "Properties",
+          "description": "An object that maps strings to the properties to set in the component type. Each string in the mapping must be unique to this object.",
+          "optional": true,
+          "type": {
+            "type": "record",
+            "description": "An object that maps strings to the properties to set in the component type. Each string in the mapping must be unique to this object.",
+            "valueType": {
+              "type": "ref",
+              "typeName": "Property"
+            }
+          }
+        },
+        {
+          "name": "PropertyGroups",
+          "description": "An object that maps strings to the property groups to set in the component type. Each string in the mapping must be unique to this object.",
+          "optional": true,
+          "type": {
+            "type": "record",
+            "description": "An object that maps strings to the property groups to set in the component type. Each string in the mapping must be unique to this object.",
+            "valueType": {
+              "type": "ref",
+              "typeName": "PropertyGroup"
+            }
+          }
+        },
+        {
+          "name": "Status",
+          "description": "The current status of the entity.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The current status of the entity.",
+            "typeName": "Status"
           }
         }
       ]
-    },
-    "PropertyDefinitionConfiguration": {
-      "type": "record",
-      "description": "An object that specifies information about a property.",
-      "valueType": {
-        "type": "string",
-        "maxLength": 256,
-        "minLength": 1,
-        "pattern": "[a-zA-Z_\\-0-9]+"
-      }
     },
     "DataType": {
       "type": "object",
@@ -186,18 +230,6 @@
           }
         },
         {
-          "name": "StringValue",
-          "description": "A string value.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "A string value.",
-            "maxLength": 256,
-            "minLength": 1,
-            "pattern": ".*"
-          }
-        },
-        {
           "name": "MapValue",
           "description": "An object that maps strings to multiple DataValue objects.",
           "optional": true,
@@ -240,8 +272,23 @@
               }
             ]
           }
+        },
+        {
+          "name": "StringValue",
+          "description": "A string value.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "A string value.",
+            "maxLength": 256,
+            "minLength": 1,
+            "pattern": ".*"
+          }
         }
       ]
+    },
+    "DateTimeFormat": {
+      "type": "string"
     },
     "Property": {
       "type": "object",
@@ -362,9 +409,15 @@
         }
       ]
     },
-    "PropertyName": {
-      "type": "string",
-      "pattern": "[a-zA-Z_\\-0-9]+"
+    "PropertyDefinitionConfiguration": {
+      "type": "record",
+      "description": "An object that specifies information about a property.",
+      "valueType": {
+        "type": "string",
+        "maxLength": 256,
+        "minLength": 1,
+        "pattern": "[a-zA-Z_\\-0-9]+"
+      }
     },
     "PropertyGroup": {
       "type": "object",
@@ -397,89 +450,36 @@
         }
       ]
     },
-    "Component": {
+    "PropertyName": {
+      "type": "string",
+      "pattern": "[a-zA-Z_\\-0-9]+"
+    },
+    "Relationship": {
       "type": "object",
+      "description": "The type of the relationship.",
       "properties": [
         {
-          "name": "ComponentName",
-          "description": "The name of the component.",
+          "name": "RelationshipType",
+          "description": "The type of the relationship.",
           "optional": true,
           "type": {
             "type": "string",
-            "description": "The name of the component.",
+            "description": "The type of the relationship.",
             "maxLength": 256,
             "minLength": 1,
-            "pattern": "[a-zA-Z_\\-0-9]+"
+            "pattern": ".*"
           }
         },
         {
-          "name": "ComponentTypeId",
-          "description": "The ID of the component type.",
+          "name": "TargetComponentTypeId",
+          "description": "The ID of the target component type associated with this relationship.",
           "optional": true,
           "type": {
             "type": "string",
-            "description": "The ID of the component type.",
+            "description": "The ID of the target component type associated with this relationship.",
             "maxLength": 256,
             "minLength": 1,
-            "pattern": "[a-zA-Z_\\-0-9]+"
-          }
-        },
-        {
-          "name": "Description",
-          "description": "The description of the component.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The description of the component.",
-            "maxLength": 512,
-            "minLength": 0
-          }
-        },
-        {
-          "name": "DefinedIn",
-          "description": "The name of the property definition set in the component.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The name of the property definition set in the component.",
-            "maxLength": 256,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "Properties",
-          "description": "An object that maps strings to the properties to set in the component type. Each string in the mapping must be unique to this object.",
-          "optional": true,
-          "type": {
-            "type": "record",
-            "description": "An object that maps strings to the properties to set in the component type. Each string in the mapping must be unique to this object.",
-            "valueType": {
-              "type": "ref",
-              "typeName": "Property"
-            }
-          }
-        },
-        {
-          "name": "PropertyGroups",
-          "description": "An object that maps strings to the property groups to set in the component type. Each string in the mapping must be unique to this object.",
-          "optional": true,
-          "type": {
-            "type": "record",
-            "description": "An object that maps strings to the property groups to set in the component type. Each string in the mapping must be unique to this object.",
-            "valueType": {
-              "type": "ref",
-              "typeName": "PropertyGroup"
-            }
-          }
-        },
-        {
-          "name": "Status",
-          "description": "The current status of the entity.",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "The current status of the entity.",
-            "typeName": "Status"
+            "pattern": "[a-zA-Z_\\.\\-0-9:]+"
           }
         }
       ]
@@ -487,20 +487,6 @@
     "Status": {
       "type": "object",
       "properties": [
-        {
-          "name": "State",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "allowedValues": [
-              "CREATING",
-              "UPDATING",
-              "DELETING",
-              "ACTIVE",
-              "ERROR"
-            ]
-          }
-        },
         {
           "name": "Error",
           "optional": true,
@@ -516,6 +502,14 @@
                 "description": "Error object with Message and Code.",
                 "properties": [
                   {
+                    "name": "Code",
+                    "optional": true,
+                    "type": {
+                      "type": "string",
+                      "allowedValues": ["VALIDATION_ERROR", "INTERNAL_FAILURE"]
+                    }
+                  },
+                  {
                     "name": "Message",
                     "optional": true,
                     "type": {
@@ -523,17 +517,23 @@
                       "maxLength": 2048,
                       "minLength": 0
                     }
-                  },
-                  {
-                    "name": "Code",
-                    "optional": true,
-                    "type": {
-                      "type": "string",
-                      "allowedValues": ["VALIDATION_ERROR", "INTERNAL_FAILURE"]
-                    }
                   }
                 ]
               }
+            ]
+          }
+        },
+        {
+          "name": "State",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": [
+              "CREATING",
+              "UPDATING",
+              "DELETING",
+              "ACTIVE",
+              "ERROR"
             ]
           }
         }
@@ -544,6 +544,30 @@
     "type": "object",
     "description": "Resource schema for AWS::IoTTwinMaker::Entity",
     "properties": [
+      {
+        "name": "Components",
+        "description": "A map that sets information about a component type.",
+        "optional": true,
+        "type": {
+          "type": "record",
+          "description": "A map that sets information about a component type.",
+          "valueType": {
+            "type": "ref",
+            "typeName": "Component"
+          }
+        }
+      },
+      {
+        "name": "Description",
+        "description": "The description of the entity.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The description of the entity.",
+          "maxLength": 512,
+          "minLength": 0
+        }
+      },
       {
         "name": "EntityId",
         "description": "The ID of the entity.",
@@ -581,17 +605,6 @@
         }
       },
       {
-        "name": "Description",
-        "description": "The description of the entity.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The description of the entity.",
-          "maxLength": 512,
-          "minLength": 0
-        }
-      },
-      {
         "name": "Tags",
         "description": "A key-value pair to associate with a resource.",
         "optional": true,
@@ -616,19 +629,6 @@
           "minLength": 1,
           "pattern": "[a-zA-Z_0-9][a-zA-Z_\\-0-9]*[a-zA-Z0-9]+"
         }
-      },
-      {
-        "name": "Components",
-        "description": "A map that sets information about a component type.",
-        "optional": true,
-        "type": {
-          "type": "record",
-          "description": "A map that sets information about a component type.",
-          "valueType": {
-            "type": "ref",
-            "typeName": "Component"
-          }
-        }
       }
     ]
   },
@@ -636,25 +636,6 @@
     "type": "object",
     "description": "Resource schema for AWS::IoTTwinMaker::Entity",
     "properties": [
-      {
-        "name": "Status",
-        "description": "The current status of the entity.",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "description": "The current status of the entity.",
-          "typeName": "Status"
-        }
-      },
-      {
-        "name": "HasChildEntities",
-        "description": "A Boolean value that specifies whether the entity has child entities or not.",
-        "optional": true,
-        "type": {
-          "type": "boolean",
-          "description": "A Boolean value that specifies whether the entity has child entities or not."
-        }
-      },
       {
         "name": "Arn",
         "description": "The ARN of the entity.",
@@ -678,6 +659,25 @@
         }
       },
       {
+        "name": "HasChildEntities",
+        "description": "A Boolean value that specifies whether the entity has child entities or not.",
+        "optional": true,
+        "type": {
+          "type": "boolean",
+          "description": "A Boolean value that specifies whether the entity has child entities or not."
+        }
+      },
+      {
+        "name": "Status",
+        "description": "The current status of the entity.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "The current status of the entity.",
+          "typeName": "Status"
+        }
+      },
+      {
         "name": "UpdateDateTime",
         "description": "The last date and time when the entity was updated.",
         "optional": true,
@@ -689,5 +689,5 @@
       }
     ]
   },
-  "$hash": "803a68a2c225eb41ba0828195aa33bbb44591302"
+  "$hash": "0496937d82c7ae7cecb8b1dda0f5d406961d2276"
 }

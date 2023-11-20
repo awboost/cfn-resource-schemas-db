@@ -1,63 +1,5 @@
 {
   "definitions": {
-    "ConnectPeerConfiguration": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "CoreNetworkAddress",
-          "description": "The IP address of a core network.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The IP address of a core network."
-          }
-        },
-        {
-          "name": "PeerAddress",
-          "description": "The IP address of the Connect peer.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The IP address of the Connect peer."
-          }
-        },
-        {
-          "name": "InsideCidrBlocks",
-          "description": "The inside IP addresses used for a Connect peer configuration.",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "description": "The inside IP addresses used for a Connect peer configuration.",
-            "itemType": {
-              "type": "string"
-            }
-          }
-        },
-        {
-          "name": "Protocol",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "TunnelProtocol"
-          }
-        },
-        {
-          "name": "BgpConfigurations",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "ConnectPeerBgpConfiguration"
-            }
-          }
-        }
-      ]
-    },
-    "TunnelProtocol": {
-      "type": "string",
-      "description": "The protocol used for a Connect peer configuration."
-    },
     "BgpOptions": {
       "type": "object",
       "description": "Bgp options",
@@ -77,6 +19,15 @@
       "description": "Bgp configuration for connect peer",
       "properties": [
         {
+          "name": "CoreNetworkAddress",
+          "description": "The address of a core network.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The address of a core network."
+          }
+        },
+        {
           "name": "CoreNetworkAsn",
           "description": "The ASN of the Coret Network.",
           "optional": true,
@@ -84,6 +35,15 @@
             "type": "number",
             "description": "The ASN of the Coret Network.",
             "isInteger": false
+          }
+        },
+        {
+          "name": "PeerAddress",
+          "description": "The address of a core network Connect peer.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The address of a core network Connect peer."
           }
         },
         {
@@ -95,23 +55,59 @@
             "description": "The ASN of the Connect peer.",
             "isInteger": false
           }
+        }
+      ]
+    },
+    "ConnectPeerConfiguration": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "BgpConfigurations",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "ConnectPeerBgpConfiguration"
+            }
+          }
         },
         {
           "name": "CoreNetworkAddress",
-          "description": "The address of a core network.",
+          "description": "The IP address of a core network.",
           "optional": true,
           "type": {
             "type": "string",
-            "description": "The address of a core network."
+            "description": "The IP address of a core network."
+          }
+        },
+        {
+          "name": "InsideCidrBlocks",
+          "description": "The inside IP addresses used for a Connect peer configuration.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "The inside IP addresses used for a Connect peer configuration.",
+            "itemType": {
+              "type": "string"
+            }
           }
         },
         {
           "name": "PeerAddress",
-          "description": "The address of a core network Connect peer.",
+          "description": "The IP address of the Connect peer.",
           "optional": true,
           "type": {
             "type": "string",
-            "description": "The address of a core network Connect peer."
+            "description": "The IP address of the Connect peer."
+          }
+        },
+        {
+          "name": "Protocol",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "TunnelProtocol"
           }
         }
       ]
@@ -139,6 +135,10 @@
           }
         }
       ]
+    },
+    "TunnelProtocol": {
+      "type": "string",
+      "description": "The protocol used for a Connect peer configuration."
     }
   },
   "resource": {
@@ -146,12 +146,22 @@
     "description": "AWS::NetworkManager::ConnectPeer Resource Type Definition.",
     "properties": [
       {
-        "name": "PeerAddress",
-        "description": "The IP address of the Connect peer.",
+        "name": "BgpOptions",
+        "description": "Bgp options for connect peer.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "Bgp options for connect peer.",
+          "typeName": "BgpOptions"
+        }
+      },
+      {
+        "name": "ConnectAttachmentId",
+        "description": "The ID of the attachment to connect.",
         "optional": false,
         "type": {
           "type": "string",
-          "description": "The IP address of the Connect peer."
+          "description": "The ID of the attachment to connect."
         }
       },
       {
@@ -161,16 +171,6 @@
         "type": {
           "type": "string",
           "description": "The IP address of a core network."
-        }
-      },
-      {
-        "name": "BgpOptions",
-        "description": "Bgp options for connect peer.",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "description": "Bgp options for connect peer.",
-          "typeName": "BgpOptions"
         }
       },
       {
@@ -186,12 +186,12 @@
         }
       },
       {
-        "name": "ConnectAttachmentId",
-        "description": "The ID of the attachment to connect.",
+        "name": "PeerAddress",
+        "description": "The IP address of the Connect peer.",
         "optional": false,
         "type": {
           "type": "string",
-          "description": "The ID of the attachment to connect."
+          "description": "The IP address of the Connect peer."
         }
       },
       {
@@ -223,12 +223,13 @@
     "description": "AWS::NetworkManager::ConnectPeer Resource Type Definition.",
     "properties": [
       {
-        "name": "CoreNetworkId",
-        "description": "The ID of the core network.",
+        "name": "Configuration",
+        "description": "Configuration of the connect peer.",
         "optional": true,
         "type": {
-          "type": "string",
-          "description": "The ID of the core network."
+          "type": "ref",
+          "description": "Configuration of the connect peer.",
+          "typeName": "ConnectPeerConfiguration"
         }
       },
       {
@@ -238,6 +239,24 @@
         "type": {
           "type": "string",
           "description": "The ID of the Connect peer."
+        }
+      },
+      {
+        "name": "CoreNetworkId",
+        "description": "The ID of the core network.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The ID of the core network."
+        }
+      },
+      {
+        "name": "CreatedAt",
+        "description": "Connect peer creation time.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Connect peer creation time."
         }
       },
       {
@@ -257,27 +276,8 @@
           "type": "string",
           "description": "State of the connect peer."
         }
-      },
-      {
-        "name": "CreatedAt",
-        "description": "Connect peer creation time.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "Connect peer creation time."
-        }
-      },
-      {
-        "name": "Configuration",
-        "description": "Configuration of the connect peer.",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "description": "Configuration of the connect peer.",
-          "typeName": "ConnectPeerConfiguration"
-        }
       }
     ]
   },
-  "$hash": "ea65dfeb0435d3241204830e0141a5c217c81c0d"
+  "$hash": "39a47e3b0ed16be05a86a57b7994a90bc5d69fa6"
 }

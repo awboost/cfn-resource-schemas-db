@@ -5,6 +5,19 @@
       "description": "Contains a composite model definition in an asset model. This composite model definition is applied to all assets created from the asset model.",
       "properties": [
         {
+          "name": "CompositeModelProperties",
+          "description": "The property definitions of the asset model. You can specify up to 200 properties per asset model.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "The property definitions of the asset model. You can specify up to 200 properties per asset model.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "AssetModelProperty"
+            }
+          }
+        },
+        {
           "name": "Description",
           "description": "A description for the asset composite model.",
           "optional": true,
@@ -30,18 +43,41 @@
             "type": "string",
             "description": "The type of the composite model. For alarm composite models, this type is AWS/ALARM"
           }
+        }
+      ]
+    },
+    "AssetModelHierarchy": {
+      "type": "object",
+      "description": "Contains information about an asset model hierarchy.",
+      "properties": [
+        {
+          "name": "ChildAssetModelId",
+          "description": "The ID of the asset model. All assets in this hierarchy must be instances of the child AssetModelId asset model.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The ID of the asset model. All assets in this hierarchy must be instances of the child AssetModelId asset model."
+          }
         },
         {
-          "name": "CompositeModelProperties",
-          "description": "The property definitions of the asset model. You can specify up to 200 properties per asset model.",
-          "optional": true,
+          "name": "LogicalId",
+          "description": "Customer provided ID for hierarchy.",
+          "optional": false,
           "type": {
-            "type": "array",
-            "description": "The property definitions of the asset model. You can specify up to 200 properties per asset model.",
-            "itemType": {
-              "type": "ref",
-              "typeName": "AssetModelProperty"
-            }
+            "type": "string",
+            "description": "Customer provided ID for hierarchy.",
+            "maxLength": 256,
+            "minLength": 1,
+            "pattern": "[^\\u0000-\\u001F\\u007F]+"
+          }
+        },
+        {
+          "name": "Name",
+          "description": "The name of the asset model hierarchy.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The name of the asset model hierarchy."
           }
         }
       ]
@@ -50,6 +86,26 @@
       "type": "object",
       "description": "Contains information about an asset model property.",
       "properties": [
+        {
+          "name": "DataType",
+          "description": "The data type of the asset model property.",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "description": "The data type of the asset model property.",
+            "typeName": "DataType"
+          }
+        },
+        {
+          "name": "DataTypeSpec",
+          "description": "The data type of the structure for this property.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The data type of the structure for this property.",
+            "typeName": "DataTypeSpec"
+          }
+        },
         {
           "name": "LogicalId",
           "description": "Customer provided ID for property.",
@@ -72,23 +128,13 @@
           }
         },
         {
-          "name": "DataType",
-          "description": "The data type of the asset model property.",
+          "name": "Type",
+          "description": "The property type",
           "optional": false,
           "type": {
             "type": "ref",
-            "description": "The data type of the asset model property.",
-            "typeName": "DataType"
-          }
-        },
-        {
-          "name": "DataTypeSpec",
-          "description": "The data type of the structure for this property.",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "The data type of the structure for this property.",
-            "typeName": "DataTypeSpec"
+            "description": "The property type",
+            "typeName": "PropertyType"
           }
         },
         {
@@ -99,68 +145,8 @@
             "type": "string",
             "description": "The unit of the asset model property, such as Newtons or RPM."
           }
-        },
-        {
-          "name": "Type",
-          "description": "The property type",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "description": "The property type",
-            "typeName": "PropertyType"
-          }
         }
       ]
-    },
-    "DataType": {
-      "type": "string",
-      "allowedValues": ["STRING", "INTEGER", "DOUBLE", "BOOLEAN", "STRUCT"]
-    },
-    "DataTypeSpec": {
-      "type": "string",
-      "allowedValues": ["AWS/ALARM_STATE"]
-    },
-    "PropertyType": {
-      "type": "object",
-      "description": "Contains a property type, which can be one of attribute, measurement, metric, or transform.",
-      "properties": [
-        {
-          "name": "TypeName",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "TypeName"
-          }
-        },
-        {
-          "name": "Attribute",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "Attribute"
-          }
-        },
-        {
-          "name": "Transform",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "Transform"
-          }
-        },
-        {
-          "name": "Metric",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "Metric"
-          }
-        }
-      ]
-    },
-    "TypeName": {
-      "type": "string",
-      "allowedValues": ["Measurement", "Attribute", "Transform", "Metric"]
     },
     "Attribute": {
       "type": "object",
@@ -174,32 +160,41 @@
         }
       ]
     },
-    "Transform": {
+    "DataType": {
+      "type": "string",
+      "allowedValues": ["STRING", "INTEGER", "DOUBLE", "BOOLEAN", "STRUCT"]
+    },
+    "DataTypeSpec": {
+      "type": "string",
+      "allowedValues": ["AWS/ALARM_STATE"]
+    },
+    "ExpressionVariable": {
       "type": "object",
       "properties": [
         {
-          "name": "Expression",
-          "description": "The mathematical expression that defines the transformation function. You can specify up to 10 functions per expression.",
+          "name": "Name",
+          "description": "The friendly name of the variable to be used in the expression.",
           "optional": false,
           "type": {
             "type": "string",
-            "description": "The mathematical expression that defines the transformation function. You can specify up to 10 functions per expression."
+            "description": "The friendly name of the variable to be used in the expression."
           }
         },
         {
-          "name": "Variables",
-          "description": "The list of variables used in the expression.",
+          "name": "Value",
+          "description": "The variable that identifies an asset property from which to use values.",
           "optional": false,
           "type": {
-            "type": "array",
-            "description": "The list of variables used in the expression.",
-            "itemType": {
-              "type": "ref",
-              "typeName": "ExpressionVariable"
-            }
+            "type": "ref",
+            "description": "The variable that identifies an asset property from which to use values.",
+            "typeName": "VariableValue"
           }
         }
       ]
+    },
+    "Interval": {
+      "type": "string",
+      "description": "The time interval for the tumbling window."
     },
     "Metric": {
       "type": "object",
@@ -252,117 +247,44 @@
         }
       ]
     },
-    "TumblingWindow": {
-      "type": "object",
-      "description": "Contains a tumbling window, which is a repeating fixed-sized, non-overlapping, and contiguous time interval. This window is used in metric and aggregation computations.",
-      "properties": [
-        {
-          "name": "Interval",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "Interval"
-          }
-        },
-        {
-          "name": "Offset",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "Offset"
-          }
-        }
-      ]
-    },
-    "Interval": {
-      "type": "string",
-      "description": "The time interval for the tumbling window."
-    },
     "Offset": {
       "type": "string",
       "description": "The shift or reference point on timeline for the contiguous time intervals."
     },
-    "ExpressionVariable": {
+    "PropertyType": {
       "type": "object",
+      "description": "Contains a property type, which can be one of attribute, measurement, metric, or transform.",
       "properties": [
         {
-          "name": "Name",
-          "description": "The friendly name of the variable to be used in the expression.",
-          "optional": false,
+          "name": "Attribute",
+          "optional": true,
           "type": {
-            "type": "string",
-            "description": "The friendly name of the variable to be used in the expression."
+            "type": "ref",
+            "typeName": "Attribute"
           }
         },
         {
-          "name": "Value",
-          "description": "The variable that identifies an asset property from which to use values.",
+          "name": "Metric",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Metric"
+          }
+        },
+        {
+          "name": "Transform",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Transform"
+          }
+        },
+        {
+          "name": "TypeName",
           "optional": false,
           "type": {
             "type": "ref",
-            "description": "The variable that identifies an asset property from which to use values.",
-            "typeName": "VariableValue"
-          }
-        }
-      ]
-    },
-    "VariableValue": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "PropertyLogicalId",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 256,
-            "minLength": 1,
-            "pattern": "[^\\u0000-\\u001F\\u007F]+"
-          }
-        },
-        {
-          "name": "HierarchyLogicalId",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "maxLength": 256,
-            "minLength": 1,
-            "pattern": "[^\\u0000-\\u001F\\u007F]+"
-          }
-        }
-      ]
-    },
-    "AssetModelHierarchy": {
-      "type": "object",
-      "description": "Contains information about an asset model hierarchy.",
-      "properties": [
-        {
-          "name": "LogicalId",
-          "description": "Customer provided ID for hierarchy.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "Customer provided ID for hierarchy.",
-            "maxLength": 256,
-            "minLength": 1,
-            "pattern": "[^\\u0000-\\u001F\\u007F]+"
-          }
-        },
-        {
-          "name": "Name",
-          "description": "The name of the asset model hierarchy.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The name of the asset model hierarchy."
-          }
-        },
-        {
-          "name": "ChildAssetModelId",
-          "description": "The ID of the asset model. All assets in this hierarchy must be instances of the child AssetModelId asset model.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The ID of the asset model. All assets in this hierarchy must be instances of the child AssetModelId asset model."
+            "typeName": "TypeName"
           }
         }
       ]
@@ -385,43 +307,90 @@
           }
         }
       ]
+    },
+    "Transform": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Expression",
+          "description": "The mathematical expression that defines the transformation function. You can specify up to 10 functions per expression.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The mathematical expression that defines the transformation function. You can specify up to 10 functions per expression."
+          }
+        },
+        {
+          "name": "Variables",
+          "description": "The list of variables used in the expression.",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "description": "The list of variables used in the expression.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "ExpressionVariable"
+            }
+          }
+        }
+      ]
+    },
+    "TumblingWindow": {
+      "type": "object",
+      "description": "Contains a tumbling window, which is a repeating fixed-sized, non-overlapping, and contiguous time interval. This window is used in metric and aggregation computations.",
+      "properties": [
+        {
+          "name": "Interval",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "Interval"
+          }
+        },
+        {
+          "name": "Offset",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Offset"
+          }
+        }
+      ]
+    },
+    "TypeName": {
+      "type": "string",
+      "allowedValues": ["Measurement", "Attribute", "Transform", "Metric"]
+    },
+    "VariableValue": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "HierarchyLogicalId",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1,
+            "pattern": "[^\\u0000-\\u001F\\u007F]+"
+          }
+        },
+        {
+          "name": "PropertyLogicalId",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1,
+            "pattern": "[^\\u0000-\\u001F\\u007F]+"
+          }
+        }
+      ]
     }
   },
   "resource": {
     "type": "object",
     "description": "Resource schema for AWS::IoTSiteWise::AssetModel",
     "properties": [
-      {
-        "name": "AssetModelName",
-        "description": "A unique, friendly name for the asset model.",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "description": "A unique, friendly name for the asset model."
-        }
-      },
-      {
-        "name": "AssetModelDescription",
-        "description": "A description for the asset model.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "A description for the asset model."
-        }
-      },
-      {
-        "name": "AssetModelProperties",
-        "description": "The property definitions of the asset model. You can specify up to 200 properties per asset model.",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "description": "The property definitions of the asset model. You can specify up to 200 properties per asset model.",
-          "itemType": {
-            "type": "ref",
-            "typeName": "AssetModelProperty"
-          }
-        }
-      },
       {
         "name": "AssetModelCompositeModels",
         "description": "The composite asset models that are part of this asset model. Composite asset models are asset models that contain specific properties.",
@@ -436,6 +405,15 @@
         }
       },
       {
+        "name": "AssetModelDescription",
+        "description": "A description for the asset model.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "A description for the asset model."
+        }
+      },
+      {
         "name": "AssetModelHierarchies",
         "description": "The hierarchy definitions of the asset model. Each hierarchy specifies an asset model whose assets can be children of any other assets created from this asset model. You can specify up to 10 hierarchies per asset model.",
         "optional": true,
@@ -445,6 +423,28 @@
           "itemType": {
             "type": "ref",
             "typeName": "AssetModelHierarchy"
+          }
+        }
+      },
+      {
+        "name": "AssetModelName",
+        "description": "A unique, friendly name for the asset model.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "A unique, friendly name for the asset model."
+        }
+      },
+      {
+        "name": "AssetModelProperties",
+        "description": "The property definitions of the asset model. You can specify up to 200 properties per asset model.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "The property definitions of the asset model. You can specify up to 200 properties per asset model.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "AssetModelProperty"
           }
         }
       },
@@ -468,15 +468,6 @@
     "description": "Resource schema for AWS::IoTSiteWise::AssetModel",
     "properties": [
       {
-        "name": "AssetModelId",
-        "description": "The ID of the asset model.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The ID of the asset model."
-        }
-      },
-      {
         "name": "AssetModelArn",
         "description": "The ARN of the asset model, which has the following format.",
         "optional": true,
@@ -484,8 +475,17 @@
           "type": "string",
           "description": "The ARN of the asset model, which has the following format."
         }
+      },
+      {
+        "name": "AssetModelId",
+        "description": "The ID of the asset model.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The ID of the asset model."
+        }
       }
     ]
   },
-  "$hash": "731a4a7016a311e8b55255652abfba0929297ab8"
+  "$hash": "e8fd293df34a13dfdd2a7b9e59b2a17e3b59a5a5"
 }

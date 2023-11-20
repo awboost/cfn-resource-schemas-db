@@ -4,14 +4,14 @@
       "type": "object",
       "properties": [
         {
-          "name": "Suffix",
+          "name": "Exact",
           "optional": true,
           "type": {
             "type": "string"
           }
         },
         {
-          "name": "Exact",
+          "name": "Suffix",
           "optional": true,
           "type": {
             "type": "string"
@@ -19,22 +19,134 @@
         }
       ]
     },
-    "QueryParameter": {
+    "GatewayRouteHostnameRewrite": {
       "type": "object",
       "properties": [
         {
-          "name": "Name",
-          "optional": false,
+          "name": "DefaultTargetHostname",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "GatewayRouteMetadataMatch": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Exact",
+          "optional": true,
           "type": {
             "type": "string"
           }
         },
         {
-          "name": "Match",
+          "name": "Prefix",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Range",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "HttpQueryParameterMatch"
+            "typeName": "GatewayRouteRangeMatch"
+          }
+        },
+        {
+          "name": "Regex",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Suffix",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "GatewayRouteRangeMatch": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "End",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "Start",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        }
+      ]
+    },
+    "GatewayRouteSpec": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "GrpcRoute",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "GrpcGatewayRoute"
+          }
+        },
+        {
+          "name": "Http2Route",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "HttpGatewayRoute"
+          }
+        },
+        {
+          "name": "HttpRoute",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "HttpGatewayRoute"
+          }
+        },
+        {
+          "name": "Priority",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        }
+      ]
+    },
+    "GatewayRouteTarget": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Port",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "VirtualService",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "GatewayRouteVirtualService"
           }
         }
       ]
@@ -45,124 +157,6 @@
         {
           "name": "VirtualServiceName",
           "optional": false,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "GatewayRouteTarget": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "VirtualService",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "GatewayRouteVirtualService"
-          }
-        },
-        {
-          "name": "Port",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        }
-      ]
-    },
-    "GrpcGatewayRouteMetadata": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Invert",
-          "optional": true,
-          "type": {
-            "type": "boolean"
-          }
-        },
-        {
-          "name": "Name",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Match",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "GatewayRouteMetadataMatch"
-          }
-        }
-      ]
-    },
-    "GrpcGatewayRouteMatch": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Hostname",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "GatewayRouteHostnameMatch"
-          }
-        },
-        {
-          "name": "Metadata",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "GrpcGatewayRouteMetadata"
-            }
-          }
-        },
-        {
-          "name": "ServiceName",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Port",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        }
-      ]
-    },
-    "HttpQueryParameterMatch": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Exact",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "HttpGatewayRoutePrefixRewrite": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Value",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "DefaultPrefix",
-          "optional": true,
           "type": {
             "type": "string"
           }
@@ -190,62 +184,46 @@
         }
       ]
     },
-    "GatewayRouteSpec": {
+    "GrpcGatewayRouteAction": {
       "type": "object",
       "properties": [
         {
-          "name": "HttpRoute",
+          "name": "Rewrite",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "HttpGatewayRoute"
+            "typeName": "GrpcGatewayRouteRewrite"
           }
         },
         {
-          "name": "Http2Route",
-          "optional": true,
+          "name": "Target",
+          "optional": false,
           "type": {
             "type": "ref",
-            "typeName": "HttpGatewayRoute"
-          }
-        },
-        {
-          "name": "GrpcRoute",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "GrpcGatewayRoute"
-          }
-        },
-        {
-          "name": "Priority",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true
+            "typeName": "GatewayRouteTarget"
           }
         }
       ]
     },
-    "HttpGatewayRouteMatch": {
+    "GrpcGatewayRouteMatch": {
       "type": "object",
       "properties": [
         {
-          "name": "Path",
+          "name": "Hostname",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "HttpPathMatch"
+            "typeName": "GatewayRouteHostnameMatch"
           }
         },
         {
-          "name": "Headers",
+          "name": "Metadata",
           "optional": true,
           "type": {
             "type": "array",
             "itemType": {
               "type": "ref",
-              "typeName": "HttpGatewayRouteHeader"
+              "typeName": "GrpcGatewayRouteMetadata"
             }
           }
         },
@@ -258,57 +236,37 @@
           }
         },
         {
-          "name": "Hostname",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "GatewayRouteHostnameMatch"
-          }
-        },
-        {
-          "name": "Prefix",
+          "name": "ServiceName",
           "optional": true,
           "type": {
             "type": "string"
-          }
-        },
-        {
-          "name": "Method",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "QueryParameters",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "QueryParameter"
-            }
           }
         }
       ]
     },
-    "HttpGatewayRouteAction": {
+    "GrpcGatewayRouteMetadata": {
       "type": "object",
       "properties": [
         {
-          "name": "Target",
-          "optional": false,
+          "name": "Invert",
+          "optional": true,
           "type": {
-            "type": "ref",
-            "typeName": "GatewayRouteTarget"
+            "type": "boolean"
           }
         },
         {
-          "name": "Rewrite",
+          "name": "Match",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "HttpGatewayRouteRewrite"
+            "typeName": "GatewayRouteMetadataMatch"
+          }
+        },
+        {
+          "name": "Name",
+          "optional": false,
+          "type": {
+            "type": "string"
           }
         }
       ]
@@ -322,207 +280,6 @@
           "type": {
             "type": "ref",
             "typeName": "GatewayRouteHostnameRewrite"
-          }
-        }
-      ]
-    },
-    "HttpGatewayRouteHeader": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Invert",
-          "optional": true,
-          "type": {
-            "type": "boolean"
-          }
-        },
-        {
-          "name": "Name",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Match",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "HttpGatewayRouteHeaderMatch"
-          }
-        }
-      ]
-    },
-    "GatewayRouteRangeMatch": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Start",
-          "optional": false,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        },
-        {
-          "name": "End",
-          "optional": false,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        }
-      ]
-    },
-    "GrpcGatewayRouteAction": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Target",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "GatewayRouteTarget"
-          }
-        },
-        {
-          "name": "Rewrite",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "GrpcGatewayRouteRewrite"
-          }
-        }
-      ]
-    },
-    "HttpGatewayRouteHeaderMatch": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Suffix",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Exact",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Prefix",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Regex",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Range",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "GatewayRouteRangeMatch"
-          }
-        }
-      ]
-    },
-    "HttpGatewayRoutePathRewrite": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Exact",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "GatewayRouteMetadataMatch": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Suffix",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Exact",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Prefix",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Regex",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Range",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "GatewayRouteRangeMatch"
-          }
-        }
-      ]
-    },
-    "Tag": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Value",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Key",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "HttpPathMatch": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Regex",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Exact",
-          "optional": true,
-          "type": {
-            "type": "string"
           }
         }
       ]
@@ -548,15 +305,107 @@
         }
       ]
     },
-    "HttpGatewayRouteRewrite": {
+    "HttpGatewayRouteAction": {
       "type": "object",
       "properties": [
         {
-          "name": "Path",
+          "name": "Rewrite",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "HttpGatewayRoutePathRewrite"
+            "typeName": "HttpGatewayRouteRewrite"
+          }
+        },
+        {
+          "name": "Target",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "GatewayRouteTarget"
+          }
+        }
+      ]
+    },
+    "HttpGatewayRouteHeader": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Invert",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "Match",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "HttpGatewayRouteHeaderMatch"
+          }
+        },
+        {
+          "name": "Name",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "HttpGatewayRouteHeaderMatch": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Exact",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Prefix",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Range",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "GatewayRouteRangeMatch"
+          }
+        },
+        {
+          "name": "Regex",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Suffix",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "HttpGatewayRouteMatch": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Headers",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "HttpGatewayRouteHeader"
+            }
           }
         },
         {
@@ -564,7 +413,100 @@
           "optional": true,
           "type": {
             "type": "ref",
+            "typeName": "GatewayRouteHostnameMatch"
+          }
+        },
+        {
+          "name": "Method",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Path",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "HttpPathMatch"
+          }
+        },
+        {
+          "name": "Port",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "Prefix",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "QueryParameters",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "QueryParameter"
+            }
+          }
+        }
+      ]
+    },
+    "HttpGatewayRoutePathRewrite": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Exact",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "HttpGatewayRoutePrefixRewrite": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "DefaultPrefix",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "HttpGatewayRouteRewrite": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Hostname",
+          "optional": true,
+          "type": {
+            "type": "ref",
             "typeName": "GatewayRouteHostnameRewrite"
+          }
+        },
+        {
+          "name": "Path",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "HttpGatewayRoutePathRewrite"
           }
         },
         {
@@ -577,12 +519,70 @@
         }
       ]
     },
-    "GatewayRouteHostnameRewrite": {
+    "HttpPathMatch": {
       "type": "object",
       "properties": [
         {
-          "name": "DefaultTargetHostname",
+          "name": "Exact",
           "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Regex",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "HttpQueryParameterMatch": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Exact",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "QueryParameter": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Match",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "HttpQueryParameterMatch"
+          }
+        },
+        {
+          "name": "Name",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
           "type": {
             "type": "string"
           }
@@ -595,6 +595,13 @@
     "description": "Resource Type definition for AWS::AppMesh::GatewayRoute",
     "properties": [
       {
+        "name": "GatewayRouteName",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
         "name": "MeshName",
         "optional": false,
         "type": {
@@ -602,21 +609,7 @@
         }
       },
       {
-        "name": "VirtualGatewayName",
-        "optional": false,
-        "type": {
-          "type": "string"
-        }
-      },
-      {
         "name": "MeshOwner",
-        "optional": true,
-        "type": {
-          "type": "string"
-        }
-      },
-      {
-        "name": "GatewayRouteName",
         "optional": true,
         "type": {
           "type": "string"
@@ -640,6 +633,13 @@
             "typeName": "Tag"
           }
         }
+      },
+      {
+        "name": "VirtualGatewayName",
+        "optional": false,
+        "type": {
+          "type": "string"
+        }
       }
     ]
   },
@@ -648,14 +648,7 @@
     "description": "Resource Type definition for AWS::AppMesh::GatewayRoute",
     "properties": [
       {
-        "name": "Uid",
-        "optional": true,
-        "type": {
-          "type": "string"
-        }
-      },
-      {
-        "name": "ResourceOwner",
+        "name": "Arn",
         "optional": true,
         "type": {
           "type": "string"
@@ -669,7 +662,14 @@
         }
       },
       {
-        "name": "Arn",
+        "name": "ResourceOwner",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "Uid",
         "optional": true,
         "type": {
           "type": "string"
@@ -677,5 +677,5 @@
       }
     ]
   },
-  "$hash": "e25d4d4bb25b582a6ead2d7624d3648ff8e83dba"
+  "$hash": "e012212721377d035741f70b2d5923b9394204af"
 }

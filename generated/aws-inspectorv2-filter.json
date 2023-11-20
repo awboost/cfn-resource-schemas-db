@@ -1,48 +1,5 @@
 {
   "definitions": {
-    "StringComparison": {
-      "type": "string",
-      "allowedValues": ["EQUALS", "PREFIX", "NOT_EQUALS"]
-    },
-    "StringInput": {
-      "type": "string",
-      "maxLength": 1024,
-      "minLength": 1
-    },
-    "StringFilter": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Comparison",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "StringComparison"
-          }
-        },
-        {
-          "name": "Value",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "StringInput"
-          }
-        }
-      ]
-    },
-    "StringFilterList": {
-      "type": "array",
-      "itemType": {
-        "type": "ref",
-        "typeName": "StringFilter"
-      },
-      "maxLength": 10,
-      "minLength": 1
-    },
-    "Timestamp": {
-      "type": "number",
-      "isInteger": true
-    },
     "DateFilter": {
       "type": "object",
       "properties": [
@@ -73,175 +30,9 @@
       "maxLength": 10,
       "minLength": 1
     },
-    "Port": {
-      "type": "number",
-      "isInteger": true,
-      "maximum": 65535,
-      "minimum": 0
-    },
-    "PortRangeFilter": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "BeginInclusive",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "Port"
-          }
-        },
-        {
-          "name": "EndInclusive",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "Port"
-          }
-        }
-      ]
-    },
-    "PortRangeFilterList": {
-      "type": "array",
-      "itemType": {
-        "type": "ref",
-        "typeName": "PortRangeFilter"
-      },
-      "maxLength": 10,
-      "minLength": 1
-    },
-    "NumberFilter": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "LowerInclusive",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": false
-          }
-        },
-        {
-          "name": "UpperInclusive",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": false
-          }
-        }
-      ]
-    },
-    "NumberFilterList": {
-      "type": "array",
-      "itemType": {
-        "type": "ref",
-        "typeName": "NumberFilter"
-      },
-      "maxLength": 10,
-      "minLength": 1
-    },
-    "MapComparison": {
+    "FilterAction": {
       "type": "string",
-      "allowedValues": ["EQUALS"]
-    },
-    "MapFilter": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Comparison",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "MapComparison"
-          }
-        },
-        {
-          "name": "Key",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "MapKey"
-          }
-        },
-        {
-          "name": "Value",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "MapValue"
-          }
-        }
-      ]
-    },
-    "MapFilterList": {
-      "type": "array",
-      "itemType": {
-        "type": "ref",
-        "typeName": "MapFilter"
-      },
-      "maxLength": 10,
-      "minLength": 1
-    },
-    "PackageFilter": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Architecture",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "StringFilter"
-          }
-        },
-        {
-          "name": "Epoch",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "NumberFilter"
-          }
-        },
-        {
-          "name": "Name",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "StringFilter"
-          }
-        },
-        {
-          "name": "Release",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "StringFilter"
-          }
-        },
-        {
-          "name": "SourceLayerHash",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "StringFilter"
-          }
-        },
-        {
-          "name": "Version",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "StringFilter"
-          }
-        }
-      ]
-    },
-    "PackageFilterList": {
-      "type": "array",
-      "itemType": {
-        "type": "ref",
-        "typeName": "PackageFilter"
-      },
-      "maxLength": 10,
-      "minLength": 1
+      "allowedValues": ["NONE", "SUPPRESS"]
     },
     "FilterCriteria": {
       "type": "object",
@@ -311,14 +102,6 @@
           }
         },
         {
-          "name": "EcrImageTags",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "StringFilterList"
-          }
-        },
-        {
           "name": "EcrImagePushedAt",
           "optional": true,
           "type": {
@@ -336,6 +119,14 @@
         },
         {
           "name": "EcrImageRepositoryName",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "StringFilterList"
+          }
+        },
+        {
+          "name": "EcrImageTags",
           "optional": true,
           "type": {
             "type": "ref",
@@ -496,9 +287,47 @@
         }
       ]
     },
-    "FilterAction": {
+    "MapComparison": {
       "type": "string",
-      "allowedValues": ["NONE", "SUPPRESS"]
+      "allowedValues": ["EQUALS"]
+    },
+    "MapFilter": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Comparison",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "MapComparison"
+          }
+        },
+        {
+          "name": "Key",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "MapKey"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "MapValue"
+          }
+        }
+      ]
+    },
+    "MapFilterList": {
+      "type": "array",
+      "itemType": {
+        "type": "ref",
+        "typeName": "MapFilter"
+      },
+      "maxLength": 10,
+      "minLength": 1
     },
     "MapKey": {
       "type": "string",
@@ -509,23 +338,183 @@
       "type": "string",
       "maxLength": 256,
       "minLength": 0
+    },
+    "NumberFilter": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "LowerInclusive",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": false
+          }
+        },
+        {
+          "name": "UpperInclusive",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": false
+          }
+        }
+      ]
+    },
+    "NumberFilterList": {
+      "type": "array",
+      "itemType": {
+        "type": "ref",
+        "typeName": "NumberFilter"
+      },
+      "maxLength": 10,
+      "minLength": 1
+    },
+    "PackageFilter": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Architecture",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "StringFilter"
+          }
+        },
+        {
+          "name": "Epoch",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "NumberFilter"
+          }
+        },
+        {
+          "name": "Name",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "StringFilter"
+          }
+        },
+        {
+          "name": "Release",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "StringFilter"
+          }
+        },
+        {
+          "name": "SourceLayerHash",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "StringFilter"
+          }
+        },
+        {
+          "name": "Version",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "StringFilter"
+          }
+        }
+      ]
+    },
+    "PackageFilterList": {
+      "type": "array",
+      "itemType": {
+        "type": "ref",
+        "typeName": "PackageFilter"
+      },
+      "maxLength": 10,
+      "minLength": 1
+    },
+    "Port": {
+      "type": "number",
+      "isInteger": true,
+      "maximum": 65535,
+      "minimum": 0
+    },
+    "PortRangeFilter": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "BeginInclusive",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Port"
+          }
+        },
+        {
+          "name": "EndInclusive",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Port"
+          }
+        }
+      ]
+    },
+    "PortRangeFilterList": {
+      "type": "array",
+      "itemType": {
+        "type": "ref",
+        "typeName": "PortRangeFilter"
+      },
+      "maxLength": 10,
+      "minLength": 1
+    },
+    "StringComparison": {
+      "type": "string",
+      "allowedValues": ["EQUALS", "PREFIX", "NOT_EQUALS"]
+    },
+    "StringFilter": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Comparison",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "StringComparison"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "StringInput"
+          }
+        }
+      ]
+    },
+    "StringFilterList": {
+      "type": "array",
+      "itemType": {
+        "type": "ref",
+        "typeName": "StringFilter"
+      },
+      "maxLength": 10,
+      "minLength": 1
+    },
+    "StringInput": {
+      "type": "string",
+      "maxLength": 1024,
+      "minLength": 1
+    },
+    "Timestamp": {
+      "type": "number",
+      "isInteger": true
     }
   },
   "resource": {
     "type": "object",
     "description": "Inspector Filter resource schema",
     "properties": [
-      {
-        "name": "Name",
-        "description": "Findings filter name.",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "description": "Findings filter name.",
-          "maxLength": 128,
-          "minLength": 1
-        }
-      },
       {
         "name": "Description",
         "description": "Findings filter description.",
@@ -535,6 +524,16 @@
           "description": "Findings filter description.",
           "maxLength": 512,
           "minLength": 1
+        }
+      },
+      {
+        "name": "FilterAction",
+        "description": "Findings filter action.",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "description": "Findings filter action.",
+          "typeName": "FilterAction"
         }
       },
       {
@@ -548,13 +547,14 @@
         }
       },
       {
-        "name": "FilterAction",
-        "description": "Findings filter action.",
+        "name": "Name",
+        "description": "Findings filter name.",
         "optional": false,
         "type": {
-          "type": "ref",
-          "description": "Findings filter action.",
-          "typeName": "FilterAction"
+          "type": "string",
+          "description": "Findings filter name.",
+          "maxLength": 128,
+          "minLength": 1
         }
       }
     ]
@@ -576,5 +576,5 @@
       }
     ]
   },
-  "$hash": "e838e2753062b0dd0819552b8307e595496fa9e2"
+  "$hash": "b1842b36755d8eb7752f0e8bba285c33468d3838"
 }

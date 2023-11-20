@@ -1,17 +1,27 @@
 {
   "definitions": {
-    "FrameworkControl": {
+    "ControlInputParameter": {
       "type": "object",
       "properties": [
         {
-          "name": "ControlName",
-          "description": "The name of a control. This name is between 1 and 256 characters.",
+          "name": "ParameterName",
           "optional": false,
           "type": {
-            "type": "string",
-            "description": "The name of a control. This name is between 1 and 256 characters."
+            "type": "string"
           }
         },
+        {
+          "name": "ParameterValue",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "FrameworkControl": {
+      "type": "object",
+      "properties": [
         {
           "name": "ControlInputParameters",
           "description": "A list of ParameterName and ParameterValue pairs.",
@@ -23,6 +33,15 @@
               "type": "ref",
               "typeName": "ControlInputParameter"
             }
+          }
+        },
+        {
+          "name": "ControlName",
+          "description": "The name of a control. This name is between 1 and 256 characters.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The name of a control. This name is between 1 and 256 characters."
           }
         },
         {
@@ -75,25 +94,6 @@
         }
       ]
     },
-    "ControlInputParameter": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "ParameterName",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "ParameterValue",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
     "Tag": {
       "type": "object",
       "description": "A key-value pair to associate with a resource.",
@@ -128,15 +128,16 @@
     "description": "Contains detailed information about a framework. Frameworks contain controls, which evaluate and report on your backup events and resources. Frameworks generate daily compliance results.",
     "properties": [
       {
-        "name": "FrameworkName",
-        "description": "The unique name of a framework. This name is between 1 and 256 characters, starting with a letter, and consisting of letters (a-z, A-Z), numbers (0-9), and underscores (_).",
-        "optional": true,
+        "name": "FrameworkControls",
+        "description": "Contains detailed information about all of the controls of a framework. Each framework must contain at least one control.",
+        "optional": false,
         "type": {
-          "type": "string",
-          "description": "The unique name of a framework. This name is between 1 and 256 characters, starting with a letter, and consisting of letters (a-z, A-Z), numbers (0-9), and underscores (_).",
-          "maxLength": 256,
-          "minLength": 1,
-          "pattern": "[a-zA-Z][_a-zA-Z0-9]*"
+          "type": "array",
+          "description": "Contains detailed information about all of the controls of a framework. Each framework must contain at least one control.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "FrameworkControl"
+          }
         }
       },
       {
@@ -151,16 +152,15 @@
         }
       },
       {
-        "name": "FrameworkControls",
-        "description": "Contains detailed information about all of the controls of a framework. Each framework must contain at least one control.",
-        "optional": false,
+        "name": "FrameworkName",
+        "description": "The unique name of a framework. This name is between 1 and 256 characters, starting with a letter, and consisting of letters (a-z, A-Z), numbers (0-9), and underscores (_).",
+        "optional": true,
         "type": {
-          "type": "array",
-          "description": "Contains detailed information about all of the controls of a framework. Each framework must contain at least one control.",
-          "itemType": {
-            "type": "ref",
-            "typeName": "FrameworkControl"
-          }
+          "type": "string",
+          "description": "The unique name of a framework. This name is between 1 and 256 characters, starting with a letter, and consisting of letters (a-z, A-Z), numbers (0-9), and underscores (_).",
+          "maxLength": 256,
+          "minLength": 1,
+          "pattern": "[a-zA-Z][_a-zA-Z0-9]*"
         }
       },
       {
@@ -183,12 +183,12 @@
     "description": "Contains detailed information about a framework. Frameworks contain controls, which evaluate and report on your backup events and resources. Frameworks generate daily compliance results.",
     "properties": [
       {
-        "name": "FrameworkArn",
-        "description": "An Amazon Resource Name (ARN) that uniquely identifies Framework as a resource",
+        "name": "CreationTime",
+        "description": "The date and time that a framework is created, in ISO 8601 representation. The value of CreationTime is accurate to milliseconds. For example, 2020-07-10T15:00:00.000-08:00 represents the 10th of July 2020 at 3:00 PM 8 hours behind UTC.",
         "optional": true,
         "type": {
           "type": "string",
-          "description": "An Amazon Resource Name (ARN) that uniquely identifies Framework as a resource"
+          "description": "The date and time that a framework is created, in ISO 8601 representation. The value of CreationTime is accurate to milliseconds. For example, 2020-07-10T15:00:00.000-08:00 represents the 10th of July 2020 at 3:00 PM 8 hours behind UTC."
         }
       },
       {
@@ -201,12 +201,12 @@
         }
       },
       {
-        "name": "CreationTime",
-        "description": "The date and time that a framework is created, in ISO 8601 representation. The value of CreationTime is accurate to milliseconds. For example, 2020-07-10T15:00:00.000-08:00 represents the 10th of July 2020 at 3:00 PM 8 hours behind UTC.",
+        "name": "FrameworkArn",
+        "description": "An Amazon Resource Name (ARN) that uniquely identifies Framework as a resource",
         "optional": true,
         "type": {
           "type": "string",
-          "description": "The date and time that a framework is created, in ISO 8601 representation. The value of CreationTime is accurate to milliseconds. For example, 2020-07-10T15:00:00.000-08:00 represents the 10th of July 2020 at 3:00 PM 8 hours behind UTC."
+          "description": "An Amazon Resource Name (ARN) that uniquely identifies Framework as a resource"
         }
       },
       {
@@ -220,5 +220,5 @@
       }
     ]
   },
-  "$hash": "2277f1020a2d961d6477591be73fc6a2b06d3ae7"
+  "$hash": "ca7acff06b5efba6070603a06adbae6b5c8b1838"
 }

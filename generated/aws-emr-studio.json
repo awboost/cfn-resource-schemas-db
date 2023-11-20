@@ -1,20 +1,13 @@
 {
   "definitions": {
-    "SubnetId": {
-      "type": "string",
-      "description": "Identifier of a subnet",
-      "pattern": "^(subnet-[a-f0-9]{13})|(subnet-[a-f0-9]{8})\\Z"
-    },
     "Arn": {
       "type": "string",
       "pattern": "^arn:aws(-(cn|us-gov))?:[a-z-]+:(([a-z]+-)+[0-9])?:([0-9]{12})?:[^.]+$"
     },
-    "Tags": {
-      "type": "array",
-      "itemType": {
-        "type": "ref",
-        "typeName": "Tag"
-      }
+    "SubnetId": {
+      "type": "string",
+      "description": "Identifier of a subnet",
+      "pattern": "^(subnet-[a-f0-9]{13})|(subnet-[a-f0-9]{8})\\Z"
     },
     "Tag": {
       "type": "object",
@@ -45,6 +38,13 @@
           }
         }
       ]
+    },
+    "Tags": {
+      "type": "array",
+      "itemType": {
+        "type": "ref",
+        "typeName": "Tag"
+      }
     }
   },
   "resource": {
@@ -95,6 +95,28 @@
           "maxLength": 256,
           "minLength": 4,
           "pattern": "^sg-[a-zA-Z0-9\\-._]+$"
+        }
+      },
+      {
+        "name": "IdpAuthUrl",
+        "description": "Your identity provider's authentication endpoint. Amazon EMR Studio redirects federated users to this endpoint for authentication when logging in to a Studio with the Studio URL.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Your identity provider's authentication endpoint. Amazon EMR Studio redirects federated users to this endpoint for authentication when logging in to a Studio with the Studio URL.",
+          "maxLength": 4096,
+          "pattern": "^https://[0-9a-zA-Z]([-.\\w]*[0-9a-zA-Z])(:[0-9]*)*([?/#].*)?$"
+        }
+      },
+      {
+        "name": "IdpRelayStateParameterName",
+        "description": "The name of relay state parameter for external Identity Provider.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The name of relay state parameter for external Identity Provider.",
+          "maxLength": 256,
+          "minLength": 0
         }
       },
       {
@@ -172,28 +194,6 @@
           "description": "The ID of the Amazon EMR Studio Workspace security group. The Workspace security group allows outbound network traffic to resources in the Engine security group, and it must be in the same VPC specified by VpcId.",
           "pattern": "^sg-[a-zA-Z0-9\\-._]+$"
         }
-      },
-      {
-        "name": "IdpAuthUrl",
-        "description": "Your identity provider's authentication endpoint. Amazon EMR Studio redirects federated users to this endpoint for authentication when logging in to a Studio with the Studio URL.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "Your identity provider's authentication endpoint. Amazon EMR Studio redirects federated users to this endpoint for authentication when logging in to a Studio with the Studio URL.",
-          "maxLength": 4096,
-          "pattern": "^https://[0-9a-zA-Z]([-.\\w]*[0-9a-zA-Z])(:[0-9]*)*([?/#].*)?$"
-        }
-      },
-      {
-        "name": "IdpRelayStateParameterName",
-        "description": "The name of relay state parameter for external Identity Provider.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The name of relay state parameter for external Identity Provider.",
-          "maxLength": 256,
-          "minLength": 0
-        }
       }
     ]
   },
@@ -237,5 +237,5 @@
       }
     ]
   },
-  "$hash": "b5cf92bd22d085cda829c6900efa86e1867398dd"
+  "$hash": "1033735868064cecd1d33346f53d3f97910d78bf"
 }

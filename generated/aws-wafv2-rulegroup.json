@@ -1,5 +1,19 @@
 {
   "definitions": {
+    "AllowAction": {
+      "type": "object",
+      "description": "Allow traffic towards application.",
+      "properties": [
+        {
+          "name": "CustomRequestHandling",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "CustomRequestHandling"
+          }
+        }
+      ]
+    },
     "AndStatement": {
       "type": "object",
       "properties": [
@@ -16,10 +30,59 @@
         }
       ]
     },
+    "BlockAction": {
+      "type": "object",
+      "description": "Block traffic towards application.",
+      "properties": [
+        {
+          "name": "CustomResponse",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "CustomResponse"
+          }
+        }
+      ]
+    },
+    "Body": {
+      "type": "object",
+      "description": "The body of a web request. This immediately follows the request headers.",
+      "properties": [
+        {
+          "name": "OversizeHandling",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "OversizeHandling"
+          }
+        }
+      ]
+    },
+    "BodyParsingFallbackBehavior": {
+      "type": "string",
+      "description": "The inspection behavior to fall back to if the JSON in the request body is invalid.",
+      "allowedValues": ["MATCH", "NO_MATCH", "EVALUATE_AS_STRING"]
+    },
     "ByteMatchStatement": {
       "type": "object",
       "description": "Byte Match statement.",
       "properties": [
+        {
+          "name": "FieldToMatch",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "FieldToMatch"
+          }
+        },
+        {
+          "name": "PositionalConstraint",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "PositionalConstraint"
+          }
+        },
         {
           "name": "SearchString",
           "optional": true,
@@ -37,14 +100,6 @@
           }
         },
         {
-          "name": "FieldToMatch",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "FieldToMatch"
-          }
-        },
-        {
           "name": "TextTransformations",
           "optional": false,
           "type": {
@@ -54,13 +109,270 @@
               "typeName": "TextTransformation"
             }
           }
+        }
+      ]
+    },
+    "CaptchaAction": {
+      "type": "object",
+      "description": "Checks valid token exists with request.",
+      "properties": [
+        {
+          "name": "CustomRequestHandling",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "CustomRequestHandling"
+          }
+        }
+      ]
+    },
+    "CaptchaConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ImmunityTimeProperty",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ImmunityTimeProperty"
+          }
+        }
+      ]
+    },
+    "ChallengeAction": {
+      "type": "object",
+      "description": "Checks that the request has a valid token with an unexpired challenge timestamp and, if not, returns a browser challenge to the client.",
+      "properties": [
+        {
+          "name": "CustomRequestHandling",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "CustomRequestHandling"
+          }
+        }
+      ]
+    },
+    "ChallengeConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ImmunityTimeProperty",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ImmunityTimeProperty"
+          }
+        }
+      ]
+    },
+    "CookieMatchPattern": {
+      "type": "object",
+      "description": "The pattern to look for in the request cookies.",
+      "properties": [
+        {
+          "name": "All",
+          "description": "Inspect all parts of the web request cookies.",
+          "optional": true,
+          "type": {
+            "type": "record",
+            "description": "Inspect all parts of the web request cookies."
+          }
         },
         {
-          "name": "PositionalConstraint",
+          "name": "ExcludedCookies",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string",
+              "maxLength": 60,
+              "minLength": 1,
+              "pattern": ".*\\S.*"
+            },
+            "maxLength": 199,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "IncludedCookies",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string",
+              "maxLength": 60,
+              "minLength": 1,
+              "pattern": ".*\\S.*"
+            },
+            "maxLength": 199,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "Cookies": {
+      "type": "object",
+      "description": "Includes headers of a web request.",
+      "properties": [
+        {
+          "name": "MatchPattern",
           "optional": false,
           "type": {
             "type": "ref",
-            "typeName": "PositionalConstraint"
+            "typeName": "CookieMatchPattern"
+          }
+        },
+        {
+          "name": "MatchScope",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "MapMatchScope"
+          }
+        },
+        {
+          "name": "OversizeHandling",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "OversizeHandling"
+          }
+        }
+      ]
+    },
+    "CountAction": {
+      "type": "object",
+      "description": "Count traffic towards application.",
+      "properties": [
+        {
+          "name": "CustomRequestHandling",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "CustomRequestHandling"
+          }
+        }
+      ]
+    },
+    "CustomHTTPHeader": {
+      "type": "object",
+      "description": "HTTP header.",
+      "properties": [
+        {
+          "name": "Name",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "CustomHTTPHeaderName"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "CustomHTTPHeaderValue"
+          }
+        }
+      ]
+    },
+    "CustomHTTPHeaderName": {
+      "type": "string",
+      "description": "HTTP header name.",
+      "maxLength": 64,
+      "minLength": 1
+    },
+    "CustomHTTPHeaderValue": {
+      "type": "string",
+      "description": "HTTP header value.",
+      "maxLength": 255,
+      "minLength": 1
+    },
+    "CustomRequestHandling": {
+      "type": "object",
+      "description": "Custom request handling.",
+      "properties": [
+        {
+          "name": "InsertHeaders",
+          "description": "Collection of HTTP headers.",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "description": "Collection of HTTP headers.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "CustomHTTPHeader"
+            },
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "CustomResponse": {
+      "type": "object",
+      "description": "Custom response.",
+      "properties": [
+        {
+          "name": "CustomResponseBodyKey",
+          "description": "Custom response body key.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Custom response body key.",
+            "pattern": "^[\\w\\-]+$"
+          }
+        },
+        {
+          "name": "ResponseCode",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "ResponseStatusCode"
+          }
+        },
+        {
+          "name": "ResponseHeaders",
+          "description": "Collection of HTTP headers.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "Collection of HTTP headers.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "CustomHTTPHeader"
+            },
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "CustomResponseBodies": {
+      "type": "record",
+      "description": "Custom response key and body map.",
+      "valueType": {
+        "type": "ref",
+        "typeName": "CustomResponseBody"
+      }
+    },
+    "CustomResponseBody": {
+      "type": "object",
+      "description": "Custom response body.",
+      "properties": [
+        {
+          "name": "Content",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "ResponseContent"
+          }
+        },
+        {
+          "name": "ContentType",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "ResponseContentType"
           }
         }
       ]
@@ -69,6 +381,11 @@
       "type": "string",
       "description": "Description of the entity.",
       "pattern": "^[a-zA-Z0-9=:#@/\\-,.][a-zA-Z0-9+=:#@/\\-,.\\s]+[a-zA-Z0-9+=:#@/\\-,.]{1,256}$"
+    },
+    "EntityId": {
+      "type": "string",
+      "description": "Id of the RuleGroup",
+      "pattern": "^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$"
     },
     "EntityName": {
       "type": "string",
@@ -79,6 +396,65 @@
       "type": "object",
       "description": "Field of the request to match.",
       "properties": [
+        {
+          "name": "AllQueryArguments",
+          "description": "All query arguments of a web request.",
+          "optional": true,
+          "type": {
+            "type": "record",
+            "description": "All query arguments of a web request."
+          }
+        },
+        {
+          "name": "Body",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Body"
+          }
+        },
+        {
+          "name": "Cookies",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Cookies"
+          }
+        },
+        {
+          "name": "Headers",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Headers"
+          }
+        },
+        {
+          "name": "JsonBody",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "JsonBody"
+          }
+        },
+        {
+          "name": "Method",
+          "description": "The HTTP method of a web request. The method indicates the type of operation that the request is asking the origin to perform.",
+          "optional": true,
+          "type": {
+            "type": "record",
+            "description": "The HTTP method of a web request. The method indicates the type of operation that the request is asking the origin to perform."
+          }
+        },
+        {
+          "name": "QueryString",
+          "description": "The query string of a web request. This is the part of a URL that appears after a ? character, if any.",
+          "optional": true,
+          "type": {
+            "type": "record",
+            "description": "The query string of a web request. This is the part of a URL that appears after a ? character, if any."
+          }
+        },
         {
           "name": "SingleHeader",
           "optional": true,
@@ -114,15 +490,6 @@
           }
         },
         {
-          "name": "AllQueryArguments",
-          "description": "All query arguments of a web request.",
-          "optional": true,
-          "type": {
-            "type": "record",
-            "description": "All query arguments of a web request."
-          }
-        },
-        {
           "name": "UriPath",
           "description": "The path component of the URI of a web request. This is the part of a web request that identifies a resource, for example, /images/daily-ad.jpg.",
           "optional": true,
@@ -130,55 +497,191 @@
             "type": "record",
             "description": "The path component of the URI of a web request. This is the part of a web request that identifies a resource, for example, /images/daily-ad.jpg."
           }
+        }
+      ]
+    },
+    "ForwardedIPConfiguration": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "FallbackBehavior",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "allowedValues": ["MATCH", "NO_MATCH"]
+          }
         },
         {
-          "name": "QueryString",
-          "description": "The query string of a web request. This is the part of a URL that appears after a ? character, if any.",
+          "name": "HeaderName",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9-]+{1,255}$"
+          }
+        }
+      ]
+    },
+    "GeoMatchStatement": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "CountryCodes",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string",
+              "maxLength": 2,
+              "minLength": 1
+            }
+          }
+        },
+        {
+          "name": "ForwardedIPConfig",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ForwardedIPConfiguration"
+          }
+        }
+      ]
+    },
+    "HeaderMatchPattern": {
+      "type": "object",
+      "description": "The pattern to look for in the request headers.",
+      "properties": [
+        {
+          "name": "All",
+          "description": "Inspect all parts of the web request headers.",
           "optional": true,
           "type": {
             "type": "record",
-            "description": "The query string of a web request. This is the part of a URL that appears after a ? character, if any."
+            "description": "Inspect all parts of the web request headers."
           }
         },
         {
-          "name": "Body",
+          "name": "ExcludedHeaders",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string",
+              "maxLength": 64,
+              "minLength": 1,
+              "pattern": ".*\\S.*"
+            },
+            "maxLength": 199,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "IncludedHeaders",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string",
+              "maxLength": 64,
+              "minLength": 1,
+              "pattern": ".*\\S.*"
+            },
+            "maxLength": 199,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "Headers": {
+      "type": "object",
+      "description": "Includes headers of a web request.",
+      "properties": [
+        {
+          "name": "MatchPattern",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "HeaderMatchPattern"
+          }
+        },
+        {
+          "name": "MatchScope",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "MapMatchScope"
+          }
+        },
+        {
+          "name": "OversizeHandling",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "OversizeHandling"
+          }
+        }
+      ]
+    },
+    "IPSetForwardedIPConfiguration": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "FallbackBehavior",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "allowedValues": ["MATCH", "NO_MATCH"]
+          }
+        },
+        {
+          "name": "HeaderName",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9-]+{1,255}$"
+          }
+        },
+        {
+          "name": "Position",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "allowedValues": ["FIRST", "LAST", "ANY"]
+          }
+        }
+      ]
+    },
+    "IPSetReferenceStatement": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Arn",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "ResourceArn"
+          }
+        },
+        {
+          "name": "IPSetForwardedIPConfig",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "Body"
+            "typeName": "IPSetForwardedIPConfiguration"
           }
-        },
+        }
+      ]
+    },
+    "ImmunityTimeProperty": {
+      "type": "object",
+      "properties": [
         {
-          "name": "Method",
-          "description": "The HTTP method of a web request. The method indicates the type of operation that the request is asking the origin to perform.",
-          "optional": true,
+          "name": "ImmunityTime",
+          "optional": false,
           "type": {
-            "type": "record",
-            "description": "The HTTP method of a web request. The method indicates the type of operation that the request is asking the origin to perform."
-          }
-        },
-        {
-          "name": "JsonBody",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "JsonBody"
-          }
-        },
-        {
-          "name": "Headers",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "Headers"
-          }
-        },
-        {
-          "name": "Cookies",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "Cookies"
+            "type": "number",
+            "isInteger": true,
+            "maximum": 259200,
+            "minimum": 60
           }
         }
       ]
@@ -187,6 +690,14 @@
       "type": "object",
       "description": "Inspect the request body as JSON. The request body immediately follows the request headers.",
       "properties": [
+        {
+          "name": "InvalidFallbackBehavior",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "BodyParsingFallbackBehavior"
+          }
+        },
         {
           "name": "MatchPattern",
           "optional": false,
@@ -204,14 +715,6 @@
           }
         },
         {
-          "name": "InvalidFallbackBehavior",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "BodyParsingFallbackBehavior"
-          }
-        },
-        {
           "name": "OversizeHandling",
           "optional": true,
           "type": {
@@ -220,16 +723,6 @@
           }
         }
       ]
-    },
-    "BodyParsingFallbackBehavior": {
-      "type": "string",
-      "description": "The inspection behavior to fall back to if the JSON in the request body is invalid.",
-      "allowedValues": ["MATCH", "NO_MATCH", "EVALUATE_AS_STRING"]
-    },
-    "JsonMatchScope": {
-      "type": "string",
-      "description": "The parts of the JSON to match against using the MatchPattern.",
-      "allowedValues": ["ALL", "KEY", "VALUE"]
     },
     "JsonMatchPattern": {
       "type": "object",
@@ -257,61 +750,80 @@
         }
       ]
     },
+    "JsonMatchScope": {
+      "type": "string",
+      "description": "The parts of the JSON to match against using the MatchPattern.",
+      "allowedValues": ["ALL", "KEY", "VALUE"]
+    },
     "JsonPointerPath": {
       "type": "string",
       "description": "JSON pointer path in the web request's JSON body",
       "pattern": "^[\\/]+([^~]*(~[01])*)*{1,512}$"
     },
-    "GeoMatchStatement": {
+    "Label": {
       "type": "object",
       "properties": [
         {
-          "name": "CountryCodes",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "string",
-              "maxLength": 2,
-              "minLength": 1
-            }
-          }
-        },
-        {
-          "name": "ForwardedIPConfig",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ForwardedIPConfiguration"
-          }
-        }
-      ]
-    },
-    "EntityId": {
-      "type": "string",
-      "description": "Id of the RuleGroup",
-      "pattern": "^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$"
-    },
-    "IPSetReferenceStatement": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Arn",
+          "name": "Name",
           "optional": false,
           "type": {
             "type": "ref",
-            "typeName": "ResourceArn"
-          }
-        },
-        {
-          "name": "IPSetForwardedIPConfig",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "IPSetForwardedIPConfiguration"
+            "typeName": "LabelName"
           }
         }
       ]
+    },
+    "LabelMatchKey": {
+      "type": "string",
+      "pattern": "^[0-9A-Za-z_:-]{1,1024}$"
+    },
+    "LabelMatchScope": {
+      "type": "string",
+      "allowedValues": ["LABEL", "NAMESPACE"]
+    },
+    "LabelMatchStatement": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "LabelMatchKey"
+          }
+        },
+        {
+          "name": "Scope",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "LabelMatchScope"
+          }
+        }
+      ]
+    },
+    "LabelName": {
+      "type": "string",
+      "description": "Name of the Label.",
+      "pattern": "^[0-9A-Za-z_:-]{1,1024}$"
+    },
+    "LabelSummary": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Name",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "LabelName"
+          }
+        }
+      ]
+    },
+    "MapMatchScope": {
+      "type": "string",
+      "description": "The parts of the request to match against using the MatchPattern.",
+      "allowedValues": ["ALL", "KEY", "VALUE"]
     },
     "NotStatement": {
       "type": "object",
@@ -342,6 +854,11 @@
         }
       ]
     },
+    "OversizeHandling": {
+      "type": "string",
+      "description": "Handling of requests containing oversize fields",
+      "allowedValues": ["CONTINUE", "MATCH", "NO_MATCH"]
+    },
     "PositionalConstraint": {
       "type": "string",
       "description": "Position of the evaluation in the FieldToMatch of request.",
@@ -356,14 +873,6 @@
     "RateBasedStatement": {
       "type": "object",
       "properties": [
-        {
-          "name": "Limit",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "RateLimit"
-          }
-        },
         {
           "name": "AggregateKeyType",
           "optional": false,
@@ -387,19 +896,27 @@
           }
         },
         {
-          "name": "ScopeDownStatement",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "Statement"
-          }
-        },
-        {
           "name": "ForwardedIPConfig",
           "optional": true,
           "type": {
             "type": "ref",
             "typeName": "ForwardedIPConfiguration"
+          }
+        },
+        {
+          "name": "Limit",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "RateLimit"
+          }
+        },
+        {
+          "name": "ScopeDownStatement",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Statement"
           }
         }
       ]
@@ -425,19 +942,19 @@
           }
         },
         {
-          "name": "Header",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "RateLimitHeader"
-          }
-        },
-        {
           "name": "HTTPMethod",
           "optional": true,
           "type": {
             "type": "ref",
             "typeName": "RateLimitHTTPMethod"
+          }
+        },
+        {
+          "name": "Header",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "RateLimitHeader"
           }
         },
         {
@@ -482,6 +999,12 @@
         }
       ]
     },
+    "RateLimit": {
+      "type": "number",
+      "isInteger": true,
+      "maximum": 2000000000,
+      "minimum": 100
+    },
     "RateLimitCookie": {
       "type": "object",
       "description": "Specifies a cookie as an aggregate key for a rate-based rule.",
@@ -515,6 +1038,10 @@
       "type": "record",
       "description": "Specifies the first IP address in an HTTP header as an aggregate key for a rate-based rule."
     },
+    "RateLimitHTTPMethod": {
+      "type": "record",
+      "description": "Specifies the request's HTTP method as an aggregate key for a rate-based rule."
+    },
     "RateLimitHeader": {
       "type": "object",
       "description": "Specifies a header as an aggregate key for a rate-based rule.",
@@ -543,10 +1070,6 @@
           }
         }
       ]
-    },
-    "RateLimitHTTPMethod": {
-      "type": "record",
-      "description": "Specifies the request's HTTP method as an aggregate key for a rate-based rule."
     },
     "RateLimitIP": {
       "type": "record",
@@ -631,11 +1154,38 @@
         }
       ]
     },
-    "RateLimit": {
-      "type": "number",
-      "isInteger": true,
-      "maximum": 2000000000,
-      "minimum": 100
+    "RegexMatchStatement": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "FieldToMatch",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "FieldToMatch"
+          }
+        },
+        {
+          "name": "RegexString",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 512,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "TextTransformations",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "TextTransformation"
+            }
+          }
+        }
+      ]
     },
     "RegexPatternSetReferenceStatement": {
       "type": "object",
@@ -675,60 +1225,52 @@
       "maxLength": 2048,
       "minLength": 20
     },
-    "ForwardedIPConfiguration": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "HeaderName",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9-]+{1,255}$"
-          }
-        },
-        {
-          "name": "FallbackBehavior",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "allowedValues": ["MATCH", "NO_MATCH"]
-          }
-        }
-      ]
+    "ResponseContent": {
+      "type": "string",
+      "description": "Response content.",
+      "maxLength": 10240,
+      "minLength": 1
     },
-    "IPSetForwardedIPConfiguration": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "HeaderName",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9-]+{1,255}$"
-          }
-        },
-        {
-          "name": "FallbackBehavior",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "allowedValues": ["MATCH", "NO_MATCH"]
-          }
-        },
-        {
-          "name": "Position",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "allowedValues": ["FIRST", "LAST", "ANY"]
-          }
-        }
-      ]
+    "ResponseContentType": {
+      "type": "string",
+      "description": "Valid values are TEXT_PLAIN, TEXT_HTML, and APPLICATION_JSON.",
+      "allowedValues": ["TEXT_PLAIN", "TEXT_HTML", "APPLICATION_JSON"]
+    },
+    "ResponseStatusCode": {
+      "type": "number",
+      "description": "Custom response code.",
+      "isInteger": true,
+      "maximum": 599,
+      "minimum": 200
     },
     "Rule": {
       "type": "object",
       "description": "Rule of RuleGroup that contains condition and action.",
       "properties": [
+        {
+          "name": "Action",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "RuleAction"
+          }
+        },
+        {
+          "name": "CaptchaConfig",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "CaptchaConfig"
+          }
+        },
+        {
+          "name": "ChallengeConfig",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ChallengeConfig"
+          }
+        },
         {
           "name": "Name",
           "optional": false,
@@ -746,22 +1288,6 @@
           }
         },
         {
-          "name": "Statement",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "Statement"
-          }
-        },
-        {
-          "name": "Action",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "RuleAction"
-          }
-        },
-        {
           "name": "RuleLabels",
           "description": "Collection of Rule Labels.",
           "optional": true,
@@ -775,27 +1301,19 @@
           }
         },
         {
+          "name": "Statement",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "Statement"
+          }
+        },
+        {
           "name": "VisibilityConfig",
           "optional": false,
           "type": {
             "type": "ref",
             "typeName": "VisibilityConfig"
-          }
-        },
-        {
-          "name": "CaptchaConfig",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "CaptchaConfig"
-          }
-        },
-        {
-          "name": "ChallengeConfig",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ChallengeConfig"
           }
         }
       ]
@@ -821,14 +1339,6 @@
           }
         },
         {
-          "name": "Count",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "CountAction"
-          }
-        },
-        {
           "name": "Captcha",
           "optional": true,
           "type": {
@@ -843,228 +1353,43 @@
             "type": "ref",
             "typeName": "ChallengeAction"
           }
-        }
-      ]
-    },
-    "AllowAction": {
-      "type": "object",
-      "description": "Allow traffic towards application.",
-      "properties": [
-        {
-          "name": "CustomRequestHandling",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "CustomRequestHandling"
-          }
-        }
-      ]
-    },
-    "BlockAction": {
-      "type": "object",
-      "description": "Block traffic towards application.",
-      "properties": [
-        {
-          "name": "CustomResponse",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "CustomResponse"
-          }
-        }
-      ]
-    },
-    "CountAction": {
-      "type": "object",
-      "description": "Count traffic towards application.",
-      "properties": [
-        {
-          "name": "CustomRequestHandling",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "CustomRequestHandling"
-          }
-        }
-      ]
-    },
-    "CaptchaAction": {
-      "type": "object",
-      "description": "Checks valid token exists with request.",
-      "properties": [
-        {
-          "name": "CustomRequestHandling",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "CustomRequestHandling"
-          }
-        }
-      ]
-    },
-    "ChallengeAction": {
-      "type": "object",
-      "description": "Checks that the request has a valid token with an unexpired challenge timestamp and, if not, returns a browser challenge to the client.",
-      "properties": [
-        {
-          "name": "CustomRequestHandling",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "CustomRequestHandling"
-          }
-        }
-      ]
-    },
-    "CustomHTTPHeaderName": {
-      "type": "string",
-      "description": "HTTP header name.",
-      "maxLength": 64,
-      "minLength": 1
-    },
-    "CustomHTTPHeaderValue": {
-      "type": "string",
-      "description": "HTTP header value.",
-      "maxLength": 255,
-      "minLength": 1
-    },
-    "CustomHTTPHeader": {
-      "type": "object",
-      "description": "HTTP header.",
-      "properties": [
-        {
-          "name": "Name",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "CustomHTTPHeaderName"
-          }
         },
         {
-          "name": "Value",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "CustomHTTPHeaderValue"
-          }
-        }
-      ]
-    },
-    "CustomRequestHandling": {
-      "type": "object",
-      "description": "Custom request handling.",
-      "properties": [
-        {
-          "name": "InsertHeaders",
-          "description": "Collection of HTTP headers.",
-          "optional": false,
-          "type": {
-            "type": "array",
-            "description": "Collection of HTTP headers.",
-            "itemType": {
-              "type": "ref",
-              "typeName": "CustomHTTPHeader"
-            },
-            "minLength": 1
-          }
-        }
-      ]
-    },
-    "ResponseStatusCode": {
-      "type": "number",
-      "description": "Custom response code.",
-      "isInteger": true,
-      "maximum": 599,
-      "minimum": 200
-    },
-    "ResponseContentType": {
-      "type": "string",
-      "description": "Valid values are TEXT_PLAIN, TEXT_HTML, and APPLICATION_JSON.",
-      "allowedValues": ["TEXT_PLAIN", "TEXT_HTML", "APPLICATION_JSON"]
-    },
-    "ResponseContent": {
-      "type": "string",
-      "description": "Response content.",
-      "maxLength": 10240,
-      "minLength": 1
-    },
-    "CustomResponseBody": {
-      "type": "object",
-      "description": "Custom response body.",
-      "properties": [
-        {
-          "name": "ContentType",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "ResponseContentType"
-          }
-        },
-        {
-          "name": "Content",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "ResponseContent"
-          }
-        }
-      ]
-    },
-    "CustomResponse": {
-      "type": "object",
-      "description": "Custom response.",
-      "properties": [
-        {
-          "name": "ResponseCode",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "ResponseStatusCode"
-          }
-        },
-        {
-          "name": "CustomResponseBodyKey",
-          "description": "Custom response body key.",
+          "name": "Count",
           "optional": true,
           "type": {
-            "type": "string",
-            "description": "Custom response body key.",
-            "pattern": "^[\\w\\-]+$"
-          }
-        },
-        {
-          "name": "ResponseHeaders",
-          "description": "Collection of HTTP headers.",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "description": "Collection of HTTP headers.",
-            "itemType": {
-              "type": "ref",
-              "typeName": "CustomHTTPHeader"
-            },
-            "minLength": 1
+            "type": "ref",
+            "typeName": "CountAction"
           }
         }
       ]
-    },
-    "CustomResponseBodies": {
-      "type": "record",
-      "description": "Custom response key and body map.",
-      "valueType": {
-        "type": "ref",
-        "typeName": "CustomResponseBody"
-      }
     },
     "RuleGroup": {
       "type": "object",
       "properties": [
         {
-          "name": "Name",
+          "name": "Arn",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "EntityName"
+            "typeName": "ResourceArn"
+          }
+        },
+        {
+          "name": "Capacity",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "minimum": 0
+          }
+        },
+        {
+          "name": "Description",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "EntityDescription"
           }
         },
         {
@@ -1076,19 +1401,11 @@
           }
         },
         {
-          "name": "Arn",
+          "name": "Name",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "ResourceArn"
-          }
-        },
-        {
-          "name": "Description",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "EntityDescription"
+            "typeName": "EntityName"
           }
         },
         {
@@ -1110,15 +1427,6 @@
           "type": {
             "type": "ref",
             "typeName": "VisibilityConfig"
-          }
-        },
-        {
-          "name": "Capacity",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true,
-            "minimum": 0
           }
         }
       ]
@@ -1142,24 +1450,29 @@
       "type": "string",
       "description": "Base64 encoded string that is searched to find a match."
     },
+    "SensitivityLevel": {
+      "type": "string",
+      "description": "Sensitivity Level current only used for sqli match statements.",
+      "allowedValues": ["LOW", "HIGH"]
+    },
     "SizeConstraintStatement": {
       "type": "object",
       "description": "Size Constraint statement.",
       "properties": [
-        {
-          "name": "FieldToMatch",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "FieldToMatch"
-          }
-        },
         {
           "name": "ComparisonOperator",
           "optional": false,
           "type": {
             "type": "string",
             "allowedValues": ["EQ", "NE", "LE", "LT", "GE", "GT"]
+          }
+        },
+        {
+          "name": "FieldToMatch",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "FieldToMatch"
           }
         },
         {
@@ -1198,6 +1511,14 @@
           }
         },
         {
+          "name": "SensitivityLevel",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "SensitivityLevel"
+          }
+        },
+        {
           "name": "TextTransformations",
           "optional": false,
           "type": {
@@ -1207,14 +1528,6 @@
               "typeName": "TextTransformation"
             }
           }
-        },
-        {
-          "name": "SensitivityLevel",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "SensitivityLevel"
-          }
         }
       ]
     },
@@ -1223,35 +1536,19 @@
       "description": "First level statement that contains conditions, such as ByteMatch, SizeConstraint, etc",
       "properties": [
         {
+          "name": "AndStatement",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "AndStatement"
+          }
+        },
+        {
           "name": "ByteMatchStatement",
           "optional": true,
           "type": {
             "type": "ref",
             "typeName": "ByteMatchStatement"
-          }
-        },
-        {
-          "name": "SqliMatchStatement",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "SqliMatchStatement"
-          }
-        },
-        {
-          "name": "XssMatchStatement",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "XssMatchStatement"
-          }
-        },
-        {
-          "name": "SizeConstraintStatement",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "SizeConstraintStatement"
           }
         },
         {
@@ -1271,35 +1568,11 @@
           }
         },
         {
-          "name": "RegexPatternSetReferenceStatement",
+          "name": "LabelMatchStatement",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "RegexPatternSetReferenceStatement"
-          }
-        },
-        {
-          "name": "RateBasedStatement",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "RateBasedStatement"
-          }
-        },
-        {
-          "name": "AndStatement",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "AndStatement"
-          }
-        },
-        {
-          "name": "OrStatement",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "OrStatement"
+            "typeName": "LabelMatchStatement"
           }
         },
         {
@@ -1311,11 +1584,19 @@
           }
         },
         {
-          "name": "LabelMatchStatement",
+          "name": "OrStatement",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "LabelMatchStatement"
+            "typeName": "OrStatement"
+          }
+        },
+        {
+          "name": "RateBasedStatement",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "RateBasedStatement"
           }
         },
         {
@@ -1324,6 +1605,38 @@
           "type": {
             "type": "ref",
             "typeName": "RegexMatchStatement"
+          }
+        },
+        {
+          "name": "RegexPatternSetReferenceStatement",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "RegexPatternSetReferenceStatement"
+          }
+        },
+        {
+          "name": "SizeConstraintStatement",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "SizeConstraintStatement"
+          }
+        },
+        {
+          "name": "SqliMatchStatement",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "SqliMatchStatement"
+          }
+        },
+        {
+          "name": "XssMatchStatement",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "XssMatchStatement"
           }
         }
       ]
@@ -1411,13 +1724,6 @@
       "description": "Visibility Metric of the RuleGroup.",
       "properties": [
         {
-          "name": "SampledRequestsEnabled",
-          "optional": false,
-          "type": {
-            "type": "boolean"
-          }
-        },
-        {
           "name": "CloudWatchMetricsEnabled",
           "optional": false,
           "type": {
@@ -1431,6 +1737,13 @@
             "type": "string",
             "maxLength": 128,
             "minLength": 1
+          }
+        },
+        {
+          "name": "SampledRequestsEnabled",
+          "optional": false,
+          "type": {
+            "type": "boolean"
           }
         }
       ]
@@ -1459,319 +1772,6 @@
           }
         }
       ]
-    },
-    "LabelName": {
-      "type": "string",
-      "description": "Name of the Label.",
-      "pattern": "^[0-9A-Za-z_:-]{1,1024}$"
-    },
-    "LabelSummary": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Name",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "LabelName"
-          }
-        }
-      ]
-    },
-    "Label": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Name",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "LabelName"
-          }
-        }
-      ]
-    },
-    "LabelMatchKey": {
-      "type": "string",
-      "pattern": "^[0-9A-Za-z_:-]{1,1024}$"
-    },
-    "LabelMatchScope": {
-      "type": "string",
-      "allowedValues": ["LABEL", "NAMESPACE"]
-    },
-    "LabelMatchStatement": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Scope",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "LabelMatchScope"
-          }
-        },
-        {
-          "name": "Key",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "LabelMatchKey"
-          }
-        }
-      ]
-    },
-    "RegexMatchStatement": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "RegexString",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 512,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "FieldToMatch",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "FieldToMatch"
-          }
-        },
-        {
-          "name": "TextTransformations",
-          "optional": false,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "TextTransformation"
-            }
-          }
-        }
-      ]
-    },
-    "CaptchaConfig": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "ImmunityTimeProperty",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ImmunityTimeProperty"
-          }
-        }
-      ]
-    },
-    "ChallengeConfig": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "ImmunityTimeProperty",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ImmunityTimeProperty"
-          }
-        }
-      ]
-    },
-    "ImmunityTimeProperty": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "ImmunityTime",
-          "optional": false,
-          "type": {
-            "type": "number",
-            "isInteger": true,
-            "maximum": 259200,
-            "minimum": 60
-          }
-        }
-      ]
-    },
-    "Body": {
-      "type": "object",
-      "description": "The body of a web request. This immediately follows the request headers.",
-      "properties": [
-        {
-          "name": "OversizeHandling",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "OversizeHandling"
-          }
-        }
-      ]
-    },
-    "Headers": {
-      "type": "object",
-      "description": "Includes headers of a web request.",
-      "properties": [
-        {
-          "name": "MatchPattern",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "HeaderMatchPattern"
-          }
-        },
-        {
-          "name": "MatchScope",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "MapMatchScope"
-          }
-        },
-        {
-          "name": "OversizeHandling",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "OversizeHandling"
-          }
-        }
-      ]
-    },
-    "Cookies": {
-      "type": "object",
-      "description": "Includes headers of a web request.",
-      "properties": [
-        {
-          "name": "MatchPattern",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "CookieMatchPattern"
-          }
-        },
-        {
-          "name": "MatchScope",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "MapMatchScope"
-          }
-        },
-        {
-          "name": "OversizeHandling",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "OversizeHandling"
-          }
-        }
-      ]
-    },
-    "HeaderMatchPattern": {
-      "type": "object",
-      "description": "The pattern to look for in the request headers.",
-      "properties": [
-        {
-          "name": "All",
-          "description": "Inspect all parts of the web request headers.",
-          "optional": true,
-          "type": {
-            "type": "record",
-            "description": "Inspect all parts of the web request headers."
-          }
-        },
-        {
-          "name": "IncludedHeaders",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "string",
-              "maxLength": 64,
-              "minLength": 1,
-              "pattern": ".*\\S.*"
-            },
-            "maxLength": 199,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "ExcludedHeaders",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "string",
-              "maxLength": 64,
-              "minLength": 1,
-              "pattern": ".*\\S.*"
-            },
-            "maxLength": 199,
-            "minLength": 1
-          }
-        }
-      ]
-    },
-    "CookieMatchPattern": {
-      "type": "object",
-      "description": "The pattern to look for in the request cookies.",
-      "properties": [
-        {
-          "name": "All",
-          "description": "Inspect all parts of the web request cookies.",
-          "optional": true,
-          "type": {
-            "type": "record",
-            "description": "Inspect all parts of the web request cookies."
-          }
-        },
-        {
-          "name": "IncludedCookies",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "string",
-              "maxLength": 60,
-              "minLength": 1,
-              "pattern": ".*\\S.*"
-            },
-            "maxLength": 199,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "ExcludedCookies",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "string",
-              "maxLength": 60,
-              "minLength": 1,
-              "pattern": ".*\\S.*"
-            },
-            "maxLength": 199,
-            "minLength": 1
-          }
-        }
-      ]
-    },
-    "MapMatchScope": {
-      "type": "string",
-      "description": "The parts of the request to match against using the MatchPattern.",
-      "allowedValues": ["ALL", "KEY", "VALUE"]
-    },
-    "OversizeHandling": {
-      "type": "string",
-      "description": "Handling of requests containing oversize fields",
-      "allowedValues": ["CONTINUE", "MATCH", "NO_MATCH"]
-    },
-    "SensitivityLevel": {
-      "type": "string",
-      "description": "Sensitivity Level current only used for sqli match statements.",
-      "allowedValues": ["LOW", "HIGH"]
     }
   },
   "resource": {
@@ -1779,12 +1779,46 @@
     "description": "Contains the Rules that identify the requests that you want to allow, block, or count. In a RuleGroup, you also specify a default action (ALLOW or BLOCK), and the action for each Rule that you add to a RuleGroup, for example, block requests from specified IP addresses or block requests from specified referrers. You also associate the RuleGroup with a CloudFront distribution to identify the requests that you want AWS WAF to filter. If you add more than one Rule to a RuleGroup, a request needs to match only one of the specifications to be allowed, blocked, or counted.",
     "properties": [
       {
+        "name": "AvailableLabels",
+        "description": "Collection of Available Labels.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "Collection of Available Labels.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "LabelSummary"
+          }
+        }
+      },
+      {
         "name": "Capacity",
         "optional": false,
         "type": {
           "type": "number",
           "isInteger": true,
           "minimum": 0
+        }
+      },
+      {
+        "name": "ConsumedLabels",
+        "description": "Collection of Consumed Labels.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "Collection of Consumed Labels.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "LabelSummary"
+          }
+        }
+      },
+      {
+        "name": "CustomResponseBodies",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "CustomResponseBodies"
         }
       },
       {
@@ -1804,14 +1838,6 @@
         }
       },
       {
-        "name": "Scope",
-        "optional": false,
-        "type": {
-          "type": "ref",
-          "typeName": "Scope"
-        }
-      },
-      {
         "name": "Rules",
         "description": "Collection of Rules.",
         "optional": true,
@@ -1825,11 +1851,11 @@
         }
       },
       {
-        "name": "VisibilityConfig",
+        "name": "Scope",
         "optional": false,
         "type": {
           "type": "ref",
-          "typeName": "VisibilityConfig"
+          "typeName": "Scope"
         }
       },
       {
@@ -1845,37 +1871,11 @@
         }
       },
       {
-        "name": "CustomResponseBodies",
-        "optional": true,
+        "name": "VisibilityConfig",
+        "optional": false,
         "type": {
           "type": "ref",
-          "typeName": "CustomResponseBodies"
-        }
-      },
-      {
-        "name": "AvailableLabels",
-        "description": "Collection of Available Labels.",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "description": "Collection of Available Labels.",
-          "itemType": {
-            "type": "ref",
-            "typeName": "LabelSummary"
-          }
-        }
-      },
-      {
-        "name": "ConsumedLabels",
-        "description": "Collection of Consumed Labels.",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "description": "Collection of Consumed Labels.",
-          "itemType": {
-            "type": "ref",
-            "typeName": "LabelSummary"
-          }
+          "typeName": "VisibilityConfig"
         }
       }
     ]
@@ -1910,5 +1910,5 @@
       }
     ]
   },
-  "$hash": "75a8d7c4bf11b0274b7c342cc24730eb78bff2c9"
+  "$hash": "e6c7d7fc078a8f532af0e1e0a245434eebf92762"
 }

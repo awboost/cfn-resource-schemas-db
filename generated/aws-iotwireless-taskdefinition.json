@@ -4,20 +4,20 @@
       "type": "object",
       "properties": [
         {
-          "name": "PackageVersion",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "maxLength": 32,
-            "minLength": 1
-          }
-        },
-        {
           "name": "Model",
           "optional": true,
           "type": {
             "type": "string",
             "maxLength": 4096,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "PackageVersion",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 32,
             "minLength": 1
           }
         },
@@ -36,12 +36,11 @@
       "type": "object",
       "properties": [
         {
-          "name": "UpdateSignature",
+          "name": "CurrentVersion",
           "optional": true,
           "type": {
-            "type": "string",
-            "maxLength": 4096,
-            "minLength": 1
+            "type": "ref",
+            "typeName": "LoRaWANGatewayVersion"
           }
         },
         {
@@ -53,28 +52,7 @@
           }
         },
         {
-          "name": "CurrentVersion",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "LoRaWANGatewayVersion"
-          }
-        },
-        {
-          "name": "UpdateVersion",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "LoRaWANGatewayVersion"
-          }
-        }
-      ]
-    },
-    "UpdateWirelessGatewayTaskCreate": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "UpdateDataSource",
+          "name": "UpdateSignature",
           "optional": true,
           "type": {
             "type": "string",
@@ -83,20 +61,11 @@
           }
         },
         {
-          "name": "UpdateDataRole",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "maxLength": 2048,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "LoRaWAN",
+          "name": "UpdateVersion",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "LoRaWANUpdateGatewayTaskCreate"
+            "typeName": "LoRaWANGatewayVersion"
           }
         }
       ]
@@ -144,6 +113,37 @@
           }
         }
       ]
+    },
+    "UpdateWirelessGatewayTaskCreate": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "LoRaWAN",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "LoRaWANUpdateGatewayTaskCreate"
+          }
+        },
+        {
+          "name": "UpdateDataRole",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 2048,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "UpdateDataSource",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 4096,
+            "minLength": 1
+          }
+        }
+      ]
     }
   },
   "resource": {
@@ -151,33 +151,12 @@
     "description": "Creates a gateway task definition.",
     "properties": [
       {
-        "name": "Name",
-        "description": "The name of the new resource.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The name of the new resource.",
-          "maxLength": 256,
-          "minLength": 1
-        }
-      },
-      {
         "name": "AutoCreateTasks",
         "description": "Whether to automatically create tasks using this task definition for all gateways with the specified current version. If false, the task must me created by calling CreateWirelessGatewayTask.",
         "optional": false,
         "type": {
           "type": "boolean",
           "description": "Whether to automatically create tasks using this task definition for all gateways with the specified current version. If false, the task must me created by calling CreateWirelessGatewayTask."
-        }
-      },
-      {
-        "name": "Update",
-        "description": "Information about the gateways to update.",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "description": "Information about the gateways to update.",
-          "typeName": "UpdateWirelessGatewayTaskCreate"
         }
       },
       {
@@ -191,13 +170,14 @@
         }
       },
       {
-        "name": "TaskDefinitionType",
-        "description": "A filter to list only the wireless gateway task definitions that use this task definition type",
+        "name": "Name",
+        "description": "The name of the new resource.",
         "optional": true,
         "type": {
           "type": "string",
-          "description": "A filter to list only the wireless gateway task definitions that use this task definition type",
-          "allowedValues": ["UPDATE"]
+          "description": "The name of the new resource.",
+          "maxLength": 256,
+          "minLength": 1
         }
       },
       {
@@ -213,6 +193,26 @@
           },
           "maxLength": 200
         }
+      },
+      {
+        "name": "TaskDefinitionType",
+        "description": "A filter to list only the wireless gateway task definitions that use this task definition type",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "A filter to list only the wireless gateway task definitions that use this task definition type",
+          "allowedValues": ["UPDATE"]
+        }
+      },
+      {
+        "name": "Update",
+        "description": "Information about the gateways to update.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "Information about the gateways to update.",
+          "typeName": "UpdateWirelessGatewayTaskCreate"
+        }
       }
     ]
   },
@@ -220,6 +220,15 @@
     "type": "object",
     "description": "Creates a gateway task definition.",
     "properties": [
+      {
+        "name": "Arn",
+        "description": "TaskDefinition arn. Returned after successful create.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "TaskDefinition arn. Returned after successful create."
+        }
+      },
       {
         "name": "Id",
         "description": "The ID of the new wireless gateway task definition",
@@ -229,17 +238,8 @@
           "description": "The ID of the new wireless gateway task definition",
           "pattern": "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}"
         }
-      },
-      {
-        "name": "Arn",
-        "description": "TaskDefinition arn. Returned after successful create.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "TaskDefinition arn. Returned after successful create."
-        }
       }
     ]
   },
-  "$hash": "2e0fe7314c98f69ade5c608def126820f8baef19"
+  "$hash": "fac5660bcc3a83059396591783cf04ef49fd4023"
 }

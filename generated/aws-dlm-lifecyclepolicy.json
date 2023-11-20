@@ -1,57 +1,5 @@
 {
   "definitions": {
-    "Script": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "ExecutionHandlerService",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "ExecutionTimeout",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        },
-        {
-          "name": "Stages",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "string"
-            }
-          }
-        },
-        {
-          "name": "ExecutionHandler",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "MaximumRetryCount",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        },
-        {
-          "name": "ExecuteOperationOnScriptFailure",
-          "optional": true,
-          "type": {
-            "type": "boolean"
-          }
-        }
-      ]
-    },
     "Action": {
       "type": "object",
       "properties": [
@@ -75,32 +23,151 @@
         }
       ]
     },
-    "Parameters": {
+    "ArchiveRetainRule": {
       "type": "object",
       "properties": [
         {
-          "name": "ExcludeBootVolume",
+          "name": "RetentionArchiveTier",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "RetentionArchiveTier"
+          }
+        }
+      ]
+    },
+    "ArchiveRule": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "RetainRule",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "ArchiveRetainRule"
+          }
+        }
+      ]
+    },
+    "CreateRule": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "CronExpression",
           "optional": true,
           "type": {
-            "type": "boolean"
+            "type": "string"
           }
         },
         {
-          "name": "NoReboot",
+          "name": "Interval",
           "optional": true,
           "type": {
-            "type": "boolean"
+            "type": "number",
+            "isInteger": true
           }
         },
         {
-          "name": "ExcludeDataVolumeTags",
+          "name": "IntervalUnit",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Location",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Scripts",
           "optional": true,
           "type": {
             "type": "array",
             "itemType": {
               "type": "ref",
-              "typeName": "Tag"
+              "typeName": "Script"
             }
+          }
+        },
+        {
+          "name": "Times",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "CrossRegionCopyAction": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "EncryptionConfiguration",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "EncryptionConfiguration"
+          }
+        },
+        {
+          "name": "RetainRule",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "CrossRegionCopyRetainRule"
+          }
+        },
+        {
+          "name": "Target",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "CrossRegionCopyDeprecateRule": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Interval",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "IntervalUnit",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "CrossRegionCopyRetainRule": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Interval",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "IntervalUnit",
+          "optional": false,
+          "type": {
+            "type": "string"
           }
         }
       ]
@@ -109,17 +176,17 @@
       "type": "object",
       "properties": [
         {
-          "name": "TargetRegion",
+          "name": "CmkArn",
           "optional": true,
           "type": {
             "type": "string"
           }
         },
         {
-          "name": "Target",
+          "name": "CopyTags",
           "optional": true,
           "type": {
-            "type": "string"
+            "type": "boolean"
           }
         },
         {
@@ -138,13 +205,6 @@
           }
         },
         {
-          "name": "CmkArn",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
           "name": "RetainRule",
           "optional": true,
           "type": {
@@ -153,10 +213,45 @@
           }
         },
         {
-          "name": "CopyTags",
+          "name": "Target",
           "optional": true,
           "type": {
-            "type": "boolean"
+            "type": "string"
+          }
+        },
+        {
+          "name": "TargetRegion",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "DeprecateRule": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Count",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "Interval",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "IntervalUnit",
+          "optional": true,
+          "type": {
+            "type": "string"
           }
         }
       ]
@@ -165,50 +260,17 @@
       "type": "object",
       "properties": [
         {
-          "name": "Encrypted",
-          "optional": false,
-          "type": {
-            "type": "boolean"
-          }
-        },
-        {
           "name": "CmkArn",
           "optional": true,
           "type": {
             "type": "string"
           }
-        }
-      ]
-    },
-    "CrossRegionCopyRetainRule": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "IntervalUnit",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
         },
         {
-          "name": "Interval",
+          "name": "Encrypted",
           "optional": false,
           "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        }
-      ]
-    },
-    "ArchiveRule": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "RetainRule",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "ArchiveRetainRule"
+            "type": "boolean"
           }
         }
       ]
@@ -242,72 +304,9 @@
         }
       ]
     },
-    "RetainRule": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "IntervalUnit",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Count",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        },
-        {
-          "name": "Interval",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        }
-      ]
-    },
-    "CrossRegionCopyAction": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Target",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "EncryptionConfiguration",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "EncryptionConfiguration"
-          }
-        },
-        {
-          "name": "RetainRule",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "CrossRegionCopyRetainRule"
-          }
-        }
-      ]
-    },
     "EventSource": {
       "type": "object",
       "properties": [
-        {
-          "name": "Type",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
         {
           "name": "Parameters",
           "optional": true,
@@ -315,224 +314,12 @@
             "type": "ref",
             "typeName": "EventParameters"
           }
-        }
-      ]
-    },
-    "DeprecateRule": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "IntervalUnit",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
         },
         {
-          "name": "Count",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        },
-        {
-          "name": "Interval",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        }
-      ]
-    },
-    "CrossRegionCopyDeprecateRule": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "IntervalUnit",
+          "name": "Type",
           "optional": false,
           "type": {
             "type": "string"
-          }
-        },
-        {
-          "name": "Interval",
-          "optional": false,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        }
-      ]
-    },
-    "ArchiveRetainRule": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "RetentionArchiveTier",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "RetentionArchiveTier"
-          }
-        }
-      ]
-    },
-    "CreateRule": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "IntervalUnit",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Scripts",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "Script"
-            }
-          }
-        },
-        {
-          "name": "Times",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "string"
-            }
-          }
-        },
-        {
-          "name": "CronExpression",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Interval",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        },
-        {
-          "name": "Location",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "Schedule": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "ShareRules",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "ShareRule"
-            }
-          }
-        },
-        {
-          "name": "DeprecateRule",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "DeprecateRule"
-          }
-        },
-        {
-          "name": "TagsToAdd",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "Tag"
-            }
-          }
-        },
-        {
-          "name": "CreateRule",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "CreateRule"
-          }
-        },
-        {
-          "name": "VariableTags",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "Tag"
-            }
-          }
-        },
-        {
-          "name": "FastRestoreRule",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "FastRestoreRule"
-          }
-        },
-        {
-          "name": "ArchiveRule",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ArchiveRule"
-          }
-        },
-        {
-          "name": "RetainRule",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "RetainRule"
-          }
-        },
-        {
-          "name": "CrossRegionCopyRules",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "CrossRegionCopyRule"
-            }
-          }
-        },
-        {
-          "name": "Name",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "CopyTags",
-          "optional": true,
-          "type": {
-            "type": "boolean"
           }
         }
       ]
@@ -540,21 +327,6 @@
     "FastRestoreRule": {
       "type": "object",
       "properties": [
-        {
-          "name": "IntervalUnit",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Count",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        },
         {
           "name": "AvailabilityZones",
           "optional": true,
@@ -566,11 +338,56 @@
           }
         },
         {
+          "name": "Count",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
           "name": "Interval",
           "optional": true,
           "type": {
             "type": "number",
             "isInteger": true
+          }
+        },
+        {
+          "name": "IntervalUnit",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "Parameters": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ExcludeBootVolume",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "ExcludeDataVolumeTags",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Tag"
+            }
+          }
+        },
+        {
+          "name": "NoReboot",
+          "optional": true,
+          "type": {
+            "type": "boolean"
           }
         }
       ]
@@ -578,6 +395,50 @@
     "PolicyDetails": {
       "type": "object",
       "properties": [
+        {
+          "name": "Actions",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Action"
+            }
+          }
+        },
+        {
+          "name": "EventSource",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "EventSource"
+          }
+        },
+        {
+          "name": "Parameters",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Parameters"
+          }
+        },
+        {
+          "name": "PolicyType",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "ResourceLocations",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            }
+          }
+        },
         {
           "name": "ResourceTypes",
           "optional": true,
@@ -600,40 +461,6 @@
           }
         },
         {
-          "name": "PolicyType",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "EventSource",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "EventSource"
-          }
-        },
-        {
-          "name": "Parameters",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "Parameters"
-          }
-        },
-        {
-          "name": "Actions",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "Action"
-            }
-          }
-        },
-        {
           "name": "TargetTags",
           "optional": true,
           "type": {
@@ -643,29 +470,12 @@
               "typeName": "Tag"
             }
           }
-        },
-        {
-          "name": "ResourceLocations",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "string"
-            }
-          }
         }
       ]
     },
-    "RetentionArchiveTier": {
+    "RetainRule": {
       "type": "object",
       "properties": [
-        {
-          "name": "IntervalUnit",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
         {
           "name": "Count",
           "optional": true,
@@ -681,24 +491,195 @@
             "type": "number",
             "isInteger": true
           }
+        },
+        {
+          "name": "IntervalUnit",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
         }
       ]
     },
-    "Tag": {
+    "RetentionArchiveTier": {
       "type": "object",
       "properties": [
         {
-          "name": "Value",
-          "optional": false,
+          "name": "Count",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "Interval",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "IntervalUnit",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "Schedule": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ArchiveRule",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ArchiveRule"
+          }
+        },
+        {
+          "name": "CopyTags",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "CreateRule",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "CreateRule"
+          }
+        },
+        {
+          "name": "CrossRegionCopyRules",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "CrossRegionCopyRule"
+            }
+          }
+        },
+        {
+          "name": "DeprecateRule",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DeprecateRule"
+          }
+        },
+        {
+          "name": "FastRestoreRule",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "FastRestoreRule"
+          }
+        },
+        {
+          "name": "Name",
+          "optional": true,
           "type": {
             "type": "string"
           }
         },
         {
-          "name": "Key",
-          "optional": false,
+          "name": "RetainRule",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "RetainRule"
+          }
+        },
+        {
+          "name": "ShareRules",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "ShareRule"
+            }
+          }
+        },
+        {
+          "name": "TagsToAdd",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Tag"
+            }
+          }
+        },
+        {
+          "name": "VariableTags",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Tag"
+            }
+          }
+        }
+      ]
+    },
+    "Script": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ExecuteOperationOnScriptFailure",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "ExecutionHandler",
+          "optional": true,
           "type": {
             "type": "string"
+          }
+        },
+        {
+          "name": "ExecutionHandlerService",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "ExecutionTimeout",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "MaximumRetryCount",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "Stages",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            }
           }
         }
       ]
@@ -717,18 +698,37 @@
           }
         },
         {
-          "name": "UnshareIntervalUnit",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
           "name": "UnshareInterval",
           "optional": true,
           "type": {
             "type": "number",
             "isInteger": true
+          }
+        },
+        {
+          "name": "UnshareIntervalUnit",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string"
           }
         }
       ]
@@ -739,13 +739,6 @@
     "description": "Resource Type definition for AWS::DLM::LifecyclePolicy",
     "properties": [
       {
-        "name": "ExecutionRoleArn",
-        "optional": true,
-        "type": {
-          "type": "string"
-        }
-      },
-      {
         "name": "Description",
         "optional": true,
         "type": {
@@ -753,7 +746,7 @@
         }
       },
       {
-        "name": "State",
+        "name": "ExecutionRoleArn",
         "optional": true,
         "type": {
           "type": "string"
@@ -765,6 +758,13 @@
         "type": {
           "type": "ref",
           "typeName": "PolicyDetails"
+        }
+      },
+      {
+        "name": "State",
+        "optional": true,
+        "type": {
+          "type": "string"
         }
       },
       {
@@ -785,14 +785,14 @@
     "description": "Resource Type definition for AWS::DLM::LifecyclePolicy",
     "properties": [
       {
-        "name": "Id",
+        "name": "Arn",
         "optional": true,
         "type": {
           "type": "string"
         }
       },
       {
-        "name": "Arn",
+        "name": "Id",
         "optional": true,
         "type": {
           "type": "string"
@@ -800,5 +800,5 @@
       }
     ]
   },
-  "$hash": "1200893a1d99f6f33eda2462861f5056a718801d"
+  "$hash": "c8a9740088210b4dfb41b93040b77db42a8caf8b"
 }

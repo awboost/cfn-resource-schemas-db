@@ -1,5 +1,87 @@
 {
   "definitions": {
+    "Action": {
+      "type": "object",
+      "description": "An action for an extension to take at a specific action point.",
+      "properties": [
+        {
+          "name": "Description",
+          "description": "The description of the extension Action.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The description of the extension Action.",
+            "maxLength": 1024,
+            "minLength": 0
+          }
+        },
+        {
+          "name": "Name",
+          "description": "The name of the extension action.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The name of the extension action.",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "RoleArn",
+          "description": "The ARN of the role for invoking the extension action.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The ARN of the role for invoking the extension action.",
+            "maxLength": 2048,
+            "minLength": 20
+          }
+        },
+        {
+          "name": "Uri",
+          "description": "The URI of the extension action.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The URI of the extension action.",
+            "maxLength": 2048,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "Actions": {
+      "type": "array",
+      "description": "A list of actions for an extension to take at a specific action point.",
+      "itemType": {
+        "type": "ref",
+        "typeName": "Action"
+      }
+    },
+    "Parameter": {
+      "type": "object",
+      "description": "A parameter for the extension to send to a specific action.",
+      "properties": [
+        {
+          "name": "Description",
+          "description": "The description of the extension Parameter.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The description of the extension Parameter.",
+            "maxLength": 1024,
+            "minLength": 0
+          }
+        },
+        {
+          "name": "Required",
+          "optional": false,
+          "type": {
+            "type": "boolean"
+          }
+        }
+      ]
+    },
     "Tag": {
       "type": "object",
       "description": "A key-value pair to associate with a resource.",
@@ -27,112 +109,12 @@
           }
         }
       ]
-    },
-    "Actions": {
-      "type": "array",
-      "description": "A list of actions for an extension to take at a specific action point.",
-      "itemType": {
-        "type": "ref",
-        "typeName": "Action"
-      }
-    },
-    "Action": {
-      "type": "object",
-      "description": "An action for an extension to take at a specific action point.",
-      "properties": [
-        {
-          "name": "Name",
-          "description": "The name of the extension action.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The name of the extension action.",
-            "maxLength": 128,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "Description",
-          "description": "The description of the extension Action.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The description of the extension Action.",
-            "maxLength": 1024,
-            "minLength": 0
-          }
-        },
-        {
-          "name": "Uri",
-          "description": "The URI of the extension action.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The URI of the extension action.",
-            "maxLength": 2048,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "RoleArn",
-          "description": "The ARN of the role for invoking the extension action.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The ARN of the role for invoking the extension action.",
-            "maxLength": 2048,
-            "minLength": 20
-          }
-        }
-      ]
-    },
-    "Parameter": {
-      "type": "object",
-      "description": "A parameter for the extension to send to a specific action.",
-      "properties": [
-        {
-          "name": "Description",
-          "description": "The description of the extension Parameter.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The description of the extension Parameter.",
-            "maxLength": 1024,
-            "minLength": 0
-          }
-        },
-        {
-          "name": "Required",
-          "optional": false,
-          "type": {
-            "type": "boolean"
-          }
-        }
-      ]
     }
   },
   "resource": {
     "type": "object",
     "description": "Resource Type definition for AWS::AppConfig::Extension",
     "properties": [
-      {
-        "name": "Name",
-        "description": "Name of the extension.",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "description": "Name of the extension."
-        }
-      },
-      {
-        "name": "Description",
-        "description": "Description of the extension.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "Description of the extension."
-        }
-      },
       {
         "name": "Actions",
         "optional": false,
@@ -145,14 +127,12 @@
         }
       },
       {
-        "name": "Parameters",
+        "name": "Description",
+        "description": "Description of the extension.",
         "optional": true,
         "type": {
-          "type": "record",
-          "valueType": {
-            "type": "ref",
-            "typeName": "Parameter"
-          }
+          "type": "string",
+          "description": "Description of the extension."
         }
       },
       {
@@ -161,6 +141,26 @@
         "type": {
           "type": "number",
           "isInteger": true
+        }
+      },
+      {
+        "name": "Name",
+        "description": "Name of the extension.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "Name of the extension."
+        }
+      },
+      {
+        "name": "Parameters",
+        "optional": true,
+        "type": {
+          "type": "record",
+          "valueType": {
+            "type": "ref",
+            "typeName": "Parameter"
+          }
         }
       },
       {
@@ -183,14 +183,14 @@
     "description": "Resource Type definition for AWS::AppConfig::Extension",
     "properties": [
       {
-        "name": "Id",
+        "name": "Arn",
         "optional": true,
         "type": {
           "type": "string"
         }
       },
       {
-        "name": "Arn",
+        "name": "Id",
         "optional": true,
         "type": {
           "type": "string"
@@ -206,5 +206,5 @@
       }
     ]
   },
-  "$hash": "fac653df9604b0f3f83f40f0a8f0be15898e51c2"
+  "$hash": "703274b29c3652f01dbc60506e4cee079b9575e5"
 }

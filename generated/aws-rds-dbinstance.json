@@ -23,38 +23,6 @@
         }
       ]
     },
-    "Endpoint": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Address",
-          "description": "Specifies the DNS address of the DB instance.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Specifies the DNS address of the DB instance."
-          }
-        },
-        {
-          "name": "Port",
-          "description": "Specifies the port that the database engine is listening on.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Specifies the port that the database engine is listening on."
-          }
-        },
-        {
-          "name": "HostedZoneId",
-          "description": "Specifies the ID that Amazon Route 53 assigns when you create a hosted zone.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Specifies the ID that Amazon Route 53 assigns when you create a hosted zone."
-          }
-        }
-      ]
-    },
     "DBInstanceRole": {
       "type": "object",
       "properties": [
@@ -74,6 +42,61 @@
           "type": {
             "type": "string",
             "description": "The Amazon Resource Name (ARN) of the IAM role that is associated with the DB instance."
+          }
+        }
+      ]
+    },
+    "Endpoint": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Address",
+          "description": "Specifies the DNS address of the DB instance.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Specifies the DNS address of the DB instance."
+          }
+        },
+        {
+          "name": "HostedZoneId",
+          "description": "Specifies the ID that Amazon Route 53 assigns when you create a hosted zone.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Specifies the ID that Amazon Route 53 assigns when you create a hosted zone."
+          }
+        },
+        {
+          "name": "Port",
+          "description": "Specifies the port that the database engine is listening on.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Specifies the port that the database engine is listening on."
+          }
+        }
+      ]
+    },
+    "MasterUserSecret": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "KmsKeyId",
+          "description": "The AWS KMS key identifier that is used to encrypt the secret.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The AWS KMS key identifier that is used to encrypt the secret."
+          }
+        },
+        {
+          "name": "SecretArn",
+          "description": "The Amazon Resource Name (ARN) of the secret.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the secret."
           }
         }
       ]
@@ -126,29 +149,6 @@
             "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
             "maxLength": 256,
             "minLength": 0
-          }
-        }
-      ]
-    },
-    "MasterUserSecret": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "SecretArn",
-          "description": "The Amazon Resource Name (ARN) of the secret.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The Amazon Resource Name (ARN) of the secret."
-          }
-        },
-        {
-          "name": "KmsKeyId",
-          "description": "The AWS KMS key identifier that is used to encrypt the secret.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The AWS KMS key identifier that is used to encrypt the secret."
           }
         }
       ]
@@ -513,15 +513,6 @@
         }
       },
       {
-        "name": "ManageMasterUserPassword",
-        "description": "A value that indicates whether to manage the master user password with AWS Secrets Manager.",
-        "optional": true,
-        "type": {
-          "type": "boolean",
-          "description": "A value that indicates whether to manage the master user password with AWS Secrets Manager."
-        }
-      },
-      {
         "name": "Iops",
         "description": "The number of I/O operations per second (IOPS) that the database provisions.",
         "optional": true,
@@ -550,15 +541,12 @@
         }
       },
       {
-        "name": "MasterUsername",
-        "description": "The master user name for the DB instance.",
+        "name": "ManageMasterUserPassword",
+        "description": "A value that indicates whether to manage the master user password with AWS Secrets Manager.",
         "optional": true,
         "type": {
-          "type": "string",
-          "description": "The master user name for the DB instance.",
-          "maxLength": 128,
-          "minLength": 1,
-          "pattern": "^[a-zA-Z][a-zA-Z0-9_]{0,127}$"
+          "type": "boolean",
+          "description": "A value that indicates whether to manage the master user password with AWS Secrets Manager."
         }
       },
       {
@@ -578,6 +566,18 @@
           "type": "ref",
           "description": "Contains the secret managed by RDS in AWS Secrets Manager for the master user password.",
           "typeName": "MasterUserSecret"
+        }
+      },
+      {
+        "name": "MasterUsername",
+        "description": "The master user name for the DB instance.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The master user name for the DB instance.",
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[a-zA-Z][a-zA-Z0-9_]{0,127}$"
         }
       },
       {
@@ -753,15 +753,6 @@
         }
       },
       {
-        "name": "SourceDbiResourceId",
-        "description": "The resource ID of the source DB instance from which to restore.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The resource ID of the source DB instance from which to restore."
-        }
-      },
-      {
         "name": "SourceDBInstanceAutomatedBackupsArn",
         "description": "The Amazon Resource Name (ARN) of the replicated automated backups from which to restore.",
         "optional": true,
@@ -777,6 +768,15 @@
         "type": {
           "type": "string",
           "description": "If you want to create a Read Replica DB instance, specify the ID of the source DB instance. Each DB instance can have a limited number of Read Replicas."
+        }
+      },
+      {
+        "name": "SourceDbiResourceId",
+        "description": "The resource ID of the source DB instance from which to restore.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The resource ID of the source DB instance from which to restore."
         }
       },
       {
@@ -798,15 +798,6 @@
         }
       },
       {
-        "name": "StorageType",
-        "description": "Specifies the storage type to be associated with the DB instance.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "Specifies the storage type to be associated with the DB instance."
-        }
-      },
-      {
         "name": "StorageThroughput",
         "description": "Specifies the storage throughput for the DB instance.",
         "optional": true,
@@ -814,6 +805,15 @@
           "type": "number",
           "description": "Specifies the storage throughput for the DB instance.",
           "isInteger": true
+        }
+      },
+      {
+        "name": "StorageType",
+        "description": "Specifies the storage type to be associated with the DB instance.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Specifies the storage type to be associated with the DB instance."
         }
       },
       {
@@ -902,15 +902,6 @@
         }
       },
       {
-        "name": "DbiResourceId",
-        "description": "The AWS Region-unique, immutable identifier for the DB instance. This identifier is found in AWS CloudTrail log entries whenever the AWS KMS key for the DB instance is accessed.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The AWS Region-unique, immutable identifier for the DB instance. This identifier is found in AWS CloudTrail log entries whenever the AWS KMS key for the DB instance is accessed."
-        }
-      },
-      {
         "name": "DBSystemId",
         "description": "The Oracle system ID (Oracle SID) for a container database (CDB). The Oracle SID is also the name of the CDB. This setting is valid for RDS Custom only.",
         "optional": true,
@@ -918,8 +909,17 @@
           "type": "string",
           "description": "The Oracle system ID (Oracle SID) for a container database (CDB). The Oracle SID is also the name of the CDB. This setting is valid for RDS Custom only."
         }
+      },
+      {
+        "name": "DbiResourceId",
+        "description": "The AWS Region-unique, immutable identifier for the DB instance. This identifier is found in AWS CloudTrail log entries whenever the AWS KMS key for the DB instance is accessed.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The AWS Region-unique, immutable identifier for the DB instance. This identifier is found in AWS CloudTrail log entries whenever the AWS KMS key for the DB instance is accessed."
+        }
       }
     ]
   },
-  "$hash": "a61fb44bb7521dfb2345a8aecdb8a528f1d5aebe"
+  "$hash": "76d0e7e357016ca3664faf697cb5cb16527b959e"
 }

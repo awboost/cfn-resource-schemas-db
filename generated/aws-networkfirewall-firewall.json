@@ -1,5 +1,9 @@
 {
   "definitions": {
+    "EndpointId": {
+      "type": "string",
+      "description": "An endpoint Id."
+    },
     "ResourceArn": {
       "type": "string",
       "description": "A resource ARN.",
@@ -7,22 +11,9 @@
       "minLength": 1,
       "pattern": "^arn:aws.*$"
     },
-    "EndpointId": {
-      "type": "string",
-      "description": "An endpoint Id."
-    },
     "SubnetMapping": {
       "type": "object",
       "properties": [
-        {
-          "name": "SubnetId",
-          "description": "A SubnetId.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "A SubnetId."
-          }
-        },
         {
           "name": "IPAddressType",
           "description": "A IPAddressType",
@@ -30,6 +21,15 @@
           "type": {
             "type": "string",
             "description": "A IPAddressType"
+          }
+        },
+        {
+          "name": "SubnetId",
+          "description": "A SubnetId.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "A SubnetId."
           }
         }
       ]
@@ -63,6 +63,22 @@
     "description": "Resource type definition for AWS::NetworkFirewall::Firewall",
     "properties": [
       {
+        "name": "DeleteProtection",
+        "optional": true,
+        "type": {
+          "type": "boolean"
+        }
+      },
+      {
+        "name": "Description",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 512,
+          "pattern": "^.*$"
+        }
+      },
+      {
         "name": "FirewallName",
         "optional": false,
         "type": {
@@ -81,13 +97,17 @@
         }
       },
       {
-        "name": "VpcId",
-        "optional": false,
+        "name": "FirewallPolicyChangeProtection",
+        "optional": true,
         "type": {
-          "type": "string",
-          "maxLength": 128,
-          "minLength": 1,
-          "pattern": "^vpc-[0-9a-f]+$"
+          "type": "boolean"
+        }
+      },
+      {
+        "name": "SubnetChangeProtection",
+        "optional": true,
+        "type": {
+          "type": "boolean"
         }
       },
       {
@@ -103,36 +123,6 @@
         }
       },
       {
-        "name": "DeleteProtection",
-        "optional": true,
-        "type": {
-          "type": "boolean"
-        }
-      },
-      {
-        "name": "SubnetChangeProtection",
-        "optional": true,
-        "type": {
-          "type": "boolean"
-        }
-      },
-      {
-        "name": "FirewallPolicyChangeProtection",
-        "optional": true,
-        "type": {
-          "type": "boolean"
-        }
-      },
-      {
-        "name": "Description",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "maxLength": 512,
-          "pattern": "^.*$"
-        }
-      },
-      {
         "name": "Tags",
         "optional": true,
         "type": {
@@ -142,6 +132,16 @@
             "typeName": "Tag"
           }
         }
+      },
+      {
+        "name": "VpcId",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^vpc-[0-9a-f]+$"
+        }
       }
     ]
   },
@@ -149,6 +149,17 @@
     "type": "object",
     "description": "Resource type definition for AWS::NetworkFirewall::Firewall",
     "properties": [
+      {
+        "name": "EndpointIds",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "EndpointId"
+          }
+        }
+      },
       {
         "name": "FirewallArn",
         "optional": true,
@@ -166,19 +177,8 @@
           "minLength": 36,
           "pattern": "^([0-9a-f]{8})-([0-9a-f]{4}-){3}([0-9a-f]{12})$"
         }
-      },
-      {
-        "name": "EndpointIds",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "itemType": {
-            "type": "ref",
-            "typeName": "EndpointId"
-          }
-        }
       }
     ]
   },
-  "$hash": "be4c39172522cace137dfc59c350683d75371404"
+  "$hash": "a938ed75c7b98e9260f751943365c2a3fe0b515f"
 }

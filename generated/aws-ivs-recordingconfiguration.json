@@ -1,28 +1,5 @@
 {
   "definitions": {
-    "Tag": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Key",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 128,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "Value",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 256,
-            "minLength": 1
-          }
-        }
-      ]
-    },
     "DestinationConfiguration": {
       "type": "object",
       "description": "Recording Destination Configuration.",
@@ -33,75 +10,6 @@
           "type": {
             "type": "ref",
             "typeName": "S3DestinationConfiguration"
-          }
-        }
-      ]
-    },
-    "S3DestinationConfiguration": {
-      "type": "object",
-      "description": "Recording S3 Destination Configuration.",
-      "properties": [
-        {
-          "name": "BucketName",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 63,
-            "minLength": 3,
-            "pattern": "^[a-z0-9-.]+$"
-          }
-        }
-      ]
-    },
-    "ThumbnailConfiguration": {
-      "type": "object",
-      "description": "Recording Thumbnail Configuration.",
-      "properties": [
-        {
-          "name": "RecordingMode",
-          "description": "Thumbnail Recording Mode, which determines whether thumbnails are recorded at an interval or are disabled.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Thumbnail Recording Mode, which determines whether thumbnails are recorded at an interval or are disabled.",
-            "allowedValues": ["INTERVAL", "DISABLED"]
-          }
-        },
-        {
-          "name": "TargetIntervalSeconds",
-          "description": "Target Interval Seconds defines the interval at which thumbnails are recorded. This field is required if RecordingMode is INTERVAL.",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "description": "Target Interval Seconds defines the interval at which thumbnails are recorded. This field is required if RecordingMode is INTERVAL.",
-            "isInteger": true,
-            "maximum": 60,
-            "minimum": 1
-          }
-        },
-        {
-          "name": "Resolution",
-          "description": "Resolution indicates the desired resolution of recorded thumbnails.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Resolution indicates the desired resolution of recorded thumbnails.",
-            "allowedValues": ["FULL_HD", "HD", "SD", "LOWEST_RESOLUTION"]
-          }
-        },
-        {
-          "name": "Storage",
-          "description": "Storage indicates the format in which thumbnails are recorded.",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "description": "Storage indicates the format in which thumbnails are recorded.",
-            "itemType": {
-              "type": "string",
-              "allowedValues": ["SEQUENTIAL", "LATEST"]
-            },
-            "maxLength": 2,
-            "minLength": 0
           }
         }
       ]
@@ -136,12 +44,112 @@
           }
         }
       ]
+    },
+    "S3DestinationConfiguration": {
+      "type": "object",
+      "description": "Recording S3 Destination Configuration.",
+      "properties": [
+        {
+          "name": "BucketName",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 63,
+            "minLength": 3,
+            "pattern": "^[a-z0-9-.]+$"
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "ThumbnailConfiguration": {
+      "type": "object",
+      "description": "Recording Thumbnail Configuration.",
+      "properties": [
+        {
+          "name": "RecordingMode",
+          "description": "Thumbnail Recording Mode, which determines whether thumbnails are recorded at an interval or are disabled.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Thumbnail Recording Mode, which determines whether thumbnails are recorded at an interval or are disabled.",
+            "allowedValues": ["INTERVAL", "DISABLED"]
+          }
+        },
+        {
+          "name": "Resolution",
+          "description": "Resolution indicates the desired resolution of recorded thumbnails.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Resolution indicates the desired resolution of recorded thumbnails.",
+            "allowedValues": ["FULL_HD", "HD", "SD", "LOWEST_RESOLUTION"]
+          }
+        },
+        {
+          "name": "Storage",
+          "description": "Storage indicates the format in which thumbnails are recorded.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "Storage indicates the format in which thumbnails are recorded.",
+            "itemType": {
+              "type": "string",
+              "allowedValues": ["SEQUENTIAL", "LATEST"]
+            },
+            "maxLength": 2,
+            "minLength": 0
+          }
+        },
+        {
+          "name": "TargetIntervalSeconds",
+          "description": "Target Interval Seconds defines the interval at which thumbnails are recorded. This field is required if RecordingMode is INTERVAL.",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "Target Interval Seconds defines the interval at which thumbnails are recorded. This field is required if RecordingMode is INTERVAL.",
+            "isInteger": true,
+            "maximum": 60,
+            "minimum": 1
+          }
+        }
+      ]
     }
   },
   "resource": {
     "type": "object",
     "description": "Resource Type definition for AWS::IVS::RecordingConfiguration",
     "properties": [
+      {
+        "name": "DestinationConfiguration",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "DestinationConfiguration"
+        }
+      },
       {
         "name": "Name",
         "description": "Recording Configuration Name.",
@@ -167,11 +175,11 @@
         }
       },
       {
-        "name": "DestinationConfiguration",
-        "optional": false,
+        "name": "RenditionConfiguration",
+        "optional": true,
         "type": {
           "type": "ref",
-          "typeName": "DestinationConfiguration"
+          "typeName": "RenditionConfiguration"
         }
       },
       {
@@ -194,14 +202,6 @@
         "type": {
           "type": "ref",
           "typeName": "ThumbnailConfiguration"
-        }
-      },
-      {
-        "name": "RenditionConfiguration",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "RenditionConfiguration"
         }
       }
     ]
@@ -234,5 +234,5 @@
       }
     ]
   },
-  "$hash": "df9381f119ac64318881b5e1250e3384ce2021f0"
+  "$hash": "07e726088a3f195ed747ad59e23a96a9c0633554"
 }

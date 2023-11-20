@@ -1,37 +1,33 @@
 {
   "definitions": {
-    "Input": {
+    "CSVMappingParameters": {
       "type": "object",
       "properties": [
         {
-          "name": "NamePrefix",
+          "name": "RecordColumnDelimiter",
           "optional": false,
           "type": {
             "type": "string"
           }
         },
         {
-          "name": "InputSchema",
+          "name": "RecordRowDelimiter",
           "optional": false,
           "type": {
-            "type": "ref",
-            "typeName": "InputSchema"
+            "type": "string"
           }
-        },
+        }
+      ]
+    },
+    "Input": {
+      "type": "object",
+      "properties": [
         {
-          "name": "KinesisStreamsInput",
+          "name": "InputParallelism",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "KinesisStreamsInput"
-          }
-        },
-        {
-          "name": "KinesisFirehoseInput",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "KinesisFirehoseInput"
+            "typeName": "InputParallelism"
           }
         },
         {
@@ -43,11 +39,66 @@
           }
         },
         {
-          "name": "InputParallelism",
+          "name": "InputSchema",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "InputSchema"
+          }
+        },
+        {
+          "name": "KinesisFirehoseInput",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "InputParallelism"
+            "typeName": "KinesisFirehoseInput"
+          }
+        },
+        {
+          "name": "KinesisStreamsInput",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "KinesisStreamsInput"
+          }
+        },
+        {
+          "name": "NamePrefix",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "InputLambdaProcessor": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ResourceARN",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "RoleARN",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "InputParallelism": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Count",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
           }
         }
       ]
@@ -61,6 +112,49 @@
           "type": {
             "type": "ref",
             "typeName": "InputLambdaProcessor"
+          }
+        }
+      ]
+    },
+    "InputSchema": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "RecordColumns",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "RecordColumn"
+            }
+          }
+        },
+        {
+          "name": "RecordEncoding",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "RecordFormat",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "RecordFormat"
+          }
+        }
+      ]
+    },
+    "JSONMappingParameters": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "RecordRowPath",
+          "optional": false,
+          "type": {
+            "type": "string"
           }
         }
       ]
@@ -103,46 +197,23 @@
         }
       ]
     },
-    "InputSchema": {
+    "MappingParameters": {
       "type": "object",
       "properties": [
         {
-          "name": "RecordEncoding",
+          "name": "CSVMappingParameters",
           "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "RecordColumns",
-          "optional": false,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "RecordColumn"
-            }
-          }
-        },
-        {
-          "name": "RecordFormat",
-          "optional": false,
           "type": {
             "type": "ref",
-            "typeName": "RecordFormat"
+            "typeName": "CSVMappingParameters"
           }
-        }
-      ]
-    },
-    "InputParallelism": {
-      "type": "object",
-      "properties": [
+        },
         {
-          "name": "Count",
+          "name": "JSONMappingParameters",
           "optional": true,
           "type": {
-            "type": "number",
-            "isInteger": true
+            "type": "ref",
+            "typeName": "JSONMappingParameters"
           }
         }
       ]
@@ -158,14 +229,14 @@
           }
         },
         {
-          "name": "SqlType",
+          "name": "Name",
           "optional": false,
           "type": {
             "type": "string"
           }
         },
         {
-          "name": "Name",
+          "name": "SqlType",
           "optional": false,
           "type": {
             "type": "string"
@@ -192,83 +263,26 @@
           }
         }
       ]
-    },
-    "InputLambdaProcessor": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "ResourceARN",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "RoleARN",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "MappingParameters": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "JSONMappingParameters",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "JSONMappingParameters"
-          }
-        },
-        {
-          "name": "CSVMappingParameters",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "CSVMappingParameters"
-          }
-        }
-      ]
-    },
-    "JSONMappingParameters": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "RecordRowPath",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "CSVMappingParameters": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "RecordRowDelimiter",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "RecordColumnDelimiter",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
     }
   },
   "resource": {
     "type": "object",
     "description": "Resource Type definition for AWS::KinesisAnalytics::Application",
     "properties": [
+      {
+        "name": "ApplicationCode",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "ApplicationDescription",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
       {
         "name": "ApplicationName",
         "optional": true,
@@ -286,20 +300,6 @@
             "typeName": "Input"
           }
         }
-      },
-      {
-        "name": "ApplicationDescription",
-        "optional": true,
-        "type": {
-          "type": "string"
-        }
-      },
-      {
-        "name": "ApplicationCode",
-        "optional": true,
-        "type": {
-          "type": "string"
-        }
       }
     ]
   },
@@ -316,5 +316,5 @@
       }
     ]
   },
-  "$hash": "e315a9c5c116f9b6afae672a73845a3e207e1adb"
+  "$hash": "6399e4418a051b360ca95ac8fa46357f9b4e4f72"
 }

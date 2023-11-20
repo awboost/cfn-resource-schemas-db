@@ -1,29 +1,5 @@
 {
   "definitions": {
-    "Tag": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Key",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 128,
-            "minLength": 1,
-            "pattern": "^(?!aws:)[a-zA-Z+-=._:/]+$"
-          }
-        },
-        {
-          "name": "Value",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 256,
-            "minLength": 0
-          }
-        }
-      ]
-    },
     "FieldMap": {
       "type": "object",
       "properties": [
@@ -43,50 +19,6 @@
           "type": {
             "type": "ref",
             "typeName": "ObjectTypeField"
-          }
-        }
-      ]
-    },
-    "ObjectTypeField": {
-      "type": "object",
-      "description": "Represents a field in a ProfileObjectType.",
-      "properties": [
-        {
-          "name": "Source",
-          "description": "A field of a ProfileObject. For example: _source.FirstName, where \"_source\" is a ProfileObjectType of a Zendesk user and \"FirstName\" is a field in that ObjectType.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "A field of a ProfileObject. For example: _source.FirstName, where \"_source\" is a ProfileObjectType of a Zendesk user and \"FirstName\" is a field in that ObjectType.",
-            "maxLength": 1000,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "Target",
-          "description": "The location of the data in the standard ProfileObject model. For example: _profile.Address.PostalCode.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The location of the data in the standard ProfileObject model. For example: _profile.Address.PostalCode.",
-            "maxLength": 1000,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "ContentType",
-          "description": "The content type of the field. Used for determining equality when searching.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The content type of the field. Used for determining equality when searching.",
-            "allowedValues": [
-              "STRING",
-              "NUMBER",
-              "PHONE_NUMBER",
-              "EMAIL_ADDRESS",
-              "NAME"
-            ]
           }
         }
       ]
@@ -113,6 +45,50 @@
               "type": "ref",
               "typeName": "ObjectTypeKey"
             }
+          }
+        }
+      ]
+    },
+    "ObjectTypeField": {
+      "type": "object",
+      "description": "Represents a field in a ProfileObjectType.",
+      "properties": [
+        {
+          "name": "ContentType",
+          "description": "The content type of the field. Used for determining equality when searching.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The content type of the field. Used for determining equality when searching.",
+            "allowedValues": [
+              "STRING",
+              "NUMBER",
+              "PHONE_NUMBER",
+              "EMAIL_ADDRESS",
+              "NAME"
+            ]
+          }
+        },
+        {
+          "name": "Source",
+          "description": "A field of a ProfileObject. For example: _source.FirstName, where \"_source\" is a ProfileObjectType of a Zendesk user and \"FirstName\" is a field in that ObjectType.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "A field of a ProfileObject. For example: _source.FirstName, where \"_source\" is a ProfileObjectType of a Zendesk user and \"FirstName\" is a field in that ObjectType.",
+            "maxLength": 1000,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Target",
+          "description": "The location of the data in the standard ProfileObject model. For example: _profile.Address.PostalCode.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The location of the data in the standard ProfileObject model. For example: _profile.Address.PostalCode.",
+            "maxLength": 1000,
+            "minLength": 1
           }
         }
       ]
@@ -159,36 +135,36 @@
           }
         }
       ]
+    },
+    "Tag": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^(?!aws:)[a-zA-Z+-=._:/]+$"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 0
+          }
+        }
+      ]
     }
   },
   "resource": {
     "type": "object",
     "description": "An ObjectType resource of Amazon Connect Customer Profiles",
     "properties": [
-      {
-        "name": "DomainName",
-        "description": "The unique name of the domain.",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "description": "The unique name of the domain.",
-          "maxLength": 64,
-          "minLength": 1,
-          "pattern": "^[a-zA-Z0-9_-]+$"
-        }
-      },
-      {
-        "name": "ObjectTypeName",
-        "description": "The name of the profile object type.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The name of the profile object type.",
-          "maxLength": 255,
-          "minLength": 1,
-          "pattern": "^[a-zA-Z_][a-zA-Z_0-9-]*$"
-        }
-      },
       {
         "name": "AllowProfileCreation",
         "description": "Indicates whether a profile should be created when data is received.",
@@ -207,6 +183,18 @@
           "description": "Description of the profile object type.",
           "maxLength": 1000,
           "minLength": 1
+        }
+      },
+      {
+        "name": "DomainName",
+        "description": "The unique name of the domain.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The unique name of the domain.",
+          "maxLength": 64,
+          "minLength": 1,
+          "pattern": "^[a-zA-Z0-9_-]+$"
         }
       },
       {
@@ -256,6 +244,18 @@
             "type": "ref",
             "typeName": "KeyMap"
           }
+        }
+      },
+      {
+        "name": "ObjectTypeName",
+        "description": "The name of the profile object type.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The name of the profile object type.",
+          "maxLength": 255,
+          "minLength": 1,
+          "pattern": "^[a-zA-Z_][a-zA-Z_0-9-]*$"
         }
       },
       {
@@ -322,5 +322,5 @@
       }
     ]
   },
-  "$hash": "bc05f551326b31b19276ee874a217dc3da226771"
+  "$hash": "34d09dbdb03a5e2abb386b41ecc9a1095479caf5"
 }

@@ -1,47 +1,5 @@
 {
   "definitions": {
-    "TagMap": {
-      "type": "object",
-      "description": "TagMap",
-      "properties": [
-        {
-          "name": "TagKey",
-          "description": "TagKey",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "TagKey",
-            "maxLength": 128,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "TagValue",
-          "description": "TagValue",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "TagValue",
-            "maxLength": 256,
-            "minLength": 1
-          }
-        }
-      ]
-    },
-    "Logging": {
-      "type": "object",
-      "description": "The logging configuration of the infrastructure configuration.",
-      "properties": [
-        {
-          "name": "S3Logs",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "S3Logs"
-          }
-        }
-      ]
-    },
     "InstanceMetadataOptions": {
       "type": "object",
       "description": "The instance metadata option settings for the infrastructure configuration.",
@@ -64,6 +22,20 @@
             "type": "string",
             "description": "Indicates whether a signed token header is required for instance metadata retrieval requests. The values affect the response as follows: ",
             "allowedValues": ["required", "optional"]
+          }
+        }
+      ]
+    },
+    "Logging": {
+      "type": "object",
+      "description": "The logging configuration of the infrastructure configuration.",
+      "properties": [
+        {
+          "name": "S3Logs",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "S3Logs"
           }
         }
       ]
@@ -91,21 +63,40 @@
           }
         }
       ]
+    },
+    "TagMap": {
+      "type": "object",
+      "description": "TagMap",
+      "properties": [
+        {
+          "name": "TagKey",
+          "description": "TagKey",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "TagKey",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "TagValue",
+          "description": "TagValue",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "TagValue",
+            "maxLength": 256,
+            "minLength": 1
+          }
+        }
+      ]
     }
   },
   "resource": {
     "type": "object",
     "description": "Resource schema for AWS::ImageBuilder::InfrastructureConfiguration",
     "properties": [
-      {
-        "name": "Name",
-        "description": "The name of the infrastructure configuration.",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "description": "The name of the infrastructure configuration."
-        }
-      },
       {
         "name": "Description",
         "description": "The description of the infrastructure configuration.",
@@ -116,6 +107,25 @@
         }
       },
       {
+        "name": "InstanceMetadataOptions",
+        "description": "The instance metadata option settings for the infrastructure configuration.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "The instance metadata option settings for the infrastructure configuration.",
+          "typeName": "InstanceMetadataOptions"
+        }
+      },
+      {
+        "name": "InstanceProfileName",
+        "description": "The instance profile of the infrastructure configuration.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The instance profile of the infrastructure configuration."
+        }
+      },
+      {
         "name": "InstanceTypes",
         "description": "The instance types of the infrastructure configuration.",
         "optional": true,
@@ -123,6 +133,46 @@
           "type": "array",
           "description": "The instance types of the infrastructure configuration.",
           "itemType": {
+            "type": "string"
+          }
+        }
+      },
+      {
+        "name": "KeyPair",
+        "description": "The EC2 key pair of the infrastructure configuration..",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The EC2 key pair of the infrastructure configuration.."
+        }
+      },
+      {
+        "name": "Logging",
+        "description": "The logging configuration of the infrastructure configuration.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "The logging configuration of the infrastructure configuration.",
+          "typeName": "Logging"
+        }
+      },
+      {
+        "name": "Name",
+        "description": "The name of the infrastructure configuration.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The name of the infrastructure configuration."
+        }
+      },
+      {
+        "name": "ResourceTags",
+        "description": "The tags attached to the resource created by Image Builder.",
+        "optional": true,
+        "type": {
+          "type": "record",
+          "description": "The tags attached to the resource created by Image Builder.",
+          "valueType": {
             "type": "string"
           }
         }
@@ -140,13 +190,12 @@
         }
       },
       {
-        "name": "Logging",
-        "description": "The logging configuration of the infrastructure configuration.",
+        "name": "SnsTopicArn",
+        "description": "The SNS Topic Amazon Resource Name (ARN) of the infrastructure configuration.",
         "optional": true,
         "type": {
-          "type": "ref",
-          "description": "The logging configuration of the infrastructure configuration.",
-          "typeName": "Logging"
+          "type": "string",
+          "description": "The SNS Topic Amazon Resource Name (ARN) of the infrastructure configuration."
         }
       },
       {
@@ -159,64 +208,6 @@
         }
       },
       {
-        "name": "KeyPair",
-        "description": "The EC2 key pair of the infrastructure configuration..",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The EC2 key pair of the infrastructure configuration.."
-        }
-      },
-      {
-        "name": "TerminateInstanceOnFailure",
-        "description": "The terminate instance on failure configuration of the infrastructure configuration.",
-        "optional": true,
-        "type": {
-          "type": "boolean",
-          "description": "The terminate instance on failure configuration of the infrastructure configuration."
-        }
-      },
-      {
-        "name": "InstanceProfileName",
-        "description": "The instance profile of the infrastructure configuration.",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "description": "The instance profile of the infrastructure configuration."
-        }
-      },
-      {
-        "name": "InstanceMetadataOptions",
-        "description": "The instance metadata option settings for the infrastructure configuration.",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "description": "The instance metadata option settings for the infrastructure configuration.",
-          "typeName": "InstanceMetadataOptions"
-        }
-      },
-      {
-        "name": "SnsTopicArn",
-        "description": "The SNS Topic Amazon Resource Name (ARN) of the infrastructure configuration.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The SNS Topic Amazon Resource Name (ARN) of the infrastructure configuration."
-        }
-      },
-      {
-        "name": "ResourceTags",
-        "description": "The tags attached to the resource created by Image Builder.",
-        "optional": true,
-        "type": {
-          "type": "record",
-          "description": "The tags attached to the resource created by Image Builder.",
-          "valueType": {
-            "type": "string"
-          }
-        }
-      },
-      {
         "name": "Tags",
         "description": "The tags associated with the component.",
         "optional": true,
@@ -226,6 +217,15 @@
           "valueType": {
             "type": "string"
           }
+        }
+      },
+      {
+        "name": "TerminateInstanceOnFailure",
+        "description": "The terminate instance on failure configuration of the infrastructure configuration.",
+        "optional": true,
+        "type": {
+          "type": "boolean",
+          "description": "The terminate instance on failure configuration of the infrastructure configuration."
         }
       }
     ]
@@ -245,5 +245,5 @@
       }
     ]
   },
-  "$hash": "3db8271aface4c8fcc8e26d781b8800bae4f3284"
+  "$hash": "d8b63f8bace90974b2e1a7763e31a2769e6f4539"
 }

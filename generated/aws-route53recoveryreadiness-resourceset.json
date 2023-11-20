@@ -1,20 +1,51 @@
 {
   "definitions": {
-    "Tag": {
+    "DNSTargetResource": {
       "type": "object",
+      "description": "A component for DNS/routing control readiness checks.",
       "properties": [
         {
-          "name": "Key",
-          "optional": false,
+          "name": "DomainName",
+          "description": "The domain name that acts as an ingress point to a portion of the customer application.",
+          "optional": true,
           "type": {
-            "type": "string"
+            "type": "string",
+            "description": "The domain name that acts as an ingress point to a portion of the customer application."
           }
         },
         {
-          "name": "Value",
-          "optional": false,
+          "name": "HostedZoneArn",
+          "description": "The hosted zone Amazon Resource Name (ARN) that contains the DNS record with the provided name of the target resource.",
+          "optional": true,
           "type": {
-            "type": "string"
+            "type": "string",
+            "description": "The hosted zone Amazon Resource Name (ARN) that contains the DNS record with the provided name of the target resource."
+          }
+        },
+        {
+          "name": "RecordSetId",
+          "description": "The Route 53 record set ID that will uniquely identify a DNS record, given a name and a type.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The Route 53 record set ID that will uniquely identify a DNS record, given a name and a type."
+          }
+        },
+        {
+          "name": "RecordType",
+          "description": "The type of DNS record of the target resource.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The type of DNS record of the target resource."
+          }
+        },
+        {
+          "name": "TargetResource",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "TargetResource"
           }
         }
       ]
@@ -58,91 +89,10 @@
         }
       ]
     },
-    "TargetResource": {
-      "type": "object",
-      "description": "The target resource that the Route 53 record points to.",
-      "properties": [
-        {
-          "name": "NLBResource",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "NLBResource"
-          }
-        },
-        {
-          "name": "R53Resource",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "R53ResourceRecord"
-          }
-        }
-      ]
-    },
-    "DNSTargetResource": {
-      "type": "object",
-      "description": "A component for DNS/routing control readiness checks.",
-      "properties": [
-        {
-          "name": "DomainName",
-          "description": "The domain name that acts as an ingress point to a portion of the customer application.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The domain name that acts as an ingress point to a portion of the customer application."
-          }
-        },
-        {
-          "name": "RecordSetId",
-          "description": "The Route 53 record set ID that will uniquely identify a DNS record, given a name and a type.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The Route 53 record set ID that will uniquely identify a DNS record, given a name and a type."
-          }
-        },
-        {
-          "name": "HostedZoneArn",
-          "description": "The hosted zone Amazon Resource Name (ARN) that contains the DNS record with the provided name of the target resource.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The hosted zone Amazon Resource Name (ARN) that contains the DNS record with the provided name of the target resource."
-          }
-        },
-        {
-          "name": "RecordType",
-          "description": "The type of DNS record of the target resource.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The type of DNS record of the target resource."
-          }
-        },
-        {
-          "name": "TargetResource",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "TargetResource"
-          }
-        }
-      ]
-    },
     "Resource": {
       "type": "object",
       "description": "The resource element of a ResourceSet",
       "properties": [
-        {
-          "name": "ResourceArn",
-          "description": "The Amazon Resource Name (ARN) of the AWS resource.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The Amazon Resource Name (ARN) of the AWS resource."
-          }
-        },
         {
           "name": "ComponentId",
           "description": "The component identifier of the resource, generated when DNS target resource is used.",
@@ -171,6 +121,56 @@
               "type": "string"
             }
           }
+        },
+        {
+          "name": "ResourceArn",
+          "description": "The Amazon Resource Name (ARN) of the AWS resource.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the AWS resource."
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "TargetResource": {
+      "type": "object",
+      "description": "The target resource that the Route 53 record points to.",
+      "properties": [
+        {
+          "name": "NLBResource",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "NLBResource"
+          }
+        },
+        {
+          "name": "R53Resource",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "R53ResourceRecord"
+          }
         }
       ]
     }
@@ -189,6 +189,15 @@
         }
       },
       {
+        "name": "ResourceSetType",
+        "description": "The resource type of the resources in the resource set. Enter one of the following values for resource type: \n\nAWS: :AutoScaling: :AutoScalingGroup, AWS: :CloudWatch: :Alarm, AWS: :EC2: :CustomerGateway, AWS: :DynamoDB: :Table, AWS: :EC2: :Volume, AWS: :ElasticLoadBalancing: :LoadBalancer, AWS: :ElasticLoadBalancingV2: :LoadBalancer, AWS: :MSK: :Cluster, AWS: :RDS: :DBCluster, AWS: :Route53: :HealthCheck, AWS: :SQS: :Queue, AWS: :SNS: :Topic, AWS: :SNS: :Subscription, AWS: :EC2: :VPC, AWS: :EC2: :VPNConnection, AWS: :EC2: :VPNGateway, AWS::Route53RecoveryReadiness::DNSTargetResource",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The resource type of the resources in the resource set. Enter one of the following values for resource type: \n\nAWS: :AutoScaling: :AutoScalingGroup, AWS: :CloudWatch: :Alarm, AWS: :EC2: :CustomerGateway, AWS: :DynamoDB: :Table, AWS: :EC2: :Volume, AWS: :ElasticLoadBalancing: :LoadBalancer, AWS: :ElasticLoadBalancingV2: :LoadBalancer, AWS: :MSK: :Cluster, AWS: :RDS: :DBCluster, AWS: :Route53: :HealthCheck, AWS: :SQS: :Queue, AWS: :SNS: :Topic, AWS: :SNS: :Subscription, AWS: :EC2: :VPC, AWS: :EC2: :VPNConnection, AWS: :EC2: :VPNGateway, AWS::Route53RecoveryReadiness::DNSTargetResource"
+        }
+      },
+      {
         "name": "Resources",
         "description": "A list of resource objects in the resource set.",
         "optional": false,
@@ -201,15 +210,6 @@
           },
           "maxLength": 6,
           "minLength": 1
-        }
-      },
-      {
-        "name": "ResourceSetType",
-        "description": "The resource type of the resources in the resource set. Enter one of the following values for resource type: \n\nAWS: :AutoScaling: :AutoScalingGroup, AWS: :CloudWatch: :Alarm, AWS: :EC2: :CustomerGateway, AWS: :DynamoDB: :Table, AWS: :EC2: :Volume, AWS: :ElasticLoadBalancing: :LoadBalancer, AWS: :ElasticLoadBalancingV2: :LoadBalancer, AWS: :MSK: :Cluster, AWS: :RDS: :DBCluster, AWS: :Route53: :HealthCheck, AWS: :SQS: :Queue, AWS: :SNS: :Topic, AWS: :SNS: :Subscription, AWS: :EC2: :VPC, AWS: :EC2: :VPNConnection, AWS: :EC2: :VPNGateway, AWS::Route53RecoveryReadiness::DNSTargetResource",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "description": "The resource type of the resources in the resource set. Enter one of the following values for resource type: \n\nAWS: :AutoScaling: :AutoScalingGroup, AWS: :CloudWatch: :Alarm, AWS: :EC2: :CustomerGateway, AWS: :DynamoDB: :Table, AWS: :EC2: :Volume, AWS: :ElasticLoadBalancing: :LoadBalancer, AWS: :ElasticLoadBalancingV2: :LoadBalancer, AWS: :MSK: :Cluster, AWS: :RDS: :DBCluster, AWS: :Route53: :HealthCheck, AWS: :SQS: :Queue, AWS: :SNS: :Topic, AWS: :SNS: :Subscription, AWS: :EC2: :VPC, AWS: :EC2: :VPNConnection, AWS: :EC2: :VPNGateway, AWS::Route53RecoveryReadiness::DNSTargetResource"
         }
       },
       {
@@ -244,5 +244,5 @@
       }
     ]
   },
-  "$hash": "60c5bd819b2aa8ecc3d53238b43d84000ab13f62"
+  "$hash": "a0409f64cf90396f0099c6d10eeccd9efc0f0270"
 }

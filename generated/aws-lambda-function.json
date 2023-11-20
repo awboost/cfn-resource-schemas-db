@@ -1,17 +1,144 @@
 {
   "definitions": {
-    "ImageConfig": {
+    "Code": {
       "type": "object",
       "properties": [
         {
-          "name": "WorkingDirectory",
-          "description": "WorkingDirectory.",
+          "name": "ImageUri",
+          "description": "ImageUri.",
           "optional": true,
           "type": {
             "type": "string",
-            "description": "WorkingDirectory."
+            "description": "ImageUri."
           }
         },
+        {
+          "name": "S3Bucket",
+          "description": "An Amazon S3 bucket in the same AWS Region as your function. The bucket can be in a different AWS account.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "An Amazon S3 bucket in the same AWS Region as your function. The bucket can be in a different AWS account.",
+            "maxLength": 63,
+            "minLength": 3,
+            "pattern": "^[0-9A-Za-z\\.\\-_]*(?<!\\.)$"
+          }
+        },
+        {
+          "name": "S3Key",
+          "description": "The Amazon S3 key of the deployment package.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The Amazon S3 key of the deployment package.",
+            "maxLength": 1024,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "S3ObjectVersion",
+          "description": "For versioned objects, the version of the deployment package object to use.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "For versioned objects, the version of the deployment package object to use.",
+            "maxLength": 1024,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "ZipFile",
+          "description": "The source code of your Lambda function. If you include your function source inline with this parameter, AWS CloudFormation places it in a file named index and zips it to create a deployment package..",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The source code of your Lambda function. If you include your function source inline with this parameter, AWS CloudFormation places it in a file named index and zips it to create a deployment package.."
+          }
+        }
+      ]
+    },
+    "DeadLetterConfig": {
+      "type": "object",
+      "description": "The dead-letter queue for failed asynchronous invocations.",
+      "properties": [
+        {
+          "name": "TargetArn",
+          "description": "The Amazon Resource Name (ARN) of an Amazon SQS queue or Amazon SNS topic.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of an Amazon SQS queue or Amazon SNS topic.",
+            "pattern": "^(arn:(aws[a-zA-Z-]*)?:[a-z0-9-.]+:.*)|()$"
+          }
+        }
+      ]
+    },
+    "Environment": {
+      "type": "object",
+      "description": "A function's environment variable settings.",
+      "properties": [
+        {
+          "name": "Variables",
+          "description": "Environment variable key-value pairs.",
+          "optional": true,
+          "type": {
+            "type": "record",
+            "description": "Environment variable key-value pairs.",
+            "valueType": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "EphemeralStorage": {
+      "type": "object",
+      "description": "A function's ephemeral storage settings.",
+      "properties": [
+        {
+          "name": "Size",
+          "description": "The amount of ephemeral storage that your function has access to.",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "description": "The amount of ephemeral storage that your function has access to.",
+            "isInteger": true,
+            "maximum": 10240,
+            "minimum": 512
+          }
+        }
+      ]
+    },
+    "FileSystemConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Arn",
+          "description": "The Amazon Resource Name (ARN) of the Amazon EFS access point that provides access to the file system.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the Amazon EFS access point that provides access to the file system.",
+            "maxLength": 200,
+            "pattern": "^arn:aws[a-zA-Z-]*:elasticfilesystem:[a-z]{2}((-gov)|(-iso(b?)))?-[a-z]+-\\d{1}:\\d{12}:access-point/fsap-[a-f0-9]{17}$"
+          }
+        },
+        {
+          "name": "LocalMountPath",
+          "description": "The path where the function can access the file system, starting with /mnt/.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The path where the function can access the file system, starting with /mnt/.",
+            "maxLength": 160,
+            "pattern": "^/mnt/[a-zA-Z0-9-_.]+$"
+          }
+        }
+      ]
+    },
+    "ImageConfig": {
+      "type": "object",
+      "properties": [
         {
           "name": "Command",
           "description": "Command.",
@@ -36,6 +163,163 @@
               "type": "string"
             },
             "maxLength": 1500
+          }
+        },
+        {
+          "name": "WorkingDirectory",
+          "description": "WorkingDirectory.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "WorkingDirectory."
+          }
+        }
+      ]
+    },
+    "LoggingConfig": {
+      "type": "object",
+      "description": "The function's logging configuration.",
+      "properties": [
+        {
+          "name": "ApplicationLogLevel",
+          "description": "Application log granularity level, can only be used when LogFormat is set to JSON",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Application log granularity level, can only be used when LogFormat is set to JSON",
+            "allowedValues": [
+              "TRACE",
+              "DEBUG",
+              "INFO",
+              "WARN",
+              "ERROR",
+              "FATAL"
+            ]
+          }
+        },
+        {
+          "name": "LogFormat",
+          "description": "Log delivery format for the lambda function",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Log delivery format for the lambda function",
+            "allowedValues": ["Text", "JSON"]
+          }
+        },
+        {
+          "name": "LogGroup",
+          "description": "The log group name.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The log group name.",
+            "maxLength": 512,
+            "minLength": 1,
+            "pattern": "[\\.\\-_/#A-Za-z0-9]+"
+          }
+        },
+        {
+          "name": "SystemLogLevel",
+          "description": "System log granularity level, can only be used when LogFormat is set to JSON",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "System log granularity level, can only be used when LogFormat is set to JSON",
+            "allowedValues": ["DEBUG", "INFO", "WARN"]
+          }
+        }
+      ]
+    },
+    "RuntimeManagementConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "RuntimeVersionArn",
+          "description": "Unique identifier for a runtime version arn",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Unique identifier for a runtime version arn"
+          }
+        },
+        {
+          "name": "UpdateRuntimeOn",
+          "description": "Trigger for runtime update",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Trigger for runtime update",
+            "allowedValues": ["Auto", "FunctionUpdate", "Manual"]
+          }
+        }
+      ]
+    },
+    "SnapStart": {
+      "type": "object",
+      "description": "The function's SnapStart setting. When set to PublishedVersions, Lambda creates a snapshot of the execution environment when you publish a function version.",
+      "properties": [
+        {
+          "name": "ApplyOn",
+          "description": "Applying SnapStart setting on function resource type.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Applying SnapStart setting on function resource type.",
+            "allowedValues": ["PublishedVersions", "None"]
+          }
+        }
+      ]
+    },
+    "SnapStartResponse": {
+      "type": "object",
+      "description": "The function's SnapStart Response. When set to PublishedVersions, Lambda creates a snapshot of the execution environment when you publish a function version.",
+      "properties": [
+        {
+          "name": "ApplyOn",
+          "description": "Applying SnapStart setting on function resource type.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Applying SnapStart setting on function resource type.",
+            "allowedValues": ["PublishedVersions", "None"]
+          }
+        },
+        {
+          "name": "OptimizationStatus",
+          "description": "Indicates whether SnapStart is activated for the specified function version.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Indicates whether SnapStart is activated for the specified function version.",
+            "allowedValues": ["On", "Off"]
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+            "maxLength": 256,
+            "minLength": 0
           }
         }
       ]
@@ -96,290 +380,6 @@
           }
         }
       ]
-    },
-    "DeadLetterConfig": {
-      "type": "object",
-      "description": "The dead-letter queue for failed asynchronous invocations.",
-      "properties": [
-        {
-          "name": "TargetArn",
-          "description": "The Amazon Resource Name (ARN) of an Amazon SQS queue or Amazon SNS topic.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The Amazon Resource Name (ARN) of an Amazon SQS queue or Amazon SNS topic.",
-            "pattern": "^(arn:(aws[a-zA-Z-]*)?:[a-z0-9-.]+:.*)|()$"
-          }
-        }
-      ]
-    },
-    "RuntimeManagementConfig": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "UpdateRuntimeOn",
-          "description": "Trigger for runtime update",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "Trigger for runtime update",
-            "allowedValues": ["Auto", "FunctionUpdate", "Manual"]
-          }
-        },
-        {
-          "name": "RuntimeVersionArn",
-          "description": "Unique identifier for a runtime version arn",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Unique identifier for a runtime version arn"
-          }
-        }
-      ]
-    },
-    "SnapStart": {
-      "type": "object",
-      "description": "The function's SnapStart setting. When set to PublishedVersions, Lambda creates a snapshot of the execution environment when you publish a function version.",
-      "properties": [
-        {
-          "name": "ApplyOn",
-          "description": "Applying SnapStart setting on function resource type.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "Applying SnapStart setting on function resource type.",
-            "allowedValues": ["PublishedVersions", "None"]
-          }
-        }
-      ]
-    },
-    "SnapStartResponse": {
-      "type": "object",
-      "description": "The function's SnapStart Response. When set to PublishedVersions, Lambda creates a snapshot of the execution environment when you publish a function version.",
-      "properties": [
-        {
-          "name": "OptimizationStatus",
-          "description": "Indicates whether SnapStart is activated for the specified function version.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Indicates whether SnapStart is activated for the specified function version.",
-            "allowedValues": ["On", "Off"]
-          }
-        },
-        {
-          "name": "ApplyOn",
-          "description": "Applying SnapStart setting on function resource type.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Applying SnapStart setting on function resource type.",
-            "allowedValues": ["PublishedVersions", "None"]
-          }
-        }
-      ]
-    },
-    "Code": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "S3ObjectVersion",
-          "description": "For versioned objects, the version of the deployment package object to use.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "For versioned objects, the version of the deployment package object to use.",
-            "maxLength": 1024,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "S3Bucket",
-          "description": "An Amazon S3 bucket in the same AWS Region as your function. The bucket can be in a different AWS account.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "An Amazon S3 bucket in the same AWS Region as your function. The bucket can be in a different AWS account.",
-            "maxLength": 63,
-            "minLength": 3,
-            "pattern": "^[0-9A-Za-z\\.\\-_]*(?<!\\.)$"
-          }
-        },
-        {
-          "name": "ZipFile",
-          "description": "The source code of your Lambda function. If you include your function source inline with this parameter, AWS CloudFormation places it in a file named index and zips it to create a deployment package..",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The source code of your Lambda function. If you include your function source inline with this parameter, AWS CloudFormation places it in a file named index and zips it to create a deployment package.."
-          }
-        },
-        {
-          "name": "S3Key",
-          "description": "The Amazon S3 key of the deployment package.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The Amazon S3 key of the deployment package.",
-            "maxLength": 1024,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "ImageUri",
-          "description": "ImageUri.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "ImageUri."
-          }
-        }
-      ]
-    },
-    "LoggingConfig": {
-      "type": "object",
-      "description": "The function's logging configuration.",
-      "properties": [
-        {
-          "name": "LogFormat",
-          "description": "Log delivery format for the lambda function",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Log delivery format for the lambda function",
-            "allowedValues": ["Text", "JSON"]
-          }
-        },
-        {
-          "name": "ApplicationLogLevel",
-          "description": "Application log granularity level, can only be used when LogFormat is set to JSON",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Application log granularity level, can only be used when LogFormat is set to JSON",
-            "allowedValues": [
-              "TRACE",
-              "DEBUG",
-              "INFO",
-              "WARN",
-              "ERROR",
-              "FATAL"
-            ]
-          }
-        },
-        {
-          "name": "LogGroup",
-          "description": "The log group name.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The log group name.",
-            "maxLength": 512,
-            "minLength": 1,
-            "pattern": "[\\.\\-_/#A-Za-z0-9]+"
-          }
-        },
-        {
-          "name": "SystemLogLevel",
-          "description": "System log granularity level, can only be used when LogFormat is set to JSON",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "System log granularity level, can only be used when LogFormat is set to JSON",
-            "allowedValues": ["DEBUG", "INFO", "WARN"]
-          }
-        }
-      ]
-    },
-    "Environment": {
-      "type": "object",
-      "description": "A function's environment variable settings.",
-      "properties": [
-        {
-          "name": "Variables",
-          "description": "Environment variable key-value pairs.",
-          "optional": true,
-          "type": {
-            "type": "record",
-            "description": "Environment variable key-value pairs.",
-            "valueType": {
-              "type": "string"
-            }
-          }
-        }
-      ]
-    },
-    "FileSystemConfig": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Arn",
-          "description": "The Amazon Resource Name (ARN) of the Amazon EFS access point that provides access to the file system.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The Amazon Resource Name (ARN) of the Amazon EFS access point that provides access to the file system.",
-            "maxLength": 200,
-            "pattern": "^arn:aws[a-zA-Z-]*:elasticfilesystem:[a-z]{2}((-gov)|(-iso(b?)))?-[a-z]+-\\d{1}:\\d{12}:access-point/fsap-[a-f0-9]{17}$"
-          }
-        },
-        {
-          "name": "LocalMountPath",
-          "description": "The path where the function can access the file system, starting with /mnt/.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The path where the function can access the file system, starting with /mnt/.",
-            "maxLength": 160,
-            "pattern": "^/mnt/[a-zA-Z0-9-_.]+$"
-          }
-        }
-      ]
-    },
-    "Tag": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Value",
-          "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
-            "maxLength": 256,
-            "minLength": 0
-          }
-        },
-        {
-          "name": "Key",
-          "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
-            "maxLength": 128,
-            "minLength": 1
-          }
-        }
-      ]
-    },
-    "EphemeralStorage": {
-      "type": "object",
-      "description": "A function's ephemeral storage settings.",
-      "properties": [
-        {
-          "name": "Size",
-          "description": "The amount of ephemeral storage that your function has access to.",
-          "optional": false,
-          "type": {
-            "type": "number",
-            "description": "The amount of ephemeral storage that your function has access to.",
-            "isInteger": true,
-            "maximum": 10240,
-            "minimum": 512
-          }
-        }
-      ]
     }
   },
   "resource": {
@@ -387,12 +387,46 @@
     "description": "Resource Type definition for AWS::Lambda::Function in region",
     "properties": [
       {
-        "name": "Policy",
-        "description": "The resource policy of your function",
+        "name": "Architectures",
         "optional": true,
         "type": {
-          "type": "record",
-          "description": "The resource policy of your function"
+          "type": "array",
+          "itemType": {
+            "type": "string",
+            "allowedValues": ["x86_64", "arm64"]
+          },
+          "maxLength": 1,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "Code",
+        "description": "The code for the function.",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "description": "The code for the function.",
+          "typeName": "Code"
+        }
+      },
+      {
+        "name": "CodeSigningConfigArn",
+        "description": "A unique Arn for CodeSigningConfig resource",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "A unique Arn for CodeSigningConfig resource",
+          "pattern": "arn:(aws[a-zA-Z-]*)?:lambda:[a-z]{2}((-gov)|(-iso(b?)))?-[a-z]+-\\d{1}:\\d{12}:code-signing-config:csc-[a-z0-9]{17}"
+        }
+      },
+      {
+        "name": "DeadLetterConfig",
+        "description": "A dead letter queue configuration that specifies the queue or topic where Lambda sends asynchronous events when they fail processing.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "A dead letter queue configuration that specifies the queue or topic where Lambda sends asynchronous events when they fail processing.",
+          "typeName": "DeadLetterConfig"
         }
       },
       {
@@ -406,54 +440,23 @@
         }
       },
       {
-        "name": "TracingConfig",
-        "description": "Set Mode to Active to sample and trace a subset of incoming requests with AWS X-Ray.",
+        "name": "Environment",
+        "description": "Environment variables that are accessible from function code during execution.",
         "optional": true,
         "type": {
           "type": "ref",
-          "description": "Set Mode to Active to sample and trace a subset of incoming requests with AWS X-Ray.",
-          "typeName": "TracingConfig"
+          "description": "Environment variables that are accessible from function code during execution.",
+          "typeName": "Environment"
         }
       },
       {
-        "name": "VpcConfig",
-        "description": "For network connectivity to AWS resources in a VPC, specify a list of security groups and subnets in the VPC.",
+        "name": "EphemeralStorage",
+        "description": "A function's ephemeral storage settings.",
         "optional": true,
         "type": {
           "type": "ref",
-          "description": "For network connectivity to AWS resources in a VPC, specify a list of security groups and subnets in the VPC.",
-          "typeName": "VpcConfig"
-        }
-      },
-      {
-        "name": "RuntimeManagementConfig",
-        "description": "RuntimeManagementConfig",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "description": "RuntimeManagementConfig",
-          "typeName": "RuntimeManagementConfig"
-        }
-      },
-      {
-        "name": "ReservedConcurrentExecutions",
-        "description": "The number of simultaneous executions to reserve for the function.",
-        "optional": true,
-        "type": {
-          "type": "number",
-          "description": "The number of simultaneous executions to reserve for the function.",
-          "isInteger": true,
-          "minimum": 0
-        }
-      },
-      {
-        "name": "SnapStart",
-        "description": "The SnapStart setting of your function",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "description": "The SnapStart setting of your function",
-          "typeName": "SnapStart"
+          "description": "A function's ephemeral storage settings.",
+          "typeName": "EphemeralStorage"
         }
       },
       {
@@ -481,12 +484,24 @@
         }
       },
       {
-        "name": "Runtime",
-        "description": "The identifier of the function's runtime.",
+        "name": "Handler",
+        "description": "The name of the method within your code that Lambda calls to execute your function. The format includes the file name. It can also include namespaces and other qualifiers, depending on the runtime",
         "optional": true,
         "type": {
           "type": "string",
-          "description": "The identifier of the function's runtime."
+          "description": "The name of the method within your code that Lambda calls to execute your function. The format includes the file name. It can also include namespaces and other qualifiers, depending on the runtime",
+          "maxLength": 128,
+          "pattern": "^[^\\s]+$"
+        }
+      },
+      {
+        "name": "ImageConfig",
+        "description": "ImageConfig",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "ImageConfig",
+          "typeName": "ImageConfig"
         }
       },
       {
@@ -500,6 +515,38 @@
         }
       },
       {
+        "name": "Layers",
+        "description": "A list of function layers to add to the function's execution environment. Specify each layer by its ARN, including the version.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "A list of function layers to add to the function's execution environment. Specify each layer by its ARN, including the version.",
+          "itemType": {
+            "type": "string"
+          }
+        }
+      },
+      {
+        "name": "LoggingConfig",
+        "description": "The logging configuration of your function",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "The logging configuration of your function",
+          "typeName": "LoggingConfig"
+        }
+      },
+      {
+        "name": "MemorySize",
+        "description": "The amount of memory that your function has access to. Increasing the function's memory also increases its CPU allocation. The default value is 128 MB. The value must be a multiple of 64 MB.",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "The amount of memory that your function has access to. Increasing the function's memory also increases its CPU allocation. The default value is 128 MB. The value must be a multiple of 64 MB.",
+          "isInteger": true
+        }
+      },
+      {
         "name": "PackageType",
         "description": "PackageType.",
         "optional": true,
@@ -510,25 +557,62 @@
         }
       },
       {
-        "name": "CodeSigningConfigArn",
-        "description": "A unique Arn for CodeSigningConfig resource",
+        "name": "Policy",
+        "description": "The resource policy of your function",
         "optional": true,
         "type": {
-          "type": "string",
-          "description": "A unique Arn for CodeSigningConfig resource",
-          "pattern": "arn:(aws[a-zA-Z-]*)?:lambda:[a-z]{2}((-gov)|(-iso(b?)))?-[a-z]+-\\d{1}:\\d{12}:code-signing-config:csc-[a-z0-9]{17}"
+          "type": "record",
+          "description": "The resource policy of your function"
         }
       },
       {
-        "name": "Layers",
-        "description": "A list of function layers to add to the function's execution environment. Specify each layer by its ARN, including the version.",
+        "name": "ReservedConcurrentExecutions",
+        "description": "The number of simultaneous executions to reserve for the function.",
         "optional": true,
         "type": {
-          "type": "array",
-          "description": "A list of function layers to add to the function's execution environment. Specify each layer by its ARN, including the version.",
-          "itemType": {
-            "type": "string"
-          }
+          "type": "number",
+          "description": "The number of simultaneous executions to reserve for the function.",
+          "isInteger": true,
+          "minimum": 0
+        }
+      },
+      {
+        "name": "Role",
+        "description": "The Amazon Resource Name (ARN) of the function's execution role.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) of the function's execution role.",
+          "pattern": "^arn:(aws[a-zA-Z-]*)?:iam::\\d{12}:role/?[a-zA-Z_0-9+=,.@\\-_/]+$"
+        }
+      },
+      {
+        "name": "Runtime",
+        "description": "The identifier of the function's runtime.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The identifier of the function's runtime."
+        }
+      },
+      {
+        "name": "RuntimeManagementConfig",
+        "description": "RuntimeManagementConfig",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "RuntimeManagementConfig",
+          "typeName": "RuntimeManagementConfig"
+        }
+      },
+      {
+        "name": "SnapStart",
+        "description": "The SnapStart setting of your function",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "The SnapStart setting of your function",
+          "typeName": "SnapStart"
         }
       },
       {
@@ -545,36 +629,6 @@
         }
       },
       {
-        "name": "ImageConfig",
-        "description": "ImageConfig",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "description": "ImageConfig",
-          "typeName": "ImageConfig"
-        }
-      },
-      {
-        "name": "MemorySize",
-        "description": "The amount of memory that your function has access to. Increasing the function's memory also increases its CPU allocation. The default value is 128 MB. The value must be a multiple of 64 MB.",
-        "optional": true,
-        "type": {
-          "type": "number",
-          "description": "The amount of memory that your function has access to. Increasing the function's memory also increases its CPU allocation. The default value is 128 MB. The value must be a multiple of 64 MB.",
-          "isInteger": true
-        }
-      },
-      {
-        "name": "DeadLetterConfig",
-        "description": "A dead letter queue configuration that specifies the queue or topic where Lambda sends asynchronous events when they fail processing.",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "description": "A dead letter queue configuration that specifies the queue or topic where Lambda sends asynchronous events when they fail processing.",
-          "typeName": "DeadLetterConfig"
-        }
-      },
-      {
         "name": "Timeout",
         "description": "The amount of time that Lambda allows a function to run before stopping it. The default is 3 seconds. The maximum allowed value is 900 seconds.",
         "optional": true,
@@ -586,77 +640,23 @@
         }
       },
       {
-        "name": "Handler",
-        "description": "The name of the method within your code that Lambda calls to execute your function. The format includes the file name. It can also include namespaces and other qualifiers, depending on the runtime",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The name of the method within your code that Lambda calls to execute your function. The format includes the file name. It can also include namespaces and other qualifiers, depending on the runtime",
-          "maxLength": 128,
-          "pattern": "^[^\\s]+$"
-        }
-      },
-      {
-        "name": "Code",
-        "description": "The code for the function.",
-        "optional": false,
-        "type": {
-          "type": "ref",
-          "description": "The code for the function.",
-          "typeName": "Code"
-        }
-      },
-      {
-        "name": "Role",
-        "description": "The Amazon Resource Name (ARN) of the function's execution role.",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "description": "The Amazon Resource Name (ARN) of the function's execution role.",
-          "pattern": "^arn:(aws[a-zA-Z-]*)?:iam::\\d{12}:role/?[a-zA-Z_0-9+=,.@\\-_/]+$"
-        }
-      },
-      {
-        "name": "LoggingConfig",
-        "description": "The logging configuration of your function",
+        "name": "TracingConfig",
+        "description": "Set Mode to Active to sample and trace a subset of incoming requests with AWS X-Ray.",
         "optional": true,
         "type": {
           "type": "ref",
-          "description": "The logging configuration of your function",
-          "typeName": "LoggingConfig"
+          "description": "Set Mode to Active to sample and trace a subset of incoming requests with AWS X-Ray.",
+          "typeName": "TracingConfig"
         }
       },
       {
-        "name": "Environment",
-        "description": "Environment variables that are accessible from function code during execution.",
+        "name": "VpcConfig",
+        "description": "For network connectivity to AWS resources in a VPC, specify a list of security groups and subnets in the VPC.",
         "optional": true,
         "type": {
           "type": "ref",
-          "description": "Environment variables that are accessible from function code during execution.",
-          "typeName": "Environment"
-        }
-      },
-      {
-        "name": "EphemeralStorage",
-        "description": "A function's ephemeral storage settings.",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "description": "A function's ephemeral storage settings.",
-          "typeName": "EphemeralStorage"
-        }
-      },
-      {
-        "name": "Architectures",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "itemType": {
-            "type": "string",
-            "allowedValues": ["x86_64", "arm64"]
-          },
-          "maxLength": 1,
-          "minLength": 1
+          "description": "For network connectivity to AWS resources in a VPC, specify a list of security groups and subnets in the VPC.",
+          "typeName": "VpcConfig"
         }
       }
     ]
@@ -666,6 +666,15 @@
     "description": "Resource Type definition for AWS::Lambda::Function in region",
     "properties": [
       {
+        "name": "Arn",
+        "description": "Unique identifier for function resources",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Unique identifier for function resources"
+        }
+      },
+      {
         "name": "SnapStartResponse",
         "description": "The SnapStart response of your function",
         "optional": true,
@@ -674,17 +683,8 @@
           "description": "The SnapStart response of your function",
           "typeName": "SnapStartResponse"
         }
-      },
-      {
-        "name": "Arn",
-        "description": "Unique identifier for function resources",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "Unique identifier for function resources"
-        }
       }
     ]
   },
-  "$hash": "db68fcd3833f9cd29417dcbe9ca71d7510ee16a4"
+  "$hash": "b239481727aa45f6c02b9d6e92800fc76267f059"
 }

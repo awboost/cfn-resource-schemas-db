@@ -1,33 +1,5 @@
 {
   "definitions": {
-    "S3Tag": {
-      "type": "object",
-      "description": "Specifies the key-value pair that are assigned to a file during the execution of a Tagging step.",
-      "properties": [
-        {
-          "name": "Key",
-          "description": "The name assigned to the tag that you create.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The name assigned to the tag that you create.",
-            "maxLength": 128,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "Value",
-          "description": "The value that corresponds to the key.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The value that corresponds to the key.",
-            "maxLength": 256,
-            "minLength": 0
-          }
-        }
-      ]
-    },
     "EfsInputFileLocation": {
       "type": "object",
       "description": "Specifies the details for an EFS file.",
@@ -54,6 +26,42 @@
             "maxLength": 65536,
             "minLength": 1,
             "pattern": "^[^\\x00]+$"
+          }
+        }
+      ]
+    },
+    "InputFileLocation": {
+      "type": "object",
+      "description": "Specifies the location for the file being decrypted. Only applicable for the Decrypt type of workflow steps.",
+      "properties": [
+        {
+          "name": "EfsFileLocation",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "EfsInputFileLocation"
+          }
+        },
+        {
+          "name": "S3FileLocation",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "S3InputFileLocation"
+          }
+        }
+      ]
+    },
+    "S3FileLocation": {
+      "type": "object",
+      "description": "Specifies the location for the file being copied. Only applicable for the Copy type of workflow steps.",
+      "properties": [
+        {
+          "name": "S3FileLocation",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "S3InputFileLocation"
           }
         }
       ]
@@ -88,38 +96,58 @@
         }
       ]
     },
-    "InputFileLocation": {
+    "S3Tag": {
       "type": "object",
-      "description": "Specifies the location for the file being decrypted. Only applicable for the Decrypt type of workflow steps.",
+      "description": "Specifies the key-value pair that are assigned to a file during the execution of a Tagging step.",
       "properties": [
         {
-          "name": "S3FileLocation",
-          "optional": true,
+          "name": "Key",
+          "description": "The name assigned to the tag that you create.",
+          "optional": false,
           "type": {
-            "type": "ref",
-            "typeName": "S3InputFileLocation"
+            "type": "string",
+            "description": "The name assigned to the tag that you create.",
+            "maxLength": 128,
+            "minLength": 1
           }
         },
         {
-          "name": "EfsFileLocation",
-          "optional": true,
+          "name": "Value",
+          "description": "The value that corresponds to the key.",
+          "optional": false,
           "type": {
-            "type": "ref",
-            "typeName": "EfsInputFileLocation"
+            "type": "string",
+            "description": "The value that corresponds to the key.",
+            "maxLength": 256,
+            "minLength": 0
           }
         }
       ]
     },
-    "S3FileLocation": {
+    "Tag": {
       "type": "object",
-      "description": "Specifies the location for the file being copied. Only applicable for the Copy type of workflow steps.",
+      "description": "Creates a key-value pair for a specific resource.",
       "properties": [
         {
-          "name": "S3FileLocation",
-          "optional": true,
+          "name": "Key",
+          "description": "The name assigned to the tag that you create.",
+          "optional": false,
           "type": {
-            "type": "ref",
-            "typeName": "S3InputFileLocation"
+            "type": "string",
+            "description": "The name assigned to the tag that you create.",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "description": "Contains one or more values that you assigned to the key name you create.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Contains one or more values that you assigned to the key name you create.",
+            "maxLength": 256,
+            "minLength": 0
           }
         }
       ]
@@ -202,6 +230,18 @@
                 }
               },
               {
+                "name": "SourceFileLocation",
+                "description": "Specifies which file to use as input to the workflow step.",
+                "optional": true,
+                "type": {
+                  "type": "string",
+                  "description": "Specifies which file to use as input to the workflow step.",
+                  "maxLength": 256,
+                  "minLength": 0,
+                  "pattern": "^\\$\\{(\\w+.)+\\w+\\}$"
+                }
+              },
+              {
                 "name": "Target",
                 "description": "The ARN for the lambda function that is being called.",
                 "optional": true,
@@ -223,18 +263,6 @@
                   "isInteger": true,
                   "maximum": 1800,
                   "minimum": 1
-                }
-              },
-              {
-                "name": "SourceFileLocation",
-                "description": "Specifies which file to use as input to the workflow step.",
-                "optional": true,
-                "type": {
-                  "type": "string",
-                  "description": "Specifies which file to use as input to the workflow step.",
-                  "maxLength": 256,
-                  "minLength": 0,
-                  "pattern": "^\\$\\{(\\w+.)+\\w+\\}$"
                 }
               }
             ]
@@ -269,16 +297,6 @@
                 }
               },
               {
-                "name": "Type",
-                "description": "Specifies which encryption method to use.",
-                "optional": true,
-                "type": {
-                  "type": "string",
-                  "description": "Specifies which encryption method to use.",
-                  "allowedValues": ["PGP"]
-                }
-              },
-              {
                 "name": "OverwriteExisting",
                 "description": "A flag that indicates whether or not to overwrite an existing file of the same name. The default is FALSE.",
                 "optional": true,
@@ -298,6 +316,16 @@
                   "maxLength": 256,
                   "minLength": 0,
                   "pattern": "^\\$\\{(\\w+.)+\\w+\\}$"
+                }
+              },
+              {
+                "name": "Type",
+                "description": "Specifies which encryption method to use.",
+                "optional": true,
+                "type": {
+                  "type": "string",
+                  "description": "Specifies which encryption method to use.",
+                  "allowedValues": ["PGP"]
                 }
               }
             ]
@@ -359,6 +387,18 @@
                 }
               },
               {
+                "name": "SourceFileLocation",
+                "description": "Specifies which file to use as input to the workflow step.",
+                "optional": true,
+                "type": {
+                  "type": "string",
+                  "description": "Specifies which file to use as input to the workflow step.",
+                  "maxLength": 256,
+                  "minLength": 0,
+                  "pattern": "^\\$\\{(\\w+.)+\\w+\\}$"
+                }
+              },
+              {
                 "name": "Tags",
                 "description": "Array that contains from 1 to 10 key/value pairs.",
                 "optional": true,
@@ -370,18 +410,6 @@
                     "typeName": "S3Tag"
                   },
                   "maxLength": 10
-                }
-              },
-              {
-                "name": "SourceFileLocation",
-                "description": "Specifies which file to use as input to the workflow step.",
-                "optional": true,
-                "type": {
-                  "type": "string",
-                  "description": "Specifies which file to use as input to the workflow step.",
-                  "maxLength": 256,
-                  "minLength": 0,
-                  "pattern": "^\\$\\{(\\w+.)+\\w+\\}$"
                 }
               }
             ]
@@ -396,40 +424,24 @@
           }
         }
       ]
-    },
-    "Tag": {
-      "type": "object",
-      "description": "Creates a key-value pair for a specific resource.",
-      "properties": [
-        {
-          "name": "Key",
-          "description": "The name assigned to the tag that you create.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The name assigned to the tag that you create.",
-            "maxLength": 128,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "Value",
-          "description": "Contains one or more values that you assigned to the key name you create.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "Contains one or more values that you assigned to the key name you create.",
-            "maxLength": 256,
-            "minLength": 0
-          }
-        }
-      ]
     }
   },
   "resource": {
     "type": "object",
     "description": "Resource Type definition for AWS::Transfer::Workflow",
     "properties": [
+      {
+        "name": "Description",
+        "description": "A textual description for the workflow.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "A textual description for the workflow.",
+          "maxLength": 256,
+          "minLength": 0,
+          "pattern": "^[\\w\\- ]*$"
+        }
+      },
       {
         "name": "OnExceptionSteps",
         "description": "Specifies the steps (actions) to take if any errors are encountered during execution of the workflow.",
@@ -471,18 +483,6 @@
           },
           "maxLength": 50
         }
-      },
-      {
-        "name": "Description",
-        "description": "A textual description for the workflow.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "A textual description for the workflow.",
-          "maxLength": 256,
-          "minLength": 0,
-          "pattern": "^[\\w\\- ]*$"
-        }
       }
     ]
   },
@@ -490,18 +490,6 @@
     "type": "object",
     "description": "Resource Type definition for AWS::Transfer::Workflow",
     "properties": [
-      {
-        "name": "WorkflowId",
-        "description": "A unique identifier for the workflow.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "A unique identifier for the workflow.",
-          "maxLength": 19,
-          "minLength": 19,
-          "pattern": "^w-([a-z0-9]{17})$"
-        }
-      },
       {
         "name": "Arn",
         "description": "Specifies the unique Amazon Resource Name (ARN) for the workflow.",
@@ -513,8 +501,20 @@
           "minLength": 20,
           "pattern": "arn:.*"
         }
+      },
+      {
+        "name": "WorkflowId",
+        "description": "A unique identifier for the workflow.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "A unique identifier for the workflow.",
+          "maxLength": 19,
+          "minLength": 19,
+          "pattern": "^w-([a-z0-9]{17})$"
+        }
       }
     ]
   },
-  "$hash": "553240d27829b28e464df8ba96dc6346bcc16ca1"
+  "$hash": "039d5b059571e8ef8a36c4457ee010c22fbb664e"
 }

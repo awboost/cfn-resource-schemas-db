@@ -1,5 +1,40 @@
 {
   "definitions": {
+    "DataCatalogConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Catalog",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "pattern": "[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\t]*"
+          }
+        },
+        {
+          "name": "Database",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "pattern": "[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\t]*"
+          }
+        },
+        {
+          "name": "TableName",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "pattern": "[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\t]*"
+          }
+        }
+      ]
+    },
     "FeatureDefinition": {
       "type": "object",
       "properties": [
@@ -44,55 +79,20 @@
       "type": "object",
       "properties": [
         {
-          "name": "S3Uri",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 1024,
-            "pattern": "^(https|s3)://([^/]+)/?(.*)$"
-          }
-        },
-        {
           "name": "KmsKeyId",
           "optional": true,
           "type": {
             "type": "ref",
             "typeName": "KmsKeyId"
           }
-        }
-      ]
-    },
-    "DataCatalogConfig": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "TableName",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 255,
-            "minLength": 1,
-            "pattern": "[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\t]*"
-          }
         },
         {
-          "name": "Catalog",
+          "name": "S3Uri",
           "optional": false,
           "type": {
             "type": "string",
-            "maxLength": 255,
-            "minLength": 1,
-            "pattern": "[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\t]*"
-          }
-        },
-        {
-          "name": "Database",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 255,
-            "minLength": 1,
-            "pattern": "[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\t]*"
+            "maxLength": 1024,
+            "pattern": "^(https|s3)://([^/]+)/?(.*)$"
           }
         }
       ]
@@ -107,14 +107,14 @@
       "description": "A key-value pair to associate with a resource.",
       "properties": [
         {
-          "name": "Value",
+          "name": "Key",
           "optional": false,
           "type": {
             "type": "string"
           }
         },
         {
-          "name": "Key",
+          "name": "Value",
           "optional": false,
           "type": {
             "type": "string"
@@ -128,27 +128,13 @@
     "description": "Resource Type definition for AWS::SageMaker::FeatureGroup",
     "properties": [
       {
-        "name": "FeatureGroupName",
-        "description": "The Name of the FeatureGroup.",
-        "optional": false,
+        "name": "Description",
+        "description": "Description about the FeatureGroup.",
+        "optional": true,
         "type": {
           "type": "string",
-          "description": "The Name of the FeatureGroup.",
-          "maxLength": 64,
-          "minLength": 1,
-          "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9]){0,63}"
-        }
-      },
-      {
-        "name": "RecordIdentifierFeatureName",
-        "description": "The Record Identifier Feature Name.",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "description": "The Record Identifier Feature Name.",
-          "maxLength": 64,
-          "minLength": 1,
-          "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9]){0,63}"
+          "description": "Description about the FeatureGroup.",
+          "maxLength": 128
         }
       },
       {
@@ -179,27 +165,15 @@
         }
       },
       {
-        "name": "OnlineStoreConfig",
-        "optional": true,
+        "name": "FeatureGroupName",
+        "description": "The Name of the FeatureGroup.",
+        "optional": false,
         "type": {
-          "type": "object",
-          "properties": [
-            {
-              "name": "SecurityConfig",
-              "optional": true,
-              "type": {
-                "type": "ref",
-                "typeName": "OnlineStoreSecurityConfig"
-              }
-            },
-            {
-              "name": "EnableOnlineStore",
-              "optional": true,
-              "type": {
-                "type": "boolean"
-              }
-            }
-          ]
+          "type": "string",
+          "description": "The Name of the FeatureGroup.",
+          "maxLength": 64,
+          "minLength": 1,
+          "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9]){0,63}"
         }
       },
       {
@@ -209,11 +183,11 @@
           "type": "object",
           "properties": [
             {
-              "name": "S3StorageConfig",
-              "optional": false,
+              "name": "DataCatalogConfig",
+              "optional": true,
               "type": {
                 "type": "ref",
-                "typeName": "S3StorageConfig"
+                "typeName": "DataCatalogConfig"
               }
             },
             {
@@ -224,11 +198,11 @@
               }
             },
             {
-              "name": "DataCatalogConfig",
-              "optional": true,
+              "name": "S3StorageConfig",
+              "optional": false,
               "type": {
                 "type": "ref",
-                "typeName": "DataCatalogConfig"
+                "typeName": "S3StorageConfig"
               }
             },
             {
@@ -243,6 +217,42 @@
         }
       },
       {
+        "name": "OnlineStoreConfig",
+        "optional": true,
+        "type": {
+          "type": "object",
+          "properties": [
+            {
+              "name": "EnableOnlineStore",
+              "optional": true,
+              "type": {
+                "type": "boolean"
+              }
+            },
+            {
+              "name": "SecurityConfig",
+              "optional": true,
+              "type": {
+                "type": "ref",
+                "typeName": "OnlineStoreSecurityConfig"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "name": "RecordIdentifierFeatureName",
+        "description": "The Record Identifier Feature Name.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The Record Identifier Feature Name.",
+          "maxLength": 64,
+          "minLength": 1,
+          "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9]){0,63}"
+        }
+      },
+      {
         "name": "RoleArn",
         "description": "Role Arn",
         "optional": true,
@@ -252,16 +262,6 @@
           "maxLength": 2048,
           "minLength": 20,
           "pattern": "^arn:aws[a-z\\-]*:iam::\\d{12}:role/?[a-zA-Z_0-9+=,.@\\-_/]+$"
-        }
-      },
-      {
-        "name": "Description",
-        "description": "Description about the FeatureGroup.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "Description about the FeatureGroup.",
-          "maxLength": 128
         }
       },
       {
@@ -304,5 +304,5 @@
       }
     ]
   },
-  "$hash": "b4c5f3b6f6cf9fdd47034af456fef736e64e5dbc"
+  "$hash": "290add71ddf5b9c3226747ef8d3c4bd383ddb326"
 }

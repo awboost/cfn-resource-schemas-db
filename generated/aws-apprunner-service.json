@@ -1,108 +1,29 @@
 {
   "definitions": {
-    "SourceConfiguration": {
+    "AuthenticationConfiguration": {
       "type": "object",
-      "description": "Source Code configuration",
+      "description": "Authentication Configuration",
       "properties": [
         {
-          "name": "CodeRepository",
+          "name": "AccessRoleArn",
+          "description": "Access Role Arn",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "CodeRepository"
+            "description": "Access Role Arn",
+            "typeName": "RoleArn"
           }
         },
         {
-          "name": "ImageRepository",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ImageRepository"
-          }
-        },
-        {
-          "name": "AutoDeploymentsEnabled",
-          "description": "Auto Deployment enabled",
-          "optional": true,
-          "type": {
-            "type": "boolean",
-            "description": "Auto Deployment enabled"
-          }
-        },
-        {
-          "name": "AuthenticationConfiguration",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "AuthenticationConfiguration"
-          }
-        }
-      ]
-    },
-    "CodeRepository": {
-      "type": "object",
-      "description": "Source Code Repository",
-      "properties": [
-        {
-          "name": "RepositoryUrl",
-          "description": "Repository Url",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "Repository Url"
-          }
-        },
-        {
-          "name": "SourceCodeVersion",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "SourceCodeVersion"
-          }
-        },
-        {
-          "name": "CodeConfiguration",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "CodeConfiguration"
-          }
-        },
-        {
-          "name": "SourceDirectory",
-          "description": "Source Directory",
+          "name": "ConnectionArn",
+          "description": "Connection Arn",
           "optional": true,
           "type": {
             "type": "string",
-            "description": "Source Directory",
-            "maxLength": 4096,
+            "description": "Connection Arn",
+            "maxLength": 1011,
             "minLength": 1,
-            "pattern": "[^\\x00]+"
-          }
-        }
-      ]
-    },
-    "SourceCodeVersion": {
-      "type": "object",
-      "description": "Source Code Version",
-      "properties": [
-        {
-          "name": "Type",
-          "description": "Source Code Version Type",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "Source Code Version Type",
-            "allowedValues": ["BRANCH"]
-          }
-        },
-        {
-          "name": "Value",
-          "description": "Source Code Version Value",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "Source Code Version Value"
+            "pattern": "arn:aws(-[\\w]+)*:[a-z0-9-\\\\.]{0,63}:[a-z0-9-\\\\.]{0,63}:[0-9]{12}:(\\w|\\/|-){1,1011}"
           }
         }
       ]
@@ -112,6 +33,14 @@
       "description": "Code Configuration",
       "properties": [
         {
+          "name": "CodeConfigurationValues",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "CodeConfigurationValues"
+          }
+        },
+        {
           "name": "ConfigurationSource",
           "description": "Configuration Source",
           "optional": false,
@@ -120,14 +49,6 @@
             "description": "Configuration Source",
             "allowedValues": ["REPOSITORY", "API"]
           }
-        },
-        {
-          "name": "CodeConfigurationValues",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "CodeConfigurationValues"
-          }
         }
       ]
     },
@@ -135,6 +56,24 @@
       "type": "object",
       "description": "Code Configuration Values",
       "properties": [
+        {
+          "name": "BuildCommand",
+          "description": "Build Command",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Build Command"
+          }
+        },
+        {
+          "name": "Port",
+          "description": "Port",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Port"
+          }
+        },
         {
           "name": "Runtime",
           "description": "Runtime",
@@ -157,30 +96,16 @@
           }
         },
         {
-          "name": "BuildCommand",
-          "description": "Build Command",
+          "name": "RuntimeEnvironmentSecrets",
+          "description": "The secrets and parameters that get referenced by your service as environment variables",
           "optional": true,
           "type": {
-            "type": "string",
-            "description": "Build Command"
-          }
-        },
-        {
-          "name": "StartCommand",
-          "description": "Start Command",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Start Command"
-          }
-        },
-        {
-          "name": "Port",
-          "description": "Port",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Port"
+            "type": "array",
+            "description": "The secrets and parameters that get referenced by your service as environment variables",
+            "itemType": {
+              "type": "ref",
+              "typeName": "KeyValuePair"
+            }
           }
         },
         {
@@ -195,61 +120,6 @@
           }
         },
         {
-          "name": "RuntimeEnvironmentSecrets",
-          "description": "The secrets and parameters that get referenced by your service as environment variables",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "description": "The secrets and parameters that get referenced by your service as environment variables",
-            "itemType": {
-              "type": "ref",
-              "typeName": "KeyValuePair"
-            }
-          }
-        }
-      ]
-    },
-    "ImageRepository": {
-      "type": "object",
-      "description": "Image Repository",
-      "properties": [
-        {
-          "name": "ImageIdentifier",
-          "description": "Image Identifier",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "Image Identifier",
-            "maxLength": 1024,
-            "minLength": 1,
-            "pattern": "([0-9]{12}.dkr.ecr.[a-z\\-]+-[0-9]{1}.amazonaws.com\\/.*)|(^public\\.ecr\\.aws\\/.+\\/.+)"
-          }
-        },
-        {
-          "name": "ImageConfiguration",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ImageConfiguration"
-          }
-        },
-        {
-          "name": "ImageRepositoryType",
-          "description": "Image Repository Type",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "Image Repository Type",
-            "allowedValues": ["ECR", "ECR_PUBLIC"]
-          }
-        }
-      ]
-    },
-    "ImageConfiguration": {
-      "type": "object",
-      "description": "Image Configuration",
-      "properties": [
-        {
           "name": "StartCommand",
           "description": "Start Command",
           "optional": true,
@@ -257,201 +127,48 @@
             "type": "string",
             "description": "Start Command"
           }
-        },
-        {
-          "name": "Port",
-          "description": "Port",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Port"
-          }
-        },
-        {
-          "name": "RuntimeEnvironmentVariables",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "KeyValuePair"
-            }
-          }
-        },
-        {
-          "name": "RuntimeEnvironmentSecrets",
-          "description": "The secrets and parameters that get referenced by your service as environment variables",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "description": "The secrets and parameters that get referenced by your service as environment variables",
-            "itemType": {
-              "type": "ref",
-              "typeName": "KeyValuePair"
-            }
-          }
         }
       ]
     },
-    "AuthenticationConfiguration": {
+    "CodeRepository": {
       "type": "object",
-      "description": "Authentication Configuration",
+      "description": "Source Code Repository",
       "properties": [
         {
-          "name": "ConnectionArn",
-          "description": "Connection Arn",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Connection Arn",
-            "maxLength": 1011,
-            "minLength": 1,
-            "pattern": "arn:aws(-[\\w]+)*:[a-z0-9-\\\\.]{0,63}:[a-z0-9-\\\\.]{0,63}:[0-9]{12}:(\\w|\\/|-){1,1011}"
-          }
-        },
-        {
-          "name": "AccessRoleArn",
-          "description": "Access Role Arn",
+          "name": "CodeConfiguration",
           "optional": true,
           "type": {
             "type": "ref",
-            "description": "Access Role Arn",
-            "typeName": "RoleArn"
-          }
-        }
-      ]
-    },
-    "InstanceConfiguration": {
-      "type": "object",
-      "description": "Instance Configuration",
-      "properties": [
-        {
-          "name": "Cpu",
-          "description": "CPU",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "CPU",
-            "maxLength": 9,
-            "minLength": 3,
-            "pattern": "256|512|1024|2048|4096|(0.25|0.5|1|2|4) vCPU"
+            "typeName": "CodeConfiguration"
           }
         },
         {
-          "name": "Memory",
-          "description": "Memory",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Memory",
-            "maxLength": 6,
-            "minLength": 3,
-            "pattern": "512|1024|2048|3072|4096|6144|8192|10240|12288|(0.5|1|2|3|4|6|8|10|12) GB"
-          }
-        },
-        {
-          "name": "InstanceRoleArn",
-          "description": "Instance Role Arn",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "Instance Role Arn",
-            "typeName": "RoleArn"
-          }
-        }
-      ]
-    },
-    "RoleArn": {
-      "type": "string",
-      "maxLength": 1024,
-      "minLength": 29,
-      "pattern": "arn:(aws|aws-us-gov|aws-cn|aws-iso|aws-iso-b):iam::[0-9]{12}:role/[\\w+=,.@-]{1,64}"
-    },
-    "EncryptionConfiguration": {
-      "type": "object",
-      "description": "Encryption configuration (KMS key)",
-      "properties": [
-        {
-          "name": "KmsKey",
-          "description": "The KMS Key",
+          "name": "RepositoryUrl",
+          "description": "Repository Url",
           "optional": false,
           "type": {
             "type": "string",
-            "description": "The KMS Key",
-            "maxLength": 256,
-            "minLength": 0,
-            "pattern": "arn:aws(-[\\w]+)*:kms:[a-z\\-]+-[0-9]{1}:[0-9]{12}:key\\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+            "description": "Repository Url"
           }
-        }
-      ]
-    },
-    "HealthCheckConfiguration": {
-      "type": "object",
-      "description": "Health check configuration",
-      "properties": [
+        },
         {
-          "name": "Protocol",
-          "description": "Health Check Protocol",
+          "name": "SourceCodeVersion",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "SourceCodeVersion"
+          }
+        },
+        {
+          "name": "SourceDirectory",
+          "description": "Source Directory",
           "optional": true,
           "type": {
             "type": "string",
-            "description": "Health Check Protocol",
-            "allowedValues": ["TCP", "HTTP"]
-          }
-        },
-        {
-          "name": "Path",
-          "description": "Health check Path",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Health check Path"
-          }
-        },
-        {
-          "name": "Interval",
-          "description": "Health check Interval",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "description": "Health check Interval",
-            "isInteger": true
-          }
-        },
-        {
-          "name": "Timeout",
-          "description": "Health check Timeout",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "description": "Health check Timeout",
-            "isInteger": true,
-            "maximum": 20,
-            "minimum": 1
-          }
-        },
-        {
-          "name": "HealthyThreshold",
-          "description": "Health check Healthy Threshold",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "description": "Health check Healthy Threshold",
-            "isInteger": true,
-            "maximum": 20,
-            "minimum": 1
-          }
-        },
-        {
-          "name": "UnhealthyThreshold",
-          "description": "Health check Unhealthy Threshold",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "description": "Health check Unhealthy Threshold",
-            "isInteger": true,
-            "maximum": 20,
-            "minimum": 1
+            "description": "Source Directory",
+            "maxLength": 4096,
+            "minLength": 1,
+            "pattern": "[^\\x00]+"
           }
         }
       ]
@@ -484,6 +201,179 @@
         }
       ]
     },
+    "EncryptionConfiguration": {
+      "type": "object",
+      "description": "Encryption configuration (KMS key)",
+      "properties": [
+        {
+          "name": "KmsKey",
+          "description": "The KMS Key",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The KMS Key",
+            "maxLength": 256,
+            "minLength": 0,
+            "pattern": "arn:aws(-[\\w]+)*:kms:[a-z\\-]+-[0-9]{1}:[0-9]{12}:key\\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+          }
+        }
+      ]
+    },
+    "HealthCheckConfiguration": {
+      "type": "object",
+      "description": "Health check configuration",
+      "properties": [
+        {
+          "name": "HealthyThreshold",
+          "description": "Health check Healthy Threshold",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "Health check Healthy Threshold",
+            "isInteger": true,
+            "maximum": 20,
+            "minimum": 1
+          }
+        },
+        {
+          "name": "Interval",
+          "description": "Health check Interval",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "Health check Interval",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "Path",
+          "description": "Health check Path",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Health check Path"
+          }
+        },
+        {
+          "name": "Protocol",
+          "description": "Health Check Protocol",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Health Check Protocol",
+            "allowedValues": ["TCP", "HTTP"]
+          }
+        },
+        {
+          "name": "Timeout",
+          "description": "Health check Timeout",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "Health check Timeout",
+            "isInteger": true,
+            "maximum": 20,
+            "minimum": 1
+          }
+        },
+        {
+          "name": "UnhealthyThreshold",
+          "description": "Health check Unhealthy Threshold",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "Health check Unhealthy Threshold",
+            "isInteger": true,
+            "maximum": 20,
+            "minimum": 1
+          }
+        }
+      ]
+    },
+    "ImageConfiguration": {
+      "type": "object",
+      "description": "Image Configuration",
+      "properties": [
+        {
+          "name": "Port",
+          "description": "Port",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Port"
+          }
+        },
+        {
+          "name": "RuntimeEnvironmentSecrets",
+          "description": "The secrets and parameters that get referenced by your service as environment variables",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "The secrets and parameters that get referenced by your service as environment variables",
+            "itemType": {
+              "type": "ref",
+              "typeName": "KeyValuePair"
+            }
+          }
+        },
+        {
+          "name": "RuntimeEnvironmentVariables",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "KeyValuePair"
+            }
+          }
+        },
+        {
+          "name": "StartCommand",
+          "description": "Start Command",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Start Command"
+          }
+        }
+      ]
+    },
+    "ImageRepository": {
+      "type": "object",
+      "description": "Image Repository",
+      "properties": [
+        {
+          "name": "ImageConfiguration",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ImageConfiguration"
+          }
+        },
+        {
+          "name": "ImageIdentifier",
+          "description": "Image Identifier",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Image Identifier",
+            "maxLength": 1024,
+            "minLength": 1,
+            "pattern": "([0-9]{12}.dkr.ecr.[a-z\\-]+-[0-9]{1}.amazonaws.com\\/.*)|(^public\\.ecr\\.aws\\/.+\\/.+)"
+          }
+        },
+        {
+          "name": "ImageRepositoryType",
+          "description": "Image Repository Type",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Image Repository Type",
+            "allowedValues": ["ECR", "ECR_PUBLIC"]
+          }
+        }
+      ]
+    },
     "IngressConfiguration": {
       "type": "object",
       "description": "Network ingress configuration",
@@ -495,6 +385,65 @@
           "type": {
             "type": "boolean",
             "description": "It's set to true if the Apprunner service is publicly accessible. It's set to false otherwise."
+          }
+        }
+      ]
+    },
+    "InstanceConfiguration": {
+      "type": "object",
+      "description": "Instance Configuration",
+      "properties": [
+        {
+          "name": "Cpu",
+          "description": "CPU",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "CPU",
+            "maxLength": 9,
+            "minLength": 3,
+            "pattern": "256|512|1024|2048|4096|(0.25|0.5|1|2|4) vCPU"
+          }
+        },
+        {
+          "name": "InstanceRoleArn",
+          "description": "Instance Role Arn",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "Instance Role Arn",
+            "typeName": "RoleArn"
+          }
+        },
+        {
+          "name": "Memory",
+          "description": "Memory",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Memory",
+            "maxLength": 6,
+            "minLength": 3,
+            "pattern": "512|1024|2048|3072|4096|6144|8192|10240|12288|(0.5|1|2|3|4|6|8|10|12) GB"
+          }
+        }
+      ]
+    },
+    "KeyValuePair": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Name",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": true,
+          "type": {
+            "type": "string"
           }
         }
       ]
@@ -531,19 +480,16 @@
         }
       ]
     },
+    "RoleArn": {
+      "type": "string",
+      "maxLength": 1024,
+      "minLength": 29,
+      "pattern": "arn:(aws|aws-us-gov|aws-cn|aws-iso|aws-iso-b):iam::[0-9]{12}:role/[\\w+=,.@-]{1,64}"
+    },
     "ServiceObservabilityConfiguration": {
       "type": "object",
       "description": "Service observability configuration",
       "properties": [
-        {
-          "name": "ObservabilityEnabled",
-          "description": "Observability enabled",
-          "optional": false,
-          "type": {
-            "type": "boolean",
-            "description": "Observability enabled"
-          }
-        },
         {
           "name": "ObservabilityConfigurationArn",
           "description": "The Amazon Resource Name (ARN) of the App Runner ObservabilityConfiguration.",
@@ -554,6 +500,79 @@
             "maxLength": 1011,
             "minLength": 1,
             "pattern": "arn:aws(-[\\w]+)*:[a-z0-9-\\.]{0,63}:[a-z0-9-\\.]{0,63}:[0-9]{12}:(\\w|/|-){1,1011}"
+          }
+        },
+        {
+          "name": "ObservabilityEnabled",
+          "description": "Observability enabled",
+          "optional": false,
+          "type": {
+            "type": "boolean",
+            "description": "Observability enabled"
+          }
+        }
+      ]
+    },
+    "SourceCodeVersion": {
+      "type": "object",
+      "description": "Source Code Version",
+      "properties": [
+        {
+          "name": "Type",
+          "description": "Source Code Version Type",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Source Code Version Type",
+            "allowedValues": ["BRANCH"]
+          }
+        },
+        {
+          "name": "Value",
+          "description": "Source Code Version Value",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Source Code Version Value"
+          }
+        }
+      ]
+    },
+    "SourceConfiguration": {
+      "type": "object",
+      "description": "Source Code configuration",
+      "properties": [
+        {
+          "name": "AuthenticationConfiguration",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "AuthenticationConfiguration"
+          }
+        },
+        {
+          "name": "AutoDeploymentsEnabled",
+          "description": "Auto Deployment enabled",
+          "optional": true,
+          "type": {
+            "type": "boolean",
+            "description": "Auto Deployment enabled"
+          }
+        },
+        {
+          "name": "CodeRepository",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "CodeRepository"
+          }
+        },
+        {
+          "name": "ImageRepository",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ImageRepository"
           }
         }
       ]
@@ -576,31 +595,64 @@
           }
         }
       ]
-    },
-    "KeyValuePair": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Name",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Value",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
     }
   },
   "resource": {
     "type": "object",
     "description": "The AWS::AppRunner::Service resource specifies an AppRunner Service.",
     "properties": [
+      {
+        "name": "AutoScalingConfigurationArn",
+        "description": "Autoscaling configuration ARN",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Autoscaling configuration ARN",
+          "maxLength": 1011,
+          "minLength": 1,
+          "pattern": "arn:aws(-[\\w]+)*:[a-z0-9-\\\\.]{0,63}:[a-z0-9-\\\\.]{0,63}:[0-9]{12}:(\\w|\\/|-){1,1011}"
+        }
+      },
+      {
+        "name": "EncryptionConfiguration",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "EncryptionConfiguration"
+        }
+      },
+      {
+        "name": "HealthCheckConfiguration",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "HealthCheckConfiguration"
+        }
+      },
+      {
+        "name": "InstanceConfiguration",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "InstanceConfiguration"
+        }
+      },
+      {
+        "name": "NetworkConfiguration",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "NetworkConfiguration"
+        }
+      },
+      {
+        "name": "ObservabilityConfiguration",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "ServiceObservabilityConfiguration"
+        }
+      },
       {
         "name": "ServiceName",
         "description": "The AppRunner Service Name.",
@@ -622,14 +674,6 @@
         }
       },
       {
-        "name": "InstanceConfiguration",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "InstanceConfiguration"
-        }
-      },
-      {
         "name": "Tags",
         "optional": true,
         "type": {
@@ -639,50 +683,6 @@
             "typeName": "Tag"
           }
         }
-      },
-      {
-        "name": "EncryptionConfiguration",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "EncryptionConfiguration"
-        }
-      },
-      {
-        "name": "HealthCheckConfiguration",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "HealthCheckConfiguration"
-        }
-      },
-      {
-        "name": "ObservabilityConfiguration",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "ServiceObservabilityConfiguration"
-        }
-      },
-      {
-        "name": "AutoScalingConfigurationArn",
-        "description": "Autoscaling configuration ARN",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "Autoscaling configuration ARN",
-          "maxLength": 1011,
-          "minLength": 1,
-          "pattern": "arn:aws(-[\\w]+)*:[a-z0-9-\\\\.]{0,63}:[a-z0-9-\\\\.]{0,63}:[0-9]{12}:(\\w|\\/|-){1,1011}"
-        }
-      },
-      {
-        "name": "NetworkConfiguration",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "NetworkConfiguration"
-        }
       }
     ]
   },
@@ -690,17 +690,6 @@
     "type": "object",
     "description": "The AWS::AppRunner::Service resource specifies an AppRunner Service.",
     "properties": [
-      {
-        "name": "ServiceId",
-        "description": "The AppRunner Service Id",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The AppRunner Service Id",
-          "maxLength": 32,
-          "minLength": 32
-        }
-      },
       {
         "name": "ServiceArn",
         "description": "The Amazon Resource Name (ARN) of the AppRunner Service.",
@@ -711,6 +700,17 @@
           "maxLength": 1011,
           "minLength": 1,
           "pattern": "arn:aws(-[\\w]+)*:[a-z0-9-\\\\.]{0,63}:[a-z0-9-\\\\.]{0,63}:[0-9]{12}:(\\w|\\/|-){1,1011}"
+        }
+      },
+      {
+        "name": "ServiceId",
+        "description": "The AppRunner Service Id",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The AppRunner Service Id",
+          "maxLength": 32,
+          "minLength": 32
         }
       },
       {
@@ -733,5 +733,5 @@
       }
     ]
   },
-  "$hash": "d5bdb9b4b5d101ba215dc34c0fb60e14e4502aa3"
+  "$hash": "e958401a330351a1cff7d478354524a7457155c6"
 }

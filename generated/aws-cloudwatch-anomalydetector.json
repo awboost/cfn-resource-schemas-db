@@ -1,31 +1,8 @@
 {
   "definitions": {
-    "MetricMathAnomalyDetector": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "MetricDataQueries",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "MetricDataQuery"
-            }
-          }
-        }
-      ]
-    },
     "Configuration": {
       "type": "object",
       "properties": [
-        {
-          "name": "MetricTimeZone",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
         {
           "name": "ExcludedTimeRanges",
           "optional": true,
@@ -36,38 +13,29 @@
               "typeName": "Range"
             }
           }
+        },
+        {
+          "name": "MetricTimeZone",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
         }
       ]
     },
-    "MetricStat": {
+    "Dimension": {
       "type": "object",
       "properties": [
         {
-          "name": "Period",
-          "optional": false,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        },
-        {
-          "name": "Metric",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "Metric"
-          }
-        },
-        {
-          "name": "Stat",
+          "name": "Name",
           "optional": false,
           "type": {
             "type": "string"
           }
         },
         {
-          "name": "Unit",
-          "optional": true,
+          "name": "Value",
+          "optional": false,
           "type": {
             "type": "string"
           }
@@ -77,13 +45,6 @@
     "Metric": {
       "type": "object",
       "properties": [
-        {
-          "name": "MetricName",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
         {
           "name": "Dimensions",
           "optional": true,
@@ -96,26 +57,14 @@
           }
         },
         {
-          "name": "Namespace",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "Dimension": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Value",
+          "name": "MetricName",
           "optional": false,
           "type": {
             "type": "string"
           }
         },
         {
-          "name": "Name",
+          "name": "Namespace",
           "optional": false,
           "type": {
             "type": "string"
@@ -134,14 +83,21 @@
           }
         },
         {
-          "name": "ReturnData",
+          "name": "Expression",
           "optional": true,
           "type": {
-            "type": "boolean"
+            "type": "string"
           }
         },
         {
-          "name": "Expression",
+          "name": "Id",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Label",
           "optional": true,
           "type": {
             "type": "string"
@@ -156,13 +112,6 @@
           }
         },
         {
-          "name": "Label",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
           "name": "Period",
           "optional": true,
           "type": {
@@ -171,8 +120,59 @@
           }
         },
         {
-          "name": "Id",
+          "name": "ReturnData",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        }
+      ]
+    },
+    "MetricMathAnomalyDetector": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "MetricDataQueries",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "MetricDataQuery"
+            }
+          }
+        }
+      ]
+    },
+    "MetricStat": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Metric",
           "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "Metric"
+          }
+        },
+        {
+          "name": "Period",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "Stat",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Unit",
+          "optional": true,
           "type": {
             "type": "string"
           }
@@ -202,13 +202,6 @@
       "type": "object",
       "properties": [
         {
-          "name": "MetricName",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
           "name": "Dimensions",
           "optional": true,
           "type": {
@@ -220,7 +213,7 @@
           }
         },
         {
-          "name": "Stat",
+          "name": "MetricName",
           "optional": true,
           "type": {
             "type": "string"
@@ -228,6 +221,13 @@
         },
         {
           "name": "Namespace",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Stat",
           "optional": true,
           "type": {
             "type": "string"
@@ -241,33 +241,11 @@
     "description": "Resource Type definition for AWS::CloudWatch::AnomalyDetector",
     "properties": [
       {
-        "name": "MetricName",
-        "optional": true,
-        "type": {
-          "type": "string"
-        }
-      },
-      {
-        "name": "Stat",
-        "optional": true,
-        "type": {
-          "type": "string"
-        }
-      },
-      {
         "name": "Configuration",
         "optional": true,
         "type": {
           "type": "ref",
           "typeName": "Configuration"
-        }
-      },
-      {
-        "name": "MetricMathAnomalyDetector",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "MetricMathAnomalyDetector"
         }
       },
       {
@@ -279,6 +257,21 @@
             "type": "ref",
             "typeName": "Dimension"
           }
+        }
+      },
+      {
+        "name": "MetricMathAnomalyDetector",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "MetricMathAnomalyDetector"
+        }
+      },
+      {
+        "name": "MetricName",
+        "optional": true,
+        "type": {
+          "type": "string"
         }
       },
       {
@@ -294,6 +287,13 @@
         "type": {
           "type": "ref",
           "typeName": "SingleMetricAnomalyDetector"
+        }
+      },
+      {
+        "name": "Stat",
+        "optional": true,
+        "type": {
+          "type": "string"
         }
       }
     ]
@@ -311,5 +311,5 @@
       }
     ]
   },
-  "$hash": "c87ab5367d1645e7aa734fcab8a36d79d2bfac98"
+  "$hash": "79e44c5a713e3c3d1c0e436c9573770469728f89"
 }

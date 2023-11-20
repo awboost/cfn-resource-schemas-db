@@ -1,11 +1,5 @@
 {
   "definitions": {
-    "SolutionArn": {
-      "type": "string",
-      "description": "The ARN of the solution",
-      "maxLength": 256,
-      "pattern": "arn:([a-z\\d-]+):personalize:.*:.*:.+"
-    },
     "CategoricalHyperParameterRange": {
       "type": "object",
       "description": "Provides the name and values of a Categorical hyperparameter.",
@@ -41,27 +35,6 @@
       "description": "Provides the name and range of a continuous hyperparameter.",
       "properties": [
         {
-          "name": "Name",
-          "description": "The name of the hyperparameter.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The name of the hyperparameter.",
-            "maxLength": 256
-          }
-        },
-        {
-          "name": "MinValue",
-          "description": "The minimum allowable value for the hyperparameter.",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "description": "The minimum allowable value for the hyperparameter.",
-            "isInteger": false,
-            "minimum": -1000000
-          }
-        },
-        {
           "name": "MaxValue",
           "description": "The maximum allowable value for the hyperparameter.",
           "optional": true,
@@ -71,13 +44,18 @@
             "isInteger": false,
             "minimum": -1000000
           }
-        }
-      ]
-    },
-    "IntegerHyperParameterRange": {
-      "type": "object",
-      "description": "Provides the name and range of an integer-valued hyperparameter.",
-      "properties": [
+        },
+        {
+          "name": "MinValue",
+          "description": "The minimum allowable value for the hyperparameter.",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "The minimum allowable value for the hyperparameter.",
+            "isInteger": false,
+            "minimum": -1000000
+          }
+        },
         {
           "name": "Name",
           "description": "The name of the hyperparameter.",
@@ -87,18 +65,13 @@
             "description": "The name of the hyperparameter.",
             "maxLength": 256
           }
-        },
-        {
-          "name": "MinValue",
-          "description": "The minimum allowable value for the hyperparameter.",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "description": "The minimum allowable value for the hyperparameter.",
-            "isInteger": true,
-            "minimum": -1000000
-          }
-        },
+        }
+      ]
+    },
+    "IntegerHyperParameterRange": {
+      "type": "object",
+      "description": "Provides the name and range of an integer-valued hyperparameter.",
+      "properties": [
         {
           "name": "MaxValue",
           "description": "The maximum allowable value for the hyperparameter.",
@@ -109,8 +82,35 @@
             "isInteger": true,
             "maximum": 1000000
           }
+        },
+        {
+          "name": "MinValue",
+          "description": "The minimum allowable value for the hyperparameter.",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "The minimum allowable value for the hyperparameter.",
+            "isInteger": true,
+            "minimum": -1000000
+          }
+        },
+        {
+          "name": "Name",
+          "description": "The name of the hyperparameter.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The name of the hyperparameter.",
+            "maxLength": 256
+          }
         }
       ]
+    },
+    "SolutionArn": {
+      "type": "string",
+      "description": "The ARN of the solution",
+      "maxLength": 256,
+      "pattern": "arn:([a-z\\d-]+):personalize:.*:.*:.+"
     },
     "SolutionConfig": {
       "type": "object",
@@ -266,16 +266,6 @@
                       }
                     },
                     {
-                      "name": "Type",
-                      "description": "The type of the metric. Valid values are Maximize and Minimize.",
-                      "optional": true,
-                      "type": {
-                        "type": "string",
-                        "description": "The type of the metric. Valid values are Maximize and Minimize.",
-                        "allowedValues": ["Maximize", "Minimize"]
-                      }
-                    },
-                    {
                       "name": "MetricRegex",
                       "description": "A regular expression for finding the metric in the training job logs.",
                       "optional": true,
@@ -283,6 +273,16 @@
                         "type": "string",
                         "description": "A regular expression for finding the metric in the training job logs.",
                         "maxLength": 256
+                      }
+                    },
+                    {
+                      "name": "Type",
+                      "description": "The type of the metric. Valid values are Maximize and Minimize.",
+                      "optional": true,
+                      "type": {
+                        "type": "string",
+                        "description": "The type of the metric. Valid values are Maximize and Minimize.",
+                        "allowedValues": ["Maximize", "Minimize"]
                       }
                     }
                   ]
@@ -330,15 +330,14 @@
     "description": "Resource schema for AWS::Personalize::Solution.",
     "properties": [
       {
-        "name": "Name",
-        "description": "The name for the solution",
+        "name": "DatasetGroupArn",
+        "description": "The ARN of the dataset group that provides the training data.",
         "optional": false,
         "type": {
           "type": "string",
-          "description": "The name for the solution",
-          "maxLength": 63,
-          "minLength": 1,
-          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\-_]*"
+          "description": "The ARN of the dataset group that provides the training data.",
+          "maxLength": 256,
+          "pattern": "arn:([a-z\\d-]+):personalize:.*:.*:.+"
         }
       },
       {
@@ -352,14 +351,15 @@
         }
       },
       {
-        "name": "DatasetGroupArn",
-        "description": "The ARN of the dataset group that provides the training data.",
+        "name": "Name",
+        "description": "The name for the solution",
         "optional": false,
         "type": {
           "type": "string",
-          "description": "The ARN of the dataset group that provides the training data.",
-          "maxLength": 256,
-          "pattern": "arn:([a-z\\d-]+):personalize:.*:.*:.+"
+          "description": "The name for the solution",
+          "maxLength": 63,
+          "minLength": 1,
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\-_]*"
         }
       },
       {
@@ -415,5 +415,5 @@
       }
     ]
   },
-  "$hash": "3909e6ebc386599a1aa96a05800b031039e52401"
+  "$hash": "2ab0fb1c05590c6e2b03fe0a7ab90163dffd429a"
 }

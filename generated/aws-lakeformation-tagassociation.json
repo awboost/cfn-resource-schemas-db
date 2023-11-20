@@ -5,9 +5,58 @@
       "maxLength": 12,
       "minLength": 12
     },
-    "NameString": {
+    "CatalogResource": {
+      "type": "record"
+    },
+    "ColumnNames": {
+      "type": "array",
+      "itemType": {
+        "type": "ref",
+        "typeName": "NameString"
+      }
+    },
+    "DataLakePrincipal": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "DataLakePrincipalIdentifier",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DataLakePrincipalString"
+          }
+        }
+      ]
+    },
+    "DataLakePrincipalString": {
       "type": "string",
       "maxLength": 255,
+      "minLength": 1
+    },
+    "DatabaseResource": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "CatalogId",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "CatalogIdString"
+          }
+        },
+        {
+          "name": "Name",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "NameString"
+          }
+        }
+      ]
+    },
+    "LFTagKey": {
+      "type": "string",
+      "maxLength": 128,
       "minLength": 1
     },
     "LFTagPair": {
@@ -39,6 +88,11 @@
         }
       ]
     },
+    "LFTagValue": {
+      "type": "string",
+      "maxLength": 256,
+      "minLength": 0
+    },
     "LFTagsList": {
       "type": "array",
       "itemType": {
@@ -46,135 +100,10 @@
         "typeName": "LFTagPair"
       }
     },
-    "DataLakePrincipalString": {
+    "NameString": {
       "type": "string",
       "maxLength": 255,
       "minLength": 1
-    },
-    "DataLakePrincipal": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "DataLakePrincipalIdentifier",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "DataLakePrincipalString"
-          }
-        }
-      ]
-    },
-    "ResourceType": {
-      "type": "string",
-      "allowedValues": ["DATABASE", "TABLE"]
-    },
-    "CatalogResource": {
-      "type": "record"
-    },
-    "DatabaseResource": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "CatalogId",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "CatalogIdString"
-          }
-        },
-        {
-          "name": "Name",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "NameString"
-          }
-        }
-      ]
-    },
-    "TableWildcard": {
-      "type": "record"
-    },
-    "TableResource": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "CatalogId",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "CatalogIdString"
-          }
-        },
-        {
-          "name": "DatabaseName",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "NameString"
-          }
-        },
-        {
-          "name": "Name",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "NameString"
-          }
-        },
-        {
-          "name": "TableWildcard",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "TableWildcard"
-          }
-        }
-      ]
-    },
-    "ColumnNames": {
-      "type": "array",
-      "itemType": {
-        "type": "ref",
-        "typeName": "NameString"
-      }
-    },
-    "TableWithColumnsResource": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "CatalogId",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "CatalogIdString"
-          }
-        },
-        {
-          "name": "DatabaseName",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "NameString"
-          }
-        },
-        {
-          "name": "Name",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "NameString"
-          }
-        },
-        {
-          "name": "ColumnNames",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "ColumnNames"
-          }
-        }
-      ]
     },
     "Resource": {
       "type": "object",
@@ -213,15 +142,86 @@
         }
       ]
     },
-    "LFTagKey": {
+    "ResourceType": {
       "type": "string",
-      "maxLength": 128,
-      "minLength": 1
+      "allowedValues": ["DATABASE", "TABLE"]
     },
-    "LFTagValue": {
-      "type": "string",
-      "maxLength": 256,
-      "minLength": 0
+    "TableResource": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "CatalogId",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "CatalogIdString"
+          }
+        },
+        {
+          "name": "DatabaseName",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "NameString"
+          }
+        },
+        {
+          "name": "Name",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "NameString"
+          }
+        },
+        {
+          "name": "TableWildcard",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "TableWildcard"
+          }
+        }
+      ]
+    },
+    "TableWildcard": {
+      "type": "record"
+    },
+    "TableWithColumnsResource": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "CatalogId",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "CatalogIdString"
+          }
+        },
+        {
+          "name": "ColumnNames",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "ColumnNames"
+          }
+        },
+        {
+          "name": "DatabaseName",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "NameString"
+          }
+        },
+        {
+          "name": "Name",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "NameString"
+          }
+        }
+      ]
     },
     "TagValueList": {
       "type": "array",
@@ -238,16 +238,6 @@
     "description": "A resource schema representing a Lake Formation Tag Association. While tag associations are not explicit Lake Formation resources, this CloudFormation resource can be used to associate tags with Lake Formation entities.",
     "properties": [
       {
-        "name": "Resource",
-        "description": "Resource to tag with the Lake Formation Tags",
-        "optional": false,
-        "type": {
-          "type": "ref",
-          "description": "Resource to tag with the Lake Formation Tags",
-          "typeName": "Resource"
-        }
-      },
-      {
         "name": "LFTags",
         "description": "List of Lake Formation Tags to associate with the Lake Formation Resource",
         "optional": false,
@@ -255,6 +245,16 @@
           "type": "ref",
           "description": "List of Lake Formation Tags to associate with the Lake Formation Resource",
           "typeName": "LFTagsList"
+        }
+      },
+      {
+        "name": "Resource",
+        "description": "Resource to tag with the Lake Formation Tags",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "description": "Resource to tag with the Lake Formation Tags",
+          "typeName": "Resource"
         }
       }
     ]
@@ -283,5 +283,5 @@
       }
     ]
   },
-  "$hash": "29ba079fa83a6e2bd36674d47bbfe919cdd61835"
+  "$hash": "3375408ff3ab74beb8d57c6ed83eb3df0f544b85"
 }

@@ -1,69 +1,5 @@
 {
   "definitions": {
-    "MembershipQueryLogStatus": {
-      "type": "string",
-      "allowedValues": ["ENABLED", "DISABLED"]
-    },
-    "MembershipStatus": {
-      "type": "string",
-      "allowedValues": ["ACTIVE", "REMOVED", "COLLABORATION_DELETED"]
-    },
-    "Tag": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Key",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 128,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "Value",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 256,
-            "minLength": 1
-          }
-        }
-      ]
-    },
-    "ResultFormat": {
-      "type": "string",
-      "allowedValues": ["CSV", "PARQUET"]
-    },
-    "ProtectedQueryS3OutputConfiguration": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "ResultFormat",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "ResultFormat"
-          }
-        },
-        {
-          "name": "Bucket",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 63,
-            "minLength": 3
-          }
-        },
-        {
-          "name": "KeyPrefix",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
     "MembershipProtectedQueryOutputConfiguration": {
       "type": "object",
       "properties": [
@@ -98,25 +34,76 @@
           }
         }
       ]
+    },
+    "MembershipQueryLogStatus": {
+      "type": "string",
+      "allowedValues": ["ENABLED", "DISABLED"]
+    },
+    "MembershipStatus": {
+      "type": "string",
+      "allowedValues": ["ACTIVE", "REMOVED", "COLLABORATION_DELETED"]
+    },
+    "ProtectedQueryS3OutputConfiguration": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Bucket",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 63,
+            "minLength": 3
+          }
+        },
+        {
+          "name": "KeyPrefix",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "ResultFormat",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "ResultFormat"
+          }
+        }
+      ]
+    },
+    "ResultFormat": {
+      "type": "string",
+      "allowedValues": ["CSV", "PARQUET"]
+    },
+    "Tag": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1
+          }
+        }
+      ]
     }
   },
   "resource": {
     "type": "object",
     "description": "Represents an AWS account that is a part of a collaboration",
     "properties": [
-      {
-        "name": "Tags",
-        "description": "An arbitrary set of tags (key-value pairs) for this cleanrooms membership.",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "description": "An arbitrary set of tags (key-value pairs) for this cleanrooms membership.",
-          "itemType": {
-            "type": "ref",
-            "typeName": "Tag"
-          }
-        }
-      },
       {
         "name": "CollaborationIdentifier",
         "optional": false,
@@ -128,6 +115,14 @@
         }
       },
       {
+        "name": "DefaultResultConfiguration",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "MembershipProtectedQueryResultConfiguration"
+        }
+      },
+      {
         "name": "QueryLogStatus",
         "optional": false,
         "type": {
@@ -136,11 +131,16 @@
         }
       },
       {
-        "name": "DefaultResultConfiguration",
+        "name": "Tags",
+        "description": "An arbitrary set of tags (key-value pairs) for this cleanrooms membership.",
         "optional": true,
         "type": {
-          "type": "ref",
-          "typeName": "MembershipProtectedQueryResultConfiguration"
+          "type": "array",
+          "description": "An arbitrary set of tags (key-value pairs) for this cleanrooms membership.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          }
         }
       }
     ]
@@ -187,5 +187,5 @@
       }
     ]
   },
-  "$hash": "b3ce3434c50fbbfaf60c7d88f37a2c4461c937d5"
+  "$hash": "8ddf6c3024b5c135ac9fdb762cee1ba6c2084b95"
 }

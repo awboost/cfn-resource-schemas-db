@@ -1,5 +1,68 @@
 {
   "definitions": {
+    "AirflowArn": {
+      "type": "string",
+      "description": "",
+      "maxLength": 1224,
+      "minLength": 1,
+      "pattern": "^arn:(aws|aws-us-gov|aws-cn|aws-iso|aws-iso-b)(-[a-z]+)?:airflow:[a-z0-9\\-]+:\\d{12}:environment/\\w+"
+    },
+    "AirflowVersion": {
+      "type": "string",
+      "description": "Version of airflow to deploy to the environment.",
+      "maxLength": 32,
+      "pattern": "^[0-9a-z.]+$"
+    },
+    "CeleryExecutorQueue": {
+      "type": "string",
+      "description": "The celery executor queue associated with the environment.",
+      "maxLength": 1224
+    },
+    "CloudWatchLogGroupArn": {
+      "type": "string",
+      "description": "",
+      "maxLength": 1224,
+      "pattern": "^arn:(aws|aws-us-gov|aws-cn|aws-iso|aws-iso-b)(-[a-z]+)?:logs:[a-z0-9\\-]+:\\d{12}:log-group:\\w+"
+    },
+    "ConfigKey": {
+      "type": "string",
+      "description": "",
+      "maxLength": 64,
+      "pattern": "^[a-z]+([a-z._]*[a-z]+)?$"
+    },
+    "ConfigValue": {
+      "type": "string",
+      "description": "",
+      "maxLength": 256,
+      "pattern": ".*"
+    },
+    "CreatedAt": {
+      "type": "string",
+      "description": "When the environment resource was created."
+    },
+    "DatabaseVpcEndpointService": {
+      "type": "string",
+      "description": "The database VPC endpoint service name.",
+      "maxLength": 1224
+    },
+    "EndpointManagement": {
+      "type": "string",
+      "description": "Defines whether the VPC endpoints configured for the environment are created, and managed, by the customer or by Amazon MWAA.",
+      "allowedValues": ["CUSTOMER", "SERVICE"]
+    },
+    "EnvironmentArn": {
+      "type": "string",
+      "description": "ARN for the MWAA environment.",
+      "maxLength": 1224,
+      "minLength": 1,
+      "pattern": "^arn:(aws|aws-us-gov|aws-cn|aws-iso|aws-iso-b)(-[a-z]+)?:airflow:[a-z0-9\\-]+:\\d{12}:environment/\\w+"
+    },
+    "EnvironmentClass": {
+      "type": "string",
+      "description": "Templated configuration for airflow processes and backing infrastructure.",
+      "maxLength": 1024,
+      "minLength": 1
+    },
     "EnvironmentName": {
       "type": "string",
       "description": "Customer-defined identifier for the environment, unique per customer region.",
@@ -22,78 +85,20 @@
         "PENDING"
       ]
     },
-    "UpdateStatus": {
+    "ErrorCode": {
       "type": "string",
-      "description": "",
-      "allowedValues": ["SUCCESS", "PENDING", "FAILED"]
+      "description": "The error code associated with an error."
     },
-    "UpdateError": {
-      "type": "object",
-      "description": "The error associated with an update request.",
-      "properties": [
-        {
-          "name": "ErrorCode",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ErrorCode"
-          }
-        },
-        {
-          "name": "ErrorMessage",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ErrorMessage"
-          }
-        }
-      ]
-    },
-    "AirflowArn": {
+    "ErrorMessage": {
       "type": "string",
-      "description": "",
-      "maxLength": 1224,
+      "description": "Error message describing a failed operation.",
+      "maxLength": 1024,
       "minLength": 1,
-      "pattern": "^arn:(aws|aws-us-gov|aws-cn|aws-iso|aws-iso-b)(-[a-z]+)?:airflow:[a-z0-9\\-]+:\\d{12}:environment/\\w+"
-    },
-    "EnvironmentArn": {
-      "type": "string",
-      "description": "ARN for the MWAA environment.",
-      "maxLength": 1224,
-      "minLength": 1,
-      "pattern": "^arn:(aws|aws-us-gov|aws-cn|aws-iso|aws-iso-b)(-[a-z]+)?:airflow:[a-z0-9\\-]+:\\d{12}:environment/\\w+"
-    },
-    "S3BucketArn": {
-      "type": "string",
-      "description": "ARN for the AWS S3 bucket to use as the source of DAGs and plugins for the environment.",
-      "maxLength": 1224,
-      "minLength": 1,
-      "pattern": "^arn:(aws|aws-us-gov|aws-cn|aws-iso|aws-iso-b)(-[a-z]+)?:s3:::[a-z0-9.\\-]+$"
-    },
-    "CreatedAt": {
-      "type": "string",
-      "description": "When the environment resource was created."
-    },
-    "UpdateCreatedAt": {
-      "type": "string",
-      "description": "When the update request was created."
-    },
-    "WebserverUrl": {
-      "type": "string",
-      "description": "Url endpoint for the environment's Airflow UI.",
-      "maxLength": 256,
-      "minLength": 1,
-      "pattern": "^https://.+$"
+      "pattern": "^.+$"
     },
     "ExecutionRoleArn": {
       "type": "string",
       "description": "IAM role to be used by tasks.",
-      "maxLength": 1224,
-      "pattern": "^arn:(aws|aws-us-gov|aws-cn|aws-iso|aws-iso-b)(-[a-z]+)?:iam::\\d{12}:role/?[a-zA-Z_0-9+=,.@\\-_/]+$"
-    },
-    "ServiceRoleArn": {
-      "type": "string",
-      "description": "IAM role to be used by MWAA to perform AWS API calls on behalf of the customer.",
       "maxLength": 1224,
       "pattern": "^arn:(aws|aws-us-gov|aws-cn|aws-iso|aws-iso-b)(-[a-z]+)?:iam::\\d{12}:role/?[a-zA-Z_0-9+=,.@\\-_/]+$"
     },
@@ -103,114 +108,32 @@
       "maxLength": 1224,
       "pattern": "^(((arn:(aws|aws-us-gov|aws-cn|aws-iso|aws-iso-b)(-[a-z]+)?:kms:[a-z]{2}-[a-z]+-\\d:\\d+:)?key\\/)?[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}|(arn:(aws|aws-us-gov|aws-cn|aws-iso|aws-iso-b):kms:[a-z]{2}-[a-z]+-\\d:\\d+:)?alias/.+)$"
     },
-    "AirflowVersion": {
-      "type": "string",
-      "description": "Version of airflow to deploy to the environment.",
-      "maxLength": 32,
-      "pattern": "^[0-9a-z.]+$"
-    },
-    "RelativePath": {
-      "type": "string",
-      "description": "Represents an S3 prefix relative to the root of an S3 bucket.",
-      "maxLength": 1024,
-      "pattern": ".*"
-    },
-    "ConfigKey": {
-      "type": "string",
-      "description": "",
-      "maxLength": 64,
-      "pattern": "^[a-z]+([a-z._]*[a-z]+)?$"
-    },
-    "ConfigValue": {
-      "type": "string",
-      "description": "",
-      "maxLength": 256,
-      "pattern": ".*"
-    },
-    "SecurityGroupId": {
-      "type": "string",
-      "description": "",
-      "maxLength": 1024,
-      "minLength": 1,
-      "pattern": "^sg-[a-zA-Z0-9\\-._]+$"
-    },
-    "SubnetId": {
-      "type": "string",
-      "description": "",
-      "maxLength": 1024,
-      "pattern": "^subnet-[a-zA-Z0-9\\-._]+$"
-    },
-    "CloudWatchLogGroupArn": {
-      "type": "string",
-      "description": "",
-      "maxLength": 1224,
-      "pattern": "^arn:(aws|aws-us-gov|aws-cn|aws-iso|aws-iso-b)(-[a-z]+)?:logs:[a-z0-9\\-]+:\\d{12}:log-group:\\w+"
-    },
-    "LoggingEnabled": {
-      "type": "boolean",
-      "description": ""
-    },
-    "LoggingLevel": {
-      "type": "string",
-      "description": "",
-      "allowedValues": ["CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG"]
-    },
-    "EnvironmentClass": {
-      "type": "string",
-      "description": "Templated configuration for airflow processes and backing infrastructure.",
-      "maxLength": 1024,
-      "minLength": 1
-    },
-    "MaxWorkers": {
-      "type": "number",
-      "description": "Maximum worker compute units.",
-      "isInteger": true,
-      "minimum": 1
-    },
-    "MinWorkers": {
-      "type": "number",
-      "description": "Minimum worker compute units.",
-      "isInteger": true,
-      "minimum": 1
-    },
-    "Schedulers": {
-      "type": "number",
-      "description": "Scheduler compute units.",
-      "isInteger": true,
-      "minimum": 1
-    },
-    "NetworkConfiguration": {
+    "LastUpdate": {
       "type": "object",
-      "description": "Configures the network resources of the environment.",
+      "description": "Details about the last update performed on the environment.",
       "properties": [
         {
-          "name": "SubnetIds",
-          "description": "A list of subnets to use for the environment. These must be private subnets, in the same VPC, in two different availability zones.",
+          "name": "CreatedAt",
           "optional": true,
           "type": {
-            "type": "array",
-            "description": "A list of subnets to use for the environment. These must be private subnets, in the same VPC, in two different availability zones.",
-            "itemType": {
-              "type": "ref",
-              "typeName": "SubnetId"
-            },
-            "maxLength": 2,
-            "minLength": 2
+            "type": "ref",
+            "typeName": "UpdateCreatedAt"
           }
         },
         {
-          "name": "SecurityGroupIds",
-          "description": "A list of security groups to use for the environment.",
+          "name": "Error",
           "optional": true,
           "type": {
-            "type": "array",
-            "description": "A list of security groups to use for the environment.",
-            "itemType": {
-              "type": "ref",
-              "typeName": "SecurityGroupId"
-            },
-            "maxLength": 5,
-            "minLength": 1
+            "type": "ref",
+            "typeName": "UpdateError"
+          }
+        },
+        {
+          "name": "Status",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "UpdateStatus"
           }
         }
       ]
@@ -236,6 +159,14 @@
           }
         },
         {
+          "name": "TaskLogs",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ModuleLoggingConfiguration"
+          }
+        },
+        {
           "name": "WebserverLogs",
           "optional": true,
           "type": {
@@ -245,14 +176,6 @@
         },
         {
           "name": "WorkerLogs",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ModuleLoggingConfiguration"
-          }
-        },
-        {
-          "name": "TaskLogs",
           "optional": true,
           "type": {
             "type": "ref",
@@ -282,6 +205,14 @@
           }
         },
         {
+          "name": "TaskLogs",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ModuleLoggingConfigurationInput"
+          }
+        },
+        {
           "name": "WebserverLogs",
           "optional": true,
           "type": {
@@ -296,21 +227,42 @@
             "type": "ref",
             "typeName": "ModuleLoggingConfigurationInput"
           }
-        },
-        {
-          "name": "TaskLogs",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ModuleLoggingConfigurationInput"
-          }
         }
       ]
+    },
+    "LoggingEnabled": {
+      "type": "boolean",
+      "description": ""
+    },
+    "LoggingLevel": {
+      "type": "string",
+      "description": "",
+      "allowedValues": ["CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG"]
+    },
+    "MaxWorkers": {
+      "type": "number",
+      "description": "Maximum worker compute units.",
+      "isInteger": true,
+      "minimum": 1
+    },
+    "MinWorkers": {
+      "type": "number",
+      "description": "Minimum worker compute units.",
+      "isInteger": true,
+      "minimum": 1
     },
     "ModuleLoggingConfiguration": {
       "type": "object",
       "description": "Logging configuration for a specific airflow component.",
       "properties": [
+        {
+          "name": "CloudWatchLogGroupArn",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "CloudWatchLogGroupArn"
+          }
+        },
         {
           "name": "Enabled",
           "optional": true,
@@ -325,14 +277,6 @@
           "type": {
             "type": "ref",
             "typeName": "LoggingLevel"
-          }
-        },
-        {
-          "name": "CloudWatchLogGroupArn",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "CloudWatchLogGroupArn"
           }
         }
       ]
@@ -359,82 +303,138 @@
         }
       ]
     },
-    "LastUpdate": {
+    "NetworkConfiguration": {
       "type": "object",
-      "description": "Details about the last update performed on the environment.",
+      "description": "Configures the network resources of the environment.",
       "properties": [
         {
-          "name": "Status",
+          "name": "SecurityGroupIds",
+          "description": "A list of security groups to use for the environment.",
           "optional": true,
           "type": {
-            "type": "ref",
-            "typeName": "UpdateStatus"
+            "type": "array",
+            "description": "A list of security groups to use for the environment.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "SecurityGroupId"
+            },
+            "maxLength": 5,
+            "minLength": 1
           }
         },
         {
-          "name": "CreatedAt",
+          "name": "SubnetIds",
+          "description": "A list of subnets to use for the environment. These must be private subnets, in the same VPC, in two different availability zones.",
           "optional": true,
           "type": {
-            "type": "ref",
-            "typeName": "UpdateCreatedAt"
-          }
-        },
-        {
-          "name": "Error",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "UpdateError"
+            "type": "array",
+            "description": "A list of subnets to use for the environment. These must be private subnets, in the same VPC, in two different availability zones.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "SubnetId"
+            },
+            "maxLength": 2,
+            "minLength": 2
           }
         }
       ]
     },
-    "ErrorCode": {
+    "RelativePath": {
       "type": "string",
-      "description": "The error code associated with an error."
-    },
-    "ErrorMessage": {
-      "type": "string",
-      "description": "Error message describing a failed operation.",
+      "description": "Represents an S3 prefix relative to the root of an S3 bucket.",
       "maxLength": 1024,
+      "pattern": ".*"
+    },
+    "S3BucketArn": {
+      "type": "string",
+      "description": "ARN for the AWS S3 bucket to use as the source of DAGs and plugins for the environment.",
+      "maxLength": 1224,
       "minLength": 1,
-      "pattern": "^.+$"
+      "pattern": "^arn:(aws|aws-us-gov|aws-cn|aws-iso|aws-iso-b)(-[a-z]+)?:s3:::[a-z0-9.\\-]+$"
     },
     "S3ObjectVersion": {
       "type": "string",
       "description": "Represents an version ID for an S3 object.",
       "maxLength": 1024
     },
-    "WeeklyMaintenanceWindowStart": {
+    "Schedulers": {
+      "type": "number",
+      "description": "Scheduler compute units.",
+      "isInteger": true,
+      "minimum": 1
+    },
+    "SecurityGroupId": {
       "type": "string",
-      "description": "Start time for the weekly maintenance window.",
-      "maxLength": 9,
-      "pattern": "(MON|TUE|WED|THU|FRI|SAT|SUN):([01]\\d|2[0-3]):(00|30)"
+      "description": "",
+      "maxLength": 1024,
+      "minLength": 1,
+      "pattern": "^sg-[a-zA-Z0-9\\-._]+$"
+    },
+    "ServiceRoleArn": {
+      "type": "string",
+      "description": "IAM role to be used by MWAA to perform AWS API calls on behalf of the customer.",
+      "maxLength": 1224,
+      "pattern": "^arn:(aws|aws-us-gov|aws-cn|aws-iso|aws-iso-b)(-[a-z]+)?:iam::\\d{12}:role/?[a-zA-Z_0-9+=,.@\\-_/]+$"
+    },
+    "SubnetId": {
+      "type": "string",
+      "description": "",
+      "maxLength": 1024,
+      "pattern": "^subnet-[a-zA-Z0-9\\-._]+$"
+    },
+    "UpdateCreatedAt": {
+      "type": "string",
+      "description": "When the update request was created."
+    },
+    "UpdateError": {
+      "type": "object",
+      "description": "The error associated with an update request.",
+      "properties": [
+        {
+          "name": "ErrorCode",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ErrorCode"
+          }
+        },
+        {
+          "name": "ErrorMessage",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ErrorMessage"
+          }
+        }
+      ]
+    },
+    "UpdateStatus": {
+      "type": "string",
+      "description": "",
+      "allowedValues": ["SUCCESS", "PENDING", "FAILED"]
     },
     "WebserverAccessMode": {
       "type": "string",
       "description": "Choice for mode of webserver access including over public internet or via private VPC endpoint.",
       "allowedValues": ["PRIVATE_ONLY", "PUBLIC_ONLY"]
     },
-    "EndpointManagement": {
+    "WebserverUrl": {
       "type": "string",
-      "description": "Defines whether the VPC endpoints configured for the environment are created, and managed, by the customer or by Amazon MWAA.",
-      "allowedValues": ["CUSTOMER", "SERVICE"]
-    },
-    "CeleryExecutorQueue": {
-      "type": "string",
-      "description": "The celery executor queue associated with the environment.",
-      "maxLength": 1224
-    },
-    "DatabaseVpcEndpointService": {
-      "type": "string",
-      "description": "The database VPC endpoint service name.",
-      "maxLength": 1224
+      "description": "Url endpoint for the environment's Airflow UI.",
+      "maxLength": 256,
+      "minLength": 1,
+      "pattern": "^https://.+$"
     },
     "WebserverVpcEndpointService": {
       "type": "string",
       "description": "The webserver VPC endpoint service name, applicable if private webserver access mode selected.",
       "maxLength": 1224
+    },
+    "WeeklyMaintenanceWindowStart": {
+      "type": "string",
+      "description": "Start time for the weekly maintenance window.",
+      "maxLength": 9,
+      "pattern": "(MON|TUE|WED|THU|FRI|SAT|SUN):([01]\\d|2[0-3]):(00|30)"
     }
   },
   "resource": {
@@ -442,11 +442,44 @@
     "description": "Resource schema for AWS::MWAA::Environment",
     "properties": [
       {
-        "name": "Name",
-        "optional": false,
+        "name": "AirflowConfigurationOptions",
+        "description": "Key/value pairs representing Airflow configuration variables.\n    Keys are prefixed by their section:\n\n    [core]\n    dags_folder={AIRFLOW_HOME}/dags\n\n    Would be represented as\n\n    \"core.dags_folder\": \"{AIRFLOW_HOME}/dags\"",
+        "optional": true,
+        "type": {
+          "type": "record",
+          "description": "Key/value pairs representing Airflow configuration variables.\n    Keys are prefixed by their section:\n\n    [core]\n    dags_folder={AIRFLOW_HOME}/dags\n\n    Would be represented as\n\n    \"core.dags_folder\": \"{AIRFLOW_HOME}/dags\""
+        }
+      },
+      {
+        "name": "AirflowVersion",
+        "optional": true,
         "type": {
           "type": "ref",
-          "typeName": "EnvironmentName"
+          "typeName": "AirflowVersion"
+        }
+      },
+      {
+        "name": "DagS3Path",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "RelativePath"
+        }
+      },
+      {
+        "name": "EndpointManagement",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "EndpointManagement"
+        }
+      },
+      {
+        "name": "EnvironmentClass",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "EnvironmentClass"
         }
       },
       {
@@ -466,92 +499,11 @@
         }
       },
       {
-        "name": "AirflowVersion",
+        "name": "LoggingConfiguration",
         "optional": true,
         "type": {
           "type": "ref",
-          "typeName": "AirflowVersion"
-        }
-      },
-      {
-        "name": "SourceBucketArn",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "S3BucketArn"
-        }
-      },
-      {
-        "name": "DagS3Path",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "RelativePath"
-        }
-      },
-      {
-        "name": "PluginsS3Path",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "RelativePath"
-        }
-      },
-      {
-        "name": "PluginsS3ObjectVersion",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "S3ObjectVersion"
-        }
-      },
-      {
-        "name": "RequirementsS3Path",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "RelativePath"
-        }
-      },
-      {
-        "name": "RequirementsS3ObjectVersion",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "S3ObjectVersion"
-        }
-      },
-      {
-        "name": "StartupScriptS3Path",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "RelativePath"
-        }
-      },
-      {
-        "name": "StartupScriptS3ObjectVersion",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "S3ObjectVersion"
-        }
-      },
-      {
-        "name": "AirflowConfigurationOptions",
-        "description": "Key/value pairs representing Airflow configuration variables.\n    Keys are prefixed by their section:\n\n    [core]\n    dags_folder={AIRFLOW_HOME}/dags\n\n    Would be represented as\n\n    \"core.dags_folder\": \"{AIRFLOW_HOME}/dags\"",
-        "optional": true,
-        "type": {
-          "type": "record",
-          "description": "Key/value pairs representing Airflow configuration variables.\n    Keys are prefixed by their section:\n\n    [core]\n    dags_folder={AIRFLOW_HOME}/dags\n\n    Would be represented as\n\n    \"core.dags_folder\": \"{AIRFLOW_HOME}/dags\""
-        }
-      },
-      {
-        "name": "EnvironmentClass",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "EnvironmentClass"
+          "typeName": "LoggingConfiguration"
         }
       },
       {
@@ -571,11 +523,11 @@
         }
       },
       {
-        "name": "Schedulers",
-        "optional": true,
+        "name": "Name",
+        "optional": false,
         "type": {
           "type": "ref",
-          "typeName": "Schedulers"
+          "typeName": "EnvironmentName"
         }
       },
       {
@@ -587,19 +539,67 @@
         }
       },
       {
-        "name": "LoggingConfiguration",
+        "name": "PluginsS3ObjectVersion",
         "optional": true,
         "type": {
           "type": "ref",
-          "typeName": "LoggingConfiguration"
+          "typeName": "S3ObjectVersion"
         }
       },
       {
-        "name": "WeeklyMaintenanceWindowStart",
+        "name": "PluginsS3Path",
         "optional": true,
         "type": {
           "type": "ref",
-          "typeName": "WeeklyMaintenanceWindowStart"
+          "typeName": "RelativePath"
+        }
+      },
+      {
+        "name": "RequirementsS3ObjectVersion",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "S3ObjectVersion"
+        }
+      },
+      {
+        "name": "RequirementsS3Path",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "RelativePath"
+        }
+      },
+      {
+        "name": "Schedulers",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "Schedulers"
+        }
+      },
+      {
+        "name": "SourceBucketArn",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "S3BucketArn"
+        }
+      },
+      {
+        "name": "StartupScriptS3ObjectVersion",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "S3ObjectVersion"
+        }
+      },
+      {
+        "name": "StartupScriptS3Path",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "RelativePath"
         }
       },
       {
@@ -620,11 +620,11 @@
         }
       },
       {
-        "name": "EndpointManagement",
+        "name": "WeeklyMaintenanceWindowStart",
         "optional": true,
         "type": {
           "type": "ref",
-          "typeName": "EndpointManagement"
+          "typeName": "WeeklyMaintenanceWindowStart"
         }
       }
     ]
@@ -639,14 +639,6 @@
         "type": {
           "type": "ref",
           "typeName": "EnvironmentArn"
-        }
-      },
-      {
-        "name": "WebserverUrl",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "WebserverUrl"
         }
       },
       {
@@ -666,6 +658,14 @@
         }
       },
       {
+        "name": "WebserverUrl",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "WebserverUrl"
+        }
+      },
+      {
         "name": "WebserverVpcEndpointService",
         "optional": true,
         "type": {
@@ -675,5 +675,5 @@
       }
     ]
   },
-  "$hash": "98735989dc470005ac2cd11d056f4c6e3f54eb9a"
+  "$hash": "8c06cce4bc99bc39ac62ec1e2c9ccdad91d8c6f4"
 }

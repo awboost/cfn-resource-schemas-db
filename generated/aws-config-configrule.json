@@ -1,16 +1,64 @@
 {
   "definitions": {
+    "CustomPolicyDetails": {
+      "type": "object",
+      "description": "Custom policy details when rule is custom owned",
+      "properties": [
+        {
+          "name": "EnableDebugLogDelivery",
+          "description": "Logging toggle for custom policy rule",
+          "optional": true,
+          "type": {
+            "type": "boolean",
+            "description": "Logging toggle for custom policy rule"
+          }
+        },
+        {
+          "name": "PolicyRuntime",
+          "description": "Runtime system for custom policy rule",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Runtime system for custom policy rule"
+          }
+        },
+        {
+          "name": "PolicyText",
+          "description": "Policy definition containing logic for custom policy rule",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Policy definition containing logic for custom policy rule"
+          }
+        }
+      ]
+    },
+    "EvaluationModeConfiguration": {
+      "type": "object",
+      "description": "Evaluation mode for the AWS Config rule",
+      "properties": [
+        {
+          "name": "Mode",
+          "description": "Mode of evaluation of AWS Config rule",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Mode of evaluation of AWS Config rule"
+          }
+        }
+      ]
+    },
     "Scope": {
       "type": "object",
       "description": "Scope to constrain which resources can trigger the rule",
       "properties": [
         {
-          "name": "TagKey",
-          "description": "Tag key applied only to resources which we want to trigger the rule",
+          "name": "ComplianceResourceId",
+          "description": "ID of the only one resource which we want to trigger the rule",
           "optional": true,
           "type": {
             "type": "string",
-            "description": "Tag key applied only to resources which we want to trigger the rule"
+            "description": "ID of the only one resource which we want to trigger the rule"
           }
         },
         {
@@ -26,6 +74,15 @@
           }
         },
         {
+          "name": "TagKey",
+          "description": "Tag key applied only to resources which we want to trigger the rule",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Tag key applied only to resources which we want to trigger the rule"
+          }
+        },
+        {
           "name": "TagValue",
           "description": "Tag value applied only to resources which we want to trigger the rule",
           "optional": true,
@@ -33,47 +90,53 @@
             "type": "string",
             "description": "Tag value applied only to resources which we want to trigger the rule"
           }
-        },
-        {
-          "name": "ComplianceResourceId",
-          "description": "ID of the only one resource which we want to trigger the rule",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "ID of the only one resource which we want to trigger the rule"
-          }
         }
       ]
     },
-    "CustomPolicyDetails": {
+    "Source": {
       "type": "object",
-      "description": "Custom policy details when rule is custom owned",
+      "description": "Source of events for the config rule",
       "properties": [
         {
-          "name": "EnableDebugLogDelivery",
-          "description": "Logging toggle for custom policy rule",
+          "name": "CustomPolicyDetails",
+          "description": "Custom policy details when rule is custom owned",
           "optional": true,
           "type": {
-            "type": "boolean",
-            "description": "Logging toggle for custom policy rule"
+            "type": "ref",
+            "description": "Custom policy details when rule is custom owned",
+            "typeName": "CustomPolicyDetails"
           }
         },
         {
-          "name": "PolicyText",
-          "description": "Policy definition containing logic for custom policy rule",
-          "optional": true,
+          "name": "Owner",
+          "description": "Owner of the config rule",
+          "optional": false,
           "type": {
             "type": "string",
-            "description": "Policy definition containing logic for custom policy rule"
+            "description": "Owner of the config rule"
           }
         },
         {
-          "name": "PolicyRuntime",
-          "description": "Runtime system for custom policy rule",
+          "name": "SourceDetails",
+          "description": "List of message types that can trigger the rule",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "List of message types that can trigger the rule",
+            "itemType": {
+              "type": "ref",
+              "description": "Source and message type that can trigger the rule",
+              "typeName": "SourceDetail"
+            }
+          }
+        },
+        {
+          "name": "SourceIdentifier",
+          "description": "Identifier for the source of events",
           "optional": true,
           "type": {
             "type": "string",
-            "description": "Runtime system for custom policy rule"
+            "description": "Identifier for the source of events"
           }
         }
       ]
@@ -110,103 +173,12 @@
           }
         }
       ]
-    },
-    "Source": {
-      "type": "object",
-      "description": "Source of events for the config rule",
-      "properties": [
-        {
-          "name": "CustomPolicyDetails",
-          "description": "Custom policy details when rule is custom owned",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "Custom policy details when rule is custom owned",
-            "typeName": "CustomPolicyDetails"
-          }
-        },
-        {
-          "name": "SourceIdentifier",
-          "description": "Identifier for the source of events",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Identifier for the source of events"
-          }
-        },
-        {
-          "name": "Owner",
-          "description": "Owner of the config rule",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "Owner of the config rule"
-          }
-        },
-        {
-          "name": "SourceDetails",
-          "description": "List of message types that can trigger the rule",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "description": "List of message types that can trigger the rule",
-            "itemType": {
-              "type": "ref",
-              "description": "Source and message type that can trigger the rule",
-              "typeName": "SourceDetail"
-            }
-          }
-        }
-      ]
-    },
-    "EvaluationModeConfiguration": {
-      "type": "object",
-      "description": "Evaluation mode for the AWS Config rule",
-      "properties": [
-        {
-          "name": "Mode",
-          "description": "Mode of evaluation of AWS Config rule",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Mode of evaluation of AWS Config rule"
-          }
-        }
-      ]
     }
   },
   "resource": {
     "type": "object",
     "description": "Schema for AWS Config ConfigRule",
     "properties": [
-      {
-        "name": "Description",
-        "description": "Description provided for the AWS Config rule",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "Description provided for the AWS Config rule"
-        }
-      },
-      {
-        "name": "Scope",
-        "description": "Scope to constrain which resources can trigger the AWS Config rule",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "description": "Scope to constrain which resources can trigger the AWS Config rule",
-          "typeName": "Scope"
-        }
-      },
-      {
-        "name": "ConfigRuleName",
-        "description": "Name for the AWS Config rule",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "Name for the AWS Config rule"
-        }
-      },
       {
         "name": "Compliance",
         "description": "Compliance details of the Config rule",
@@ -228,22 +200,35 @@
         }
       },
       {
-        "name": "MaximumExecutionFrequency",
-        "description": "Maximum frequency at which the rule has to be evaluated",
+        "name": "ConfigRuleName",
+        "description": "Name for the AWS Config rule",
         "optional": true,
         "type": {
           "type": "string",
-          "description": "Maximum frequency at which the rule has to be evaluated"
+          "description": "Name for the AWS Config rule"
         }
       },
       {
-        "name": "Source",
-        "description": "Source of events for the AWS Config rule",
-        "optional": false,
+        "name": "Description",
+        "description": "Description provided for the AWS Config rule",
+        "optional": true,
         "type": {
-          "type": "ref",
-          "description": "Source of events for the AWS Config rule",
-          "typeName": "Source"
+          "type": "string",
+          "description": "Description provided for the AWS Config rule"
+        }
+      },
+      {
+        "name": "EvaluationModes",
+        "description": "List of EvaluationModeConfiguration objects",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "List of EvaluationModeConfiguration objects",
+          "itemType": {
+            "type": "ref",
+            "description": "Mode of evaluation of AWS Config rule",
+            "typeName": "EvaluationModeConfiguration"
+          }
         }
       },
       {
@@ -265,17 +250,32 @@
         }
       },
       {
-        "name": "EvaluationModes",
-        "description": "List of EvaluationModeConfiguration objects",
+        "name": "MaximumExecutionFrequency",
+        "description": "Maximum frequency at which the rule has to be evaluated",
         "optional": true,
         "type": {
-          "type": "array",
-          "description": "List of EvaluationModeConfiguration objects",
-          "itemType": {
-            "type": "ref",
-            "description": "Mode of evaluation of AWS Config rule",
-            "typeName": "EvaluationModeConfiguration"
-          }
+          "type": "string",
+          "description": "Maximum frequency at which the rule has to be evaluated"
+        }
+      },
+      {
+        "name": "Scope",
+        "description": "Scope to constrain which resources can trigger the AWS Config rule",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "Scope to constrain which resources can trigger the AWS Config rule",
+          "typeName": "Scope"
+        }
+      },
+      {
+        "name": "Source",
+        "description": "Source of events for the AWS Config rule",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "description": "Source of events for the AWS Config rule",
+          "typeName": "Source"
         }
       }
     ]
@@ -285,15 +285,6 @@
     "description": "Schema for AWS Config ConfigRule",
     "properties": [
       {
-        "name": "ConfigRuleId",
-        "description": "ID of the config rule",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "ID of the config rule"
-        }
-      },
-      {
         "name": "Arn",
         "description": "ARN generated for the AWS Config rule ",
         "optional": true,
@@ -301,8 +292,17 @@
           "type": "string",
           "description": "ARN generated for the AWS Config rule "
         }
+      },
+      {
+        "name": "ConfigRuleId",
+        "description": "ID of the config rule",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "ID of the config rule"
+        }
       }
     ]
   },
-  "$hash": "ede77896a7c7980d86dbf0e01fc77cb05594b21b"
+  "$hash": "5dacca9835af22db2be5e51b37c0038e6a97b2aa"
 }

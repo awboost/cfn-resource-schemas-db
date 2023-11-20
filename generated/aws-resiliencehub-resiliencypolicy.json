@@ -5,22 +5,22 @@
       "description": "Failure Policy.",
       "properties": [
         {
-          "name": "RtoInSecs",
-          "description": "RTO in seconds.",
-          "optional": false,
-          "type": {
-            "type": "number",
-            "description": "RTO in seconds.",
-            "isInteger": true
-          }
-        },
-        {
           "name": "RpoInSecs",
           "description": "RPO in seconds.",
           "optional": false,
           "type": {
             "type": "number",
             "description": "RPO in seconds.",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "RtoInSecs",
+          "description": "RTO in seconds.",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "description": "RTO in seconds.",
             "isInteger": true
           }
         }
@@ -33,16 +33,16 @@
         "typeName": "FailurePolicy"
       }
     },
-    "TagValue": {
-      "type": "string",
-      "maxLength": 256
-    },
     "TagMap": {
       "type": "record",
       "valueType": {
         "type": "ref",
         "typeName": "TagValue"
       }
+    },
+    "TagValue": {
+      "type": "string",
+      "maxLength": 256
     }
   },
   "resource": {
@@ -50,13 +50,21 @@
     "description": "Resource Type Definition for Resiliency Policy.",
     "properties": [
       {
-        "name": "PolicyName",
-        "description": "Name of Resiliency Policy.",
-        "optional": false,
+        "name": "DataLocationConstraint",
+        "description": "Data Location Constraint of the Policy.",
+        "optional": true,
         "type": {
           "type": "string",
-          "description": "Name of Resiliency Policy.",
-          "pattern": "^[A-Za-z0-9][A-Za-z0-9_\\-]{1,59}$"
+          "description": "Data Location Constraint of the Policy.",
+          "allowedValues": ["AnyLocation", "SameContinent", "SameCountry"]
+        }
+      },
+      {
+        "name": "Policy",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "PolicyMap"
         }
       },
       {
@@ -70,13 +78,21 @@
         }
       },
       {
-        "name": "DataLocationConstraint",
-        "description": "Data Location Constraint of the Policy.",
-        "optional": true,
+        "name": "PolicyName",
+        "description": "Name of Resiliency Policy.",
+        "optional": false,
         "type": {
           "type": "string",
-          "description": "Data Location Constraint of the Policy.",
-          "allowedValues": ["AnyLocation", "SameContinent", "SameCountry"]
+          "description": "Name of Resiliency Policy.",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_\\-]{1,59}$"
+        }
+      },
+      {
+        "name": "Tags",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "TagMap"
         }
       },
       {
@@ -93,22 +109,6 @@
             "CoreServices",
             "NonCritical"
           ]
-        }
-      },
-      {
-        "name": "Policy",
-        "optional": false,
-        "type": {
-          "type": "ref",
-          "typeName": "PolicyMap"
-        }
-      },
-      {
-        "name": "Tags",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "TagMap"
         }
       }
     ]
@@ -129,5 +129,5 @@
       }
     ]
   },
-  "$hash": "5de96d415dfd40db057465343627b023f982fee4"
+  "$hash": "c44a3d7d482d2e5d41db680f969bec4b17384cde"
 }

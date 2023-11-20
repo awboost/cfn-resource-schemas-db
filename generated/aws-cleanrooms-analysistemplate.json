@@ -48,19 +48,6 @@
         }
       ]
     },
-    "TableName": {
-      "type": "string",
-      "maxLength": 128,
-      "pattern": "^[a-zA-Z0-9_](([a-zA-Z0-9_ ]+-)*([a-zA-Z0-9_ ]+))?$"
-    },
-    "ReferencedTables": {
-      "type": "array",
-      "itemType": {
-        "type": "ref",
-        "typeName": "TableName"
-      },
-      "minLength": 0
-    },
     "AnalysisSchema": {
       "type": "object",
       "properties": [
@@ -87,6 +74,19 @@
           }
         }
       ]
+    },
+    "ReferencedTables": {
+      "type": "array",
+      "itemType": {
+        "type": "ref",
+        "typeName": "TableName"
+      },
+      "minLength": 0
+    },
+    "TableName": {
+      "type": "string",
+      "maxLength": 128,
+      "pattern": "^[a-zA-Z0-9_](([a-zA-Z0-9_ ]+-)*([a-zA-Z0-9_ ]+))?$"
     },
     "Tag": {
       "type": "object",
@@ -117,19 +117,6 @@
     "description": "Represents a stored analysis within a collaboration",
     "properties": [
       {
-        "name": "Tags",
-        "description": "An arbitrary set of tags (key-value pairs) for this cleanrooms analysis template.",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "description": "An arbitrary set of tags (key-value pairs) for this cleanrooms analysis template.",
-          "itemType": {
-            "type": "ref",
-            "typeName": "Tag"
-          }
-        }
-      },
-      {
         "name": "AnalysisParameters",
         "description": "The member who can query can provide this placeholder for a literal data value in an analysis template",
         "optional": true,
@@ -151,6 +138,14 @@
           "type": "string",
           "maxLength": 255,
           "pattern": "^[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDBFF-\\uDC00\\uDFFF\\t\\r\\n]*$"
+        }
+      },
+      {
+        "name": "Format",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "allowedValues": ["SQL"]
         }
       },
       {
@@ -181,11 +176,16 @@
         }
       },
       {
-        "name": "Format",
-        "optional": false,
+        "name": "Tags",
+        "description": "An arbitrary set of tags (key-value pairs) for this cleanrooms analysis template.",
+        "optional": true,
         "type": {
-          "type": "string",
-          "allowedValues": ["SQL"]
+          "type": "array",
+          "description": "An arbitrary set of tags (key-value pairs) for this cleanrooms analysis template.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          }
         }
       }
     ]
@@ -194,6 +194,16 @@
     "type": "object",
     "description": "Represents a stored analysis within a collaboration",
     "properties": [
+      {
+        "name": "AnalysisTemplateIdentifier",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 36,
+          "minLength": 36,
+          "pattern": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+        }
+      },
       {
         "name": "Arn",
         "optional": true,
@@ -221,16 +231,6 @@
         }
       },
       {
-        "name": "AnalysisTemplateIdentifier",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "maxLength": 36,
-          "minLength": 36,
-          "pattern": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
-        }
-      },
-      {
         "name": "MembershipArn",
         "optional": true,
         "type": {
@@ -248,5 +248,5 @@
       }
     ]
   },
-  "$hash": "586b46ef1cf85bbf823ab207f00f40e0c3e9a696"
+  "$hash": "5f7fc22b84dc17863ecfb5d2719e7577de7355ac"
 }

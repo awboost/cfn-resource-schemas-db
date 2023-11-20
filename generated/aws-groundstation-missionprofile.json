@@ -4,14 +4,33 @@
       "type": "object",
       "properties": [
         {
-          "name": "Source",
+          "name": "Destination",
           "optional": true,
           "type": {
             "type": "string"
           }
         },
         {
-          "name": "Destination",
+          "name": "Source",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "StreamsKmsKey": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "KmsAliasArn",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "KmsKeyArn",
           "optional": true,
           "type": {
             "type": "string"
@@ -39,25 +58,6 @@
           }
         }
       ]
-    },
-    "StreamsKmsKey": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "KmsKeyArn",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "KmsAliasArn",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
     }
   },
   "resource": {
@@ -65,13 +65,13 @@
     "description": "AWS Ground Station Mission Profile resource type for CloudFormation.",
     "properties": [
       {
-        "name": "Name",
-        "description": "A name used to identify a mission profile.",
-        "optional": false,
+        "name": "ContactPostPassDurationSeconds",
+        "description": "Post-pass time needed after the contact.",
+        "optional": true,
         "type": {
-          "type": "string",
-          "description": "A name used to identify a mission profile.",
-          "pattern": "^[ a-zA-Z0-9_:-]{1,256}$"
+          "type": "number",
+          "description": "Post-pass time needed after the contact.",
+          "isInteger": true
         }
       },
       {
@@ -85,13 +85,17 @@
         }
       },
       {
-        "name": "ContactPostPassDurationSeconds",
-        "description": "Post-pass time needed after the contact.",
-        "optional": true,
+        "name": "DataflowEdges",
+        "description": "",
+        "optional": false,
         "type": {
-          "type": "number",
-          "description": "Post-pass time needed after the contact.",
-          "isInteger": true
+          "type": "array",
+          "description": "",
+          "itemType": {
+            "type": "ref",
+            "typeName": "DataflowEdge"
+          },
+          "minLength": 1
         }
       },
       {
@@ -102,6 +106,16 @@
           "type": "number",
           "description": "Visibilities with shorter duration than the specified minimum viable contact duration will be ignored when searching for available contacts.",
           "isInteger": true
+        }
+      },
+      {
+        "name": "Name",
+        "description": "A name used to identify a mission profile.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "A name used to identify a mission profile.",
+          "pattern": "^[ a-zA-Z0-9_:-]{1,256}$"
         }
       },
       {
@@ -124,27 +138,6 @@
         }
       },
       {
-        "name": "DataflowEdges",
-        "description": "",
-        "optional": false,
-        "type": {
-          "type": "array",
-          "description": "",
-          "itemType": {
-            "type": "ref",
-            "typeName": "DataflowEdge"
-          },
-          "minLength": 1
-        }
-      },
-      {
-        "name": "TrackingConfigArn",
-        "optional": false,
-        "type": {
-          "type": "string"
-        }
-      },
-      {
         "name": "Tags",
         "optional": true,
         "type": {
@@ -154,6 +147,13 @@
             "typeName": "Tag"
           }
         }
+      },
+      {
+        "name": "TrackingConfigArn",
+        "optional": false,
+        "type": {
+          "type": "string"
+        }
       }
     ]
   },
@@ -162,14 +162,14 @@
     "description": "AWS Ground Station Mission Profile resource type for CloudFormation.",
     "properties": [
       {
-        "name": "Id",
+        "name": "Arn",
         "optional": true,
         "type": {
           "type": "string"
         }
       },
       {
-        "name": "Arn",
+        "name": "Id",
         "optional": true,
         "type": {
           "type": "string"
@@ -184,5 +184,5 @@
       }
     ]
   },
-  "$hash": "e27a7413725a91f2711d0ce4588481a11293af44"
+  "$hash": "ad1ac99a37e4d71a17debb6b2fb79788236a783b"
 }

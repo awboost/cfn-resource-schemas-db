@@ -10,20 +10,11 @@
       "description": "This structure specifies the VPC subnets and security groups for the task, and whether a public IP address is to be used. This structure is relevant only for ECS tasks that use the awsvpc network mode.",
       "properties": [
         {
-          "name": "Subnets",
-          "description": "Specifies the subnets associated with the task. These subnets must all be in the same VPC. You can specify as many as 16 subnets.",
-          "optional": false,
+          "name": "AssignPublicIp",
+          "optional": true,
           "type": {
-            "type": "array",
-            "description": "Specifies the subnets associated with the task. These subnets must all be in the same VPC. You can specify as many as 16 subnets.",
-            "itemType": {
-              "type": "string",
-              "description": "Specifies the subnet associated with the task.",
-              "maxLength": 1000,
-              "minLength": 1
-            },
-            "maxLength": 16,
-            "minLength": 1
+            "type": "ref",
+            "typeName": "AssignPublicIp"
           }
         },
         {
@@ -44,11 +35,20 @@
           }
         },
         {
-          "name": "AssignPublicIp",
-          "optional": true,
+          "name": "Subnets",
+          "description": "Specifies the subnets associated with the task. These subnets must all be in the same VPC. You can specify as many as 16 subnets.",
+          "optional": false,
           "type": {
-            "type": "ref",
-            "typeName": "AssignPublicIp"
+            "type": "array",
+            "description": "Specifies the subnets associated with the task. These subnets must all be in the same VPC. You can specify as many as 16 subnets.",
+            "itemType": {
+              "type": "string",
+              "description": "Specifies the subnet associated with the task.",
+              "maxLength": 1000,
+              "minLength": 1
+            },
+            "maxLength": 16,
+            "minLength": 1
           }
         }
       ]
@@ -57,6 +57,18 @@
       "type": "object",
       "description": "The details of a capacity provider strategy.",
       "properties": [
+        {
+          "name": "Base",
+          "description": "The base value designates how many tasks, at a minimum, to run on the specified capacity provider. Only one capacity provider in a capacity provider strategy can have a base defined. If no value is specified, the default value of 0 is used.",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "The base value designates how many tasks, at a minimum, to run on the specified capacity provider. Only one capacity provider in a capacity provider strategy can have a base defined. If no value is specified, the default value of 0 is used.",
+            "isInteger": false,
+            "maximum": 100000,
+            "minimum": 0
+          }
+        },
         {
           "name": "CapacityProvider",
           "description": "The short name of the capacity provider.",
@@ -77,18 +89,6 @@
             "description": "The weight value designates the relative percentage of the total number of tasks launched that should use the specified capacity provider. The weight value is taken into consideration after the base value, if defined, is satisfied.",
             "isInteger": false,
             "maximum": 1000,
-            "minimum": 0
-          }
-        },
-        {
-          "name": "Base",
-          "description": "The base value designates how many tasks, at a minimum, to run on the specified capacity provider. Only one capacity provider in a capacity provider strategy can have a base defined. If no value is specified, the default value of 0 is used.",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "description": "The base value designates how many tasks, at a minimum, to run on the specified capacity provider. Only one capacity provider in a capacity provider strategy can have a base defined. If no value is specified, the default value of 0 is used.",
-            "isInteger": false,
-            "maximum": 100000,
             "minimum": 0
           }
         }
@@ -116,67 +116,6 @@
       "type": "object",
       "description": "The custom parameters to be used when the target is an Amazon ECS task.",
       "properties": [
-        {
-          "name": "TaskDefinitionArn",
-          "description": "The ARN of the task definition to use if the event target is an Amazon ECS task.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The ARN of the task definition to use if the event target is an Amazon ECS task.",
-            "maxLength": 1600,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "TaskCount",
-          "description": "The number of tasks to create based on TaskDefinition. The default is 1.",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "description": "The number of tasks to create based on TaskDefinition. The default is 1.",
-            "isInteger": false,
-            "maximum": 10,
-            "minimum": 1
-          }
-        },
-        {
-          "name": "LaunchType",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "LaunchType"
-          }
-        },
-        {
-          "name": "NetworkConfiguration",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "NetworkConfiguration"
-          }
-        },
-        {
-          "name": "PlatformVersion",
-          "description": "Specifies the platform version for the task. Specify only the numeric portion of the platform version, such as 1.1.0.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Specifies the platform version for the task. Specify only the numeric portion of the platform version, such as 1.1.0.",
-            "maxLength": 64,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "Group",
-          "description": "Specifies an ECS task group for the task. The maximum length is 255 characters.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Specifies an ECS task group for the task. The maximum length is 255 characters.",
-            "maxLength": 255,
-            "minLength": 1
-          }
-        },
         {
           "name": "CapacityProviderStrategy",
           "description": "The capacity provider strategy to use for the task.",
@@ -210,6 +149,33 @@
           }
         },
         {
+          "name": "Group",
+          "description": "Specifies an ECS task group for the task. The maximum length is 255 characters.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Specifies an ECS task group for the task. The maximum length is 255 characters.",
+            "maxLength": 255,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "LaunchType",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "LaunchType"
+          }
+        },
+        {
+          "name": "NetworkConfiguration",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "NetworkConfiguration"
+          }
+        },
+        {
           "name": "PlacementConstraints",
           "description": "An array of placement constraint objects to use for the task. You can specify up to 10 constraints per task (including constraints in the task definition and those specified at runtime).",
           "optional": true,
@@ -235,6 +201,17 @@
               "typeName": "PlacementStrategy"
             },
             "maxLength": 5
+          }
+        },
+        {
+          "name": "PlatformVersion",
+          "description": "Specifies the platform version for the task. Specify only the numeric portion of the platform version, such as 1.1.0.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Specifies the platform version for the task. Specify only the numeric portion of the platform version, such as 1.1.0.",
+            "maxLength": 64,
+            "minLength": 1
           }
         },
         {
@@ -268,6 +245,29 @@
             },
             "maxLength": 50,
             "minLength": 0
+          }
+        },
+        {
+          "name": "TaskCount",
+          "description": "The number of tasks to create based on TaskDefinition. The default is 1.",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "The number of tasks to create based on TaskDefinition. The default is 1.",
+            "isInteger": false,
+            "maximum": 10,
+            "minimum": 1
+          }
+        },
+        {
+          "name": "TaskDefinitionArn",
+          "description": "The ARN of the task definition to use if the event target is an Amazon ECS task.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The ARN of the task definition to use if the event target is an Amazon ECS task.",
+            "maxLength": 1600,
+            "minLength": 1
           }
         }
       ]
@@ -306,14 +306,6 @@
       "description": "Flexible time window allows configuration of a window within which a schedule can be invoked",
       "properties": [
         {
-          "name": "Mode",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "FlexibleTimeWindowMode"
-          }
-        },
-        {
           "name": "MaximumWindowInMinutes",
           "description": "The maximum time window during which a schedule can be invoked.",
           "optional": true,
@@ -323,6 +315,14 @@
             "isInteger": false,
             "maximum": 1440,
             "minimum": 1
+          }
+        },
+        {
+          "name": "Mode",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "FlexibleTimeWindowMode"
           }
         }
       ]
@@ -373,14 +373,6 @@
       "description": "An object representing a constraint on task placement.",
       "properties": [
         {
-          "name": "Type",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "PlacementConstraintType"
-          }
-        },
-        {
           "name": "Expression",
           "description": "A cluster query language expression to apply to the constraint. You cannot specify an expression if the constraint type is distinctInstance. To learn more, see Cluster Query Language in the Amazon Elastic Container Service Developer Guide.",
           "optional": true,
@@ -388,6 +380,14 @@
             "type": "string",
             "description": "A cluster query language expression to apply to the constraint. You cannot specify an expression if the constraint type is distinctInstance. To learn more, see Cluster Query Language in the Amazon Elastic Container Service Developer Guide.",
             "maxLength": 2000
+          }
+        },
+        {
+          "name": "Type",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PlacementConstraintType"
           }
         }
       ]
@@ -402,14 +402,6 @@
       "description": "The task placement strategy for a task or service.",
       "properties": [
         {
-          "name": "Type",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "PlacementStrategyType"
-          }
-        },
-        {
           "name": "Field",
           "description": "The field to apply the placement strategy against. For the spread placement strategy, valid values are instanceId (or host, which has the same effect), or any platform or custom attribute that is applied to a container instance, such as attribute:ecs.availability-zone. For the binpack placement strategy, valid values are cpu and memory. For the random placement strategy, this field is not used.",
           "optional": true,
@@ -417,6 +409,14 @@
             "type": "string",
             "description": "The field to apply the placement strategy against. For the spread placement strategy, valid values are instanceId (or host, which has the same effect), or any platform or custom attribute that is applied to a container instance, such as attribute:ecs.availability-zone. For the binpack placement strategy, valid values are cpu and memory. For the random placement strategy, this field is not used.",
             "maxLength": 255
+          }
+        },
+        {
+          "name": "Type",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PlacementStrategyType"
           }
         }
       ]
@@ -557,41 +557,11 @@
           }
         },
         {
-          "name": "RoleArn",
-          "description": "The Amazon Resource Name (ARN) of the IAM role to be used for this target when the schedule is triggered.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The Amazon Resource Name (ARN) of the IAM role to be used for this target when the schedule is triggered.",
-            "maxLength": 1600,
-            "minLength": 1,
-            "pattern": "^arn:aws(-[a-z]+)?:iam::\\d{12}:role\\/[\\w+=,.@\\/-]+$"
-          }
-        },
-        {
           "name": "DeadLetterConfig",
           "optional": true,
           "type": {
             "type": "ref",
             "typeName": "DeadLetterConfig"
-          }
-        },
-        {
-          "name": "RetryPolicy",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "RetryPolicy"
-          }
-        },
-        {
-          "name": "Input",
-          "description": "The text, or well-formed JSON, passed to the target. If you are configuring a templated Lambda, AWS Step Functions, or Amazon EventBridge target, the input must be a well-formed JSON. For all other target types, a JSON is not required. If you do not specify anything for this field, EventBridge Scheduler delivers a default notification to the target.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The text, or well-formed JSON, passed to the target. If you are configuring a templated Lambda, AWS Step Functions, or Amazon EventBridge target, the input must be a well-formed JSON. For all other target types, a JSON is not required. If you do not specify anything for this field, EventBridge Scheduler delivers a default notification to the target.",
-            "minLength": 1
           }
         },
         {
@@ -611,11 +581,41 @@
           }
         },
         {
+          "name": "Input",
+          "description": "The text, or well-formed JSON, passed to the target. If you are configuring a templated Lambda, AWS Step Functions, or Amazon EventBridge target, the input must be a well-formed JSON. For all other target types, a JSON is not required. If you do not specify anything for this field, EventBridge Scheduler delivers a default notification to the target.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The text, or well-formed JSON, passed to the target. If you are configuring a templated Lambda, AWS Step Functions, or Amazon EventBridge target, the input must be a well-formed JSON. For all other target types, a JSON is not required. If you do not specify anything for this field, EventBridge Scheduler delivers a default notification to the target.",
+            "minLength": 1
+          }
+        },
+        {
           "name": "KinesisParameters",
           "optional": true,
           "type": {
             "type": "ref",
             "typeName": "KinesisParameters"
+          }
+        },
+        {
+          "name": "RetryPolicy",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "RetryPolicy"
+          }
+        },
+        {
+          "name": "RoleArn",
+          "description": "The Amazon Resource Name (ARN) of the IAM role to be used for this target when the schedule is triggered.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the IAM role to be used for this target when the schedule is triggered.",
+            "maxLength": 1600,
+            "minLength": 1,
+            "pattern": "^arn:aws(-[a-z]+)?:iam::\\d{12}:role\\/[\\w+=,.@\\/-]+$"
           }
         },
         {
@@ -770,5 +770,5 @@
       }
     ]
   },
-  "$hash": "3d62818f95ae32cf0ad95ebd04ba726d17e69b5d"
+  "$hash": "2c17f42650e62ce7a1ef1a0d8933a843e6a7b10f"
 }

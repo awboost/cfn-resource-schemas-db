@@ -1,9 +1,45 @@
 {
   "definitions": {
+    "AssetHierarchy": {
+      "type": "object",
+      "description": "A hierarchy specifies allowed parent/child asset relationships.",
+      "properties": [
+        {
+          "name": "ChildAssetId",
+          "description": "The ID of the child asset to be associated.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The ID of the child asset to be associated."
+          }
+        },
+        {
+          "name": "LogicalId",
+          "description": "The LogicalID of a hierarchy in the parent asset's model.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The LogicalID of a hierarchy in the parent asset's model.",
+            "maxLength": 256,
+            "minLength": 1,
+            "pattern": "[^\\u0000-\\u001F\\u007F]+"
+          }
+        }
+      ]
+    },
     "AssetProperty": {
       "type": "object",
       "description": "The asset property's definition, alias, unit, and notification state.",
       "properties": [
+        {
+          "name": "Alias",
+          "description": "The property alias that identifies the property.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The property alias that identifies the property."
+          }
+        },
         {
           "name": "LogicalId",
           "description": "Customer provided ID for property.",
@@ -14,15 +50,6 @@
             "maxLength": 256,
             "minLength": 1,
             "pattern": "[^\\u0000-\\u001F\\u007F]+"
-          }
-        },
-        {
-          "name": "Alias",
-          "description": "The property alias that identifies the property.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The property alias that identifies the property."
           }
         },
         {
@@ -42,33 +69,6 @@
           "type": {
             "type": "string",
             "description": "The unit of measure (such as Newtons or RPM) of the asset property. If you don't specify a value for this parameter, the service uses the value of the assetModelProperty in the asset model."
-          }
-        }
-      ]
-    },
-    "AssetHierarchy": {
-      "type": "object",
-      "description": "A hierarchy specifies allowed parent/child asset relationships.",
-      "properties": [
-        {
-          "name": "LogicalId",
-          "description": "The LogicalID of a hierarchy in the parent asset's model.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The LogicalID of a hierarchy in the parent asset's model.",
-            "maxLength": 256,
-            "minLength": 1,
-            "pattern": "[^\\u0000-\\u001F\\u007F]+"
-          }
-        },
-        {
-          "name": "ChildAssetId",
-          "description": "The ID of the child asset to be associated.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The ID of the child asset to be associated."
           }
         }
       ]
@@ -98,6 +98,26 @@
     "description": "Resource schema for AWS::IoTSiteWise::Asset",
     "properties": [
       {
+        "name": "AssetDescription",
+        "description": "A description for the asset",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "A description for the asset"
+        }
+      },
+      {
+        "name": "AssetHierarchies",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "AssetHierarchy"
+          }
+        }
+      },
+      {
         "name": "AssetModelId",
         "description": "The ID of the asset model from which to create the asset.",
         "optional": false,
@@ -116,15 +136,6 @@
         }
       },
       {
-        "name": "AssetDescription",
-        "description": "A description for the asset",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "A description for the asset"
-        }
-      },
-      {
         "name": "AssetProperties",
         "optional": true,
         "type": {
@@ -132,17 +143,6 @@
           "itemType": {
             "type": "ref",
             "typeName": "AssetProperty"
-          }
-        }
-      },
-      {
-        "name": "AssetHierarchies",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "itemType": {
-            "type": "ref",
-            "typeName": "AssetHierarchy"
           }
         }
       },
@@ -166,15 +166,6 @@
     "description": "Resource schema for AWS::IoTSiteWise::Asset",
     "properties": [
       {
-        "name": "AssetId",
-        "description": "The ID of the asset",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The ID of the asset"
-        }
-      },
-      {
         "name": "AssetArn",
         "description": "The ARN of the asset",
         "optional": true,
@@ -182,8 +173,17 @@
           "type": "string",
           "description": "The ARN of the asset"
         }
+      },
+      {
+        "name": "AssetId",
+        "description": "The ID of the asset",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The ID of the asset"
+        }
       }
     ]
   },
-  "$hash": "9750f5cce044e489700971c86e0606e5db3e6bc6"
+  "$hash": "1235d86a6db631a9c05988387d86e7ab905644f8"
 }

@@ -11,42 +11,6 @@
           }
         },
         {
-          "name": "Protocol",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "allowedValues": ["HTTP", "HTTPS"]
-          }
-        },
-        {
-          "name": "ProtocolVersion",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "allowedValues": ["HTTP1", "HTTP2", "GRPC"]
-          }
-        },
-        {
-          "name": "Port",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true,
-            "maximum": 65535,
-            "minimum": 1
-          }
-        },
-        {
-          "name": "Path",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "maxLength": 2048,
-            "minLength": 0,
-            "pattern": "(^/[a-zA-Z0-9@:%_+.~#?&/=-]*$|(^$))"
-          }
-        },
-        {
           "name": "HealthCheckIntervalSeconds",
           "optional": true,
           "type": {
@@ -77,43 +41,23 @@
           }
         },
         {
-          "name": "UnhealthyThresholdCount",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true,
-            "maximum": 10,
-            "minimum": 2
-          }
-        },
-        {
           "name": "Matcher",
           "optional": true,
           "type": {
             "type": "ref",
             "typeName": "Matcher"
           }
-        }
-      ]
-    },
-    "Matcher": {
-      "type": "object",
-      "properties": [
+        },
         {
-          "name": "HttpCode",
-          "optional": false,
+          "name": "Path",
+          "optional": true,
           "type": {
             "type": "string",
-            "maxLength": 2000,
-            "minLength": 3,
-            "pattern": "^[0-9-,]+$"
+            "maxLength": 2048,
+            "minLength": 0,
+            "pattern": "(^/[a-zA-Z0-9@:%_+.~#?&/=-]*$|(^$))"
           }
-        }
-      ]
-    },
-    "TargetGroupConfig": {
-      "type": "object",
-      "properties": [
+        },
         {
           "name": "Port",
           "optional": true,
@@ -141,37 +85,51 @@
           }
         },
         {
-          "name": "IpAddressType",
+          "name": "UnhealthyThresholdCount",
           "optional": true,
           "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 10,
+            "minimum": 2
+          }
+        }
+      ]
+    },
+    "Matcher": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "HttpCode",
+          "optional": false,
+          "type": {
             "type": "string",
-            "allowedValues": ["IPV4", "IPV6"]
+            "maxLength": 2000,
+            "minLength": 3,
+            "pattern": "^[0-9-,]+$"
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1
           }
         },
         {
-          "name": "LambdaEventStructureVersion",
-          "optional": true,
+          "name": "Value",
+          "optional": false,
           "type": {
             "type": "string",
-            "allowedValues": ["V1", "V2"]
-          }
-        },
-        {
-          "name": "VpcIdentifier",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "maxLength": 2048,
-            "minLength": 5,
-            "pattern": "^vpc-(([0-9a-z]{8})|([0-9a-z]{17}))$"
-          }
-        },
-        {
-          "name": "HealthCheck",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "HealthCheckConfig"
+            "maxLength": 256,
+            "minLength": 1
           }
         }
       ]
@@ -198,25 +156,67 @@
         }
       ]
     },
-    "Tag": {
+    "TargetGroupConfig": {
       "type": "object",
       "properties": [
         {
-          "name": "Key",
-          "optional": false,
+          "name": "HealthCheck",
+          "optional": true,
           "type": {
-            "type": "string",
-            "maxLength": 128,
-            "minLength": 1
+            "type": "ref",
+            "typeName": "HealthCheckConfig"
           }
         },
         {
-          "name": "Value",
-          "optional": false,
+          "name": "IpAddressType",
+          "optional": true,
           "type": {
             "type": "string",
-            "maxLength": 256,
-            "minLength": 1
+            "allowedValues": ["IPV4", "IPV6"]
+          }
+        },
+        {
+          "name": "LambdaEventStructureVersion",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": ["V1", "V2"]
+          }
+        },
+        {
+          "name": "Port",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 65535,
+            "minimum": 1
+          }
+        },
+        {
+          "name": "Protocol",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": ["HTTP", "HTTPS"]
+          }
+        },
+        {
+          "name": "ProtocolVersion",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": ["HTTP1", "HTTP2", "GRPC"]
+          }
+        },
+        {
+          "name": "VpcIdentifier",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 2048,
+            "minLength": 5,
+            "pattern": "^vpc-(([0-9a-z]{8})|([0-9a-z]{17}))$"
           }
         }
       ]
@@ -245,11 +245,16 @@
         }
       },
       {
-        "name": "Type",
-        "optional": false,
+        "name": "Tags",
+        "optional": true,
         "type": {
-          "type": "string",
-          "allowedValues": ["IP", "LAMBDA", "INSTANCE", "ALB"]
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Tag"
+          },
+          "maxLength": 50,
+          "minLength": 0
         }
       },
       {
@@ -266,16 +271,11 @@
         }
       },
       {
-        "name": "Tags",
-        "optional": true,
+        "name": "Type",
+        "optional": false,
         "type": {
-          "type": "array",
-          "itemType": {
-            "type": "ref",
-            "typeName": "Tag"
-          },
-          "maxLength": 50,
-          "minLength": 0
+          "type": "string",
+          "allowedValues": ["IP", "LAMBDA", "INSTANCE", "ALB"]
         }
       }
     ]
@@ -334,5 +334,5 @@
       }
     ]
   },
-  "$hash": "a570ba498bef9b13fd4922420b729156e0195f63"
+  "$hash": "cc017d8cb83d9e8018da12f8c62a2b1208b8684d"
 }

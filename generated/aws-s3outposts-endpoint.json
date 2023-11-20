@@ -1,25 +1,5 @@
 {
   "definitions": {
-    "iso8601UTC": {
-      "type": "string",
-      "description": "The date value in ISO 8601 format. The timezone is always UTC. (YYYY-MM-DDThh:mm:ssZ)",
-      "pattern": "^([0-2]\\d{3})-(0[0-9]|1[0-2])-([0-2]\\d|3[01])T([01]\\d|2[0-4]):([0-5]\\d):([0-6]\\d)((\\.\\d{3})?)Z$"
-    },
-    "NetworkInterface": {
-      "type": "object",
-      "description": "The container for the network interface.",
-      "properties": [
-        {
-          "name": "NetworkInterfaceId",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 100,
-            "minLength": 1
-          }
-        }
-      ]
-    },
     "FailedReason": {
       "type": "object",
       "properties": [
@@ -42,12 +22,62 @@
           }
         }
       ]
+    },
+    "NetworkInterface": {
+      "type": "object",
+      "description": "The container for the network interface.",
+      "properties": [
+        {
+          "name": "NetworkInterfaceId",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "iso8601UTC": {
+      "type": "string",
+      "description": "The date value in ISO 8601 format. The timezone is always UTC. (YYYY-MM-DDThh:mm:ssZ)",
+      "pattern": "^([0-2]\\d{3})-(0[0-9]|1[0-2])-([0-2]\\d|3[01])T([01]\\d|2[0-4]):([0-5]\\d):([0-6]\\d)((\\.\\d{3})?)Z$"
     }
   },
   "resource": {
     "type": "object",
     "description": "Resource Type Definition for AWS::S3Outposts::Endpoint",
     "properties": [
+      {
+        "name": "AccessType",
+        "description": "The type of access for the on-premise network connectivity for the Outpost endpoint. To access endpoint from an on-premises network, you must specify the access type and provide the customer owned Ipv4 pool.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The type of access for the on-premise network connectivity for the Outpost endpoint. To access endpoint from an on-premises network, you must specify the access type and provide the customer owned Ipv4 pool.",
+          "allowedValues": ["CustomerOwnedIp", "Private"]
+        }
+      },
+      {
+        "name": "CustomerOwnedIpv4Pool",
+        "description": "The ID of the customer-owned IPv4 pool for the Endpoint. IP addresses will be allocated from this pool for the endpoint.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The ID of the customer-owned IPv4 pool for the Endpoint. IP addresses will be allocated from this pool for the endpoint.",
+          "pattern": "^ipv4pool-coip-([0-9a-f]{17})$"
+        }
+      },
+      {
+        "name": "FailedReason",
+        "description": "The failure reason, if any, for a create or delete endpoint operation.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "The failure reason, if any, for a create or delete endpoint operation.",
+          "typeName": "FailedReason"
+        }
+      },
       {
         "name": "OutpostId",
         "description": "The id of the customer outpost on which the bucket resides.",
@@ -80,36 +110,6 @@
           "maxLength": 100,
           "minLength": 1,
           "pattern": "^subnet-([0-9a-f]{8}|[0-9a-f]{17})$"
-        }
-      },
-      {
-        "name": "AccessType",
-        "description": "The type of access for the on-premise network connectivity for the Outpost endpoint. To access endpoint from an on-premises network, you must specify the access type and provide the customer owned Ipv4 pool.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The type of access for the on-premise network connectivity for the Outpost endpoint. To access endpoint from an on-premises network, you must specify the access type and provide the customer owned Ipv4 pool.",
-          "allowedValues": ["CustomerOwnedIp", "Private"]
-        }
-      },
-      {
-        "name": "CustomerOwnedIpv4Pool",
-        "description": "The ID of the customer-owned IPv4 pool for the Endpoint. IP addresses will be allocated from this pool for the endpoint.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The ID of the customer-owned IPv4 pool for the Endpoint. IP addresses will be allocated from this pool for the endpoint.",
-          "pattern": "^ipv4pool-coip-([0-9a-f]{17})$"
-        }
-      },
-      {
-        "name": "FailedReason",
-        "description": "The failure reason, if any, for a create or delete endpoint operation.",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "description": "The failure reason, if any, for a create or delete endpoint operation.",
-          "typeName": "FailedReason"
         }
       }
     ]
@@ -192,5 +192,5 @@
       }
     ]
   },
-  "$hash": "20640104c91fe06ee092ce28daea324200217753"
+  "$hash": "db61a7f01b1f394b67076acede1b33651aeae9c9"
 }

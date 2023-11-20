@@ -1,31 +1,77 @@
 {
   "definitions": {
-    "Tag": {
+    "BillingPeriodRange": {
       "type": "object",
       "properties": [
         {
-          "name": "Key",
-          "optional": false,
+          "name": "ExclusiveEndBillingPeriod",
+          "optional": true,
           "type": {
-            "type": "string",
-            "maxLength": 128,
-            "minLength": 1
+            "type": "ref",
+            "typeName": "ExclusiveEndBillingPeriod"
           }
         },
         {
-          "name": "Value",
-          "optional": false,
+          "name": "InclusiveStartBillingPeriod",
+          "optional": true,
           "type": {
-            "type": "string",
-            "maxLength": 256,
-            "minLength": 1
+            "type": "ref",
+            "typeName": "InclusiveStartBillingPeriod"
           }
         }
       ]
     },
-    "Type": {
-      "type": "string",
-      "allowedValues": ["FEE", "CREDIT"]
+    "CustomLineItemChargeDetails": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Flat",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "CustomLineItemFlatChargeDetails"
+          }
+        },
+        {
+          "name": "LineItemFilters",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "LineItemFilters"
+          }
+        },
+        {
+          "name": "Percentage",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "CustomLineItemPercentageChargeDetails"
+          }
+        },
+        {
+          "name": "Type",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "Type"
+          }
+        }
+      ]
+    },
+    "CustomLineItemFlatChargeDetails": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ChargeValue",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": false,
+            "maximum": 1000000,
+            "minimum": 0
+          }
+        }
+      ]
     },
     "CustomLineItemPercentageChargeDetails": {
       "type": "object",
@@ -53,27 +99,13 @@
         }
       ]
     },
-    "CustomLineItemFlatChargeDetails": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "ChargeValue",
-          "optional": false,
-          "type": {
-            "type": "number",
-            "isInteger": false,
-            "maximum": 1000000,
-            "minimum": 0
-          }
-        }
-      ]
+    "ExclusiveEndBillingPeriod": {
+      "type": "string",
+      "pattern": "\\d{4}-(0?[1-9]|1[012])"
     },
-    "LineItemFilters": {
-      "type": "array",
-      "itemType": {
-        "type": "ref",
-        "typeName": "LineItemFilter"
-      }
+    "InclusiveStartBillingPeriod": {
+      "type": "string",
+      "pattern": "\\d{4}-(0?[1-9]|1[012])"
     },
     "LineItemFilter": {
       "type": "object",
@@ -111,103 +143,45 @@
       "type": "string",
       "allowedValues": ["SAVINGS_PLAN_NEGATION"]
     },
-    "CustomLineItemChargeDetails": {
+    "LineItemFilters": {
+      "type": "array",
+      "itemType": {
+        "type": "ref",
+        "typeName": "LineItemFilter"
+      }
+    },
+    "Tag": {
       "type": "object",
       "properties": [
         {
-          "name": "Flat",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "CustomLineItemFlatChargeDetails"
-          }
-        },
-        {
-          "name": "Percentage",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "CustomLineItemPercentageChargeDetails"
-          }
-        },
-        {
-          "name": "Type",
+          "name": "Key",
           "optional": false,
           "type": {
-            "type": "ref",
-            "typeName": "Type"
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1
           }
         },
         {
-          "name": "LineItemFilters",
-          "optional": true,
+          "name": "Value",
+          "optional": false,
           "type": {
-            "type": "ref",
-            "typeName": "LineItemFilters"
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1
           }
         }
       ]
     },
-    "InclusiveStartBillingPeriod": {
+    "Type": {
       "type": "string",
-      "pattern": "\\d{4}-(0?[1-9]|1[012])"
-    },
-    "ExclusiveEndBillingPeriod": {
-      "type": "string",
-      "pattern": "\\d{4}-(0?[1-9]|1[012])"
-    },
-    "BillingPeriodRange": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "InclusiveStartBillingPeriod",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "InclusiveStartBillingPeriod"
-          }
-        },
-        {
-          "name": "ExclusiveEndBillingPeriod",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ExclusiveEndBillingPeriod"
-          }
-        }
-      ]
+      "allowedValues": ["FEE", "CREDIT"]
     }
   },
   "resource": {
     "type": "object",
     "description": "A custom line item is an one time charge that is applied to a specific billing group's bill.",
     "properties": [
-      {
-        "name": "Name",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "maxLength": 128,
-          "minLength": 1,
-          "pattern": "[a-zA-Z0-9_\\+=\\.\\-@]+"
-        }
-      },
-      {
-        "name": "Description",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "maxLength": 255
-        }
-      },
-      {
-        "name": "CustomLineItemChargeDetails",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "CustomLineItemChargeDetails"
-        }
-      },
       {
         "name": "BillingGroupArn",
         "description": "Billing Group ARN",
@@ -224,6 +198,32 @@
         "type": {
           "type": "ref",
           "typeName": "BillingPeriodRange"
+        }
+      },
+      {
+        "name": "CustomLineItemChargeDetails",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "CustomLineItemChargeDetails"
+        }
+      },
+      {
+        "name": "Description",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 255
+        }
+      },
+      {
+        "name": "Name",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "[a-zA-Z0-9_\\+=\\.\\-@]+"
         }
       },
       {
@@ -254,6 +254,16 @@
         }
       },
       {
+        "name": "AssociationSize",
+        "description": "Number of source values associated to this custom line item",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "Number of source values associated to this custom line item",
+          "isInteger": true
+        }
+      },
+      {
         "name": "CreationTime",
         "description": "Creation timestamp in UNIX epoch time format",
         "optional": true,
@@ -261,6 +271,14 @@
           "type": "number",
           "description": "Creation timestamp in UNIX epoch time format",
           "isInteger": true
+        }
+      },
+      {
+        "name": "CurrencyCode",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "allowedValues": ["USD", "CNY"]
         }
       },
       {
@@ -274,16 +292,6 @@
         }
       },
       {
-        "name": "AssociationSize",
-        "description": "Number of source values associated to this custom line item",
-        "optional": true,
-        "type": {
-          "type": "number",
-          "description": "Number of source values associated to this custom line item",
-          "isInteger": true
-        }
-      },
-      {
         "name": "ProductCode",
         "optional": true,
         "type": {
@@ -291,16 +299,8 @@
           "maxLength": 29,
           "minLength": 1
         }
-      },
-      {
-        "name": "CurrencyCode",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "allowedValues": ["USD", "CNY"]
-        }
       }
     ]
   },
-  "$hash": "fb23c7bc13e6d23a1cc2c1885b93f07cf0e4509e"
+  "$hash": "b9e56b4e6026191337c08a0a7166bf64505f2e4f"
 }

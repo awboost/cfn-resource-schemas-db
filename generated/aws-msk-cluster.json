@@ -1,42 +1,8 @@
 {
   "definitions": {
-    "S3": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Enabled",
-          "optional": false,
-          "type": {
-            "type": "boolean"
-          }
-        },
-        {
-          "name": "Prefix",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Bucket",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
     "BrokerLogs": {
       "type": "object",
       "properties": [
-        {
-          "name": "S3",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "S3"
-          }
-        },
         {
           "name": "CloudWatchLogs",
           "optional": true,
@@ -52,15 +18,214 @@
             "type": "ref",
             "typeName": "Firehose"
           }
+        },
+        {
+          "name": "S3",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "S3"
+          }
         }
       ]
     },
-    "NodeExporter": {
+    "BrokerNodeGroupInfo": {
       "type": "object",
       "properties": [
         {
-          "name": "EnabledInBroker",
+          "name": "BrokerAZDistribution",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 9,
+            "minLength": 6
+          }
+        },
+        {
+          "name": "ClientSubnets",
           "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "name": "ConnectivityInfo",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ConnectivityInfo"
+          }
+        },
+        {
+          "name": "InstanceType",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 32,
+            "minLength": 5
+          }
+        },
+        {
+          "name": "SecurityGroups",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "name": "StorageInfo",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "StorageInfo"
+          }
+        }
+      ]
+    },
+    "ClientAuthentication": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Sasl",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Sasl"
+          }
+        },
+        {
+          "name": "Tls",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Tls"
+          }
+        },
+        {
+          "name": "Unauthenticated",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Unauthenticated"
+          }
+        }
+      ]
+    },
+    "CloudWatchLogs": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Enabled",
+          "optional": false,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "LogGroup",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "ConfigurationInfo": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Arn",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Revision",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        }
+      ]
+    },
+    "ConnectivityInfo": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "PublicAccess",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PublicAccess"
+          }
+        },
+        {
+          "name": "VpcConnectivity",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "VpcConnectivity"
+          }
+        }
+      ]
+    },
+    "EBSStorageInfo": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ProvisionedThroughput",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ProvisionedThroughput"
+          }
+        },
+        {
+          "name": "VolumeSize",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 16384,
+            "minimum": 1
+          }
+        }
+      ]
+    },
+    "EncryptionAtRest": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "DataVolumeKMSKeyId",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "EncryptionInTransit": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ClientBroker",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": ["TLS", "TLS_PLAINTEXT", "PLAINTEXT"]
+          }
+        },
+        {
+          "name": "InCluster",
+          "optional": true,
           "type": {
             "type": "boolean"
           }
@@ -92,17 +257,66 @@
       "type": "object",
       "properties": [
         {
+          "name": "DeliveryStream",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
           "name": "Enabled",
           "optional": false,
           "type": {
             "type": "boolean"
           }
-        },
+        }
+      ]
+    },
+    "Iam": {
+      "type": "object",
+      "properties": [
         {
-          "name": "DeliveryStream",
-          "optional": true,
+          "name": "Enabled",
+          "optional": false,
           "type": {
-            "type": "string"
+            "type": "boolean"
+          }
+        }
+      ]
+    },
+    "JmxExporter": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "EnabledInBroker",
+          "optional": false,
+          "type": {
+            "type": "boolean"
+          }
+        }
+      ]
+    },
+    "LoggingInfo": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "BrokerLogs",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "BrokerLogs"
+          }
+        }
+      ]
+    },
+    "NodeExporter": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "EnabledInBroker",
+          "optional": false,
+          "type": {
+            "type": "boolean"
           }
         }
       ]
@@ -141,48 +355,6 @@
         }
       ]
     },
-    "CloudWatchLogs": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "LogGroup",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Enabled",
-          "optional": false,
-          "type": {
-            "type": "boolean"
-          }
-        }
-      ]
-    },
-    "EBSStorageInfo": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "VolumeSize",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true,
-            "maximum": 16384,
-            "minimum": 1
-          }
-        },
-        {
-          "name": "ProvisionedThroughput",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ProvisionedThroughput"
-          }
-        }
-      ]
-    },
     "ProvisionedThroughput": {
       "type": "object",
       "properties": [
@@ -217,115 +389,58 @@
         }
       ]
     },
-    "VpcConnectivity": {
+    "S3": {
       "type": "object",
       "properties": [
         {
-          "name": "ClientAuthentication",
+          "name": "Bucket",
           "optional": true,
           "type": {
-            "type": "ref",
-            "typeName": "VpcConnectivityClientAuthentication"
-          }
-        }
-      ]
-    },
-    "ConfigurationInfo": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Revision",
-          "optional": false,
-          "type": {
-            "type": "number",
-            "isInteger": true
+            "type": "string"
           }
         },
         {
-          "name": "Arn",
+          "name": "Enabled",
           "optional": false,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "Prefix",
+          "optional": true,
           "type": {
             "type": "string"
           }
         }
       ]
     },
-    "BrokerNodeGroupInfo": {
+    "Sasl": {
       "type": "object",
       "properties": [
         {
-          "name": "StorageInfo",
+          "name": "Iam",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "StorageInfo"
+            "typeName": "Iam"
           }
         },
         {
-          "name": "ConnectivityInfo",
+          "name": "Scram",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "ConnectivityInfo"
-          }
-        },
-        {
-          "name": "SecurityGroups",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "string"
-            }
-          }
-        },
-        {
-          "name": "BrokerAZDistribution",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "maxLength": 9,
-            "minLength": 6
-          }
-        },
-        {
-          "name": "ClientSubnets",
-          "optional": false,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "string"
-            }
-          }
-        },
-        {
-          "name": "InstanceType",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 32,
-            "minLength": 5
+            "typeName": "Scram"
           }
         }
       ]
     },
-    "EncryptionAtRest": {
+    "Scram": {
       "type": "object",
       "properties": [
         {
-          "name": "DataVolumeKMSKeyId",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "JmxExporter": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "EnabledInBroker",
+          "name": "Enabled",
           "optional": false,
           "type": {
             "type": "boolean"
@@ -342,84 +457,6 @@
           "type": {
             "type": "ref",
             "typeName": "EBSStorageInfo"
-          }
-        }
-      ]
-    },
-    "ConnectivityInfo": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "PublicAccess",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "PublicAccess"
-          }
-        },
-        {
-          "name": "VpcConnectivity",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "VpcConnectivity"
-          }
-        }
-      ]
-    },
-    "VpcConnectivityTls": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Enabled",
-          "optional": false,
-          "type": {
-            "type": "boolean"
-          }
-        }
-      ]
-    },
-    "VpcConnectivitySasl": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Scram",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "VpcConnectivityScram"
-          }
-        },
-        {
-          "name": "Iam",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "VpcConnectivityIam"
-          }
-        }
-      ]
-    },
-    "VpcConnectivityScram": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Enabled",
-          "optional": false,
-          "type": {
-            "type": "boolean"
-          }
-        }
-      ]
-    },
-    "VpcConnectivityIam": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Enabled",
-          "optional": false,
-          "type": {
-            "type": "boolean"
           }
         }
       ]
@@ -446,51 +483,6 @@
         }
       ]
     },
-    "Sasl": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Scram",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "Scram"
-          }
-        },
-        {
-          "name": "Iam",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "Iam"
-          }
-        }
-      ]
-    },
-    "Scram": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Enabled",
-          "optional": false,
-          "type": {
-            "type": "boolean"
-          }
-        }
-      ]
-    },
-    "Iam": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Enabled",
-          "optional": false,
-          "type": {
-            "type": "boolean"
-          }
-        }
-      ]
-    },
     "Unauthenticated": {
       "type": "object",
       "properties": [
@@ -503,31 +495,15 @@
         }
       ]
     },
-    "ClientAuthentication": {
+    "VpcConnectivity": {
       "type": "object",
       "properties": [
         {
-          "name": "Tls",
+          "name": "ClientAuthentication",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "Tls"
-          }
-        },
-        {
-          "name": "Sasl",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "Sasl"
-          }
-        },
-        {
-          "name": "Unauthenticated",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "Unauthenticated"
+            "typeName": "VpcConnectivityClientAuthentication"
           }
         }
       ]
@@ -536,52 +512,76 @@
       "type": "object",
       "properties": [
         {
-          "name": "Tls",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "VpcConnectivityTls"
-          }
-        },
-        {
           "name": "Sasl",
           "optional": true,
           "type": {
             "type": "ref",
             "typeName": "VpcConnectivitySasl"
           }
-        }
-      ]
-    },
-    "LoggingInfo": {
-      "type": "object",
-      "properties": [
+        },
         {
-          "name": "BrokerLogs",
-          "optional": false,
+          "name": "Tls",
+          "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "BrokerLogs"
+            "typeName": "VpcConnectivityTls"
           }
         }
       ]
     },
-    "EncryptionInTransit": {
+    "VpcConnectivityIam": {
       "type": "object",
       "properties": [
         {
-          "name": "InCluster",
-          "optional": true,
+          "name": "Enabled",
+          "optional": false,
           "type": {
             "type": "boolean"
           }
-        },
+        }
+      ]
+    },
+    "VpcConnectivitySasl": {
+      "type": "object",
+      "properties": [
         {
-          "name": "ClientBroker",
+          "name": "Iam",
           "optional": true,
           "type": {
-            "type": "string",
-            "allowedValues": ["TLS", "TLS_PLAINTEXT", "PLAINTEXT"]
+            "type": "ref",
+            "typeName": "VpcConnectivityIam"
+          }
+        },
+        {
+          "name": "Scram",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "VpcConnectivityScram"
+          }
+        }
+      ]
+    },
+    "VpcConnectivityScram": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Enabled",
+          "optional": false,
+          "type": {
+            "type": "boolean"
+          }
+        }
+      ]
+    },
+    "VpcConnectivityTls": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Enabled",
+          "optional": false,
+          "type": {
+            "type": "boolean"
           }
         }
       ]
@@ -597,6 +597,48 @@
         "type": {
           "type": "ref",
           "typeName": "BrokerNodeGroupInfo"
+        }
+      },
+      {
+        "name": "ClientAuthentication",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "ClientAuthentication"
+        }
+      },
+      {
+        "name": "ClusterName",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "maxLength": 64,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "ConfigurationInfo",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "ConfigurationInfo"
+        }
+      },
+      {
+        "name": "CurrentVersion",
+        "description": "The current version of the MSK cluster",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The current version of the MSK cluster"
+        }
+      },
+      {
+        "name": "EncryptionInfo",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "EncryptionInfo"
         }
       },
       {
@@ -624,19 +666,19 @@
         }
       },
       {
+        "name": "LoggingInfo",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "LoggingInfo"
+        }
+      },
+      {
         "name": "NumberOfBrokerNodes",
         "optional": false,
         "type": {
           "type": "number",
           "isInteger": true
-        }
-      },
-      {
-        "name": "EncryptionInfo",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "EncryptionInfo"
         }
       },
       {
@@ -648,37 +690,13 @@
         }
       },
       {
-        "name": "ClusterName",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "maxLength": 64,
-          "minLength": 1
-        }
-      },
-      {
-        "name": "CurrentVersion",
-        "description": "The current version of the MSK cluster",
+        "name": "StorageMode",
         "optional": true,
         "type": {
           "type": "string",
-          "description": "The current version of the MSK cluster"
-        }
-      },
-      {
-        "name": "ClientAuthentication",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "ClientAuthentication"
-        }
-      },
-      {
-        "name": "LoggingInfo",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "LoggingInfo"
+          "allowedValues": ["LOCAL", "TIERED"],
+          "maxLength": 6,
+          "minLength": 5
         }
       },
       {
@@ -691,24 +709,6 @@
           "valueType": {
             "type": "string"
           }
-        }
-      },
-      {
-        "name": "ConfigurationInfo",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "ConfigurationInfo"
-        }
-      },
-      {
-        "name": "StorageMode",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "allowedValues": ["LOCAL", "TIERED"],
-          "maxLength": 6,
-          "minLength": 5
         }
       }
     ]
@@ -726,5 +726,5 @@
       }
     ]
   },
-  "$hash": "11e8a58ad03ab69458d476fffbb1e66005ef242d"
+  "$hash": "87da9a9dccccf1ce6e7faa70f94e7c0952483a97"
 }

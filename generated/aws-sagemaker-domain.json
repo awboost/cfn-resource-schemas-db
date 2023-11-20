@@ -1,81 +1,40 @@
 {
   "definitions": {
-    "UserSettings": {
+    "CustomImage": {
       "type": "object",
-      "description": "A collection of settings that apply to users of Amazon SageMaker Studio. These settings are specified when the CreateUserProfile API is called, and as DefaultUserSettings when the CreateDomain API is called.",
+      "description": "A custom SageMaker image.",
       "properties": [
         {
-          "name": "ExecutionRole",
-          "description": "The execution role for the user.",
+          "name": "AppImageConfigName",
+          "description": "The Name of the AppImageConfig.",
           "optional": false,
           "type": {
             "type": "string",
-            "description": "The execution role for the user.",
-            "maxLength": 2048,
-            "minLength": 20,
-            "pattern": "^arn:aws[a-z\\-]*:iam::\\d{12}:role/?[a-zA-Z_0-9+=,.@\\-_/]+$"
+            "description": "The Name of the AppImageConfig.",
+            "maxLength": 63,
+            "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9]){0,62}"
           }
         },
         {
-          "name": "JupyterServerAppSettings",
-          "description": "The Jupyter server's app settings.",
-          "optional": true,
+          "name": "ImageName",
+          "description": "The name of the CustomImage. Must be unique to your account.",
+          "optional": false,
           "type": {
-            "type": "ref",
-            "description": "The Jupyter server's app settings.",
-            "typeName": "JupyterServerAppSettings"
+            "type": "string",
+            "description": "The name of the CustomImage. Must be unique to your account.",
+            "maxLength": 63,
+            "pattern": "^[a-zA-Z0-9]([-.]?[a-zA-Z0-9]){0,62}$"
           }
         },
         {
-          "name": "KernelGatewayAppSettings",
-          "description": "The kernel gateway app settings.",
+          "name": "ImageVersionNumber",
+          "description": "The version number of the CustomImage.",
           "optional": true,
           "type": {
-            "type": "ref",
-            "description": "The kernel gateway app settings.",
-            "typeName": "KernelGatewayAppSettings"
-          }
-        },
-        {
-          "name": "RStudioServerProAppSettings",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "RStudioServerProAppSettings"
-          }
-        },
-        {
-          "name": "RSessionAppSettings",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "RSessionAppSettings"
-          }
-        },
-        {
-          "name": "SecurityGroups",
-          "description": "The security groups for the Amazon Virtual Private Cloud (VPC) that Studio uses for communication.",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "description": "The security groups for the Amazon Virtual Private Cloud (VPC) that Studio uses for communication.",
-            "itemType": {
-              "type": "string",
-              "maxLength": 32,
-              "pattern": "[-0-9a-zA-Z]+"
-            },
-            "maxLength": 5,
-            "minLength": 0
-          }
-        },
-        {
-          "name": "SharingSettings",
-          "description": "The sharing settings.",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "The sharing settings.",
-            "typeName": "SharingSettings"
+            "type": "number",
+            "description": "The version number of the CustomImage.",
+            "isInteger": true,
+            "minimum": 0
           }
         }
       ]
@@ -134,6 +93,36 @@
         }
       ]
     },
+    "DomainSettings": {
+      "type": "object",
+      "description": "A collection of Domain settings.",
+      "properties": [
+        {
+          "name": "RStudioServerProDomainSettings",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "RStudioServerProDomainSettings"
+          }
+        },
+        {
+          "name": "SecurityGroupIds",
+          "description": "The security groups for the Amazon Virtual Private Cloud that the Domain uses for communication between Domain-level apps and user apps.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "The security groups for the Amazon Virtual Private Cloud that the Domain uses for communication between Domain-level apps and user apps.",
+            "itemType": {
+              "type": "string",
+              "maxLength": 32,
+              "pattern": "[-0-9a-zA-Z]+"
+            },
+            "maxLength": 3,
+            "minLength": 1
+          }
+        }
+      ]
+    },
     "JupyterServerAppSettings": {
       "type": "object",
       "description": "The JupyterServer app settings.",
@@ -144,6 +133,138 @@
           "type": {
             "type": "ref",
             "typeName": "ResourceSpec"
+          }
+        }
+      ]
+    },
+    "KernelGatewayAppSettings": {
+      "type": "object",
+      "description": "The kernel gateway app settings.",
+      "properties": [
+        {
+          "name": "CustomImages",
+          "description": "A list of custom SageMaker images that are configured to run as a KernelGateway app.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "A list of custom SageMaker images that are configured to run as a KernelGateway app.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "CustomImage"
+            },
+            "maxLength": 30,
+            "minLength": 0
+          }
+        },
+        {
+          "name": "DefaultResourceSpec",
+          "description": "The default instance type and the Amazon Resource Name (ARN) of the default SageMaker image used by the KernelGateway app.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The default instance type and the Amazon Resource Name (ARN) of the default SageMaker image used by the KernelGateway app.",
+            "typeName": "ResourceSpec"
+          }
+        }
+      ]
+    },
+    "RSessionAppSettings": {
+      "type": "object",
+      "description": "A collection of settings that apply to an RSessionGateway app.",
+      "properties": [
+        {
+          "name": "CustomImages",
+          "description": "A list of custom SageMaker images that are configured to run as a KernelGateway app.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "A list of custom SageMaker images that are configured to run as a KernelGateway app.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "CustomImage"
+            },
+            "maxLength": 30,
+            "minLength": 0
+          }
+        },
+        {
+          "name": "DefaultResourceSpec",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ResourceSpec"
+          }
+        }
+      ]
+    },
+    "RStudioServerProAppSettings": {
+      "type": "object",
+      "description": "A collection of settings that configure user interaction with the RStudioServerPro app.",
+      "properties": [
+        {
+          "name": "AccessStatus",
+          "description": "Indicates whether the current user has access to the RStudioServerPro app.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Indicates whether the current user has access to the RStudioServerPro app.",
+            "allowedValues": ["ENABLED", "DISABLED"]
+          }
+        },
+        {
+          "name": "UserGroup",
+          "description": "The level of permissions that the user has within the RStudioServerPro app. This value defaults to User. The Admin value allows the user access to the RStudio Administrative Dashboard.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The level of permissions that the user has within the RStudioServerPro app. This value defaults to User. The Admin value allows the user access to the RStudio Administrative Dashboard.",
+            "allowedValues": ["R_STUDIO_ADMIN", "R_STUDIO_USER"]
+          }
+        }
+      ]
+    },
+    "RStudioServerProDomainSettings": {
+      "type": "object",
+      "description": "A collection of settings that update the current configuration for the RStudioServerPro Domain-level app.",
+      "properties": [
+        {
+          "name": "DefaultResourceSpec",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ResourceSpec"
+          }
+        },
+        {
+          "name": "DomainExecutionRoleArn",
+          "description": "The ARN of the execution role for the RStudioServerPro Domain-level app.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The ARN of the execution role for the RStudioServerPro Domain-level app.",
+            "maxLength": 2048,
+            "minLength": 20,
+            "pattern": "^arn:aws[a-z\\-]*:iam::\\d{12}:role/?[a-zA-Z_0-9+=,.@\\-_/]+$"
+          }
+        },
+        {
+          "name": "RStudioConnectUrl",
+          "description": "A URL pointing to an RStudio Connect server.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "A URL pointing to an RStudio Connect server.",
+            "pattern": "^(https:|http:|www\\.)\\S*"
+          }
+        },
+        {
+          "name": "RStudioPackageManagerUrl",
+          "description": "A URL pointing to an RStudio Package Manager server.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "A URL pointing to an RStudio Package Manager server.",
+            "pattern": "^(https:|http:|www\\.)\\S*"
           }
         }
       ]
@@ -223,6 +344,17 @@
           }
         },
         {
+          "name": "LifecycleConfigArn",
+          "description": "The Amazon Resource Name (ARN) of the Lifecycle Configuration to attach to the Resource.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the Lifecycle Configuration to attach to the Resource.",
+            "maxLength": 256,
+            "pattern": "arn:aws[a-z\\-]*:sagemaker:[a-z0-9\\-]*:[0-9]{12}:studio-lifecycle-config/.*"
+          }
+        },
+        {
           "name": "SageMakerImageArn",
           "description": "The Amazon Resource Name (ARN) of the SageMaker image that the image version belongs to.",
           "optional": true,
@@ -242,87 +374,6 @@
             "description": "The Amazon Resource Name (ARN) of the image version created on the instance.",
             "maxLength": 256,
             "pattern": "^arn:aws(-[\\w]+)*:sagemaker:.+:[0-9]{12}:image-version/[a-z0-9]([-.]?[a-z0-9])*/[0-9]+$"
-          }
-        },
-        {
-          "name": "LifecycleConfigArn",
-          "description": "The Amazon Resource Name (ARN) of the Lifecycle Configuration to attach to the Resource.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The Amazon Resource Name (ARN) of the Lifecycle Configuration to attach to the Resource.",
-            "maxLength": 256,
-            "pattern": "arn:aws[a-z\\-]*:sagemaker:[a-z0-9\\-]*:[0-9]{12}:studio-lifecycle-config/.*"
-          }
-        }
-      ]
-    },
-    "KernelGatewayAppSettings": {
-      "type": "object",
-      "description": "The kernel gateway app settings.",
-      "properties": [
-        {
-          "name": "CustomImages",
-          "description": "A list of custom SageMaker images that are configured to run as a KernelGateway app.",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "description": "A list of custom SageMaker images that are configured to run as a KernelGateway app.",
-            "itemType": {
-              "type": "ref",
-              "typeName": "CustomImage"
-            },
-            "maxLength": 30,
-            "minLength": 0
-          }
-        },
-        {
-          "name": "DefaultResourceSpec",
-          "description": "The default instance type and the Amazon Resource Name (ARN) of the default SageMaker image used by the KernelGateway app.",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "The default instance type and the Amazon Resource Name (ARN) of the default SageMaker image used by the KernelGateway app.",
-            "typeName": "ResourceSpec"
-          }
-        }
-      ]
-    },
-    "CustomImage": {
-      "type": "object",
-      "description": "A custom SageMaker image.",
-      "properties": [
-        {
-          "name": "AppImageConfigName",
-          "description": "The Name of the AppImageConfig.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The Name of the AppImageConfig.",
-            "maxLength": 63,
-            "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9]){0,62}"
-          }
-        },
-        {
-          "name": "ImageName",
-          "description": "The name of the CustomImage. Must be unique to your account.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The name of the CustomImage. Must be unique to your account.",
-            "maxLength": 63,
-            "pattern": "^[a-zA-Z0-9]([-.]?[a-zA-Z0-9]){0,62}$"
-          }
-        },
-        {
-          "name": "ImageVersionNumber",
-          "description": "The version number of the CustomImage.",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "description": "The version number of the CustomImage.",
-            "isInteger": true,
-            "minimum": 0
           }
         }
       ]
@@ -369,15 +420,6 @@
       "type": "object",
       "properties": [
         {
-          "name": "Value",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 128,
-            "minLength": 1
-          }
-        },
-        {
           "name": "Key",
           "optional": false,
           "type": {
@@ -385,136 +427,94 @@
             "maxLength": 128,
             "minLength": 1
           }
-        }
-      ]
-    },
-    "DomainSettings": {
-      "type": "object",
-      "description": "A collection of Domain settings.",
-      "properties": [
-        {
-          "name": "SecurityGroupIds",
-          "description": "The security groups for the Amazon Virtual Private Cloud that the Domain uses for communication between Domain-level apps and user apps.",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "description": "The security groups for the Amazon Virtual Private Cloud that the Domain uses for communication between Domain-level apps and user apps.",
-            "itemType": {
-              "type": "string",
-              "maxLength": 32,
-              "pattern": "[-0-9a-zA-Z]+"
-            },
-            "maxLength": 3,
-            "minLength": 1
-          }
         },
         {
-          "name": "RStudioServerProDomainSettings",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "RStudioServerProDomainSettings"
-          }
-        }
-      ]
-    },
-    "RStudioServerProDomainSettings": {
-      "type": "object",
-      "description": "A collection of settings that update the current configuration for the RStudioServerPro Domain-level app.",
-      "properties": [
-        {
-          "name": "DomainExecutionRoleArn",
-          "description": "The ARN of the execution role for the RStudioServerPro Domain-level app.",
+          "name": "Value",
           "optional": false,
           "type": {
             "type": "string",
-            "description": "The ARN of the execution role for the RStudioServerPro Domain-level app.",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "UserSettings": {
+      "type": "object",
+      "description": "A collection of settings that apply to users of Amazon SageMaker Studio. These settings are specified when the CreateUserProfile API is called, and as DefaultUserSettings when the CreateDomain API is called.",
+      "properties": [
+        {
+          "name": "ExecutionRole",
+          "description": "The execution role for the user.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The execution role for the user.",
             "maxLength": 2048,
             "minLength": 20,
             "pattern": "^arn:aws[a-z\\-]*:iam::\\d{12}:role/?[a-zA-Z_0-9+=,.@\\-_/]+$"
           }
         },
         {
-          "name": "RStudioConnectUrl",
-          "description": "A URL pointing to an RStudio Connect server.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "A URL pointing to an RStudio Connect server.",
-            "pattern": "^(https:|http:|www\\.)\\S*"
-          }
-        },
-        {
-          "name": "RStudioPackageManagerUrl",
-          "description": "A URL pointing to an RStudio Package Manager server.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "A URL pointing to an RStudio Package Manager server.",
-            "pattern": "^(https:|http:|www\\.)\\S*"
-          }
-        },
-        {
-          "name": "DefaultResourceSpec",
+          "name": "JupyterServerAppSettings",
+          "description": "The Jupyter server's app settings.",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "ResourceSpec"
+            "description": "The Jupyter server's app settings.",
+            "typeName": "JupyterServerAppSettings"
           }
-        }
-      ]
-    },
-    "RSessionAppSettings": {
-      "type": "object",
-      "description": "A collection of settings that apply to an RSessionGateway app.",
-      "properties": [
+        },
         {
-          "name": "CustomImages",
-          "description": "A list of custom SageMaker images that are configured to run as a KernelGateway app.",
+          "name": "KernelGatewayAppSettings",
+          "description": "The kernel gateway app settings.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The kernel gateway app settings.",
+            "typeName": "KernelGatewayAppSettings"
+          }
+        },
+        {
+          "name": "RSessionAppSettings",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "RSessionAppSettings"
+          }
+        },
+        {
+          "name": "RStudioServerProAppSettings",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "RStudioServerProAppSettings"
+          }
+        },
+        {
+          "name": "SecurityGroups",
+          "description": "The security groups for the Amazon Virtual Private Cloud (VPC) that Studio uses for communication.",
           "optional": true,
           "type": {
             "type": "array",
-            "description": "A list of custom SageMaker images that are configured to run as a KernelGateway app.",
+            "description": "The security groups for the Amazon Virtual Private Cloud (VPC) that Studio uses for communication.",
             "itemType": {
-              "type": "ref",
-              "typeName": "CustomImage"
+              "type": "string",
+              "maxLength": 32,
+              "pattern": "[-0-9a-zA-Z]+"
             },
-            "maxLength": 30,
+            "maxLength": 5,
             "minLength": 0
           }
         },
         {
-          "name": "DefaultResourceSpec",
+          "name": "SharingSettings",
+          "description": "The sharing settings.",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "ResourceSpec"
-          }
-        }
-      ]
-    },
-    "RStudioServerProAppSettings": {
-      "type": "object",
-      "description": "A collection of settings that configure user interaction with the RStudioServerPro app.",
-      "properties": [
-        {
-          "name": "AccessStatus",
-          "description": "Indicates whether the current user has access to the RStudioServerPro app.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Indicates whether the current user has access to the RStudioServerPro app.",
-            "allowedValues": ["ENABLED", "DISABLED"]
-          }
-        },
-        {
-          "name": "UserGroup",
-          "description": "The level of permissions that the user has within the RStudioServerPro app. This value defaults to User. The Admin value allows the user access to the RStudio Administrative Dashboard.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The level of permissions that the user has within the RStudioServerPro app. This value defaults to User. The Admin value allows the user access to the RStudio Administrative Dashboard.",
-            "allowedValues": ["R_STUDIO_ADMIN", "R_STUDIO_USER"]
+            "description": "The sharing settings.",
+            "typeName": "SharingSettings"
           }
         }
       ]
@@ -535,6 +535,16 @@
         }
       },
       {
+        "name": "AppSecurityGroupManagement",
+        "description": "The entity that creates and manages the required security groups for inter-app communication in VPCOnly mode. Required when CreateDomain.AppNetworkAccessType is VPCOnly and DomainSettings.RStudioServerProDomainSettings.DomainExecutionRoleArn is provided.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The entity that creates and manages the required security groups for inter-app communication in VPCOnly mode. Required when CreateDomain.AppNetworkAccessType is VPCOnly and DomainSettings.RStudioServerProDomainSettings.DomainExecutionRoleArn is provided.",
+          "allowedValues": ["Service", "Customer"]
+        }
+      },
+      {
         "name": "AuthMode",
         "description": "The mode of authentication that members use to access the domain.",
         "optional": false,
@@ -542,16 +552,6 @@
           "type": "string",
           "description": "The mode of authentication that members use to access the domain.",
           "allowedValues": ["SSO", "IAM"]
-        }
-      },
-      {
-        "name": "DefaultUserSettings",
-        "description": "The default user settings.",
-        "optional": false,
-        "type": {
-          "type": "ref",
-          "description": "The default user settings.",
-          "typeName": "UserSettings"
         }
       },
       {
@@ -565,6 +565,16 @@
         }
       },
       {
+        "name": "DefaultUserSettings",
+        "description": "The default user settings.",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "description": "The default user settings.",
+          "typeName": "UserSettings"
+        }
+      },
+      {
         "name": "DomainName",
         "description": "A name for the domain.",
         "optional": false,
@@ -573,6 +583,14 @@
           "description": "A name for the domain.",
           "maxLength": 63,
           "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9]){0,62}"
+        }
+      },
+      {
+        "name": "DomainSettings",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "DomainSettings"
         }
       },
       {
@@ -627,24 +645,6 @@
           "maxLength": 32,
           "pattern": "[-0-9a-zA-Z]+"
         }
-      },
-      {
-        "name": "DomainSettings",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "DomainSettings"
-        }
-      },
-      {
-        "name": "AppSecurityGroupManagement",
-        "description": "The entity that creates and manages the required security groups for inter-app communication in VPCOnly mode. Required when CreateDomain.AppNetworkAccessType is VPCOnly and DomainSettings.RStudioServerProDomainSettings.DomainExecutionRoleArn is provided.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The entity that creates and manages the required security groups for inter-app communication in VPCOnly mode. Required when CreateDomain.AppNetworkAccessType is VPCOnly and DomainSettings.RStudioServerProDomainSettings.DomainExecutionRoleArn is provided.",
-          "allowedValues": ["Service", "Customer"]
-        }
       }
     ]
   },
@@ -661,16 +661,6 @@
           "description": "The Amazon Resource Name (ARN) of the created domain.",
           "maxLength": 256,
           "pattern": "arn:aws[a-z\\-]*:sagemaker:[a-z0-9\\-]*:[0-9]{12}:domain/.*"
-        }
-      },
-      {
-        "name": "Url",
-        "description": "The URL to the created domain.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The URL to the created domain.",
-          "maxLength": 1024
         }
       },
       {
@@ -695,6 +685,17 @@
         }
       },
       {
+        "name": "SecurityGroupIdForDomainBoundary",
+        "description": "The ID of the security group that authorizes traffic between the RSessionGateway apps and the RStudioServerPro app.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The ID of the security group that authorizes traffic between the RSessionGateway apps and the RStudioServerPro app.",
+          "maxLength": 32,
+          "pattern": "[-0-9a-zA-Z]+"
+        }
+      },
+      {
         "name": "SingleSignOnManagedApplicationInstanceId",
         "description": "The SSO managed application instance ID.",
         "optional": true,
@@ -705,17 +706,16 @@
         }
       },
       {
-        "name": "SecurityGroupIdForDomainBoundary",
-        "description": "The ID of the security group that authorizes traffic between the RSessionGateway apps and the RStudioServerPro app.",
+        "name": "Url",
+        "description": "The URL to the created domain.",
         "optional": true,
         "type": {
           "type": "string",
-          "description": "The ID of the security group that authorizes traffic between the RSessionGateway apps and the RStudioServerPro app.",
-          "maxLength": 32,
-          "pattern": "[-0-9a-zA-Z]+"
+          "description": "The URL to the created domain.",
+          "maxLength": 1024
         }
       }
     ]
   },
-  "$hash": "5e71e451574b1b3c666981ad48f7e65f39eb1a02"
+  "$hash": "b694664d6b650e255db82d0b879c04b42ca677ea"
 }

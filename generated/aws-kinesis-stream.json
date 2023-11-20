@@ -1,21 +1,5 @@
 {
   "definitions": {
-    "StreamModeDetails": {
-      "type": "object",
-      "description": "When specified, enables or updates the mode of stream. Default is PROVISIONED.",
-      "properties": [
-        {
-          "name": "StreamMode",
-          "description": "The mode of the stream",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The mode of the stream",
-            "allowedValues": ["ON_DEMAND", "PROVISIONED"]
-          }
-        }
-      ]
-    },
     "StreamEncryption": {
       "type": "object",
       "description": "When specified, enables or updates server-side encryption using an AWS KMS key for a specified stream. Removing this property from your stack template and updating your stack disables encryption.",
@@ -43,21 +27,26 @@
         }
       ]
     },
+    "StreamModeDetails": {
+      "type": "object",
+      "description": "When specified, enables or updates the mode of stream. Default is PROVISIONED.",
+      "properties": [
+        {
+          "name": "StreamMode",
+          "description": "The mode of the stream",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The mode of the stream",
+            "allowedValues": ["ON_DEMAND", "PROVISIONED"]
+          }
+        }
+      ]
+    },
     "Tag": {
       "type": "object",
       "description": "An arbitrary set of tags (key-value pairs) to associate with the Kinesis stream.",
       "properties": [
-        {
-          "name": "Value",
-          "description": "The value for the tag. You can specify a value that is 0 to 255 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The value for the tag. You can specify a value that is 0 to 255 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
-            "maxLength": 255,
-            "minLength": 0
-          }
-        },
         {
           "name": "Key",
           "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
@@ -68,6 +57,17 @@
             "maxLength": 128,
             "minLength": 1
           }
+        },
+        {
+          "name": "Value",
+          "description": "The value for the tag. You can specify a value that is 0 to 255 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The value for the tag. You can specify a value that is 0 to 255 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+            "maxLength": 255,
+            "minLength": 0
+          }
         }
       ]
     }
@@ -77,23 +77,15 @@
     "description": "Resource Type definition for AWS::Kinesis::Stream",
     "properties": [
       {
-        "name": "StreamModeDetails",
-        "description": "The mode in which the stream is running.",
+        "name": "Name",
+        "description": "The name of the Kinesis stream.",
         "optional": true,
         "type": {
-          "type": "ref",
-          "description": "The mode in which the stream is running.",
-          "typeName": "StreamModeDetails"
-        }
-      },
-      {
-        "name": "StreamEncryption",
-        "description": "When specified, enables or updates server-side encryption using an AWS KMS key for a specified stream.",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "description": "When specified, enables or updates server-side encryption using an AWS KMS key for a specified stream.",
-          "typeName": "StreamEncryption"
+          "type": "string",
+          "description": "The name of the Kinesis stream.",
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[a-zA-Z0-9_.-]+$"
         }
       },
       {
@@ -108,6 +100,37 @@
         }
       },
       {
+        "name": "ShardCount",
+        "description": "The number of shards that the stream uses. Required when StreamMode = PROVISIONED is passed.",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "The number of shards that the stream uses. Required when StreamMode = PROVISIONED is passed.",
+          "isInteger": true,
+          "minimum": 1
+        }
+      },
+      {
+        "name": "StreamEncryption",
+        "description": "When specified, enables or updates server-side encryption using an AWS KMS key for a specified stream.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "When specified, enables or updates server-side encryption using an AWS KMS key for a specified stream.",
+          "typeName": "StreamEncryption"
+        }
+      },
+      {
+        "name": "StreamModeDetails",
+        "description": "The mode in which the stream is running.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "The mode in which the stream is running.",
+          "typeName": "StreamModeDetails"
+        }
+      },
+      {
         "name": "Tags",
         "description": "An arbitrary set of tags (key–value pairs) to associate with the Kinesis stream.",
         "optional": true,
@@ -119,29 +142,6 @@
             "typeName": "Tag"
           },
           "maxLength": 50
-        }
-      },
-      {
-        "name": "Name",
-        "description": "The name of the Kinesis stream.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The name of the Kinesis stream.",
-          "maxLength": 128,
-          "minLength": 1,
-          "pattern": "^[a-zA-Z0-9_.-]+$"
-        }
-      },
-      {
-        "name": "ShardCount",
-        "description": "The number of shards that the stream uses. Required when StreamMode = PROVISIONED is passed.",
-        "optional": true,
-        "type": {
-          "type": "number",
-          "description": "The number of shards that the stream uses. Required when StreamMode = PROVISIONED is passed.",
-          "isInteger": true,
-          "minimum": 1
         }
       }
     ]
@@ -161,5 +161,5 @@
       }
     ]
   },
-  "$hash": "953a2378539063e9577f2497ed7d54ac12e1202d"
+  "$hash": "6c8ac8b4c639276c455abf93c1ef8fec8ece1696"
 }

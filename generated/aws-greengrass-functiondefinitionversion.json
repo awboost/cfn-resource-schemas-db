@@ -13,6 +13,64 @@
         }
       ]
     },
+    "Environment": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "AccessSysfs",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "Execution",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Execution"
+          }
+        },
+        {
+          "name": "ResourceAccessPolicies",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "ResourceAccessPolicy"
+            }
+          }
+        },
+        {
+          "name": "Variables",
+          "optional": true,
+          "type": {
+            "type": "record"
+          }
+        }
+      ]
+    },
+    "Execution": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "IsolationMode",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "RunAs",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "RunAs"
+          }
+        }
+      ]
+    },
     "Function": {
       "type": "object",
       "properties": [
@@ -40,59 +98,9 @@
         }
       ]
     },
-    "Execution": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "IsolationMode",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "RunAs",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "RunAs"
-          }
-        }
-      ]
-    },
     "FunctionConfiguration": {
       "type": "object",
       "properties": [
-        {
-          "name": "MemorySize",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        },
-        {
-          "name": "Pinned",
-          "optional": true,
-          "type": {
-            "type": "boolean"
-          }
-        },
-        {
-          "name": "ExecArgs",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Timeout",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        },
         {
           "name": "EncodingType",
           "optional": true,
@@ -109,8 +117,57 @@
           }
         },
         {
+          "name": "ExecArgs",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
           "name": "Executable",
           "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "MemorySize",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "Pinned",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "Timeout",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        }
+      ]
+    },
+    "ResourceAccessPolicy": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Permission",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "ResourceId",
+          "optional": false,
           "type": {
             "type": "string"
           }
@@ -121,76 +178,19 @@
       "type": "object",
       "properties": [
         {
-          "name": "Uid",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        },
-        {
           "name": "Gid",
           "optional": true,
           "type": {
             "type": "number",
             "isInteger": true
           }
-        }
-      ]
-    },
-    "Environment": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Variables",
-          "optional": true,
-          "type": {
-            "type": "record"
-          }
         },
         {
-          "name": "Execution",
+          "name": "Uid",
           "optional": true,
           "type": {
-            "type": "ref",
-            "typeName": "Execution"
-          }
-        },
-        {
-          "name": "ResourceAccessPolicies",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "ResourceAccessPolicy"
-            }
-          }
-        },
-        {
-          "name": "AccessSysfs",
-          "optional": true,
-          "type": {
-            "type": "boolean"
-          }
-        }
-      ]
-    },
-    "ResourceAccessPolicy": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "ResourceId",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Permission",
-          "optional": true,
-          "type": {
-            "type": "string"
+            "type": "number",
+            "isInteger": true
           }
         }
       ]
@@ -209,6 +209,13 @@
         }
       },
       {
+        "name": "FunctionDefinitionId",
+        "optional": false,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
         "name": "Functions",
         "optional": false,
         "type": {
@@ -217,13 +224,6 @@
             "type": "ref",
             "typeName": "Function"
           }
-        }
-      },
-      {
-        "name": "FunctionDefinitionId",
-        "optional": false,
-        "type": {
-          "type": "string"
         }
       }
     ]
@@ -241,5 +241,5 @@
       }
     ]
   },
-  "$hash": "332f7414560d662bfaa3a525356fa79bd8c7d13c"
+  "$hash": "453ae01db12065a917e137668eaf5a13c81f9e12"
 }

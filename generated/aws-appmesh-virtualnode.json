@@ -13,54 +13,84 @@
         }
       ]
     },
-    "ListenerTimeout": {
+    "AwsCloudMapInstanceAttribute": {
       "type": "object",
       "properties": [
         {
-          "name": "TCP",
-          "optional": true,
+          "name": "Key",
+          "optional": false,
           "type": {
-            "type": "ref",
-            "typeName": "TcpTimeout"
+            "type": "string"
           }
         },
         {
-          "name": "HTTP",
-          "optional": true,
+          "name": "Value",
+          "optional": false,
           "type": {
-            "type": "ref",
-            "typeName": "HttpTimeout"
-          }
-        },
-        {
-          "name": "HTTP2",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "HttpTimeout"
-          }
-        },
-        {
-          "name": "GRPC",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "GrpcTimeout"
+            "type": "string"
           }
         }
       ]
     },
-    "TlsValidationContextAcmTrust": {
+    "AwsCloudMapServiceDiscovery": {
       "type": "object",
       "properties": [
         {
-          "name": "CertificateAuthorityArns",
-          "optional": false,
+          "name": "Attributes",
+          "optional": true,
           "type": {
             "type": "array",
             "itemType": {
-              "type": "string"
+              "type": "ref",
+              "typeName": "AwsCloudMapInstanceAttribute"
             }
+          }
+        },
+        {
+          "name": "IpPreference",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "NamespaceName",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "ServiceName",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "Backend": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "VirtualService",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "VirtualServiceBackend"
+          }
+        }
+      ]
+    },
+    "BackendDefaults": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ClientPolicy",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ClientPolicy"
           }
         }
       ]
@@ -78,296 +108,48 @@
         }
       ]
     },
-    "FileAccessLog": {
+    "ClientPolicyTls": {
       "type": "object",
       "properties": [
         {
-          "name": "Path",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Format",
+          "name": "Certificate",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "LoggingFormat"
+            "typeName": "ClientTlsCertificate"
+          }
+        },
+        {
+          "name": "Enforce",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "Ports",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "number",
+              "isInteger": true
+            }
+          }
+        },
+        {
+          "name": "Validation",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "TlsValidationContext"
           }
         }
       ]
     },
-    "Listener": {
+    "ClientTlsCertificate": {
       "type": "object",
       "properties": [
-        {
-          "name": "ConnectionPool",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "VirtualNodeConnectionPool"
-          }
-        },
-        {
-          "name": "Timeout",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ListenerTimeout"
-          }
-        },
-        {
-          "name": "HealthCheck",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "HealthCheck"
-          }
-        },
-        {
-          "name": "TLS",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ListenerTls"
-          }
-        },
-        {
-          "name": "PortMapping",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "PortMapping"
-          }
-        },
-        {
-          "name": "OutlierDetection",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "OutlierDetection"
-          }
-        }
-      ]
-    },
-    "TlsValidationContextTrust": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "SDS",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "TlsValidationContextSdsTrust"
-          }
-        },
-        {
-          "name": "ACM",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "TlsValidationContextAcmTrust"
-          }
-        },
-        {
-          "name": "File",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "TlsValidationContextFileTrust"
-          }
-        }
-      ]
-    },
-    "HealthCheck": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Path",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "UnhealthyThreshold",
-          "optional": false,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        },
-        {
-          "name": "Port",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        },
-        {
-          "name": "HealthyThreshold",
-          "optional": false,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        },
-        {
-          "name": "TimeoutMillis",
-          "optional": false,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        },
-        {
-          "name": "Protocol",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "IntervalMillis",
-          "optional": false,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        }
-      ]
-    },
-    "GrpcTimeout": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "PerRequest",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "Duration"
-          }
-        },
-        {
-          "name": "Idle",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "Duration"
-          }
-        }
-      ]
-    },
-    "VirtualNodeConnectionPool": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "TCP",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "VirtualNodeTcpConnectionPool"
-          }
-        },
-        {
-          "name": "HTTP",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "VirtualNodeHttpConnectionPool"
-          }
-        },
-        {
-          "name": "HTTP2",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "VirtualNodeHttp2ConnectionPool"
-          }
-        },
-        {
-          "name": "GRPC",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "VirtualNodeGrpcConnectionPool"
-          }
-        }
-      ]
-    },
-    "TlsValidationContextFileTrust": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "CertificateChain",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "ListenerTlsFileCertificate": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "CertificateChain",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "PrivateKey",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "ListenerTlsValidationContextTrust": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "File",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "TlsValidationContextFileTrust"
-          }
-        },
-        {
-          "name": "SDS",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "TlsValidationContextSdsTrust"
-          }
-        }
-      ]
-    },
-    "ListenerTlsCertificate": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "SDS",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ListenerTlsSdsCertificate"
-          }
-        },
-        {
-          "name": "ACM",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ListenerTlsAcmCertificate"
-          }
-        },
         {
           "name": "File",
           "optional": true,
@@ -375,197 +157,13 @@
             "type": "ref",
             "typeName": "ListenerTlsFileCertificate"
           }
-        }
-      ]
-    },
-    "PortMapping": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Protocol",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
         },
         {
-          "name": "Port",
-          "optional": false,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        }
-      ]
-    },
-    "TcpTimeout": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Idle",
+          "name": "SDS",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "Duration"
-          }
-        }
-      ]
-    },
-    "ListenerTls": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Validation",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ListenerTlsValidationContext"
-          }
-        },
-        {
-          "name": "Mode",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Certificate",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "ListenerTlsCertificate"
-          }
-        }
-      ]
-    },
-    "HttpTimeout": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "PerRequest",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "Duration"
-          }
-        },
-        {
-          "name": "Idle",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "Duration"
-          }
-        }
-      ]
-    },
-    "VirtualNodeTcpConnectionPool": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "MaxConnections",
-          "optional": false,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        }
-      ]
-    },
-    "ServiceDiscovery": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "DNS",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "DnsServiceDiscovery"
-          }
-        },
-        {
-          "name": "AWSCloudMap",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "AwsCloudMapServiceDiscovery"
-          }
-        }
-      ]
-    },
-    "ListenerTlsAcmCertificate": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "CertificateArn",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "VirtualNodeSpec": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Logging",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "Logging"
-          }
-        },
-        {
-          "name": "Backends",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "Backend"
-            }
-          }
-        },
-        {
-          "name": "Listeners",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "Listener"
-            }
-          }
-        },
-        {
-          "name": "BackendDefaults",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "BackendDefaults"
-          }
-        },
-        {
-          "name": "ServiceDiscovery",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ServiceDiscovery"
-          }
-        }
-      ]
-    },
-    "Logging": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "AccessLog",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "AccessLog"
+            "typeName": "ListenerTlsSdsCertificate"
           }
         }
       ]
@@ -596,34 +194,18 @@
         }
       ]
     },
-    "LoggingFormat": {
+    "Duration": {
       "type": "object",
       "properties": [
         {
-          "name": "Text",
-          "optional": true,
+          "name": "Unit",
+          "optional": false,
           "type": {
             "type": "string"
           }
         },
         {
-          "name": "Json",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "JsonFormatRef"
-            }
-          }
-        }
-      ]
-    },
-    "VirtualNodeHttp2ConnectionPool": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "MaxRequests",
+          "name": "Value",
           "optional": false,
           "type": {
             "type": "number",
@@ -632,119 +214,123 @@
         }
       ]
     },
-    "ClientPolicyTls": {
+    "FileAccessLog": {
       "type": "object",
       "properties": [
         {
-          "name": "Validation",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "TlsValidationContext"
-          }
-        },
-        {
-          "name": "Ports",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "number",
-              "isInteger": true
-            }
-          }
-        },
-        {
-          "name": "Enforce",
-          "optional": true,
-          "type": {
-            "type": "boolean"
-          }
-        },
-        {
-          "name": "Certificate",
+          "name": "Format",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "ClientTlsCertificate"
+            "typeName": "LoggingFormat"
           }
-        }
-      ]
-    },
-    "VirtualServiceBackend": {
-      "type": "object",
-      "properties": [
+        },
         {
-          "name": "VirtualServiceName",
+          "name": "Path",
           "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "ClientPolicy",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ClientPolicy"
-          }
-        }
-      ]
-    },
-    "AwsCloudMapServiceDiscovery": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Attributes",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "AwsCloudMapInstanceAttribute"
-            }
-          }
-        },
-        {
-          "name": "NamespaceName",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "ServiceName",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "IpPreference",
-          "optional": true,
           "type": {
             "type": "string"
           }
         }
       ]
     },
-    "TlsValidationContext": {
+    "GrpcTimeout": {
       "type": "object",
       "properties": [
         {
-          "name": "SubjectAlternativeNames",
+          "name": "Idle",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "SubjectAlternativeNames"
+            "typeName": "Duration"
           }
         },
         {
-          "name": "Trust",
-          "optional": false,
+          "name": "PerRequest",
+          "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "TlsValidationContextTrust"
+            "typeName": "Duration"
+          }
+        }
+      ]
+    },
+    "HealthCheck": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "HealthyThreshold",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "IntervalMillis",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "Path",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Port",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "Protocol",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "TimeoutMillis",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "UnhealthyThreshold",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        }
+      ]
+    },
+    "HttpTimeout": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Idle",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Duration"
+          }
+        },
+        {
+          "name": "PerRequest",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Duration"
           }
         }
       ]
@@ -753,48 +339,144 @@
       "type": "object",
       "properties": [
         {
-          "name": "Value",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
           "name": "Key",
           "optional": false,
           "type": {
             "type": "string"
           }
-        }
-      ]
-    },
-    "SubjectAlternativeNameMatchers": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Exact",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "string"
-            }
-          }
-        }
-      ]
-    },
-    "AwsCloudMapInstanceAttribute": {
-      "type": "object",
-      "properties": [
+        },
         {
           "name": "Value",
           "optional": false,
           "type": {
             "type": "string"
           }
+        }
+      ]
+    },
+    "Listener": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ConnectionPool",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "VirtualNodeConnectionPool"
+          }
         },
         {
-          "name": "Key",
+          "name": "HealthCheck",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "HealthCheck"
+          }
+        },
+        {
+          "name": "OutlierDetection",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "OutlierDetection"
+          }
+        },
+        {
+          "name": "PortMapping",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "PortMapping"
+          }
+        },
+        {
+          "name": "TLS",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ListenerTls"
+          }
+        },
+        {
+          "name": "Timeout",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ListenerTimeout"
+          }
+        }
+      ]
+    },
+    "ListenerTimeout": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "GRPC",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "GrpcTimeout"
+          }
+        },
+        {
+          "name": "HTTP",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "HttpTimeout"
+          }
+        },
+        {
+          "name": "HTTP2",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "HttpTimeout"
+          }
+        },
+        {
+          "name": "TCP",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "TcpTimeout"
+          }
+        }
+      ]
+    },
+    "ListenerTls": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Certificate",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "ListenerTlsCertificate"
+          }
+        },
+        {
+          "name": "Mode",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Validation",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ListenerTlsValidationContext"
+          }
+        }
+      ]
+    },
+    "ListenerTlsAcmCertificate": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "CertificateArn",
           "optional": false,
           "type": {
             "type": "string"
@@ -802,45 +484,47 @@
         }
       ]
     },
-    "SubjectAlternativeNames": {
+    "ListenerTlsCertificate": {
       "type": "object",
       "properties": [
         {
-          "name": "Match",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "SubjectAlternativeNameMatchers"
-          }
-        }
-      ]
-    },
-    "BackendDefaults": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "ClientPolicy",
+          "name": "ACM",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "ClientPolicy"
+            "typeName": "ListenerTlsAcmCertificate"
+          }
+        },
+        {
+          "name": "File",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ListenerTlsFileCertificate"
+          }
+        },
+        {
+          "name": "SDS",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ListenerTlsSdsCertificate"
           }
         }
       ]
     },
-    "Duration": {
+    "ListenerTlsFileCertificate": {
       "type": "object",
       "properties": [
         {
-          "name": "Value",
+          "name": "CertificateChain",
           "optional": false,
           "type": {
-            "type": "number",
-            "isInteger": true
+            "type": "string"
           }
         },
         {
-          "name": "Unit",
+          "name": "PrivateKey",
           "optional": false,
           "type": {
             "type": "string"
@@ -856,31 +540,6 @@
           "optional": false,
           "type": {
             "type": "string"
-          }
-        }
-      ]
-    },
-    "TlsValidationContextSdsTrust": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "SecretName",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "Backend": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "VirtualService",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "VirtualServiceBackend"
           }
         }
       ]
@@ -906,7 +565,7 @@
         }
       ]
     },
-    "ClientTlsCertificate": {
+    "ListenerTlsValidationContextTrust": {
       "type": "object",
       "properties": [
         {
@@ -914,7 +573,7 @@
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "ListenerTlsFileCertificate"
+            "typeName": "TlsValidationContextFileTrust"
           }
         },
         {
@@ -922,24 +581,41 @@
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "ListenerTlsSdsCertificate"
+            "typeName": "TlsValidationContextSdsTrust"
           }
         }
       ]
     },
-    "Tag": {
+    "Logging": {
       "type": "object",
       "properties": [
         {
-          "name": "Value",
-          "optional": false,
+          "name": "AccessLog",
+          "optional": true,
           "type": {
-            "type": "string"
+            "type": "ref",
+            "typeName": "AccessLog"
+          }
+        }
+      ]
+    },
+    "LoggingFormat": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Json",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "JsonFormatRef"
+            }
           }
         },
         {
-          "name": "Key",
-          "optional": false,
+          "name": "Text",
+          "optional": true,
           "type": {
             "type": "string"
           }
@@ -950,27 +626,11 @@
       "type": "object",
       "properties": [
         {
-          "name": "MaxEjectionPercent",
-          "optional": false,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        },
-        {
           "name": "BaseEjectionDuration",
           "optional": false,
           "type": {
             "type": "ref",
             "typeName": "Duration"
-          }
-        },
-        {
-          "name": "MaxServerErrors",
-          "optional": false,
-          "type": {
-            "type": "number",
-            "isInteger": true
           }
         },
         {
@@ -980,10 +640,266 @@
             "type": "ref",
             "typeName": "Duration"
           }
+        },
+        {
+          "name": "MaxEjectionPercent",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "MaxServerErrors",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        }
+      ]
+    },
+    "PortMapping": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Port",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "Protocol",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "ServiceDiscovery": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "AWSCloudMap",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "AwsCloudMapServiceDiscovery"
+          }
+        },
+        {
+          "name": "DNS",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DnsServiceDiscovery"
+          }
+        }
+      ]
+    },
+    "SubjectAlternativeNameMatchers": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Exact",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "SubjectAlternativeNames": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Match",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "SubjectAlternativeNameMatchers"
+          }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "TcpTimeout": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Idle",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Duration"
+          }
+        }
+      ]
+    },
+    "TlsValidationContext": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "SubjectAlternativeNames",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "SubjectAlternativeNames"
+          }
+        },
+        {
+          "name": "Trust",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "TlsValidationContextTrust"
+          }
+        }
+      ]
+    },
+    "TlsValidationContextAcmTrust": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "CertificateAuthorityArns",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "TlsValidationContextFileTrust": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "CertificateChain",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "TlsValidationContextSdsTrust": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "SecretName",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "TlsValidationContextTrust": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ACM",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "TlsValidationContextAcmTrust"
+          }
+        },
+        {
+          "name": "File",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "TlsValidationContextFileTrust"
+          }
+        },
+        {
+          "name": "SDS",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "TlsValidationContextSdsTrust"
+          }
+        }
+      ]
+    },
+    "VirtualNodeConnectionPool": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "GRPC",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "VirtualNodeGrpcConnectionPool"
+          }
+        },
+        {
+          "name": "HTTP",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "VirtualNodeHttpConnectionPool"
+          }
+        },
+        {
+          "name": "HTTP2",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "VirtualNodeHttp2ConnectionPool"
+          }
+        },
+        {
+          "name": "TCP",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "VirtualNodeTcpConnectionPool"
+          }
         }
       ]
     },
     "VirtualNodeGrpcConnectionPool": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "MaxRequests",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        }
+      ]
+    },
+    "VirtualNodeHttp2ConnectionPool": {
       "type": "object",
       "properties": [
         {
@@ -1016,6 +932,90 @@
           }
         }
       ]
+    },
+    "VirtualNodeSpec": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "BackendDefaults",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "BackendDefaults"
+          }
+        },
+        {
+          "name": "Backends",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Backend"
+            }
+          }
+        },
+        {
+          "name": "Listeners",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Listener"
+            }
+          }
+        },
+        {
+          "name": "Logging",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Logging"
+          }
+        },
+        {
+          "name": "ServiceDiscovery",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ServiceDiscovery"
+          }
+        }
+      ]
+    },
+    "VirtualNodeTcpConnectionPool": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "MaxConnections",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        }
+      ]
+    },
+    "VirtualServiceBackend": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ClientPolicy",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ClientPolicy"
+          }
+        },
+        {
+          "name": "VirtualServiceName",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
     }
   },
   "resource": {
@@ -1045,13 +1045,6 @@
         }
       },
       {
-        "name": "VirtualNodeName",
-        "optional": true,
-        "type": {
-          "type": "string"
-        }
-      },
-      {
         "name": "Tags",
         "optional": true,
         "type": {
@@ -1061,6 +1054,13 @@
             "typeName": "Tag"
           }
         }
+      },
+      {
+        "name": "VirtualNodeName",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
       }
     ]
   },
@@ -1069,14 +1069,7 @@
     "description": "Resource Type definition for AWS::AppMesh::VirtualNode",
     "properties": [
       {
-        "name": "Uid",
-        "optional": true,
-        "type": {
-          "type": "string"
-        }
-      },
-      {
-        "name": "ResourceOwner",
+        "name": "Arn",
         "optional": true,
         "type": {
           "type": "string"
@@ -1090,7 +1083,14 @@
         }
       },
       {
-        "name": "Arn",
+        "name": "ResourceOwner",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "Uid",
         "optional": true,
         "type": {
           "type": "string"
@@ -1098,5 +1098,5 @@
       }
     ]
   },
-  "$hash": "cb16e59d28e309fdabdbb8c4d370708c53b9a8c1"
+  "$hash": "e7f2f94bb9ab120ec69e5c3f29f235f7b4e4af4e"
 }

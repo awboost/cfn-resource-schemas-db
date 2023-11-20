@@ -1,110 +1,5 @@
 {
   "definitions": {
-    "Compression": {
-      "type": "string",
-      "allowedValues": ["OFF", "SNAPPY"]
-    },
-    "DataDestinationConfig": {
-      "type": "union",
-      "types": [
-        {
-          "type": "object",
-          "properties": [
-            {
-              "name": "S3Config",
-              "optional": false,
-              "type": {
-                "type": "ref",
-                "typeName": "S3Config"
-              }
-            }
-          ]
-        },
-        {
-          "type": "object",
-          "properties": [
-            {
-              "name": "TimestreamConfig",
-              "optional": false,
-              "type": {
-                "type": "ref",
-                "typeName": "TimestreamConfig"
-              }
-            }
-          ]
-        }
-      ]
-    },
-    "S3Config": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "BucketArn",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 100,
-            "minLength": 16,
-            "pattern": "^arn:(aws[a-zA-Z0-9-]*):s3:::.+$"
-          }
-        },
-        {
-          "name": "DataFormat",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "DataFormat"
-          }
-        },
-        {
-          "name": "StorageCompressionFormat",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "StorageCompressionFormat"
-          }
-        },
-        {
-          "name": "Prefix",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "maxLength": 512,
-            "minLength": 1,
-            "pattern": "^[a-zA-Z0-9-_:./!*'()]+$"
-          }
-        }
-      ]
-    },
-    "TimestreamConfig": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "TimestreamTableArn",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 2048,
-            "minLength": 20,
-            "pattern": "^arn:(aws[a-zA-Z0-9-]*):timestream:[a-zA-Z0-9-]+:[0-9]{12}:database\\/[a-zA-Z0-9_.-]+\\/table\\/[a-zA-Z0-9_.-]+$"
-          }
-        },
-        {
-          "name": "ExecutionRoleArn",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 2048,
-            "minLength": 20,
-            "pattern": "^arn:(aws[a-zA-Z0-9-]*):iam::(\\d{12})?:(role((\\u002F)|(\\u002F[\\u0021-\\u007F]+\\u002F))[\\w+=,.@-]+)$"
-          }
-        }
-      ]
-    },
-    "UpdateCampaignAction": {
-      "type": "string",
-      "allowedValues": ["APPROVE", "SUSPEND", "RESUME", "UPDATE"]
-    },
     "CampaignStatus": {
       "type": "string",
       "allowedValues": [
@@ -113,76 +8,6 @@
         "RUNNING",
         "SUSPENDED"
       ]
-    },
-    "DiagnosticsMode": {
-      "type": "string",
-      "allowedValues": ["OFF", "SEND_ACTIVE_DTCS"]
-    },
-    "SignalInformation": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "MaxSampleCount",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": false,
-            "maximum": 4294967295,
-            "minimum": 1
-          }
-        },
-        {
-          "name": "Name",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 150,
-            "minLength": 1,
-            "pattern": "^[\\w|*|-]+(\\.[\\w|*|-]+)*$"
-          }
-        },
-        {
-          "name": "MinimumSamplingIntervalMs",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": false,
-            "maximum": 4294967295,
-            "minimum": 0
-          }
-        }
-      ]
-    },
-    "TimeBasedCollectionScheme": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "PeriodMs",
-          "optional": false,
-          "type": {
-            "type": "number",
-            "isInteger": false,
-            "maximum": 60000,
-            "minimum": 10000
-          }
-        }
-      ]
-    },
-    "SpoolingMode": {
-      "type": "string",
-      "allowedValues": ["OFF", "TO_DISK"]
-    },
-    "TriggerMode": {
-      "type": "string",
-      "allowedValues": ["ALWAYS", "RISING_EDGE"]
-    },
-    "DataFormat": {
-      "type": "string",
-      "allowedValues": ["JSON", "PARQUET"]
-    },
-    "StorageCompressionFormat": {
-      "type": "string",
-      "allowedValues": ["NONE", "GZIP"]
     },
     "CollectionScheme": {
       "type": "union",
@@ -215,17 +40,20 @@
         }
       ]
     },
+    "Compression": {
+      "type": "string",
+      "allowedValues": ["OFF", "SNAPPY"]
+    },
     "ConditionBasedCollectionScheme": {
       "type": "object",
       "properties": [
         {
-          "name": "MinimumTriggerIntervalMs",
+          "name": "ConditionLanguageVersion",
           "optional": true,
           "type": {
             "type": "number",
-            "isInteger": false,
-            "maximum": 4294967295,
-            "minimum": 0
+            "isInteger": true,
+            "minimum": 1
           }
         },
         {
@@ -238,23 +66,147 @@
           }
         },
         {
+          "name": "MinimumTriggerIntervalMs",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": false,
+            "maximum": 4294967295,
+            "minimum": 0
+          }
+        },
+        {
           "name": "TriggerMode",
           "optional": true,
           "type": {
             "type": "ref",
             "typeName": "TriggerMode"
           }
+        }
+      ]
+    },
+    "DataDestinationConfig": {
+      "type": "union",
+      "types": [
+        {
+          "type": "object",
+          "properties": [
+            {
+              "name": "S3Config",
+              "optional": false,
+              "type": {
+                "type": "ref",
+                "typeName": "S3Config"
+              }
+            }
+          ]
         },
         {
-          "name": "ConditionLanguageVersion",
+          "type": "object",
+          "properties": [
+            {
+              "name": "TimestreamConfig",
+              "optional": false,
+              "type": {
+                "type": "ref",
+                "typeName": "TimestreamConfig"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "DataFormat": {
+      "type": "string",
+      "allowedValues": ["JSON", "PARQUET"]
+    },
+    "DiagnosticsMode": {
+      "type": "string",
+      "allowedValues": ["OFF", "SEND_ACTIVE_DTCS"]
+    },
+    "S3Config": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "BucketArn",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 16,
+            "pattern": "^arn:(aws[a-zA-Z0-9-]*):s3:::.+$"
+          }
+        },
+        {
+          "name": "DataFormat",
           "optional": true,
           "type": {
-            "type": "number",
-            "isInteger": true,
-            "minimum": 1
+            "type": "ref",
+            "typeName": "DataFormat"
+          }
+        },
+        {
+          "name": "Prefix",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 512,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9-_:./!*'()]+$"
+          }
+        },
+        {
+          "name": "StorageCompressionFormat",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "StorageCompressionFormat"
           }
         }
       ]
+    },
+    "SignalInformation": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "MaxSampleCount",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": false,
+            "maximum": 4294967295,
+            "minimum": 1
+          }
+        },
+        {
+          "name": "MinimumSamplingIntervalMs",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": false,
+            "maximum": 4294967295,
+            "minimum": 0
+          }
+        },
+        {
+          "name": "Name",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 150,
+            "minLength": 1,
+            "pattern": "^[\\w|*|-]+(\\.[\\w|*|-]+)*$"
+          }
+        }
+      ]
+    },
+    "SpoolingMode": {
+      "type": "string",
+      "allowedValues": ["OFF", "TO_DISK"]
+    },
+    "StorageCompressionFormat": {
+      "type": "string",
+      "allowedValues": ["NONE", "GZIP"]
     },
     "Tag": {
       "type": "object",
@@ -278,6 +230,54 @@
           }
         }
       ]
+    },
+    "TimeBasedCollectionScheme": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "PeriodMs",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": false,
+            "maximum": 60000,
+            "minimum": 10000
+          }
+        }
+      ]
+    },
+    "TimestreamConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ExecutionRoleArn",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 2048,
+            "minLength": 20,
+            "pattern": "^arn:(aws[a-zA-Z0-9-]*):iam::(\\d{12})?:(role((\\u002F)|(\\u002F[\\u0021-\\u007F]+\\u002F))[\\w+=,.@-]+)$"
+          }
+        },
+        {
+          "name": "TimestreamTableArn",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 2048,
+            "minLength": 20,
+            "pattern": "^arn:(aws[a-zA-Z0-9-]*):timestream:[a-zA-Z0-9-]+:[0-9]{12}:database\\/[a-zA-Z0-9_.-]+\\/table\\/[a-zA-Z0-9_.-]+$"
+          }
+        }
+      ]
+    },
+    "TriggerMode": {
+      "type": "string",
+      "allowedValues": ["ALWAYS", "RISING_EDGE"]
+    },
+    "UpdateCampaignAction": {
+      "type": "string",
+      "allowedValues": ["APPROVE", "SUSPEND", "RESUME", "UPDATE"]
     }
   },
   "resource": {
@@ -293,43 +293,19 @@
         }
       },
       {
+        "name": "CollectionScheme",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "CollectionScheme"
+        }
+      },
+      {
         "name": "Compression",
         "optional": true,
         "type": {
           "type": "ref",
           "typeName": "Compression"
-        }
-      },
-      {
-        "name": "Description",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "maxLength": 2048,
-          "minLength": 1,
-          "pattern": "^[^\\u0000-\\u001F\\u007F]+$"
-        }
-      },
-      {
-        "name": "Priority",
-        "optional": true,
-        "type": {
-          "type": "number",
-          "isInteger": true,
-          "minimum": 0
-        }
-      },
-      {
-        "name": "SignalsToCollect",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "itemType": {
-            "type": "ref",
-            "typeName": "SignalInformation"
-          },
-          "maxLength": 1000,
-          "minLength": 0
         }
       },
       {
@@ -343,55 +319,6 @@
           },
           "maxLength": 1,
           "minLength": 1
-        }
-      },
-      {
-        "name": "StartTime",
-        "optional": true,
-        "type": {
-          "type": "string"
-        }
-      },
-      {
-        "name": "Name",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "maxLength": 100,
-          "minLength": 1,
-          "pattern": "^[a-zA-Z\\d\\-_:]+$"
-        }
-      },
-      {
-        "name": "ExpiryTime",
-        "optional": true,
-        "type": {
-          "type": "string"
-        }
-      },
-      {
-        "name": "SpoolingMode",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "SpoolingMode"
-        }
-      },
-      {
-        "name": "SignalCatalogArn",
-        "optional": false,
-        "type": {
-          "type": "string"
-        }
-      },
-      {
-        "name": "PostTriggerCollectionDuration",
-        "optional": true,
-        "type": {
-          "type": "number",
-          "isInteger": false,
-          "maximum": 4294967295,
-          "minimum": 0
         }
       },
       {
@@ -410,6 +337,16 @@
         }
       },
       {
+        "name": "Description",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 2048,
+          "minLength": 1,
+          "pattern": "^[^\\u0000-\\u001F\\u007F]+$"
+        }
+      },
+      {
         "name": "DiagnosticsMode",
         "optional": true,
         "type": {
@@ -418,18 +355,74 @@
         }
       },
       {
-        "name": "TargetArn",
+        "name": "ExpiryTime",
+        "optional": true,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "Name",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "maxLength": 100,
+          "minLength": 1,
+          "pattern": "^[a-zA-Z\\d\\-_:]+$"
+        }
+      },
+      {
+        "name": "PostTriggerCollectionDuration",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "isInteger": false,
+          "maximum": 4294967295,
+          "minimum": 0
+        }
+      },
+      {
+        "name": "Priority",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "isInteger": true,
+          "minimum": 0
+        }
+      },
+      {
+        "name": "SignalCatalogArn",
         "optional": false,
         "type": {
           "type": "string"
         }
       },
       {
-        "name": "CollectionScheme",
-        "optional": false,
+        "name": "SignalsToCollect",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "SignalInformation"
+          },
+          "maxLength": 1000,
+          "minLength": 0
+        }
+      },
+      {
+        "name": "SpoolingMode",
+        "optional": true,
         "type": {
           "type": "ref",
-          "typeName": "CollectionScheme"
+          "typeName": "SpoolingMode"
+        }
+      },
+      {
+        "name": "StartTime",
+        "optional": true,
+        "type": {
+          "type": "string"
         }
       },
       {
@@ -444,6 +437,13 @@
           "maxLength": 50,
           "minLength": 0
         }
+      },
+      {
+        "name": "TargetArn",
+        "optional": false,
+        "type": {
+          "type": "string"
+        }
       }
     ]
   },
@@ -452,11 +452,10 @@
     "description": "Definition of AWS::IoTFleetWise::Campaign Resource Type",
     "properties": [
       {
-        "name": "Status",
+        "name": "Arn",
         "optional": true,
         "type": {
-          "type": "ref",
-          "typeName": "CampaignStatus"
+          "type": "string"
         }
       },
       {
@@ -474,13 +473,14 @@
         }
       },
       {
-        "name": "Arn",
+        "name": "Status",
         "optional": true,
         "type": {
-          "type": "string"
+          "type": "ref",
+          "typeName": "CampaignStatus"
         }
       }
     ]
   },
-  "$hash": "cd068312c35b944c9189c592d78a41f12fa07cd9"
+  "$hash": "7239250c4c5b2aa3f608746fa5931b54b7a9ebe1"
 }

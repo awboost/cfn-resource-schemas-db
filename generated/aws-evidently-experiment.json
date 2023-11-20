@@ -1,98 +1,14 @@
 {
   "definitions": {
-    "RunningStatusObject": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Status",
-          "description": "Provide START or STOP action to apply on an experiment",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Provide START or STOP action to apply on an experiment"
-          }
-        },
-        {
-          "name": "AnalysisCompleteTime",
-          "description": "Provide the analysis Completion time for an experiment",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Provide the analysis Completion time for an experiment"
-          }
-        },
-        {
-          "name": "Reason",
-          "description": "Reason is a required input for stopping the experiment",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Reason is a required input for stopping the experiment"
-          }
-        },
-        {
-          "name": "DesiredState",
-          "description": "Provide CANCELLED or COMPLETED desired state when stopping an experiment",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Provide CANCELLED or COMPLETED desired state when stopping an experiment",
-            "pattern": "^(CANCELLED|COMPLETED)"
-          }
-        }
-      ]
-    },
-    "TreatmentObject": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "TreatmentName",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 127,
-            "minLength": 1,
-            "pattern": "[-a-zA-Z0-9._]*"
-          }
-        },
-        {
-          "name": "Description",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Feature",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "pattern": "([-a-zA-Z0-9._]*)|(arn:[^:]*:[^:]*:[^:]*:[^:]*:.*)"
-          }
-        },
-        {
-          "name": "Variation",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 255,
-            "minLength": 1,
-            "pattern": "[-a-zA-Z0-9._]*"
-          }
-        }
-      ]
-    },
     "MetricGoalObject": {
       "type": "object",
       "properties": [
         {
-          "name": "MetricName",
+          "name": "DesiredChange",
           "optional": false,
           "type": {
             "type": "string",
-            "maxLength": 255,
-            "minLength": 1,
-            "pattern": "^[\\S]+$"
+            "allowedValues": ["INCREASE", "DECREASE"]
           }
         },
         {
@@ -105,21 +21,22 @@
           }
         },
         {
-          "name": "ValueKey",
-          "description": "The JSON path to reference the numerical metric value in the event.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The JSON path to reference the numerical metric value in the event."
-          }
-        },
-        {
           "name": "EventPattern",
           "description": "Event patterns have the same structure as the events they match. Rules use event patterns to select events. An event pattern either matches an event or it doesn't.",
           "optional": true,
           "type": {
             "type": "string",
             "description": "Event patterns have the same structure as the events they match. Rules use event patterns to select events. An event pattern either matches an event or it doesn't."
+          }
+        },
+        {
+          "name": "MetricName",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "pattern": "^[\\S]+$"
           }
         },
         {
@@ -133,11 +50,12 @@
           }
         },
         {
-          "name": "DesiredChange",
+          "name": "ValueKey",
+          "description": "The JSON path to reference the numerical metric value in the event.",
           "optional": false,
           "type": {
             "type": "string",
-            "allowedValues": ["INCREASE", "DECREASE"]
+            "description": "The JSON path to reference the numerical metric value in the event."
           }
         }
       ]
@@ -168,27 +86,44 @@
         }
       ]
     },
-    "TreatmentToWeight": {
+    "RunningStatusObject": {
       "type": "object",
       "properties": [
         {
-          "name": "Treatment",
-          "optional": false,
+          "name": "AnalysisCompleteTime",
+          "description": "Provide the analysis Completion time for an experiment",
+          "optional": true,
           "type": {
             "type": "string",
-            "maxLength": 127,
-            "minLength": 1,
-            "pattern": "[-a-zA-Z0-9._]*"
+            "description": "Provide the analysis Completion time for an experiment"
           }
         },
         {
-          "name": "SplitWeight",
-          "optional": false,
+          "name": "DesiredState",
+          "description": "Provide CANCELLED or COMPLETED desired state when stopping an experiment",
+          "optional": true,
           "type": {
-            "type": "number",
-            "isInteger": true,
-            "maximum": 100000,
-            "minimum": 0
+            "type": "string",
+            "description": "Provide CANCELLED or COMPLETED desired state when stopping an experiment",
+            "pattern": "^(CANCELLED|COMPLETED)"
+          }
+        },
+        {
+          "name": "Reason",
+          "description": "Reason is a required input for stopping the experiment",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Reason is a required input for stopping the experiment"
+          }
+        },
+        {
+          "name": "Status",
+          "description": "Provide START or STOP action to apply on an experiment",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Provide START or STOP action to apply on an experiment"
           }
         }
       ]
@@ -221,6 +156,71 @@
           }
         }
       ]
+    },
+    "TreatmentObject": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Description",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Feature",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "pattern": "([-a-zA-Z0-9._]*)|(arn:[^:]*:[^:]*:[^:]*:[^:]*:.*)"
+          }
+        },
+        {
+          "name": "TreatmentName",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 127,
+            "minLength": 1,
+            "pattern": "[-a-zA-Z0-9._]*"
+          }
+        },
+        {
+          "name": "Variation",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "pattern": "[-a-zA-Z0-9._]*"
+          }
+        }
+      ]
+    },
+    "TreatmentToWeight": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "SplitWeight",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 100000,
+            "minimum": 0
+          }
+        },
+        {
+          "name": "Treatment",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 127,
+            "minLength": 1,
+            "pattern": "[-a-zA-Z0-9._]*"
+          }
+        }
+      ]
     }
   },
   "resource": {
@@ -228,65 +228,12 @@
     "description": "Resource Type definition for AWS::Evidently::Experiment.",
     "properties": [
       {
-        "name": "Name",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "maxLength": 127,
-          "minLength": 1,
-          "pattern": "[-a-zA-Z0-9._]*"
-        }
-      },
-      {
-        "name": "Project",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "maxLength": 2048,
-          "minLength": 0,
-          "pattern": "([-a-zA-Z0-9._]*)|(arn:[^:]*:[^:]*:[^:]*:[^:]*:project/[-a-zA-Z0-9._]*)"
-        }
-      },
-      {
         "name": "Description",
         "optional": true,
         "type": {
           "type": "string",
           "maxLength": 160,
           "minLength": 0
-        }
-      },
-      {
-        "name": "RunningStatus",
-        "description": "Start Experiment. Default is False",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "description": "Start Experiment. Default is False",
-          "typeName": "RunningStatusObject"
-        }
-      },
-      {
-        "name": "RandomizationSalt",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "maxLength": 127,
-          "minLength": 0,
-          "pattern": ".*"
-        }
-      },
-      {
-        "name": "Treatments",
-        "optional": false,
-        "type": {
-          "type": "array",
-          "itemType": {
-            "type": "ref",
-            "typeName": "TreatmentObject"
-          },
-          "maxLength": 5,
-          "minLength": 2
         }
       },
       {
@@ -303,13 +250,13 @@
         }
       },
       {
-        "name": "SamplingRate",
-        "optional": true,
+        "name": "Name",
+        "optional": false,
         "type": {
-          "type": "number",
-          "isInteger": true,
-          "maximum": 100000,
-          "minimum": 0
+          "type": "string",
+          "maxLength": 127,
+          "minLength": 1,
+          "pattern": "[-a-zA-Z0-9._]*"
         }
       },
       {
@@ -318,6 +265,53 @@
         "type": {
           "type": "ref",
           "typeName": "OnlineAbConfigObject"
+        }
+      },
+      {
+        "name": "Project",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "maxLength": 2048,
+          "minLength": 0,
+          "pattern": "([-a-zA-Z0-9._]*)|(arn:[^:]*:[^:]*:[^:]*:[^:]*:project/[-a-zA-Z0-9._]*)"
+        }
+      },
+      {
+        "name": "RandomizationSalt",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 127,
+          "minLength": 0,
+          "pattern": ".*"
+        }
+      },
+      {
+        "name": "RemoveSegment",
+        "optional": true,
+        "type": {
+          "type": "boolean"
+        }
+      },
+      {
+        "name": "RunningStatus",
+        "description": "Start Experiment. Default is False",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "Start Experiment. Default is False",
+          "typeName": "RunningStatusObject"
+        }
+      },
+      {
+        "name": "SamplingRate",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "isInteger": true,
+          "maximum": 100000,
+          "minimum": 0
         }
       },
       {
@@ -331,13 +325,6 @@
         }
       },
       {
-        "name": "RemoveSegment",
-        "optional": true,
-        "type": {
-          "type": "boolean"
-        }
-      },
-      {
         "name": "Tags",
         "description": "An array of key-value pairs to apply to this resource.",
         "optional": true,
@@ -348,6 +335,19 @@
             "type": "ref",
             "typeName": "Tag"
           }
+        }
+      },
+      {
+        "name": "Treatments",
+        "optional": false,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "TreatmentObject"
+          },
+          "maxLength": 5,
+          "minLength": 2
         }
       }
     ]
@@ -366,5 +366,5 @@
       }
     ]
   },
-  "$hash": "2185423840498dc4d960771979b9d84f8f26de7d"
+  "$hash": "bc2ebd4ab3791f1fe1d61a78d6cd283473a614ca"
 }

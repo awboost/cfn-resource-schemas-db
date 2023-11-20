@@ -1,38 +1,26 @@
 {
   "definitions": {
-    "DomainName": {
-      "type": "string",
-      "description": "The unique name of the domain.",
-      "maxLength": 64,
-      "minLength": 1,
-      "pattern": "^[a-zA-Z0-9_-]+$"
-    },
-    "CalculatedAttributeName": {
-      "type": "string",
-      "description": "The unique name of the calculated attribute.",
-      "maxLength": 255,
-      "minLength": 1,
-      "pattern": "^[a-zA-Z_][a-zA-Z_0-9-]*$"
-    },
-    "DisplayName": {
-      "type": "string",
-      "description": "The display name of the calculated attribute.",
-      "maxLength": 255,
-      "minLength": 1,
-      "pattern": "^[a-zA-Z_][a-zA-Z_0-9-\\s]*$"
-    },
-    "Description": {
-      "type": "string",
-      "description": "The description of the calculated attribute.",
-      "maxLength": 1000,
-      "minLength": 1
-    },
-    "AttributeName": {
-      "type": "string",
-      "description": "The name of an attribute defined in a profile object type.",
-      "maxLength": 64,
-      "minLength": 1,
-      "pattern": "^[a-zA-Z0-9_.-]+$"
+    "AttributeDetails": {
+      "type": "object",
+      "description": "Mathematical expression and a list of attribute items specified in that expression.",
+      "properties": [
+        {
+          "name": "Attributes",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "AttributeList"
+          }
+        },
+        {
+          "name": "Expression",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "Expression"
+          }
+        }
+      ]
     },
     "AttributeItem": {
       "type": "object",
@@ -58,30 +46,101 @@
       "maxLength": 2,
       "minLength": 1
     },
+    "AttributeName": {
+      "type": "string",
+      "description": "The name of an attribute defined in a profile object type.",
+      "maxLength": 64,
+      "minLength": 1,
+      "pattern": "^[a-zA-Z0-9_.-]+$"
+    },
+    "CalculatedAttributeName": {
+      "type": "string",
+      "description": "The unique name of the calculated attribute.",
+      "maxLength": 255,
+      "minLength": 1,
+      "pattern": "^[a-zA-Z_][a-zA-Z_0-9-]*$"
+    },
+    "Conditions": {
+      "type": "object",
+      "description": "The conditions including range, object count, and threshold for the calculated attribute.",
+      "properties": [
+        {
+          "name": "ObjectCount",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ObjectCount"
+          }
+        },
+        {
+          "name": "Range",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Range"
+          }
+        },
+        {
+          "name": "Threshold",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Threshold"
+          }
+        }
+      ]
+    },
+    "Description": {
+      "type": "string",
+      "description": "The description of the calculated attribute.",
+      "maxLength": 1000,
+      "minLength": 1
+    },
+    "DisplayName": {
+      "type": "string",
+      "description": "The display name of the calculated attribute.",
+      "maxLength": 255,
+      "minLength": 1,
+      "pattern": "^[a-zA-Z_][a-zA-Z_0-9-\\s]*$"
+    },
+    "DomainName": {
+      "type": "string",
+      "description": "The unique name of the domain.",
+      "maxLength": 64,
+      "minLength": 1,
+      "pattern": "^[a-zA-Z0-9_-]+$"
+    },
     "Expression": {
       "type": "string",
       "description": "Mathematical expression that is performed on attribute items provided in the attribute list. Each element in the expression should follow the structure of \"{ObjectTypeName.AttributeName}\".",
       "maxLength": 255,
       "minLength": 1
     },
-    "AttributeDetails": {
+    "ObjectCount": {
+      "type": "number",
+      "description": "The number of profile objects used for the calculated attribute.",
+      "isInteger": true,
+      "maximum": 100,
+      "minimum": 1
+    },
+    "Range": {
       "type": "object",
-      "description": "Mathematical expression and a list of attribute items specified in that expression.",
+      "description": "The relative time period over which data is included in the aggregation.",
       "properties": [
         {
-          "name": "Attributes",
+          "name": "Unit",
           "optional": false,
           "type": {
             "type": "ref",
-            "typeName": "AttributeList"
+            "typeName": "RangeUnit"
           }
         },
         {
-          "name": "Expression",
+          "name": "Value",
           "optional": false,
           "type": {
             "type": "ref",
-            "typeName": "Expression"
+            "typeName": "RangeValue"
           }
         }
       ]
@@ -97,98 +156,6 @@
       "isInteger": true,
       "maximum": 366,
       "minimum": 1
-    },
-    "Range": {
-      "type": "object",
-      "description": "The relative time period over which data is included in the aggregation.",
-      "properties": [
-        {
-          "name": "Value",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "RangeValue"
-          }
-        },
-        {
-          "name": "Unit",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "RangeUnit"
-          }
-        }
-      ]
-    },
-    "ObjectCount": {
-      "type": "number",
-      "description": "The number of profile objects used for the calculated attribute.",
-      "isInteger": true,
-      "maximum": 100,
-      "minimum": 1
-    },
-    "ThresholdValue": {
-      "type": "string",
-      "description": "The value of the threshold.",
-      "maxLength": 255,
-      "minLength": 1
-    },
-    "ThresholdOperator": {
-      "type": "string",
-      "description": "The operator of the threshold.",
-      "allowedValues": ["EQUAL_TO", "GREATER_THAN", "LESS_THAN", "NOT_EQUAL_TO"]
-    },
-    "Threshold": {
-      "type": "object",
-      "description": "The threshold for the calculated attribute.",
-      "properties": [
-        {
-          "name": "Value",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "ThresholdValue"
-          }
-        },
-        {
-          "name": "Operator",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "ThresholdOperator"
-          }
-        }
-      ]
-    },
-    "Conditions": {
-      "type": "object",
-      "description": "The conditions including range, object count, and threshold for the calculated attribute.",
-      "properties": [
-        {
-          "name": "Range",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "Range"
-          }
-        },
-        {
-          "name": "ObjectCount",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ObjectCount"
-          }
-        },
-        {
-          "name": "Threshold",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "Threshold"
-          }
-        }
-      ]
     },
     "Statistic": {
       "type": "string",
@@ -241,6 +208,39 @@
       },
       "maxLength": 50,
       "minLength": 0
+    },
+    "Threshold": {
+      "type": "object",
+      "description": "The threshold for the calculated attribute.",
+      "properties": [
+        {
+          "name": "Operator",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "ThresholdOperator"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "ThresholdValue"
+          }
+        }
+      ]
+    },
+    "ThresholdOperator": {
+      "type": "string",
+      "description": "The operator of the threshold.",
+      "allowedValues": ["EQUAL_TO", "GREATER_THAN", "LESS_THAN", "NOT_EQUAL_TO"]
+    },
+    "ThresholdValue": {
+      "type": "string",
+      "description": "The value of the threshold.",
+      "maxLength": 255,
+      "minLength": 1
     }
   },
   "resource": {
@@ -248,11 +248,11 @@
     "description": "A calculated attribute definition for Customer Profiles",
     "properties": [
       {
-        "name": "DomainName",
+        "name": "AttributeDetails",
         "optional": false,
         "type": {
           "type": "ref",
-          "typeName": "DomainName"
+          "typeName": "AttributeDetails"
         }
       },
       {
@@ -264,11 +264,11 @@
         }
       },
       {
-        "name": "DisplayName",
+        "name": "Conditions",
         "optional": true,
         "type": {
           "type": "ref",
-          "typeName": "DisplayName"
+          "typeName": "Conditions"
         }
       },
       {
@@ -280,19 +280,19 @@
         }
       },
       {
-        "name": "AttributeDetails",
-        "optional": false,
-        "type": {
-          "type": "ref",
-          "typeName": "AttributeDetails"
-        }
-      },
-      {
-        "name": "Conditions",
+        "name": "DisplayName",
         "optional": true,
         "type": {
           "type": "ref",
-          "typeName": "Conditions"
+          "typeName": "DisplayName"
+        }
+      },
+      {
+        "name": "DomainName",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "DomainName"
         }
       },
       {
@@ -337,5 +337,5 @@
       }
     ]
   },
-  "$hash": "2f88585f459929c846fedf18e7941291bd859160"
+  "$hash": "3e3ed04142915440f6bec7eeea508035ac5e98ce"
 }

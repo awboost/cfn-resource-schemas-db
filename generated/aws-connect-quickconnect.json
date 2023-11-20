@@ -1,24 +1,14 @@
 {
   "definitions": {
-    "PhoneNumber": {
-      "type": "string",
-      "description": "The phone number in E.164 format.",
-      "pattern": "^\\+[1-9]\\d{1,14}$"
-    },
     "ContactFlowArn": {
       "type": "string",
       "description": "The identifier of the contact flow.",
       "pattern": "^arn:aws[-a-z0-9]*:connect:[-a-z0-9]*:[0-9]{12}:instance/[-a-zA-Z0-9]*/contact-flow/[-a-zA-Z0-9]*$"
     },
-    "QueueArn": {
+    "PhoneNumber": {
       "type": "string",
-      "description": "The identifier for the queue.",
-      "pattern": "^arn:aws[-a-z0-9]*:connect:[-a-z0-9]*:[0-9]{12}:instance/[-a-zA-Z0-9]*/queue/[-a-zA-Z0-9]*$"
-    },
-    "UserArn": {
-      "type": "string",
-      "description": "The identifier of the user.",
-      "pattern": "^arn:aws[-a-z0-9]*:connect:[-a-z0-9]*:[0-9]{12}:instance/[-a-zA-Z0-9]*/agent/[-a-zA-Z0-9]*$"
+      "description": "The phone number in E.164 format.",
+      "pattern": "^\\+[1-9]\\d{1,14}$"
     },
     "PhoneNumberQuickConnectConfig": {
       "type": "object",
@@ -33,6 +23,11 @@
           }
         }
       ]
+    },
+    "QueueArn": {
+      "type": "string",
+      "description": "The identifier for the queue.",
+      "pattern": "^arn:aws[-a-z0-9]*:connect:[-a-z0-9]*:[0-9]{12}:instance/[-a-zA-Z0-9]*/queue/[-a-zA-Z0-9]*$"
     },
     "QueueQuickConnectConfig": {
       "type": "object",
@@ -56,40 +51,10 @@
         }
       ]
     },
-    "UserQuickConnectConfig": {
-      "type": "object",
-      "description": "The user configuration. This is required only if QuickConnectType is USER.",
-      "properties": [
-        {
-          "name": "ContactFlowArn",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "ContactFlowArn"
-          }
-        },
-        {
-          "name": "UserArn",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "UserArn"
-          }
-        }
-      ]
-    },
     "QuickConnectConfig": {
       "type": "object",
       "description": "Configuration settings for the quick connect.",
       "properties": [
-        {
-          "name": "QuickConnectType",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "QuickConnectType"
-          }
-        },
         {
           "name": "PhoneConfig",
           "optional": true,
@@ -104,6 +69,14 @@
           "type": {
             "type": "ref",
             "typeName": "QueueQuickConnectConfig"
+          }
+        },
+        {
+          "name": "QuickConnectType",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "QuickConnectType"
           }
         },
         {
@@ -148,12 +121,50 @@
           }
         }
       ]
+    },
+    "UserArn": {
+      "type": "string",
+      "description": "The identifier of the user.",
+      "pattern": "^arn:aws[-a-z0-9]*:connect:[-a-z0-9]*:[0-9]{12}:instance/[-a-zA-Z0-9]*/agent/[-a-zA-Z0-9]*$"
+    },
+    "UserQuickConnectConfig": {
+      "type": "object",
+      "description": "The user configuration. This is required only if QuickConnectType is USER.",
+      "properties": [
+        {
+          "name": "ContactFlowArn",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "ContactFlowArn"
+          }
+        },
+        {
+          "name": "UserArn",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "UserArn"
+          }
+        }
+      ]
     }
   },
   "resource": {
     "type": "object",
     "description": "Resource Type definition for AWS::Connect::QuickConnect",
     "properties": [
+      {
+        "name": "Description",
+        "description": "The description of the quick connect.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The description of the quick connect.",
+          "maxLength": 250,
+          "minLength": 1
+        }
+      },
       {
         "name": "InstanceArn",
         "description": "The identifier of the Amazon Connect instance.",
@@ -172,17 +183,6 @@
           "type": "string",
           "description": "The name of the quick connect.",
           "maxLength": 127,
-          "minLength": 1
-        }
-      },
-      {
-        "name": "Description",
-        "description": "The description of the quick connect.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The description of the quick connect.",
-          "maxLength": 250,
           "minLength": 1
         }
       },
@@ -238,5 +238,5 @@
       }
     ]
   },
-  "$hash": "22ce49e180f90f6db6e0c03533a0465716c0c0f3"
+  "$hash": "7f2d835898e20b6c1a1fcd32b77137932404e1ff"
 }

@@ -1,33 +1,13 @@
 {
   "definitions": {
-    "Tag": {
-      "type": "object",
-      "description": "Tag type enables you to specify a key-value pair that can be used to store information about an AWS CloudFormation StackSet.",
-      "properties": [
-        {
-          "name": "Key",
-          "description": "A string used to identify this tag. You can specify a maximum of 127 characters for a tag key.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "A string used to identify this tag. You can specify a maximum of 127 characters for a tag key.",
-            "maxLength": 128,
-            "minLength": 1,
-            "pattern": "^(?!aws:.*)[a-zA-Z0-9\\s\\:\\_\\.\\/\\=\\+\\-]+$"
-          }
-        },
-        {
-          "name": "Value",
-          "description": "A string containing the value for this tag. You can specify a maximum of 256 characters for a tag value.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "A string containing the value for this tag. You can specify a maximum of 256 characters for a tag value.",
-            "maxLength": 256,
-            "minLength": 1
-          }
-        }
-      ]
+    "Account": {
+      "type": "string",
+      "description": "AWS account that you want to create stack instances in the specified Region(s) for.",
+      "pattern": "^[0-9]{12}$"
+    },
+    "Active": {
+      "type": "boolean",
+      "description": "When true, StackSets performs non-conflicting operations concurrently and queues conflicting operations. After conflicting operations finish, StackSets starts queued operations in request order."
     },
     "AutoDeployment": {
       "type": "object",
@@ -52,19 +32,6 @@
         }
       ]
     },
-    "Account": {
-      "type": "string",
-      "description": "AWS account that you want to create stack instances in the specified Region(s) for.",
-      "pattern": "^[0-9]{12}$"
-    },
-    "Region": {
-      "type": "string",
-      "pattern": "^[a-zA-Z0-9-]{1,128}$"
-    },
-    "OrganizationalUnitId": {
-      "type": "string",
-      "pattern": "^(ou-[a-z0-9]{4,32}-[a-z0-9]{8,32}|r-[a-z0-9]{4,32})$"
-    },
     "Capability": {
       "type": "string",
       "allowedValues": [
@@ -73,14 +40,61 @@
         "CAPABILITY_AUTO_EXPAND"
       ]
     },
-    "RegionConcurrencyType": {
-      "type": "string",
-      "description": "The concurrency type of deploying StackSets operations in regions, could be in parallel or one region at a time",
-      "allowedValues": ["SEQUENTIAL", "PARALLEL"]
-    },
-    "Active": {
-      "type": "boolean",
-      "description": "When true, StackSets performs non-conflicting operations concurrently and queues conflicting operations. After conflicting operations finish, StackSets starts queued operations in request order."
+    "DeploymentTargets": {
+      "type": "object",
+      "description": " The AWS OrganizationalUnitIds or Accounts for which to create stack instances in the specified Regions.",
+      "properties": [
+        {
+          "name": "AccountFilterType",
+          "description": "The filter type you want to apply on organizational units and accounts.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The filter type you want to apply on organizational units and accounts.",
+            "allowedValues": ["NONE", "UNION", "INTERSECTION", "DIFFERENCE"]
+          }
+        },
+        {
+          "name": "Accounts",
+          "description": "AWS accounts that you want to create stack instances in the specified Region(s) for.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "AWS accounts that you want to create stack instances in the specified Region(s) for.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Account"
+            },
+            "minLength": 1
+          }
+        },
+        {
+          "name": "AccountsUrl",
+          "description": "Returns the value of the AccountsUrl property.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Returns the value of the AccountsUrl property.",
+            "maxLength": 5120,
+            "minLength": 1,
+            "pattern": "(s3://|http(s?)://).+"
+          }
+        },
+        {
+          "name": "OrganizationalUnitIds",
+          "description": "The organization root ID or organizational unit (OU) IDs to which StackSets deploys.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "The organization root ID or organizational unit (OU) IDs to which StackSets deploys.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "OrganizationalUnitId"
+            },
+            "minLength": 1
+          }
+        }
+      ]
     },
     "OperationPreferences": {
       "type": "object",
@@ -125,6 +139,14 @@
           }
         },
         {
+          "name": "RegionConcurrencyType",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "RegionConcurrencyType"
+          }
+        },
+        {
           "name": "RegionOrder",
           "optional": true,
           "type": {
@@ -134,16 +156,12 @@
               "typeName": "Region"
             }
           }
-        },
-        {
-          "name": "RegionConcurrencyType",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "RegionConcurrencyType"
-          }
         }
       ]
+    },
+    "OrganizationalUnitId": {
+      "type": "string",
+      "pattern": "^(ou-[a-z0-9]{4,32}-[a-z0-9]{8,32}|r-[a-z0-9]{4,32})$"
     },
     "Parameter": {
       "type": "object",
@@ -168,61 +186,14 @@
         }
       ]
     },
-    "DeploymentTargets": {
-      "type": "object",
-      "description": " The AWS OrganizationalUnitIds or Accounts for which to create stack instances in the specified Regions.",
-      "properties": [
-        {
-          "name": "Accounts",
-          "description": "AWS accounts that you want to create stack instances in the specified Region(s) for.",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "description": "AWS accounts that you want to create stack instances in the specified Region(s) for.",
-            "itemType": {
-              "type": "ref",
-              "typeName": "Account"
-            },
-            "minLength": 1
-          }
-        },
-        {
-          "name": "AccountsUrl",
-          "description": "Returns the value of the AccountsUrl property.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Returns the value of the AccountsUrl property.",
-            "maxLength": 5120,
-            "minLength": 1,
-            "pattern": "(s3://|http(s?)://).+"
-          }
-        },
-        {
-          "name": "OrganizationalUnitIds",
-          "description": "The organization root ID or organizational unit (OU) IDs to which StackSets deploys.",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "description": "The organization root ID or organizational unit (OU) IDs to which StackSets deploys.",
-            "itemType": {
-              "type": "ref",
-              "typeName": "OrganizationalUnitId"
-            },
-            "minLength": 1
-          }
-        },
-        {
-          "name": "AccountFilterType",
-          "description": "The filter type you want to apply on organizational units and accounts.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The filter type you want to apply on organizational units and accounts.",
-            "allowedValues": ["NONE", "UNION", "INTERSECTION", "DIFFERENCE"]
-          }
-        }
-      ]
+    "Region": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9-]{1,128}$"
+    },
+    "RegionConcurrencyType": {
+      "type": "string",
+      "description": "The concurrency type of deploying StackSets operations in regions, could be in parallel or one region at a time",
+      "allowedValues": ["SEQUENTIAL", "PARALLEL"]
     },
     "StackInstances": {
       "type": "object",
@@ -234,6 +205,19 @@
           "type": {
             "type": "ref",
             "typeName": "DeploymentTargets"
+          }
+        },
+        {
+          "name": "ParameterOverrides",
+          "description": "A list of stack set parameters whose values you want to override in the selected stack instances.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "A list of stack set parameters whose values you want to override in the selected stack instances.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Parameter"
+            }
           }
         },
         {
@@ -249,18 +233,34 @@
             },
             "minLength": 1
           }
+        }
+      ]
+    },
+    "Tag": {
+      "type": "object",
+      "description": "Tag type enables you to specify a key-value pair that can be used to store information about an AWS CloudFormation StackSet.",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "A string used to identify this tag. You can specify a maximum of 127 characters for a tag key.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "A string used to identify this tag. You can specify a maximum of 127 characters for a tag key.",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^(?!aws:.*)[a-zA-Z0-9\\s\\:\\_\\.\\/\\=\\+\\-]+$"
+          }
         },
         {
-          "name": "ParameterOverrides",
-          "description": "A list of stack set parameters whose values you want to override in the selected stack instances.",
-          "optional": true,
+          "name": "Value",
+          "description": "A string containing the value for this tag. You can specify a maximum of 256 characters for a tag value.",
+          "optional": false,
           "type": {
-            "type": "array",
-            "description": "A list of stack set parameters whose values you want to override in the selected stack instances.",
-            "itemType": {
-              "type": "ref",
-              "typeName": "Parameter"
-            }
+            "type": "string",
+            "description": "A string containing the value for this tag. You can specify a maximum of 256 characters for a tag value.",
+            "maxLength": 256,
+            "minLength": 1
           }
         }
       ]
@@ -270,17 +270,6 @@
     "type": "object",
     "description": "StackSet as a resource provides one-click experience for provisioning a StackSet and StackInstances",
     "properties": [
-      {
-        "name": "StackSetName",
-        "description": "The name to associate with the stack set. The name must be unique in the Region where you create your stack set.",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "description": "The name to associate with the stack set. The name must be unique in the Region where you create your stack set.",
-          "maxLength": 128,
-          "pattern": "^[a-zA-Z][a-zA-Z0-9\\-]{0,127}$"
-        }
-      },
       {
         "name": "AdministrationRoleARN",
         "description": "The Amazon Resource Number (ARN) of the IAM role to use to create this stack set. Specify an IAM role only if you are using customized administrator roles to control which users or groups can manage specific stack sets within the same administrator account.",
@@ -300,6 +289,16 @@
           "type": "ref",
           "description": "Describes whether StackSets automatically deploys to AWS Organizations accounts that are added to the target organization or organizational unit (OU). Specify only if PermissionModel is SERVICE_MANAGED.",
           "typeName": "AutoDeployment"
+        }
+      },
+      {
+        "name": "CallAs",
+        "description": "Specifies the AWS account that you are acting from. By default, SELF is specified. For self-managed permissions, specify SELF; for service-managed permissions, if you are signed in to the organization's management account, specify SELF. If you are signed in to a delegated administrator account, specify DELEGATED_ADMIN.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Specifies the AWS account that you are acting from. By default, SELF is specified. For self-managed permissions, specify SELF; for service-managed permissions, if you are signed in to the organization's management account, specify SELF. If you are signed in to a delegated administrator account, specify DELEGATED_ADMIN.",
+          "allowedValues": ["SELF", "DELEGATED_ADMIN"]
         }
       },
       {
@@ -338,24 +337,30 @@
         }
       },
       {
+        "name": "ManagedExecution",
+        "description": "Describes whether StackSets performs non-conflicting operations concurrently and queues conflicting operations.",
+        "optional": true,
+        "type": {
+          "type": "object",
+          "description": "Describes whether StackSets performs non-conflicting operations concurrently and queues conflicting operations.",
+          "properties": [
+            {
+              "name": "Active",
+              "optional": true,
+              "type": {
+                "type": "ref",
+                "typeName": "Active"
+              }
+            }
+          ]
+        }
+      },
+      {
         "name": "OperationPreferences",
         "optional": true,
         "type": {
           "type": "ref",
           "typeName": "OperationPreferences"
-        }
-      },
-      {
-        "name": "StackInstancesGroup",
-        "description": "A group of stack instances with parameters in some specific accounts and regions.",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "description": "A group of stack instances with parameters in some specific accounts and regions.",
-          "itemType": {
-            "type": "ref",
-            "typeName": "StackInstances"
-          }
         }
       },
       {
@@ -379,6 +384,30 @@
           "type": "string",
           "description": "Describes how the IAM roles required for stack set operations are created. By default, SELF-MANAGED is specified.",
           "allowedValues": ["SERVICE_MANAGED", "SELF_MANAGED"]
+        }
+      },
+      {
+        "name": "StackInstancesGroup",
+        "description": "A group of stack instances with parameters in some specific accounts and regions.",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "A group of stack instances with parameters in some specific accounts and regions.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "StackInstances"
+          }
+        }
+      },
+      {
+        "name": "StackSetName",
+        "description": "The name to associate with the stack set. The name must be unique in the Region where you create your stack set.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The name to associate with the stack set. The name must be unique in the Region where you create your stack set.",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z][a-zA-Z0-9\\-]{0,127}$"
         }
       },
       {
@@ -416,35 +445,6 @@
           "maxLength": 5120,
           "minLength": 1
         }
-      },
-      {
-        "name": "CallAs",
-        "description": "Specifies the AWS account that you are acting from. By default, SELF is specified. For self-managed permissions, specify SELF; for service-managed permissions, if you are signed in to the organization's management account, specify SELF. If you are signed in to a delegated administrator account, specify DELEGATED_ADMIN.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "Specifies the AWS account that you are acting from. By default, SELF is specified. For self-managed permissions, specify SELF; for service-managed permissions, if you are signed in to the organization's management account, specify SELF. If you are signed in to a delegated administrator account, specify DELEGATED_ADMIN.",
-          "allowedValues": ["SELF", "DELEGATED_ADMIN"]
-        }
-      },
-      {
-        "name": "ManagedExecution",
-        "description": "Describes whether StackSets performs non-conflicting operations concurrently and queues conflicting operations.",
-        "optional": true,
-        "type": {
-          "type": "object",
-          "description": "Describes whether StackSets performs non-conflicting operations concurrently and queues conflicting operations.",
-          "properties": [
-            {
-              "name": "Active",
-              "optional": true,
-              "type": {
-                "type": "ref",
-                "typeName": "Active"
-              }
-            }
-          ]
-        }
       }
     ]
   },
@@ -463,5 +463,5 @@
       }
     ]
   },
-  "$hash": "da7360512ab21a2fbd3012d5c0746806f5ab784f"
+  "$hash": "20e88656b20c8d82d1be801f03d6c31ef45199fd"
 }

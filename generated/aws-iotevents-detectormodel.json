@@ -1,237 +1,5 @@
 {
   "definitions": {
-    "DetectorModelDefinition": {
-      "type": "object",
-      "description": "Information that defines how a detector operates.",
-      "properties": [
-        {
-          "name": "InitialStateName",
-          "description": "The state that is entered at the creation of each detector (instance).",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The state that is entered at the creation of each detector (instance).",
-            "maxLength": 128,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "States",
-          "description": "Information about the states of the detector.",
-          "optional": false,
-          "type": {
-            "type": "array",
-            "description": "Information about the states of the detector.",
-            "itemType": {
-              "type": "ref",
-              "typeName": "State"
-            },
-            "minLength": 1
-          }
-        }
-      ]
-    },
-    "State": {
-      "type": "object",
-      "description": "Information that defines a state of a detector.",
-      "properties": [
-        {
-          "name": "OnEnter",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "OnEnter"
-          }
-        },
-        {
-          "name": "OnExit",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "OnExit"
-          }
-        },
-        {
-          "name": "OnInput",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "OnInput"
-          }
-        },
-        {
-          "name": "StateName",
-          "description": "The name of the state.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The name of the state.",
-            "maxLength": 128,
-            "minLength": 1
-          }
-        }
-      ]
-    },
-    "OnEnter": {
-      "type": "object",
-      "description": "When entering this state, perform these `actions` if the `condition` is `TRUE`.",
-      "properties": [
-        {
-          "name": "Events",
-          "description": "Specifies the `actions` that are performed when the state is entered and the `condition` is `TRUE`.",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "description": "Specifies the `actions` that are performed when the state is entered and the `condition` is `TRUE`.",
-            "itemType": {
-              "type": "ref",
-              "typeName": "Event"
-            }
-          }
-        }
-      ]
-    },
-    "OnExit": {
-      "type": "object",
-      "description": "When exiting this state, perform these `actions` if the specified `condition` is `TRUE`.",
-      "properties": [
-        {
-          "name": "Events",
-          "description": "Specifies the `actions` that are performed when the state is exited and the `condition` is `TRUE`.",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "description": "Specifies the `actions` that are performed when the state is exited and the `condition` is `TRUE`.",
-            "itemType": {
-              "type": "ref",
-              "typeName": "Event"
-            }
-          }
-        }
-      ]
-    },
-    "OnInput": {
-      "type": "object",
-      "description": "When an input is received and the `condition` is `TRUE`, perform the specified `actions`.",
-      "properties": [
-        {
-          "name": "Events",
-          "description": "Specifies the `actions` performed when the `condition` evaluates to `TRUE`.",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "description": "Specifies the `actions` performed when the `condition` evaluates to `TRUE`.",
-            "itemType": {
-              "type": "ref",
-              "typeName": "Event"
-            }
-          }
-        },
-        {
-          "name": "TransitionEvents",
-          "description": "Specifies the `actions` performed, and the next `state` entered, when a `condition` evaluates to `TRUE`.",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "description": "Specifies the `actions` performed, and the next `state` entered, when a `condition` evaluates to `TRUE`.",
-            "itemType": {
-              "type": "ref",
-              "typeName": "TransitionEvent"
-            }
-          }
-        }
-      ]
-    },
-    "Event": {
-      "type": "object",
-      "description": "Specifies the `actions` to be performed when the `condition` evaluates to `TRUE`.",
-      "properties": [
-        {
-          "name": "Actions",
-          "description": "The actions to be performed.",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "description": "The actions to be performed.",
-            "itemType": {
-              "type": "ref",
-              "typeName": "Action"
-            }
-          }
-        },
-        {
-          "name": "Condition",
-          "description": "The Boolean expression that, when `TRUE`, causes the `actions` to be performed. If not present, the `actions` are performed (=`TRUE`). If the expression result is not a `Boolean` value, the `actions` are not performed (=`FALSE`).",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The Boolean expression that, when `TRUE`, causes the `actions` to be performed. If not present, the `actions` are performed (=`TRUE`). If the expression result is not a `Boolean` value, the `actions` are not performed (=`FALSE`).",
-            "maxLength": 512
-          }
-        },
-        {
-          "name": "EventName",
-          "description": "The name of the event.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The name of the event.",
-            "maxLength": 128
-          }
-        }
-      ]
-    },
-    "TransitionEvent": {
-      "type": "object",
-      "description": "Specifies the `actions `performed and the next `state` entered when a `condition` evaluates to `TRUE`.",
-      "properties": [
-        {
-          "name": "Actions",
-          "description": "The actions to be performed.",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "description": "The actions to be performed.",
-            "itemType": {
-              "type": "ref",
-              "typeName": "Action"
-            }
-          }
-        },
-        {
-          "name": "Condition",
-          "description": "A Boolean expression that when `TRUE` causes the `actions` to be performed and the `nextState` to be entered.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "A Boolean expression that when `TRUE` causes the `actions` to be performed and the `nextState` to be entered.",
-            "maxLength": 512
-          }
-        },
-        {
-          "name": "EventName",
-          "description": "The name of the event.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The name of the event.",
-            "maxLength": 128,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "NextState",
-          "description": "The next state to enter.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The next state to enter.",
-            "maxLength": 128,
-            "minLength": 1
-          }
-        }
-      ]
-    },
     "Action": {
       "type": "object",
       "description": "The actions to be performed.",
@@ -342,6 +110,103 @@
         }
       ]
     },
+    "AssetPropertyTimestamp": {
+      "type": "object",
+      "description": "A structure that contains timestamp information. For more information, see [TimeInNanos](https://docs.aws.amazon.com/iot-sitewise/latest/APIReference/API_TimeInNanos.html) in the *AWS IoT SiteWise API Reference*.",
+      "properties": [
+        {
+          "name": "OffsetInNanos",
+          "description": "The timestamp, in seconds, in the Unix epoch format. The valid range is between `1-31556889864403199`. You can also specify an expression.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The timestamp, in seconds, in the Unix epoch format. The valid range is between `1-31556889864403199`. You can also specify an expression."
+          }
+        },
+        {
+          "name": "TimeInSeconds",
+          "description": "The nanosecond offset converted from `timeInSeconds`. The valid range is between `0-999999999`. You can also specify an expression.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The nanosecond offset converted from `timeInSeconds`. The valid range is between `0-999999999`. You can also specify an expression."
+          }
+        }
+      ]
+    },
+    "AssetPropertyValue": {
+      "type": "object",
+      "description": "A structure that contains value information. For more information, see [AssetPropertyValue](https://docs.aws.amazon.com/iot-sitewise/latest/APIReference/API_AssetPropertyValue.html) in the *AWS IoT SiteWise API Reference*.",
+      "properties": [
+        {
+          "name": "Quality",
+          "description": "The quality of the asset property value. The value must be `GOOD`, `BAD`, or `UNCERTAIN`. You can also specify an expression.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The quality of the asset property value. The value must be `GOOD`, `BAD`, or `UNCERTAIN`. You can also specify an expression."
+          }
+        },
+        {
+          "name": "Timestamp",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "AssetPropertyTimestamp"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "AssetPropertyVariant"
+          }
+        }
+      ]
+    },
+    "AssetPropertyVariant": {
+      "type": "object",
+      "description": "A structure that contains an asset property value. For more information, see [Variant](https://docs.aws.amazon.com/iot-sitewise/latest/APIReference/API_Variant.html) in the *AWS IoT SiteWise API Reference*.",
+      "properties": [
+        {
+          "name": "BooleanValue",
+          "description": "The asset property value is a Boolean value that must be `TRUE` or `FALSE`. You can also specify an expression. If you use an expression, the evaluated result should be a Boolean value.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The asset property value is a Boolean value that must be `TRUE` or `FALSE`. You can also specify an expression. If you use an expression, the evaluated result should be a Boolean value."
+          }
+        },
+        {
+          "name": "DoubleValue",
+          "description": "The asset property value is a double. You can also specify an expression. If you use an expression, the evaluated result should be a double.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The asset property value is a double. You can also specify an expression. If you use an expression, the evaluated result should be a double."
+          }
+        },
+        {
+          "name": "IntegerValue",
+          "description": "The asset property value is an integer. You can also specify an expression. If you use an expression, the evaluated result should be an integer.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The asset property value is an integer. You can also specify an expression. If you use an expression, the evaluated result should be an integer."
+          }
+        },
+        {
+          "name": "StringValue",
+          "description": "The asset property value is a string. You can also specify an expression. If you use an expression, the evaluated result should be a string.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The asset property value is a string. You can also specify an expression. If you use an expression, the evaluated result should be a string."
+          }
+        }
+      ]
+    },
     "ClearTimer": {
       "type": "object",
       "description": "Information needed to clear the timer.",
@@ -352,6 +217,37 @@
           "type": {
             "type": "string",
             "maxLength": 128,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "DetectorModelDefinition": {
+      "type": "object",
+      "description": "Information that defines how a detector operates.",
+      "properties": [
+        {
+          "name": "InitialStateName",
+          "description": "The state that is entered at the creation of each detector (instance).",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The state that is entered at the creation of each detector (instance).",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "States",
+          "description": "Information about the states of the detector.",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "description": "Information about the states of the detector.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "State"
+            },
             "minLength": 1
           }
         }
@@ -471,6 +367,45 @@
           "type": {
             "type": "string",
             "description": "The name of the DynamoDB table."
+          }
+        }
+      ]
+    },
+    "Event": {
+      "type": "object",
+      "description": "Specifies the `actions` to be performed when the `condition` evaluates to `TRUE`.",
+      "properties": [
+        {
+          "name": "Actions",
+          "description": "The actions to be performed.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "The actions to be performed.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Action"
+            }
+          }
+        },
+        {
+          "name": "Condition",
+          "description": "The Boolean expression that, when `TRUE`, causes the `actions` to be performed. If not present, the `actions` are performed (=`TRUE`). If the expression result is not a `Boolean` value, the `actions` are not performed (=`FALSE`).",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The Boolean expression that, when `TRUE`, causes the `actions` to be performed. If not present, the `actions` are performed (=`TRUE`). If the expression result is not a `Boolean` value, the `actions` are not performed (=`FALSE`).",
+            "maxLength": 512
+          }
+        },
+        {
+          "name": "EventName",
+          "description": "The name of the event.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The name of the event.",
+            "maxLength": 128
           }
         }
       ]
@@ -633,6 +568,101 @@
         }
       ]
     },
+    "OnEnter": {
+      "type": "object",
+      "description": "When entering this state, perform these `actions` if the `condition` is `TRUE`.",
+      "properties": [
+        {
+          "name": "Events",
+          "description": "Specifies the `actions` that are performed when the state is entered and the `condition` is `TRUE`.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "Specifies the `actions` that are performed when the state is entered and the `condition` is `TRUE`.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Event"
+            }
+          }
+        }
+      ]
+    },
+    "OnExit": {
+      "type": "object",
+      "description": "When exiting this state, perform these `actions` if the specified `condition` is `TRUE`.",
+      "properties": [
+        {
+          "name": "Events",
+          "description": "Specifies the `actions` that are performed when the state is exited and the `condition` is `TRUE`.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "Specifies the `actions` that are performed when the state is exited and the `condition` is `TRUE`.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Event"
+            }
+          }
+        }
+      ]
+    },
+    "OnInput": {
+      "type": "object",
+      "description": "When an input is received and the `condition` is `TRUE`, perform the specified `actions`.",
+      "properties": [
+        {
+          "name": "Events",
+          "description": "Specifies the `actions` performed when the `condition` evaluates to `TRUE`.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "Specifies the `actions` performed when the `condition` evaluates to `TRUE`.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Event"
+            }
+          }
+        },
+        {
+          "name": "TransitionEvents",
+          "description": "Specifies the `actions` performed, and the next `state` entered, when a `condition` evaluates to `TRUE`.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "Specifies the `actions` performed, and the next `state` entered, when a `condition` evaluates to `TRUE`.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "TransitionEvent"
+            }
+          }
+        }
+      ]
+    },
+    "Payload": {
+      "type": "object",
+      "description": "Information needed to configure the payload.\n\nBy default, AWS IoT Events generates a standard payload in JSON for any action. This action payload contains all attribute-value pairs that have the information about the detector model instance and the event triggered the action. To configure the action payload, you can use `contentExpression`.",
+      "properties": [
+        {
+          "name": "ContentExpression",
+          "description": "The content of the payload. You can use a string expression that includes quoted strings (`'<string>'`), variables (`$variable.<variable-name>`), input values (`$input.<input-name>.<path-to-datum>`), string concatenations, and quoted strings that contain `${}` as the content. The recommended maximum size of a content expression is 1 KB.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The content of the payload. You can use a string expression that includes quoted strings (`'<string>'`), variables (`$variable.<variable-name>`), input values (`$input.<input-name>.<path-to-datum>`), string concatenations, and quoted strings that contain `${}` as the content. The recommended maximum size of a content expression is 1 KB.",
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Type",
+          "description": "The value of the payload type can be either `STRING` or `JSON`.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The value of the payload type can be either `STRING` or `JSON`."
+          }
+        }
+      ]
+    },
     "ResetTimer": {
       "type": "object",
       "description": "Information required to reset the timer. The timer is reset to the previously evaluated result of the duration. The duration expression isn't reevaluated when you reset the timer.",
@@ -775,124 +805,43 @@
         }
       ]
     },
-    "AssetPropertyValue": {
+    "State": {
       "type": "object",
-      "description": "A structure that contains value information. For more information, see [AssetPropertyValue](https://docs.aws.amazon.com/iot-sitewise/latest/APIReference/API_AssetPropertyValue.html) in the *AWS IoT SiteWise API Reference*.",
+      "description": "Information that defines a state of a detector.",
       "properties": [
         {
-          "name": "Quality",
-          "description": "The quality of the asset property value. The value must be `GOOD`, `BAD`, or `UNCERTAIN`. You can also specify an expression.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The quality of the asset property value. The value must be `GOOD`, `BAD`, or `UNCERTAIN`. You can also specify an expression."
-          }
-        },
-        {
-          "name": "Timestamp",
+          "name": "OnEnter",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "AssetPropertyTimestamp"
+            "typeName": "OnEnter"
           }
         },
         {
-          "name": "Value",
-          "optional": false,
+          "name": "OnExit",
+          "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "AssetPropertyVariant"
-          }
-        }
-      ]
-    },
-    "AssetPropertyTimestamp": {
-      "type": "object",
-      "description": "A structure that contains timestamp information. For more information, see [TimeInNanos](https://docs.aws.amazon.com/iot-sitewise/latest/APIReference/API_TimeInNanos.html) in the *AWS IoT SiteWise API Reference*.",
-      "properties": [
-        {
-          "name": "OffsetInNanos",
-          "description": "The timestamp, in seconds, in the Unix epoch format. The valid range is between `1-31556889864403199`. You can also specify an expression.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The timestamp, in seconds, in the Unix epoch format. The valid range is between `1-31556889864403199`. You can also specify an expression."
+            "typeName": "OnExit"
           }
         },
         {
-          "name": "TimeInSeconds",
-          "description": "The nanosecond offset converted from `timeInSeconds`. The valid range is between `0-999999999`. You can also specify an expression.",
+          "name": "OnInput",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "OnInput"
+          }
+        },
+        {
+          "name": "StateName",
+          "description": "The name of the state.",
           "optional": false,
           "type": {
             "type": "string",
-            "description": "The nanosecond offset converted from `timeInSeconds`. The valid range is between `0-999999999`. You can also specify an expression."
-          }
-        }
-      ]
-    },
-    "AssetPropertyVariant": {
-      "type": "object",
-      "description": "A structure that contains an asset property value. For more information, see [Variant](https://docs.aws.amazon.com/iot-sitewise/latest/APIReference/API_Variant.html) in the *AWS IoT SiteWise API Reference*.",
-      "properties": [
-        {
-          "name": "BooleanValue",
-          "description": "The asset property value is a Boolean value that must be `TRUE` or `FALSE`. You can also specify an expression. If you use an expression, the evaluated result should be a Boolean value.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The asset property value is a Boolean value that must be `TRUE` or `FALSE`. You can also specify an expression. If you use an expression, the evaluated result should be a Boolean value."
-          }
-        },
-        {
-          "name": "DoubleValue",
-          "description": "The asset property value is a double. You can also specify an expression. If you use an expression, the evaluated result should be a double.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The asset property value is a double. You can also specify an expression. If you use an expression, the evaluated result should be a double."
-          }
-        },
-        {
-          "name": "IntegerValue",
-          "description": "The asset property value is an integer. You can also specify an expression. If you use an expression, the evaluated result should be an integer.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The asset property value is an integer. You can also specify an expression. If you use an expression, the evaluated result should be an integer."
-          }
-        },
-        {
-          "name": "StringValue",
-          "description": "The asset property value is a string. You can also specify an expression. If you use an expression, the evaluated result should be a string.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The asset property value is a string. You can also specify an expression. If you use an expression, the evaluated result should be a string."
-          }
-        }
-      ]
-    },
-    "Payload": {
-      "type": "object",
-      "description": "Information needed to configure the payload.\n\nBy default, AWS IoT Events generates a standard payload in JSON for any action. This action payload contains all attribute-value pairs that have the information about the detector model instance and the event triggered the action. To configure the action payload, you can use `contentExpression`.",
-      "properties": [
-        {
-          "name": "ContentExpression",
-          "description": "The content of the payload. You can use a string expression that includes quoted strings (`'<string>'`), variables (`$variable.<variable-name>`), input values (`$input.<input-name>.<path-to-datum>`), string concatenations, and quoted strings that contain `${}` as the content. The recommended maximum size of a content expression is 1 KB.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The content of the payload. You can use a string expression that includes quoted strings (`'<string>'`), variables (`$variable.<variable-name>`), input values (`$input.<input-name>.<path-to-datum>`), string concatenations, and quoted strings that contain `${}` as the content. The recommended maximum size of a content expression is 1 KB.",
+            "description": "The name of the state.",
+            "maxLength": 128,
             "minLength": 1
-          }
-        },
-        {
-          "name": "Type",
-          "description": "The value of the payload type can be either `STRING` or `JSON`.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The value of the payload type can be either `STRING` or `JSON`."
           }
         }
       ]
@@ -917,6 +866,57 @@
           "type": {
             "type": "string",
             "description": "Value of the Tag."
+          }
+        }
+      ]
+    },
+    "TransitionEvent": {
+      "type": "object",
+      "description": "Specifies the `actions `performed and the next `state` entered when a `condition` evaluates to `TRUE`.",
+      "properties": [
+        {
+          "name": "Actions",
+          "description": "The actions to be performed.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "The actions to be performed.",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Action"
+            }
+          }
+        },
+        {
+          "name": "Condition",
+          "description": "A Boolean expression that when `TRUE` causes the `actions` to be performed and the `nextState` to be entered.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "A Boolean expression that when `TRUE` causes the `actions` to be performed and the `nextState` to be entered.",
+            "maxLength": 512
+          }
+        },
+        {
+          "name": "EventName",
+          "description": "The name of the event.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The name of the event.",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "NextState",
+          "description": "The next state to enter.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The next state to enter.",
+            "maxLength": 128,
+            "minLength": 1
           }
         }
       ]

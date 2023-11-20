@@ -1,88 +1,5 @@
 {
   "definitions": {
-    "ExponentialRolloutRate": {
-      "type": "object",
-      "description": "Allows you to create an exponential rate of rollout for a job.",
-      "properties": [
-        {
-          "name": "BaseRatePerMinute",
-          "description": "The minimum number of things that will be notified of a pending job, per minute at the start of job rollout. This parameter allows you to define the initial rate of rollout.",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "description": "The minimum number of things that will be notified of a pending job, per minute at the start of job rollout. This parameter allows you to define the initial rate of rollout.",
-            "typeName": "BaseRatePerMinute"
-          }
-        },
-        {
-          "name": "IncrementFactor",
-          "description": "The exponential factor to increase the rate of rollout for a job.",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "description": "The exponential factor to increase the rate of rollout for a job.",
-            "typeName": "IncrementFactor"
-          }
-        },
-        {
-          "name": "RateIncreaseCriteria",
-          "description": "The criteria to initiate the increase in rate of rollout for a job.",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "description": "The criteria to initiate the increase in rate of rollout for a job.",
-            "typeName": "RateIncreaseCriteria"
-          }
-        }
-      ]
-    },
-    "BaseRatePerMinute": {
-      "type": "number",
-      "isInteger": true,
-      "minimum": 1
-    },
-    "IncrementFactor": {
-      "type": "number",
-      "isInteger": false,
-      "maximum": 5,
-      "minimum": 1
-    },
-    "RateIncreaseCriteria": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "NumberOfNotifiedThings",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "NumberOfNotifiedThings"
-          }
-        },
-        {
-          "name": "NumberOfSucceededThings",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "NumberOfSucceededThings"
-          }
-        }
-      ]
-    },
-    "NumberOfNotifiedThings": {
-      "type": "number",
-      "isInteger": true,
-      "minimum": 1
-    },
-    "NumberOfSucceededThings": {
-      "type": "number",
-      "isInteger": true,
-      "minimum": 1
-    },
-    "MaximumPerMinute": {
-      "type": "number",
-      "isInteger": true,
-      "minimum": 1
-    },
     "AbortCriteria": {
       "type": "object",
       "description": "The criteria that determine when and how a job abort takes place.",
@@ -133,32 +50,16 @@
       "type": "string",
       "allowedValues": ["CANCEL"]
     },
-    "FailureType": {
-      "type": "string",
-      "allowedValues": ["FAILED", "REJECTED", "TIMED_OUT", "ALL"]
-    },
-    "MinNumberOfExecutedThings": {
+    "BaseRatePerMinute": {
       "type": "number",
       "isInteger": true,
       "minimum": 1
     },
-    "ThresholdPercentage": {
-      "type": "number",
-      "isInteger": false,
-      "maximum": 100
-    },
-    "InProgressTimeoutInMinutes": {
-      "type": "number",
-      "description": "Specifies the amount of time, in minutes, this device has to finish execution of this job.",
-      "isInteger": true,
-      "maximum": 10080,
-      "minimum": 1
-    },
-    "RoleArn": {
+    "DestinationPackageVersion": {
       "type": "string",
-      "description": "The ARN of an IAM role that grants grants permission to download files from the S3 bucket where the job data/updates are stored. The role must also grant permission for IoT to download the files.",
-      "maxLength": 2048,
-      "minLength": 20
+      "description": "Specifies target package version ARNs for a software update job.",
+      "maxLength": 1600,
+      "minLength": 1
     },
     "ExpiresInSec": {
       "type": "number",
@@ -167,29 +68,58 @@
       "maximum": 3600,
       "minimum": 60
     },
-    "RetryCriteria": {
+    "ExponentialRolloutRate": {
       "type": "object",
-      "description": "Specifies how many times a failure type should be retried.",
+      "description": "Allows you to create an exponential rate of rollout for a job.",
       "properties": [
         {
-          "name": "NumberOfRetries",
-          "optional": true,
+          "name": "BaseRatePerMinute",
+          "description": "The minimum number of things that will be notified of a pending job, per minute at the start of job rollout. This parameter allows you to define the initial rate of rollout.",
+          "optional": false,
           "type": {
-            "type": "number",
-            "isInteger": true,
-            "maximum": 10,
-            "minimum": 0
+            "type": "ref",
+            "description": "The minimum number of things that will be notified of a pending job, per minute at the start of job rollout. This parameter allows you to define the initial rate of rollout.",
+            "typeName": "BaseRatePerMinute"
           }
         },
         {
-          "name": "FailureType",
-          "optional": true,
+          "name": "IncrementFactor",
+          "description": "The exponential factor to increase the rate of rollout for a job.",
+          "optional": false,
           "type": {
             "type": "ref",
-            "typeName": "JobRetryFailureType"
+            "description": "The exponential factor to increase the rate of rollout for a job.",
+            "typeName": "IncrementFactor"
+          }
+        },
+        {
+          "name": "RateIncreaseCriteria",
+          "description": "The criteria to initiate the increase in rate of rollout for a job.",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "description": "The criteria to initiate the increase in rate of rollout for a job.",
+            "typeName": "RateIncreaseCriteria"
           }
         }
       ]
+    },
+    "FailureType": {
+      "type": "string",
+      "allowedValues": ["FAILED", "REJECTED", "TIMED_OUT", "ALL"]
+    },
+    "InProgressTimeoutInMinutes": {
+      "type": "number",
+      "description": "Specifies the amount of time, in minutes, this device has to finish execution of this job.",
+      "isInteger": true,
+      "maximum": 10080,
+      "minimum": 1
+    },
+    "IncrementFactor": {
+      "type": "number",
+      "isInteger": false,
+      "maximum": 5,
+      "minimum": 1
     },
     "JobRetryFailureType": {
       "type": "string",
@@ -200,15 +130,6 @@
       "description": "Specifies a start time and duration for a scheduled Job.",
       "properties": [
         {
-          "name": "StartTime",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "maxLength": 256,
-            "minLength": 1
-          }
-        },
-        {
           "name": "DurationInMinutes",
           "optional": true,
           "type": {
@@ -217,14 +138,88 @@
             "maximum": 1430,
             "minimum": 1
           }
+        },
+        {
+          "name": "StartTime",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1
+          }
         }
       ]
     },
-    "DestinationPackageVersion": {
+    "MaximumPerMinute": {
+      "type": "number",
+      "isInteger": true,
+      "minimum": 1
+    },
+    "MinNumberOfExecutedThings": {
+      "type": "number",
+      "isInteger": true,
+      "minimum": 1
+    },
+    "NumberOfNotifiedThings": {
+      "type": "number",
+      "isInteger": true,
+      "minimum": 1
+    },
+    "NumberOfSucceededThings": {
+      "type": "number",
+      "isInteger": true,
+      "minimum": 1
+    },
+    "RateIncreaseCriteria": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "NumberOfNotifiedThings",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "NumberOfNotifiedThings"
+          }
+        },
+        {
+          "name": "NumberOfSucceededThings",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "NumberOfSucceededThings"
+          }
+        }
+      ]
+    },
+    "RetryCriteria": {
+      "type": "object",
+      "description": "Specifies how many times a failure type should be retried.",
+      "properties": [
+        {
+          "name": "FailureType",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "JobRetryFailureType"
+          }
+        },
+        {
+          "name": "NumberOfRetries",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 10,
+            "minimum": 0
+          }
+        }
+      ]
+    },
+    "RoleArn": {
       "type": "string",
-      "description": "Specifies target package version ARNs for a software update job.",
-      "maxLength": 1600,
-      "minLength": 1
+      "description": "The ARN of an IAM role that grants grants permission to download files from the S3 bucket where the job data/updates are stored. The role must also grant permission for IoT to download the files.",
+      "maxLength": 2048,
+      "minLength": 20
     },
     "Tag": {
       "type": "object",
@@ -253,6 +248,11 @@
           }
         }
       ]
+    },
+    "ThresholdPercentage": {
+      "type": "number",
+      "isInteger": false,
+      "maximum": 100
     }
   },
   "resource": {
@@ -261,22 +261,26 @@
     "documentationUrl": "https://docs.aws.amazon.com/iot/latest/developerguide/job-templates.html",
     "properties": [
       {
-        "name": "JobArn",
-        "description": "Optional for copying a JobTemplate from a pre-existing Job configuration.",
+        "name": "AbortConfig",
+        "description": "The criteria that determine when and how a job abort takes place.",
         "optional": true,
         "type": {
-          "type": "string",
-          "description": "Optional for copying a JobTemplate from a pre-existing Job configuration."
-        }
-      },
-      {
-        "name": "JobTemplateId",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "maxLength": 64,
-          "minLength": 1,
-          "pattern": "[a-zA-Z0-9_-]+"
+          "type": "object",
+          "description": "The criteria that determine when and how a job abort takes place.",
+          "properties": [
+            {
+              "name": "CriteriaList",
+              "optional": false,
+              "type": {
+                "type": "array",
+                "itemType": {
+                  "type": "ref",
+                  "typeName": "AbortCriteria"
+                },
+                "minLength": 1
+              }
+            }
+          ]
         }
       },
       {
@@ -288,6 +292,17 @@
           "description": "A description of the Job Template.",
           "maxLength": 2028,
           "pattern": "[^\\p{C}]+"
+        }
+      },
+      {
+        "name": "DestinationPackageVersions",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "DestinationPackageVersion"
+          }
         }
       },
       {
@@ -312,19 +327,31 @@
         }
       },
       {
-        "name": "TimeoutConfig",
-        "description": "Specifies the amount of time each device has to finish its execution of the job.",
+        "name": "JobArn",
+        "description": "Optional for copying a JobTemplate from a pre-existing Job configuration.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Optional for copying a JobTemplate from a pre-existing Job configuration."
+        }
+      },
+      {
+        "name": "JobExecutionsRetryConfig",
         "optional": true,
         "type": {
           "type": "object",
-          "description": "Specifies the amount of time each device has to finish its execution of the job.",
           "properties": [
             {
-              "name": "InProgressTimeoutInMinutes",
-              "optional": false,
+              "name": "RetryCriteriaList",
+              "optional": true,
               "type": {
-                "type": "ref",
-                "typeName": "InProgressTimeoutInMinutes"
+                "type": "array",
+                "itemType": {
+                  "type": "ref",
+                  "typeName": "RetryCriteria"
+                },
+                "maxLength": 2,
+                "minLength": 1
               }
             }
           ]
@@ -362,75 +389,13 @@
         }
       },
       {
-        "name": "AbortConfig",
-        "description": "The criteria that determine when and how a job abort takes place.",
-        "optional": true,
+        "name": "JobTemplateId",
+        "optional": false,
         "type": {
-          "type": "object",
-          "description": "The criteria that determine when and how a job abort takes place.",
-          "properties": [
-            {
-              "name": "CriteriaList",
-              "optional": false,
-              "type": {
-                "type": "array",
-                "itemType": {
-                  "type": "ref",
-                  "typeName": "AbortCriteria"
-                },
-                "minLength": 1
-              }
-            }
-          ]
-        }
-      },
-      {
-        "name": "PresignedUrlConfig",
-        "description": "Configuration for pre-signed S3 URLs.",
-        "optional": true,
-        "type": {
-          "type": "object",
-          "description": "Configuration for pre-signed S3 URLs.",
-          "properties": [
-            {
-              "name": "RoleArn",
-              "optional": false,
-              "type": {
-                "type": "ref",
-                "typeName": "RoleArn"
-              }
-            },
-            {
-              "name": "ExpiresInSec",
-              "optional": true,
-              "type": {
-                "type": "ref",
-                "typeName": "ExpiresInSec"
-              }
-            }
-          ]
-        }
-      },
-      {
-        "name": "JobExecutionsRetryConfig",
-        "optional": true,
-        "type": {
-          "type": "object",
-          "properties": [
-            {
-              "name": "RetryCriteriaList",
-              "optional": true,
-              "type": {
-                "type": "array",
-                "itemType": {
-                  "type": "ref",
-                  "typeName": "RetryCriteria"
-                },
-                "maxLength": 2,
-                "minLength": 1
-              }
-            }
-          ]
+          "type": "string",
+          "maxLength": 64,
+          "minLength": 1,
+          "pattern": "[a-zA-Z0-9_-]+"
         }
       },
       {
@@ -445,14 +410,30 @@
         }
       },
       {
-        "name": "DestinationPackageVersions",
+        "name": "PresignedUrlConfig",
+        "description": "Configuration for pre-signed S3 URLs.",
         "optional": true,
         "type": {
-          "type": "array",
-          "itemType": {
-            "type": "ref",
-            "typeName": "DestinationPackageVersion"
-          }
+          "type": "object",
+          "description": "Configuration for pre-signed S3 URLs.",
+          "properties": [
+            {
+              "name": "ExpiresInSec",
+              "optional": true,
+              "type": {
+                "type": "ref",
+                "typeName": "ExpiresInSec"
+              }
+            },
+            {
+              "name": "RoleArn",
+              "optional": false,
+              "type": {
+                "type": "ref",
+                "typeName": "RoleArn"
+              }
+            }
+          ]
         }
       },
       {
@@ -467,6 +448,25 @@
             "typeName": "Tag"
           },
           "maxLength": 50
+        }
+      },
+      {
+        "name": "TimeoutConfig",
+        "description": "Specifies the amount of time each device has to finish its execution of the job.",
+        "optional": true,
+        "type": {
+          "type": "object",
+          "description": "Specifies the amount of time each device has to finish its execution of the job.",
+          "properties": [
+            {
+              "name": "InProgressTimeoutInMinutes",
+              "optional": false,
+              "type": {
+                "type": "ref",
+                "typeName": "InProgressTimeoutInMinutes"
+              }
+            }
+          ]
         }
       }
     ]
@@ -485,5 +485,5 @@
       }
     ]
   },
-  "$hash": "c32d79186f77b1f16645a90051d183b4381b4223"
+  "$hash": "f21150c3b18f32432d7ee0c9be185748070b499e"
 }

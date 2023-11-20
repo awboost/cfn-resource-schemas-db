@@ -5,6 +5,59 @@
       "description": "Firewall Rule associating the Rule Group to a Domain List",
       "properties": [
         {
+          "name": "Action",
+          "description": "Rule Action",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Rule Action",
+            "allowedValues": ["ALLOW", "BLOCK", "ALERT"]
+          }
+        },
+        {
+          "name": "BlockOverrideDnsType",
+          "description": "BlockOverrideDnsType",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "BlockOverrideDnsType",
+            "allowedValues": ["CNAME"]
+          }
+        },
+        {
+          "name": "BlockOverrideDomain",
+          "description": "BlockOverrideDomain",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "BlockOverrideDomain",
+            "maxLength": 255,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "BlockOverrideTtl",
+          "description": "BlockOverrideTtl",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "BlockOverrideTtl",
+            "isInteger": true,
+            "maximum": 604800,
+            "minimum": 0
+          }
+        },
+        {
+          "name": "BlockResponse",
+          "description": "BlockResponse",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "BlockResponse",
+            "allowedValues": ["NODATA", "NXDOMAIN", "OVERRIDE"]
+          }
+        },
+        {
           "name": "FirewallDomainListId",
           "description": "ResourceId",
           "optional": false,
@@ -23,59 +76,6 @@
             "type": "number",
             "description": "Rule Priority",
             "isInteger": true
-          }
-        },
-        {
-          "name": "Action",
-          "description": "Rule Action",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "Rule Action",
-            "allowedValues": ["ALLOW", "BLOCK", "ALERT"]
-          }
-        },
-        {
-          "name": "BlockResponse",
-          "description": "BlockResponse",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "BlockResponse",
-            "allowedValues": ["NODATA", "NXDOMAIN", "OVERRIDE"]
-          }
-        },
-        {
-          "name": "BlockOverrideDomain",
-          "description": "BlockOverrideDomain",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "BlockOverrideDomain",
-            "maxLength": 255,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "BlockOverrideDnsType",
-          "description": "BlockOverrideDnsType",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "BlockOverrideDnsType",
-            "allowedValues": ["CNAME"]
-          }
-        },
-        {
-          "name": "BlockOverrideTtl",
-          "description": "BlockOverrideTtl",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "description": "BlockOverrideTtl",
-            "isInteger": true,
-            "maximum": 604800,
-            "minimum": 0
           }
         }
       ]
@@ -114,18 +114,6 @@
     "description": "Resource schema for AWS::Route53Resolver::FirewallRuleGroup.",
     "properties": [
       {
-        "name": "Name",
-        "description": "FirewallRuleGroupName",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "FirewallRuleGroupName",
-          "maxLength": 64,
-          "minLength": 1,
-          "pattern": "(?!^[0-9]+$)([a-zA-Z0-9\\-_' ']+)"
-        }
-      },
-      {
         "name": "FirewallRules",
         "description": "FirewallRules",
         "optional": true,
@@ -136,6 +124,18 @@
             "type": "ref",
             "typeName": "FirewallRule"
           }
+        }
+      },
+      {
+        "name": "Name",
+        "description": "FirewallRuleGroupName",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "FirewallRuleGroupName",
+          "maxLength": 64,
+          "minLength": 1,
+          "pattern": "(?!^[0-9]+$)([a-zA-Z0-9\\-_' ']+)"
         }
       },
       {
@@ -158,17 +158,6 @@
     "description": "Resource schema for AWS::Route53Resolver::FirewallRuleGroup.",
     "properties": [
       {
-        "name": "Id",
-        "description": "ResourceId",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "ResourceId",
-          "maxLength": 64,
-          "minLength": 1
-        }
-      },
-      {
         "name": "Arn",
         "description": "Arn",
         "optional": true,
@@ -180,6 +169,61 @@
         }
       },
       {
+        "name": "CreationTime",
+        "description": "Rfc3339TimeString",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Rfc3339TimeString",
+          "maxLength": 40,
+          "minLength": 20
+        }
+      },
+      {
+        "name": "CreatorRequestId",
+        "description": "The id of the creator request.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The id of the creator request.",
+          "maxLength": 255,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "Id",
+        "description": "ResourceId",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "ResourceId",
+          "maxLength": 64,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "ModificationTime",
+        "description": "Rfc3339TimeString",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Rfc3339TimeString",
+          "maxLength": 40,
+          "minLength": 20
+        }
+      },
+      {
+        "name": "OwnerId",
+        "description": "AccountId",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "AccountId",
+          "maxLength": 32,
+          "minLength": 12
+        }
+      },
+      {
         "name": "RuleCount",
         "description": "Count",
         "optional": true,
@@ -187,6 +231,16 @@
           "type": "number",
           "description": "Count",
           "isInteger": true
+        }
+      },
+      {
+        "name": "ShareStatus",
+        "description": "ShareStatus, possible values are NOT_SHARED, SHARED_WITH_ME, SHARED_BY_ME.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "ShareStatus, possible values are NOT_SHARED, SHARED_WITH_ME, SHARED_BY_ME.",
+          "allowedValues": ["NOT_SHARED", "SHARED_WITH_ME", "SHARED_BY_ME"]
         }
       },
       {
@@ -212,62 +266,8 @@
           "type": "string",
           "description": "FirewallRuleGroupStatus"
         }
-      },
-      {
-        "name": "OwnerId",
-        "description": "AccountId",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "AccountId",
-          "maxLength": 32,
-          "minLength": 12
-        }
-      },
-      {
-        "name": "ShareStatus",
-        "description": "ShareStatus, possible values are NOT_SHARED, SHARED_WITH_ME, SHARED_BY_ME.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "ShareStatus, possible values are NOT_SHARED, SHARED_WITH_ME, SHARED_BY_ME.",
-          "allowedValues": ["NOT_SHARED", "SHARED_WITH_ME", "SHARED_BY_ME"]
-        }
-      },
-      {
-        "name": "CreatorRequestId",
-        "description": "The id of the creator request.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The id of the creator request.",
-          "maxLength": 255,
-          "minLength": 1
-        }
-      },
-      {
-        "name": "CreationTime",
-        "description": "Rfc3339TimeString",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "Rfc3339TimeString",
-          "maxLength": 40,
-          "minLength": 20
-        }
-      },
-      {
-        "name": "ModificationTime",
-        "description": "Rfc3339TimeString",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "Rfc3339TimeString",
-          "maxLength": 40,
-          "minLength": 20
-        }
       }
     ]
   },
-  "$hash": "7d32460344794b2119ef93b08c839ef2b5d4c3f0"
+  "$hash": "9a8976f847b785e4d0f596dae0d699992462b48d"
 }

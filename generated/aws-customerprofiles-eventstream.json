@@ -1,11 +1,5 @@
 {
   "definitions": {
-    "Uri": {
-      "type": "string",
-      "description": "The StreamARN of the destination to deliver profile events to. For example, arn:aws:kinesis:region:account-id:stream/stream-name",
-      "maxLength": 255,
-      "minLength": 1
-    },
     "Status": {
       "type": "string",
       "description": "The status of enabling the Kinesis stream as a destination for export.",
@@ -39,6 +33,12 @@
           }
         }
       ]
+    },
+    "Uri": {
+      "type": "string",
+      "description": "The StreamARN of the destination to deliver profile events to. For example, arn:aws:kinesis:region:account-id:stream/stream-name",
+      "maxLength": 255,
+      "minLength": 1
     }
   },
   "resource": {
@@ -70,14 +70,6 @@
         }
       },
       {
-        "name": "Uri",
-        "optional": false,
-        "type": {
-          "type": "ref",
-          "typeName": "Uri"
-        }
-      },
-      {
         "name": "Tags",
         "description": "The tags used to organize, track, or control access for this resource.",
         "optional": true,
@@ -91,6 +83,14 @@
           "maxLength": 50,
           "minLength": 0
         }
+      },
+      {
+        "name": "Uri",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "Uri"
+        }
       }
     ]
   },
@@ -98,6 +98,42 @@
     "type": "object",
     "description": "An Event Stream resource of Amazon Connect Customer Profiles",
     "properties": [
+      {
+        "name": "CreatedAt",
+        "description": "The timestamp of when the export was created.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The timestamp of when the export was created."
+        }
+      },
+      {
+        "name": "DestinationDetails",
+        "description": "Details regarding the Kinesis stream.",
+        "optional": true,
+        "type": {
+          "type": "object",
+          "description": "Details regarding the Kinesis stream.",
+          "properties": [
+            {
+              "name": "Status",
+              "optional": false,
+              "type": {
+                "type": "ref",
+                "typeName": "Status"
+              }
+            },
+            {
+              "name": "Uri",
+              "optional": false,
+              "type": {
+                "type": "ref",
+                "typeName": "Uri"
+              }
+            }
+          ]
+        }
+      },
       {
         "name": "EventStreamArn",
         "description": "A unique identifier for the event stream.",
@@ -110,15 +146,6 @@
         }
       },
       {
-        "name": "CreatedAt",
-        "description": "The timestamp of when the export was created.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The timestamp of when the export was created."
-        }
-      },
-      {
         "name": "State",
         "description": "The operational state of destination stream for export.",
         "optional": true,
@@ -127,35 +154,8 @@
           "description": "The operational state of destination stream for export.",
           "allowedValues": ["RUNNING", "STOPPED"]
         }
-      },
-      {
-        "name": "DestinationDetails",
-        "description": "Details regarding the Kinesis stream.",
-        "optional": true,
-        "type": {
-          "type": "object",
-          "description": "Details regarding the Kinesis stream.",
-          "properties": [
-            {
-              "name": "Uri",
-              "optional": false,
-              "type": {
-                "type": "ref",
-                "typeName": "Uri"
-              }
-            },
-            {
-              "name": "Status",
-              "optional": false,
-              "type": {
-                "type": "ref",
-                "typeName": "Status"
-              }
-            }
-          ]
-        }
       }
     ]
   },
-  "$hash": "9723600fdae117af36e457e5508a17afdd17d300"
+  "$hash": "a24ba735cc167a9fad4593222598923af4f64689"
 }

@@ -94,19 +94,19 @@
       "description": "<p>The encryption type.</p>",
       "properties": [
         {
-          "name": "TsEncryptionMethod",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "TsEncryptionMethod"
-          }
-        },
-        {
           "name": "CmafEncryptionMethod",
           "optional": true,
           "type": {
             "type": "ref",
             "typeName": "CmafEncryptionMethod"
+          }
+        },
+        {
+          "name": "TsEncryptionMethod",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "TsEncryptionMethod"
           }
         }
       ]
@@ -115,6 +115,15 @@
       "type": "object",
       "description": "<p>Filter configuration includes settings for manifest filtering, start and end times, and time delay that apply to all of your egress requests for this manifest. </p>",
       "properties": [
+        {
+          "name": "End",
+          "description": "<p>Optionally specify the end time for all of your manifest egress requests. When you include end time, note that you cannot use end time query parameters for this manifest's endpoint URL.</p>",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "<p>Optionally specify the end time for all of your manifest egress requests. When you include end time, note that you cannot use end time query parameters for this manifest's endpoint URL.</p>"
+          }
+        },
         {
           "name": "ManifestFilter",
           "description": "<p>Optionally specify one or more manifest filters for all of your manifest egress requests. When you include a manifest filter, note that you cannot use an identical manifest filter query parameter for this manifest's endpoint URL.</p>",
@@ -136,15 +145,6 @@
           }
         },
         {
-          "name": "End",
-          "description": "<p>Optionally specify the end time for all of your manifest egress requests. When you include end time, note that you cannot use end time query parameters for this manifest's endpoint URL.</p>",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "<p>Optionally specify the end time for all of your manifest egress requests. When you include end time, note that you cannot use end time query parameters for this manifest's endpoint URL.</p>"
-          }
-        },
-        {
           "name": "TimeDelaySeconds",
           "description": "<p>Optionally specify the time delay for all of your manifest egress requests. Enter a value that is smaller than your endpoint's startover window. When you include time delay, note that you cannot use time delay query parameters for this manifest's endpoint URL.</p>",
           "optional": true,
@@ -163,33 +163,32 @@
       "description": "<p>Retrieve the HTTP live streaming (HLS) manifest configuration.</p>",
       "properties": [
         {
-          "name": "ManifestName",
-          "description": "<p>A short short string that's appended to the endpoint URL. The manifest name creates a unique path to this endpoint. If you don't enter a value, MediaPackage uses the default manifest name, index. MediaPackage automatically inserts the format extension, such as .m3u8. You can't use the same manifest name if you use HLS manifest and low-latency HLS manifest. The manifestName on the HLSManifest object overrides the manifestName you provided on the originEndpoint object.</p>",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "<p>A short short string that's appended to the endpoint URL. The manifest name creates a unique path to this endpoint. If you don't enter a value, MediaPackage uses the default manifest name, index. MediaPackage automatically inserts the format extension, such as .m3u8. You can't use the same manifest name if you use HLS manifest and low-latency HLS manifest. The manifestName on the HLSManifest object overrides the manifestName you provided on the originEndpoint object.</p>",
-            "maxLength": 256,
-            "minLength": 1,
-            "pattern": "^[a-zA-Z0-9_-]+$"
-          }
-        },
-        {
-          "name": "Url",
-          "description": "<p>The egress domain URL for stream delivery from MediaPackage.</p>",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "<p>The egress domain URL for stream delivery from MediaPackage.</p>"
-          }
-        },
-        {
           "name": "ChildManifestName",
           "description": "<p>A short string that's appended to the endpoint URL. The child manifest name creates a unique path to this endpoint. If you don't enter a value, MediaPackage uses the default child manifest name, index_1. The manifestName on the HLSManifest object overrides the manifestName you provided on the originEndpoint object.</p>",
           "optional": true,
           "type": {
             "type": "string",
             "description": "<p>A short string that's appended to the endpoint URL. The child manifest name creates a unique path to this endpoint. If you don't enter a value, MediaPackage uses the default child manifest name, index_1. The manifestName on the HLSManifest object overrides the manifestName you provided on the originEndpoint object.</p>",
+            "maxLength": 256,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9_-]+$"
+          }
+        },
+        {
+          "name": "FilterConfiguration",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "FilterConfiguration"
+          }
+        },
+        {
+          "name": "ManifestName",
+          "description": "<p>A short short string that's appended to the endpoint URL. The manifest name creates a unique path to this endpoint. If you don't enter a value, MediaPackage uses the default manifest name, index. MediaPackage automatically inserts the format extension, such as .m3u8. You can't use the same manifest name if you use HLS manifest and low-latency HLS manifest. The manifestName on the HLSManifest object overrides the manifestName you provided on the originEndpoint object.</p>",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "<p>A short short string that's appended to the endpoint URL. The manifest name creates a unique path to this endpoint. If you don't enter a value, MediaPackage uses the default manifest name, index. MediaPackage automatically inserts the format extension, such as .m3u8. You can't use the same manifest name if you use HLS manifest and low-latency HLS manifest. The manifestName on the HLSManifest object overrides the manifestName you provided on the originEndpoint object.</p>",
             "maxLength": 256,
             "minLength": 1,
             "pattern": "^[a-zA-Z0-9_-]+$"
@@ -224,11 +223,12 @@
           }
         },
         {
-          "name": "FilterConfiguration",
+          "name": "Url",
+          "description": "<p>The egress domain URL for stream delivery from MediaPackage.</p>",
           "optional": true,
           "type": {
-            "type": "ref",
-            "typeName": "FilterConfiguration"
+            "type": "string",
+            "description": "<p>The egress domain URL for stream delivery from MediaPackage.</p>"
           }
         }
       ]
@@ -238,33 +238,32 @@
       "description": "<p>Retrieve the low-latency HTTP live streaming (HLS) manifest configuration.</p>",
       "properties": [
         {
-          "name": "ManifestName",
-          "description": "<p>A short short string that's appended to the endpoint URL. The manifest name creates a unique path to this endpoint. If you don't enter a value, MediaPackage uses the default manifest name, index. MediaPackage automatically inserts the format extension, such as .m3u8. You can't use the same manifest name if you use HLS manifest and low-latency HLS manifest. The manifestName on the HLSManifest object overrides the manifestName you provided on the originEndpoint object.</p>",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "<p>A short short string that's appended to the endpoint URL. The manifest name creates a unique path to this endpoint. If you don't enter a value, MediaPackage uses the default manifest name, index. MediaPackage automatically inserts the format extension, such as .m3u8. You can't use the same manifest name if you use HLS manifest and low-latency HLS manifest. The manifestName on the HLSManifest object overrides the manifestName you provided on the originEndpoint object.</p>",
-            "maxLength": 256,
-            "minLength": 1,
-            "pattern": "^[a-zA-Z0-9_-]+$"
-          }
-        },
-        {
-          "name": "Url",
-          "description": "<p>The egress domain URL for stream delivery from MediaPackage.</p>",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "<p>The egress domain URL for stream delivery from MediaPackage.</p>"
-          }
-        },
-        {
           "name": "ChildManifestName",
           "description": "<p>A short string that's appended to the endpoint URL. The child manifest name creates a unique path to this endpoint. If you don't enter a value, MediaPackage uses the default child manifest name, index_1. The manifestName on the HLSManifest object overrides the manifestName you provided on the originEndpoint object.</p>",
           "optional": true,
           "type": {
             "type": "string",
             "description": "<p>A short string that's appended to the endpoint URL. The child manifest name creates a unique path to this endpoint. If you don't enter a value, MediaPackage uses the default child manifest name, index_1. The manifestName on the HLSManifest object overrides the manifestName you provided on the originEndpoint object.</p>",
+            "maxLength": 256,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9_-]+$"
+          }
+        },
+        {
+          "name": "FilterConfiguration",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "FilterConfiguration"
+          }
+        },
+        {
+          "name": "ManifestName",
+          "description": "<p>A short short string that's appended to the endpoint URL. The manifest name creates a unique path to this endpoint. If you don't enter a value, MediaPackage uses the default manifest name, index. MediaPackage automatically inserts the format extension, such as .m3u8. You can't use the same manifest name if you use HLS manifest and low-latency HLS manifest. The manifestName on the HLSManifest object overrides the manifestName you provided on the originEndpoint object.</p>",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "<p>A short short string that's appended to the endpoint URL. The manifest name creates a unique path to this endpoint. If you don't enter a value, MediaPackage uses the default manifest name, index. MediaPackage automatically inserts the format extension, such as .m3u8. You can't use the same manifest name if you use HLS manifest and low-latency HLS manifest. The manifestName on the HLSManifest object overrides the manifestName you provided on the originEndpoint object.</p>",
             "maxLength": 256,
             "minLength": 1,
             "pattern": "^[a-zA-Z0-9_-]+$"
@@ -299,11 +298,12 @@
           }
         },
         {
-          "name": "FilterConfiguration",
+          "name": "Url",
+          "description": "<p>The egress domain URL for stream delivery from MediaPackage.</p>",
           "optional": true,
           "type": {
-            "type": "ref",
-            "typeName": "FilterConfiguration"
+            "type": "string",
+            "description": "<p>The egress domain URL for stream delivery from MediaPackage.</p>"
           }
         }
       ]
@@ -387,6 +387,31 @@
       "description": "<p>The segment configuration, including the segment name, duration, and other configuration values.</p>",
       "properties": [
         {
+          "name": "Encryption",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Encryption"
+          }
+        },
+        {
+          "name": "IncludeIframeOnlyStreams",
+          "description": "<p>When selected, the stream set includes an additional I-frame only stream, along with the other tracks. If false, this extra stream is not included. MediaPackage generates an I-frame only stream from the first rendition in the manifest. The service inserts EXT-I-FRAMES-ONLY tags in the output manifest, and then generates and includes an I-frames only playlist in the stream. This playlist permits player functionality like fast forward and rewind.</p>",
+          "optional": true,
+          "type": {
+            "type": "boolean",
+            "description": "<p>When selected, the stream set includes an additional I-frame only stream, along with the other tracks. If false, this extra stream is not included. MediaPackage generates an I-frame only stream from the first rendition in the manifest. The service inserts EXT-I-FRAMES-ONLY tags in the output manifest, and then generates and includes an I-frames only playlist in the stream. This playlist permits player functionality like fast forward and rewind.</p>"
+          }
+        },
+        {
+          "name": "Scte",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Scte"
+          }
+        },
+        {
           "name": "SegmentDurationSeconds",
           "description": "<p>The duration (in seconds) of each segment. Enter a value equal to, or a multiple of, the input segment duration. If the value that you enter is different from the input segment duration, MediaPackage rounds segments to the nearest multiple of the input segment duration.</p>",
           "optional": true,
@@ -411,24 +436,6 @@
           }
         },
         {
-          "name": "TsUseAudioRenditionGroup",
-          "description": "<p>When selected, MediaPackage bundles all audio tracks in a rendition group. All other tracks in the stream can be used with any audio rendition from the group.</p>",
-          "optional": true,
-          "type": {
-            "type": "boolean",
-            "description": "<p>When selected, MediaPackage bundles all audio tracks in a rendition group. All other tracks in the stream can be used with any audio rendition from the group.</p>"
-          }
-        },
-        {
-          "name": "IncludeIframeOnlyStreams",
-          "description": "<p>When selected, the stream set includes an additional I-frame only stream, along with the other tracks. If false, this extra stream is not included. MediaPackage generates an I-frame only stream from the first rendition in the manifest. The service inserts EXT-I-FRAMES-ONLY tags in the output manifest, and then generates and includes an I-frames only playlist in the stream. This playlist permits player functionality like fast forward and rewind.</p>",
-          "optional": true,
-          "type": {
-            "type": "boolean",
-            "description": "<p>When selected, the stream set includes an additional I-frame only stream, along with the other tracks. If false, this extra stream is not included. MediaPackage generates an I-frame only stream from the first rendition in the manifest. The service inserts EXT-I-FRAMES-ONLY tags in the output manifest, and then generates and includes an I-frames only playlist in the stream. This playlist permits player functionality like fast forward and rewind.</p>"
-          }
-        },
-        {
           "name": "TsIncludeDvbSubtitles",
           "description": "<p>By default, MediaPackage excludes all digital video broadcasting (DVB) subtitles from the output. When selected, MediaPackage passes through DVB subtitles into the output.</p>",
           "optional": true,
@@ -438,19 +445,12 @@
           }
         },
         {
-          "name": "Scte",
+          "name": "TsUseAudioRenditionGroup",
+          "description": "<p>When selected, MediaPackage bundles all audio tracks in a rendition group. All other tracks in the stream can be used with any audio rendition from the group.</p>",
           "optional": true,
           "type": {
-            "type": "ref",
-            "typeName": "Scte"
-          }
-        },
-        {
-          "name": "Encryption",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "Encryption"
+            "type": "boolean",
+            "description": "<p>When selected, MediaPackage bundles all audio tracks in a rendition group. All other tracks in the stream can be used with any audio rendition from the group.</p>"
           }
         }
       ]
@@ -459,6 +459,21 @@
       "type": "object",
       "description": "<p>The parameters for the SPEKE key provider.</p>",
       "properties": [
+        {
+          "name": "DrmSystems",
+          "description": "<p>The DRM solution provider you're using to protect your content during distribution.</p>",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "description": "<p>The DRM solution provider you're using to protect your content during distribution.</p>",
+            "itemType": {
+              "type": "ref",
+              "typeName": "DrmSystem"
+            },
+            "maxLength": 4,
+            "minLength": 1
+          }
+        },
         {
           "name": "EncryptionContractConfiguration",
           "optional": false,
@@ -477,21 +492,6 @@
             "maxLength": 256,
             "minLength": 1,
             "pattern": "^[0-9a-zA-Z_-]+$"
-          }
-        },
-        {
-          "name": "DrmSystems",
-          "description": "<p>The DRM solution provider you're using to protect your content during distribution.</p>",
-          "optional": false,
-          "type": {
-            "type": "array",
-            "description": "<p>The DRM solution provider you're using to protect your content during distribution.</p>",
-            "itemType": {
-              "type": "ref",
-              "typeName": "DrmSystem"
-            },
-            "maxLength": 4,
-            "minLength": 1
           }
         },
         {
@@ -518,10 +518,6 @@
         }
       ]
     },
-    "TsEncryptionMethod": {
-      "type": "string",
-      "allowedValues": ["AES_128", "SAMPLE_AES"]
-    },
     "Tag": {
       "type": "object",
       "properties": [
@@ -540,6 +536,10 @@
           }
         }
       ]
+    },
+    "TsEncryptionMethod": {
+      "type": "string",
+      "allowedValues": ["AES_128", "SAMPLE_AES"]
     }
   },
   "resource": {
@@ -687,5 +687,5 @@
       }
     ]
   },
-  "$hash": "f016eb39abe99d50f5b95baaca84d0a7adbabf9e"
+  "$hash": "3b7bd675e9cca7dcd3f36d432bd449ca2af2f2f7"
 }

@@ -1,200 +1,73 @@
 {
   "definitions": {
-    "RoleArn": {
-      "type": "string",
-      "description": "An Amazon Resource Name (ARN) of an IAM role that AWS Elemental MediaPackage will assume when accessing the key provider service."
-    },
-    "SpekeKeyProvider": {
+    "CmafEncryption": {
       "type": "object",
-      "description": "A configuration for accessing an external Secure Packager and Encoder Key Exchange (SPEKE) service that will provide encryption keys.",
+      "description": "A CMAF encryption configuration.",
       "properties": [
         {
-          "name": "EncryptionContractConfiguration",
+          "name": "SpekeKeyProvider",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "SpekeKeyProvider"
+          }
+        }
+      ]
+    },
+    "CmafPackage": {
+      "type": "object",
+      "description": "A CMAF packaging configuration.",
+      "properties": [
+        {
+          "name": "Encryption",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "EncryptionContractConfiguration"
+            "typeName": "CmafEncryption"
           }
         },
         {
-          "name": "RoleArn",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "RoleArn"
-          }
-        },
-        {
-          "name": "SystemIds",
-          "description": "The system IDs to include in key requests.",
+          "name": "HlsManifests",
+          "description": "A list of HLS manifest configurations.",
           "optional": false,
           "type": {
             "type": "array",
-            "description": "The system IDs to include in key requests.",
+            "description": "A list of HLS manifest configurations.",
             "itemType": {
-              "type": "string"
+              "type": "ref",
+              "typeName": "HlsManifest"
             }
           }
         },
         {
-          "name": "Url",
-          "description": "The URL of the external key provider service.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The URL of the external key provider service."
-          }
-        }
-      ]
-    },
-    "EncryptionContractConfiguration": {
-      "type": "object",
-      "description": "The configuration to use for encrypting one or more content tracks separately for endpoints that use SPEKE 2.0.",
-      "properties": [
-        {
-          "name": "PresetSpeke20Audio",
-          "description": "A collection of audio encryption presets.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "A collection of audio encryption presets.",
-            "allowedValues": [
-              "PRESET-AUDIO-1",
-              "PRESET-AUDIO-2",
-              "PRESET-AUDIO-3",
-              "SHARED",
-              "UNENCRYPTED"
-            ]
-          }
-        },
-        {
-          "name": "PresetSpeke20Video",
-          "description": "A collection of video encryption presets.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "A collection of video encryption presets.",
-            "allowedValues": [
-              "PRESET-VIDEO-1",
-              "PRESET-VIDEO-2",
-              "PRESET-VIDEO-3",
-              "PRESET-VIDEO-4",
-              "PRESET-VIDEO-5",
-              "PRESET-VIDEO-6",
-              "PRESET-VIDEO-7",
-              "PRESET-VIDEO-8",
-              "SHARED",
-              "UNENCRYPTED"
-            ]
-          }
-        }
-      ]
-    },
-    "StreamSelection": {
-      "type": "object",
-      "description": "A StreamSelection configuration.",
-      "properties": [
-        {
-          "name": "MaxVideoBitsPerSecond",
-          "description": "The maximum video bitrate (bps) to include in output.",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "description": "The maximum video bitrate (bps) to include in output.",
-            "isInteger": true
-          }
-        },
-        {
-          "name": "MinVideoBitsPerSecond",
-          "description": "The minimum video bitrate (bps) to include in output.",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "description": "The minimum video bitrate (bps) to include in output.",
-            "isInteger": true
-          }
-        },
-        {
-          "name": "StreamOrder",
-          "description": "A directive that determines the order of streams in the output.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "A directive that determines the order of streams in the output.",
-            "allowedValues": [
-              "ORIGINAL",
-              "VIDEO_BITRATE_ASCENDING",
-              "VIDEO_BITRATE_DESCENDING"
-            ]
-          }
-        }
-      ]
-    },
-    "SegmentDurationSeconds": {
-      "type": "number",
-      "description": "Duration (in seconds) of each fragment. Actual fragments will be rounded to the nearest multiple of the source fragment duration.",
-      "isInteger": true
-    },
-    "ManifestName": {
-      "type": "string",
-      "description": "An optional string to include in the name of the manifest."
-    },
-    "HlsManifest": {
-      "type": "object",
-      "description": "An HTTP Live Streaming (HLS) manifest configuration.",
-      "properties": [
-        {
-          "name": "AdMarkers",
-          "description": "This setting controls how ad markers are included in the packaged OriginEndpoint. \"NONE\" will omit all SCTE-35 ad markers from the output. \"PASSTHROUGH\" causes the manifest to contain a copy of the SCTE-35 ad markers (comments) taken directly from the input HTTP Live Streaming (HLS) manifest. \"SCTE35_ENHANCED\" generates ad markers and blackout tags based on SCTE-35 messages in the input source.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "This setting controls how ad markers are included in the packaged OriginEndpoint. \"NONE\" will omit all SCTE-35 ad markers from the output. \"PASSTHROUGH\" causes the manifest to contain a copy of the SCTE-35 ad markers (comments) taken directly from the input HTTP Live Streaming (HLS) manifest. \"SCTE35_ENHANCED\" generates ad markers and blackout tags based on SCTE-35 messages in the input source.",
-            "allowedValues": ["NONE", "SCTE35_ENHANCED", "PASSTHROUGH"]
-          }
-        },
-        {
-          "name": "IncludeIframeOnlyStream",
-          "description": "When enabled, an I-Frame only stream will be included in the output.",
+          "name": "IncludeEncoderConfigurationInSegments",
+          "description": "When includeEncoderConfigurationInSegments is set to true, MediaPackage places your encoder's Sequence Parameter Set (SPS), Picture Parameter Set (PPS), and Video Parameter Set (VPS) metadata in every video segment instead of in the init fragment. This lets you use different SPS/PPS/VPS settings for your assets during content playback.",
           "optional": true,
           "type": {
             "type": "boolean",
-            "description": "When enabled, an I-Frame only stream will be included in the output."
+            "description": "When includeEncoderConfigurationInSegments is set to true, MediaPackage places your encoder's Sequence Parameter Set (SPS), Picture Parameter Set (PPS), and Video Parameter Set (VPS) metadata in every video segment instead of in the init fragment. This lets you use different SPS/PPS/VPS settings for your assets during content playback."
           }
         },
         {
-          "name": "ManifestName",
+          "name": "SegmentDurationSeconds",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "ManifestName"
+            "typeName": "SegmentDurationSeconds"
           }
-        },
+        }
+      ]
+    },
+    "DashEncryption": {
+      "type": "object",
+      "description": "A Dynamic Adaptive Streaming over HTTP (DASH) encryption configuration.",
+      "properties": [
         {
-          "name": "ProgramDateTimeIntervalSeconds",
-          "description": "The interval (in seconds) between each EXT-X-PROGRAM-DATE-TIME tag inserted into manifests. Additionally, when an interval is specified ID3Timed Metadata messages will be generated every 5 seconds using the ingest time of the content. If the interval is not specified, or set to 0, then no EXT-X-PROGRAM-DATE-TIME tags will be inserted into manifests and no ID3Timed Metadata messages will be generated. Note that irrespective of this parameter, if any ID3 Timed Metadata is found in HTTP Live Streaming (HLS) input, it will be passed through to HLS output.",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "description": "The interval (in seconds) between each EXT-X-PROGRAM-DATE-TIME tag inserted into manifests. Additionally, when an interval is specified ID3Timed Metadata messages will be generated every 5 seconds using the ingest time of the content. If the interval is not specified, or set to 0, then no EXT-X-PROGRAM-DATE-TIME tags will be inserted into manifests and no ID3Timed Metadata messages will be generated. Note that irrespective of this parameter, if any ID3 Timed Metadata is found in HTTP Live Streaming (HLS) input, it will be passed through to HLS output.",
-            "isInteger": true
-          }
-        },
-        {
-          "name": "RepeatExtXKey",
-          "description": "When enabled, the EXT-X-KEY tag will be repeated in output manifests.",
-          "optional": true,
-          "type": {
-            "type": "boolean",
-            "description": "When enabled, the EXT-X-KEY tag will be repeated in output manifests."
-          }
-        },
-        {
-          "name": "StreamSelection",
-          "optional": true,
+          "name": "SpekeKeyProvider",
+          "optional": false,
           "type": {
             "type": "ref",
-            "typeName": "StreamSelection"
+            "typeName": "SpekeKeyProvider"
           }
         }
       ]
@@ -261,100 +134,6 @@
         }
       ]
     },
-    "MssManifest": {
-      "type": "object",
-      "description": "A Microsoft Smooth Streaming (MSS) manifest configuration.",
-      "properties": [
-        {
-          "name": "ManifestName",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ManifestName"
-          }
-        },
-        {
-          "name": "StreamSelection",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "StreamSelection"
-          }
-        }
-      ]
-    },
-    "CmafEncryption": {
-      "type": "object",
-      "description": "A CMAF encryption configuration.",
-      "properties": [
-        {
-          "name": "SpekeKeyProvider",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "SpekeKeyProvider"
-          }
-        }
-      ]
-    },
-    "CmafPackage": {
-      "type": "object",
-      "description": "A CMAF packaging configuration.",
-      "properties": [
-        {
-          "name": "Encryption",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "CmafEncryption"
-          }
-        },
-        {
-          "name": "HlsManifests",
-          "description": "A list of HLS manifest configurations.",
-          "optional": false,
-          "type": {
-            "type": "array",
-            "description": "A list of HLS manifest configurations.",
-            "itemType": {
-              "type": "ref",
-              "typeName": "HlsManifest"
-            }
-          }
-        },
-        {
-          "name": "SegmentDurationSeconds",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "SegmentDurationSeconds"
-          }
-        },
-        {
-          "name": "IncludeEncoderConfigurationInSegments",
-          "description": "When includeEncoderConfigurationInSegments is set to true, MediaPackage places your encoder's Sequence Parameter Set (SPS), Picture Parameter Set (PPS), and Video Parameter Set (VPS) metadata in every video segment instead of in the init fragment. This lets you use different SPS/PPS/VPS settings for your assets during content playback.",
-          "optional": true,
-          "type": {
-            "type": "boolean",
-            "description": "When includeEncoderConfigurationInSegments is set to true, MediaPackage places your encoder's Sequence Parameter Set (SPS), Picture Parameter Set (PPS), and Video Parameter Set (VPS) metadata in every video segment instead of in the init fragment. This lets you use different SPS/PPS/VPS settings for your assets during content playback."
-          }
-        }
-      ]
-    },
-    "DashEncryption": {
-      "type": "object",
-      "description": "A Dynamic Adaptive Streaming over HTTP (DASH) encryption configuration.",
-      "properties": [
-        {
-          "name": "SpekeKeyProvider",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "SpekeKeyProvider"
-          }
-        }
-      ]
-    },
     "DashPackage": {
       "type": "object",
       "description": "A Dynamic Adaptive Streaming over HTTP (DASH) packaging configuration.",
@@ -378,6 +157,24 @@
           "type": {
             "type": "ref",
             "typeName": "DashEncryption"
+          }
+        },
+        {
+          "name": "IncludeEncoderConfigurationInSegments",
+          "description": "When includeEncoderConfigurationInSegments is set to true, MediaPackage places your encoder's Sequence Parameter Set (SPS), Picture Parameter Set (PPS), and Video Parameter Set (VPS) metadata in every video segment instead of in the init fragment. This lets you use different SPS/PPS/VPS settings for your assets during content playback.",
+          "optional": true,
+          "type": {
+            "type": "boolean",
+            "description": "When includeEncoderConfigurationInSegments is set to true, MediaPackage places your encoder's Sequence Parameter Set (SPS), Picture Parameter Set (PPS), and Video Parameter Set (VPS) metadata in every video segment instead of in the init fragment. This lets you use different SPS/PPS/VPS settings for your assets during content playback."
+          }
+        },
+        {
+          "name": "IncludeIframeOnlyStream",
+          "description": "When enabled, an I-Frame only stream will be included in the output.",
+          "optional": true,
+          "type": {
+            "type": "boolean",
+            "description": "When enabled, an I-Frame only stream will be included in the output."
           }
         },
         {
@@ -414,23 +211,48 @@
               "NUMBER_WITH_DURATION"
             ]
           }
-        },
+        }
+      ]
+    },
+    "EncryptionContractConfiguration": {
+      "type": "object",
+      "description": "The configuration to use for encrypting one or more content tracks separately for endpoints that use SPEKE 2.0.",
+      "properties": [
         {
-          "name": "IncludeEncoderConfigurationInSegments",
-          "description": "When includeEncoderConfigurationInSegments is set to true, MediaPackage places your encoder's Sequence Parameter Set (SPS), Picture Parameter Set (PPS), and Video Parameter Set (VPS) metadata in every video segment instead of in the init fragment. This lets you use different SPS/PPS/VPS settings for your assets during content playback.",
-          "optional": true,
+          "name": "PresetSpeke20Audio",
+          "description": "A collection of audio encryption presets.",
+          "optional": false,
           "type": {
-            "type": "boolean",
-            "description": "When includeEncoderConfigurationInSegments is set to true, MediaPackage places your encoder's Sequence Parameter Set (SPS), Picture Parameter Set (PPS), and Video Parameter Set (VPS) metadata in every video segment instead of in the init fragment. This lets you use different SPS/PPS/VPS settings for your assets during content playback."
+            "type": "string",
+            "description": "A collection of audio encryption presets.",
+            "allowedValues": [
+              "PRESET-AUDIO-1",
+              "PRESET-AUDIO-2",
+              "PRESET-AUDIO-3",
+              "SHARED",
+              "UNENCRYPTED"
+            ]
           }
         },
         {
-          "name": "IncludeIframeOnlyStream",
-          "description": "When enabled, an I-Frame only stream will be included in the output.",
-          "optional": true,
+          "name": "PresetSpeke20Video",
+          "description": "A collection of video encryption presets.",
+          "optional": false,
           "type": {
-            "type": "boolean",
-            "description": "When enabled, an I-Frame only stream will be included in the output."
+            "type": "string",
+            "description": "A collection of video encryption presets.",
+            "allowedValues": [
+              "PRESET-VIDEO-1",
+              "PRESET-VIDEO-2",
+              "PRESET-VIDEO-3",
+              "PRESET-VIDEO-4",
+              "PRESET-VIDEO-5",
+              "PRESET-VIDEO-6",
+              "PRESET-VIDEO-7",
+              "PRESET-VIDEO-8",
+              "SHARED",
+              "UNENCRYPTED"
+            ]
           }
         }
       ]
@@ -464,6 +286,66 @@
           "type": {
             "type": "ref",
             "typeName": "SpekeKeyProvider"
+          }
+        }
+      ]
+    },
+    "HlsManifest": {
+      "type": "object",
+      "description": "An HTTP Live Streaming (HLS) manifest configuration.",
+      "properties": [
+        {
+          "name": "AdMarkers",
+          "description": "This setting controls how ad markers are included in the packaged OriginEndpoint. \"NONE\" will omit all SCTE-35 ad markers from the output. \"PASSTHROUGH\" causes the manifest to contain a copy of the SCTE-35 ad markers (comments) taken directly from the input HTTP Live Streaming (HLS) manifest. \"SCTE35_ENHANCED\" generates ad markers and blackout tags based on SCTE-35 messages in the input source.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "This setting controls how ad markers are included in the packaged OriginEndpoint. \"NONE\" will omit all SCTE-35 ad markers from the output. \"PASSTHROUGH\" causes the manifest to contain a copy of the SCTE-35 ad markers (comments) taken directly from the input HTTP Live Streaming (HLS) manifest. \"SCTE35_ENHANCED\" generates ad markers and blackout tags based on SCTE-35 messages in the input source.",
+            "allowedValues": ["NONE", "SCTE35_ENHANCED", "PASSTHROUGH"]
+          }
+        },
+        {
+          "name": "IncludeIframeOnlyStream",
+          "description": "When enabled, an I-Frame only stream will be included in the output.",
+          "optional": true,
+          "type": {
+            "type": "boolean",
+            "description": "When enabled, an I-Frame only stream will be included in the output."
+          }
+        },
+        {
+          "name": "ManifestName",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ManifestName"
+          }
+        },
+        {
+          "name": "ProgramDateTimeIntervalSeconds",
+          "description": "The interval (in seconds) between each EXT-X-PROGRAM-DATE-TIME tag inserted into manifests. Additionally, when an interval is specified ID3Timed Metadata messages will be generated every 5 seconds using the ingest time of the content. If the interval is not specified, or set to 0, then no EXT-X-PROGRAM-DATE-TIME tags will be inserted into manifests and no ID3Timed Metadata messages will be generated. Note that irrespective of this parameter, if any ID3 Timed Metadata is found in HTTP Live Streaming (HLS) input, it will be passed through to HLS output.",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "The interval (in seconds) between each EXT-X-PROGRAM-DATE-TIME tag inserted into manifests. Additionally, when an interval is specified ID3Timed Metadata messages will be generated every 5 seconds using the ingest time of the content. If the interval is not specified, or set to 0, then no EXT-X-PROGRAM-DATE-TIME tags will be inserted into manifests and no ID3Timed Metadata messages will be generated. Note that irrespective of this parameter, if any ID3 Timed Metadata is found in HTTP Live Streaming (HLS) input, it will be passed through to HLS output.",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "RepeatExtXKey",
+          "description": "When enabled, the EXT-X-KEY tag will be repeated in output manifests.",
+          "optional": true,
+          "type": {
+            "type": "boolean",
+            "description": "When enabled, the EXT-X-KEY tag will be repeated in output manifests."
+          }
+        },
+        {
+          "name": "StreamSelection",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "StreamSelection"
           }
         }
       ]
@@ -521,6 +403,10 @@
         }
       ]
     },
+    "ManifestName": {
+      "type": "string",
+      "description": "An optional string to include in the name of the manifest."
+    },
     "MssEncryption": {
       "type": "object",
       "description": "A CMAF encryption configuration.",
@@ -531,6 +417,28 @@
           "type": {
             "type": "ref",
             "typeName": "SpekeKeyProvider"
+          }
+        }
+      ]
+    },
+    "MssManifest": {
+      "type": "object",
+      "description": "A Microsoft Smooth Streaming (MSS) manifest configuration.",
+      "properties": [
+        {
+          "name": "ManifestName",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ManifestName"
+          }
+        },
+        {
+          "name": "StreamSelection",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "StreamSelection"
           }
         }
       ]
@@ -570,6 +478,98 @@
         }
       ]
     },
+    "RoleArn": {
+      "type": "string",
+      "description": "An Amazon Resource Name (ARN) of an IAM role that AWS Elemental MediaPackage will assume when accessing the key provider service."
+    },
+    "SegmentDurationSeconds": {
+      "type": "number",
+      "description": "Duration (in seconds) of each fragment. Actual fragments will be rounded to the nearest multiple of the source fragment duration.",
+      "isInteger": true
+    },
+    "SpekeKeyProvider": {
+      "type": "object",
+      "description": "A configuration for accessing an external Secure Packager and Encoder Key Exchange (SPEKE) service that will provide encryption keys.",
+      "properties": [
+        {
+          "name": "EncryptionContractConfiguration",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "EncryptionContractConfiguration"
+          }
+        },
+        {
+          "name": "RoleArn",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "RoleArn"
+          }
+        },
+        {
+          "name": "SystemIds",
+          "description": "The system IDs to include in key requests.",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "description": "The system IDs to include in key requests.",
+            "itemType": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "name": "Url",
+          "description": "The URL of the external key provider service.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The URL of the external key provider service."
+          }
+        }
+      ]
+    },
+    "StreamSelection": {
+      "type": "object",
+      "description": "A StreamSelection configuration.",
+      "properties": [
+        {
+          "name": "MaxVideoBitsPerSecond",
+          "description": "The maximum video bitrate (bps) to include in output.",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "The maximum video bitrate (bps) to include in output.",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "MinVideoBitsPerSecond",
+          "description": "The minimum video bitrate (bps) to include in output.",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "The minimum video bitrate (bps) to include in output.",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "StreamOrder",
+          "description": "A directive that determines the order of streams in the output.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "A directive that determines the order of streams in the output.",
+            "allowedValues": [
+              "ORIGINAL",
+              "VIDEO_BITRATE_ASCENDING",
+              "VIDEO_BITRATE_DESCENDING"
+            ]
+          }
+        }
+      ]
+    },
     "Tag": {
       "type": "object",
       "properties": [
@@ -594,24 +594,6 @@
     "type": "object",
     "description": "Resource schema for AWS::MediaPackage::PackagingConfiguration",
     "properties": [
-      {
-        "name": "Id",
-        "description": "The ID of the PackagingConfiguration.",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "description": "The ID of the PackagingConfiguration."
-        }
-      },
-      {
-        "name": "PackagingGroupId",
-        "description": "The ID of a PackagingGroup.",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "description": "The ID of a PackagingGroup."
-        }
-      },
       {
         "name": "CmafPackage",
         "description": "A CMAF packaging configuration.",
@@ -643,6 +625,15 @@
         }
       },
       {
+        "name": "Id",
+        "description": "The ID of the PackagingConfiguration.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The ID of the PackagingConfiguration."
+        }
+      },
+      {
         "name": "MssPackage",
         "description": "A Microsoft Smooth Streaming (MSS) PackagingConfiguration.",
         "optional": true,
@@ -650,6 +641,15 @@
           "type": "ref",
           "description": "A Microsoft Smooth Streaming (MSS) PackagingConfiguration.",
           "typeName": "MssPackage"
+        }
+      },
+      {
+        "name": "PackagingGroupId",
+        "description": "The ID of a PackagingGroup.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The ID of a PackagingGroup."
         }
       },
       {
@@ -682,5 +682,5 @@
       }
     ]
   },
-  "$hash": "578308edee9fec10483018b863d18b1858d386f0"
+  "$hash": "e14b72f0c254b256b41a24fbe2fef17d8a2b38e6"
 }

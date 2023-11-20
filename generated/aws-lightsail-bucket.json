@@ -1,5 +1,29 @@
 {
   "definitions": {
+    "AccessRules": {
+      "type": "object",
+      "description": "An object that sets the public accessibility of objects in the specified bucket.",
+      "properties": [
+        {
+          "name": "AllowPublicOverrides",
+          "description": "A Boolean value that indicates whether the access control list (ACL) permissions that are applied to individual objects override the getObject option that is currently specified.",
+          "optional": true,
+          "type": {
+            "type": "boolean",
+            "description": "A Boolean value that indicates whether the access control list (ACL) permissions that are applied to individual objects override the getObject option that is currently specified."
+          }
+        },
+        {
+          "name": "GetObject",
+          "description": "Specifies the anonymous access to all objects in a bucket.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Specifies the anonymous access to all objects in a bucket."
+          }
+        }
+      ]
+    },
     "Tag": {
       "type": "object",
       "description": "A key-value pair to associate with a resource.",
@@ -27,36 +51,20 @@
           }
         }
       ]
-    },
-    "AccessRules": {
-      "type": "object",
-      "description": "An object that sets the public accessibility of objects in the specified bucket.",
-      "properties": [
-        {
-          "name": "GetObject",
-          "description": "Specifies the anonymous access to all objects in a bucket.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Specifies the anonymous access to all objects in a bucket."
-          }
-        },
-        {
-          "name": "AllowPublicOverrides",
-          "description": "A Boolean value that indicates whether the access control list (ACL) permissions that are applied to individual objects override the getObject option that is currently specified.",
-          "optional": true,
-          "type": {
-            "type": "boolean",
-            "description": "A Boolean value that indicates whether the access control list (ACL) permissions that are applied to individual objects override the getObject option that is currently specified."
-          }
-        }
-      ]
     }
   },
   "resource": {
     "type": "object",
     "description": "Resource Type definition for AWS::Lightsail::Bucket",
     "properties": [
+      {
+        "name": "AccessRules",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "AccessRules"
+        }
+      },
       {
         "name": "BucketName",
         "description": "The name for the bucket.",
@@ -88,11 +96,15 @@
         }
       },
       {
-        "name": "AccessRules",
+        "name": "ReadOnlyAccessAccounts",
+        "description": "An array of strings to specify the AWS account IDs that can access the bucket.",
         "optional": true,
         "type": {
-          "type": "ref",
-          "typeName": "AccessRules"
+          "type": "array",
+          "description": "An array of strings to specify the AWS account IDs that can access the bucket.",
+          "itemType": {
+            "type": "string"
+          }
         }
       },
       {
@@ -102,18 +114,6 @@
         "type": {
           "type": "array",
           "description": "The names of the Lightsail resources for which to set bucket access.",
-          "itemType": {
-            "type": "string"
-          }
-        }
-      },
-      {
-        "name": "ReadOnlyAccessAccounts",
-        "description": "An array of strings to specify the AWS account IDs that can access the bucket.",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "description": "An array of strings to specify the AWS account IDs that can access the bucket.",
           "itemType": {
             "type": "string"
           }
@@ -139,6 +139,15 @@
     "description": "Resource Type definition for AWS::Lightsail::Bucket",
     "properties": [
       {
+        "name": "AbleToUpdateBundle",
+        "description": "Indicates whether the bundle that is currently applied to a bucket can be changed to another bundle. You can update a bucket's bundle only one time within a monthly AWS billing cycle.",
+        "optional": true,
+        "type": {
+          "type": "boolean",
+          "description": "Indicates whether the bundle that is currently applied to a bucket can be changed to another bundle. You can update a bucket's bundle only one time within a monthly AWS billing cycle."
+        }
+      },
+      {
         "name": "BucketArn",
         "optional": true,
         "type": {
@@ -153,17 +162,8 @@
           "type": "string",
           "description": "The URL of the bucket."
         }
-      },
-      {
-        "name": "AbleToUpdateBundle",
-        "description": "Indicates whether the bundle that is currently applied to a bucket can be changed to another bundle. You can update a bucket's bundle only one time within a monthly AWS billing cycle.",
-        "optional": true,
-        "type": {
-          "type": "boolean",
-          "description": "Indicates whether the bundle that is currently applied to a bucket can be changed to another bundle. You can update a bucket's bundle only one time within a monthly AWS billing cycle."
-        }
       }
     ]
   },
-  "$hash": "9348ef19b809033cd213ac969925427d3a97882a"
+  "$hash": "6bfb7f4996edd518313b6b00eafcaea400cd52c0"
 }

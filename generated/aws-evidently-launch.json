@@ -4,15 +4,6 @@
       "type": "object",
       "properties": [
         {
-          "name": "Status",
-          "description": "Provide START or STOP action to apply on a launch",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "Provide START or STOP action to apply on a launch"
-          }
-        },
-        {
           "name": "DesiredState",
           "description": "Provide CANCELLED or COMPLETED as the launch desired state. Defaults to Completed if not provided.",
           "optional": true,
@@ -29,43 +20,14 @@
             "type": "string",
             "description": "Provide a reason for stopping the launch. Defaults to empty if not provided."
           }
-        }
-      ]
-    },
-    "LaunchGroupObject": {
-      "type": "object",
-      "properties": [
+        },
         {
-          "name": "GroupName",
+          "name": "Status",
+          "description": "Provide START or STOP action to apply on a launch",
           "optional": false,
           "type": {
             "type": "string",
-            "maxLength": 127,
-            "minLength": 1,
-            "pattern": "[-a-zA-Z0-9._]*"
-          }
-        },
-        {
-          "name": "Description",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "maxLength": 160,
-            "minLength": 0
-          }
-        },
-        {
-          "name": "Feature",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Variation",
-          "optional": false,
-          "type": {
-            "type": "string"
+            "description": "Provide START or STOP action to apply on a launch"
           }
         }
       ]
@@ -93,9 +55,107 @@
         }
       ]
     },
+    "LaunchGroupObject": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Description",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 160,
+            "minLength": 0
+          }
+        },
+        {
+          "name": "Feature",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "GroupName",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 127,
+            "minLength": 1,
+            "pattern": "[-a-zA-Z0-9._]*"
+          }
+        },
+        {
+          "name": "Variation",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "MetricDefinitionObject": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "EntityIdKey",
+          "description": "The JSON path to reference the entity id in the event.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The JSON path to reference the entity id in the event."
+          }
+        },
+        {
+          "name": "EventPattern",
+          "description": "Event patterns have the same structure as the events they match. Rules use event patterns to select events. An event pattern either matches an event or it doesn't.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Event patterns have the same structure as the events they match. Rules use event patterns to select events. An event pattern either matches an event or it doesn't."
+          }
+        },
+        {
+          "name": "MetricName",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "pattern": "^[\\S]+$"
+          }
+        },
+        {
+          "name": "UnitLabel",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1,
+            "pattern": ".*"
+          }
+        },
+        {
+          "name": "ValueKey",
+          "description": "The JSON path to reference the numerical metric value in the event.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The JSON path to reference the numerical metric value in the event."
+          }
+        }
+      ]
+    },
     "SegmentOverride": {
       "type": "object",
       "properties": [
+        {
+          "name": "EvaluationOrder",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
         {
           "name": "Segment",
           "optional": false,
@@ -104,14 +164,6 @@
             "maxLength": 2048,
             "minLength": 1,
             "pattern": "([-a-zA-Z0-9._]*)|(arn:[^:]*:[^:]*:[^:]*:[^:]*:segment/[-a-zA-Z0-9._]*)"
-          }
-        },
-        {
-          "name": "EvaluationOrder",
-          "optional": false,
-          "type": {
-            "type": "number",
-            "isInteger": true
           }
         },
         {
@@ -130,13 +182,6 @@
     "StepConfig": {
       "type": "object",
       "properties": [
-        {
-          "name": "StartTime",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
         {
           "name": "GroupWeights",
           "optional": false,
@@ -158,57 +203,12 @@
               "typeName": "SegmentOverride"
             }
           }
-        }
-      ]
-    },
-    "MetricDefinitionObject": {
-      "type": "object",
-      "properties": [
+        },
         {
-          "name": "MetricName",
+          "name": "StartTime",
           "optional": false,
           "type": {
-            "type": "string",
-            "maxLength": 255,
-            "minLength": 1,
-            "pattern": "^[\\S]+$"
-          }
-        },
-        {
-          "name": "EntityIdKey",
-          "description": "The JSON path to reference the entity id in the event.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The JSON path to reference the entity id in the event."
-          }
-        },
-        {
-          "name": "ValueKey",
-          "description": "The JSON path to reference the numerical metric value in the event.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The JSON path to reference the numerical metric value in the event."
-          }
-        },
-        {
-          "name": "EventPattern",
-          "description": "Event patterns have the same structure as the events they match. Rules use event patterns to select events. An event pattern either matches an event or it doesn't.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Event patterns have the same structure as the events they match. Rules use event patterns to select events. An event pattern either matches an event or it doesn't."
-          }
-        },
-        {
-          "name": "UnitLabel",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "maxLength": 256,
-            "minLength": 1,
-            "pattern": ".*"
+            "type": "string"
           }
         }
       ]
@@ -248,26 +248,6 @@
     "description": "Resource Type definition for AWS::Evidently::Launch.",
     "properties": [
       {
-        "name": "Name",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "maxLength": 127,
-          "minLength": 1,
-          "pattern": "[-a-zA-Z0-9._]*"
-        }
-      },
-      {
-        "name": "Project",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "maxLength": 2048,
-          "minLength": 0,
-          "pattern": "([-a-zA-Z0-9._]*)|(arn:[^:]*:[^:]*:[^:]*:[^:]*:project/[-a-zA-Z0-9._]*)"
-        }
-      },
-      {
         "name": "Description",
         "optional": true,
         "type": {
@@ -277,26 +257,13 @@
         }
       },
       {
-        "name": "RandomizationSalt",
+        "name": "ExecutionStatus",
+        "description": "Start or Stop Launch Launch. Default is not started.",
         "optional": true,
         "type": {
-          "type": "string",
-          "maxLength": 127,
-          "minLength": 0,
-          "pattern": ".*"
-        }
-      },
-      {
-        "name": "ScheduledSplitsConfig",
-        "optional": false,
-        "type": {
-          "type": "array",
-          "itemType": {
-            "type": "ref",
-            "typeName": "StepConfig"
-          },
-          "maxLength": 6,
-          "minLength": 1
+          "type": "ref",
+          "description": "Start or Stop Launch Launch. Default is not started.",
+          "typeName": "ExecutionStatusObject"
         }
       },
       {
@@ -326,6 +293,49 @@
         }
       },
       {
+        "name": "Name",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "maxLength": 127,
+          "minLength": 1,
+          "pattern": "[-a-zA-Z0-9._]*"
+        }
+      },
+      {
+        "name": "Project",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "maxLength": 2048,
+          "minLength": 0,
+          "pattern": "([-a-zA-Z0-9._]*)|(arn:[^:]*:[^:]*:[^:]*:[^:]*:project/[-a-zA-Z0-9._]*)"
+        }
+      },
+      {
+        "name": "RandomizationSalt",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "maxLength": 127,
+          "minLength": 0,
+          "pattern": ".*"
+        }
+      },
+      {
+        "name": "ScheduledSplitsConfig",
+        "optional": false,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "StepConfig"
+          },
+          "maxLength": 6,
+          "minLength": 1
+        }
+      },
+      {
         "name": "Tags",
         "description": "An array of key-value pairs to apply to this resource.",
         "optional": true,
@@ -336,16 +346,6 @@
             "type": "ref",
             "typeName": "Tag"
           }
-        }
-      },
-      {
-        "name": "ExecutionStatus",
-        "description": "Start or Stop Launch Launch. Default is not started.",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "description": "Start or Stop Launch Launch. Default is not started.",
-          "typeName": "ExecutionStatusObject"
         }
       }
     ]
@@ -364,5 +364,5 @@
       }
     ]
   },
-  "$hash": "1f24f6089953338ab38cb77df0a8355069261836"
+  "$hash": "bd49f60b208cb1b02612c3e79fe9acdb9bf33488"
 }

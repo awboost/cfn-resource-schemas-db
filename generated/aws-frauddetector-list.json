@@ -1,5 +1,12 @@
 {
   "definitions": {
+    "Element": {
+      "type": "string",
+      "description": "An element in a list.",
+      "maxLength": 64,
+      "minLength": 1,
+      "pattern": "^\\S+( +\\S+)*$"
+    },
     "Tag": {
       "type": "object",
       "description": "A key-value pair to associate with a resource.",
@@ -27,31 +34,12 @@
           }
         }
       ]
-    },
-    "Element": {
-      "type": "string",
-      "description": "An element in a list.",
-      "maxLength": 64,
-      "minLength": 1,
-      "pattern": "^\\S+( +\\S+)*$"
     }
   },
   "resource": {
     "type": "object",
     "description": "A resource schema for a List in Amazon Fraud Detector.",
     "properties": [
-      {
-        "name": "Name",
-        "description": "The name of the list.",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "description": "The name of the list.",
-          "maxLength": 64,
-          "minLength": 1,
-          "pattern": "^[0-9a-z_]+$"
-        }
-      },
       {
         "name": "Description",
         "description": "The description of the list.",
@@ -64,15 +52,30 @@
         }
       },
       {
-        "name": "VariableType",
-        "description": "The variable type of the list.",
+        "name": "Elements",
+        "description": "The elements in this list.",
         "optional": true,
         "type": {
+          "type": "array",
+          "description": "The elements in this list.",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Element"
+          },
+          "maxLength": 100000,
+          "minLength": 0
+        }
+      },
+      {
+        "name": "Name",
+        "description": "The name of the list.",
+        "optional": false,
+        "type": {
           "type": "string",
-          "description": "The variable type of the list.",
+          "description": "The name of the list.",
           "maxLength": 64,
           "minLength": 1,
-          "pattern": "^[A-Z_]{1,64}$"
+          "pattern": "^[0-9a-z_]+$"
         }
       },
       {
@@ -90,18 +93,15 @@
         }
       },
       {
-        "name": "Elements",
-        "description": "The elements in this list.",
+        "name": "VariableType",
+        "description": "The variable type of the list.",
         "optional": true,
         "type": {
-          "type": "array",
-          "description": "The elements in this list.",
-          "itemType": {
-            "type": "ref",
-            "typeName": "Element"
-          },
-          "maxLength": 100000,
-          "minLength": 0
+          "type": "string",
+          "description": "The variable type of the list.",
+          "maxLength": 64,
+          "minLength": 1,
+          "pattern": "^[A-Z_]{1,64}$"
         }
       }
     ]
@@ -139,5 +139,5 @@
       }
     ]
   },
-  "$hash": "2b1a765258f31fcdd181ae0db93d244c409c58c9"
+  "$hash": "bdd5a6ef3cd1ad17bccf329b6c62543e44a0b124"
 }

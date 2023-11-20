@@ -27,21 +27,21 @@
       "type": "object",
       "properties": [
         {
-          "name": "OwnerUid",
-          "description": "Specifies the POSIX user ID to apply to the RootDirectory. Accepts values from 0 to 2^32 (4294967295).",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "Specifies the POSIX user ID to apply to the RootDirectory. Accepts values from 0 to 2^32 (4294967295)."
-          }
-        },
-        {
           "name": "OwnerGid",
           "description": "Specifies the POSIX group ID to apply to the RootDirectory. Accepts values from 0 to 2^32 (4294967295).",
           "optional": false,
           "type": {
             "type": "string",
             "description": "Specifies the POSIX group ID to apply to the RootDirectory. Accepts values from 0 to 2^32 (4294967295)."
+          }
+        },
+        {
+          "name": "OwnerUid",
+          "description": "Specifies the POSIX user ID to apply to the RootDirectory. Accepts values from 0 to 2^32 (4294967295).",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Specifies the POSIX user ID to apply to the RootDirectory. Accepts values from 0 to 2^32 (4294967295)."
           }
         },
         {
@@ -56,44 +56,9 @@
         }
       ]
     },
-    "RootDirectory": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Path",
-          "description": "Specifies the path on the EFS file system to expose as the root directory to NFS clients using the access point to access the EFS file system. A path can have up to four subdirectories. If the specified path does not exist, you are required to provide the CreationInfo.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Specifies the path on the EFS file system to expose as the root directory to NFS clients using the access point to access the EFS file system. A path can have up to four subdirectories. If the specified path does not exist, you are required to provide the CreationInfo.",
-            "maxLength": 100,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "CreationInfo",
-          "description": "(Optional) Specifies the POSIX IDs and permissions to apply to the access point's RootDirectory. If the RootDirectory>Path specified does not exist, EFS creates the root directory using the CreationInfo settings when a client connects to an access point. When specifying the CreationInfo, you must provide values for all properties.   If you do not provide CreationInfo and the specified RootDirectory>Path does not exist, attempts to mount the file system using the access point will fail. ",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "(Optional) Specifies the POSIX IDs and permissions to apply to the access point's RootDirectory. If the RootDirectory>Path specified does not exist, EFS creates the root directory using the CreationInfo settings when a client connects to an access point. When specifying the CreationInfo, you must provide values for all properties.   If you do not provide CreationInfo and the specified RootDirectory>Path does not exist, attempts to mount the file system using the access point will fail. ",
-            "typeName": "CreationInfo"
-          }
-        }
-      ]
-    },
     "PosixUser": {
       "type": "object",
       "properties": [
-        {
-          "name": "Uid",
-          "description": "The POSIX user ID used for all file system operations using this access point.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The POSIX user ID used for all file system operations using this access point."
-          }
-        },
         {
           "name": "Gid",
           "description": "The POSIX group ID used for all file system operations using this access point.",
@@ -114,6 +79,41 @@
               "type": "string"
             }
           }
+        },
+        {
+          "name": "Uid",
+          "description": "The POSIX user ID used for all file system operations using this access point.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The POSIX user ID used for all file system operations using this access point."
+          }
+        }
+      ]
+    },
+    "RootDirectory": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "CreationInfo",
+          "description": "(Optional) Specifies the POSIX IDs and permissions to apply to the access point's RootDirectory. If the RootDirectory>Path specified does not exist, EFS creates the root directory using the CreationInfo settings when a client connects to an access point. When specifying the CreationInfo, you must provide values for all properties.   If you do not provide CreationInfo and the specified RootDirectory>Path does not exist, attempts to mount the file system using the access point will fail. ",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "(Optional) Specifies the POSIX IDs and permissions to apply to the access point's RootDirectory. If the RootDirectory>Path specified does not exist, EFS creates the root directory using the CreationInfo settings when a client connects to an access point. When specifying the CreationInfo, you must provide values for all properties.   If you do not provide CreationInfo and the specified RootDirectory>Path does not exist, attempts to mount the file system using the access point will fail. ",
+            "typeName": "CreationInfo"
+          }
+        },
+        {
+          "name": "Path",
+          "description": "Specifies the path on the EFS file system to expose as the root directory to NFS clients using the access point to access the EFS file system. A path can have up to four subdirectories. If the specified path does not exist, you are required to provide the CreationInfo.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Specifies the path on the EFS file system to expose as the root directory to NFS clients using the access point to access the EFS file system. A path can have up to four subdirectories. If the specified path does not exist, you are required to provide the CreationInfo.",
+            "maxLength": 100,
+            "minLength": 1
+          }
         }
       ]
     }
@@ -123,15 +123,6 @@
     "description": "Resource Type definition for AWS::EFS::AccessPoint",
     "properties": [
       {
-        "name": "ClientToken",
-        "description": "(optional) A string of up to 64 ASCII characters that Amazon EFS uses to ensure idempotent creation.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "(optional) A string of up to 64 ASCII characters that Amazon EFS uses to ensure idempotent creation."
-        }
-      },
-      {
         "name": "AccessPointTags",
         "optional": true,
         "type": {
@@ -140,6 +131,15 @@
             "type": "ref",
             "typeName": "AccessPointTag"
           }
+        }
+      },
+      {
+        "name": "ClientToken",
+        "description": "(optional) A string of up to 64 ASCII characters that Amazon EFS uses to ensure idempotent creation.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "(optional) A string of up to 64 ASCII characters that Amazon EFS uses to ensure idempotent creation."
         }
       },
       {
@@ -193,5 +193,5 @@
       }
     ]
   },
-  "$hash": "a9192859c89e57bea26ad13d8d776ea5c331337c"
+  "$hash": "1ec5f9997ce9648c96d4277bbccb6ec88a28a092"
 }

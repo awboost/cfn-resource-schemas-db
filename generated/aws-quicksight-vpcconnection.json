@@ -9,25 +9,9 @@
         "type": "string"
       }
     },
-    "NetworkInterfaces": {
-      "type": "array",
-      "itemType": {
-        "type": "ref",
-        "typeName": "NetworkInterface"
-      },
-      "maxLength": 15
-    },
     "NetworkInterface": {
       "type": "object",
       "properties": [
-        {
-          "name": "SubnetId",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "SubnetId"
-          }
-        },
         {
           "name": "AvailabilityZone",
           "optional": true,
@@ -40,6 +24,14 @@
           "optional": true,
           "type": {
             "type": "string"
+          }
+        },
+        {
+          "name": "NetworkInterfaceId",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "NetworkInterfaceId"
           }
         },
         {
@@ -62,11 +54,11 @@
           }
         },
         {
-          "name": "NetworkInterfaceId",
+          "name": "SubnetId",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "NetworkInterfaceId"
+            "typeName": "SubnetId"
           }
         }
       ]
@@ -76,8 +68,20 @@
       "maxLength": 255,
       "pattern": "^eni-[0-9a-z]*$"
     },
+    "NetworkInterfaces": {
+      "type": "array",
+      "itemType": {
+        "type": "ref",
+        "typeName": "NetworkInterface"
+      },
+      "maxLength": 15
+    },
     "RoleArn": {
       "type": "string"
+    },
+    "SecurityGroupId": {
+      "type": "string",
+      "pattern": "^sg-[0-9a-z]*$"
     },
     "SecurityGroupIds": {
       "type": "array",
@@ -88,9 +92,11 @@
       "maxLength": 16,
       "minLength": 1
     },
-    "SecurityGroupId": {
+    "SubnetId": {
       "type": "string",
-      "pattern": "^sg-[0-9a-z]*$"
+      "maxLength": 255,
+      "minLength": 1,
+      "pattern": "^subnet-[0-9a-z]*$"
     },
     "SubnetIds": {
       "type": "array",
@@ -101,11 +107,28 @@
       "maxLength": 15,
       "minLength": 2
     },
-    "SubnetId": {
-      "type": "string",
-      "maxLength": 255,
-      "minLength": 1,
-      "pattern": "^subnet-[0-9a-z]*$"
+    "Tag": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1
+          }
+        }
+      ]
     },
     "Tags": {
       "type": "array",
@@ -116,37 +139,15 @@
       "maxLength": 200,
       "minLength": 1
     },
-    "Tag": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Value",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 256,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "Key",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 128,
-            "minLength": 1
-          }
-        }
-      ]
+    "VPCConnectionAvailabilityStatus": {
+      "type": "string",
+      "allowedValues": ["AVAILABLE", "UNAVAILABLE", "PARTIALLY_AVAILABLE"]
     },
     "VPCConnectionId": {
       "type": "string",
       "maxLength": 1000,
       "minLength": 1,
       "pattern": "[\\w\\-]+"
-    },
-    "VPCId": {
-      "type": "string"
     },
     "VPCConnectionResourceStatus": {
       "type": "string",
@@ -162,15 +163,22 @@
         "DELETED"
       ]
     },
-    "VPCConnectionAvailabilityStatus": {
-      "type": "string",
-      "allowedValues": ["AVAILABLE", "UNAVAILABLE", "PARTIALLY_AVAILABLE"]
+    "VPCId": {
+      "type": "string"
     }
   },
   "resource": {
     "type": "object",
     "description": "Definition of the AWS::QuickSight::VPCConnection Resource Type.",
     "properties": [
+      {
+        "name": "AvailabilityStatus",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "VPCConnectionAvailabilityStatus"
+        }
+      },
       {
         "name": "AwsAccountId",
         "optional": true,
@@ -179,6 +187,14 @@
           "maxLength": 12,
           "minLength": 12,
           "pattern": "^[0-9]{12}$"
+        }
+      },
+      {
+        "name": "DnsResolvers",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "DnsResolvers"
         }
       },
       {
@@ -191,11 +207,11 @@
         }
       },
       {
-        "name": "VPCConnectionId",
+        "name": "RoleArn",
         "optional": true,
         "type": {
           "type": "ref",
-          "typeName": "VPCConnectionId"
+          "typeName": "RoleArn"
         }
       },
       {
@@ -215,35 +231,19 @@
         }
       },
       {
-        "name": "DnsResolvers",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "DnsResolvers"
-        }
-      },
-      {
-        "name": "AvailabilityStatus",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "VPCConnectionAvailabilityStatus"
-        }
-      },
-      {
-        "name": "RoleArn",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "RoleArn"
-        }
-      },
-      {
         "name": "Tags",
         "optional": true,
         "type": {
           "type": "ref",
           "typeName": "Tags"
+        }
+      },
+      {
+        "name": "VPCConnectionId",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "VPCConnectionId"
         }
       }
     ]
@@ -261,30 +261,6 @@
         }
       },
       {
-        "name": "VPCId",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "VPCId"
-        }
-      },
-      {
-        "name": "Status",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "VPCConnectionResourceStatus"
-        }
-      },
-      {
-        "name": "NetworkInterfaces",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "NetworkInterfaces"
-        }
-      },
-      {
         "name": "CreatedTime",
         "optional": true,
         "type": {
@@ -297,8 +273,32 @@
         "type": {
           "type": "string"
         }
+      },
+      {
+        "name": "NetworkInterfaces",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "NetworkInterfaces"
+        }
+      },
+      {
+        "name": "Status",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "VPCConnectionResourceStatus"
+        }
+      },
+      {
+        "name": "VPCId",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "VPCId"
+        }
       }
     ]
   },
-  "$hash": "37bd41d8fa3acae89537e1e30bf8ba0b0693a2b2"
+  "$hash": "2e607dd6d1bfaf7c98ee49ecf4754b3e95cf9d10"
 }

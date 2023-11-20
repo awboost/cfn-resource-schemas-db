@@ -1,460 +1,107 @@
 {
   "definitions": {
-    "SecurityConfig": {
+    "AdditionalInformation": {
       "type": "object",
-      "description": "An optional Key Management Service key to encrypt, decrypt, and re-encrypt model card content for regulated workloads with highly sensitive data.\n\n",
       "properties": [
         {
-          "name": "KmsKeyId",
-          "description": "A Key Management Service key ID to use for encrypting a model card.",
+          "name": "CaveatsAndRecommendations",
+          "description": "Caveats and recommendations for people who might use this model in their applications.",
           "optional": true,
           "type": {
             "type": "string",
-            "description": "A Key Management Service key ID to use for encrypting a model card.",
-            "maxLength": 2048,
-            "pattern": ".*"
+            "description": "Caveats and recommendations for people who might use this model in their applications.",
+            "maxLength": 2048
+          }
+        },
+        {
+          "name": "CustomDetails",
+          "description": "customer details.",
+          "optional": true,
+          "type": {
+            "type": "record",
+            "description": "customer details.",
+            "valueType": {
+              "type": "string",
+              "maxLength": 1024
+            }
+          }
+        },
+        {
+          "name": "EthicalConsiderations",
+          "description": "Any ethical considerations that the author wants to provide.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Any ethical considerations that the author wants to provide.",
+            "maxLength": 2048
           }
         }
       ]
     },
-    "UserContext": {
-      "type": "object",
-      "description": "Information about the user who created or modified an experiment, trial, trial component, lineage group, project, or model card.",
-      "properties": [
-        {
-          "name": "UserProfileArn",
-          "description": "The Amazon Resource Name (ARN) of the user's profile.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The Amazon Resource Name (ARN) of the user's profile."
-          }
-        },
-        {
-          "name": "UserProfileName",
-          "description": "The name of the user's profile.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The name of the user's profile."
-          }
-        },
-        {
-          "name": "DomainId",
-          "description": "The domain associated with the user.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The domain associated with the user."
-          }
-        }
-      ]
+    "AxisNameArray": {
+      "type": "array",
+      "itemType": {
+        "type": "string",
+        "maxLength": 63
+      }
     },
-    "Tag": {
+    "AxisNameString": {
+      "type": "string",
+      "maxLength": 63
+    },
+    "BarChartMetric": {
       "type": "object",
-      "description": "A key-value pair to associate with a resource.",
       "properties": [
         {
-          "name": "Key",
-          "description": "The tag key. Tag keys must be unique per resource.",
+          "name": "Name",
           "optional": false,
           "type": {
             "type": "string",
-            "description": "The tag key. Tag keys must be unique per resource.",
-            "maxLength": 128,
-            "minLength": 1
+            "pattern": ".{1,255}"
+          }
+        },
+        {
+          "name": "Notes",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 1024
+          }
+        },
+        {
+          "name": "Type",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "allowedValues": ["bar_chart"]
           }
         },
         {
           "name": "Value",
-          "description": "The tag value.",
           "optional": false,
           "type": {
-            "type": "string",
-            "description": "The tag value.",
-            "maxLength": 256
-          }
-        }
-      ]
-    },
-    "Content": {
-      "type": "object",
-      "description": "The content of the model card.",
-      "properties": [
-        {
-          "name": "ModelOverview",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ModelOverview"
-          }
-        },
-        {
-          "name": "ModelPackageDetails",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ModelPackageDetails"
-          }
-        },
-        {
-          "name": "IntendedUses",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "IntendedUses"
-          }
-        },
-        {
-          "name": "BusinessDetails",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "BusinessDetails"
-          }
-        },
-        {
-          "name": "TrainingDetails",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "TrainingDetails"
-          }
-        },
-        {
-          "name": "EvaluationDetails",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "EvaluationDetails"
-          }
-        },
-        {
-          "name": "AdditionalInformation",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "AdditionalInformation"
-          }
-        }
-      ]
-    },
-    "ModelOverview": {
-      "type": "object",
-      "description": "Overview about the model.",
-      "properties": [
-        {
-          "name": "ModelDescription",
-          "description": "description of model.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "description of model.",
-            "maxLength": 1024
-          }
-        },
-        {
-          "name": "ModelOwner",
-          "description": "Owner of model.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Owner of model.",
-            "maxLength": 1024
-          }
-        },
-        {
-          "name": "ModelCreator",
-          "description": "Creator of model.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Creator of model.",
-            "maxLength": 1024
-          }
-        },
-        {
-          "name": "ProblemType",
-          "description": "Problem being solved with the model.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Problem being solved with the model.",
-            "maxLength": 1024
-          }
-        },
-        {
-          "name": "AlgorithmType",
-          "description": "Algorithm used to solve the problem.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Algorithm used to solve the problem.",
-            "maxLength": 1024
-          }
-        },
-        {
-          "name": "ModelId",
-          "description": "SageMaker Model Arn or Non SageMaker Model id.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "SageMaker Model Arn or Non SageMaker Model id.",
-            "maxLength": 1024
-          }
-        },
-        {
-          "name": "ModelArtifact",
-          "description": "Location of the model artifact.",
-          "optional": true,
-          "type": {
             "type": "array",
-            "description": "Location of the model artifact.",
             "itemType": {
-              "type": "string",
-              "maxLength": 1024
+              "type": "number",
+              "isInteger": false
             },
-            "maxLength": 15
-          }
-        },
-        {
-          "name": "ModelName",
-          "description": "Name of the model.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Name of the model.",
-            "maxLength": 1024
-          }
-        },
-        {
-          "name": "ModelVersion",
-          "description": "Version of the model.",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "description": "Version of the model.",
-            "isInteger": false,
-            "minimum": 1
-          }
-        },
-        {
-          "name": "InferenceEnvironment",
-          "description": "Overview about the inference.",
-          "optional": true,
-          "type": {
-            "type": "object",
-            "description": "Overview about the inference.",
-            "properties": [
-              {
-                "name": "ContainerImage",
-                "description": "SageMaker inference image uri.",
-                "optional": true,
-                "type": {
-                  "type": "array",
-                  "description": "SageMaker inference image uri.",
-                  "itemType": {
-                    "type": "string",
-                    "maxLength": 1024
-                  },
-                  "maxLength": 15
-                }
-              }
-            ]
-          }
-        }
-      ]
-    },
-    "ModelPackageDetails": {
-      "type": "object",
-      "description": "Metadata information related to model package version",
-      "properties": [
-        {
-          "name": "ModelPackageDescription",
-          "description": "A brief summary of the model package",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "A brief summary of the model package",
-            "maxLength": 1024
-          }
-        },
-        {
-          "name": "ModelPackageArn",
-          "description": "The Amazon Resource Name (ARN) of the model package",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The Amazon Resource Name (ARN) of the model package",
-            "maxLength": 2048,
             "minLength": 1
           }
         },
         {
-          "name": "CreatedBy",
-          "description": "Information about the user who created model package.",
+          "name": "XAxisName",
           "optional": true,
           "type": {
             "type": "ref",
-            "description": "Information about the user who created model package.",
-            "typeName": "ModelPackageCreator"
+            "typeName": "AxisNameArray"
           }
         },
         {
-          "name": "ModelPackageStatus",
-          "description": "Current status of model package",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Current status of model package",
-            "allowedValues": [
-              "Pending",
-              "InProgress",
-              "Completed",
-              "Failed",
-              "Deleting"
-            ]
-          }
-        },
-        {
-          "name": "ModelApprovalStatus",
-          "description": "Current approval status of model package",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Current approval status of model package",
-            "allowedValues": ["Approved", "Rejected", "PendingManualApproval"]
-          }
-        },
-        {
-          "name": "ApprovalDescription",
-          "description": "A description provided for the model approval",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "A description provided for the model approval",
-            "maxLength": 1024
-          }
-        },
-        {
-          "name": "ModelPackageGroupName",
-          "description": "If the model is a versioned model, the name of the model group that the versioned model belongs to.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "If the model is a versioned model, the name of the model group that the versioned model belongs to.",
-            "maxLength": 63,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "ModelPackageName",
-          "description": "Name of the model package",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Name of the model package",
-            "maxLength": 63,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "ModelPackageVersion",
-          "description": "Version of the model package",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "description": "Version of the model package",
-            "isInteger": false,
-            "minimum": 1
-          }
-        },
-        {
-          "name": "Domain",
-          "description": "The machine learning domain of the model package you specified. Common machine learning domains include computer vision and natural language processing.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The machine learning domain of the model package you specified. Common machine learning domains include computer vision and natural language processing."
-          }
-        },
-        {
-          "name": "Task",
-          "description": "The machine learning task you specified that your model package accomplishes. Common machine learning tasks include object detection and image classification.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The machine learning task you specified that your model package accomplishes. Common machine learning tasks include object detection and image classification."
-          }
-        },
-        {
-          "name": "SourceAlgorithms",
-          "description": "A list of algorithms that were used to create a model package.",
+          "name": "YAxisName",
           "optional": true,
           "type": {
             "type": "ref",
-            "description": "A list of algorithms that were used to create a model package.",
-            "typeName": "SourceAlgorithms"
-          }
-        },
-        {
-          "name": "InferenceSpecification",
-          "description": "Details about inference jobs that can be run with models based on this model package.",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "Details about inference jobs that can be run with models based on this model package.",
-            "typeName": "InferenceSpecification"
-          }
-        }
-      ]
-    },
-    "IntendedUses": {
-      "type": "object",
-      "description": "Intended usage of model.",
-      "properties": [
-        {
-          "name": "PurposeOfModel",
-          "description": "Why the model was developed?",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Why the model was developed?",
-            "maxLength": 2048
-          }
-        },
-        {
-          "name": "IntendedUses",
-          "description": "intended use cases.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "intended use cases.",
-            "maxLength": 2048
-          }
-        },
-        {
-          "name": "FactorsAffectingModelEfficiency",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "maxLength": 2048
-          }
-        },
-        {
-          "name": "RiskRating",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "RiskRating"
-          }
-        },
-        {
-          "name": "ExplanationsForRiskRating",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "maxLength": 2048
+            "typeName": "AxisNameString"
           }
         }
       ]
@@ -495,153 +142,116 @@
         }
       ]
     },
-    "TrainingDetails": {
+    "Container": {
       "type": "object",
-      "description": "Overview about the training.",
       "properties": [
         {
-          "name": "ObjectiveFunction",
-          "optional": true,
+          "name": "Image",
+          "description": "Inference environment path. The Amazon EC2 Container Registry (Amazon ECR) path where inference code is stored.",
+          "optional": false,
           "type": {
-            "type": "ref",
-            "typeName": "ObjectiveFunction"
+            "type": "string",
+            "description": "Inference environment path. The Amazon EC2 Container Registry (Amazon ECR) path where inference code is stored.",
+            "maxLength": 255
           }
         },
         {
-          "name": "TrainingObservations",
+          "name": "ModelDataUrl",
+          "description": "The Amazon S3 path where the model artifacts, which result from model training, are stored.",
           "optional": true,
           "type": {
             "type": "string",
+            "description": "The Amazon S3 path where the model artifacts, which result from model training, are stored.",
             "maxLength": 1024
           }
         },
         {
-          "name": "TrainingJobDetails",
+          "name": "NearestModelName",
+          "description": "The name of a pre-trained machine learning benchmarked by Amazon SageMaker Inference Recommender model that matches your model.",
           "optional": true,
           "type": {
-            "type": "object",
-            "properties": [
-              {
-                "name": "TrainingArn",
-                "description": "SageMaker Training job arn.",
-                "optional": true,
-                "type": {
-                  "type": "string",
-                  "description": "SageMaker Training job arn.",
-                  "maxLength": 1024
-                }
-              },
-              {
-                "name": "TrainingDatasets",
-                "description": "Location of the model datasets.",
-                "optional": true,
-                "type": {
-                  "type": "array",
-                  "description": "Location of the model datasets.",
-                  "itemType": {
-                    "type": "string",
-                    "maxLength": 1024
-                  },
-                  "maxLength": 15
-                }
-              },
-              {
-                "name": "TrainingEnvironment",
-                "optional": true,
-                "type": {
-                  "type": "object",
-                  "properties": [
-                    {
-                      "name": "ContainerImage",
-                      "description": "SageMaker training image uri.",
-                      "optional": true,
-                      "type": {
-                        "type": "array",
-                        "description": "SageMaker training image uri.",
-                        "itemType": {
-                          "type": "string",
-                          "maxLength": 1024
-                        },
-                        "maxLength": 15
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                "name": "TrainingMetrics",
-                "optional": true,
-                "type": {
-                  "type": "array",
-                  "itemType": {
-                    "type": "ref",
-                    "typeName": "TrainingMetric"
-                  }
-                }
-              },
-              {
-                "name": "UserProvidedTrainingMetrics",
-                "optional": true,
-                "type": {
-                  "type": "array",
-                  "itemType": {
-                    "type": "ref",
-                    "typeName": "TrainingMetric"
-                  }
-                }
-              },
-              {
-                "name": "HyperParameters",
-                "optional": true,
-                "type": {
-                  "type": "array",
-                  "itemType": {
-                    "type": "ref",
-                    "typeName": "TrainingHyperParameter"
-                  }
-                }
-              },
-              {
-                "name": "UserProvidedHyperParameters",
-                "optional": true,
-                "type": {
-                  "type": "array",
-                  "itemType": {
-                    "type": "ref",
-                    "typeName": "TrainingHyperParameter"
-                  }
-                }
-              }
-            ]
+            "type": "string",
+            "description": "The name of a pre-trained machine learning benchmarked by Amazon SageMaker Inference Recommender model that matches your model."
           }
         }
       ]
     },
-    "EvaluationDetails": {
-      "type": "array",
-      "itemType": {
-        "type": "ref",
-        "typeName": "EvaluationDetail"
-      }
+    "Content": {
+      "type": "object",
+      "description": "The content of the model card.",
+      "properties": [
+        {
+          "name": "AdditionalInformation",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "AdditionalInformation"
+          }
+        },
+        {
+          "name": "BusinessDetails",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "BusinessDetails"
+          }
+        },
+        {
+          "name": "EvaluationDetails",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "EvaluationDetails"
+          }
+        },
+        {
+          "name": "IntendedUses",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "IntendedUses"
+          }
+        },
+        {
+          "name": "ModelOverview",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ModelOverview"
+          }
+        },
+        {
+          "name": "ModelPackageDetails",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ModelPackageDetails"
+          }
+        },
+        {
+          "name": "TrainingDetails",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "TrainingDetails"
+          }
+        }
+      ]
     },
     "EvaluationDetail": {
       "type": "object",
       "description": "item of evaluation details",
       "properties": [
         {
-          "name": "Name",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "pattern": ".{1,63}"
-          }
-        },
-        {
-          "name": "EvaluationObservation",
+          "name": "Datasets",
           "optional": true,
           "type": {
-            "type": "string",
-            "maxLength": 2096
+            "type": "array",
+            "itemType": {
+              "type": "string",
+              "maxLength": 1024
+            },
+            "maxLength": 10
           }
         },
         {
@@ -653,15 +263,11 @@
           }
         },
         {
-          "name": "Datasets",
+          "name": "EvaluationObservation",
           "optional": true,
           "type": {
-            "type": "array",
-            "itemType": {
-              "type": "string",
-              "maxLength": 1024
-            },
-            "maxLength": 10
+            "type": "string",
+            "maxLength": 2096
           }
         },
         {
@@ -687,13 +293,7 @@
               "typeName": "MetricGroup"
             }
           }
-        }
-      ]
-    },
-    "MetricGroup": {
-      "type": "object",
-      "description": "item in metric groups",
-      "properties": [
+        },
         {
           "name": "Name",
           "optional": false,
@@ -701,123 +301,15 @@
             "type": "string",
             "pattern": ".{1,63}"
           }
-        },
-        {
-          "name": "MetricData",
-          "optional": false,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "union",
-              "types": [
-                {
-                  "type": "ref",
-                  "typeName": "SimpleMetric"
-                },
-                {
-                  "type": "ref",
-                  "typeName": "LinearGraphMetric"
-                },
-                {
-                  "type": "ref",
-                  "typeName": "BarChartMetric"
-                },
-                {
-                  "type": "ref",
-                  "typeName": "MatrixMetric"
-                }
-              ]
-            }
-          }
         }
       ]
     },
-    "AdditionalInformation": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "EthicalConsiderations",
-          "description": "Any ethical considerations that the author wants to provide.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Any ethical considerations that the author wants to provide.",
-            "maxLength": 2048
-          }
-        },
-        {
-          "name": "CaveatsAndRecommendations",
-          "description": "Caveats and recommendations for people who might use this model in their applications.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Caveats and recommendations for people who might use this model in their applications.",
-            "maxLength": 2048
-          }
-        },
-        {
-          "name": "CustomDetails",
-          "description": "customer details.",
-          "optional": true,
-          "type": {
-            "type": "record",
-            "description": "customer details.",
-            "valueType": {
-              "type": "string",
-              "maxLength": 1024
-            }
-          }
-        }
-      ]
-    },
-    "ModelPackageCreator": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "UserProfileName",
-          "description": "The name of the user's profile in Studio",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The name of the user's profile in Studio",
-            "maxLength": 63
-          }
-        }
-      ]
-    },
-    "SourceAlgorithms": {
+    "EvaluationDetails": {
       "type": "array",
       "itemType": {
         "type": "ref",
-        "typeName": "SourceAlgorithm"
-      },
-      "maxLength": 1,
-      "minLength": 1
-    },
-    "SourceAlgorithm": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "AlgorithmName",
-          "description": "The name of an algorithm that was used to create the model package. The algorithm must be either an algorithm resource in your SageMaker account or an algorithm in AWS Marketplace that you are subscribed to.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The name of an algorithm that was used to create the model package. The algorithm must be either an algorithm resource in your SageMaker account or an algorithm in AWS Marketplace that you are subscribed to.",
-            "maxLength": 170
-          }
-        },
-        {
-          "name": "ModelDataUrl",
-          "description": "The Amazon S3 path where the model artifacts, which result from model training, are stored.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The Amazon S3 path where the model artifacts, which result from model training, are stored.",
-            "maxLength": 1024
-          }
-        }
-      ]
+        "typeName": "EvaluationDetail"
+      }
     },
     "InferenceSpecification": {
       "type": "object",
@@ -839,142 +331,52 @@
         }
       ]
     },
-    "Container": {
+    "IntendedUses": {
       "type": "object",
+      "description": "Intended usage of model.",
       "properties": [
         {
-          "name": "ModelDataUrl",
-          "description": "The Amazon S3 path where the model artifacts, which result from model training, are stored.",
+          "name": "ExplanationsForRiskRating",
           "optional": true,
           "type": {
             "type": "string",
-            "description": "The Amazon S3 path where the model artifacts, which result from model training, are stored.",
-            "maxLength": 1024
+            "maxLength": 2048
           }
         },
         {
-          "name": "Image",
-          "description": "Inference environment path. The Amazon EC2 Container Registry (Amazon ECR) path where inference code is stored.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "Inference environment path. The Amazon EC2 Container Registry (Amazon ECR) path where inference code is stored.",
-            "maxLength": 255
-          }
-        },
-        {
-          "name": "NearestModelName",
-          "description": "The name of a pre-trained machine learning benchmarked by Amazon SageMaker Inference Recommender model that matches your model.",
+          "name": "FactorsAffectingModelEfficiency",
           "optional": true,
           "type": {
             "type": "string",
-            "description": "The name of a pre-trained machine learning benchmarked by Amazon SageMaker Inference Recommender model that matches your model."
-          }
-        }
-      ]
-    },
-    "RiskRating": {
-      "type": "string",
-      "description": "Risk rating of model.",
-      "allowedValues": ["High", "Medium", "Low", "Unknown"]
-    },
-    "ObjectiveFunction": {
-      "type": "object",
-      "description": "the objective function the model will optimize for.",
-      "properties": [
-        {
-          "name": "Function",
-          "description": "objective function that training job is optimized for.",
-          "optional": true,
-          "type": {
-            "type": "object",
-            "description": "objective function that training job is optimized for.",
-            "properties": [
-              {
-                "name": "Function",
-                "optional": true,
-                "type": {
-                  "type": "string",
-                  "allowedValues": ["Maximize", "Minimize"]
-                }
-              },
-              {
-                "name": "Facet",
-                "optional": true,
-                "type": {
-                  "type": "string",
-                  "maxLength": 63
-                }
-              },
-              {
-                "name": "Condition",
-                "optional": true,
-                "type": {
-                  "type": "string",
-                  "maxLength": 63
-                }
-              }
-            ]
+            "maxLength": 2048
           }
         },
         {
-          "name": "Notes",
+          "name": "IntendedUses",
+          "description": "intended use cases.",
           "optional": true,
           "type": {
             "type": "string",
-            "maxLength": 1024
-          }
-        }
-      ]
-    },
-    "TrainingMetric": {
-      "type": "object",
-      "description": "training metric data.",
-      "properties": [
-        {
-          "name": "Name",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "pattern": ".{1,255}"
+            "description": "intended use cases.",
+            "maxLength": 2048
           }
         },
         {
-          "name": "Notes",
+          "name": "PurposeOfModel",
+          "description": "Why the model was developed?",
           "optional": true,
           "type": {
             "type": "string",
-            "maxLength": 1024
+            "description": "Why the model was developed?",
+            "maxLength": 2048
           }
         },
         {
-          "name": "Value",
-          "optional": false,
+          "name": "RiskRating",
+          "optional": true,
           "type": {
-            "type": "number",
-            "isInteger": false
-          }
-        }
-      ]
-    },
-    "TrainingHyperParameter": {
-      "type": "object",
-      "description": "training hyper parameter",
-      "properties": [
-        {
-          "name": "Name",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "pattern": ".{1,255}"
-          }
-        },
-        {
-          "name": "Value",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "pattern": ".{1,255}"
+            "type": "ref",
+            "typeName": "RiskRating"
           }
         }
       ]
@@ -1030,63 +432,6 @@
           "type": {
             "type": "ref",
             "typeName": "AxisNameString"
-          }
-        },
-        {
-          "name": "YAxisName",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "AxisNameString"
-          }
-        }
-      ]
-    },
-    "BarChartMetric": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Name",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "pattern": ".{1,255}"
-          }
-        },
-        {
-          "name": "Notes",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "maxLength": 1024
-          }
-        },
-        {
-          "name": "Type",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "allowedValues": ["bar_chart"]
-          }
-        },
-        {
-          "name": "Value",
-          "optional": false,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "number",
-              "isInteger": false
-            },
-            "minLength": 1
-          }
-        },
-        {
-          "name": "XAxisName",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "AxisNameArray"
           }
         },
         {
@@ -1162,6 +507,404 @@
         }
       ]
     },
+    "MetricGroup": {
+      "type": "object",
+      "description": "item in metric groups",
+      "properties": [
+        {
+          "name": "MetricData",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "union",
+              "types": [
+                {
+                  "type": "ref",
+                  "typeName": "SimpleMetric"
+                },
+                {
+                  "type": "ref",
+                  "typeName": "LinearGraphMetric"
+                },
+                {
+                  "type": "ref",
+                  "typeName": "BarChartMetric"
+                },
+                {
+                  "type": "ref",
+                  "typeName": "MatrixMetric"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Name",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "pattern": ".{1,63}"
+          }
+        }
+      ]
+    },
+    "ModelOverview": {
+      "type": "object",
+      "description": "Overview about the model.",
+      "properties": [
+        {
+          "name": "AlgorithmType",
+          "description": "Algorithm used to solve the problem.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Algorithm used to solve the problem.",
+            "maxLength": 1024
+          }
+        },
+        {
+          "name": "InferenceEnvironment",
+          "description": "Overview about the inference.",
+          "optional": true,
+          "type": {
+            "type": "object",
+            "description": "Overview about the inference.",
+            "properties": [
+              {
+                "name": "ContainerImage",
+                "description": "SageMaker inference image uri.",
+                "optional": true,
+                "type": {
+                  "type": "array",
+                  "description": "SageMaker inference image uri.",
+                  "itemType": {
+                    "type": "string",
+                    "maxLength": 1024
+                  },
+                  "maxLength": 15
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "ModelArtifact",
+          "description": "Location of the model artifact.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "Location of the model artifact.",
+            "itemType": {
+              "type": "string",
+              "maxLength": 1024
+            },
+            "maxLength": 15
+          }
+        },
+        {
+          "name": "ModelCreator",
+          "description": "Creator of model.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Creator of model.",
+            "maxLength": 1024
+          }
+        },
+        {
+          "name": "ModelDescription",
+          "description": "description of model.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "description of model.",
+            "maxLength": 1024
+          }
+        },
+        {
+          "name": "ModelId",
+          "description": "SageMaker Model Arn or Non SageMaker Model id.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "SageMaker Model Arn or Non SageMaker Model id.",
+            "maxLength": 1024
+          }
+        },
+        {
+          "name": "ModelName",
+          "description": "Name of the model.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Name of the model.",
+            "maxLength": 1024
+          }
+        },
+        {
+          "name": "ModelOwner",
+          "description": "Owner of model.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Owner of model.",
+            "maxLength": 1024
+          }
+        },
+        {
+          "name": "ModelVersion",
+          "description": "Version of the model.",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "Version of the model.",
+            "isInteger": false,
+            "minimum": 1
+          }
+        },
+        {
+          "name": "ProblemType",
+          "description": "Problem being solved with the model.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Problem being solved with the model.",
+            "maxLength": 1024
+          }
+        }
+      ]
+    },
+    "ModelPackageCreator": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "UserProfileName",
+          "description": "The name of the user's profile in Studio",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The name of the user's profile in Studio",
+            "maxLength": 63
+          }
+        }
+      ]
+    },
+    "ModelPackageDetails": {
+      "type": "object",
+      "description": "Metadata information related to model package version",
+      "properties": [
+        {
+          "name": "ApprovalDescription",
+          "description": "A description provided for the model approval",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "A description provided for the model approval",
+            "maxLength": 1024
+          }
+        },
+        {
+          "name": "CreatedBy",
+          "description": "Information about the user who created model package.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "Information about the user who created model package.",
+            "typeName": "ModelPackageCreator"
+          }
+        },
+        {
+          "name": "Domain",
+          "description": "The machine learning domain of the model package you specified. Common machine learning domains include computer vision and natural language processing.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The machine learning domain of the model package you specified. Common machine learning domains include computer vision and natural language processing."
+          }
+        },
+        {
+          "name": "InferenceSpecification",
+          "description": "Details about inference jobs that can be run with models based on this model package.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "Details about inference jobs that can be run with models based on this model package.",
+            "typeName": "InferenceSpecification"
+          }
+        },
+        {
+          "name": "ModelApprovalStatus",
+          "description": "Current approval status of model package",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Current approval status of model package",
+            "allowedValues": ["Approved", "Rejected", "PendingManualApproval"]
+          }
+        },
+        {
+          "name": "ModelPackageArn",
+          "description": "The Amazon Resource Name (ARN) of the model package",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the model package",
+            "maxLength": 2048,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "ModelPackageDescription",
+          "description": "A brief summary of the model package",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "A brief summary of the model package",
+            "maxLength": 1024
+          }
+        },
+        {
+          "name": "ModelPackageGroupName",
+          "description": "If the model is a versioned model, the name of the model group that the versioned model belongs to.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "If the model is a versioned model, the name of the model group that the versioned model belongs to.",
+            "maxLength": 63,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "ModelPackageName",
+          "description": "Name of the model package",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Name of the model package",
+            "maxLength": 63,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "ModelPackageStatus",
+          "description": "Current status of model package",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Current status of model package",
+            "allowedValues": [
+              "Pending",
+              "InProgress",
+              "Completed",
+              "Failed",
+              "Deleting"
+            ]
+          }
+        },
+        {
+          "name": "ModelPackageVersion",
+          "description": "Version of the model package",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "Version of the model package",
+            "isInteger": false,
+            "minimum": 1
+          }
+        },
+        {
+          "name": "SourceAlgorithms",
+          "description": "A list of algorithms that were used to create a model package.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "A list of algorithms that were used to create a model package.",
+            "typeName": "SourceAlgorithms"
+          }
+        },
+        {
+          "name": "Task",
+          "description": "The machine learning task you specified that your model package accomplishes. Common machine learning tasks include object detection and image classification.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The machine learning task you specified that your model package accomplishes. Common machine learning tasks include object detection and image classification."
+          }
+        }
+      ]
+    },
+    "ObjectiveFunction": {
+      "type": "object",
+      "description": "the objective function the model will optimize for.",
+      "properties": [
+        {
+          "name": "Function",
+          "description": "objective function that training job is optimized for.",
+          "optional": true,
+          "type": {
+            "type": "object",
+            "description": "objective function that training job is optimized for.",
+            "properties": [
+              {
+                "name": "Condition",
+                "optional": true,
+                "type": {
+                  "type": "string",
+                  "maxLength": 63
+                }
+              },
+              {
+                "name": "Facet",
+                "optional": true,
+                "type": {
+                  "type": "string",
+                  "maxLength": 63
+                }
+              },
+              {
+                "name": "Function",
+                "optional": true,
+                "type": {
+                  "type": "string",
+                  "allowedValues": ["Maximize", "Minimize"]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "Notes",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 1024
+          }
+        }
+      ]
+    },
+    "RiskRating": {
+      "type": "string",
+      "description": "Risk rating of model.",
+      "allowedValues": ["High", "Medium", "Low", "Unknown"]
+    },
+    "SecurityConfig": {
+      "type": "object",
+      "description": "An optional Key Management Service key to encrypt, decrypt, and re-encrypt model card content for regulated workloads with highly sensitive data.\n\n",
+      "properties": [
+        {
+          "name": "KmsKeyId",
+          "description": "A Key Management Service key ID to use for encrypting a model card.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "A Key Management Service key ID to use for encrypting a model card.",
+            "maxLength": 2048,
+            "pattern": ".*"
+          }
+        }
+      ]
+    },
     "SimpleMetric": {
       "type": "object",
       "description": "metric data",
@@ -1228,51 +971,279 @@
         }
       ]
     },
-    "AxisNameString": {
-      "type": "string",
-      "maxLength": 63
+    "SourceAlgorithm": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "AlgorithmName",
+          "description": "The name of an algorithm that was used to create the model package. The algorithm must be either an algorithm resource in your SageMaker account or an algorithm in AWS Marketplace that you are subscribed to.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The name of an algorithm that was used to create the model package. The algorithm must be either an algorithm resource in your SageMaker account or an algorithm in AWS Marketplace that you are subscribed to.",
+            "maxLength": 170
+          }
+        },
+        {
+          "name": "ModelDataUrl",
+          "description": "The Amazon S3 path where the model artifacts, which result from model training, are stored.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The Amazon S3 path where the model artifacts, which result from model training, are stored.",
+            "maxLength": 1024
+          }
+        }
+      ]
     },
-    "AxisNameArray": {
+    "SourceAlgorithms": {
       "type": "array",
       "itemType": {
-        "type": "string",
-        "maxLength": 63
-      }
+        "type": "ref",
+        "typeName": "SourceAlgorithm"
+      },
+      "maxLength": 1,
+      "minLength": 1
+    },
+    "Tag": {
+      "type": "object",
+      "description": "A key-value pair to associate with a resource.",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "The tag key. Tag keys must be unique per resource.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The tag key. Tag keys must be unique per resource.",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "description": "The tag value.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The tag value.",
+            "maxLength": 256
+          }
+        }
+      ]
+    },
+    "TrainingDetails": {
+      "type": "object",
+      "description": "Overview about the training.",
+      "properties": [
+        {
+          "name": "ObjectiveFunction",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ObjectiveFunction"
+          }
+        },
+        {
+          "name": "TrainingJobDetails",
+          "optional": true,
+          "type": {
+            "type": "object",
+            "properties": [
+              {
+                "name": "HyperParameters",
+                "optional": true,
+                "type": {
+                  "type": "array",
+                  "itemType": {
+                    "type": "ref",
+                    "typeName": "TrainingHyperParameter"
+                  }
+                }
+              },
+              {
+                "name": "TrainingArn",
+                "description": "SageMaker Training job arn.",
+                "optional": true,
+                "type": {
+                  "type": "string",
+                  "description": "SageMaker Training job arn.",
+                  "maxLength": 1024
+                }
+              },
+              {
+                "name": "TrainingDatasets",
+                "description": "Location of the model datasets.",
+                "optional": true,
+                "type": {
+                  "type": "array",
+                  "description": "Location of the model datasets.",
+                  "itemType": {
+                    "type": "string",
+                    "maxLength": 1024
+                  },
+                  "maxLength": 15
+                }
+              },
+              {
+                "name": "TrainingEnvironment",
+                "optional": true,
+                "type": {
+                  "type": "object",
+                  "properties": [
+                    {
+                      "name": "ContainerImage",
+                      "description": "SageMaker training image uri.",
+                      "optional": true,
+                      "type": {
+                        "type": "array",
+                        "description": "SageMaker training image uri.",
+                        "itemType": {
+                          "type": "string",
+                          "maxLength": 1024
+                        },
+                        "maxLength": 15
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "TrainingMetrics",
+                "optional": true,
+                "type": {
+                  "type": "array",
+                  "itemType": {
+                    "type": "ref",
+                    "typeName": "TrainingMetric"
+                  }
+                }
+              },
+              {
+                "name": "UserProvidedHyperParameters",
+                "optional": true,
+                "type": {
+                  "type": "array",
+                  "itemType": {
+                    "type": "ref",
+                    "typeName": "TrainingHyperParameter"
+                  }
+                }
+              },
+              {
+                "name": "UserProvidedTrainingMetrics",
+                "optional": true,
+                "type": {
+                  "type": "array",
+                  "itemType": {
+                    "type": "ref",
+                    "typeName": "TrainingMetric"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "name": "TrainingObservations",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 1024
+          }
+        }
+      ]
+    },
+    "TrainingHyperParameter": {
+      "type": "object",
+      "description": "training hyper parameter",
+      "properties": [
+        {
+          "name": "Name",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "pattern": ".{1,255}"
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "pattern": ".{1,255}"
+          }
+        }
+      ]
+    },
+    "TrainingMetric": {
+      "type": "object",
+      "description": "training metric data.",
+      "properties": [
+        {
+          "name": "Name",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "pattern": ".{1,255}"
+          }
+        },
+        {
+          "name": "Notes",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 1024
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "number",
+            "isInteger": false
+          }
+        }
+      ]
+    },
+    "UserContext": {
+      "type": "object",
+      "description": "Information about the user who created or modified an experiment, trial, trial component, lineage group, project, or model card.",
+      "properties": [
+        {
+          "name": "DomainId",
+          "description": "The domain associated with the user.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The domain associated with the user."
+          }
+        },
+        {
+          "name": "UserProfileArn",
+          "description": "The Amazon Resource Name (ARN) of the user's profile.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The Amazon Resource Name (ARN) of the user's profile."
+          }
+        },
+        {
+          "name": "UserProfileName",
+          "description": "The name of the user's profile.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The name of the user's profile."
+          }
+        }
+      ]
     }
   },
   "resource": {
     "type": "object",
     "description": "Resource Type definition for AWS::SageMaker::ModelCard.",
     "properties": [
-      {
-        "name": "ModelCardName",
-        "description": "The unique name of the model card.",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "description": "The unique name of the model card.",
-          "maxLength": 63,
-          "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9]){0,62}$"
-        }
-      },
-      {
-        "name": "SecurityConfig",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "SecurityConfig"
-        }
-      },
-      {
-        "name": "ModelCardStatus",
-        "description": "The approval status of the model card within your organization. Different organizations might have different criteria for model card review and approval.",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "description": "The approval status of the model card within your organization. Different organizations might have different criteria for model card review and approval.",
-          "allowedValues": ["Draft", "PendingReview", "Approved", "Archived"]
-        }
-      },
       {
         "name": "Content",
         "optional": false,
@@ -1302,6 +1273,35 @@
         }
       },
       {
+        "name": "ModelCardName",
+        "description": "The unique name of the model card.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The unique name of the model card.",
+          "maxLength": 63,
+          "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9]){0,62}$"
+        }
+      },
+      {
+        "name": "ModelCardStatus",
+        "description": "The approval status of the model card within your organization. Different organizations might have different criteria for model card review and approval.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The approval status of the model card within your organization. Different organizations might have different criteria for model card review and approval.",
+          "allowedValues": ["Draft", "PendingReview", "Approved", "Archived"]
+        }
+      },
+      {
+        "name": "SecurityConfig",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "SecurityConfig"
+        }
+      },
+      {
         "name": "Tags",
         "description": "Key-value pairs used to manage metadata for model cards.",
         "optional": true,
@@ -1323,29 +1323,6 @@
     "description": "Resource Type definition for AWS::SageMaker::ModelCard.",
     "properties": [
       {
-        "name": "ModelCardArn",
-        "description": "The Amazon Resource Name (ARN) of the successfully created model card.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The Amazon Resource Name (ARN) of the successfully created model card.",
-          "maxLength": 256,
-          "minLength": 1,
-          "pattern": "^arn:aws[a-z\\-]*:sagemaker:[a-z0-9\\-]{9,16}:[0-9]{12}:model-card/[a-zA-Z0-9](-*[a-zA-Z0-9]){0,62}$"
-        }
-      },
-      {
-        "name": "ModelCardVersion",
-        "description": "A version of the model card.",
-        "optional": true,
-        "type": {
-          "type": "number",
-          "description": "A version of the model card.",
-          "isInteger": true,
-          "minimum": 1
-        }
-      },
-      {
         "name": "CreationTime",
         "description": "The date and time the model card was created.",
         "optional": true,
@@ -1361,6 +1338,18 @@
         "type": {
           "type": "string",
           "description": "The date and time the model card was last modified."
+        }
+      },
+      {
+        "name": "ModelCardArn",
+        "description": "The Amazon Resource Name (ARN) of the successfully created model card.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) of the successfully created model card.",
+          "maxLength": 256,
+          "minLength": 1,
+          "pattern": "^arn:aws[a-z\\-]*:sagemaker:[a-z0-9\\-]{9,16}:[0-9]{12}:model-card/[a-zA-Z0-9](-*[a-zA-Z0-9]){0,62}$"
         }
       },
       {
@@ -1380,8 +1369,19 @@
             "DeleteFailed"
           ]
         }
+      },
+      {
+        "name": "ModelCardVersion",
+        "description": "A version of the model card.",
+        "optional": true,
+        "type": {
+          "type": "number",
+          "description": "A version of the model card.",
+          "isInteger": true,
+          "minimum": 1
+        }
       }
     ]
   },
-  "$hash": "633088cc2c1177eca4abcc62834dbcda0dda2477"
+  "$hash": "3b0cce323591b1906a194faafc833a3e36b9700b"
 }

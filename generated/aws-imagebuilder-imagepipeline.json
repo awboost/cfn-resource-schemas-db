@@ -1,28 +1,28 @@
 {
   "definitions": {
-    "ImageTestsConfiguration": {
+    "EcrConfiguration": {
       "type": "object",
-      "description": "Image tests configuration.",
+      "description": "Settings for Image Builder to configure the ECR repository and output container images that are scanned.",
       "properties": [
         {
-          "name": "ImageTestsEnabled",
-          "description": "Defines if tests should be executed when building this image.",
+          "name": "ContainerTags",
+          "description": "Tags for Image Builder to apply the output container image that is scanned. Tags can help you identify and manage your scanned images.",
           "optional": true,
           "type": {
-            "type": "boolean",
-            "description": "Defines if tests should be executed when building this image."
+            "type": "array",
+            "description": "Tags for Image Builder to apply the output container image that is scanned. Tags can help you identify and manage your scanned images.",
+            "itemType": {
+              "type": "string"
+            }
           }
         },
         {
-          "name": "TimeoutMinutes",
-          "description": "The maximum time in minutes that tests are permitted to run.",
+          "name": "RepositoryName",
+          "description": "The name of the container repository that Amazon Inspector scans to identify findings for your container images. The name includes the path for the repository location. If you don't provide this information, Image Builder creates a repository in your account named image-builder-image-scanning-repository to use for vulnerability scans for your output container images.",
           "optional": true,
           "type": {
-            "type": "number",
-            "description": "The maximum time in minutes that tests are permitted to run.",
-            "isInteger": true,
-            "maximum": 1440,
-            "minimum": 60
+            "type": "string",
+            "description": "The name of the container repository that Amazon Inspector scans to identify findings for your container images. The name includes the path for the repository location. If you don't provide this information, Image Builder creates a repository in your account named image-builder-image-scanning-repository to use for vulnerability scans for your output container images."
           }
         }
       ]
@@ -52,29 +52,29 @@
         }
       ]
     },
-    "EcrConfiguration": {
+    "ImageTestsConfiguration": {
       "type": "object",
-      "description": "Settings for Image Builder to configure the ECR repository and output container images that are scanned.",
+      "description": "Image tests configuration.",
       "properties": [
         {
-          "name": "ContainerTags",
-          "description": "Tags for Image Builder to apply the output container image that is scanned. Tags can help you identify and manage your scanned images.",
+          "name": "ImageTestsEnabled",
+          "description": "Defines if tests should be executed when building this image.",
           "optional": true,
           "type": {
-            "type": "array",
-            "description": "Tags for Image Builder to apply the output container image that is scanned. Tags can help you identify and manage your scanned images.",
-            "itemType": {
-              "type": "string"
-            }
+            "type": "boolean",
+            "description": "Defines if tests should be executed when building this image."
           }
         },
         {
-          "name": "RepositoryName",
-          "description": "The name of the container repository that Amazon Inspector scans to identify findings for your container images. The name includes the path for the repository location. If you don't provide this information, Image Builder creates a repository in your account named image-builder-image-scanning-repository to use for vulnerability scans for your output container images.",
+          "name": "TimeoutMinutes",
+          "description": "The maximum time in minutes that tests are permitted to run.",
           "optional": true,
           "type": {
-            "type": "string",
-            "description": "The name of the container repository that Amazon Inspector scans to identify findings for your container images. The name includes the path for the repository location. If you don't provide this information, Image Builder creates a repository in your account named image-builder-image-scanning-repository to use for vulnerability scans for your output container images."
+            "type": "number",
+            "description": "The maximum time in minutes that tests are permitted to run.",
+            "isInteger": true,
+            "maximum": 1440,
+            "minimum": 60
           }
         }
       ]
@@ -83,15 +83,6 @@
       "type": "object",
       "description": "The schedule of the image pipeline.",
       "properties": [
-        {
-          "name": "ScheduleExpression",
-          "description": "The expression determines how often EC2 Image Builder evaluates your pipelineExecutionStartCondition.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The expression determines how often EC2 Image Builder evaluates your pipelineExecutionStartCondition."
-          }
-        },
         {
           "name": "PipelineExecutionStartCondition",
           "description": "The condition configures when the pipeline should trigger a new image build.",
@@ -104,6 +95,15 @@
               "EXPRESSION_MATCH_AND_DEPENDENCY_UPDATES_AVAILABLE"
             ]
           }
+        },
+        {
+          "name": "ScheduleExpression",
+          "description": "The expression determines how often EC2 Image Builder evaluates your pipelineExecutionStartCondition.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The expression determines how often EC2 Image Builder evaluates your pipelineExecutionStartCondition."
+          }
         }
       ]
     }
@@ -113,12 +113,12 @@
     "description": "Resource schema for AWS::ImageBuilder::ImagePipeline",
     "properties": [
       {
-        "name": "Name",
-        "description": "The name of the image pipeline.",
+        "name": "ContainerRecipeArn",
+        "description": "The Amazon Resource Name (ARN) of the container recipe that defines how images are configured and tested.",
         "optional": true,
         "type": {
           "type": "string",
-          "description": "The name of the image pipeline."
+          "description": "The Amazon Resource Name (ARN) of the container recipe that defines how images are configured and tested."
         }
       },
       {
@@ -128,6 +128,43 @@
         "type": {
           "type": "string",
           "description": "The description of the image pipeline."
+        }
+      },
+      {
+        "name": "DistributionConfigurationArn",
+        "description": "The Amazon Resource Name (ARN) of the distribution configuration associated with this image pipeline.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) of the distribution configuration associated with this image pipeline."
+        }
+      },
+      {
+        "name": "EnhancedImageMetadataEnabled",
+        "description": "Collects additional information about the image being created, including the operating system (OS) version and package list.",
+        "optional": true,
+        "type": {
+          "type": "boolean",
+          "description": "Collects additional information about the image being created, including the operating system (OS) version and package list."
+        }
+      },
+      {
+        "name": "ImageRecipeArn",
+        "description": "The Amazon Resource Name (ARN) of the image recipe that defines how images are configured, tested, and assessed.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) of the image recipe that defines how images are configured, tested, and assessed."
+        }
+      },
+      {
+        "name": "ImageScanningConfiguration",
+        "description": "Contains settings for vulnerability scans.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "Contains settings for vulnerability scans.",
+          "typeName": "ImageScanningConfiguration"
         }
       },
       {
@@ -141,13 +178,21 @@
         }
       },
       {
-        "name": "Status",
-        "description": "The status of the image pipeline.",
+        "name": "InfrastructureConfigurationArn",
+        "description": "The Amazon Resource Name (ARN) of the infrastructure configuration associated with this image pipeline.",
         "optional": true,
         "type": {
           "type": "string",
-          "description": "The status of the image pipeline.",
-          "allowedValues": ["DISABLED", "ENABLED"]
+          "description": "The Amazon Resource Name (ARN) of the infrastructure configuration associated with this image pipeline."
+        }
+      },
+      {
+        "name": "Name",
+        "description": "The name of the image pipeline.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The name of the image pipeline."
         }
       },
       {
@@ -161,58 +206,13 @@
         }
       },
       {
-        "name": "ImageRecipeArn",
-        "description": "The Amazon Resource Name (ARN) of the image recipe that defines how images are configured, tested, and assessed.",
+        "name": "Status",
+        "description": "The status of the image pipeline.",
         "optional": true,
         "type": {
           "type": "string",
-          "description": "The Amazon Resource Name (ARN) of the image recipe that defines how images are configured, tested, and assessed."
-        }
-      },
-      {
-        "name": "ContainerRecipeArn",
-        "description": "The Amazon Resource Name (ARN) of the container recipe that defines how images are configured and tested.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The Amazon Resource Name (ARN) of the container recipe that defines how images are configured and tested."
-        }
-      },
-      {
-        "name": "DistributionConfigurationArn",
-        "description": "The Amazon Resource Name (ARN) of the distribution configuration associated with this image pipeline.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The Amazon Resource Name (ARN) of the distribution configuration associated with this image pipeline."
-        }
-      },
-      {
-        "name": "InfrastructureConfigurationArn",
-        "description": "The Amazon Resource Name (ARN) of the infrastructure configuration associated with this image pipeline.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The Amazon Resource Name (ARN) of the infrastructure configuration associated with this image pipeline."
-        }
-      },
-      {
-        "name": "EnhancedImageMetadataEnabled",
-        "description": "Collects additional information about the image being created, including the operating system (OS) version and package list.",
-        "optional": true,
-        "type": {
-          "type": "boolean",
-          "description": "Collects additional information about the image being created, including the operating system (OS) version and package list."
-        }
-      },
-      {
-        "name": "ImageScanningConfiguration",
-        "description": "Contains settings for vulnerability scans.",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "description": "Contains settings for vulnerability scans.",
-          "typeName": "ImageScanningConfiguration"
+          "description": "The status of the image pipeline.",
+          "allowedValues": ["DISABLED", "ENABLED"]
         }
       },
       {
@@ -244,5 +244,5 @@
       }
     ]
   },
-  "$hash": "e2f67acd8d15874b07750f76151a9e6288da5ad2"
+  "$hash": "8b056e238ac2aae6edc782a9c4d5e3e07c15ead0"
 }

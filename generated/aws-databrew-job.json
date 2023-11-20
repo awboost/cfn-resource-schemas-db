@@ -1,30 +1,66 @@
 {
   "definitions": {
-    "S3Location": {
+    "AllowedStatistics": {
       "type": "object",
-      "description": "S3 Output location",
       "properties": [
         {
-          "name": "Bucket",
+          "name": "Statistics",
           "optional": false,
           "type": {
-            "type": "string"
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Statistic"
+            },
+            "minLength": 1
           }
-        },
+        }
+      ]
+    },
+    "ColumnSelector": {
+      "type": "object",
+      "properties": [
         {
-          "name": "Key",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "BucketOwner",
+          "name": "Name",
           "optional": true,
           "type": {
             "type": "string",
-            "maxLength": 12,
-            "minLength": 12
+            "maxLength": 255,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Regex",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "ColumnStatisticsConfiguration": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Selectors",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "ColumnSelector"
+            },
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Statistics",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "StatisticsConfiguration"
           }
         }
       ]
@@ -44,48 +80,168 @@
         }
       ]
     },
-    "OutputFormatOptions": {
+    "DataCatalogOutput": {
       "type": "object",
-      "description": "Format options for job Output",
       "properties": [
         {
-          "name": "Csv",
+          "name": "CatalogId",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "DatabaseName",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "DatabaseOptions",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "CsvOutputOptions"
+            "typeName": "DatabaseTableOutputOptions"
+          }
+        },
+        {
+          "name": "Overwrite",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "S3Options",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "S3TableOutputOptions"
+          }
+        },
+        {
+          "name": "TableName",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
           }
         }
       ]
     },
-    "OutputLocation": {
+    "DatabaseOutput": {
       "type": "object",
-      "description": "Output location",
       "properties": [
         {
-          "name": "Bucket",
+          "name": "DatabaseOptions",
           "optional": false,
           "type": {
-            "type": "string"
+            "type": "ref",
+            "typeName": "DatabaseTableOutputOptions"
           }
         },
         {
-          "name": "Key",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "BucketOwner",
+          "name": "DatabaseOutputMode",
+          "description": "Database table name",
           "optional": true,
           "type": {
             "type": "string",
-            "maxLength": 12,
-            "minLength": 12
+            "description": "Database table name",
+            "allowedValues": ["NEW_TABLE"]
+          }
+        },
+        {
+          "name": "GlueConnectionName",
+          "description": "Glue connection name",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Glue connection name"
           }
         }
       ]
+    },
+    "DatabaseTableOutputOptions": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "TableName",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "TempDirectory",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "S3Location"
+          }
+        }
+      ]
+    },
+    "EntityDetectorConfiguration": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "AllowedStatistics",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "AllowedStatistics"
+          }
+        },
+        {
+          "name": "EntityTypes",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string",
+              "maxLength": 128,
+              "minLength": 1,
+              "pattern": "^[A-Z_][A-Z\\\\d_]*$"
+            },
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "JobSample": {
+      "type": "object",
+      "description": "Job Sample",
+      "properties": [
+        {
+          "name": "Mode",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "SampleMode"
+          }
+        },
+        {
+          "name": "Size",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "JobSize"
+          }
+        }
+      ]
+    },
+    "JobSize": {
+      "type": "number",
+      "description": "Sample configuration size for profile jobs.",
+      "isInteger": true
     },
     "Output": {
       "type": "object",
@@ -134,28 +290,11 @@
           }
         },
         {
-          "name": "PartitionColumns",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "string"
-            }
-          }
-        },
-        {
           "name": "Location",
           "optional": false,
           "type": {
             "type": "ref",
             "typeName": "S3Location"
-          }
-        },
-        {
-          "name": "Overwrite",
-          "optional": true,
-          "type": {
-            "type": "boolean"
           }
         },
         {
@@ -167,54 +306,6 @@
             "maximum": 999,
             "minimum": 1
           }
-        }
-      ]
-    },
-    "DataCatalogOutput": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "CatalogId",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "maxLength": 255,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "DatabaseName",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 255,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "TableName",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 255,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "S3Options",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "S3TableOutputOptions"
-          }
-        },
-        {
-          "name": "DatabaseOptions",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "DatabaseTableOutputOptions"
-          }
         },
         {
           "name": "Overwrite",
@@ -222,72 +313,109 @@
           "type": {
             "type": "boolean"
           }
-        }
-      ]
-    },
-    "S3TableOutputOptions": {
-      "type": "object",
-      "properties": [
+        },
         {
-          "name": "Location",
-          "optional": false,
+          "name": "PartitionColumns",
+          "optional": true,
           "type": {
-            "type": "ref",
-            "typeName": "S3Location"
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            }
           }
         }
       ]
     },
-    "DatabaseTableOutputOptions": {
+    "OutputFormatOptions": {
       "type": "object",
+      "description": "Format options for job Output",
       "properties": [
         {
-          "name": "TempDirectory",
+          "name": "Csv",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "S3Location"
+            "typeName": "CsvOutputOptions"
+          }
+        }
+      ]
+    },
+    "OutputLocation": {
+      "type": "object",
+      "description": "Output location",
+      "properties": [
+        {
+          "name": "Bucket",
+          "optional": false,
+          "type": {
+            "type": "string"
           }
         },
         {
-          "name": "TableName",
-          "optional": false,
+          "name": "BucketOwner",
+          "optional": true,
           "type": {
             "type": "string",
-            "maxLength": 255,
+            "maxLength": 12,
+            "minLength": 12
+          }
+        },
+        {
+          "name": "Key",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "ParameterMap": {
+      "type": "record",
+      "valueType": {
+        "type": "string"
+      }
+    },
+    "ProfileConfiguration": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ColumnStatisticsConfigurations",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "ColumnStatisticsConfiguration"
+            },
             "minLength": 1
           }
-        }
-      ]
-    },
-    "DatabaseOutput": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "GlueConnectionName",
-          "description": "Glue connection name",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "Glue connection name"
-          }
         },
         {
-          "name": "DatabaseOutputMode",
-          "description": "Database table name",
+          "name": "DatasetStatisticsConfiguration",
           "optional": true,
           "type": {
-            "type": "string",
-            "description": "Database table name",
-            "allowedValues": ["NEW_TABLE"]
+            "type": "ref",
+            "typeName": "StatisticsConfiguration"
           }
         },
         {
-          "name": "DatabaseOptions",
-          "optional": false,
+          "name": "EntityDetectorConfiguration",
+          "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "DatabaseTableOutputOptions"
+            "typeName": "EntityDetectorConfiguration"
+          }
+        },
+        {
+          "name": "ProfileColumns",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "ColumnSelector"
+            },
+            "minLength": 1
           }
         }
       ]
@@ -315,26 +443,44 @@
         }
       ]
     },
-    "Tag": {
+    "S3Location": {
       "type": "object",
-      "description": "A key-value pair to associate with a resource.",
+      "description": "S3 Output location",
       "properties": [
         {
-          "name": "Key",
+          "name": "Bucket",
           "optional": false,
           "type": {
-            "type": "string",
-            "maxLength": 128,
-            "minLength": 1
+            "type": "string"
           }
         },
         {
-          "name": "Value",
-          "optional": false,
+          "name": "BucketOwner",
+          "optional": true,
           "type": {
             "type": "string",
-            "maxLength": 256,
-            "minLength": 0
+            "maxLength": 12,
+            "minLength": 12
+          }
+        },
+        {
+          "name": "Key",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "S3TableOutputOptions": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Location",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "S3Location"
           }
         }
       ]
@@ -344,143 +490,29 @@
       "description": "Sample configuration mode for profile jobs.",
       "allowedValues": ["FULL_DATASET", "CUSTOM_ROWS"]
     },
-    "JobSize": {
-      "type": "number",
-      "description": "Sample configuration size for profile jobs.",
-      "isInteger": true
+    "Statistic": {
+      "type": "string",
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[A-Z\\_]+$"
     },
-    "JobSample": {
-      "type": "object",
-      "description": "Job Sample",
-      "properties": [
-        {
-          "name": "Mode",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "SampleMode"
-          }
-        },
-        {
-          "name": "Size",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "JobSize"
-          }
-        }
-      ]
-    },
-    "ProfileConfiguration": {
+    "StatisticOverride": {
       "type": "object",
       "properties": [
         {
-          "name": "DatasetStatisticsConfiguration",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "StatisticsConfiguration"
-          }
-        },
-        {
-          "name": "ProfileColumns",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "ColumnSelector"
-            },
-            "minLength": 1
-          }
-        },
-        {
-          "name": "ColumnStatisticsConfigurations",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "ColumnStatisticsConfiguration"
-            },
-            "minLength": 1
-          }
-        },
-        {
-          "name": "EntityDetectorConfiguration",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "EntityDetectorConfiguration"
-          }
-        }
-      ]
-    },
-    "EntityDetectorConfiguration": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "EntityTypes",
-          "optional": false,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "string",
-              "maxLength": 128,
-              "minLength": 1,
-              "pattern": "^[A-Z_][A-Z\\\\d_]*$"
-            },
-            "minLength": 1
-          }
-        },
-        {
-          "name": "AllowedStatistics",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "AllowedStatistics"
-          }
-        }
-      ]
-    },
-    "AllowedStatistics": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Statistics",
-          "optional": false,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "Statistic"
-            },
-            "minLength": 1
-          }
-        }
-      ]
-    },
-    "ColumnStatisticsConfiguration": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Selectors",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "ColumnSelector"
-            },
-            "minLength": 1
-          }
-        },
-        {
-          "name": "Statistics",
+          "name": "Parameters",
           "optional": false,
           "type": {
             "type": "ref",
-            "typeName": "StatisticsConfiguration"
+            "typeName": "ParameterMap"
+          }
+        },
+        {
+          "name": "Statistic",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "Statistic"
           }
         }
       ]
@@ -514,65 +546,29 @@
         }
       ]
     },
-    "ColumnSelector": {
+    "Tag": {
       "type": "object",
+      "description": "A key-value pair to associate with a resource.",
       "properties": [
         {
-          "name": "Regex",
-          "optional": true,
+          "name": "Key",
+          "optional": false,
           "type": {
             "type": "string",
-            "maxLength": 255,
+            "maxLength": 128,
             "minLength": 1
           }
         },
         {
-          "name": "Name",
-          "optional": true,
+          "name": "Value",
+          "optional": false,
           "type": {
             "type": "string",
-            "maxLength": 255,
-            "minLength": 1
+            "maxLength": 256,
+            "minLength": 0
           }
         }
       ]
-    },
-    "Statistic": {
-      "type": "string",
-      "maxLength": 128,
-      "minLength": 1,
-      "pattern": "^[A-Z\\_]+$"
-    },
-    "StatisticOverride": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Statistic",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "Statistic"
-          }
-        },
-        {
-          "name": "Parameters",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "ParameterMap"
-          }
-        }
-      ]
-    },
-    "ParameterMap": {
-      "type": "record",
-      "valueType": {
-        "type": "string"
-      }
-    },
-    "ValidationMode": {
-      "type": "string",
-      "allowedValues": ["CHECK_ALL"]
     },
     "ValidationConfiguration": {
       "type": "object",
@@ -598,12 +594,38 @@
           }
         }
       ]
+    },
+    "ValidationMode": {
+      "type": "string",
+      "allowedValues": ["CHECK_ALL"]
     }
   },
   "resource": {
     "type": "object",
     "description": "Resource schema for AWS::DataBrew::Job.",
     "properties": [
+      {
+        "name": "DataCatalogOutputs",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "DataCatalogOutput"
+          }
+        }
+      },
+      {
+        "name": "DatabaseOutputs",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "DatabaseOutput"
+          }
+        }
+      },
       {
         "name": "DatasetName",
         "description": "Dataset name",
@@ -637,24 +659,13 @@
         }
       },
       {
-        "name": "Name",
-        "description": "Job name",
-        "optional": false,
+        "name": "JobSample",
+        "description": "Job Sample",
+        "optional": true,
         "type": {
-          "type": "string",
-          "description": "Job name",
-          "maxLength": 255,
-          "minLength": 1
-        }
-      },
-      {
-        "name": "Type",
-        "description": "Job type",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "description": "Job type",
-          "allowedValues": ["PROFILE", "RECIPE"]
+          "type": "ref",
+          "description": "Job Sample",
+          "typeName": "JobSample"
         }
       },
       {
@@ -688,6 +699,27 @@
         }
       },
       {
+        "name": "Name",
+        "description": "Job name",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "Job name",
+          "maxLength": 255,
+          "minLength": 1
+        }
+      },
+      {
+        "name": "OutputLocation",
+        "description": "Output location",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "Output location",
+          "typeName": "OutputLocation"
+        }
+      },
+      {
         "name": "Outputs",
         "optional": true,
         "type": {
@@ -699,35 +731,13 @@
         }
       },
       {
-        "name": "DataCatalogOutputs",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "itemType": {
-            "type": "ref",
-            "typeName": "DataCatalogOutput"
-          }
-        }
-      },
-      {
-        "name": "DatabaseOutputs",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "itemType": {
-            "type": "ref",
-            "typeName": "DatabaseOutput"
-          }
-        }
-      },
-      {
-        "name": "OutputLocation",
-        "description": "Output location",
+        "name": "ProfileConfiguration",
+        "description": "Profile Job configuration",
         "optional": true,
         "type": {
           "type": "ref",
-          "description": "Output location",
-          "typeName": "OutputLocation"
+          "description": "Profile Job configuration",
+          "typeName": "ProfileConfiguration"
         }
       },
       {
@@ -780,23 +790,13 @@
         }
       },
       {
-        "name": "JobSample",
-        "description": "Job Sample",
-        "optional": true,
+        "name": "Type",
+        "description": "Job type",
+        "optional": false,
         "type": {
-          "type": "ref",
-          "description": "Job Sample",
-          "typeName": "JobSample"
-        }
-      },
-      {
-        "name": "ProfileConfiguration",
-        "description": "Profile Job configuration",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "description": "Profile Job configuration",
-          "typeName": "ProfileConfiguration"
+          "type": "string",
+          "description": "Job type",
+          "allowedValues": ["PROFILE", "RECIPE"]
         }
       },
       {
@@ -814,5 +814,5 @@
       }
     ]
   },
-  "$hash": "3f65bc4e2a4d8a5576260c55fa83350a631177a0"
+  "$hash": "14b6e8703a83d5e661c517b9a5b36bd0b437afa8"
 }

@@ -4,6 +4,52 @@
       "type": "string",
       "description": "The Amazon Resource Name (ARN) of the specified capacity reservation"
     },
+    "CapacityAssignment": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "WorkgroupNames",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "WorkgroupNames"
+          }
+        }
+      ]
+    },
+    "CapacityAssignmentConfiguration": {
+      "type": "object",
+      "description": "Assignment configuration to assign workgroups to a reservation",
+      "properties": [
+        {
+          "name": "CapacityAssignments",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "CapacityAssignments"
+          }
+        }
+      ]
+    },
+    "CapacityAssignments": {
+      "type": "array",
+      "description": "List of capacity assignments",
+      "itemType": {
+        "type": "ref",
+        "typeName": "CapacityAssignment"
+      }
+    },
+    "CapacityReservationStatus": {
+      "type": "string",
+      "allowedValues": [
+        "PENDING",
+        "ACTIVE",
+        "CANCELLING",
+        "CANCELLED",
+        "FAILED",
+        "UPDATE_PENDING"
+      ]
+    },
     "Tag": {
       "type": "object",
       "properties": [
@@ -37,58 +83,20 @@
         "type": "ref",
         "typeName": "WorkgroupName"
       }
-    },
-    "CapacityAssignment": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "WorkgroupNames",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "WorkgroupNames"
-          }
-        }
-      ]
-    },
-    "CapacityAssignments": {
-      "type": "array",
-      "description": "List of capacity assignments",
-      "itemType": {
-        "type": "ref",
-        "typeName": "CapacityAssignment"
-      }
-    },
-    "CapacityAssignmentConfiguration": {
-      "type": "object",
-      "description": "Assignment configuration to assign workgroups to a reservation",
-      "properties": [
-        {
-          "name": "CapacityAssignments",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "CapacityAssignments"
-          }
-        }
-      ]
-    },
-    "CapacityReservationStatus": {
-      "type": "string",
-      "allowedValues": [
-        "PENDING",
-        "ACTIVE",
-        "CANCELLING",
-        "CANCELLED",
-        "FAILED",
-        "UPDATE_PENDING"
-      ]
     }
   },
   "resource": {
     "type": "object",
     "description": "Resource schema for AWS::Athena::CapacityReservation",
     "properties": [
+      {
+        "name": "CapacityAssignmentConfiguration",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "CapacityAssignmentConfiguration"
+        }
+      },
       {
         "name": "Name",
         "description": "The reservation name.",
@@ -97,25 +105,6 @@
           "type": "string",
           "description": "The reservation name.",
           "pattern": "[a-zA-Z0-9._-]{1,128}"
-        }
-      },
-      {
-        "name": "TargetDpus",
-        "description": "The number of DPUs to request to be allocated to the reservation.",
-        "optional": false,
-        "type": {
-          "type": "number",
-          "description": "The number of DPUs to request to be allocated to the reservation.",
-          "isInteger": true,
-          "minimum": 1
-        }
-      },
-      {
-        "name": "CapacityAssignmentConfiguration",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "CapacityAssignmentConfiguration"
         }
       },
       {
@@ -130,6 +119,17 @@
             "typeName": "Tag"
           }
         }
+      },
+      {
+        "name": "TargetDpus",
+        "description": "The number of DPUs to request to be allocated to the reservation.",
+        "optional": false,
+        "type": {
+          "type": "number",
+          "description": "The number of DPUs to request to be allocated to the reservation.",
+          "isInteger": true,
+          "minimum": 1
+        }
       }
     ]
   },
@@ -137,24 +137,6 @@
     "type": "object",
     "description": "Resource schema for AWS::Athena::CapacityReservation",
     "properties": [
-      {
-        "name": "Arn",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "Arn"
-        }
-      },
-      {
-        "name": "Status",
-        "description": "The status of the reservation.",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "description": "The status of the reservation.",
-          "typeName": "CapacityReservationStatus"
-        }
-      },
       {
         "name": "AllocatedDpus",
         "description": "The number of DPUs Athena has provisioned and allocated for the reservation",
@@ -164,6 +146,14 @@
           "description": "The number of DPUs Athena has provisioned and allocated for the reservation",
           "isInteger": true,
           "minimum": 0
+        }
+      },
+      {
+        "name": "Arn",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "Arn"
         }
       },
       {
@@ -183,8 +173,18 @@
           "type": "string",
           "description": "The timestamp when the last successful allocated was made"
         }
+      },
+      {
+        "name": "Status",
+        "description": "The status of the reservation.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "The status of the reservation.",
+          "typeName": "CapacityReservationStatus"
+        }
       }
     ]
   },
-  "$hash": "46dc9a50a34112a5291daf4eb02a7ecff46b7869"
+  "$hash": "ce44dcbc45705207dea846b7edf144063f547d59"
 }

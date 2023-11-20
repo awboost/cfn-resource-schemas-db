@@ -1,67 +1,22 @@
 {
   "definitions": {
-    "FixedResponseConfig": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "ContentType",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "StatusCode",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "MessageBody",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "TargetGroupTuple": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "TargetGroupArn",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Weight",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true
-          }
-        }
-      ]
-    },
     "Action": {
       "type": "object",
       "properties": [
         {
-          "name": "Order",
+          "name": "AuthenticateCognitoConfig",
           "optional": true,
           "type": {
-            "type": "number",
-            "isInteger": true
+            "type": "ref",
+            "typeName": "AuthenticateCognitoConfig"
           }
         },
         {
-          "name": "TargetGroupArn",
+          "name": "AuthenticateOidcConfig",
           "optional": true,
           "type": {
-            "type": "string"
+            "type": "ref",
+            "typeName": "AuthenticateOidcConfig"
           }
         },
         {
@@ -73,18 +28,19 @@
           }
         },
         {
-          "name": "AuthenticateCognitoConfig",
+          "name": "ForwardConfig",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "AuthenticateCognitoConfig"
+            "typeName": "ForwardConfig"
           }
         },
         {
-          "name": "Type",
-          "optional": false,
+          "name": "Order",
+          "optional": true,
           "type": {
-            "type": "string"
+            "type": "number",
+            "isInteger": true
           }
         },
         {
@@ -96,19 +52,17 @@
           }
         },
         {
-          "name": "ForwardConfig",
+          "name": "TargetGroupArn",
           "optional": true,
           "type": {
-            "type": "ref",
-            "typeName": "ForwardConfig"
+            "type": "string"
           }
         },
         {
-          "name": "AuthenticateOidcConfig",
-          "optional": true,
+          "name": "Type",
+          "optional": false,
           "type": {
-            "type": "ref",
-            "typeName": "AuthenticateOidcConfig"
+            "type": "string"
           }
         }
       ]
@@ -117,28 +71,17 @@
       "type": "object",
       "properties": [
         {
-          "name": "OnUnauthenticatedRequest",
+          "name": "AuthenticationRequestExtraParams",
           "optional": true,
           "type": {
-            "type": "string"
+            "type": "record",
+            "valueType": {
+              "type": "string"
+            }
           }
         },
         {
-          "name": "UserPoolClientId",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "UserPoolDomain",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "SessionTimeout",
+          "name": "OnUnauthenticatedRequest",
           "optional": true,
           "type": {
             "type": "string"
@@ -159,12 +102,38 @@
           }
         },
         {
+          "name": "SessionTimeout",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
           "name": "UserPoolArn",
           "optional": false,
           "type": {
             "type": "string"
           }
         },
+        {
+          "name": "UserPoolClientId",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "UserPoolDomain",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "AuthenticateOidcConfig": {
+      "type": "object",
+      "properties": [
         {
           "name": "AuthenticationRequestExtraParams",
           "optional": true,
@@ -174,42 +143,110 @@
               "type": "string"
             }
           }
+        },
+        {
+          "name": "AuthorizationEndpoint",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "ClientId",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "ClientSecret",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Issuer",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "OnUnauthenticatedRequest",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Scope",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "SessionCookieName",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "SessionTimeout",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "TokenEndpoint",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "UseExistingClientSecret",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "UserInfoEndpoint",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
         }
       ]
     },
-    "RedirectConfig": {
+    "Certificate": {
       "type": "object",
       "properties": [
         {
-          "name": "Path",
+          "name": "CertificateArn",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "FixedResponseConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ContentType",
           "optional": true,
           "type": {
             "type": "string"
           }
         },
         {
-          "name": "Query",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Port",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Host",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Protocol",
+          "name": "MessageBody",
           "optional": true,
           "type": {
             "type": "string"
@@ -220,26 +257,6 @@
           "optional": false,
           "type": {
             "type": "string"
-          }
-        }
-      ]
-    },
-    "TargetGroupStickinessConfig": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Enabled",
-          "optional": true,
-          "type": {
-            "type": "boolean"
-          }
-        },
-        {
-          "name": "DurationSeconds",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true
           }
         }
       ]
@@ -268,106 +285,89 @@
         }
       ]
     },
-    "AuthenticateOidcConfig": {
+    "RedirectConfig": {
       "type": "object",
       "properties": [
         {
-          "name": "OnUnauthenticatedRequest",
+          "name": "Host",
           "optional": true,
           "type": {
             "type": "string"
           }
         },
         {
-          "name": "TokenEndpoint",
+          "name": "Path",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Port",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Protocol",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Query",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "StatusCode",
           "optional": false,
           "type": {
             "type": "string"
-          }
-        },
-        {
-          "name": "UseExistingClientSecret",
-          "optional": true,
-          "type": {
-            "type": "boolean"
-          }
-        },
-        {
-          "name": "SessionTimeout",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Scope",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Issuer",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "ClientSecret",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "UserInfoEndpoint",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "ClientId",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "AuthorizationEndpoint",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "SessionCookieName",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "AuthenticationRequestExtraParams",
-          "optional": true,
-          "type": {
-            "type": "record",
-            "valueType": {
-              "type": "string"
-            }
           }
         }
       ]
     },
-    "Certificate": {
+    "TargetGroupStickinessConfig": {
       "type": "object",
       "properties": [
         {
-          "name": "CertificateArn",
+          "name": "DurationSeconds",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
+          }
+        },
+        {
+          "name": "Enabled",
+          "optional": true,
+          "type": {
+            "type": "boolean"
+          }
+        }
+      ]
+    },
+    "TargetGroupTuple": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "TargetGroupArn",
           "optional": true,
           "type": {
             "type": "string"
+          }
+        },
+        {
+          "name": "Weight",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true
           }
         }
       ]
@@ -388,17 +388,14 @@
         }
       },
       {
-        "name": "SslPolicy",
+        "name": "Certificates",
         "optional": true,
         "type": {
-          "type": "string"
-        }
-      },
-      {
-        "name": "LoadBalancerArn",
-        "optional": false,
-        "type": {
-          "type": "string"
+          "type": "array",
+          "itemType": {
+            "type": "ref",
+            "typeName": "Certificate"
+          }
         }
       },
       {
@@ -413,6 +410,13 @@
         }
       },
       {
+        "name": "LoadBalancerArn",
+        "optional": false,
+        "type": {
+          "type": "string"
+        }
+      },
+      {
         "name": "Port",
         "optional": true,
         "type": {
@@ -421,18 +425,14 @@
         }
       },
       {
-        "name": "Certificates",
+        "name": "Protocol",
         "optional": true,
         "type": {
-          "type": "array",
-          "itemType": {
-            "type": "ref",
-            "typeName": "Certificate"
-          }
+          "type": "string"
         }
       },
       {
-        "name": "Protocol",
+        "name": "SslPolicy",
         "optional": true,
         "type": {
           "type": "string"
@@ -453,5 +453,5 @@
       }
     ]
   },
-  "$hash": "a64b56612578d2a87bbadfdc84883d75e2e31ff9"
+  "$hash": "5316aebbcf8728cc555c201dbcff86817899110a"
 }

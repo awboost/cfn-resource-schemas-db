@@ -1,5 +1,31 @@
 {
   "definitions": {
+    "LoRaWAN": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "RfRegion",
+          "description": "FUOTA task LoRaWAN RF region",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "FUOTA task LoRaWAN RF region",
+            "maxLength": 64,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "StartTime",
+          "description": "FUOTA task LoRaWAN start time",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "FUOTA task LoRaWAN start time",
+            "maxLength": 64
+          }
+        }
+      ]
+    },
     "Tag": {
       "type": "object",
       "properties": [
@@ -22,32 +48,6 @@
           }
         }
       ]
-    },
-    "LoRaWAN": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "StartTime",
-          "description": "FUOTA task LoRaWAN start time",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "FUOTA task LoRaWAN start time",
-            "maxLength": 64
-          }
-        },
-        {
-          "name": "RfRegion",
-          "description": "FUOTA task LoRaWAN RF region",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "FUOTA task LoRaWAN RF region",
-            "maxLength": 64,
-            "minLength": 1
-          }
-        }
-      ]
     }
   },
   "resource": {
@@ -55,12 +55,22 @@
     "description": "Create and manage FUOTA tasks.",
     "properties": [
       {
-        "name": "Name",
-        "description": "Name of FUOTA task",
+        "name": "AssociateMulticastGroup",
+        "description": "Multicast group to associate. Only for update request.",
         "optional": true,
         "type": {
           "type": "string",
-          "description": "Name of FUOTA task",
+          "description": "Multicast group to associate. Only for update request.",
+          "maxLength": 256
+        }
+      },
+      {
+        "name": "AssociateWirelessDevice",
+        "description": "Wireless device to associate. Only for update request.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Wireless device to associate. Only for update request.",
           "maxLength": 256
         }
       },
@@ -75,13 +85,23 @@
         }
       },
       {
-        "name": "LoRaWAN",
-        "description": "FUOTA task LoRaWAN",
-        "optional": false,
+        "name": "DisassociateMulticastGroup",
+        "description": "Multicast group to disassociate. Only for update request.",
+        "optional": true,
         "type": {
-          "type": "ref",
-          "description": "FUOTA task LoRaWAN",
-          "typeName": "LoRaWAN"
+          "type": "string",
+          "description": "Multicast group to disassociate. Only for update request.",
+          "maxLength": 256
+        }
+      },
+      {
+        "name": "DisassociateWirelessDevice",
+        "description": "Wireless device to disassociate. Only for update request.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Wireless device to disassociate. Only for update request.",
+          "maxLength": 256
         }
       },
       {
@@ -107,6 +127,26 @@
         }
       },
       {
+        "name": "LoRaWAN",
+        "description": "FUOTA task LoRaWAN",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "description": "FUOTA task LoRaWAN",
+          "typeName": "LoRaWAN"
+        }
+      },
+      {
+        "name": "Name",
+        "description": "Name of FUOTA task",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "Name of FUOTA task",
+          "maxLength": 256
+        }
+      },
+      {
         "name": "Tags",
         "description": "A list of key-value pairs that contain metadata for the FUOTA task.",
         "optional": true,
@@ -118,46 +158,6 @@
             "typeName": "Tag"
           },
           "maxLength": 200
-        }
-      },
-      {
-        "name": "AssociateWirelessDevice",
-        "description": "Wireless device to associate. Only for update request.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "Wireless device to associate. Only for update request.",
-          "maxLength": 256
-        }
-      },
-      {
-        "name": "DisassociateWirelessDevice",
-        "description": "Wireless device to disassociate. Only for update request.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "Wireless device to disassociate. Only for update request.",
-          "maxLength": 256
-        }
-      },
-      {
-        "name": "AssociateMulticastGroup",
-        "description": "Multicast group to associate. Only for update request.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "Multicast group to associate. Only for update request.",
-          "maxLength": 256
-        }
-      },
-      {
-        "name": "DisassociateMulticastGroup",
-        "description": "Multicast group to disassociate. Only for update request.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "Multicast group to disassociate. Only for update request.",
-          "maxLength": 256
         }
       }
     ]
@@ -176,6 +176,15 @@
         }
       },
       {
+        "name": "FuotaTaskStatus",
+        "description": "FUOTA task status. Returned after successful read.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "FUOTA task status. Returned after successful read."
+        }
+      },
+      {
         "name": "Id",
         "description": "FUOTA task id. Returned after successful create.",
         "optional": true,
@@ -184,17 +193,8 @@
           "description": "FUOTA task id. Returned after successful create.",
           "maxLength": 256
         }
-      },
-      {
-        "name": "FuotaTaskStatus",
-        "description": "FUOTA task status. Returned after successful read.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "FUOTA task status. Returned after successful read."
-        }
       }
     ]
   },
-  "$hash": "ec4db98833508addb2afeac67f974ff0ab53df43"
+  "$hash": "0fed8bd6f940b28f260aa3c6fffd9e797c9975f8"
 }

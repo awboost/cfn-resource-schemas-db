@@ -1,26 +1,186 @@
 {
   "definitions": {
-    "ConnectorType": {
+    "AccessKeyId": {
       "type": "string",
-      "allowedValues": [
-        "Salesforce",
-        "Pardot",
-        "Singular",
-        "Slack",
-        "Redshift",
-        "Marketo",
-        "Googleanalytics",
-        "Zendesk",
-        "Servicenow",
-        "SAPOData",
-        "Datadog",
-        "Trendmicro",
-        "Snowflake",
-        "Dynatrace",
-        "Infornexus",
-        "Amplitude",
-        "Veeva",
-        "CustomConnector"
+      "maxLength": 256,
+      "pattern": "\\S+"
+    },
+    "AccessToken": {
+      "type": "string",
+      "maxLength": 4096,
+      "pattern": "\\S+"
+    },
+    "AccountName": {
+      "type": "string",
+      "maxLength": 512,
+      "pattern": "\\S+"
+    },
+    "AmplitudeConnectorProfileCredentials": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ApiKey",
+          "description": "A unique alphanumeric identiﬁer used to authenticate a user, developer, or calling program to your API.",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "description": "A unique alphanumeric identiﬁer used to authenticate a user, developer, or calling program to your API.",
+            "typeName": "ApiKey"
+          }
+        },
+        {
+          "name": "SecretKey",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "SecretKey"
+          }
+        }
+      ]
+    },
+    "ApiKey": {
+      "type": "string",
+      "maxLength": 256,
+      "pattern": "\\S+"
+    },
+    "ApiKeyCredentials": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ApiKey",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "ApiKey"
+          }
+        },
+        {
+          "name": "ApiSecretKey",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ApiSecretKey"
+          }
+        }
+      ]
+    },
+    "ApiSecretKey": {
+      "type": "string",
+      "maxLength": 256,
+      "pattern": "\\S+"
+    },
+    "ApiToken": {
+      "type": "string",
+      "maxLength": 256,
+      "pattern": "\\S+"
+    },
+    "ApplicationHostUrl": {
+      "type": "string",
+      "maxLength": 256,
+      "pattern": "^(https?)://[-a-zA-Z0-9+&amp;@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&amp;@#/%=~_|]"
+    },
+    "ApplicationKey": {
+      "type": "string",
+      "maxLength": 512,
+      "pattern": "\\S+"
+    },
+    "ApplicationServicePath": {
+      "type": "string",
+      "maxLength": 512,
+      "pattern": "\\S+"
+    },
+    "AuthCode": {
+      "type": "string",
+      "maxLength": 4096,
+      "pattern": "\\S+"
+    },
+    "AuthenticationType": {
+      "type": "string",
+      "allowedValues": ["OAUTH2", "APIKEY", "BASIC", "CUSTOM"]
+    },
+    "BasicAuthCredentials": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Password",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "Password"
+          }
+        },
+        {
+          "name": "Username",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "Username"
+          }
+        }
+      ]
+    },
+    "BucketName": {
+      "type": "string",
+      "maxLength": 63,
+      "minLength": 3,
+      "pattern": "\\S+"
+    },
+    "BucketPrefix": {
+      "type": "string",
+      "maxLength": 128
+    },
+    "BusinessUnitId": {
+      "type": "string",
+      "maxLength": 18,
+      "pattern": "\\S+"
+    },
+    "ClientCredentialsArn": {
+      "type": "string",
+      "maxLength": 2048,
+      "pattern": "arn:aws:secretsmanager:.*:[0-9]+:.*"
+    },
+    "ClientId": {
+      "type": "string",
+      "maxLength": 512,
+      "pattern": "\\S+"
+    },
+    "ClientNumber": {
+      "type": "string",
+      "maxLength": 3,
+      "minLength": 3,
+      "pattern": "^\\d{3}$"
+    },
+    "ClientSecret": {
+      "type": "string",
+      "maxLength": 512,
+      "pattern": "\\S+"
+    },
+    "ClusterIdentifier": {
+      "type": "string",
+      "maxLength": 512,
+      "pattern": "\\S+"
+    },
+    "ConnectorOAuthRequest": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "AuthCode",
+          "description": "The code provided by the connector when it has been authenticated via the connected app.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The code provided by the connector when it has been authenticated via the connected app."
+          }
+        },
+        {
+          "name": "RedirectUri",
+          "description": "The URL to which the authentication server redirects the browser after authorization has been\ngranted.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The URL to which the authentication server redirects the browser after authorization has been\ngranted."
+          }
+        }
       ]
     },
     "ConnectorProfileConfig": {
@@ -28,137 +188,19 @@
       "description": "Connector specific configurations needed to create connector profile",
       "properties": [
         {
-          "name": "ConnectorProfileProperties",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ConnectorProfileProperties"
-          }
-        },
-        {
           "name": "ConnectorProfileCredentials",
           "optional": true,
           "type": {
             "type": "ref",
             "typeName": "ConnectorProfileCredentials"
           }
-        }
-      ]
-    },
-    "ConnectorProfileProperties": {
-      "type": "object",
-      "description": "Connector specific properties needed to create connector profile - currently not needed for Amplitude, Trendmicro, Googleanalytics and Singular",
-      "properties": [
-        {
-          "name": "Datadog",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "DatadogConnectorProfileProperties"
-          }
         },
         {
-          "name": "Dynatrace",
+          "name": "ConnectorProfileProperties",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "DynatraceConnectorProfileProperties"
-          }
-        },
-        {
-          "name": "InforNexus",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "InforNexusConnectorProfileProperties"
-          }
-        },
-        {
-          "name": "Marketo",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "MarketoConnectorProfileProperties"
-          }
-        },
-        {
-          "name": "Redshift",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "RedshiftConnectorProfileProperties"
-          }
-        },
-        {
-          "name": "SAPOData",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "SAPODataConnectorProfileProperties"
-          }
-        },
-        {
-          "name": "Salesforce",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "SalesforceConnectorProfileProperties"
-          }
-        },
-        {
-          "name": "Pardot",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "PardotConnectorProfileProperties"
-          }
-        },
-        {
-          "name": "ServiceNow",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ServiceNowConnectorProfileProperties"
-          }
-        },
-        {
-          "name": "Slack",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "SlackConnectorProfileProperties"
-          }
-        },
-        {
-          "name": "Snowflake",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "SnowflakeConnectorProfileProperties"
-          }
-        },
-        {
-          "name": "Veeva",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "VeevaConnectorProfileProperties"
-          }
-        },
-        {
-          "name": "Zendesk",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ZendeskConnectorProfileProperties"
-          }
-        },
-        {
-          "name": "CustomConnector",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "CustomConnectorProfileProperties"
+            "typeName": "ConnectorProfileProperties"
           }
         }
       ]
@@ -173,6 +215,14 @@
           "type": {
             "type": "ref",
             "typeName": "AmplitudeConnectorProfileCredentials"
+          }
+        },
+        {
+          "name": "CustomConnector",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "CustomConnectorProfileCredentials"
           }
         },
         {
@@ -216,6 +266,14 @@
           }
         },
         {
+          "name": "Pardot",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PardotConnectorProfileCredentials"
+          }
+        },
+        {
           "name": "Redshift",
           "optional": true,
           "type": {
@@ -237,14 +295,6 @@
           "type": {
             "type": "ref",
             "typeName": "SalesforceConnectorProfileCredentials"
-          }
-        },
-        {
-          "name": "Pardot",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "PardotConnectorProfileCredentials"
           }
         },
         {
@@ -302,39 +352,267 @@
             "type": "ref",
             "typeName": "ZendeskConnectorProfileCredentials"
           }
-        },
+        }
+      ]
+    },
+    "ConnectorProfileProperties": {
+      "type": "object",
+      "description": "Connector specific properties needed to create connector profile - currently not needed for Amplitude, Trendmicro, Googleanalytics and Singular",
+      "properties": [
         {
           "name": "CustomConnector",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "CustomConnectorProfileCredentials"
+            "typeName": "CustomConnectorProfileProperties"
+          }
+        },
+        {
+          "name": "Datadog",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DatadogConnectorProfileProperties"
+          }
+        },
+        {
+          "name": "Dynatrace",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DynatraceConnectorProfileProperties"
+          }
+        },
+        {
+          "name": "InforNexus",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "InforNexusConnectorProfileProperties"
+          }
+        },
+        {
+          "name": "Marketo",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "MarketoConnectorProfileProperties"
+          }
+        },
+        {
+          "name": "Pardot",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PardotConnectorProfileProperties"
+          }
+        },
+        {
+          "name": "Redshift",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "RedshiftConnectorProfileProperties"
+          }
+        },
+        {
+          "name": "SAPOData",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "SAPODataConnectorProfileProperties"
+          }
+        },
+        {
+          "name": "Salesforce",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "SalesforceConnectorProfileProperties"
+          }
+        },
+        {
+          "name": "ServiceNow",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ServiceNowConnectorProfileProperties"
+          }
+        },
+        {
+          "name": "Slack",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "SlackConnectorProfileProperties"
+          }
+        },
+        {
+          "name": "Snowflake",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "SnowflakeConnectorProfileProperties"
+          }
+        },
+        {
+          "name": "Veeva",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "VeevaConnectorProfileProperties"
+          }
+        },
+        {
+          "name": "Zendesk",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ZendeskConnectorProfileProperties"
           }
         }
       ]
     },
-    "AmplitudeConnectorProfileCredentials": {
+    "ConnectorType": {
+      "type": "string",
+      "allowedValues": [
+        "Salesforce",
+        "Pardot",
+        "Singular",
+        "Slack",
+        "Redshift",
+        "Marketo",
+        "Googleanalytics",
+        "Zendesk",
+        "Servicenow",
+        "SAPOData",
+        "Datadog",
+        "Trendmicro",
+        "Snowflake",
+        "Dynatrace",
+        "Infornexus",
+        "Amplitude",
+        "Veeva",
+        "CustomConnector"
+      ]
+    },
+    "CredentialsMap": {
+      "type": "record",
+      "description": "A map for properties for custom authentication.",
+      "valueType": {
+        "type": "string",
+        "description": "A string containing the value for the property",
+        "maxLength": 2048,
+        "minLength": 1,
+        "pattern": "\\S+"
+      }
+    },
+    "CustomAuthCredentials": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "CredentialsMap",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "CredentialsMap"
+          }
+        },
+        {
+          "name": "CustomAuthenticationType",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "CustomAuthenticationType"
+          }
+        }
+      ]
+    },
+    "CustomAuthenticationType": {
+      "type": "string",
+      "maxLength": 256,
+      "pattern": "\\S+"
+    },
+    "CustomConnectorProfileCredentials": {
       "type": "object",
       "properties": [
         {
           "name": "ApiKey",
-          "description": "A unique alphanumeric identiﬁer used to authenticate a user, developer, or calling program to your API.",
-          "optional": false,
+          "optional": true,
           "type": {
             "type": "ref",
-            "description": "A unique alphanumeric identiﬁer used to authenticate a user, developer, or calling program to your API.",
-            "typeName": "ApiKey"
+            "typeName": "ApiKeyCredentials"
           }
         },
         {
-          "name": "SecretKey",
+          "name": "AuthenticationType",
           "optional": false,
           "type": {
             "type": "ref",
-            "typeName": "SecretKey"
+            "typeName": "AuthenticationType"
+          }
+        },
+        {
+          "name": "Basic",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "BasicAuthCredentials"
+          }
+        },
+        {
+          "name": "Custom",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "CustomAuthCredentials"
+          }
+        },
+        {
+          "name": "Oauth2",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "OAuth2Credentials"
           }
         }
       ]
+    },
+    "CustomConnectorProfileProperties": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "OAuth2Properties",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "OAuth2Properties"
+          }
+        },
+        {
+          "name": "ProfileProperties",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ProfileProperties"
+          }
+        }
+      ]
+    },
+    "DataApiRoleArn": {
+      "type": "string",
+      "maxLength": 512,
+      "pattern": "arn:aws:iam:.*:[0-9]+:.*"
+    },
+    "DatabaseName": {
+      "type": "string",
+      "maxLength": 512,
+      "pattern": "\\S+"
+    },
+    "DatabaseUrl": {
+      "type": "string",
+      "maxLength": 512,
+      "pattern": "\\S+"
     },
     "DatadogConnectorProfileCredentials": {
       "type": "object",
@@ -410,6 +688,16 @@
       "type": "object",
       "properties": [
         {
+          "name": "AccessToken",
+          "description": "The credentials used to access protected resources.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The credentials used to access protected resources.",
+            "typeName": "AccessToken"
+          }
+        },
+        {
           "name": "ClientId",
           "description": "The identiﬁer for the desired client.",
           "optional": false,
@@ -430,13 +718,13 @@
           }
         },
         {
-          "name": "AccessToken",
-          "description": "The credentials used to access protected resources.",
+          "name": "ConnectorOAuthRequest",
+          "description": "The oauth needed to request security tokens from the connector endpoint.",
           "optional": true,
           "type": {
             "type": "ref",
-            "description": "The credentials used to access protected resources.",
-            "typeName": "AccessToken"
+            "description": "The oauth needed to request security tokens from the connector endpoint.",
+            "typeName": "ConnectorOAuthRequest"
           }
         },
         {
@@ -447,16 +735,6 @@
             "type": "ref",
             "description": "The credentials used to acquire new access tokens.",
             "typeName": "RefreshToken"
-          }
-        },
-        {
-          "name": "ConnectorOAuthRequest",
-          "description": "The oauth needed to request security tokens from the connector endpoint.",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "The oauth needed to request security tokens from the connector endpoint.",
-            "typeName": "ConnectorOAuthRequest"
           }
         }
       ]
@@ -475,13 +753,13 @@
           }
         },
         {
-          "name": "UserId",
-          "description": "The identiﬁer for the user.",
+          "name": "Datakey",
+          "description": "The encryption keys used to encrypt data.",
           "optional": false,
           "type": {
             "type": "ref",
-            "description": "The identiﬁer for the user.",
-            "typeName": "Username"
+            "description": "The encryption keys used to encrypt data.",
+            "typeName": "Key"
           }
         },
         {
@@ -495,13 +773,13 @@
           }
         },
         {
-          "name": "Datakey",
-          "description": "The encryption keys used to encrypt data.",
+          "name": "UserId",
+          "description": "The identiﬁer for the user.",
           "optional": false,
           "type": {
             "type": "ref",
-            "description": "The encryption keys used to encrypt data.",
-            "typeName": "Key"
+            "description": "The identiﬁer for the user.",
+            "typeName": "Username"
           }
         }
       ]
@@ -521,9 +799,39 @@
         }
       ]
     },
+    "InstanceUrl": {
+      "type": "string",
+      "maxLength": 256,
+      "pattern": "\\S+"
+    },
+    "JwtToken": {
+      "type": "string",
+      "maxLength": 8000,
+      "pattern": "^[A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.[A-Za-z0-9-_.+/=]*$"
+    },
+    "Key": {
+      "type": "string",
+      "maxLength": 512,
+      "pattern": "\\S+"
+    },
+    "LogonLanguage": {
+      "type": "string",
+      "maxLength": 2,
+      "pattern": "^[a-zA-Z0-9_]*$"
+    },
     "MarketoConnectorProfileCredentials": {
       "type": "object",
       "properties": [
+        {
+          "name": "AccessToken",
+          "description": "The credentials used to access protected resources.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The credentials used to access protected resources.",
+            "typeName": "AccessToken"
+          }
+        },
         {
           "name": "ClientId",
           "description": "The identiﬁer for the desired client.",
@@ -542,16 +850,6 @@
             "type": "ref",
             "description": "The client secret used by the oauth client to authenticate to the authorization server.",
             "typeName": "ClientSecret"
-          }
-        },
-        {
-          "name": "AccessToken",
-          "description": "The credentials used to access protected resources.",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "The credentials used to access protected resources.",
-            "typeName": "AccessToken"
           }
         },
         {
@@ -581,19 +879,234 @@
         }
       ]
     },
-    "RedshiftConnectorProfileCredentials": {
+    "OAuth2Credentials": {
       "type": "object",
       "properties": [
         {
-          "name": "Username",
-          "description": "The name of the user.",
+          "name": "AccessToken",
           "optional": true,
           "type": {
             "type": "ref",
-            "description": "The name of the user.",
-            "typeName": "Username"
+            "typeName": "AccessToken"
           }
         },
+        {
+          "name": "ClientId",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ClientId"
+          }
+        },
+        {
+          "name": "ClientSecret",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ClientSecret"
+          }
+        },
+        {
+          "name": "OAuthRequest",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ConnectorOAuthRequest"
+          }
+        },
+        {
+          "name": "RefreshToken",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "RefreshToken"
+          }
+        }
+      ]
+    },
+    "OAuth2GrantType": {
+      "type": "string",
+      "allowedValues": [
+        "CLIENT_CREDENTIALS",
+        "AUTHORIZATION_CODE",
+        "JWT_BEARER"
+      ]
+    },
+    "OAuth2Properties": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "OAuth2GrantType",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "OAuth2GrantType"
+          }
+        },
+        {
+          "name": "TokenUrl",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 0,
+            "pattern": "^(https?)://[-a-zA-Z0-9+&amp;@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&amp;@#/%=~_|]"
+          }
+        },
+        {
+          "name": "TokenUrlCustomProperties",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "TokenUrlCustomProperties"
+          }
+        }
+      ]
+    },
+    "OAuthProperties": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "AuthCodeUrl",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "pattern": "^(https?)://[-a-zA-Z0-9+&amp;@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&amp;@#/%=~_|]"
+          }
+        },
+        {
+          "name": "OAuthScopes",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string",
+              "maxLength": 128,
+              "pattern": "[/\\w]*"
+            }
+          }
+        },
+        {
+          "name": "TokenUrl",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "pattern": "^(https?)://[-a-zA-Z0-9+&amp;@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&amp;@#/%=~_|]"
+          }
+        }
+      ]
+    },
+    "PardotConnectorProfileCredentials": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "AccessToken",
+          "description": "The credentials used to access protected resources.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The credentials used to access protected resources.",
+            "typeName": "AccessToken"
+          }
+        },
+        {
+          "name": "ClientCredentialsArn",
+          "description": "The client credentials to fetch access token and refresh token.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The client credentials to fetch access token and refresh token.",
+            "typeName": "ClientCredentialsArn"
+          }
+        },
+        {
+          "name": "ConnectorOAuthRequest",
+          "description": "The oauth needed to request security tokens from the connector endpoint.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The oauth needed to request security tokens from the connector endpoint.",
+            "typeName": "ConnectorOAuthRequest"
+          }
+        },
+        {
+          "name": "RefreshToken",
+          "description": "The credentials used to acquire new access tokens.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The credentials used to acquire new access tokens.",
+            "typeName": "RefreshToken"
+          }
+        }
+      ]
+    },
+    "PardotConnectorProfileProperties": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "BusinessUnitId",
+          "description": "The Business unit id of Salesforce Pardot instance to be connected",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "description": "The Business unit id of Salesforce Pardot instance to be connected",
+            "typeName": "BusinessUnitId"
+          }
+        },
+        {
+          "name": "InstanceUrl",
+          "description": "The location of the Salesforce Pardot resource",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The location of the Salesforce Pardot resource",
+            "typeName": "InstanceUrl"
+          }
+        },
+        {
+          "name": "IsSandboxEnvironment",
+          "description": "Indicates whether the connector profile applies to a demo or production environment",
+          "optional": true,
+          "type": {
+            "type": "boolean",
+            "description": "Indicates whether the connector profile applies to a demo or production environment"
+          }
+        }
+      ]
+    },
+    "Password": {
+      "type": "string",
+      "maxLength": 512,
+      "pattern": "\\S+"
+    },
+    "PortNumber": {
+      "type": "number",
+      "isInteger": true,
+      "maximum": 65535,
+      "minimum": 1
+    },
+    "PrivateLinkServiceName": {
+      "type": "string",
+      "maxLength": 512,
+      "pattern": "\\S+"
+    },
+    "ProfileProperties": {
+      "type": "record",
+      "description": "A map for properties for custom connector.",
+      "valueType": {
+        "type": "string",
+        "description": "A string containing the value for the property",
+        "maxLength": 2048,
+        "minLength": 1,
+        "pattern": "\\S+"
+      }
+    },
+    "RedshiftConnectorProfileCredentials": {
+      "type": "object",
+      "properties": [
         {
           "name": "Password",
           "description": "The password that corresponds to the username.",
@@ -603,22 +1116,22 @@
             "description": "The password that corresponds to the username.",
             "typeName": "Password"
           }
+        },
+        {
+          "name": "Username",
+          "description": "The name of the user.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The name of the user.",
+            "typeName": "Username"
+          }
         }
       ]
     },
     "RedshiftConnectorProfileProperties": {
       "type": "object",
       "properties": [
-        {
-          "name": "DatabaseUrl",
-          "description": "The JDBC URL of the Amazon Redshift cluster.",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "The JDBC URL of the Amazon Redshift cluster.",
-            "typeName": "DatabaseUrl"
-          }
-        },
         {
           "name": "BucketName",
           "description": "The name of the Amazon S3 bucket associated with Redshift.",
@@ -640,22 +1153,13 @@
           }
         },
         {
-          "name": "RoleArn",
-          "description": "The Amazon Resource Name (ARN) of the IAM role.",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "description": "The Amazon Resource Name (ARN) of the IAM role.",
-            "typeName": "RoleArn"
-          }
-        },
-        {
-          "name": "IsRedshiftServerless",
-          "description": "If Amazon AppFlow will connect to Amazon Redshift Serverless or Amazon Redshift cluster.",
+          "name": "ClusterIdentifier",
+          "description": "The unique identifier of the Amazon Redshift cluster.",
           "optional": true,
           "type": {
-            "type": "boolean",
-            "description": "If Amazon AppFlow will connect to Amazon Redshift Serverless or Amazon Redshift cluster."
+            "type": "ref",
+            "description": "The unique identifier of the Amazon Redshift cluster.",
+            "typeName": "ClusterIdentifier"
           }
         },
         {
@@ -669,13 +1173,42 @@
           }
         },
         {
-          "name": "ClusterIdentifier",
-          "description": "The unique identifier of the Amazon Redshift cluster.",
+          "name": "DatabaseName",
+          "description": "The name of the Amazon Redshift database that will store the transferred data.",
           "optional": true,
           "type": {
             "type": "ref",
-            "description": "The unique identifier of the Amazon Redshift cluster.",
-            "typeName": "ClusterIdentifier"
+            "description": "The name of the Amazon Redshift database that will store the transferred data.",
+            "typeName": "DatabaseName"
+          }
+        },
+        {
+          "name": "DatabaseUrl",
+          "description": "The JDBC URL of the Amazon Redshift cluster.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The JDBC URL of the Amazon Redshift cluster.",
+            "typeName": "DatabaseUrl"
+          }
+        },
+        {
+          "name": "IsRedshiftServerless",
+          "description": "If Amazon AppFlow will connect to Amazon Redshift Serverless or Amazon Redshift cluster.",
+          "optional": true,
+          "type": {
+            "type": "boolean",
+            "description": "If Amazon AppFlow will connect to Amazon Redshift Serverless or Amazon Redshift cluster."
+          }
+        },
+        {
+          "name": "RoleArn",
+          "description": "The Amazon Resource Name (ARN) of the IAM role.",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "description": "The Amazon Resource Name (ARN) of the IAM role.",
+            "typeName": "RoleArn"
           }
         },
         {
@@ -687,18 +1220,23 @@
             "description": "The name of the Amazon Redshift serverless workgroup",
             "typeName": "WorkgroupName"
           }
-        },
-        {
-          "name": "DatabaseName",
-          "description": "The name of the Amazon Redshift database that will store the transferred data.",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "The name of the Amazon Redshift database that will store the transferred data.",
-            "typeName": "DatabaseName"
-          }
         }
       ]
+    },
+    "RefreshToken": {
+      "type": "string",
+      "maxLength": 4096,
+      "pattern": "\\S+"
+    },
+    "Region": {
+      "type": "string",
+      "maxLength": 64,
+      "pattern": "\\S+"
+    },
+    "RoleArn": {
+      "type": "string",
+      "maxLength": 512,
+      "pattern": "arn:aws:iam:.*:[0-9]+:.*"
     },
     "SAPODataConnectorProfileCredentials": {
       "type": "object",
@@ -726,22 +1264,6 @@
                 }
               },
               {
-                "name": "RefreshToken",
-                "optional": true,
-                "type": {
-                  "type": "ref",
-                  "typeName": "RefreshToken"
-                }
-              },
-              {
-                "name": "ConnectorOAuthRequest",
-                "optional": true,
-                "type": {
-                  "type": "ref",
-                  "typeName": "ConnectorOAuthRequest"
-                }
-              },
-              {
                 "name": "ClientId",
                 "optional": true,
                 "type": {
@@ -755,6 +1277,22 @@
                 "type": {
                   "type": "ref",
                   "typeName": "ClientSecret"
+                }
+              },
+              {
+                "name": "ConnectorOAuthRequest",
+                "optional": true,
+                "type": {
+                  "type": "ref",
+                  "typeName": "ConnectorOAuthRequest"
+                }
+              },
+              {
+                "name": "RefreshToken",
+                "optional": true,
+                "type": {
+                  "type": "ref",
+                  "typeName": "RefreshToken"
                 }
               }
             ]
@@ -782,19 +1320,20 @@
           }
         },
         {
-          "name": "PortNumber",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "PortNumber"
-          }
-        },
-        {
           "name": "ClientNumber",
           "optional": true,
           "type": {
             "type": "ref",
             "typeName": "ClientNumber"
+          }
+        },
+        {
+          "name": "DisableSSO",
+          "description": "If you set this parameter to true, Amazon AppFlow bypasses the single sign-on (SSO) settings in your SAP account when it accesses your SAP OData instance.",
+          "optional": true,
+          "type": {
+            "type": "boolean",
+            "description": "If you set this parameter to true, Amazon AppFlow bypasses the single sign-on (SSO) settings in your SAP account when it accesses your SAP OData instance."
           }
         },
         {
@@ -806,14 +1345,6 @@
           }
         },
         {
-          "name": "PrivateLinkServiceName",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "PrivateLinkServiceName"
-          }
-        },
-        {
           "name": "OAuthProperties",
           "optional": true,
           "type": {
@@ -822,12 +1353,19 @@
           }
         },
         {
-          "name": "DisableSSO",
-          "description": "If you set this parameter to true, Amazon AppFlow bypasses the single sign-on (SSO) settings in your SAP account when it accesses your SAP OData instance.",
+          "name": "PortNumber",
           "optional": true,
           "type": {
-            "type": "boolean",
-            "description": "If you set this parameter to true, Amazon AppFlow bypasses the single sign-on (SSO) settings in your SAP account when it accesses your SAP OData instance."
+            "type": "ref",
+            "typeName": "PortNumber"
+          }
+        },
+        {
+          "name": "PrivateLinkServiceName",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PrivateLinkServiceName"
           }
         }
       ]
@@ -846,13 +1384,13 @@
           }
         },
         {
-          "name": "RefreshToken",
-          "description": "The credentials used to acquire new access tokens.",
+          "name": "ClientCredentialsArn",
+          "description": "The client credentials to fetch access token and refresh token.",
           "optional": true,
           "type": {
             "type": "ref",
-            "description": "The credentials used to acquire new access tokens.",
-            "typeName": "RefreshToken"
+            "description": "The client credentials to fetch access token and refresh token.",
+            "typeName": "ClientCredentialsArn"
           }
         },
         {
@@ -866,13 +1404,13 @@
           }
         },
         {
-          "name": "ClientCredentialsArn",
-          "description": "The client credentials to fetch access token and refresh token.",
+          "name": "JwtToken",
+          "description": "The credentials used to access your Salesforce records",
           "optional": true,
           "type": {
             "type": "ref",
-            "description": "The client credentials to fetch access token and refresh token.",
-            "typeName": "ClientCredentialsArn"
+            "description": "The credentials used to access your Salesforce records",
+            "typeName": "JwtToken"
           }
         },
         {
@@ -886,13 +1424,13 @@
           }
         },
         {
-          "name": "JwtToken",
-          "description": "The credentials used to access your Salesforce records",
+          "name": "RefreshToken",
+          "description": "The credentials used to acquire new access tokens.",
           "optional": true,
           "type": {
             "type": "ref",
-            "description": "The credentials used to access your Salesforce records",
-            "typeName": "JwtToken"
+            "description": "The credentials used to acquire new access tokens.",
+            "typeName": "RefreshToken"
           }
         }
       ]
@@ -930,96 +1468,22 @@
         }
       ]
     },
-    "PardotConnectorProfileProperties": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "InstanceUrl",
-          "description": "The location of the Salesforce Pardot resource",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "The location of the Salesforce Pardot resource",
-            "typeName": "InstanceUrl"
-          }
-        },
-        {
-          "name": "IsSandboxEnvironment",
-          "description": "Indicates whether the connector profile applies to a demo or production environment",
-          "optional": true,
-          "type": {
-            "type": "boolean",
-            "description": "Indicates whether the connector profile applies to a demo or production environment"
-          }
-        },
-        {
-          "name": "BusinessUnitId",
-          "description": "The Business unit id of Salesforce Pardot instance to be connected",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "description": "The Business unit id of Salesforce Pardot instance to be connected",
-            "typeName": "BusinessUnitId"
-          }
-        }
-      ]
-    },
-    "PardotConnectorProfileCredentials": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "AccessToken",
-          "description": "The credentials used to access protected resources.",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "The credentials used to access protected resources.",
-            "typeName": "AccessToken"
-          }
-        },
-        {
-          "name": "RefreshToken",
-          "description": "The credentials used to acquire new access tokens.",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "The credentials used to acquire new access tokens.",
-            "typeName": "RefreshToken"
-          }
-        },
-        {
-          "name": "ConnectorOAuthRequest",
-          "description": "The oauth needed to request security tokens from the connector endpoint.",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "The oauth needed to request security tokens from the connector endpoint.",
-            "typeName": "ConnectorOAuthRequest"
-          }
-        },
-        {
-          "name": "ClientCredentialsArn",
-          "description": "The client credentials to fetch access token and refresh token.",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "The client credentials to fetch access token and refresh token.",
-            "typeName": "ClientCredentialsArn"
-          }
-        }
-      ]
+    "SecretKey": {
+      "type": "string",
+      "maxLength": 256,
+      "pattern": "\\S+"
     },
     "ServiceNowConnectorProfileCredentials": {
       "type": "object",
       "properties": [
         {
-          "name": "Username",
-          "description": "The name of the user.",
+          "name": "OAuth2Credentials",
+          "description": "The OAuth 2.0 credentials required to authenticate the user.",
           "optional": true,
           "type": {
             "type": "ref",
-            "description": "The name of the user.",
-            "typeName": "Username"
+            "description": "The OAuth 2.0 credentials required to authenticate the user.",
+            "typeName": "OAuth2Credentials"
           }
         },
         {
@@ -1033,13 +1497,13 @@
           }
         },
         {
-          "name": "OAuth2Credentials",
-          "description": "The OAuth 2.0 credentials required to authenticate the user.",
+          "name": "Username",
+          "description": "The name of the user.",
           "optional": true,
           "type": {
             "type": "ref",
-            "description": "The OAuth 2.0 credentials required to authenticate the user.",
-            "typeName": "OAuth2Credentials"
+            "description": "The name of the user.",
+            "typeName": "Username"
           }
         }
       ]
@@ -1078,6 +1542,16 @@
       "type": "object",
       "properties": [
         {
+          "name": "AccessToken",
+          "description": "The credentials used to access protected resources.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The credentials used to access protected resources.",
+            "typeName": "AccessToken"
+          }
+        },
+        {
           "name": "ClientId",
           "description": "The identiﬁer for the desired client.",
           "optional": false,
@@ -1095,16 +1569,6 @@
             "type": "ref",
             "description": "The client secret used by the oauth client to authenticate to the authorization server.",
             "typeName": "ClientSecret"
-          }
-        },
-        {
-          "name": "AccessToken",
-          "description": "The credentials used to access protected resources.",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "The credentials used to access protected resources.",
-            "typeName": "AccessToken"
           }
         },
         {
@@ -1138,16 +1602,6 @@
       "type": "object",
       "properties": [
         {
-          "name": "Username",
-          "description": "The name of the user.",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "description": "The name of the user.",
-            "typeName": "Username"
-          }
-        },
-        {
           "name": "Password",
           "description": "The password that corresponds to the username.",
           "optional": false,
@@ -1156,6 +1610,16 @@
             "description": "The password that corresponds to the username.",
             "typeName": "Password"
           }
+        },
+        {
+          "name": "Username",
+          "description": "The name of the user.",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "description": "The name of the user.",
+            "typeName": "Username"
+          }
         }
       ]
     },
@@ -1163,23 +1627,13 @@
       "type": "object",
       "properties": [
         {
-          "name": "Warehouse",
-          "description": "The name of the Snowﬂake warehouse.",
-          "optional": false,
+          "name": "AccountName",
+          "description": "The name of the account.",
+          "optional": true,
           "type": {
             "type": "ref",
-            "description": "The name of the Snowﬂake warehouse.",
-            "typeName": "Warehouse"
-          }
-        },
-        {
-          "name": "Stage",
-          "description": "The name of the Amazon S3 stage that was created while setting up an Amazon S3 stage in the\nSnowﬂake account. This is written in the following format: < Database>< Schema><Stage Name>.",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "description": "The name of the Amazon S3 stage that was created while setting up an Amazon S3 stage in the\nSnowﬂake account. This is written in the following format: < Database>< Schema><Stage Name>.",
-            "typeName": "Stage"
+            "description": "The name of the account.",
+            "typeName": "AccountName"
           }
         },
         {
@@ -1213,16 +1667,6 @@
           }
         },
         {
-          "name": "AccountName",
-          "description": "The name of the account.",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "The name of the account.",
-            "typeName": "AccountName"
-          }
-        },
-        {
           "name": "Region",
           "description": "The region of the Snowﬂake account.",
           "optional": true,
@@ -1231,8 +1675,44 @@
             "description": "The region of the Snowﬂake account.",
             "typeName": "Region"
           }
+        },
+        {
+          "name": "Stage",
+          "description": "The name of the Amazon S3 stage that was created while setting up an Amazon S3 stage in the\nSnowﬂake account. This is written in the following format: < Database>< Schema><Stage Name>.",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "description": "The name of the Amazon S3 stage that was created while setting up an Amazon S3 stage in the\nSnowﬂake account. This is written in the following format: < Database>< Schema><Stage Name>.",
+            "typeName": "Stage"
+          }
+        },
+        {
+          "name": "Warehouse",
+          "description": "The name of the Snowﬂake warehouse.",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "description": "The name of the Snowﬂake warehouse.",
+            "typeName": "Warehouse"
+          }
         }
       ]
+    },
+    "Stage": {
+      "type": "string",
+      "maxLength": 512,
+      "pattern": "\\S+"
+    },
+    "TokenUrlCustomProperties": {
+      "type": "record",
+      "description": "A map for properties for custom connector Token Url.",
+      "valueType": {
+        "type": "string",
+        "description": "A string containing the value for the property",
+        "maxLength": 2048,
+        "minLength": 1,
+        "pattern": "\\S+"
+      }
     },
     "TrendmicroConnectorProfileCredentials": {
       "type": "object",
@@ -1249,19 +1729,14 @@
         }
       ]
     },
+    "Username": {
+      "type": "string",
+      "maxLength": 512,
+      "pattern": "\\S+"
+    },
     "VeevaConnectorProfileCredentials": {
       "type": "object",
       "properties": [
-        {
-          "name": "Username",
-          "description": "The name of the user.",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "description": "The name of the user.",
-            "typeName": "Username"
-          }
-        },
         {
           "name": "Password",
           "description": "The password that corresponds to the username.",
@@ -1270,6 +1745,16 @@
             "type": "ref",
             "description": "The password that corresponds to the username.",
             "typeName": "Password"
+          }
+        },
+        {
+          "name": "Username",
+          "description": "The name of the user.",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "description": "The name of the user.",
+            "typeName": "Username"
           }
         }
       ]
@@ -1289,9 +1774,29 @@
         }
       ]
     },
+    "Warehouse": {
+      "type": "string",
+      "maxLength": 512,
+      "pattern": "[\\s\\w/!@#+=.-]*"
+    },
+    "WorkgroupName": {
+      "type": "string",
+      "maxLength": 512,
+      "pattern": "\\S+"
+    },
     "ZendeskConnectorProfileCredentials": {
       "type": "object",
       "properties": [
+        {
+          "name": "AccessToken",
+          "description": "The credentials used to access protected resources.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "The credentials used to access protected resources.",
+            "typeName": "AccessToken"
+          }
+        },
         {
           "name": "ClientId",
           "description": "The identiﬁer for the desired client.",
@@ -1310,16 +1815,6 @@
             "type": "ref",
             "description": "The client secret used by the oauth client to authenticate to the authorization server.",
             "typeName": "ClientSecret"
-          }
-        },
-        {
-          "name": "AccessToken",
-          "description": "The credentials used to access protected resources.",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "The credentials used to access protected resources.",
-            "typeName": "AccessToken"
           }
         },
         {
@@ -1348,507 +1843,22 @@
           }
         }
       ]
-    },
-    "CustomConnectorProfileCredentials": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "AuthenticationType",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "AuthenticationType"
-          }
-        },
-        {
-          "name": "Basic",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "BasicAuthCredentials"
-          }
-        },
-        {
-          "name": "Oauth2",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "OAuth2Credentials"
-          }
-        },
-        {
-          "name": "ApiKey",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ApiKeyCredentials"
-          }
-        },
-        {
-          "name": "Custom",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "CustomAuthCredentials"
-          }
-        }
-      ]
-    },
-    "CustomConnectorProfileProperties": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "ProfileProperties",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ProfileProperties"
-          }
-        },
-        {
-          "name": "OAuth2Properties",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "OAuth2Properties"
-          }
-        }
-      ]
-    },
-    "ApiKeyCredentials": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "ApiKey",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "ApiKey"
-          }
-        },
-        {
-          "name": "ApiSecretKey",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ApiSecretKey"
-          }
-        }
-      ]
-    },
-    "CustomAuthCredentials": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "CustomAuthenticationType",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "CustomAuthenticationType"
-          }
-        },
-        {
-          "name": "CredentialsMap",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "CredentialsMap"
-          }
-        }
-      ]
-    },
-    "CredentialsMap": {
-      "type": "record",
-      "description": "A map for properties for custom authentication.",
-      "valueType": {
-        "type": "string",
-        "description": "A string containing the value for the property",
-        "maxLength": 2048,
-        "minLength": 1,
-        "pattern": "\\S+"
-      }
-    },
-    "OAuth2Credentials": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "ClientId",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ClientId"
-          }
-        },
-        {
-          "name": "ClientSecret",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ClientSecret"
-          }
-        },
-        {
-          "name": "AccessToken",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "AccessToken"
-          }
-        },
-        {
-          "name": "RefreshToken",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "RefreshToken"
-          }
-        },
-        {
-          "name": "OAuthRequest",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ConnectorOAuthRequest"
-          }
-        }
-      ]
-    },
-    "BasicAuthCredentials": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Username",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "Username"
-          }
-        },
-        {
-          "name": "Password",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "Password"
-          }
-        }
-      ]
-    },
-    "AuthenticationType": {
-      "type": "string",
-      "allowedValues": ["OAUTH2", "APIKEY", "BASIC", "CUSTOM"]
-    },
-    "OAuth2Properties": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "TokenUrl",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "maxLength": 256,
-            "minLength": 0,
-            "pattern": "^(https?)://[-a-zA-Z0-9+&amp;@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&amp;@#/%=~_|]"
-          }
-        },
-        {
-          "name": "OAuth2GrantType",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "OAuth2GrantType"
-          }
-        },
-        {
-          "name": "TokenUrlCustomProperties",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "TokenUrlCustomProperties"
-          }
-        }
-      ]
-    },
-    "ProfileProperties": {
-      "type": "record",
-      "description": "A map for properties for custom connector.",
-      "valueType": {
-        "type": "string",
-        "description": "A string containing the value for the property",
-        "maxLength": 2048,
-        "minLength": 1,
-        "pattern": "\\S+"
-      }
-    },
-    "OAuth2GrantType": {
-      "type": "string",
-      "allowedValues": [
-        "CLIENT_CREDENTIALS",
-        "AUTHORIZATION_CODE",
-        "JWT_BEARER"
-      ]
-    },
-    "TokenUrlCustomProperties": {
-      "type": "record",
-      "description": "A map for properties for custom connector Token Url.",
-      "valueType": {
-        "type": "string",
-        "description": "A string containing the value for the property",
-        "maxLength": 2048,
-        "minLength": 1,
-        "pattern": "\\S+"
-      }
-    },
-    "CustomAuthenticationType": {
-      "type": "string",
-      "maxLength": 256,
-      "pattern": "\\S+"
-    },
-    "ClientId": {
-      "type": "string",
-      "maxLength": 512,
-      "pattern": "\\S+"
-    },
-    "ClientSecret": {
-      "type": "string",
-      "maxLength": 512,
-      "pattern": "\\S+"
-    },
-    "InstanceUrl": {
-      "type": "string",
-      "maxLength": 256,
-      "pattern": "\\S+"
-    },
-    "AccessToken": {
-      "type": "string",
-      "maxLength": 4096,
-      "pattern": "\\S+"
-    },
-    "ApiKey": {
-      "type": "string",
-      "maxLength": 256,
-      "pattern": "\\S+"
-    },
-    "ApiSecretKey": {
-      "type": "string",
-      "maxLength": 256,
-      "pattern": "\\S+"
-    },
-    "ApiToken": {
-      "type": "string",
-      "maxLength": 256,
-      "pattern": "\\S+"
-    },
-    "ApplicationKey": {
-      "type": "string",
-      "maxLength": 512,
-      "pattern": "\\S+"
-    },
-    "AuthCode": {
-      "type": "string",
-      "maxLength": 4096,
-      "pattern": "\\S+"
-    },
-    "BucketName": {
-      "type": "string",
-      "maxLength": 63,
-      "minLength": 3,
-      "pattern": "\\S+"
-    },
-    "BucketPrefix": {
-      "type": "string",
-      "maxLength": 128
-    },
-    "Key": {
-      "type": "string",
-      "maxLength": 512,
-      "pattern": "\\S+"
-    },
-    "DatabaseUrl": {
-      "type": "string",
-      "maxLength": 512,
-      "pattern": "\\S+"
-    },
-    "RoleArn": {
-      "type": "string",
-      "maxLength": 512,
-      "pattern": "arn:aws:iam:.*:[0-9]+:.*"
-    },
-    "DataApiRoleArn": {
-      "type": "string",
-      "maxLength": 512,
-      "pattern": "arn:aws:iam:.*:[0-9]+:.*"
-    },
-    "ClusterIdentifier": {
-      "type": "string",
-      "maxLength": 512,
-      "pattern": "\\S+"
-    },
-    "WorkgroupName": {
-      "type": "string",
-      "maxLength": 512,
-      "pattern": "\\S+"
-    },
-    "DatabaseName": {
-      "type": "string",
-      "maxLength": 512,
-      "pattern": "\\S+"
-    },
-    "Warehouse": {
-      "type": "string",
-      "maxLength": 512,
-      "pattern": "[\\s\\w/!@#+=.-]*"
-    },
-    "Stage": {
-      "type": "string",
-      "maxLength": 512,
-      "pattern": "\\S+"
-    },
-    "PrivateLinkServiceName": {
-      "type": "string",
-      "maxLength": 512,
-      "pattern": "\\S+"
-    },
-    "AccountName": {
-      "type": "string",
-      "maxLength": 512,
-      "pattern": "\\S+"
-    },
-    "JwtToken": {
-      "type": "string",
-      "maxLength": 8000,
-      "pattern": "^[A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.[A-Za-z0-9-_.+/=]*$"
-    },
-    "RefreshToken": {
-      "type": "string",
-      "maxLength": 4096,
-      "pattern": "\\S+"
-    },
-    "Region": {
-      "type": "string",
-      "maxLength": 64,
-      "pattern": "\\S+"
-    },
-    "SecretKey": {
-      "type": "string",
-      "maxLength": 256,
-      "pattern": "\\S+"
-    },
-    "AccessKeyId": {
-      "type": "string",
-      "maxLength": 256,
-      "pattern": "\\S+"
-    },
-    "Username": {
-      "type": "string",
-      "maxLength": 512,
-      "pattern": "\\S+"
-    },
-    "Password": {
-      "type": "string",
-      "maxLength": 512,
-      "pattern": "\\S+"
-    },
-    "BusinessUnitId": {
-      "type": "string",
-      "maxLength": 18,
-      "pattern": "\\S+"
-    },
-    "ConnectorOAuthRequest": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "AuthCode",
-          "description": "The code provided by the connector when it has been authenticated via the connected app.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The code provided by the connector when it has been authenticated via the connected app."
-          }
-        },
-        {
-          "name": "RedirectUri",
-          "description": "The URL to which the authentication server redirects the browser after authorization has been\ngranted.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The URL to which the authentication server redirects the browser after authorization has been\ngranted."
-          }
-        }
-      ]
-    },
-    "ClientCredentialsArn": {
-      "type": "string",
-      "maxLength": 2048,
-      "pattern": "arn:aws:secretsmanager:.*:[0-9]+:.*"
-    },
-    "ApplicationHostUrl": {
-      "type": "string",
-      "maxLength": 256,
-      "pattern": "^(https?)://[-a-zA-Z0-9+&amp;@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&amp;@#/%=~_|]"
-    },
-    "ApplicationServicePath": {
-      "type": "string",
-      "maxLength": 512,
-      "pattern": "\\S+"
-    },
-    "ClientNumber": {
-      "type": "string",
-      "maxLength": 3,
-      "minLength": 3,
-      "pattern": "^\\d{3}$"
-    },
-    "LogonLanguage": {
-      "type": "string",
-      "maxLength": 2,
-      "pattern": "^[a-zA-Z0-9_]*$"
-    },
-    "PortNumber": {
-      "type": "number",
-      "isInteger": true,
-      "maximum": 65535,
-      "minimum": 1
-    },
-    "OAuthProperties": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "AuthCodeUrl",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "maxLength": 256,
-            "pattern": "^(https?)://[-a-zA-Z0-9+&amp;@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&amp;@#/%=~_|]"
-          }
-        },
-        {
-          "name": "TokenUrl",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "maxLength": 256,
-            "pattern": "^(https?)://[-a-zA-Z0-9+&amp;@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&amp;@#/%=~_|]"
-          }
-        },
-        {
-          "name": "OAuthScopes",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "string",
-              "maxLength": 128,
-              "pattern": "[/\\w]*"
-            }
-          }
-        }
-      ]
     }
   },
   "resource": {
     "type": "object",
     "description": "Resource Type definition for AWS::AppFlow::ConnectorProfile",
     "properties": [
+      {
+        "name": "ConnectionMode",
+        "description": "Mode in which data transfer should be enabled. Private connection mode is currently enabled for Salesforce, Snowflake, Trendmicro and Singular",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "Mode in which data transfer should be enabled. Private connection mode is currently enabled for Salesforce, Snowflake, Trendmicro and Singular",
+          "allowedValues": ["Public", "Private"]
+        }
+      },
       {
         "name": "ConnectorLabel",
         "description": "The label of the connector. The label is unique for each ConnectorRegistration in your AWS account. Only needed if calling for CUSTOMCONNECTOR connector type/.",
@@ -1858,6 +1868,16 @@
           "description": "The label of the connector. The label is unique for each ConnectorRegistration in your AWS account. Only needed if calling for CUSTOMCONNECTOR connector type/.",
           "maxLength": 256,
           "pattern": "[\\w!@#.-]+"
+        }
+      },
+      {
+        "name": "ConnectorProfileConfig",
+        "description": "Connector specific configurations needed to create connector profile",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "Connector specific configurations needed to create connector profile",
+          "typeName": "ConnectorProfileConfig"
         }
       },
       {
@@ -1872,18 +1892,6 @@
         }
       },
       {
-        "name": "KMSArn",
-        "description": "The ARN of the AWS Key Management Service (AWS KMS) key that's used to encrypt your function's environment variables. If it's not provided, AWS Lambda uses a default service key.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The ARN of the AWS Key Management Service (AWS KMS) key that's used to encrypt your function's environment variables. If it's not provided, AWS Lambda uses a default service key.",
-          "maxLength": 2048,
-          "minLength": 20,
-          "pattern": "arn:aws:kms:.*:[0-9]+:.*"
-        }
-      },
-      {
         "name": "ConnectorType",
         "description": "List of Saas providers that need connector profile to be created",
         "optional": false,
@@ -1894,23 +1902,15 @@
         }
       },
       {
-        "name": "ConnectionMode",
-        "description": "Mode in which data transfer should be enabled. Private connection mode is currently enabled for Salesforce, Snowflake, Trendmicro and Singular",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "description": "Mode in which data transfer should be enabled. Private connection mode is currently enabled for Salesforce, Snowflake, Trendmicro and Singular",
-          "allowedValues": ["Public", "Private"]
-        }
-      },
-      {
-        "name": "ConnectorProfileConfig",
-        "description": "Connector specific configurations needed to create connector profile",
+        "name": "KMSArn",
+        "description": "The ARN of the AWS Key Management Service (AWS KMS) key that's used to encrypt your function's environment variables. If it's not provided, AWS Lambda uses a default service key.",
         "optional": true,
         "type": {
-          "type": "ref",
-          "description": "Connector specific configurations needed to create connector profile",
-          "typeName": "ConnectorProfileConfig"
+          "type": "string",
+          "description": "The ARN of the AWS Key Management Service (AWS KMS) key that's used to encrypt your function's environment variables. If it's not provided, AWS Lambda uses a default service key.",
+          "maxLength": 2048,
+          "minLength": 20,
+          "pattern": "arn:aws:kms:.*:[0-9]+:.*"
         }
       }
     ]
@@ -1943,5 +1943,5 @@
       }
     ]
   },
-  "$hash": "d52450d6661e975a40038b1a8ea208ebdd5ef89b"
+  "$hash": "5a8575643de126cb3433d2c6f2f00010a8d6ccc3"
 }

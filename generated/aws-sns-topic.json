@@ -1,5 +1,24 @@
 {
   "definitions": {
+    "Subscription": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Endpoint",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "Protocol",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        }
+      ]
+    },
     "Tag": {
       "type": "object",
       "properties": [
@@ -22,25 +41,6 @@
           }
         }
       ]
-    },
-    "Subscription": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Endpoint",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Protocol",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        }
-      ]
     }
   },
   "resource": {
@@ -48,12 +48,48 @@
     "description": "Resource Type definition for AWS::SNS::Topic",
     "properties": [
       {
+        "name": "ArchivePolicy",
+        "description": "The archive policy determines the number of days Amazon SNS retains messages. You can set a retention period from 1 to 365 days.",
+        "optional": true,
+        "type": {
+          "type": "record",
+          "description": "The archive policy determines the number of days Amazon SNS retains messages. You can set a retention period from 1 to 365 days."
+        }
+      },
+      {
+        "name": "ContentBasedDeduplication",
+        "description": "Enables content-based deduplication for FIFO topics. By default, ContentBasedDeduplication is set to false. If you create a FIFO topic and this attribute is false, you must specify a value for the MessageDeduplicationId parameter for the Publish action.\n\nWhen you set ContentBasedDeduplication to true, Amazon SNS uses a SHA-256 hash to generate the MessageDeduplicationId using the body of the message (but not the attributes of the message).\n\n(Optional) To override the generated value, you can specify a value for the the MessageDeduplicationId parameter for the Publish action.\n\n",
+        "optional": true,
+        "type": {
+          "type": "boolean",
+          "description": "Enables content-based deduplication for FIFO topics. By default, ContentBasedDeduplication is set to false. If you create a FIFO topic and this attribute is false, you must specify a value for the MessageDeduplicationId parameter for the Publish action.\n\nWhen you set ContentBasedDeduplication to true, Amazon SNS uses a SHA-256 hash to generate the MessageDeduplicationId using the body of the message (but not the attributes of the message).\n\n(Optional) To override the generated value, you can specify a value for the the MessageDeduplicationId parameter for the Publish action.\n\n"
+        }
+      },
+      {
+        "name": "DataProtectionPolicy",
+        "description": "The body of the policy document you want to use for this topic.\n\nYou can only add one policy per topic.\n\nThe policy must be in JSON string format.\n\nLength Constraints: Maximum length of 30720",
+        "optional": true,
+        "type": {
+          "type": "record",
+          "description": "The body of the policy document you want to use for this topic.\n\nYou can only add one policy per topic.\n\nThe policy must be in JSON string format.\n\nLength Constraints: Maximum length of 30720"
+        }
+      },
+      {
         "name": "DisplayName",
         "description": "The display name to use for an Amazon SNS topic with SMS subscriptions.",
         "optional": true,
         "type": {
           "type": "string",
           "description": "The display name to use for an Amazon SNS topic with SMS subscriptions."
+        }
+      },
+      {
+        "name": "FifoTopic",
+        "description": "Set to true to create a FIFO topic.",
+        "optional": true,
+        "type": {
+          "type": "boolean",
+          "description": "Set to true to create a FIFO topic."
         }
       },
       {
@@ -66,12 +102,12 @@
         }
       },
       {
-        "name": "DataProtectionPolicy",
-        "description": "The body of the policy document you want to use for this topic.\n\nYou can only add one policy per topic.\n\nThe policy must be in JSON string format.\n\nLength Constraints: Maximum length of 30720",
+        "name": "SignatureVersion",
+        "description": "Version of the Amazon SNS signature used. If the SignatureVersion is 1, Signature is a Base64-encoded SHA1withRSA signature of the Message, MessageId, Type, Timestamp, and TopicArn values. If the SignatureVersion is 2, Signature is a Base64-encoded SHA256withRSA signature of the Message, MessageId, Type, Timestamp, and TopicArn values.",
         "optional": true,
         "type": {
-          "type": "record",
-          "description": "The body of the policy document you want to use for this topic.\n\nYou can only add one policy per topic.\n\nThe policy must be in JSON string format.\n\nLength Constraints: Maximum length of 30720"
+          "type": "string",
+          "description": "Version of the Amazon SNS signature used. If the SignatureVersion is 1, Signature is a Base64-encoded SHA1withRSA signature of the Message, MessageId, Type, Timestamp, and TopicArn values. If the SignatureVersion is 2, Signature is a Base64-encoded SHA256withRSA signature of the Message, MessageId, Type, Timestamp, and TopicArn values."
         }
       },
       {
@@ -85,33 +121,6 @@
             "type": "ref",
             "typeName": "Subscription"
           }
-        }
-      },
-      {
-        "name": "FifoTopic",
-        "description": "Set to true to create a FIFO topic.",
-        "optional": true,
-        "type": {
-          "type": "boolean",
-          "description": "Set to true to create a FIFO topic."
-        }
-      },
-      {
-        "name": "ContentBasedDeduplication",
-        "description": "Enables content-based deduplication for FIFO topics. By default, ContentBasedDeduplication is set to false. If you create a FIFO topic and this attribute is false, you must specify a value for the MessageDeduplicationId parameter for the Publish action.\n\nWhen you set ContentBasedDeduplication to true, Amazon SNS uses a SHA-256 hash to generate the MessageDeduplicationId using the body of the message (but not the attributes of the message).\n\n(Optional) To override the generated value, you can specify a value for the the MessageDeduplicationId parameter for the Publish action.\n\n",
-        "optional": true,
-        "type": {
-          "type": "boolean",
-          "description": "Enables content-based deduplication for FIFO topics. By default, ContentBasedDeduplication is set to false. If you create a FIFO topic and this attribute is false, you must specify a value for the MessageDeduplicationId parameter for the Publish action.\n\nWhen you set ContentBasedDeduplication to true, Amazon SNS uses a SHA-256 hash to generate the MessageDeduplicationId using the body of the message (but not the attributes of the message).\n\n(Optional) To override the generated value, you can specify a value for the the MessageDeduplicationId parameter for the Publish action.\n\n"
-        }
-      },
-      {
-        "name": "ArchivePolicy",
-        "description": "The archive policy determines the number of days Amazon SNS retains messages. You can set a retention period from 1 to 365 days.",
-        "optional": true,
-        "type": {
-          "type": "record",
-          "description": "The archive policy determines the number of days Amazon SNS retains messages. You can set a retention period from 1 to 365 days."
         }
       },
       {
@@ -132,15 +141,6 @@
         "type": {
           "type": "string",
           "description": "The name of the topic you want to create. Topic names must include only uppercase and lowercase ASCII letters, numbers, underscores, and hyphens, and must be between 1 and 256 characters long. FIFO topic names must end with .fifo.\n\nIf you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the topic name. For more information, see Name Type."
-        }
-      },
-      {
-        "name": "SignatureVersion",
-        "description": "Version of the Amazon SNS signature used. If the SignatureVersion is 1, Signature is a Base64-encoded SHA1withRSA signature of the Message, MessageId, Type, Timestamp, and TopicArn values. If the SignatureVersion is 2, Signature is a Base64-encoded SHA256withRSA signature of the Message, MessageId, Type, Timestamp, and TopicArn values.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "Version of the Amazon SNS signature used. If the SignatureVersion is 1, Signature is a Base64-encoded SHA1withRSA signature of the Message, MessageId, Type, Timestamp, and TopicArn values. If the SignatureVersion is 2, Signature is a Base64-encoded SHA256withRSA signature of the Message, MessageId, Type, Timestamp, and TopicArn values."
         }
       },
       {
@@ -167,5 +167,5 @@
       }
     ]
   },
-  "$hash": "a9d041b931ec09cd5d5babfa3366c52a0a8cf03d"
+  "$hash": "5e090d259f7aa1fbf36ae5c3bef9cba973c97ddf"
 }

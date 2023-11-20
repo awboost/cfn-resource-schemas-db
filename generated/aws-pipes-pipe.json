@@ -8,18 +8,11 @@
       "type": "object",
       "properties": [
         {
-          "name": "Subnets",
-          "optional": false,
+          "name": "AssignPublicIp",
+          "optional": true,
           "type": {
-            "type": "array",
-            "itemType": {
-              "type": "string",
-              "maxLength": 1024,
-              "minLength": 1,
-              "pattern": "^subnet-[0-9a-z]*|(\\$(\\.[\\w/_-]+(\\[(\\d+|\\*)\\])*)*)$"
-            },
-            "maxLength": 16,
-            "minLength": 0
+            "type": "ref",
+            "typeName": "AssignPublicIp"
           }
         },
         {
@@ -38,11 +31,18 @@
           }
         },
         {
-          "name": "AssignPublicIp",
-          "optional": true,
+          "name": "Subnets",
+          "optional": false,
           "type": {
-            "type": "ref",
-            "typeName": "AssignPublicIp"
+            "type": "array",
+            "itemType": {
+              "type": "string",
+              "maxLength": 1024,
+              "minLength": 1,
+              "pattern": "^subnet-[0-9a-z]*|(\\$(\\.[\\w/_-]+(\\[(\\d+|\\*)\\])*)*)$"
+            },
+            "maxLength": 16,
+            "minLength": 0
           }
         }
       ]
@@ -198,6 +198,16 @@
       "type": "object",
       "properties": [
         {
+          "name": "Base",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 100000,
+            "minimum": 0
+          }
+        },
+        {
           "name": "CapacityProvider",
           "optional": false,
           "type": {
@@ -213,16 +223,6 @@
             "type": "number",
             "isInteger": true,
             "maximum": 1000,
-            "minimum": 0
-          }
-        },
-        {
-          "name": "Base",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true,
-            "maximum": 100000,
             "minimum": 0
           }
         }
@@ -664,6 +664,14 @@
       "type": "object",
       "properties": [
         {
+          "name": "HeaderParameters",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "HeaderParametersMap"
+          }
+        },
+        {
           "name": "PathParameterValues",
           "optional": true,
           "type": {
@@ -672,14 +680,6 @@
               "type": "string",
               "pattern": "^(?!\\s*$).+|(\\$(\\.[\\w/_-]+(\\[(\\d+|\\*)\\])*)*)$"
             }
-          }
-        },
-        {
-          "name": "HeaderParameters",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "HeaderParametersMap"
           }
         },
         {
@@ -696,6 +696,14 @@
       "type": "object",
       "properties": [
         {
+          "name": "HttpParameters",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PipeEnrichmentHttpParameters"
+          }
+        },
+        {
           "name": "InputTemplate",
           "optional": true,
           "type": {
@@ -703,36 +711,12 @@
             "maxLength": 8192,
             "minLength": 0
           }
-        },
-        {
-          "name": "HttpParameters",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "PipeEnrichmentHttpParameters"
-          }
         }
       ]
     },
     "PipeLogConfiguration": {
       "type": "object",
       "properties": [
-        {
-          "name": "S3LogDestination",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "S3LogDestination"
-          }
-        },
-        {
-          "name": "FirehoseLogDestination",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "FirehoseLogDestination"
-          }
-        },
         {
           "name": "CloudwatchLogsLogDestination",
           "optional": true,
@@ -742,11 +726,11 @@
           }
         },
         {
-          "name": "Level",
+          "name": "FirehoseLogDestination",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "LogLevel"
+            "typeName": "FirehoseLogDestination"
           }
         },
         {
@@ -759,30 +743,28 @@
               "typeName": "IncludeExecutionDataOption"
             }
           }
+        },
+        {
+          "name": "Level",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "LogLevel"
+          }
+        },
+        {
+          "name": "S3LogDestination",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "S3LogDestination"
+          }
         }
       ]
     },
     "PipeSourceActiveMQBrokerParameters": {
       "type": "object",
       "properties": [
-        {
-          "name": "Credentials",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "MQBrokerAccessCredentials"
-          }
-        },
-        {
-          "name": "QueueName",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 1000,
-            "minLength": 1,
-            "pattern": "^[\\s\\S]*$"
-          }
-        },
         {
           "name": "BatchSize",
           "optional": true,
@@ -794,6 +776,14 @@
           }
         },
         {
+          "name": "Credentials",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "MQBrokerAccessCredentials"
+          }
+        },
+        {
           "name": "MaximumBatchingWindowInSeconds",
           "optional": true,
           "type": {
@@ -801,6 +791,16 @@
             "isInteger": true,
             "maximum": 300,
             "minimum": 0
+          }
+        },
+        {
+          "name": "QueueName",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 1000,
+            "minLength": 1,
+            "pattern": "^[\\s\\S]*$"
           }
         }
       ]
@@ -824,14 +824,6 @@
           "type": {
             "type": "ref",
             "typeName": "DeadLetterConfig"
-          }
-        },
-        {
-          "name": "OnPartialBatchItemFailure",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "OnPartialBatchItemFailureStreams"
           }
         },
         {
@@ -862,6 +854,14 @@
             "isInteger": true,
             "maximum": 10000,
             "minimum": -1
+          }
+        },
+        {
+          "name": "OnPartialBatchItemFailure",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "OnPartialBatchItemFailureStreams"
           }
         },
         {
@@ -906,14 +906,6 @@
           }
         },
         {
-          "name": "OnPartialBatchItemFailure",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "OnPartialBatchItemFailureStreams"
-          }
-        },
-        {
           "name": "MaximumBatchingWindowInSeconds",
           "optional": true,
           "type": {
@@ -941,6 +933,14 @@
             "isInteger": true,
             "maximum": 10000,
             "minimum": -1
+          }
+        },
+        {
+          "name": "OnPartialBatchItemFailure",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "OnPartialBatchItemFailureStreams"
           }
         },
         {
@@ -974,24 +974,6 @@
       "type": "object",
       "properties": [
         {
-          "name": "TopicName",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 249,
-            "minLength": 1,
-            "pattern": "^[^.]([a-zA-Z0-9\\-_.]+)$"
-          }
-        },
-        {
-          "name": "StartingPosition",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "MSKStartPosition"
-          }
-        },
-        {
           "name": "BatchSize",
           "optional": true,
           "type": {
@@ -999,16 +981,6 @@
             "isInteger": true,
             "maximum": 10000,
             "minimum": 1
-          }
-        },
-        {
-          "name": "MaximumBatchingWindowInSeconds",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true,
-            "maximum": 300,
-            "minimum": 0
           }
         },
         {
@@ -1028,12 +1000,56 @@
             "type": "ref",
             "typeName": "MSKAccessCredentials"
           }
+        },
+        {
+          "name": "MaximumBatchingWindowInSeconds",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 300,
+            "minimum": 0
+          }
+        },
+        {
+          "name": "StartingPosition",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "MSKStartPosition"
+          }
+        },
+        {
+          "name": "TopicName",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 249,
+            "minLength": 1,
+            "pattern": "^[^.]([a-zA-Z0-9\\-_.]+)$"
+          }
         }
       ]
     },
     "PipeSourceParameters": {
       "type": "object",
       "properties": [
+        {
+          "name": "ActiveMQBrokerParameters",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PipeSourceActiveMQBrokerParameters"
+          }
+        },
+        {
+          "name": "DynamoDBStreamParameters",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PipeSourceDynamoDBStreamParameters"
+          }
+        },
         {
           "name": "FilterCriteria",
           "optional": true,
@@ -1051,27 +1067,11 @@
           }
         },
         {
-          "name": "DynamoDBStreamParameters",
+          "name": "ManagedStreamingKafkaParameters",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "PipeSourceDynamoDBStreamParameters"
-          }
-        },
-        {
-          "name": "SqsQueueParameters",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "PipeSourceSqsQueueParameters"
-          }
-        },
-        {
-          "name": "ActiveMQBrokerParameters",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "PipeSourceActiveMQBrokerParameters"
+            "typeName": "PipeSourceManagedStreamingKafkaParameters"
           }
         },
         {
@@ -1083,19 +1083,19 @@
           }
         },
         {
-          "name": "ManagedStreamingKafkaParameters",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "PipeSourceManagedStreamingKafkaParameters"
-          }
-        },
-        {
           "name": "SelfManagedKafkaParameters",
           "optional": true,
           "type": {
             "type": "ref",
             "typeName": "PipeSourceSelfManagedKafkaParameters"
+          }
+        },
+        {
+          "name": "SqsQueueParameters",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PipeSourceSqsQueueParameters"
           }
         }
       ]
@@ -1104,11 +1104,31 @@
       "type": "object",
       "properties": [
         {
+          "name": "BatchSize",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 10000,
+            "minimum": 1
+          }
+        },
+        {
           "name": "Credentials",
           "optional": false,
           "type": {
             "type": "ref",
             "typeName": "MQBrokerAccessCredentials"
+          }
+        },
+        {
+          "name": "MaximumBatchingWindowInSeconds",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 300,
+            "minimum": 0
           }
         },
         {
@@ -1130,50 +1150,12 @@
             "minLength": 1,
             "pattern": "^[a-zA-Z0-9-\\/*:_+=.@-]*$"
           }
-        },
-        {
-          "name": "BatchSize",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true,
-            "maximum": 10000,
-            "minimum": 1
-          }
-        },
-        {
-          "name": "MaximumBatchingWindowInSeconds",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true,
-            "maximum": 300,
-            "minimum": 0
-          }
         }
       ]
     },
     "PipeSourceSelfManagedKafkaParameters": {
       "type": "object",
       "properties": [
-        {
-          "name": "TopicName",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 249,
-            "minLength": 1,
-            "pattern": "^[^.]([a-zA-Z0-9\\-_.]+)$"
-          }
-        },
-        {
-          "name": "StartingPosition",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "SelfManagedKafkaStartPosition"
-          }
-        },
         {
           "name": "AdditionalBootstrapServers",
           "optional": true,
@@ -1200,16 +1182,6 @@
           }
         },
         {
-          "name": "MaximumBatchingWindowInSeconds",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true,
-            "maximum": 300,
-            "minimum": 0
-          }
-        },
-        {
           "name": "ConsumerGroupID",
           "optional": true,
           "type": {
@@ -1228,6 +1200,16 @@
           }
         },
         {
+          "name": "MaximumBatchingWindowInSeconds",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 300,
+            "minimum": 0
+          }
+        },
+        {
           "name": "ServerRootCaCertificate",
           "description": "Optional SecretManager ARN which stores the database credentials",
           "optional": true,
@@ -1237,6 +1219,24 @@
             "maxLength": 1600,
             "minLength": 1,
             "pattern": "^(^arn:aws([a-z]|\\-)*:secretsmanager:([a-z]{2}((-gov)|(-iso(b?)))?-[a-z]+-\\d{1}):(\\d{12}):secret:.+)$"
+          }
+        },
+        {
+          "name": "StartingPosition",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "SelfManagedKafkaStartPosition"
+          }
+        },
+        {
+          "name": "TopicName",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 249,
+            "minLength": 1,
+            "pattern": "^[^.]([a-zA-Z0-9\\-_.]+)$"
           }
         },
         {
@@ -1298,33 +1298,11 @@
       "type": "object",
       "properties": [
         {
-          "name": "JobDefinition",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "JobName",
-          "optional": false,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
           "name": "ArrayProperties",
           "optional": true,
           "type": {
             "type": "ref",
             "typeName": "BatchArrayProperties"
-          }
-        },
-        {
-          "name": "RetryStrategy",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "BatchRetryStrategy"
           }
         },
         {
@@ -1349,11 +1327,33 @@
           }
         },
         {
+          "name": "JobDefinition",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "JobName",
+          "optional": false,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
           "name": "Parameters",
           "optional": true,
           "type": {
             "type": "ref",
             "typeName": "BatchParametersMap"
+          }
+        },
+        {
+          "name": "RetryStrategy",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "BatchRetryStrategy"
           }
         }
       ]
@@ -1386,55 +1386,6 @@
       "type": "object",
       "properties": [
         {
-          "name": "TaskDefinitionArn",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 1600,
-            "minLength": 1,
-            "pattern": "^arn:(aws[a-zA-Z0-9-]*):([a-zA-Z0-9\\-]+):([a-z]{2}((-gov)|(-iso(b?)))?-[a-z]+-\\d{1})?:(\\d{12})?:(.+)|(\\$(\\.[\\w/_-]+(\\[(\\d+|\\*)\\])*)*)$"
-          }
-        },
-        {
-          "name": "TaskCount",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true,
-            "minimum": 1
-          }
-        },
-        {
-          "name": "LaunchType",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "LaunchType"
-          }
-        },
-        {
-          "name": "NetworkConfiguration",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "NetworkConfiguration"
-          }
-        },
-        {
-          "name": "PlatformVersion",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Group",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
           "name": "CapacityProviderStrategy",
           "optional": true,
           "type": {
@@ -1459,6 +1410,37 @@
           "optional": true,
           "type": {
             "type": "boolean"
+          }
+        },
+        {
+          "name": "Group",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "LaunchType",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "LaunchType"
+          }
+        },
+        {
+          "name": "NetworkConfiguration",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "NetworkConfiguration"
+          }
+        },
+        {
+          "name": "Overrides",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "EcsTaskOverride"
           }
         },
         {
@@ -1488,6 +1470,13 @@
           }
         },
         {
+          "name": "PlatformVersion",
+          "optional": true,
+          "type": {
+            "type": "string"
+          }
+        },
+        {
           "name": "PropagateTags",
           "optional": true,
           "type": {
@@ -1505,14 +1494,6 @@
           }
         },
         {
-          "name": "Overrides",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "EcsTaskOverride"
-          }
-        },
-        {
           "name": "Tags",
           "optional": true,
           "type": {
@@ -1522,22 +1503,31 @@
               "typeName": "Tag"
             }
           }
+        },
+        {
+          "name": "TaskCount",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "minimum": 1
+          }
+        },
+        {
+          "name": "TaskDefinitionArn",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 1600,
+            "minLength": 1,
+            "pattern": "^arn:(aws[a-zA-Z0-9-]*):([a-zA-Z0-9\\-]+):([a-z]{2}((-gov)|(-iso(b?)))?-[a-z]+-\\d{1})?:(\\d{12})?:(.+)|(\\$(\\.[\\w/_-]+(\\[(\\d+|\\*)\\])*)*)$"
+          }
         }
       ]
     },
     "PipeTargetEventBridgeEventBusParameters": {
       "type": "object",
       "properties": [
-        {
-          "name": "EndpointId",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "maxLength": 50,
-            "minLength": 1,
-            "pattern": "^[A-Za-z0-9\\-]+[\\.][A-Za-z0-9\\-]+$"
-          }
-        },
         {
           "name": "DetailType",
           "optional": true,
@@ -1548,13 +1538,13 @@
           }
         },
         {
-          "name": "Source",
+          "name": "EndpointId",
           "optional": true,
           "type": {
             "type": "string",
-            "maxLength": 256,
+            "maxLength": 50,
             "minLength": 1,
-            "pattern": "(?=[/\\.\\-_A-Za-z0-9]+)((?!aws\\.).*)|(\\$(\\.[\\w/_-]+(\\[(\\d+|\\*)\\])*)*)"
+            "pattern": "^[A-Za-z0-9\\-]+[\\.][A-Za-z0-9\\-]+$"
           }
         },
         {
@@ -1573,6 +1563,16 @@
           }
         },
         {
+          "name": "Source",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1,
+            "pattern": "(?=[/\\.\\-_A-Za-z0-9]+)((?!aws\\.).*)|(\\$(\\.[\\w/_-]+(\\[(\\d+|\\*)\\])*)*)"
+          }
+        },
+        {
           "name": "Time",
           "optional": true,
           "type": {
@@ -1588,6 +1588,14 @@
       "type": "object",
       "properties": [
         {
+          "name": "HeaderParameters",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "HeaderParametersMap"
+          }
+        },
+        {
           "name": "PathParameterValues",
           "optional": true,
           "type": {
@@ -1596,14 +1604,6 @@
               "type": "string",
               "pattern": "^(?!\\s*$).+|(\\$(\\.[\\w/_-]+(\\[(\\d+|\\*)\\])*)*)$"
             }
-          }
-        },
-        {
-          "name": "HeaderParameters",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "HeaderParametersMap"
           }
         },
         {
@@ -1651,36 +1651,19 @@
       "type": "object",
       "properties": [
         {
-          "name": "InputTemplate",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "maxLength": 8192,
-            "minLength": 0
-          }
-        },
-        {
-          "name": "LambdaFunctionParameters",
+          "name": "BatchJobParameters",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "PipeTargetLambdaFunctionParameters"
+            "typeName": "PipeTargetBatchJobParameters"
           }
         },
         {
-          "name": "StepFunctionStateMachineParameters",
+          "name": "CloudWatchLogsParameters",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "PipeTargetStateMachineParameters"
-          }
-        },
-        {
-          "name": "KinesisStreamParameters",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "PipeTargetKinesisStreamParameters"
+            "typeName": "PipeTargetCloudWatchLogsParameters"
           }
         },
         {
@@ -1692,19 +1675,11 @@
           }
         },
         {
-          "name": "BatchJobParameters",
+          "name": "EventBridgeEventBusParameters",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "PipeTargetBatchJobParameters"
-          }
-        },
-        {
-          "name": "SqsQueueParameters",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "PipeTargetSqsQueueParameters"
+            "typeName": "PipeTargetEventBridgeEventBusParameters"
           }
         },
         {
@@ -1713,6 +1688,31 @@
           "type": {
             "type": "ref",
             "typeName": "PipeTargetHttpParameters"
+          }
+        },
+        {
+          "name": "InputTemplate",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 8192,
+            "minLength": 0
+          }
+        },
+        {
+          "name": "KinesisStreamParameters",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PipeTargetKinesisStreamParameters"
+          }
+        },
+        {
+          "name": "LambdaFunctionParameters",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PipeTargetLambdaFunctionParameters"
           }
         },
         {
@@ -1732,19 +1732,19 @@
           }
         },
         {
-          "name": "EventBridgeEventBusParameters",
+          "name": "SqsQueueParameters",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "PipeTargetEventBridgeEventBusParameters"
+            "typeName": "PipeTargetSqsQueueParameters"
           }
         },
         {
-          "name": "CloudWatchLogsParameters",
+          "name": "StepFunctionStateMachineParameters",
           "optional": true,
           "type": {
             "type": "ref",
-            "typeName": "PipeTargetCloudWatchLogsParameters"
+            "typeName": "PipeTargetStateMachineParameters"
           }
         }
       ]
@@ -1752,18 +1752,6 @@
     "PipeTargetRedshiftDataParameters": {
       "type": "object",
       "properties": [
-        {
-          "name": "SecretManagerArn",
-          "description": "Optional SecretManager ARN which stores the database credentials",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "Optional SecretManager ARN which stores the database credentials",
-            "maxLength": 1600,
-            "minLength": 1,
-            "pattern": "^(^arn:aws([a-z]|\\-)*:secretsmanager:([a-z]{2}((-gov)|(-iso(b?)))?-[a-z]+-\\d{1}):(\\d{12}):secret:.+)|(\\$(\\.[\\w/_-]+(\\[(\\d+|\\*)\\])*)*)$"
-          }
-        },
         {
           "name": "Database",
           "description": "Redshift Database",
@@ -1787,21 +1775,15 @@
           }
         },
         {
-          "name": "StatementName",
-          "description": "A name for Redshift DataAPI statement which can be used as filter of ListStatement.",
+          "name": "SecretManagerArn",
+          "description": "Optional SecretManager ARN which stores the database credentials",
           "optional": true,
           "type": {
             "type": "string",
-            "description": "A name for Redshift DataAPI statement which can be used as filter of ListStatement.",
-            "maxLength": 500,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "WithEvent",
-          "optional": true,
-          "type": {
-            "type": "boolean"
+            "description": "Optional SecretManager ARN which stores the database credentials",
+            "maxLength": 1600,
+            "minLength": 1,
+            "pattern": "^(^arn:aws([a-z]|\\-)*:secretsmanager:([a-z]{2}((-gov)|(-iso(b?)))?-[a-z]+-\\d{1}):(\\d{12}):secret:.+)|(\\$(\\.[\\w/_-]+(\\[(\\d+|\\*)\\])*)*)$"
           }
         },
         {
@@ -1819,6 +1801,24 @@
             },
             "maxLength": 40,
             "minLength": 1
+          }
+        },
+        {
+          "name": "StatementName",
+          "description": "A name for Redshift DataAPI statement which can be used as filter of ListStatement.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "A name for Redshift DataAPI statement which can be used as filter of ListStatement.",
+            "maxLength": 500,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "WithEvent",
+          "optional": true,
+          "type": {
+            "type": "boolean"
           }
         }
       ]
@@ -1845,7 +1845,7 @@
       "type": "object",
       "properties": [
         {
-          "name": "MessageGroupId",
+          "name": "MessageDeduplicationId",
           "optional": true,
           "type": {
             "type": "string",
@@ -1854,7 +1854,7 @@
           }
         },
         {
-          "name": "MessageDeduplicationId",
+          "name": "MessageGroupId",
           "optional": true,
           "type": {
             "type": "string",
@@ -1881,20 +1881,20 @@
       "type": "object",
       "properties": [
         {
-          "name": "Type",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "PlacementConstraintType"
-          }
-        },
-        {
           "name": "Expression",
           "optional": true,
           "type": {
             "type": "string",
             "maxLength": 2000,
             "minLength": 0
+          }
+        },
+        {
+          "name": "Type",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PlacementConstraintType"
           }
         }
       ]
@@ -1907,20 +1907,20 @@
       "type": "object",
       "properties": [
         {
-          "name": "Type",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "PlacementStrategyType"
-          }
-        },
-        {
           "name": "Field",
           "optional": true,
           "type": {
             "type": "string",
             "maxLength": 255,
             "minLength": 0
+          }
+        },
+        {
+          "name": "Type",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "PlacementStrategyType"
           }
         }
       ]
@@ -1957,13 +1957,6 @@
           }
         },
         {
-          "name": "Prefix",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
           "name": "BucketOwner",
           "optional": true,
           "type": {
@@ -1976,6 +1969,13 @@
           "type": {
             "type": "ref",
             "typeName": "S3OutputFormat"
+          }
+        },
+        {
+          "name": "Prefix",
+          "optional": true,
+          "type": {
+            "type": "string"
           }
         }
       ]
@@ -2085,23 +2085,6 @@
       "type": "object",
       "properties": [
         {
-          "name": "Subnets",
-          "description": "List of SubnetId.",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "description": "List of SubnetId.",
-            "itemType": {
-              "type": "string",
-              "maxLength": 1024,
-              "minLength": 1,
-              "pattern": "^subnet-[0-9a-z]*$"
-            },
-            "maxLength": 16,
-            "minLength": 0
-          }
-        },
-        {
           "name": "SecurityGroup",
           "description": "List of SecurityGroupId.",
           "optional": true,
@@ -2115,6 +2098,23 @@
               "pattern": "^sg-[0-9a-zA-Z]*$"
             },
             "maxLength": 5,
+            "minLength": 0
+          }
+        },
+        {
+          "name": "Subnets",
+          "description": "List of SubnetId.",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "description": "List of SubnetId.",
+            "itemType": {
+              "type": "string",
+              "maxLength": 1024,
+              "minLength": 1,
+              "pattern": "^subnet-[0-9a-z]*$"
+            },
+            "maxLength": 16,
             "minLength": 0
           }
         }
@@ -2318,5 +2318,5 @@
       }
     ]
   },
-  "$hash": "efc925f39146de1a9d311b44151036862fdf103b"
+  "$hash": "c1efb4fe0a2570f8fdbbe612ec7fed1d15fb6c3c"
 }

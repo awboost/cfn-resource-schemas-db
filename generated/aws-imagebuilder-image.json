@@ -1,28 +1,28 @@
 {
   "definitions": {
-    "ImageTestsConfiguration": {
+    "EcrConfiguration": {
       "type": "object",
-      "description": "The image tests configuration used when creating this image.",
+      "description": "Settings for Image Builder to configure the ECR repository and output container images that are scanned.",
       "properties": [
         {
-          "name": "ImageTestsEnabled",
-          "description": "ImageTestsEnabled",
+          "name": "ContainerTags",
+          "description": "Tags for Image Builder to apply the output container image that is scanned. Tags can help you identify and manage your scanned images.",
           "optional": true,
           "type": {
-            "type": "boolean",
-            "description": "ImageTestsEnabled"
+            "type": "array",
+            "description": "Tags for Image Builder to apply the output container image that is scanned. Tags can help you identify and manage your scanned images.",
+            "itemType": {
+              "type": "string"
+            }
           }
         },
         {
-          "name": "TimeoutMinutes",
-          "description": "TimeoutMinutes",
+          "name": "RepositoryName",
+          "description": "The name of the container repository that Amazon Inspector scans to identify findings for your container images. The name includes the path for the repository location. If you don’t provide this information, Image Builder creates a repository in your account named image-builder-image-scanning-repository to use for vulnerability scans for your output container images.",
           "optional": true,
           "type": {
-            "type": "number",
-            "description": "TimeoutMinutes",
-            "isInteger": true,
-            "maximum": 1440,
-            "minimum": 60
+            "type": "string",
+            "description": "The name of the container repository that Amazon Inspector scans to identify findings for your container images. The name includes the path for the repository location. If you don’t provide this information, Image Builder creates a repository in your account named image-builder-image-scanning-repository to use for vulnerability scans for your output container images."
           }
         }
       ]
@@ -52,29 +52,29 @@
         }
       ]
     },
-    "EcrConfiguration": {
+    "ImageTestsConfiguration": {
       "type": "object",
-      "description": "Settings for Image Builder to configure the ECR repository and output container images that are scanned.",
+      "description": "The image tests configuration used when creating this image.",
       "properties": [
         {
-          "name": "ContainerTags",
-          "description": "Tags for Image Builder to apply the output container image that is scanned. Tags can help you identify and manage your scanned images.",
+          "name": "ImageTestsEnabled",
+          "description": "ImageTestsEnabled",
           "optional": true,
           "type": {
-            "type": "array",
-            "description": "Tags for Image Builder to apply the output container image that is scanned. Tags can help you identify and manage your scanned images.",
-            "itemType": {
-              "type": "string"
-            }
+            "type": "boolean",
+            "description": "ImageTestsEnabled"
           }
         },
         {
-          "name": "RepositoryName",
-          "description": "The name of the container repository that Amazon Inspector scans to identify findings for your container images. The name includes the path for the repository location. If you don’t provide this information, Image Builder creates a repository in your account named image-builder-image-scanning-repository to use for vulnerability scans for your output container images.",
+          "name": "TimeoutMinutes",
+          "description": "TimeoutMinutes",
           "optional": true,
           "type": {
-            "type": "string",
-            "description": "The name of the container repository that Amazon Inspector scans to identify findings for your container images. The name includes the path for the repository location. If you don’t provide this information, Image Builder creates a repository in your account named image-builder-image-scanning-repository to use for vulnerability scans for your output container images."
+            "type": "number",
+            "description": "TimeoutMinutes",
+            "isInteger": true,
+            "maximum": 1440,
+            "minimum": 60
           }
         }
       ]
@@ -84,25 +84,6 @@
     "type": "object",
     "description": "Resource schema for AWS::ImageBuilder::Image",
     "properties": [
-      {
-        "name": "ImageTestsConfiguration",
-        "description": "The image tests configuration used when creating this image.",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "description": "The image tests configuration used when creating this image.",
-          "typeName": "ImageTestsConfiguration"
-        }
-      },
-      {
-        "name": "ImageRecipeArn",
-        "description": "The Amazon Resource Name (ARN) of the image recipe that defines how images are configured, tested, and assessed.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The Amazon Resource Name (ARN) of the image recipe that defines how images are configured, tested, and assessed."
-        }
-      },
       {
         "name": "ContainerRecipeArn",
         "description": "The Amazon Resource Name (ARN) of the container recipe that defines how images are configured and tested.",
@@ -122,21 +103,21 @@
         }
       },
       {
-        "name": "InfrastructureConfigurationArn",
-        "description": "The Amazon Resource Name (ARN) of the infrastructure configuration.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The Amazon Resource Name (ARN) of the infrastructure configuration."
-        }
-      },
-      {
         "name": "EnhancedImageMetadataEnabled",
         "description": "Collects additional information about the image being created, including the operating system (OS) version and package list.",
         "optional": true,
         "type": {
           "type": "boolean",
           "description": "Collects additional information about the image being created, including the operating system (OS) version and package list."
+        }
+      },
+      {
+        "name": "ImageRecipeArn",
+        "description": "The Amazon Resource Name (ARN) of the image recipe that defines how images are configured, tested, and assessed.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) of the image recipe that defines how images are configured, tested, and assessed."
         }
       },
       {
@@ -147,6 +128,25 @@
           "type": "ref",
           "description": "Contains settings for vulnerability scans.",
           "typeName": "ImageScanningConfiguration"
+        }
+      },
+      {
+        "name": "ImageTestsConfiguration",
+        "description": "The image tests configuration used when creating this image.",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "description": "The image tests configuration used when creating this image.",
+          "typeName": "ImageTestsConfiguration"
+        }
+      },
+      {
+        "name": "InfrastructureConfigurationArn",
+        "description": "The Amazon Resource Name (ARN) of the infrastructure configuration.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Name (ARN) of the infrastructure configuration."
         }
       },
       {
@@ -177,15 +177,6 @@
         }
       },
       {
-        "name": "Name",
-        "description": "The name of the image.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The name of the image."
-        }
-      },
-      {
         "name": "ImageId",
         "description": "The AMI ID of the EC2 AMI in current region.",
         "optional": true,
@@ -202,8 +193,17 @@
           "type": "string",
           "description": "URI for containers created in current Region with default ECR image tag"
         }
+      },
+      {
+        "name": "Name",
+        "description": "The name of the image.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The name of the image."
+        }
       }
     ]
   },
-  "$hash": "22eacf351a1efadf110fbfd38c3ef2e56ef0d34f"
+  "$hash": "9d848f70c5ef693b6cd0b95b06c82e64f17124dd"
 }

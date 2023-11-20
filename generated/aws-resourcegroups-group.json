@@ -1,22 +1,53 @@
 {
   "definitions": {
-    "ResourceQuery": {
+    "Configuration": {
+      "type": "array",
+      "itemType": {
+        "type": "ref",
+        "typeName": "ConfigurationItem"
+      }
+    },
+    "ConfigurationItem": {
       "type": "object",
       "properties": [
+        {
+          "name": "Parameters",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "ConfigurationParameter"
+            }
+          }
+        },
         {
           "name": "Type",
           "optional": true,
           "type": {
-            "type": "string",
-            "allowedValues": ["TAG_FILTERS_1_0", "CLOUDFORMATION_STACK_1_0"]
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "ConfigurationParameter": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Name",
+          "optional": true,
+          "type": {
+            "type": "string"
           }
         },
         {
-          "name": "Query",
+          "name": "Values",
           "optional": true,
           "type": {
-            "type": "ref",
-            "typeName": "Query"
+            "type": "array",
+            "itemType": {
+              "type": "string"
+            }
           }
         }
       ]
@@ -54,24 +85,23 @@
         }
       ]
     },
-    "TagFilter": {
+    "ResourceQuery": {
       "type": "object",
       "properties": [
         {
-          "name": "Key",
+          "name": "Query",
           "optional": true,
           "type": {
-            "type": "string"
+            "type": "ref",
+            "typeName": "Query"
           }
         },
         {
-          "name": "Values",
+          "name": "Type",
           "optional": true,
           "type": {
-            "type": "array",
-            "itemType": {
-              "type": "string"
-            }
+            "type": "string",
+            "allowedValues": ["TAG_FILTERS_1_0", "CLOUDFORMATION_STACK_1_0"]
           }
         }
       ]
@@ -96,41 +126,11 @@
         }
       ]
     },
-    "Configuration": {
-      "type": "array",
-      "itemType": {
-        "type": "ref",
-        "typeName": "ConfigurationItem"
-      }
-    },
-    "ConfigurationItem": {
+    "TagFilter": {
       "type": "object",
       "properties": [
         {
-          "name": "Type",
-          "optional": true,
-          "type": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "Parameters",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "ConfigurationParameter"
-            }
-          }
-        }
-      ]
-    },
-    "ConfigurationParameter": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Name",
+          "name": "Key",
           "optional": true,
           "type": {
             "type": "string"
@@ -154,13 +154,11 @@
     "description": "Schema for ResourceGroups::Group",
     "properties": [
       {
-        "name": "Name",
-        "description": "The name of the resource group",
-        "optional": false,
+        "name": "Configuration",
+        "optional": true,
         "type": {
-          "type": "string",
-          "description": "The name of the resource group",
-          "maxLength": 128
+          "type": "ref",
+          "typeName": "Configuration"
         }
       },
       {
@@ -174,11 +172,31 @@
         }
       },
       {
+        "name": "Name",
+        "description": "The name of the resource group",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The name of the resource group",
+          "maxLength": 128
+        }
+      },
+      {
         "name": "ResourceQuery",
         "optional": true,
         "type": {
           "type": "ref",
           "typeName": "ResourceQuery"
+        }
+      },
+      {
+        "name": "Resources",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "itemType": {
+            "type": "string"
+          }
         }
       },
       {
@@ -189,24 +207,6 @@
           "itemType": {
             "type": "ref",
             "typeName": "Tag"
-          }
-        }
-      },
-      {
-        "name": "Configuration",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "Configuration"
-        }
-      },
-      {
-        "name": "Resources",
-        "optional": true,
-        "type": {
-          "type": "array",
-          "itemType": {
-            "type": "string"
           }
         }
       }
@@ -227,5 +227,5 @@
       }
     ]
   },
-  "$hash": "a9fffd370fe8a76037d432e4eb5c89be45adfb75"
+  "$hash": "b7f0a5c08d1207004124702849579110c13baa8a"
 }

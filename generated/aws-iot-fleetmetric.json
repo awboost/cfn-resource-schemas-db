@@ -1,5 +1,32 @@
 {
   "definitions": {
+    "AggregationType": {
+      "type": "object",
+      "description": "Aggregation types supported by Fleet Indexing",
+      "properties": [
+        {
+          "name": "Name",
+          "description": "Fleet Indexing aggregation type names such as Statistics, Percentiles and Cardinality",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "Fleet Indexing aggregation type names such as Statistics, Percentiles and Cardinality"
+          }
+        },
+        {
+          "name": "Values",
+          "description": "Fleet Indexing aggregation type values",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "description": "Fleet Indexing aggregation type values",
+            "itemType": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
     "Tag": {
       "type": "object",
       "description": "A key-value pair to associate with a resource",
@@ -27,33 +54,6 @@
           }
         }
       ]
-    },
-    "AggregationType": {
-      "type": "object",
-      "description": "Aggregation types supported by Fleet Indexing",
-      "properties": [
-        {
-          "name": "Name",
-          "description": "Fleet Indexing aggregation type names such as Statistics, Percentiles and Cardinality",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "Fleet Indexing aggregation type names such as Statistics, Percentiles and Cardinality"
-          }
-        },
-        {
-          "name": "Values",
-          "description": "Fleet Indexing aggregation type values",
-          "optional": false,
-          "type": {
-            "type": "array",
-            "description": "Fleet Indexing aggregation type values",
-            "itemType": {
-              "type": "string"
-            }
-          }
-        }
-      ]
     }
   },
   "resource": {
@@ -61,12 +61,20 @@
     "description": "An aggregated metric of certain devices in your fleet",
     "properties": [
       {
-        "name": "MetricName",
-        "description": "The name of the fleet metric",
-        "optional": false,
+        "name": "AggregationField",
+        "description": "The aggregation field to perform aggregation and metric emission",
+        "optional": true,
         "type": {
           "type": "string",
-          "description": "The name of the fleet metric"
+          "description": "The aggregation field to perform aggregation and metric emission"
+        }
+      },
+      {
+        "name": "AggregationType",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "AggregationType"
         }
       },
       {
@@ -79,12 +87,21 @@
         }
       },
       {
-        "name": "QueryString",
-        "description": "The Fleet Indexing query used by a fleet metric",
+        "name": "IndexName",
+        "description": "The index name of a fleet metric",
         "optional": true,
         "type": {
           "type": "string",
-          "description": "The Fleet Indexing query used by a fleet metric"
+          "description": "The index name of a fleet metric"
+        }
+      },
+      {
+        "name": "MetricName",
+        "description": "The name of the fleet metric",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The name of the fleet metric"
         }
       },
       {
@@ -98,12 +115,12 @@
         }
       },
       {
-        "name": "AggregationField",
-        "description": "The aggregation field to perform aggregation and metric emission",
+        "name": "QueryString",
+        "description": "The Fleet Indexing query used by a fleet metric",
         "optional": true,
         "type": {
           "type": "string",
-          "description": "The aggregation field to perform aggregation and metric emission"
+          "description": "The Fleet Indexing query used by a fleet metric"
         }
       },
       {
@@ -113,32 +130,6 @@
         "type": {
           "type": "string",
           "description": "The version of a Fleet Indexing query used by a fleet metric"
-        }
-      },
-      {
-        "name": "IndexName",
-        "description": "The index name of a fleet metric",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The index name of a fleet metric"
-        }
-      },
-      {
-        "name": "Unit",
-        "description": "The unit of data points emitted by a fleet metric",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The unit of data points emitted by a fleet metric"
-        }
-      },
-      {
-        "name": "AggregationType",
-        "optional": true,
-        "type": {
-          "type": "ref",
-          "typeName": "AggregationType"
         }
       },
       {
@@ -154,6 +145,15 @@
           },
           "maxLength": 50
         }
+      },
+      {
+        "name": "Unit",
+        "description": "The unit of data points emitted by a fleet metric",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The unit of data points emitted by a fleet metric"
+        }
       }
     ]
   },
@@ -161,15 +161,6 @@
     "type": "object",
     "description": "An aggregated metric of certain devices in your fleet",
     "properties": [
-      {
-        "name": "MetricArn",
-        "description": "The Amazon Resource Number (ARN) of a fleet metric metric",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The Amazon Resource Number (ARN) of a fleet metric metric"
-        }
-      },
       {
         "name": "CreationDate",
         "description": "The creation date of a fleet metric",
@@ -191,6 +182,15 @@
         }
       },
       {
+        "name": "MetricArn",
+        "description": "The Amazon Resource Number (ARN) of a fleet metric metric",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The Amazon Resource Number (ARN) of a fleet metric metric"
+        }
+      },
+      {
         "name": "Version",
         "description": "The version of a fleet metric",
         "optional": true,
@@ -202,5 +202,5 @@
       }
     ]
   },
-  "$hash": "e747140d5765f0f6142e1bc5ec21bc7d4001b0da"
+  "$hash": "f76170892569207768ab956427bd19ddb2082813"
 }

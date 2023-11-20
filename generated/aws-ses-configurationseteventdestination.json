@@ -1,111 +1,5 @@
 {
   "definitions": {
-    "EventDestination": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Name",
-          "description": "The name of the event destination set.",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "description": "The name of the event destination set.",
-            "pattern": "^[a-zA-Z0-9_-]{0,64}$"
-          }
-        },
-        {
-          "name": "Enabled",
-          "description": "Sets whether Amazon SES publishes events to this destination when you send an email with the associated configuration set. Set to true to enable publishing to this destination; set to false to prevent publishing to this destination. The default value is false.   ",
-          "optional": true,
-          "type": {
-            "type": "boolean",
-            "description": "Sets whether Amazon SES publishes events to this destination when you send an email with the associated configuration set. Set to true to enable publishing to this destination; set to false to prevent publishing to this destination. The default value is false.   "
-          }
-        },
-        {
-          "name": "MatchingEventTypes",
-          "description": "The type of email sending events, send, reject, bounce, complaint, delivery, open, click, renderingFailure, deliveryDelay, and subscription.",
-          "optional": false,
-          "type": {
-            "type": "array",
-            "description": "The type of email sending events, send, reject, bounce, complaint, delivery, open, click, renderingFailure, deliveryDelay, and subscription.",
-            "itemType": {
-              "type": "string"
-            }
-          }
-        },
-        {
-          "name": "CloudWatchDestination",
-          "description": "An object that contains the names, default values, and sources of the dimensions associated with an Amazon CloudWatch event destination.",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "An object that contains the names, default values, and sources of the dimensions associated with an Amazon CloudWatch event destination.",
-            "typeName": "CloudWatchDestination"
-          }
-        },
-        {
-          "name": "KinesisFirehoseDestination",
-          "description": "An object that contains the delivery stream ARN and the IAM role ARN associated with an Amazon Kinesis Firehose event destination.",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "An object that contains the delivery stream ARN and the IAM role ARN associated with an Amazon Kinesis Firehose event destination.",
-            "typeName": "KinesisFirehoseDestination"
-          }
-        },
-        {
-          "name": "SnsDestination",
-          "description": "An object that contains SNS topic ARN associated event destination.",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "description": "An object that contains SNS topic ARN associated event destination.",
-            "typeName": "SnsDestination"
-          }
-        }
-      ]
-    },
-    "SnsDestination": {
-      "type": "object",
-      "description": "An object that contains SNS topic ARN associated event destination.",
-      "properties": [
-        {
-          "name": "TopicARN",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 1024,
-            "minLength": 36,
-            "pattern": "^arn:aws[a-z0-9-]*:sns:[a-z0-9-]+:\\d{12}:[^:]+$"
-          }
-        }
-      ]
-    },
-    "KinesisFirehoseDestination": {
-      "type": "object",
-      "description": "An object that contains the delivery stream ARN and the IAM role ARN associated with an Amazon Kinesis Firehose event destination.",
-      "properties": [
-        {
-          "name": "IAMRoleARN",
-          "description": "The ARN of the IAM role under which Amazon SES publishes email sending events to the Amazon Kinesis Firehose stream.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The ARN of the IAM role under which Amazon SES publishes email sending events to the Amazon Kinesis Firehose stream."
-          }
-        },
-        {
-          "name": "DeliveryStreamARN",
-          "description": "The ARN of the Amazon Kinesis Firehose stream that email sending events should be published to.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The ARN of the Amazon Kinesis Firehose stream that email sending events should be published to."
-          }
-        }
-      ]
-    },
     "CloudWatchDestination": {
       "type": "object",
       "description": "An object that contains the names, default values, and sources of the dimensions associated with an Amazon CloudWatch event destination.",
@@ -130,15 +24,6 @@
       "description": "A list of dimensions upon which to categorize your emails when you publish email sending events to Amazon CloudWatch.",
       "properties": [
         {
-          "name": "DimensionValueSource",
-          "description": "The place where Amazon SES finds the value of a dimension to publish to Amazon CloudWatch. To use the message tags that you specify using an X-SES-MESSAGE-TAGS header or a parameter to the SendEmail/SendRawEmail API, specify messageTag. To use your own email headers, specify emailHeader. To put a custom tag on any link included in your email, specify linkTag.",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "description": "The place where Amazon SES finds the value of a dimension to publish to Amazon CloudWatch. To use the message tags that you specify using an X-SES-MESSAGE-TAGS header or a parameter to the SendEmail/SendRawEmail API, specify messageTag. To use your own email headers, specify emailHeader. To put a custom tag on any link included in your email, specify linkTag."
-          }
-        },
-        {
           "name": "DefaultDimensionValue",
           "description": "The default value of the dimension that is published to Amazon CloudWatch if you do not provide the value of the dimension when you send an email.",
           "optional": false,
@@ -160,6 +45,121 @@
             "maxLength": 256,
             "minLength": 1,
             "pattern": "^[a-zA-Z0-9_:-]{1,256}$"
+          }
+        },
+        {
+          "name": "DimensionValueSource",
+          "description": "The place where Amazon SES finds the value of a dimension to publish to Amazon CloudWatch. To use the message tags that you specify using an X-SES-MESSAGE-TAGS header or a parameter to the SendEmail/SendRawEmail API, specify messageTag. To use your own email headers, specify emailHeader. To put a custom tag on any link included in your email, specify linkTag.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The place where Amazon SES finds the value of a dimension to publish to Amazon CloudWatch. To use the message tags that you specify using an X-SES-MESSAGE-TAGS header or a parameter to the SendEmail/SendRawEmail API, specify messageTag. To use your own email headers, specify emailHeader. To put a custom tag on any link included in your email, specify linkTag."
+          }
+        }
+      ]
+    },
+    "EventDestination": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "CloudWatchDestination",
+          "description": "An object that contains the names, default values, and sources of the dimensions associated with an Amazon CloudWatch event destination.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "An object that contains the names, default values, and sources of the dimensions associated with an Amazon CloudWatch event destination.",
+            "typeName": "CloudWatchDestination"
+          }
+        },
+        {
+          "name": "Enabled",
+          "description": "Sets whether Amazon SES publishes events to this destination when you send an email with the associated configuration set. Set to true to enable publishing to this destination; set to false to prevent publishing to this destination. The default value is false.   ",
+          "optional": true,
+          "type": {
+            "type": "boolean",
+            "description": "Sets whether Amazon SES publishes events to this destination when you send an email with the associated configuration set. Set to true to enable publishing to this destination; set to false to prevent publishing to this destination. The default value is false.   "
+          }
+        },
+        {
+          "name": "KinesisFirehoseDestination",
+          "description": "An object that contains the delivery stream ARN and the IAM role ARN associated with an Amazon Kinesis Firehose event destination.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "An object that contains the delivery stream ARN and the IAM role ARN associated with an Amazon Kinesis Firehose event destination.",
+            "typeName": "KinesisFirehoseDestination"
+          }
+        },
+        {
+          "name": "MatchingEventTypes",
+          "description": "The type of email sending events, send, reject, bounce, complaint, delivery, open, click, renderingFailure, deliveryDelay, and subscription.",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "description": "The type of email sending events, send, reject, bounce, complaint, delivery, open, click, renderingFailure, deliveryDelay, and subscription.",
+            "itemType": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "name": "Name",
+          "description": "The name of the event destination set.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "The name of the event destination set.",
+            "pattern": "^[a-zA-Z0-9_-]{0,64}$"
+          }
+        },
+        {
+          "name": "SnsDestination",
+          "description": "An object that contains SNS topic ARN associated event destination.",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "description": "An object that contains SNS topic ARN associated event destination.",
+            "typeName": "SnsDestination"
+          }
+        }
+      ]
+    },
+    "KinesisFirehoseDestination": {
+      "type": "object",
+      "description": "An object that contains the delivery stream ARN and the IAM role ARN associated with an Amazon Kinesis Firehose event destination.",
+      "properties": [
+        {
+          "name": "DeliveryStreamARN",
+          "description": "The ARN of the Amazon Kinesis Firehose stream that email sending events should be published to.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The ARN of the Amazon Kinesis Firehose stream that email sending events should be published to."
+          }
+        },
+        {
+          "name": "IAMRoleARN",
+          "description": "The ARN of the IAM role under which Amazon SES publishes email sending events to the Amazon Kinesis Firehose stream.",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The ARN of the IAM role under which Amazon SES publishes email sending events to the Amazon Kinesis Firehose stream."
+          }
+        }
+      ]
+    },
+    "SnsDestination": {
+      "type": "object",
+      "description": "An object that contains SNS topic ARN associated event destination.",
+      "properties": [
+        {
+          "name": "TopicARN",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 1024,
+            "minLength": 36,
+            "pattern": "^arn:aws[a-z0-9-]*:sns:[a-z0-9-]+:\\d{12}:[^:]+$"
           }
         }
       ]
@@ -203,5 +203,5 @@
       }
     ]
   },
-  "$hash": "d00eaafad1c4c3efb35d6fc6c55f3170afe97e61"
+  "$hash": "327f0ab17cbcf4798722dffece77acf088c254ea"
 }

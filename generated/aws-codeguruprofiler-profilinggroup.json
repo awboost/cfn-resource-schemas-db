@@ -1,12 +1,44 @@
 {
   "definitions": {
-    "ProfilingGroupArn": {
+    "Channel": {
+      "type": "object",
+      "description": "Notification medium for users to get alerted for events that occur in application profile. We support SNS topic as a notification channel.",
+      "properties": [
+        {
+          "name": "channelId",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ChannelId"
+          }
+        },
+        {
+          "name": "channelUri",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "ChannelUri"
+          }
+        }
+      ]
+    },
+    "ChannelId": {
       "type": "string",
-      "pattern": "^arn:aws([-\\w]*):codeguru-profiler:(([a-z]+-)+[0-9]+):([0-9]{12}):profilingGroup/[^.]+$"
+      "description": "Unique identifier for each Channel in the notification configuration of a Profiling Group",
+      "pattern": "[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}"
+    },
+    "ChannelUri": {
+      "type": "string",
+      "description": "Unique arn of the resource to be used for notifications. We support a valid SNS topic arn as a channel uri.",
+      "pattern": "^arn:aws([-\\w]*):[a-z-]+:(([a-z]+-)+[0-9]+)?:([0-9]{12}):[^.]+$"
     },
     "IamArn": {
       "type": "string",
       "pattern": "^arn:aws([-\\w]*):iam::([0-9]{12}):[\\S]+$"
+    },
+    "ProfilingGroupArn": {
+      "type": "string",
+      "pattern": "^arn:aws([-\\w]*):codeguru-profiler:(([a-z]+-)+[0-9]+):([0-9]{12}):profilingGroup/[^.]+$"
     },
     "Tag": {
       "type": "object",
@@ -35,66 +67,12 @@
           }
         }
       ]
-    },
-    "ChannelId": {
-      "type": "string",
-      "description": "Unique identifier for each Channel in the notification configuration of a Profiling Group",
-      "pattern": "[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}"
-    },
-    "ChannelUri": {
-      "type": "string",
-      "description": "Unique arn of the resource to be used for notifications. We support a valid SNS topic arn as a channel uri.",
-      "pattern": "^arn:aws([-\\w]*):[a-z-]+:(([a-z]+-)+[0-9]+)?:([0-9]{12}):[^.]+$"
-    },
-    "Channel": {
-      "type": "object",
-      "description": "Notification medium for users to get alerted for events that occur in application profile. We support SNS topic as a notification channel.",
-      "properties": [
-        {
-          "name": "channelId",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ChannelId"
-          }
-        },
-        {
-          "name": "channelUri",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "ChannelUri"
-          }
-        }
-      ]
     }
   },
   "resource": {
     "type": "object",
     "description": "This resource schema represents the Profiling Group resource in the Amazon CodeGuru Profiler service.",
     "properties": [
-      {
-        "name": "ProfilingGroupName",
-        "description": "The name of the profiling group.",
-        "optional": false,
-        "type": {
-          "type": "string",
-          "description": "The name of the profiling group.",
-          "maxLength": 255,
-          "minLength": 1,
-          "pattern": "^[\\w-]+$"
-        }
-      },
-      {
-        "name": "ComputePlatform",
-        "description": "The compute platform of the profiling group.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The compute platform of the profiling group.",
-          "allowedValues": ["Default", "AWSLambda"]
-        }
-      },
       {
         "name": "AgentPermissions",
         "description": "The agent permissions attached to this profiling group.",
@@ -133,6 +111,28 @@
         }
       },
       {
+        "name": "ComputePlatform",
+        "description": "The compute platform of the profiling group.",
+        "optional": true,
+        "type": {
+          "type": "string",
+          "description": "The compute platform of the profiling group.",
+          "allowedValues": ["Default", "AWSLambda"]
+        }
+      },
+      {
+        "name": "ProfilingGroupName",
+        "description": "The name of the profiling group.",
+        "optional": false,
+        "type": {
+          "type": "string",
+          "description": "The name of the profiling group.",
+          "maxLength": 255,
+          "minLength": 1,
+          "pattern": "^[\\w-]+$"
+        }
+      },
+      {
         "name": "Tags",
         "description": "The tags associated with a profiling group.",
         "optional": true,
@@ -164,5 +164,5 @@
       }
     ]
   },
-  "$hash": "13acc85e1c6bc68087475a235edeeafb48208116"
+  "$hash": "0009244dbb1cef45d694fc87450068c0ac5bd93d"
 }

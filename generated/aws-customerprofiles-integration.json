@@ -1,33 +1,156 @@
 {
   "definitions": {
-    "Tag": {
+    "ConnectorOperator": {
       "type": "object",
       "properties": [
         {
-          "name": "Key",
-          "optional": false,
+          "name": "Marketo",
+          "optional": true,
           "type": {
-            "type": "string",
-            "maxLength": 128,
-            "minLength": 1,
-            "pattern": "^(?!aws:)[a-zA-Z+-=._:/]+$"
+            "type": "ref",
+            "typeName": "MarketoConnectorOperator"
           }
         },
         {
-          "name": "Value",
-          "optional": false,
+          "name": "S3",
+          "optional": true,
           "type": {
-            "type": "string",
-            "maxLength": 256,
-            "minLength": 0
+            "type": "ref",
+            "typeName": "S3ConnectorOperator"
+          }
+        },
+        {
+          "name": "Salesforce",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "SalesforceConnectorOperator"
+          }
+        },
+        {
+          "name": "ServiceNow",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ServiceNowConnectorOperator"
+          }
+        },
+        {
+          "name": "Zendesk",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ZendeskConnectorOperator"
           }
         }
       ]
     },
-    "Object": {
+    "ConnectorType": {
       "type": "string",
-      "maxLength": 512,
-      "pattern": "\\S+"
+      "allowedValues": ["Salesforce", "Marketo", "ServiceNow", "Zendesk", "S3"]
+    },
+    "Date": {
+      "type": "number",
+      "isInteger": false
+    },
+    "DestinationField": {
+      "type": "string",
+      "maxLength": 256,
+      "pattern": ".*"
+    },
+    "FlowDefinition": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Description",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 2048,
+            "pattern": "[\\w!@#\\-.?,\\s]*"
+          }
+        },
+        {
+          "name": "FlowName",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "pattern": "[a-zA-Z0-9][\\w!@#.-]+"
+          }
+        },
+        {
+          "name": "KmsArn",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 2048,
+            "minLength": 20,
+            "pattern": "arn:aws:kms:.*:[0-9]+:.*"
+          }
+        },
+        {
+          "name": "SourceFlowConfig",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "SourceFlowConfig"
+          }
+        },
+        {
+          "name": "Tasks",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "Task"
+            }
+          }
+        },
+        {
+          "name": "TriggerConfig",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "TriggerConfig"
+          }
+        }
+      ]
+    },
+    "IncrementalPullConfig": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "DatetimeTypeFieldName",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 256
+          }
+        }
+      ]
+    },
+    "MarketoConnectorOperator": {
+      "type": "string",
+      "allowedValues": [
+        "PROJECTION",
+        "LESS_THAN",
+        "GREATER_THAN",
+        "BETWEEN",
+        "ADDITION",
+        "MULTIPLICATION",
+        "DIVISION",
+        "SUBTRACTION",
+        "MASK_ALL",
+        "MASK_FIRST_N",
+        "MASK_LAST_N",
+        "VALIDATE_NON_NULL",
+        "VALIDATE_NON_ZERO",
+        "VALIDATE_NON_NEGATIVE",
+        "VALIDATE_NUMERIC",
+        "NO_OP"
+      ]
     },
     "MarketoSourceProperties": {
       "type": "object",
@@ -40,6 +163,105 @@
             "typeName": "Object"
           }
         }
+      ]
+    },
+    "Object": {
+      "type": "string",
+      "maxLength": 512,
+      "pattern": "\\S+"
+    },
+    "ObjectTypeMapping": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "Key",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z_][a-zA-Z_0-9-]*$"
+          }
+        }
+      ]
+    },
+    "Operator": {
+      "type": "string",
+      "allowedValues": [
+        "PROJECTION",
+        "LESS_THAN",
+        "GREATER_THAN",
+        "CONTAINS",
+        "BETWEEN",
+        "LESS_THAN_OR_EQUAL_TO",
+        "GREATER_THAN_OR_EQUAL_TO",
+        "EQUAL_TO",
+        "NOT_EQUAL_TO",
+        "ADDITION",
+        "MULTIPLICATION",
+        "DIVISION",
+        "SUBTRACTION",
+        "MASK_ALL",
+        "MASK_FIRST_N",
+        "MASK_LAST_N",
+        "VALIDATE_NON_NULL",
+        "VALIDATE_NON_ZERO",
+        "VALIDATE_NON_NEGATIVE",
+        "VALIDATE_NUMERIC",
+        "NO_OP"
+      ]
+    },
+    "OperatorPropertiesKeys": {
+      "type": "string",
+      "allowedValues": [
+        "VALUE",
+        "VALUES",
+        "DATA_TYPE",
+        "UPPER_BOUND",
+        "LOWER_BOUND",
+        "SOURCE_DATA_TYPE",
+        "DESTINATION_DATA_TYPE",
+        "VALIDATION_ACTION",
+        "MASK_VALUE",
+        "MASK_LENGTH",
+        "TRUNCATE_LENGTH",
+        "MATH_OPERATION_FIELDS_ORDER",
+        "CONCAT_FORMAT",
+        "SUBFIELD_CATEGORY_MAP"
+      ]
+    },
+    "S3ConnectorOperator": {
+      "type": "string",
+      "allowedValues": [
+        "PROJECTION",
+        "LESS_THAN",
+        "GREATER_THAN",
+        "BETWEEN",
+        "LESS_THAN_OR_EQUAL_TO",
+        "GREATER_THAN_OR_EQUAL_TO",
+        "EQUAL_TO",
+        "NOT_EQUAL_TO",
+        "ADDITION",
+        "MULTIPLICATION",
+        "DIVISION",
+        "SUBTRACTION",
+        "MASK_ALL",
+        "MASK_FIRST_N",
+        "MASK_LAST_N",
+        "VALIDATE_NON_NULL",
+        "VALIDATE_NON_ZERO",
+        "VALIDATE_NON_NEGATIVE",
+        "VALIDATE_NUMERIC",
+        "NO_OP"
       ]
     },
     "S3SourceProperties": {
@@ -66,17 +288,35 @@
         }
       ]
     },
+    "SalesforceConnectorOperator": {
+      "type": "string",
+      "allowedValues": [
+        "PROJECTION",
+        "LESS_THAN",
+        "GREATER_THAN",
+        "CONTAINS",
+        "BETWEEN",
+        "LESS_THAN_OR_EQUAL_TO",
+        "GREATER_THAN_OR_EQUAL_TO",
+        "EQUAL_TO",
+        "NOT_EQUAL_TO",
+        "ADDITION",
+        "MULTIPLICATION",
+        "DIVISION",
+        "SUBTRACTION",
+        "MASK_ALL",
+        "MASK_FIRST_N",
+        "MASK_LAST_N",
+        "VALIDATE_NON_NULL",
+        "VALIDATE_NON_ZERO",
+        "VALIDATE_NON_NEGATIVE",
+        "VALIDATE_NUMERIC",
+        "NO_OP"
+      ]
+    },
     "SalesforceSourceProperties": {
       "type": "object",
       "properties": [
-        {
-          "name": "Object",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "Object"
-          }
-        },
         {
           "name": "EnableDynamicFieldUpdate",
           "optional": true,
@@ -90,12 +330,7 @@
           "type": {
             "type": "boolean"
           }
-        }
-      ]
-    },
-    "ServiceNowSourceProperties": {
-      "type": "object",
-      "properties": [
+        },
         {
           "name": "Object",
           "optional": false,
@@ -106,7 +341,98 @@
         }
       ]
     },
-    "ZendeskSourceProperties": {
+    "ScheduledTriggerProperties": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "DataPullMode",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "allowedValues": ["Incremental", "Complete"]
+          }
+        },
+        {
+          "name": "FirstExecutionFrom",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Date"
+          }
+        },
+        {
+          "name": "ScheduleEndTime",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Date"
+          }
+        },
+        {
+          "name": "ScheduleExpression",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "pattern": ".*"
+          }
+        },
+        {
+          "name": "ScheduleOffset",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "isInteger": true,
+            "maximum": 36000,
+            "minimum": 0
+          }
+        },
+        {
+          "name": "ScheduleStartTime",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Date"
+          }
+        },
+        {
+          "name": "Timezone",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "maxLength": 256,
+            "pattern": ".*"
+          }
+        }
+      ]
+    },
+    "ServiceNowConnectorOperator": {
+      "type": "string",
+      "allowedValues": [
+        "PROJECTION",
+        "LESS_THAN",
+        "GREATER_THAN",
+        "CONTAINS",
+        "BETWEEN",
+        "LESS_THAN_OR_EQUAL_TO",
+        "GREATER_THAN_OR_EQUAL_TO",
+        "EQUAL_TO",
+        "NOT_EQUAL_TO",
+        "ADDITION",
+        "MULTIPLICATION",
+        "DIVISION",
+        "SUBTRACTION",
+        "MASK_ALL",
+        "MASK_FIRST_N",
+        "MASK_LAST_N",
+        "VALIDATE_NON_NULL",
+        "VALIDATE_NON_ZERO",
+        "VALIDATE_NON_NEGATIVE",
+        "VALIDATE_NUMERIC",
+        "NO_OP"
+      ]
+    },
+    "ServiceNowSourceProperties": {
       "type": "object",
       "properties": [
         {
@@ -164,34 +490,9 @@
         }
       ]
     },
-    "ConnectorType": {
-      "type": "string",
-      "allowedValues": ["Salesforce", "Marketo", "ServiceNow", "Zendesk", "S3"]
-    },
-    "IncrementalPullConfig": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "DatetimeTypeFieldName",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "maxLength": 256
-          }
-        }
-      ]
-    },
     "SourceFlowConfig": {
       "type": "object",
       "properties": [
-        {
-          "name": "ConnectorType",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "ConnectorType"
-          }
-        },
         {
           "name": "ConnectorProfileName",
           "optional": true,
@@ -199,6 +500,14 @@
             "type": "string",
             "maxLength": 256,
             "pattern": "[\\w/!@#+=.-]+"
+          }
+        },
+        {
+          "name": "ConnectorType",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "ConnectorType"
           }
         },
         {
@@ -219,228 +528,80 @@
         }
       ]
     },
-    "ConnectorOperator": {
+    "Tag": {
       "type": "object",
       "properties": [
         {
-          "name": "Marketo",
-          "optional": true,
+          "name": "Key",
+          "optional": false,
           "type": {
-            "type": "ref",
-            "typeName": "MarketoConnectorOperator"
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "pattern": "^(?!aws:)[a-zA-Z+-=._:/]+$"
           }
         },
         {
-          "name": "S3",
-          "optional": true,
+          "name": "Value",
+          "optional": false,
           "type": {
-            "type": "ref",
-            "typeName": "S3ConnectorOperator"
-          }
-        },
-        {
-          "name": "Salesforce",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "SalesforceConnectorOperator"
-          }
-        },
-        {
-          "name": "ServiceNow",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ServiceNowConnectorOperator"
-          }
-        },
-        {
-          "name": "Zendesk",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ZendeskConnectorOperator"
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 0
           }
         }
       ]
     },
-    "Operator": {
-      "type": "string",
-      "allowedValues": [
-        "PROJECTION",
-        "LESS_THAN",
-        "GREATER_THAN",
-        "CONTAINS",
-        "BETWEEN",
-        "LESS_THAN_OR_EQUAL_TO",
-        "GREATER_THAN_OR_EQUAL_TO",
-        "EQUAL_TO",
-        "NOT_EQUAL_TO",
-        "ADDITION",
-        "MULTIPLICATION",
-        "DIVISION",
-        "SUBTRACTION",
-        "MASK_ALL",
-        "MASK_FIRST_N",
-        "MASK_LAST_N",
-        "VALIDATE_NON_NULL",
-        "VALIDATE_NON_ZERO",
-        "VALIDATE_NON_NEGATIVE",
-        "VALIDATE_NUMERIC",
-        "NO_OP"
-      ]
-    },
-    "MarketoConnectorOperator": {
-      "type": "string",
-      "allowedValues": [
-        "PROJECTION",
-        "LESS_THAN",
-        "GREATER_THAN",
-        "BETWEEN",
-        "ADDITION",
-        "MULTIPLICATION",
-        "DIVISION",
-        "SUBTRACTION",
-        "MASK_ALL",
-        "MASK_FIRST_N",
-        "MASK_LAST_N",
-        "VALIDATE_NON_NULL",
-        "VALIDATE_NON_ZERO",
-        "VALIDATE_NON_NEGATIVE",
-        "VALIDATE_NUMERIC",
-        "NO_OP"
-      ]
-    },
-    "S3ConnectorOperator": {
-      "type": "string",
-      "allowedValues": [
-        "PROJECTION",
-        "LESS_THAN",
-        "GREATER_THAN",
-        "BETWEEN",
-        "LESS_THAN_OR_EQUAL_TO",
-        "GREATER_THAN_OR_EQUAL_TO",
-        "EQUAL_TO",
-        "NOT_EQUAL_TO",
-        "ADDITION",
-        "MULTIPLICATION",
-        "DIVISION",
-        "SUBTRACTION",
-        "MASK_ALL",
-        "MASK_FIRST_N",
-        "MASK_LAST_N",
-        "VALIDATE_NON_NULL",
-        "VALIDATE_NON_ZERO",
-        "VALIDATE_NON_NEGATIVE",
-        "VALIDATE_NUMERIC",
-        "NO_OP"
-      ]
-    },
-    "SalesforceConnectorOperator": {
-      "type": "string",
-      "allowedValues": [
-        "PROJECTION",
-        "LESS_THAN",
-        "GREATER_THAN",
-        "CONTAINS",
-        "BETWEEN",
-        "LESS_THAN_OR_EQUAL_TO",
-        "GREATER_THAN_OR_EQUAL_TO",
-        "EQUAL_TO",
-        "NOT_EQUAL_TO",
-        "ADDITION",
-        "MULTIPLICATION",
-        "DIVISION",
-        "SUBTRACTION",
-        "MASK_ALL",
-        "MASK_FIRST_N",
-        "MASK_LAST_N",
-        "VALIDATE_NON_NULL",
-        "VALIDATE_NON_ZERO",
-        "VALIDATE_NON_NEGATIVE",
-        "VALIDATE_NUMERIC",
-        "NO_OP"
-      ]
-    },
-    "ServiceNowConnectorOperator": {
-      "type": "string",
-      "allowedValues": [
-        "PROJECTION",
-        "LESS_THAN",
-        "GREATER_THAN",
-        "CONTAINS",
-        "BETWEEN",
-        "LESS_THAN_OR_EQUAL_TO",
-        "GREATER_THAN_OR_EQUAL_TO",
-        "EQUAL_TO",
-        "NOT_EQUAL_TO",
-        "ADDITION",
-        "MULTIPLICATION",
-        "DIVISION",
-        "SUBTRACTION",
-        "MASK_ALL",
-        "MASK_FIRST_N",
-        "MASK_LAST_N",
-        "VALIDATE_NON_NULL",
-        "VALIDATE_NON_ZERO",
-        "VALIDATE_NON_NEGATIVE",
-        "VALIDATE_NUMERIC",
-        "NO_OP"
-      ]
-    },
-    "ZendeskConnectorOperator": {
-      "type": "string",
-      "allowedValues": [
-        "PROJECTION",
-        "GREATER_THAN",
-        "ADDITION",
-        "MULTIPLICATION",
-        "DIVISION",
-        "SUBTRACTION",
-        "MASK_ALL",
-        "MASK_FIRST_N",
-        "MASK_LAST_N",
-        "VALIDATE_NON_NULL",
-        "VALIDATE_NON_ZERO",
-        "VALIDATE_NON_NEGATIVE",
-        "VALIDATE_NUMERIC",
-        "NO_OP"
-      ]
-    },
-    "OperatorPropertiesKeys": {
-      "type": "string",
-      "allowedValues": [
-        "VALUE",
-        "VALUES",
-        "DATA_TYPE",
-        "UPPER_BOUND",
-        "LOWER_BOUND",
-        "SOURCE_DATA_TYPE",
-        "DESTINATION_DATA_TYPE",
-        "VALIDATION_ACTION",
-        "MASK_VALUE",
-        "MASK_LENGTH",
-        "TRUNCATE_LENGTH",
-        "MATH_OPERATION_FIELDS_ORDER",
-        "CONCAT_FORMAT",
-        "SUBFIELD_CATEGORY_MAP"
-      ]
-    },
-    "DestinationField": {
-      "type": "string",
-      "maxLength": 256,
-      "pattern": ".*"
-    },
-    "TaskType": {
-      "type": "string",
-      "allowedValues": [
-        "Arithmetic",
-        "Filter",
-        "Map",
-        "Mask",
-        "Merge",
-        "Truncate",
-        "Validate"
+    "Task": {
+      "type": "object",
+      "properties": [
+        {
+          "name": "ConnectorOperator",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ConnectorOperator"
+          }
+        },
+        {
+          "name": "DestinationField",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DestinationField"
+          }
+        },
+        {
+          "name": "SourceFields",
+          "optional": false,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "string",
+              "maxLength": 2048,
+              "pattern": ".*"
+            }
+          }
+        },
+        {
+          "name": "TaskProperties",
+          "optional": true,
+          "type": {
+            "type": "array",
+            "itemType": {
+              "type": "ref",
+              "typeName": "TaskPropertiesMap"
+            }
+          }
+        },
+        {
+          "name": "TaskType",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "TaskType"
+          }
+        }
       ]
     },
     "TaskPropertiesMap": {
@@ -465,127 +626,35 @@
         }
       ]
     },
-    "Task": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "ConnectorOperator",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "ConnectorOperator"
-          }
-        },
-        {
-          "name": "SourceFields",
-          "optional": false,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "string",
-              "maxLength": 2048,
-              "pattern": ".*"
-            }
-          }
-        },
-        {
-          "name": "DestinationField",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "DestinationField"
-          }
-        },
-        {
-          "name": "TaskType",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "TaskType"
-          }
-        },
-        {
-          "name": "TaskProperties",
-          "optional": true,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "TaskPropertiesMap"
-            }
-          }
-        }
+    "TaskType": {
+      "type": "string",
+      "allowedValues": [
+        "Arithmetic",
+        "Filter",
+        "Map",
+        "Mask",
+        "Merge",
+        "Truncate",
+        "Validate"
       ]
     },
-    "TriggerType": {
-      "type": "string",
-      "allowedValues": ["Scheduled", "Event", "OnDemand"]
-    },
-    "Date": {
-      "type": "number",
-      "isInteger": false
-    },
-    "ScheduledTriggerProperties": {
+    "TriggerConfig": {
       "type": "object",
       "properties": [
         {
-          "name": "ScheduleExpression",
+          "name": "TriggerProperties",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "TriggerProperties"
+          }
+        },
+        {
+          "name": "TriggerType",
           "optional": false,
           "type": {
-            "type": "string",
-            "maxLength": 256,
-            "pattern": ".*"
-          }
-        },
-        {
-          "name": "DataPullMode",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "allowedValues": ["Incremental", "Complete"]
-          }
-        },
-        {
-          "name": "ScheduleStartTime",
-          "optional": true,
-          "type": {
             "type": "ref",
-            "typeName": "Date"
-          }
-        },
-        {
-          "name": "ScheduleEndTime",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "Date"
-          }
-        },
-        {
-          "name": "Timezone",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "maxLength": 256,
-            "pattern": ".*"
-          }
-        },
-        {
-          "name": "ScheduleOffset",
-          "optional": true,
-          "type": {
-            "type": "number",
-            "isInteger": true,
-            "maximum": 36000,
-            "minimum": 0
-          }
-        },
-        {
-          "name": "FirstExecutionFrom",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "Date"
+            "typeName": "TriggerType"
           }
         }
       ]
@@ -603,107 +672,38 @@
         }
       ]
     },
-    "TriggerConfig": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "TriggerType",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "TriggerType"
-          }
-        },
-        {
-          "name": "TriggerProperties",
-          "optional": true,
-          "type": {
-            "type": "ref",
-            "typeName": "TriggerProperties"
-          }
-        }
+    "TriggerType": {
+      "type": "string",
+      "allowedValues": ["Scheduled", "Event", "OnDemand"]
+    },
+    "ZendeskConnectorOperator": {
+      "type": "string",
+      "allowedValues": [
+        "PROJECTION",
+        "GREATER_THAN",
+        "ADDITION",
+        "MULTIPLICATION",
+        "DIVISION",
+        "SUBTRACTION",
+        "MASK_ALL",
+        "MASK_FIRST_N",
+        "MASK_LAST_N",
+        "VALIDATE_NON_NULL",
+        "VALIDATE_NON_ZERO",
+        "VALIDATE_NON_NEGATIVE",
+        "VALIDATE_NUMERIC",
+        "NO_OP"
       ]
     },
-    "FlowDefinition": {
+    "ZendeskSourceProperties": {
       "type": "object",
       "properties": [
         {
-          "name": "FlowName",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 256,
-            "pattern": "[a-zA-Z0-9][\\w!@#.-]+"
-          }
-        },
-        {
-          "name": "Description",
-          "optional": true,
-          "type": {
-            "type": "string",
-            "maxLength": 2048,
-            "pattern": "[\\w!@#\\-.?,\\s]*"
-          }
-        },
-        {
-          "name": "KmsArn",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 2048,
-            "minLength": 20,
-            "pattern": "arn:aws:kms:.*:[0-9]+:.*"
-          }
-        },
-        {
-          "name": "Tasks",
-          "optional": false,
-          "type": {
-            "type": "array",
-            "itemType": {
-              "type": "ref",
-              "typeName": "Task"
-            }
-          }
-        },
-        {
-          "name": "TriggerConfig",
+          "name": "Object",
           "optional": false,
           "type": {
             "type": "ref",
-            "typeName": "TriggerConfig"
-          }
-        },
-        {
-          "name": "SourceFlowConfig",
-          "optional": false,
-          "type": {
-            "type": "ref",
-            "typeName": "SourceFlowConfig"
-          }
-        }
-      ]
-    },
-    "ObjectTypeMapping": {
-      "type": "object",
-      "properties": [
-        {
-          "name": "Key",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 255,
-            "minLength": 1
-          }
-        },
-        {
-          "name": "Value",
-          "optional": false,
-          "type": {
-            "type": "string",
-            "maxLength": 255,
-            "minLength": 1,
-            "pattern": "^[a-zA-Z_][a-zA-Z_0-9-]*$"
+            "typeName": "Object"
           }
         }
       ]
@@ -723,17 +723,6 @@
           "maxLength": 64,
           "minLength": 1,
           "pattern": "^[a-zA-Z0-9_-]+$"
-        }
-      },
-      {
-        "name": "Uri",
-        "description": "The URI of the S3 bucket or any other type of data source.",
-        "optional": true,
-        "type": {
-          "type": "string",
-          "description": "The URI of the S3 bucket or any other type of data source.",
-          "maxLength": 255,
-          "minLength": 1
         }
       },
       {
@@ -757,6 +746,19 @@
         }
       },
       {
+        "name": "ObjectTypeNames",
+        "description": "The mapping between 3rd party event types and ObjectType names",
+        "optional": true,
+        "type": {
+          "type": "array",
+          "description": "The mapping between 3rd party event types and ObjectType names",
+          "itemType": {
+            "type": "ref",
+            "typeName": "ObjectTypeMapping"
+          }
+        }
+      },
+      {
         "name": "Tags",
         "description": "The tags (keys and values) associated with the integration",
         "optional": true,
@@ -772,16 +774,14 @@
         }
       },
       {
-        "name": "ObjectTypeNames",
-        "description": "The mapping between 3rd party event types and ObjectType names",
+        "name": "Uri",
+        "description": "The URI of the S3 bucket or any other type of data source.",
         "optional": true,
         "type": {
-          "type": "array",
-          "description": "The mapping between 3rd party event types and ObjectType names",
-          "itemType": {
-            "type": "ref",
-            "typeName": "ObjectTypeMapping"
-          }
+          "type": "string",
+          "description": "The URI of the S3 bucket or any other type of data source.",
+          "maxLength": 255,
+          "minLength": 1
         }
       }
     ]
@@ -810,5 +810,5 @@
       }
     ]
   },
-  "$hash": "e9f8ff2f5852ad031a3f1b52b8c4c9b544798cc3"
+  "$hash": "b50ca2593fa4c97547b7573a54e9954d6b552c15"
 }
