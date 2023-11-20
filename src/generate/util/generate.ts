@@ -361,6 +361,7 @@ export async function generate(): Promise<Problem[]> {
         ctx.override<JSONSchema7>(),
         propertyNames,
       ),
+      typeName: schema.typeName,
     };
 
     if (attributeNames.length) {
