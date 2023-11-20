@@ -268,12 +268,18 @@ function convertType(
     };
   }
   if (type === "number" || type === "integer") {
+    if (schema.enum !== undefined && schema.const !== undefined) {
+      ctx.error(`schema contains "enum" and "const"`);
+    }
     return {
       type: "number",
       description: schema.description,
       documentationUrl: schema.documentationUrl,
       isInteger: type === "integer",
-      allowedValues: schema.enum as number[],
+      allowedValues:
+        schema.const !== undefined
+          ? [schema.const as number]
+          : (schema.enum as number[]),
       maximum: schema.maximum,
       minimum: schema.minimum,
     };
@@ -286,11 +292,17 @@ function convertType(
     }
   }
   if (type === "string") {
+    if (schema.enum !== undefined && schema.const !== undefined) {
+      ctx.error(`schema contains "enum" and "const"`);
+    }
     return {
       type: "string",
       description: schema.description,
       documentationUrl: schema.documentationUrl,
-      allowedValues: schema.enum as string[],
+      allowedValues:
+        schema.const !== undefined
+          ? [schema.const as string]
+          : (schema.enum as string[]),
       maxLength: schema.maxLength,
       minLength: schema.minLength,
       pattern: schema.pattern,
