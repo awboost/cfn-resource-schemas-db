@@ -107,3 +107,5 @@ export type ResourceNamespace = {
   definitions: Record<string, TypeDefinition>;
   resource: ObjectType;
 };
+
+export type IntegrityProps = { $hash: string };

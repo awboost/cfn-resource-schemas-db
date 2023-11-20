@@ -1,7 +1,6 @@
 import { createHash } from "crypto";
 import { canonicalize } from "json-canonicalize";
-
-export type IntegrityProps = { $hash: string };
+import { IntegrityProps } from "../../types.js";
 
 export function addIntegrity<T>(value: T): T & IntegrityProps {
   const hash = createHash("sha1");

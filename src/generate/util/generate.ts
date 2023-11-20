@@ -4,9 +4,8 @@ import JsonPointerRaw from "json-pointer";
 import { JSONSchema7, JSONSchema7Definition } from "json-schema";
 import { join, resolve } from "path";
 import { format } from "prettier";
-import { getResourceTypeSchemas } from "../../index.js";
-import { addIntegrity } from "./integrity.js";
-import { Problem, ProblemContext } from "./problems.js";
+import { GeneratedOutputDir } from "../../consts.js";
+import { getResourceTypeSchemas } from "../../data.js";
 import {
   ArrayType,
   ObjectType,
@@ -14,9 +13,9 @@ import {
   ResourceNamespace,
   TypeDefinition,
   UnionType,
-} from "./types.js";
-
-export const GeneratedOutputDir = "generated";
+} from "../../types.js";
+import { addIntegrity } from "./integrity.js";
+import { Problem, ProblemContext } from "./problems.js";
 
 type DocumentationProps = {
   description?: string;

@@ -3,9 +3,9 @@ import { mkdir, readFile, readdir, unlink, writeFile } from "fs/promises";
 import { canonicalize } from "json-canonicalize";
 import { join } from "path";
 import { format } from "prettier";
-import { IntegrityProps, addIntegrity } from "./integrity.js";
-
-export const SchemaOutputDir = "schemas";
+import { SchemaOutputDir } from "../../consts.js";
+import { IntegrityProps } from "../../types.js";
+import { addIntegrity } from "./integrity.js";
 
 export type FileChange = {
   type: "added" | "removed" | "updated";

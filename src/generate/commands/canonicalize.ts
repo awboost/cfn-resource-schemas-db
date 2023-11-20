@@ -2,7 +2,7 @@ import { readFile, readdir, writeFile } from "fs/promises";
 import { canonicalize } from "json-canonicalize";
 import { join } from "path";
 import { format } from "prettier";
-import { SchemaOutputDir } from "../util/download.js";
+import { SchemaOutputDir } from "../../consts.js";
 
 const files = await readdir(SchemaOutputDir);
 
