@@ -1,111 +1,26 @@
 {
+  "tagging": {
+    "taggable": true,
+    "tagOnCreate": true,
+    "tagUpdatable": true,
+    "tagProperty": "/properties/Tags",
+    "cloudFormationSystemTags": true
+  },
   "typeName": "AWS::AccessAnalyzer::Analyzer",
-  "description": "The AWS::AccessAnalyzer::Analyzer type specifies an analyzer of the user's account",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-accessanalyzer.git",
-  "resourceLink": {
-    "templateUri": "/access-analyzer/home?region=${awsRegion}#/analyzer/${AnalyzerName}",
-    "mappings": { "AnalyzerName": "/AnalyzerName" }
-  },
-  "definitions": {
-    "ArchiveRule": {
-      "description": "An Access Analyzer archive rule. Archive rules automatically archive new findings that meet the criteria you define when you create the rule.",
-      "type": "object",
-      "properties": {
-        "Filter": {
-          "type": "array",
-          "insertionOrder": false,
-          "minItems": 1,
-          "items": { "$ref": "#/definitions/Filter" }
-        },
-        "RuleName": { "type": "string", "description": "The archive rule name" }
-      },
-      "required": ["Filter", "RuleName"],
-      "additionalProperties": false
-    },
-    "Filter": {
-      "type": "object",
-      "properties": {
-        "Contains": {
-          "type": "array",
-          "insertionOrder": false,
-          "items": { "type": "string" }
-        },
-        "Eq": {
-          "type": "array",
-          "insertionOrder": false,
-          "items": { "type": "string" }
-        },
-        "Exists": { "type": "boolean" },
-        "Property": { "type": "string" },
-        "Neq": {
-          "type": "array",
-          "insertionOrder": false,
-          "items": { "type": "string" }
-        }
-      },
-      "required": ["Property"],
-      "additionalProperties": false
-    },
-    "Tag": {
-      "description": "A key-value pair to associate with a resource.",
-      "type": "object",
-      "properties": {
-        "Key": {
-          "type": "string",
-          "description": "The key name of the tag. You can specify a value that is 1 to 127 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
-          "minLength": 1,
-          "maxLength": 127
-        },
-        "Value": {
-          "type": "string",
-          "description": "The value for the tag. You can specify a value that is 1 to 255 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
-          "minLength": 1,
-          "maxLength": 255
-        }
-      },
-      "required": ["Key", "Value"],
-      "additionalProperties": false
-    }
-  },
-  "properties": {
-    "AnalyzerName": {
-      "description": "Analyzer name",
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 1024
-    },
-    "ArchiveRules": {
-      "type": "array",
-      "insertionOrder": false,
-      "items": { "$ref": "#/definitions/ArchiveRule" }
-    },
-    "Arn": {
-      "description": "Amazon Resource Name (ARN) of the analyzer",
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 1600
-    },
-    "Tags": {
-      "type": "array",
-      "maxItems": 50,
-      "insertionOrder": false,
-      "uniqueItems": true,
-      "description": "An array of key-value pairs to apply to this resource.",
-      "items": { "$ref": "#/definitions/Tag" }
-    },
-    "Type": {
-      "description": "The type of the analyzer, must be ACCOUNT or ORGANIZATION",
-      "type": "string",
-      "minLength": 0,
-      "maxLength": 1024
-    }
-  },
-  "required": ["Type"],
   "readOnlyProperties": ["/properties/Arn"],
+  "description": "The AWS::AccessAnalyzer::Analyzer type specifies an analyzer of the user's account",
   "createOnlyProperties": ["/properties/AnalyzerName", "/properties/Type"],
   "primaryIdentifier": ["/properties/Arn"],
-  "additionalProperties": false,
+  "required": ["Type"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-accessanalyzer.git",
   "handlers": {
+    "read": {
+      "permissions": [
+        "access-analyzer:ListAnalyzers",
+        "access-analyzer:GetAnalyzer",
+        "access-analyzer:ListArchiveRules"
+      ]
+    },
     "create": {
       "permissions": [
         "access-analyzer:CreateAnalyzer",
@@ -113,13 +28,6 @@
         "iam:CreateServiceLinkedRole",
         "organizations:ListAWSServiceAccessForOrganization",
         "organizations:ListDelegatedAdministrators"
-      ]
-    },
-    "read": {
-      "permissions": [
-        "access-analyzer:ListAnalyzers",
-        "access-analyzer:GetAnalyzer",
-        "access-analyzer:ListArchiveRules"
       ]
     },
     "update": {
@@ -132,15 +40,107 @@
         "access-analyzer:UpdateArchiveRule"
       ]
     },
-    "delete": { "permissions": ["access-analyzer:DeleteAnalyzer"] },
-    "list": { "permissions": ["access-analyzer:ListAnalyzers"] }
+    "list": { "permissions": ["access-analyzer:ListAnalyzers"] },
+    "delete": { "permissions": ["access-analyzer:DeleteAnalyzer"] }
   },
-  "tagging": {
-    "taggable": true,
-    "tagOnCreate": true,
-    "tagUpdatable": true,
-    "cloudFormationSystemTags": true,
-    "tagProperty": "/properties/Tags"
+  "resourceLink": {
+    "mappings": { "AnalyzerName": "/AnalyzerName" },
+    "templateUri": "/access-analyzer/home?region=${awsRegion}#/analyzer/${AnalyzerName}"
   },
-  "$hash": "193f12e1cb6ec7dec5f15ceeaec2ff147078719a"
+  "additionalProperties": false,
+  "definitions": {
+    "Filter": {
+      "additionalProperties": false,
+      "type": "object",
+      "properties": {
+        "Exists": { "type": "boolean" },
+        "Contains": {
+          "insertionOrder": false,
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "Neq": {
+          "insertionOrder": false,
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "Eq": {
+          "insertionOrder": false,
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "Property": { "type": "string" }
+      },
+      "required": ["Property"]
+    },
+    "ArchiveRule": {
+      "description": "An Access Analyzer archive rule. Archive rules automatically archive new findings that meet the criteria you define when you create the rule.",
+      "additionalProperties": false,
+      "type": "object",
+      "properties": {
+        "Filter": {
+          "minItems": 1,
+          "insertionOrder": false,
+          "type": "array",
+          "items": { "$ref": "#/definitions/Filter" }
+        },
+        "RuleName": { "description": "The archive rule name", "type": "string" }
+      },
+      "required": ["Filter", "RuleName"]
+    },
+    "Tag": {
+      "description": "A key-value pair to associate with a resource.",
+      "additionalProperties": false,
+      "type": "object",
+      "properties": {
+        "Value": {
+          "minLength": 1,
+          "description": "The value for the tag. You can specify a value that is 1 to 255 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
+          "type": "string",
+          "maxLength": 255
+        },
+        "Key": {
+          "minLength": 1,
+          "description": "The key name of the tag. You can specify a value that is 1 to 127 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
+          "type": "string",
+          "maxLength": 127
+        }
+      },
+      "required": ["Key", "Value"]
+    }
+  },
+  "properties": {
+    "ArchiveRules": {
+      "insertionOrder": false,
+      "type": "array",
+      "items": { "$ref": "#/definitions/ArchiveRule" }
+    },
+    "Type": {
+      "minLength": 0,
+      "description": "The type of the analyzer, must be one of ACCOUNT, ORGANIZATION",
+      "type": "string",
+      "maxLength": 1024
+    },
+    "AnalyzerName": {
+      "minLength": 1,
+      "description": "Analyzer name",
+      "type": "string",
+      "maxLength": 1024
+    },
+    "Arn": {
+      "minLength": 1,
+      "description": "Amazon Resource Name (ARN) of the analyzer",
+      "type": "string",
+      "maxLength": 1600
+    },
+    "Tags": {
+      "maxItems": 50,
+      "uniqueItems": true,
+      "description": "An array of key-value pairs to apply to this resource.",
+      "insertionOrder": false,
+      "type": "array",
+      "items": { "$ref": "#/definitions/Tag" }
+    }
+  },
+  "$hash": "6b148d0af06b6cad8888429523a6d7dae06ec1c8"
 }
