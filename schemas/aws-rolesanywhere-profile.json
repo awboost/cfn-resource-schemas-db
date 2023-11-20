@@ -1,43 +1,18 @@
 {
-  "typeName": "AWS::RolesAnywhere::Profile",
-  "description": "Definition of AWS::RolesAnywhere::Profile Resource Type",
+  "$hash": "de0a02fcf0ed1ae59969b2ece7a74950f5080a7f",
+  "additionalProperties": false,
   "definitions": {
     "Tag": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
-        "Key": { "type": "string", "maxLength": 128, "minLength": 1 },
-        "Value": { "type": "string", "maxLength": 256, "minLength": 0 }
+        "Key": { "maxLength": 128, "minLength": 1, "type": "string" },
+        "Value": { "maxLength": 256, "minLength": 0, "type": "string" }
       },
       "required": ["Key", "Value"],
-      "additionalProperties": false
+      "type": "object"
     }
   },
-  "properties": {
-    "DurationSeconds": { "type": "number", "maximum": 43200, "minimum": 900 },
-    "Enabled": { "type": "boolean" },
-    "ManagedPolicyArns": { "type": "array", "items": { "type": "string" } },
-    "Name": { "type": "string" },
-    "ProfileArn": { "type": "string" },
-    "ProfileId": {
-      "type": "string",
-      "pattern": "[a-f0-9]{8}-([a-z0-9]{4}-){3}[a-z0-9]{12}"
-    },
-    "RequireInstanceProperties": { "type": "boolean" },
-    "RoleArns": {
-      "type": "array",
-      "items": { "type": "string", "maxLength": 1011, "minLength": 1 }
-    },
-    "SessionPolicy": { "type": "string" },
-    "Tags": {
-      "type": "array",
-      "items": { "$ref": "#/definitions/Tag" },
-      "maxItems": 200,
-      "minItems": 0
-    }
-  },
-  "readOnlyProperties": ["/properties/ProfileId", "/properties/ProfileArn"],
-  "primaryIdentifier": ["/properties/ProfileId"],
-  "required": ["Name", "RoleArns"],
+  "description": "Definition of AWS::RolesAnywhere::Profile Resource Type",
   "handlers": {
     "create": {
       "permissions": [
@@ -46,6 +21,13 @@
         "iam:PassRole",
         "rolesanywhere:CreateProfile",
         "rolesanywhere:TagResource",
+        "rolesanywhere:ListTagsForResource"
+      ]
+    },
+    "delete": { "permissions": ["rolesanywhere:DeleteProfile"] },
+    "list": {
+      "permissions": [
+        "rolesanywhere:ListProfiles",
         "rolesanywhere:ListTagsForResource"
       ]
     },
@@ -67,15 +49,33 @@
         "rolesanywhere:UntagResource",
         "rolesanywhere:ListTagsForResource"
       ]
-    },
-    "delete": { "permissions": ["rolesanywhere:DeleteProfile"] },
-    "list": {
-      "permissions": [
-        "rolesanywhere:ListProfiles",
-        "rolesanywhere:ListTagsForResource"
-      ]
     }
   },
-  "additionalProperties": false,
-  "$hash": "de0a02fcf0ed1ae59969b2ece7a74950f5080a7f"
+  "primaryIdentifier": ["/properties/ProfileId"],
+  "properties": {
+    "DurationSeconds": { "maximum": 43200, "minimum": 900, "type": "number" },
+    "Enabled": { "type": "boolean" },
+    "ManagedPolicyArns": { "items": { "type": "string" }, "type": "array" },
+    "Name": { "type": "string" },
+    "ProfileArn": { "type": "string" },
+    "ProfileId": {
+      "pattern": "[a-f0-9]{8}-([a-z0-9]{4}-){3}[a-z0-9]{12}",
+      "type": "string"
+    },
+    "RequireInstanceProperties": { "type": "boolean" },
+    "RoleArns": {
+      "items": { "maxLength": 1011, "minLength": 1, "type": "string" },
+      "type": "array"
+    },
+    "SessionPolicy": { "type": "string" },
+    "Tags": {
+      "items": { "$ref": "#/definitions/Tag" },
+      "maxItems": 200,
+      "minItems": 0,
+      "type": "array"
+    }
+  },
+  "readOnlyProperties": ["/properties/ProfileId", "/properties/ProfileArn"],
+  "required": ["Name", "RoleArns"],
+  "typeName": "AWS::RolesAnywhere::Profile"
 }

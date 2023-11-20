@@ -1,58 +1,19 @@
 {
-  "typeName": "AWS::IoTFleetWise::Fleet",
-  "description": "Definition of AWS::IoTFleetWise::Fleet Resource Type",
+  "$hash": "6243ffe80c327afa80b69eb9438ce5951df0ff6b",
+  "additionalProperties": false,
+  "createOnlyProperties": ["/properties/Id", "/properties/SignalCatalogArn"],
   "definitions": {
     "Tag": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
-        "Key": { "type": "string", "maxLength": 128, "minLength": 1 },
-        "Value": { "type": "string", "maxLength": 256, "minLength": 0 }
+        "Key": { "maxLength": 128, "minLength": 1, "type": "string" },
+        "Value": { "maxLength": 256, "minLength": 0, "type": "string" }
       },
       "required": ["Key", "Value"],
-      "additionalProperties": false
+      "type": "object"
     }
   },
-  "properties": {
-    "Arn": { "type": "string" },
-    "CreationTime": { "type": "string", "format": "date-time" },
-    "Description": {
-      "type": "string",
-      "maxLength": 2048,
-      "minLength": 1,
-      "pattern": "^[^\\u0000-\\u001F\\u007F]+$"
-    },
-    "Id": {
-      "type": "string",
-      "maxLength": 100,
-      "minLength": 1,
-      "pattern": "^[a-zA-Z0-9:_-]+$"
-    },
-    "LastModificationTime": { "type": "string", "format": "date-time" },
-    "SignalCatalogArn": { "type": "string" },
-    "Tags": {
-      "type": "array",
-      "items": { "$ref": "#/definitions/Tag" },
-      "insertionOrder": false,
-      "uniqueItems": true,
-      "maxItems": 50,
-      "minItems": 0
-    }
-  },
-  "required": ["Id", "SignalCatalogArn"],
-  "tagging": {
-    "taggable": true,
-    "tagOnCreate": true,
-    "tagUpdatable": true,
-    "cloudFormationSystemTags": true,
-    "tagProperty": "/properties/Tags"
-  },
-  "readOnlyProperties": [
-    "/properties/Arn",
-    "/properties/CreationTime",
-    "/properties/LastModificationTime"
-  ],
-  "createOnlyProperties": ["/properties/Id", "/properties/SignalCatalogArn"],
-  "primaryIdentifier": ["/properties/Id"],
+  "description": "Definition of AWS::IoTFleetWise::Fleet Resource Type",
   "handlers": {
     "create": {
       "permissions": [
@@ -63,6 +24,10 @@
         "iotfleetwise:TagResource"
       ]
     },
+    "delete": {
+      "permissions": ["iotfleetwise:GetFleet", "iotfleetwise:DeleteFleet"]
+    },
+    "list": { "permissions": ["iotfleetwise:ListFleets"] },
     "read": {
       "permissions": [
         "iotfleetwise:GetFleet",
@@ -77,12 +42,47 @@
         "iotfleetwise:TagResource",
         "iotfleetwise:UntagResource"
       ]
-    },
-    "delete": {
-      "permissions": ["iotfleetwise:GetFleet", "iotfleetwise:DeleteFleet"]
-    },
-    "list": { "permissions": ["iotfleetwise:ListFleets"] }
+    }
   },
-  "additionalProperties": false,
-  "$hash": "6243ffe80c327afa80b69eb9438ce5951df0ff6b"
+  "primaryIdentifier": ["/properties/Id"],
+  "properties": {
+    "Arn": { "type": "string" },
+    "CreationTime": { "format": "date-time", "type": "string" },
+    "Description": {
+      "maxLength": 2048,
+      "minLength": 1,
+      "pattern": "^[^\\u0000-\\u001F\\u007F]+$",
+      "type": "string"
+    },
+    "Id": {
+      "maxLength": 100,
+      "minLength": 1,
+      "pattern": "^[a-zA-Z0-9:_-]+$",
+      "type": "string"
+    },
+    "LastModificationTime": { "format": "date-time", "type": "string" },
+    "SignalCatalogArn": { "type": "string" },
+    "Tags": {
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/Tag" },
+      "maxItems": 50,
+      "minItems": 0,
+      "type": "array",
+      "uniqueItems": true
+    }
+  },
+  "readOnlyProperties": [
+    "/properties/Arn",
+    "/properties/CreationTime",
+    "/properties/LastModificationTime"
+  ],
+  "required": ["Id", "SignalCatalogArn"],
+  "tagging": {
+    "cloudFormationSystemTags": true,
+    "tagOnCreate": true,
+    "tagProperty": "/properties/Tags",
+    "tagUpdatable": true,
+    "taggable": true
+  },
+  "typeName": "AWS::IoTFleetWise::Fleet"
 }

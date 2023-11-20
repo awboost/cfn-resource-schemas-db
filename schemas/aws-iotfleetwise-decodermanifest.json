@@ -1,28 +1,39 @@
 {
-  "typeName": "AWS::IoTFleetWise::DecoderManifest",
-  "description": "Definition of AWS::IoTFleetWise::DecoderManifest Resource Type",
+  "$hash": "6e34b36e02e4f8695232463be8f6b2f997a15877",
+  "additionalProperties": false,
+  "createOnlyProperties": ["/properties/Name", "/properties/ModelManifestArn"],
   "definitions": {
     "CanInterface": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
-        "Name": { "type": "string", "maxLength": 100, "minLength": 1 },
-        "ProtocolName": { "type": "string", "maxLength": 50, "minLength": 1 },
-        "ProtocolVersion": { "type": "string", "maxLength": 50, "minLength": 1 }
+        "Name": { "maxLength": 100, "minLength": 1, "type": "string" },
+        "ProtocolName": { "maxLength": 50, "minLength": 1, "type": "string" },
+        "ProtocolVersion": { "maxLength": 50, "minLength": 1, "type": "string" }
       },
       "required": ["Name"],
-      "additionalProperties": false
+      "type": "object"
+    },
+    "CanNetworkInterface": {
+      "additionalProperties": false,
+      "properties": {
+        "CanInterface": { "$ref": "#/definitions/CanInterface" },
+        "InterfaceId": { "maxLength": 50, "minLength": 1, "type": "string" },
+        "Type": { "enum": ["CAN_INTERFACE"], "type": "string" }
+      },
+      "required": ["InterfaceId", "Type", "CanInterface"],
+      "type": "object"
     },
     "CanSignal": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
-        "MessageId": { "type": ["integer", "string"] },
+        "Factor": { "type": ["number", "string"] },
         "IsBigEndian": { "type": ["boolean", "string"] },
         "IsSigned": { "type": ["boolean", "string"] },
-        "StartBit": { "type": ["integer", "string"] },
-        "Offset": { "type": ["number", "string"] },
-        "Factor": { "type": ["number", "string"] },
         "Length": { "type": ["integer", "string"] },
-        "Name": { "type": "string", "maxLength": 100, "minLength": 1 }
+        "MessageId": { "type": ["integer", "string"] },
+        "Name": { "maxLength": 100, "minLength": 1, "type": "string" },
+        "Offset": { "type": ["number", "string"] },
+        "StartBit": { "type": ["integer", "string"] }
       },
       "required": [
         "Factor",
@@ -33,59 +44,64 @@
         "Offset",
         "StartBit"
       ],
-      "additionalProperties": false
+      "type": "object"
+    },
+    "CanSignalDecoder": {
+      "additionalProperties": false,
+      "properties": {
+        "CanSignal": { "$ref": "#/definitions/CanSignal" },
+        "FullyQualifiedName": {
+          "maxLength": 150,
+          "minLength": 1,
+          "type": "string"
+        },
+        "InterfaceId": { "maxLength": 50, "minLength": 1, "type": "string" },
+        "Type": { "enum": ["CAN_SIGNAL"], "type": "string" }
+      },
+      "required": ["FullyQualifiedName", "InterfaceId", "Type", "CanSignal"],
+      "type": "object"
     },
     "ManifestStatus": {
-      "type": "string",
+      "default": "DRAFT",
       "enum": ["ACTIVE", "DRAFT"],
-      "default": "DRAFT"
-    },
-    "CanNetworkInterface": {
-      "type": "object",
-      "properties": {
-        "InterfaceId": { "type": "string", "maxLength": 50, "minLength": 1 },
-        "Type": { "type": "string", "enum": ["CAN_INTERFACE"] },
-        "CanInterface": { "$ref": "#/definitions/CanInterface" }
-      },
-      "required": ["InterfaceId", "Type", "CanInterface"],
-      "additionalProperties": false
-    },
-    "ObdNetworkInterface": {
-      "type": "object",
-      "properties": {
-        "InterfaceId": { "type": "string", "maxLength": 50, "minLength": 1 },
-        "Type": { "type": "string", "enum": ["OBD_INTERFACE"] },
-        "ObdInterface": { "$ref": "#/definitions/ObdInterface" }
-      },
-      "required": ["InterfaceId", "Type", "ObdInterface"],
-      "additionalProperties": false
+      "type": "string"
     },
     "ObdInterface": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
-        "Name": { "type": "string", "maxLength": 100, "minLength": 1 },
-        "RequestMessageId": { "type": ["integer", "string"] },
-        "ObdStandard": { "type": "string", "maxLength": 50, "minLength": 1 },
-        "PidRequestIntervalSeconds": { "type": ["integer", "string"] },
         "DtcRequestIntervalSeconds": { "type": ["integer", "string"] },
-        "UseExtendedIds": { "type": ["boolean", "string"] },
-        "HasTransmissionEcu": { "type": ["boolean", "string"] }
+        "HasTransmissionEcu": { "type": ["boolean", "string"] },
+        "Name": { "maxLength": 100, "minLength": 1, "type": "string" },
+        "ObdStandard": { "maxLength": 50, "minLength": 1, "type": "string" },
+        "PidRequestIntervalSeconds": { "type": ["integer", "string"] },
+        "RequestMessageId": { "type": ["integer", "string"] },
+        "UseExtendedIds": { "type": ["boolean", "string"] }
       },
       "required": ["Name", "RequestMessageId"],
-      "additionalProperties": false
+      "type": "object"
+    },
+    "ObdNetworkInterface": {
+      "additionalProperties": false,
+      "properties": {
+        "InterfaceId": { "maxLength": 50, "minLength": 1, "type": "string" },
+        "ObdInterface": { "$ref": "#/definitions/ObdInterface" },
+        "Type": { "enum": ["OBD_INTERFACE"], "type": "string" }
+      },
+      "required": ["InterfaceId", "Type", "ObdInterface"],
+      "type": "object"
     },
     "ObdSignal": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
-        "PidResponseLength": { "type": ["integer", "string"] },
-        "ServiceMode": { "type": ["integer", "string"] },
-        "Pid": { "type": ["integer", "string"] },
-        "Scaling": { "type": ["number", "string"] },
-        "Offset": { "type": ["number", "string"] },
-        "StartByte": { "type": ["integer", "string"] },
-        "ByteLength": { "type": ["integer", "string"] },
+        "BitMaskLength": { "type": ["integer", "string"] },
         "BitRightShift": { "type": ["integer", "string"] },
-        "BitMaskLength": { "type": ["integer", "string"] }
+        "ByteLength": { "type": ["integer", "string"] },
+        "Offset": { "type": ["number", "string"] },
+        "Pid": { "type": ["integer", "string"] },
+        "PidResponseLength": { "type": ["integer", "string"] },
+        "Scaling": { "type": ["number", "string"] },
+        "ServiceMode": { "type": ["integer", "string"] },
+        "StartByte": { "type": ["integer", "string"] }
       },
       "required": [
         "ByteLength",
@@ -96,107 +112,34 @@
         "ServiceMode",
         "StartByte"
       ],
-      "additionalProperties": false
-    },
-    "CanSignalDecoder": {
-      "type": "object",
-      "properties": {
-        "FullyQualifiedName": {
-          "type": "string",
-          "maxLength": 150,
-          "minLength": 1
-        },
-        "Type": { "type": "string", "enum": ["CAN_SIGNAL"] },
-        "InterfaceId": { "type": "string", "maxLength": 50, "minLength": 1 },
-        "CanSignal": { "$ref": "#/definitions/CanSignal" }
-      },
-      "required": ["FullyQualifiedName", "InterfaceId", "Type", "CanSignal"],
-      "additionalProperties": false
+      "type": "object"
     },
     "ObdSignalDecoder": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "FullyQualifiedName": {
-          "type": "string",
           "maxLength": 150,
-          "minLength": 1
+          "minLength": 1,
+          "type": "string"
         },
-        "Type": { "type": "string", "enum": ["OBD_SIGNAL"] },
-        "InterfaceId": { "type": "string", "maxLength": 50, "minLength": 1 },
-        "ObdSignal": { "$ref": "#/definitions/ObdSignal" }
+        "InterfaceId": { "maxLength": 50, "minLength": 1, "type": "string" },
+        "ObdSignal": { "$ref": "#/definitions/ObdSignal" },
+        "Type": { "enum": ["OBD_SIGNAL"], "type": "string" }
       },
       "required": ["FullyQualifiedName", "InterfaceId", "Type", "ObdSignal"],
-      "additionalProperties": false
+      "type": "object"
     },
     "Tag": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
-        "Key": { "type": "string", "maxLength": 128, "minLength": 1 },
-        "Value": { "type": "string", "maxLength": 256, "minLength": 0 }
+        "Key": { "maxLength": 128, "minLength": 1, "type": "string" },
+        "Value": { "maxLength": 256, "minLength": 0, "type": "string" }
       },
       "required": ["Key", "Value"],
-      "additionalProperties": false
+      "type": "object"
     }
   },
-  "properties": {
-    "Arn": { "type": "string" },
-    "CreationTime": { "type": "string", "format": "date-time" },
-    "Description": {
-      "type": "string",
-      "maxLength": 2048,
-      "minLength": 1,
-      "pattern": "^[^\\u0000-\\u001F\\u007F]+$"
-    },
-    "LastModificationTime": { "type": "string", "format": "date-time" },
-    "ModelManifestArn": { "type": "string" },
-    "Name": {
-      "type": "string",
-      "maxLength": 100,
-      "minLength": 1,
-      "pattern": "^[a-zA-Z\\d\\-_:]+$"
-    },
-    "NetworkInterfaces": {
-      "insertionOrder": false,
-      "type": "array",
-      "items": {
-        "oneOf": [
-          { "$ref": "#/definitions/CanNetworkInterface" },
-          { "$ref": "#/definitions/ObdNetworkInterface" }
-        ]
-      },
-      "maxItems": 500,
-      "minItems": 1
-    },
-    "SignalDecoders": {
-      "insertionOrder": false,
-      "type": "array",
-      "items": {
-        "oneOf": [
-          { "$ref": "#/definitions/CanSignalDecoder" },
-          { "$ref": "#/definitions/ObdSignalDecoder" }
-        ]
-      },
-      "maxItems": 500,
-      "minItems": 1
-    },
-    "Status": { "$ref": "#/definitions/ManifestStatus" },
-    "Tags": {
-      "type": "array",
-      "items": { "$ref": "#/definitions/Tag" },
-      "maxItems": 50,
-      "minItems": 0,
-      "insertionOrder": false,
-      "uniqueItems": true
-    }
-  },
-  "required": ["Name", "ModelManifestArn"],
-  "readOnlyProperties": [
-    "/properties/Arn",
-    "/properties/CreationTime",
-    "/properties/LastModificationTime"
-  ],
-  "createOnlyProperties": ["/properties/Name", "/properties/ModelManifestArn"],
-  "primaryIdentifier": ["/properties/Name"],
+  "description": "Definition of AWS::IoTFleetWise::DecoderManifest Resource Type",
   "handlers": {
     "create": {
       "permissions": [
@@ -209,6 +152,13 @@
         "iotfleetwise:TagResource"
       ]
     },
+    "delete": {
+      "permissions": [
+        "iotfleetwise:DeleteDecoderManifest",
+        "iotfleetwise:GetDecoderManifest"
+      ]
+    },
+    "list": { "permissions": ["iotfleetwise:ListDecoderManifests"] },
     "read": {
       "permissions": [
         "iotfleetwise:GetDecoderManifest",
@@ -227,22 +177,72 @@
         "iotfleetwise:TagResource",
         "iotfleetwise:UntagResource"
       ]
-    },
-    "delete": {
-      "permissions": [
-        "iotfleetwise:DeleteDecoderManifest",
-        "iotfleetwise:GetDecoderManifest"
-      ]
-    },
-    "list": { "permissions": ["iotfleetwise:ListDecoderManifests"] }
+    }
   },
-  "additionalProperties": false,
+  "primaryIdentifier": ["/properties/Name"],
+  "properties": {
+    "Arn": { "type": "string" },
+    "CreationTime": { "format": "date-time", "type": "string" },
+    "Description": {
+      "maxLength": 2048,
+      "minLength": 1,
+      "pattern": "^[^\\u0000-\\u001F\\u007F]+$",
+      "type": "string"
+    },
+    "LastModificationTime": { "format": "date-time", "type": "string" },
+    "ModelManifestArn": { "type": "string" },
+    "Name": {
+      "maxLength": 100,
+      "minLength": 1,
+      "pattern": "^[a-zA-Z\\d\\-_:]+$",
+      "type": "string"
+    },
+    "NetworkInterfaces": {
+      "insertionOrder": false,
+      "items": {
+        "oneOf": [
+          { "$ref": "#/definitions/CanNetworkInterface" },
+          { "$ref": "#/definitions/ObdNetworkInterface" }
+        ]
+      },
+      "maxItems": 500,
+      "minItems": 1,
+      "type": "array"
+    },
+    "SignalDecoders": {
+      "insertionOrder": false,
+      "items": {
+        "oneOf": [
+          { "$ref": "#/definitions/CanSignalDecoder" },
+          { "$ref": "#/definitions/ObdSignalDecoder" }
+        ]
+      },
+      "maxItems": 500,
+      "minItems": 1,
+      "type": "array"
+    },
+    "Status": { "$ref": "#/definitions/ManifestStatus" },
+    "Tags": {
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/Tag" },
+      "maxItems": 50,
+      "minItems": 0,
+      "type": "array",
+      "uniqueItems": true
+    }
+  },
+  "readOnlyProperties": [
+    "/properties/Arn",
+    "/properties/CreationTime",
+    "/properties/LastModificationTime"
+  ],
+  "required": ["Name", "ModelManifestArn"],
   "tagging": {
-    "taggable": true,
-    "tagOnCreate": true,
-    "tagUpdatable": true,
     "cloudFormationSystemTags": true,
-    "tagProperty": "/properties/Tags"
+    "tagOnCreate": true,
+    "tagProperty": "/properties/Tags",
+    "tagUpdatable": true,
+    "taggable": true
   },
-  "$hash": "6e34b36e02e4f8695232463be8f6b2f997a15877"
+  "typeName": "AWS::IoTFleetWise::DecoderManifest"
 }

@@ -1,52 +1,37 @@
 {
-  "typeName": "AWS::Athena::CapacityReservation",
-  "description": "Resource schema for AWS::Athena::CapacityReservation",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-athena.git",
+  "$hash": "d254d36ac25cc7448e603498b751d222923a436e",
+  "additionalIdentifiers": [["/properties/Name"]],
+  "additionalProperties": false,
+  "createOnlyProperties": ["/properties/Name"],
   "definitions": {
     "Arn": {
       "description": "The Amazon Resource Name (ARN) of the specified capacity reservation",
       "type": "string"
     },
-    "Tag": {
-      "type": "object",
-      "properties": {
-        "Key": { "type": "string", "minLength": 1, "maxLength": 128 },
-        "Value": { "type": "string", "minLength": 0, "maxLength": 256 }
-      },
-      "required": ["Key", "Value"],
-      "additionalProperties": false
-    },
-    "WorkgroupName": { "pattern": "[a-zA-Z0-9._-]{1,128}", "type": "string" },
-    "WorkgroupNames": {
-      "type": "array",
-      "insertionOrder": false,
-      "items": { "$ref": "#/definitions/WorkgroupName" }
-    },
     "CapacityAssignment": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "WorkgroupNames": { "$ref": "#/definitions/WorkgroupNames" }
       },
       "required": ["WorkgroupNames"],
-      "additionalProperties": false
-    },
-    "CapacityAssignments": {
-      "description": "List of capacity assignments",
-      "type": "array",
-      "insertionOrder": false,
-      "items": { "$ref": "#/definitions/CapacityAssignment" }
+      "type": "object"
     },
     "CapacityAssignmentConfiguration": {
+      "additionalProperties": false,
       "description": "Assignment configuration to assign workgroups to a reservation",
-      "type": "object",
       "properties": {
         "CapacityAssignments": { "$ref": "#/definitions/CapacityAssignments" }
       },
       "required": ["CapacityAssignments"],
-      "additionalProperties": false
+      "type": "object"
+    },
+    "CapacityAssignments": {
+      "description": "List of capacity assignments",
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/CapacityAssignment" },
+      "type": "array"
     },
     "CapacityReservationStatus": {
-      "type": "string",
       "enum": [
         "PENDING",
         "ACTIVE",
@@ -54,63 +39,26 @@
         "CANCELLED",
         "FAILED",
         "UPDATE_PENDING"
-      ]
-    }
-  },
-  "properties": {
-    "Arn": { "$ref": "#/definitions/Arn" },
-    "Name": {
-      "description": "The reservation name.",
-      "pattern": "[a-zA-Z0-9._-]{1,128}",
+      ],
       "type": "string"
     },
-    "Status": {
-      "description": "The status of the reservation.",
-      "$ref": "#/definitions/CapacityReservationStatus"
+    "Tag": {
+      "additionalProperties": false,
+      "properties": {
+        "Key": { "maxLength": 128, "minLength": 1, "type": "string" },
+        "Value": { "maxLength": 256, "minLength": 0, "type": "string" }
+      },
+      "required": ["Key", "Value"],
+      "type": "object"
     },
-    "TargetDpus": {
-      "description": "The number of DPUs to request to be allocated to the reservation.",
-      "type": "integer",
-      "format": "int64",
-      "minimum": 1
-    },
-    "AllocatedDpus": {
-      "description": "The number of DPUs Athena has provisioned and allocated for the reservation",
-      "type": "integer",
-      "format": "int64",
-      "minimum": 0
-    },
-    "CapacityAssignmentConfiguration": {
-      "$ref": "#/definitions/CapacityAssignmentConfiguration"
-    },
-    "CreationTime": {
-      "description": "The date and time the reservation was created.",
-      "type": "string"
-    },
-    "LastSuccessfulAllocationTime": {
-      "description": "The timestamp when the last successful allocated was made",
-      "type": "string"
-    },
-    "Tags": {
-      "description": "An array of key-value pairs to apply to this resource.",
-      "type": "array",
-      "uniqueItems": true,
+    "WorkgroupName": { "pattern": "[a-zA-Z0-9._-]{1,128}", "type": "string" },
+    "WorkgroupNames": {
       "insertionOrder": false,
-      "items": { "$ref": "#/definitions/Tag" }
+      "items": { "$ref": "#/definitions/WorkgroupName" },
+      "type": "array"
     }
   },
-  "additionalProperties": false,
-  "required": ["Name", "TargetDpus"],
-  "readOnlyProperties": [
-    "/properties/Arn",
-    "/properties/Status",
-    "/properties/AllocatedDpus",
-    "/properties/CreationTime",
-    "/properties/LastSuccessfulAllocationTime"
-  ],
-  "createOnlyProperties": ["/properties/Name"],
-  "primaryIdentifier": ["/properties/Arn"],
-  "additionalIdentifiers": [["/properties/Name"]],
+  "description": "Resource schema for AWS::Athena::CapacityReservation",
   "handlers": {
     "create": {
       "permissions": [
@@ -118,6 +66,21 @@
         "athena:PutCapacityAssignmentConfiguration",
         "athena:GetCapacityReservation",
         "athena:TagResource"
+      ],
+      "timeoutInMinutes": 60
+    },
+    "delete": {
+      "permissions": [
+        "athena:CancelCapacityReservation",
+        "athena:GetCapacityReservation",
+        "athena:DeleteCapacityReservation"
+      ],
+      "timeoutInMinutes": 60
+    },
+    "list": {
+      "permissions": [
+        "athena:ListCapacityReservations",
+        "athena:GetCapacityReservation"
       ],
       "timeoutInMinutes": 60
     },
@@ -138,29 +101,66 @@
         "athena:UntagResource"
       ],
       "timeoutInMinutes": 60
-    },
-    "delete": {
-      "permissions": [
-        "athena:CancelCapacityReservation",
-        "athena:GetCapacityReservation",
-        "athena:DeleteCapacityReservation"
-      ],
-      "timeoutInMinutes": 60
-    },
-    "list": {
-      "permissions": [
-        "athena:ListCapacityReservations",
-        "athena:GetCapacityReservation"
-      ],
-      "timeoutInMinutes": 60
     }
   },
-  "tagging": {
-    "taggable": true,
-    "tagOnCreate": true,
-    "tagUpdatable": true,
-    "cloudFormationSystemTags": true,
-    "tagProperty": "/properties/Tags"
+  "primaryIdentifier": ["/properties/Arn"],
+  "properties": {
+    "AllocatedDpus": {
+      "description": "The number of DPUs Athena has provisioned and allocated for the reservation",
+      "format": "int64",
+      "minimum": 0,
+      "type": "integer"
+    },
+    "Arn": { "$ref": "#/definitions/Arn" },
+    "CapacityAssignmentConfiguration": {
+      "$ref": "#/definitions/CapacityAssignmentConfiguration"
+    },
+    "CreationTime": {
+      "description": "The date and time the reservation was created.",
+      "type": "string"
+    },
+    "LastSuccessfulAllocationTime": {
+      "description": "The timestamp when the last successful allocated was made",
+      "type": "string"
+    },
+    "Name": {
+      "description": "The reservation name.",
+      "pattern": "[a-zA-Z0-9._-]{1,128}",
+      "type": "string"
+    },
+    "Status": {
+      "$ref": "#/definitions/CapacityReservationStatus",
+      "description": "The status of the reservation."
+    },
+    "Tags": {
+      "description": "An array of key-value pairs to apply to this resource.",
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/Tag" },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "TargetDpus": {
+      "description": "The number of DPUs to request to be allocated to the reservation.",
+      "format": "int64",
+      "minimum": 1,
+      "type": "integer"
+    }
   },
-  "$hash": "d254d36ac25cc7448e603498b751d222923a436e"
+  "readOnlyProperties": [
+    "/properties/Arn",
+    "/properties/Status",
+    "/properties/AllocatedDpus",
+    "/properties/CreationTime",
+    "/properties/LastSuccessfulAllocationTime"
+  ],
+  "required": ["Name", "TargetDpus"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-athena.git",
+  "tagging": {
+    "cloudFormationSystemTags": true,
+    "tagOnCreate": true,
+    "tagProperty": "/properties/Tags",
+    "tagUpdatable": true,
+    "taggable": true
+  },
+  "typeName": "AWS::Athena::CapacityReservation"
 }

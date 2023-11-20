@@ -1,140 +1,140 @@
 {
-  "typeName": "AWS::ServiceCatalog::CloudFormationProvisionedProduct",
-  "description": "Resource Schema for AWS::ServiceCatalog::CloudFormationProvisionedProduct",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
-  "documentationUrl": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-cloudformationprovisionedproduct.html",
+  "$hash": "a70013497ca3d05a9c884d99dbe3e7821138244c",
+  "additionalProperties": false,
+  "createOnlyProperties": [
+    "/properties/NotificationArns",
+    "/properties/ProvisionedProductName"
+  ],
   "definitions": {
+    "OutputType": { "type": "string" },
+    "ProvisioningParameter": {
+      "additionalProperties": false,
+      "properties": {
+        "Key": { "maxLength": 1000, "minLength": 1, "type": "string" },
+        "Value": { "maxLength": 4096, "type": "string" }
+      },
+      "required": ["Key", "Value"],
+      "type": "object"
+    },
     "ProvisioningPreferences": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "StackSetAccounts": {
+          "items": { "pattern": "^[0-9]{12}$", "type": "string" },
           "type": "array",
-          "uniqueItems": true,
-          "items": { "type": "string", "pattern": "^[0-9]{12}$" }
+          "uniqueItems": true
         },
-        "StackSetFailureToleranceCount": { "type": "integer", "minimum": 0 },
+        "StackSetFailureToleranceCount": { "minimum": 0, "type": "integer" },
         "StackSetFailureTolerancePercentage": {
-          "type": "integer",
+          "maximum": 100,
           "minimum": 0,
-          "maximum": 100
+          "type": "integer"
         },
-        "StackSetMaxConcurrencyCount": { "type": "integer", "minimum": 1 },
+        "StackSetMaxConcurrencyCount": { "minimum": 1, "type": "integer" },
         "StackSetMaxConcurrencyPercentage": {
-          "type": "integer",
+          "maximum": 100,
           "minimum": 1,
-          "maximum": 100
+          "type": "integer"
         },
         "StackSetOperationType": {
-          "type": "string",
-          "enum": ["CREATE", "UPDATE", "DELETE"]
+          "enum": ["CREATE", "UPDATE", "DELETE"],
+          "type": "string"
         },
         "StackSetRegions": {
+          "items": { "pattern": "^[a-z]{2}-([a-z]+-)+[1-9]", "type": "string" },
           "type": "array",
-          "uniqueItems": true,
-          "items": { "type": "string", "pattern": "^[a-z]{2}-([a-z]+-)+[1-9]" }
+          "uniqueItems": true
         }
       },
-      "additionalProperties": false
-    },
-    "ProvisioningParameter": {
-      "type": "object",
-      "properties": {
-        "Key": { "type": "string", "minLength": 1, "maxLength": 1000 },
-        "Value": { "type": "string", "maxLength": 4096 }
-      },
-      "additionalProperties": false,
-      "required": ["Key", "Value"]
+      "type": "object"
     },
     "Tag": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "Key": {
-          "type": "string",
-          "minLength": 1,
           "maxLength": 128,
-          "pattern": "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$"
+          "minLength": 1,
+          "pattern": "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$",
+          "type": "string"
         },
         "Value": {
-          "type": "string",
-          "minLength": 1,
           "maxLength": 256,
-          "pattern": "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$"
+          "minLength": 1,
+          "pattern": "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$",
+          "type": "string"
         }
       },
-      "additionalProperties": false,
-      "required": ["Key", "Value"]
-    },
-    "OutputType": { "type": "string" }
+      "required": ["Key", "Value"],
+      "type": "object"
+    }
   },
+  "description": "Resource Schema for AWS::ServiceCatalog::CloudFormationProvisionedProduct",
+  "documentationUrl": "https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-servicecatalog-cloudformationprovisionedproduct.html",
+  "handlers": {
+    "create": { "permissions": ["*"], "timeoutInMinutes": 720 },
+    "delete": { "permissions": ["*"] },
+    "read": { "permissions": ["*"] },
+    "update": { "permissions": ["*"], "timeoutInMinutes": 720 }
+  },
+  "primaryIdentifier": ["/properties/ProvisionedProductId"],
   "properties": {
-    "AcceptLanguage": { "type": "string", "enum": ["en", "jp", "zh"] },
-    "NotificationArns": {
-      "type": "array",
-      "uniqueItems": true,
-      "items": { "type": "string" },
-      "maxItems": 5
-    },
-    "PathId": { "type": "string", "minLength": 1, "maxLength": 100 },
-    "PathName": { "type": "string", "minLength": 1, "maxLength": 100 },
-    "ProductId": { "type": "string", "minLength": 1, "maxLength": 100 },
-    "ProductName": { "type": "string", "minLength": 1, "maxLength": 128 },
-    "ProvisionedProductName": {
-      "type": "string",
+    "AcceptLanguage": { "enum": ["en", "jp", "zh"], "type": "string" },
+    "CloudformationStackArn": {
+      "maxLength": 256,
       "minLength": 1,
-      "maxLength": 128
+      "type": "string"
+    },
+    "NotificationArns": {
+      "items": { "type": "string" },
+      "maxItems": 5,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "Outputs": {
+      "additionalProperties": false,
+      "description": "List of key-value pair outputs.",
+      "maxProperties": 100,
+      "patternProperties": {
+        "^[A-Za-z0-9]{1,64}$": { "$ref": "#/definitions/OutputType" }
+      },
+      "type": "object"
+    },
+    "PathId": { "maxLength": 100, "minLength": 1, "type": "string" },
+    "PathName": { "maxLength": 100, "minLength": 1, "type": "string" },
+    "ProductId": { "maxLength": 100, "minLength": 1, "type": "string" },
+    "ProductName": { "maxLength": 128, "minLength": 1, "type": "string" },
+    "ProvisionedProductId": {
+      "maxLength": 50,
+      "minLength": 1,
+      "type": "string"
+    },
+    "ProvisionedProductName": {
+      "maxLength": 128,
+      "minLength": 1,
+      "type": "string"
     },
     "ProvisioningArtifactId": {
-      "type": "string",
+      "maxLength": 100,
       "minLength": 1,
-      "maxLength": 100
+      "type": "string"
     },
     "ProvisioningArtifactName": { "type": "string" },
     "ProvisioningParameters": {
-      "type": "array",
-      "items": { "$ref": "#/definitions/ProvisioningParameter" }
+      "items": { "$ref": "#/definitions/ProvisioningParameter" },
+      "type": "array"
     },
     "ProvisioningPreferences": {
       "$ref": "#/definitions/ProvisioningPreferences"
     },
-    "Tags": { "type": "array", "items": { "$ref": "#/definitions/Tag" } },
-    "ProvisionedProductId": {
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 50
-    },
-    "RecordId": { "type": "string", "minLength": 1, "maxLength": 50 },
-    "CloudformationStackArn": {
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 256
-    },
-    "Outputs": {
-      "description": "List of key-value pair outputs.",
-      "type": "object",
-      "patternProperties": {
-        "^[A-Za-z0-9]{1,64}$": { "$ref": "#/definitions/OutputType" }
-      },
-      "additionalProperties": false,
-      "maxProperties": 100
-    }
+    "RecordId": { "maxLength": 50, "minLength": 1, "type": "string" },
+    "Tags": { "items": { "$ref": "#/definitions/Tag" }, "type": "array" }
   },
-  "additionalProperties": false,
   "readOnlyProperties": [
     "/properties/RecordId",
     "/properties/CloudformationStackArn",
     "/properties/Outputs",
     "/properties/ProvisionedProductId"
   ],
-  "createOnlyProperties": [
-    "/properties/NotificationArns",
-    "/properties/ProvisionedProductName"
-  ],
-  "primaryIdentifier": ["/properties/ProvisionedProductId"],
-  "handlers": {
-    "create": { "permissions": ["*"], "timeoutInMinutes": 720 },
-    "read": { "permissions": ["*"] },
-    "update": { "permissions": ["*"], "timeoutInMinutes": 720 },
-    "delete": { "permissions": ["*"] }
-  },
-  "$hash": "a70013497ca3d05a9c884d99dbe3e7821138244c"
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+  "typeName": "AWS::ServiceCatalog::CloudFormationProvisionedProduct"
 }

@@ -1,27 +1,106 @@
 {
-  "typeName": "AWS::MediaConnect::Bridge",
-  "description": "Resource schema for AWS::MediaConnect::Bridge",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-mediaconnect.git",
+  "$hash": "51a1995ba486edd80de8e643acbe598060de7f74",
+  "additionalProperties": false,
   "definitions": {
-    "FailoverConfig": {
-      "description": "The settings for source failover.",
-      "type": "object",
+    "BridgeFlowSource": {
+      "additionalProperties": false,
+      "description": "The source of the bridge. A flow source originates in MediaConnect as an existing cloud flow.",
       "properties": {
-        "State": { "$ref": "#/definitions/FailoverConfigStateEnum" },
-        "FailoverMode": {
-          "description": "The type of failover you choose for this flow. FAILOVER allows switching between different streams.",
-          "$ref": "#/definitions/FailoverModeEnum"
+        "FlowArn": {
+          "description": "The ARN of the cloud flow used as a source of this bridge.",
+          "type": "string"
         },
-        "SourcePriority": {
-          "description": "The priority you want to assign to a source. You can have a primary stream and a backup stream or two equally prioritized streams.",
-          "$ref": "#/definitions/SourcePriority"
+        "FlowVpcInterfaceAttachment": {
+          "$ref": "#/definitions/VpcInterfaceAttachment",
+          "description": "The name of the VPC interface attachment to use for this source."
+        },
+        "Name": {
+          "description": "The name of the flow source.",
+          "type": "string"
         }
       },
-      "required": ["FailoverMode"],
-      "additionalProperties": false
+      "required": ["Name", "FlowArn"],
+      "type": "object"
+    },
+    "BridgeNetworkOutput": {
+      "additionalProperties": false,
+      "description": "The output of the bridge. A network output is delivered to your premises.",
+      "properties": {
+        "IpAddress": {
+          "description": "The network output IP Address.",
+          "type": "string"
+        },
+        "Name": { "description": "The network output name.", "type": "string" },
+        "NetworkName": {
+          "description": "The network output's gateway network name.",
+          "type": "string"
+        },
+        "Port": {
+          "description": "The network output port.",
+          "type": "integer"
+        },
+        "Protocol": {
+          "$ref": "#/definitions/ProtocolEnum",
+          "description": "The network output protocol."
+        },
+        "Ttl": { "description": "The network output TTL.", "type": "integer" }
+      },
+      "required": [
+        "Name",
+        "Protocol",
+        "IpAddress",
+        "Port",
+        "NetworkName",
+        "Ttl"
+      ],
+      "type": "object"
+    },
+    "BridgeNetworkSource": {
+      "additionalProperties": false,
+      "description": "The source of the bridge. A network source originates at your premises.",
+      "properties": {
+        "MulticastIp": {
+          "description": "The network source multicast IP.",
+          "type": "string"
+        },
+        "Name": {
+          "description": "The name of the network source.",
+          "type": "string"
+        },
+        "NetworkName": {
+          "description": "The network source's gateway network name.",
+          "type": "string"
+        },
+        "Port": {
+          "description": "The network source port.",
+          "type": "integer"
+        },
+        "Protocol": {
+          "$ref": "#/definitions/ProtocolEnum",
+          "description": "The network source protocol."
+        }
+      },
+      "required": ["Name", "Protocol", "MulticastIp", "Port", "NetworkName"],
+      "type": "object"
+    },
+    "BridgeOutput": {
+      "additionalProperties": false,
+      "description": "The output of the bridge.",
+      "properties": {
+        "NetworkOutput": { "$ref": "#/definitions/BridgeNetworkOutput" }
+      },
+      "type": "object"
+    },
+    "BridgeSource": {
+      "additionalProperties": false,
+      "description": "The bridge's source.",
+      "properties": {
+        "FlowSource": { "$ref": "#/definitions/BridgeFlowSource" },
+        "NetworkSource": { "$ref": "#/definitions/BridgeNetworkSource" }
+      },
+      "type": "object"
     },
     "BridgeStateEnum": {
-      "type": "string",
       "enum": [
         "CREATING",
         "STANDBY",
@@ -34,136 +113,44 @@
         "START_FAILED",
         "START_PENDING",
         "UPDATING"
-      ]
+      ],
+      "type": "string"
+    },
+    "EgressGatewayBridge": {
+      "additionalProperties": false,
+      "properties": {
+        "MaxBitrate": {
+          "description": "The maximum expected bitrate of the egress bridge.",
+          "type": "integer"
+        }
+      },
+      "required": ["MaxBitrate"],
+      "type": "object"
+    },
+    "FailoverConfig": {
+      "additionalProperties": false,
+      "description": "The settings for source failover.",
+      "properties": {
+        "FailoverMode": {
+          "$ref": "#/definitions/FailoverModeEnum",
+          "description": "The type of failover you choose for this flow. FAILOVER allows switching between different streams."
+        },
+        "SourcePriority": {
+          "$ref": "#/definitions/SourcePriority",
+          "description": "The priority you want to assign to a source. You can have a primary stream and a backup stream or two equally prioritized streams."
+        },
+        "State": { "$ref": "#/definitions/FailoverConfigStateEnum" }
+      },
+      "required": ["FailoverMode"],
+      "type": "object"
     },
     "FailoverConfigStateEnum": {
-      "type": "string",
-      "enum": ["ENABLED", "DISABLED"]
+      "enum": ["ENABLED", "DISABLED"],
+      "type": "string"
     },
-    "FailoverModeEnum": { "type": "string", "enum": ["FAILOVER"] },
-    "SourcePriority": {
-      "type": "object",
-      "description": "The priority you want to assign to a source. You can have a primary stream and a backup stream or two equally prioritized streams.",
-      "properties": {
-        "PrimarySource": {
-          "description": "The name of the source you choose as the primary source for this flow.",
-          "type": "string"
-        }
-      },
-      "additionalProperties": false
-    },
-    "BridgeOutput": {
-      "description": "The output of the bridge.",
-      "type": "object",
-      "properties": {
-        "NetworkOutput": { "$ref": "#/definitions/BridgeNetworkOutput" }
-      },
-      "additionalProperties": false
-    },
-    "BridgeNetworkOutput": {
-      "description": "The output of the bridge. A network output is delivered to your premises.",
-      "type": "object",
-      "properties": {
-        "Name": { "description": "The network output name.", "type": "string" },
-        "Protocol": {
-          "description": "The network output protocol.",
-          "$ref": "#/definitions/ProtocolEnum"
-        },
-        "IpAddress": {
-          "description": "The network output IP Address.",
-          "type": "string"
-        },
-        "Port": {
-          "description": "The network output port.",
-          "type": "integer"
-        },
-        "NetworkName": {
-          "description": "The network output's gateway network name.",
-          "type": "string"
-        },
-        "Ttl": { "description": "The network output TTL.", "type": "integer" }
-      },
-      "additionalProperties": false,
-      "required": [
-        "Name",
-        "Protocol",
-        "IpAddress",
-        "Port",
-        "NetworkName",
-        "Ttl"
-      ]
-    },
-    "BridgeSource": {
-      "description": "The bridge's source.",
-      "type": "object",
-      "properties": {
-        "FlowSource": { "$ref": "#/definitions/BridgeFlowSource" },
-        "NetworkSource": { "$ref": "#/definitions/BridgeNetworkSource" }
-      },
-      "additionalProperties": false
-    },
-    "BridgeFlowSource": {
-      "type": "object",
-      "description": "The source of the bridge. A flow source originates in MediaConnect as an existing cloud flow.",
-      "properties": {
-        "Name": {
-          "description": "The name of the flow source.",
-          "type": "string"
-        },
-        "FlowArn": {
-          "description": "The ARN of the cloud flow used as a source of this bridge.",
-          "type": "string"
-        },
-        "FlowVpcInterfaceAttachment": {
-          "description": "The name of the VPC interface attachment to use for this source.",
-          "$ref": "#/definitions/VpcInterfaceAttachment"
-        }
-      },
-      "additionalProperties": false,
-      "required": ["Name", "FlowArn"]
-    },
-    "VpcInterfaceAttachment": {
-      "type": "object",
-      "description": "The settings for attaching a VPC interface to an resource.",
-      "properties": {
-        "VpcInterfaceName": {
-          "description": "The name of the VPC interface to use for this resource.",
-          "type": "string"
-        }
-      },
-      "additionalProperties": false
-    },
-    "BridgeNetworkSource": {
-      "type": "object",
-      "description": "The source of the bridge. A network source originates at your premises.",
-      "properties": {
-        "Name": {
-          "description": "The name of the network source.",
-          "type": "string"
-        },
-        "Protocol": {
-          "description": "The network source protocol.",
-          "$ref": "#/definitions/ProtocolEnum"
-        },
-        "MulticastIp": {
-          "description": "The network source multicast IP.",
-          "type": "string"
-        },
-        "Port": {
-          "description": "The network source port.",
-          "type": "integer"
-        },
-        "NetworkName": {
-          "description": "The network source's gateway network name.",
-          "type": "string"
-        }
-      },
-      "required": ["Name", "Protocol", "MulticastIp", "Port", "NetworkName"],
-      "additionalProperties": false
-    },
-    "ProtocolEnum": { "type": "string", "enum": ["rtp-fec", "rtp", "udp"] },
+    "FailoverModeEnum": { "enum": ["FAILOVER"], "type": "string" },
     "IngressGatewayBridge": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "MaxBitrate": {
           "description": "The maximum expected bitrate of the ingress bridge.",
@@ -174,74 +161,39 @@
           "type": "integer"
         }
       },
-      "additionalProperties": false,
-      "required": ["MaxBitrate", "MaxOutputs"]
+      "required": ["MaxBitrate", "MaxOutputs"],
+      "type": "object"
     },
-    "EgressGatewayBridge": {
-      "type": "object",
+    "ProtocolEnum": { "enum": ["rtp-fec", "rtp", "udp"], "type": "string" },
+    "SourcePriority": {
+      "additionalProperties": false,
+      "description": "The priority you want to assign to a source. You can have a primary stream and a backup stream or two equally prioritized streams.",
       "properties": {
-        "MaxBitrate": {
-          "type": "integer",
-          "description": "The maximum expected bitrate of the egress bridge."
+        "PrimarySource": {
+          "description": "The name of the source you choose as the primary source for this flow.",
+          "type": "string"
         }
       },
+      "type": "object"
+    },
+    "VpcInterfaceAttachment": {
       "additionalProperties": false,
-      "required": ["MaxBitrate"]
+      "description": "The settings for attaching a VPC interface to an resource.",
+      "properties": {
+        "VpcInterfaceName": {
+          "description": "The name of the VPC interface to use for this resource.",
+          "type": "string"
+        }
+      },
+      "type": "object"
     }
   },
-  "properties": {
-    "Name": { "description": "The name of the bridge.", "type": "string" },
-    "BridgeArn": {
-      "description": "The Amazon Resource Number (ARN) of the bridge.",
-      "type": "string"
-    },
-    "PlacementArn": {
-      "description": "The placement Amazon Resource Number (ARN) of the bridge.",
-      "type": "string"
-    },
-    "BridgeState": { "$ref": "#/definitions/BridgeStateEnum" },
-    "SourceFailoverConfig": { "$ref": "#/definitions/FailoverConfig" },
-    "Outputs": {
-      "description": "The outputs on this bridge.",
-      "type": "array",
-      "minItems": 0,
-      "maxItems": 2,
-      "items": { "$ref": "#/definitions/BridgeOutput" },
-      "insertionOrder": true
-    },
-    "Sources": {
-      "description": "The sources on this bridge.",
-      "type": "array",
-      "minItems": 0,
-      "maxItems": 2,
-      "items": { "$ref": "#/definitions/BridgeSource" },
-      "insertionOrder": true
-    },
-    "IngressGatewayBridge": {
-      "type": "object",
-      "$ref": "#/definitions/IngressGatewayBridge"
-    },
-    "EgressGatewayBridge": {
-      "type": "object",
-      "$ref": "#/definitions/EgressGatewayBridge"
-    }
-  },
-  "additionalProperties": false,
-  "required": ["Name", "PlacementArn", "Sources"],
-  "readOnlyProperties": ["/properties/BridgeArn", "/properties/BridgeState"],
-  "primaryIdentifier": ["/properties/BridgeArn"],
+  "description": "Resource schema for AWS::MediaConnect::Bridge",
   "handlers": {
     "create": {
       "permissions": [
         "mediaconnect:CreateBridge",
         "mediaconnect:DescribeBridge"
-      ]
-    },
-    "read": { "permissions": ["mediaconnect:DescribeBridge"] },
-    "update": {
-      "permissions": [
-        "mediaconnect:DescribeBridge",
-        "mediaconnect:UpdateBridge"
       ]
     },
     "delete": {
@@ -250,8 +202,56 @@
         "mediaconnect:DeleteBridge"
       ]
     },
-    "list": { "permissions": ["mediaconnect:ListBridges"] }
+    "list": { "permissions": ["mediaconnect:ListBridges"] },
+    "read": { "permissions": ["mediaconnect:DescribeBridge"] },
+    "update": {
+      "permissions": [
+        "mediaconnect:DescribeBridge",
+        "mediaconnect:UpdateBridge"
+      ]
+    }
   },
+  "primaryIdentifier": ["/properties/BridgeArn"],
+  "properties": {
+    "BridgeArn": {
+      "description": "The Amazon Resource Number (ARN) of the bridge.",
+      "type": "string"
+    },
+    "BridgeState": { "$ref": "#/definitions/BridgeStateEnum" },
+    "EgressGatewayBridge": {
+      "$ref": "#/definitions/EgressGatewayBridge",
+      "type": "object"
+    },
+    "IngressGatewayBridge": {
+      "$ref": "#/definitions/IngressGatewayBridge",
+      "type": "object"
+    },
+    "Name": { "description": "The name of the bridge.", "type": "string" },
+    "Outputs": {
+      "description": "The outputs on this bridge.",
+      "insertionOrder": true,
+      "items": { "$ref": "#/definitions/BridgeOutput" },
+      "maxItems": 2,
+      "minItems": 0,
+      "type": "array"
+    },
+    "PlacementArn": {
+      "description": "The placement Amazon Resource Number (ARN) of the bridge.",
+      "type": "string"
+    },
+    "SourceFailoverConfig": { "$ref": "#/definitions/FailoverConfig" },
+    "Sources": {
+      "description": "The sources on this bridge.",
+      "insertionOrder": true,
+      "items": { "$ref": "#/definitions/BridgeSource" },
+      "maxItems": 2,
+      "minItems": 0,
+      "type": "array"
+    }
+  },
+  "readOnlyProperties": ["/properties/BridgeArn", "/properties/BridgeState"],
+  "required": ["Name", "PlacementArn", "Sources"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-mediaconnect.git",
   "tagging": { "taggable": false },
-  "$hash": "51a1995ba486edd80de8e643acbe598060de7f74"
+  "typeName": "AWS::MediaConnect::Bridge"
 }

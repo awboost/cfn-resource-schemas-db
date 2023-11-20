@@ -1,50 +1,19 @@
 {
-  "typeName": "AWS::Route53RecoveryReadiness::RecoveryGroup",
-  "description": "AWS Route53 Recovery Readiness Recovery Group Schema and API specifications.",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-route53-recovery-readiness-readiness.git",
-  "taggable": true,
+  "$hash": "777976fb7beca3575d0a4105a2412974cb37dc98",
+  "additionalProperties": false,
+  "createOnlyProperties": ["/properties/RecoveryGroupName"],
   "definitions": {
     "Tag": {
-      "type": "object",
       "additionalProperties": false,
       "properties": {
         "Key": { "type": "string" },
         "Value": { "type": "string" }
       },
-      "required": ["Value", "Key"]
+      "required": ["Value", "Key"],
+      "type": "object"
     }
   },
-  "properties": {
-    "RecoveryGroupName": {
-      "description": "The name of the recovery group to create.",
-      "type": "string",
-      "pattern": "[a-zA-Z0-9_]+",
-      "minLength": 1,
-      "maxLength": 64
-    },
-    "Cells": {
-      "description": "A list of the cell Amazon Resource Names (ARNs) in the recovery group.",
-      "type": "array",
-      "items": { "type": "string", "minLength": 1, "maxLength": 256 },
-      "maxItems": 5,
-      "insertionOrder": false
-    },
-    "RecoveryGroupArn": {
-      "description": "A collection of tags associated with a resource.",
-      "type": "string",
-      "maxLength": 256
-    },
-    "Tags": {
-      "description": "A collection of tags associated with a resource.",
-      "type": "array",
-      "items": { "$ref": "#/definitions/Tag", "maxItems": 20 },
-      "insertionOrder": false
-    }
-  },
-  "additionalProperties": false,
-  "createOnlyProperties": ["/properties/RecoveryGroupName"],
-  "readOnlyProperties": ["/properties/RecoveryGroupArn"],
-  "primaryIdentifier": ["/properties/RecoveryGroupName"],
+  "description": "AWS Route53 Recovery Readiness Recovery Group Schema and API specifications.",
   "handlers": {
     "create": {
       "permissions": [
@@ -54,6 +23,15 @@
         "route53-recovery-readiness:ListTagsForResources",
         "route53-recovery-readiness:TagResource"
       ]
+    },
+    "delete": {
+      "permissions": [
+        "route53-recovery-readiness:DeleteRecoveryGroup",
+        "route53-recovery-readiness:GetRecoveryGroup"
+      ]
+    },
+    "list": {
+      "permissions": ["route53-recovery-readiness:ListRecoveryGroups"]
     },
     "read": {
       "permissions": [
@@ -70,14 +48,38 @@
         "route53-recovery-readiness:TagResource",
         "route53-recovery-readiness:UntagResource"
       ]
-    },
-    "delete": {
-      "permissions": [
-        "route53-recovery-readiness:DeleteRecoveryGroup",
-        "route53-recovery-readiness:GetRecoveryGroup"
-      ]
-    },
-    "list": { "permissions": ["route53-recovery-readiness:ListRecoveryGroups"] }
+    }
   },
-  "$hash": "777976fb7beca3575d0a4105a2412974cb37dc98"
+  "primaryIdentifier": ["/properties/RecoveryGroupName"],
+  "properties": {
+    "Cells": {
+      "description": "A list of the cell Amazon Resource Names (ARNs) in the recovery group.",
+      "insertionOrder": false,
+      "items": { "maxLength": 256, "minLength": 1, "type": "string" },
+      "maxItems": 5,
+      "type": "array"
+    },
+    "RecoveryGroupArn": {
+      "description": "A collection of tags associated with a resource.",
+      "maxLength": 256,
+      "type": "string"
+    },
+    "RecoveryGroupName": {
+      "description": "The name of the recovery group to create.",
+      "maxLength": 64,
+      "minLength": 1,
+      "pattern": "[a-zA-Z0-9_]+",
+      "type": "string"
+    },
+    "Tags": {
+      "description": "A collection of tags associated with a resource.",
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/Tag", "maxItems": 20 },
+      "type": "array"
+    }
+  },
+  "readOnlyProperties": ["/properties/RecoveryGroupArn"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-route53-recovery-readiness-readiness.git",
+  "taggable": true,
+  "typeName": "AWS::Route53RecoveryReadiness::RecoveryGroup"
 }

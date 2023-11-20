@@ -1,115 +1,24 @@
 {
-  "typeName": "AWS::InspectorV2::Filter",
-  "description": "Inspector Filter resource schema",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-inspector.git",
+  "$hash": "38cafb5019fd4570cefc534b36f8733e98e03080",
+  "additionalProperties": false,
   "definitions": {
-    "StringComparison": {
-      "type": "string",
-      "enum": ["EQUALS", "PREFIX", "NOT_EQUALS"]
-    },
-    "StringInput": { "type": "string", "maxLength": 1024, "minLength": 1 },
-    "StringFilter": {
-      "type": "object",
-      "required": ["Comparison", "Value"],
-      "properties": {
-        "Comparison": { "$ref": "#/definitions/StringComparison" },
-        "Value": { "$ref": "#/definitions/StringInput" }
-      },
-      "additionalProperties": false
-    },
-    "StringFilterList": {
-      "type": "array",
-      "items": { "$ref": "#/definitions/StringFilter" },
-      "insertionOrder": false,
-      "maxItems": 10,
-      "minItems": 1
-    },
-    "Timestamp": { "type": "integer", "format": "int64" },
     "DateFilter": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "EndInclusive": { "$ref": "#/definitions/Timestamp" },
         "StartInclusive": { "$ref": "#/definitions/Timestamp" }
       },
-      "additionalProperties": false
+      "type": "object"
     },
     "DateFilterList": {
-      "type": "array",
       "insertionOrder": false,
       "items": { "$ref": "#/definitions/DateFilter" },
       "maxItems": 10,
-      "minItems": 1
+      "minItems": 1,
+      "type": "array"
     },
-    "Port": { "type": "integer", "maximum": 65535, "minimum": 0 },
-    "PortRangeFilter": {
-      "type": "object",
-      "properties": {
-        "BeginInclusive": { "$ref": "#/definitions/Port" },
-        "EndInclusive": { "$ref": "#/definitions/Port" }
-      },
-      "additionalProperties": false
-    },
-    "PortRangeFilterList": {
-      "type": "array",
-      "insertionOrder": false,
-      "items": { "$ref": "#/definitions/PortRangeFilter" },
-      "maxItems": 10,
-      "minItems": 1
-    },
-    "NumberFilter": {
-      "type": "object",
-      "properties": {
-        "LowerInclusive": { "type": "number" },
-        "UpperInclusive": { "type": "number" }
-      },
-      "additionalProperties": false
-    },
-    "NumberFilterList": {
-      "type": "array",
-      "insertionOrder": false,
-      "items": { "$ref": "#/definitions/NumberFilter" },
-      "maxItems": 10,
-      "minItems": 1
-    },
-    "MapComparison": { "type": "string", "enum": ["EQUALS"] },
-    "MapFilter": {
-      "type": "object",
-      "required": ["Comparison"],
-      "properties": {
-        "Comparison": { "$ref": "#/definitions/MapComparison" },
-        "Key": { "$ref": "#/definitions/MapKey" },
-        "Value": { "$ref": "#/definitions/MapValue" }
-      },
-      "additionalProperties": false
-    },
-    "MapFilterList": {
-      "type": "array",
-      "insertionOrder": false,
-      "items": { "$ref": "#/definitions/MapFilter" },
-      "maxItems": 10,
-      "minItems": 1
-    },
-    "PackageFilter": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "Architecture": { "$ref": "#/definitions/StringFilter" },
-        "Epoch": { "$ref": "#/definitions/NumberFilter" },
-        "Name": { "$ref": "#/definitions/StringFilter" },
-        "Release": { "$ref": "#/definitions/StringFilter" },
-        "SourceLayerHash": { "$ref": "#/definitions/StringFilter" },
-        "Version": { "$ref": "#/definitions/StringFilter" }
-      }
-    },
-    "PackageFilterList": {
-      "type": "array",
-      "insertionOrder": false,
-      "items": { "$ref": "#/definitions/PackageFilter" },
-      "maxItems": 10,
-      "minItems": 1
-    },
+    "FilterAction": { "enum": ["NONE", "SUPPRESS"], "type": "string" },
     "FilterCriteria": {
-      "type": "object",
       "additionalProperties": false,
       "properties": {
         "AwsAccountId": { "$ref": "#/definitions/StringFilterList" },
@@ -120,10 +29,10 @@
         "Ec2InstanceVpcId": { "$ref": "#/definitions/StringFilterList" },
         "EcrImageArchitecture": { "$ref": "#/definitions/StringFilterList" },
         "EcrImageHash": { "$ref": "#/definitions/StringFilterList" },
-        "EcrImageTags": { "$ref": "#/definitions/StringFilterList" },
         "EcrImagePushedAt": { "$ref": "#/definitions/DateFilterList" },
         "EcrImageRegistry": { "$ref": "#/definitions/StringFilterList" },
         "EcrImageRepositoryName": { "$ref": "#/definitions/StringFilterList" },
+        "EcrImageTags": { "$ref": "#/definitions/StringFilterList" },
         "FindingArn": { "$ref": "#/definitions/StringFilterList" },
         "FindingStatus": { "$ref": "#/definitions/StringFilterList" },
         "FindingType": { "$ref": "#/definitions/StringFilterList" },
@@ -143,56 +52,147 @@
         "VulnerabilityId": { "$ref": "#/definitions/StringFilterList" },
         "VulnerabilitySource": { "$ref": "#/definitions/StringFilterList" },
         "VulnerablePackages": { "$ref": "#/definitions/PackageFilterList" }
-      }
+      },
+      "type": "object"
     },
-    "FilterAction": { "type": "string", "enum": ["NONE", "SUPPRESS"] },
-    "MapKey": { "type": "string", "maxLength": 128, "minLength": 1 },
-    "MapValue": { "type": "string", "maxLength": 256, "minLength": 0 }
+    "MapComparison": { "enum": ["EQUALS"], "type": "string" },
+    "MapFilter": {
+      "additionalProperties": false,
+      "properties": {
+        "Comparison": { "$ref": "#/definitions/MapComparison" },
+        "Key": { "$ref": "#/definitions/MapKey" },
+        "Value": { "$ref": "#/definitions/MapValue" }
+      },
+      "required": ["Comparison"],
+      "type": "object"
+    },
+    "MapFilterList": {
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/MapFilter" },
+      "maxItems": 10,
+      "minItems": 1,
+      "type": "array"
+    },
+    "MapKey": { "maxLength": 128, "minLength": 1, "type": "string" },
+    "MapValue": { "maxLength": 256, "minLength": 0, "type": "string" },
+    "NumberFilter": {
+      "additionalProperties": false,
+      "properties": {
+        "LowerInclusive": { "type": "number" },
+        "UpperInclusive": { "type": "number" }
+      },
+      "type": "object"
+    },
+    "NumberFilterList": {
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/NumberFilter" },
+      "maxItems": 10,
+      "minItems": 1,
+      "type": "array"
+    },
+    "PackageFilter": {
+      "additionalProperties": false,
+      "properties": {
+        "Architecture": { "$ref": "#/definitions/StringFilter" },
+        "Epoch": { "$ref": "#/definitions/NumberFilter" },
+        "Name": { "$ref": "#/definitions/StringFilter" },
+        "Release": { "$ref": "#/definitions/StringFilter" },
+        "SourceLayerHash": { "$ref": "#/definitions/StringFilter" },
+        "Version": { "$ref": "#/definitions/StringFilter" }
+      },
+      "type": "object"
+    },
+    "PackageFilterList": {
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/PackageFilter" },
+      "maxItems": 10,
+      "minItems": 1,
+      "type": "array"
+    },
+    "Port": { "maximum": 65535, "minimum": 0, "type": "integer" },
+    "PortRangeFilter": {
+      "additionalProperties": false,
+      "properties": {
+        "BeginInclusive": { "$ref": "#/definitions/Port" },
+        "EndInclusive": { "$ref": "#/definitions/Port" }
+      },
+      "type": "object"
+    },
+    "PortRangeFilterList": {
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/PortRangeFilter" },
+      "maxItems": 10,
+      "minItems": 1,
+      "type": "array"
+    },
+    "StringComparison": {
+      "enum": ["EQUALS", "PREFIX", "NOT_EQUALS"],
+      "type": "string"
+    },
+    "StringFilter": {
+      "additionalProperties": false,
+      "properties": {
+        "Comparison": { "$ref": "#/definitions/StringComparison" },
+        "Value": { "$ref": "#/definitions/StringInput" }
+      },
+      "required": ["Comparison", "Value"],
+      "type": "object"
+    },
+    "StringFilterList": {
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/StringFilter" },
+      "maxItems": 10,
+      "minItems": 1,
+      "type": "array"
+    },
+    "StringInput": { "maxLength": 1024, "minLength": 1, "type": "string" },
+    "Timestamp": { "format": "int64", "type": "integer" }
   },
-  "properties": {
-    "Name": {
-      "description": "Findings filter name.",
-      "type": "string",
-      "maxLength": 128,
-      "minLength": 1
-    },
-    "Description": {
-      "description": "Findings filter description.",
-      "type": "string",
-      "maxLength": 512,
-      "minLength": 1
-    },
-    "FilterCriteria": {
-      "description": "Findings filter criteria.",
-      "$ref": "#/definitions/FilterCriteria"
-    },
-    "FilterAction": {
-      "description": "Findings filter action.",
-      "$ref": "#/definitions/FilterAction"
-    },
-    "Arn": {
-      "description": "Findings filter ARN.",
-      "type": "string",
-      "maxLength": 128,
-      "minLength": 1
-    }
-  },
-  "required": ["Name", "FilterCriteria", "FilterAction"],
-  "readOnlyProperties": ["/properties/Arn"],
-  "additionalProperties": false,
-  "primaryIdentifier": ["/properties/Arn"],
+  "description": "Inspector Filter resource schema",
   "handlers": {
     "create": {
       "permissions": ["inspector2:CreateFilter", "inspector2:ListFilters"]
     },
-    "read": { "permissions": ["inspector2:ListFilters"] },
-    "update": {
-      "permissions": ["inspector2:ListFilters", "inspector2:UpdateFilter"]
-    },
     "delete": {
       "permissions": ["inspector2:DeleteFilter", "inspector2:ListFilters"]
     },
-    "list": { "permissions": ["inspector2:ListFilters"] }
+    "list": { "permissions": ["inspector2:ListFilters"] },
+    "read": { "permissions": ["inspector2:ListFilters"] },
+    "update": {
+      "permissions": ["inspector2:ListFilters", "inspector2:UpdateFilter"]
+    }
   },
-  "$hash": "38cafb5019fd4570cefc534b36f8733e98e03080"
+  "primaryIdentifier": ["/properties/Arn"],
+  "properties": {
+    "Arn": {
+      "description": "Findings filter ARN.",
+      "maxLength": 128,
+      "minLength": 1,
+      "type": "string"
+    },
+    "Description": {
+      "description": "Findings filter description.",
+      "maxLength": 512,
+      "minLength": 1,
+      "type": "string"
+    },
+    "FilterAction": {
+      "$ref": "#/definitions/FilterAction",
+      "description": "Findings filter action."
+    },
+    "FilterCriteria": {
+      "$ref": "#/definitions/FilterCriteria",
+      "description": "Findings filter criteria."
+    },
+    "Name": {
+      "description": "Findings filter name.",
+      "maxLength": 128,
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "readOnlyProperties": ["/properties/Arn"],
+  "required": ["Name", "FilterCriteria", "FilterAction"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-inspector.git",
+  "typeName": "AWS::InspectorV2::Filter"
 }

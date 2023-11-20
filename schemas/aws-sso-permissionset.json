@@ -1,147 +1,65 @@
 {
-  "typeName": "AWS::SSO::PermissionSet",
-  "description": "Resource Type definition for SSO PermissionSet",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-sso/aws-sso-permissionset",
+  "$hash": "34379746ad50417be1c408cf83f7e7e11f4ab14f",
+  "additionalProperties": false,
+  "createOnlyProperties": ["/properties/InstanceArn", "/properties/Name"],
   "definitions": {
-    "Tag": {
-      "description": "The metadata that you apply to the permission set to help you categorize and organize them.",
-      "type": "object",
-      "properties": {
-        "Key": {
-          "type": "string",
-          "pattern": "[\\w+=,.@-]+",
-          "minLength": 1,
-          "maxLength": 128
-        },
-        "Value": {
-          "type": "string",
-          "pattern": "[\\w+=,.@-]+",
-          "minLength": 0,
-          "maxLength": 256
-        }
-      },
-      "required": ["Key", "Value"],
-      "additionalProperties": false
-    },
-    "ManagedPolicyArn": {
-      "description": "The managed policy to attach.",
-      "type": "string",
-      "minLength": 20,
-      "maxLength": 2048
-    },
     "CustomerManagedPolicyReference": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "Name": {
-          "type": "string",
-          "pattern": "[\\w+=,.@-]+",
+          "maxLength": 128,
           "minLength": 1,
-          "maxLength": 128
+          "pattern": "[\\w+=,.@-]+",
+          "type": "string"
         },
         "Path": {
-          "type": "string",
-          "pattern": "((/[A-Za-z0-9\\.,\\+@=_-]+)*)/",
+          "maxLength": 512,
           "minLength": 1,
-          "maxLength": 512
+          "pattern": "((/[A-Za-z0-9\\.,\\+@=_-]+)*)/",
+          "type": "string"
         }
       },
       "required": ["Name"],
-      "additionalProperties": false
+      "type": "object"
+    },
+    "ManagedPolicyArn": {
+      "description": "The managed policy to attach.",
+      "maxLength": 2048,
+      "minLength": 20,
+      "type": "string"
     },
     "PermissionsBoundary": {
-      "type": "object",
       "additionalProperties": false,
       "properties": {
         "CustomerManagedPolicyReference": {
           "$ref": "#/definitions/CustomerManagedPolicyReference"
         },
         "ManagedPolicyArn": { "$ref": "#/definitions/ManagedPolicyArn" }
-      }
+      },
+      "type": "object"
+    },
+    "Tag": {
+      "additionalProperties": false,
+      "description": "The metadata that you apply to the permission set to help you categorize and organize them.",
+      "properties": {
+        "Key": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "[\\w+=,.@-]+",
+          "type": "string"
+        },
+        "Value": {
+          "maxLength": 256,
+          "minLength": 0,
+          "pattern": "[\\w+=,.@-]+",
+          "type": "string"
+        }
+      },
+      "required": ["Key", "Value"],
+      "type": "object"
     }
   },
-  "properties": {
-    "Name": {
-      "description": "The name you want to assign to this permission set.",
-      "type": "string",
-      "pattern": "[\\w+=,.@-]+",
-      "minLength": 1,
-      "maxLength": 32
-    },
-    "PermissionSetArn": {
-      "description": "The permission set that the policy will be attached to",
-      "type": "string",
-      "pattern": "arn:(aws|aws-us-gov|aws-cn|aws-iso|aws-iso-b):sso:::permissionSet/(sso)?ins-[a-zA-Z0-9-.]{16}/ps-[a-zA-Z0-9-./]{16}",
-      "minLength": 10,
-      "maxLength": 1224
-    },
-    "Description": {
-      "description": "The permission set description.",
-      "type": "string",
-      "pattern": "[\\u0009\\u000A\\u000D\\u0020-\\u007E\\u00A1-\\u00FF]*",
-      "minLength": 1,
-      "maxLength": 700
-    },
-    "InstanceArn": {
-      "description": "The sso instance arn that the permission set is owned.",
-      "type": "string",
-      "pattern": "arn:(aws|aws-us-gov|aws-cn|aws-iso|aws-iso-b):sso:::instance/(sso)?ins-[a-zA-Z0-9-.]{16}",
-      "minLength": 10,
-      "maxLength": 1224
-    },
-    "SessionDuration": {
-      "description": "The length of time that a user can be signed in to an AWS account.",
-      "type": "string",
-      "pattern": "^(-?)P(?=\\d|T\\d)(?:(\\d+)Y)?(?:(\\d+)M)?(?:(\\d+)([DW]))?(?:T(?:(\\d+)H)?(?:(\\d+)M)?(?:(\\d+(?:\\.\\d+)?)S)?)?$",
-      "minLength": 1,
-      "maxLength": 100
-    },
-    "RelayStateType": {
-      "description": "The relay state URL that redirect links to any service in the AWS Management Console.",
-      "type": "string",
-      "pattern": "[a-zA-Z0-9&amp;$@#\\/%?=~\\-_'&quot;|!:,.;*+\\[\\]\\ \\(\\)\\{\\}]+",
-      "minLength": 1,
-      "maxLength": 240
-    },
-    "ManagedPolicies": {
-      "type": "array",
-      "insertionOrder": false,
-      "items": { "$ref": "#/definitions/ManagedPolicyArn" },
-      "maxItems": 20,
-      "default": []
-    },
-    "InlinePolicy": {
-      "description": "The inline policy to put in permission set.",
-      "type": ["object", "string"]
-    },
-    "Tags": {
-      "type": "array",
-      "insertionOrder": false,
-      "items": { "$ref": "#/definitions/Tag" },
-      "maxItems": 50
-    },
-    "CustomerManagedPolicyReferences": {
-      "type": "array",
-      "insertionOrder": false,
-      "items": { "$ref": "#/definitions/CustomerManagedPolicyReference" },
-      "maxItems": 20,
-      "default": []
-    },
-    "PermissionsBoundary": { "$ref": "#/definitions/PermissionsBoundary" }
-  },
-  "additionalProperties": false,
-  "required": ["Name", "InstanceArn"],
-  "tagging": {
-    "taggable": true,
-    "tagOnCreate": true,
-    "tagUpdatable": true,
-    "tagProperty": "/properties/Tags"
-  },
-  "createOnlyProperties": ["/properties/InstanceArn", "/properties/Name"],
-  "readOnlyProperties": ["/properties/PermissionSetArn"],
-  "primaryIdentifier": [
-    "/properties/InstanceArn",
-    "/properties/PermissionSetArn"
-  ],
+  "description": "Resource Type definition for SSO PermissionSet",
   "handlers": {
     "create": {
       "permissions": [
@@ -159,6 +77,8 @@
         "sso:GetPermissionsBoundaryForPermissionSet"
       ]
     },
+    "delete": { "permissions": ["sso:DeletePermissionSet"] },
+    "list": { "permissions": ["sso:DescribePermissionSet"] },
     "read": {
       "permissions": [
         "sso:DescribePermissionSet",
@@ -191,9 +111,89 @@
         "sso:GetInlinePolicyForPermissionSet",
         "sso:DescribePermissionSetProvisioningStatus"
       ]
-    },
-    "delete": { "permissions": ["sso:DeletePermissionSet"] },
-    "list": { "permissions": ["sso:DescribePermissionSet"] }
+    }
   },
-  "$hash": "34379746ad50417be1c408cf83f7e7e11f4ab14f"
+  "primaryIdentifier": [
+    "/properties/InstanceArn",
+    "/properties/PermissionSetArn"
+  ],
+  "properties": {
+    "CustomerManagedPolicyReferences": {
+      "default": [],
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/CustomerManagedPolicyReference" },
+      "maxItems": 20,
+      "type": "array"
+    },
+    "Description": {
+      "description": "The permission set description.",
+      "maxLength": 700,
+      "minLength": 1,
+      "pattern": "[\\u0009\\u000A\\u000D\\u0020-\\u007E\\u00A1-\\u00FF]*",
+      "type": "string"
+    },
+    "InlinePolicy": {
+      "description": "The inline policy to put in permission set.",
+      "type": ["object", "string"]
+    },
+    "InstanceArn": {
+      "description": "The sso instance arn that the permission set is owned.",
+      "maxLength": 1224,
+      "minLength": 10,
+      "pattern": "arn:(aws|aws-us-gov|aws-cn|aws-iso|aws-iso-b):sso:::instance/(sso)?ins-[a-zA-Z0-9-.]{16}",
+      "type": "string"
+    },
+    "ManagedPolicies": {
+      "default": [],
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/ManagedPolicyArn" },
+      "maxItems": 20,
+      "type": "array"
+    },
+    "Name": {
+      "description": "The name you want to assign to this permission set.",
+      "maxLength": 32,
+      "minLength": 1,
+      "pattern": "[\\w+=,.@-]+",
+      "type": "string"
+    },
+    "PermissionSetArn": {
+      "description": "The permission set that the policy will be attached to",
+      "maxLength": 1224,
+      "minLength": 10,
+      "pattern": "arn:(aws|aws-us-gov|aws-cn|aws-iso|aws-iso-b):sso:::permissionSet/(sso)?ins-[a-zA-Z0-9-.]{16}/ps-[a-zA-Z0-9-./]{16}",
+      "type": "string"
+    },
+    "PermissionsBoundary": { "$ref": "#/definitions/PermissionsBoundary" },
+    "RelayStateType": {
+      "description": "The relay state URL that redirect links to any service in the AWS Management Console.",
+      "maxLength": 240,
+      "minLength": 1,
+      "pattern": "[a-zA-Z0-9&amp;$@#\\/%?=~\\-_'&quot;|!:,.;*+\\[\\]\\ \\(\\)\\{\\}]+",
+      "type": "string"
+    },
+    "SessionDuration": {
+      "description": "The length of time that a user can be signed in to an AWS account.",
+      "maxLength": 100,
+      "minLength": 1,
+      "pattern": "^(-?)P(?=\\d|T\\d)(?:(\\d+)Y)?(?:(\\d+)M)?(?:(\\d+)([DW]))?(?:T(?:(\\d+)H)?(?:(\\d+)M)?(?:(\\d+(?:\\.\\d+)?)S)?)?$",
+      "type": "string"
+    },
+    "Tags": {
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/Tag" },
+      "maxItems": 50,
+      "type": "array"
+    }
+  },
+  "readOnlyProperties": ["/properties/PermissionSetArn"],
+  "required": ["Name", "InstanceArn"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-sso/aws-sso-permissionset",
+  "tagging": {
+    "tagOnCreate": true,
+    "tagProperty": "/properties/Tags",
+    "tagUpdatable": true,
+    "taggable": true
+  },
+  "typeName": "AWS::SSO::PermissionSet"
 }

@@ -1,90 +1,48 @@
 {
-  "typeName": "AWS::AppStream::AppBlockBuilder",
-  "description": "Resource Type definition for AWS::AppStream::AppBlockBuilder.",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-appstream.git",
+  "$hash": "59a98e53b8c436e681d6e10148fa4350fad0c0ba",
+  "additionalProperties": false,
+  "createOnlyProperties": ["/properties/Name"],
   "definitions": {
-    "PlatformType": { "type": "string" },
-    "Arn": { "type": "string" },
     "AccessEndpoint": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "EndpointType": { "type": "string" },
         "VpceId": { "type": "string" }
       },
       "required": ["EndpointType", "VpceId"],
-      "additionalProperties": false
+      "type": "object"
     },
+    "Arn": { "type": "string" },
+    "PlatformType": { "type": "string" },
     "Tag": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "Key": { "type": "string" },
         "Value": { "type": "string" }
       },
       "required": ["Key", "Value"],
-      "additionalProperties": false
+      "type": "object"
     },
     "VpcConfig": {
-      "type": "object",
       "additionalProperties": false,
       "properties": {
         "SecurityGroupIds": {
-          "type": "array",
           "insertionOrder": false,
-          "uniqueItems": false,
-          "items": { "type": "string" }
+          "items": { "type": "string" },
+          "type": "array",
+          "uniqueItems": false
         },
         "SubnetIds": {
-          "type": "array",
           "insertionOrder": false,
-          "uniqueItems": false,
-          "items": { "type": "string" }
+          "items": { "type": "string" },
+          "type": "array",
+          "uniqueItems": false
         }
-      }
+      },
+      "type": "object"
     }
   },
-  "properties": {
-    "Name": { "type": "string" },
-    "Arn": { "$ref": "#/definitions/Arn" },
-    "Description": { "type": "string" },
-    "DisplayName": { "type": "string" },
-    "Platform": { "$ref": "#/definitions/PlatformType" },
-    "AccessEndpoints": {
-      "type": "array",
-      "insertionOrder": false,
-      "uniqueItems": true,
-      "items": { "$ref": "#/definitions/AccessEndpoint" }
-    },
-    "Tags": {
-      "type": "array",
-      "insertionOrder": false,
-      "uniqueItems": true,
-      "items": { "$ref": "#/definitions/Tag" }
-    },
-    "VpcConfig": { "$ref": "#/definitions/VpcConfig" },
-    "EnableDefaultInternetAccess": { "type": "boolean" },
-    "IamRoleArn": { "type": "string" },
-    "CreatedTime": { "type": "string" },
-    "InstanceType": { "type": "string" },
-    "AppBlockArns": {
-      "type": "array",
-      "insertionOrder": false,
-      "uniqueItems": true,
-      "items": { "$ref": "#/definitions/Arn" }
-    }
-  },
-  "additionalProperties": false,
-  "required": ["Name", "Platform", "InstanceType", "VpcConfig"],
-  "createOnlyProperties": ["/properties/Name"],
-  "readOnlyProperties": ["/properties/Arn", "/properties/CreatedTime"],
-  "writeOnlyProperties": ["/properties/Tags", "/properties/AppBlockArns"],
-  "primaryIdentifier": ["/properties/Name"],
-  "tagging": {
-    "taggable": true,
-    "tagOnCreate": true,
-    "tagUpdatable": true,
-    "cloudFormationSystemTags": false,
-    "tagProperty": "/properties/Tags"
-  },
+  "description": "Resource Type definition for AWS::AppStream::AppBlockBuilder.",
   "handlers": {
     "create": {
       "permissions": [
@@ -97,6 +55,15 @@
         "iam:PassRole"
       ]
     },
+    "delete": {
+      "permissions": [
+        "appstream:DescribeAppBlockBuilders",
+        "appstream:DeleteAppBlockBuilder",
+        "appstream:DisassociateAppBlockBuilderAppBlock",
+        "appstream:DescribeAppBlockBuilderAppBlockAssociations"
+      ]
+    },
+    "list": { "permissions": ["appstream:DescribeAppBlockBuilders"] },
     "read": { "permissions": ["appstream:DescribeAppBlockBuilders"] },
     "update": {
       "permissions": [
@@ -112,16 +79,49 @@
         "appstream:UntagResource",
         "iam:PassRole"
       ]
-    },
-    "delete": {
-      "permissions": [
-        "appstream:DescribeAppBlockBuilders",
-        "appstream:DeleteAppBlockBuilder",
-        "appstream:DisassociateAppBlockBuilderAppBlock",
-        "appstream:DescribeAppBlockBuilderAppBlockAssociations"
-      ]
-    },
-    "list": { "permissions": ["appstream:DescribeAppBlockBuilders"] }
+    }
   },
-  "$hash": "59a98e53b8c436e681d6e10148fa4350fad0c0ba"
+  "primaryIdentifier": ["/properties/Name"],
+  "properties": {
+    "AccessEndpoints": {
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/AccessEndpoint" },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "AppBlockArns": {
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/Arn" },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "Arn": { "$ref": "#/definitions/Arn" },
+    "CreatedTime": { "type": "string" },
+    "Description": { "type": "string" },
+    "DisplayName": { "type": "string" },
+    "EnableDefaultInternetAccess": { "type": "boolean" },
+    "IamRoleArn": { "type": "string" },
+    "InstanceType": { "type": "string" },
+    "Name": { "type": "string" },
+    "Platform": { "$ref": "#/definitions/PlatformType" },
+    "Tags": {
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/Tag" },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "VpcConfig": { "$ref": "#/definitions/VpcConfig" }
+  },
+  "readOnlyProperties": ["/properties/Arn", "/properties/CreatedTime"],
+  "required": ["Name", "Platform", "InstanceType", "VpcConfig"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-appstream.git",
+  "tagging": {
+    "cloudFormationSystemTags": false,
+    "tagOnCreate": true,
+    "tagProperty": "/properties/Tags",
+    "tagUpdatable": true,
+    "taggable": true
+  },
+  "typeName": "AWS::AppStream::AppBlockBuilder",
+  "writeOnlyProperties": ["/properties/Tags", "/properties/AppBlockArns"]
 }

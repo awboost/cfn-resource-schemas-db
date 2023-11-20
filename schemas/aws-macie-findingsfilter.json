@@ -1,89 +1,54 @@
 {
-  "typeName": "AWS::Macie::FindingsFilter",
-  "description": "Macie FindingsFilter resource schema.",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-macie.git",
+  "$hash": "581e9048bc725d76e177a697b3a62cbf04593e06",
+  "additionalIdentifiers": [["/properties/Arn"], ["/properties/Name"]],
+  "additionalProperties": false,
   "definitions": {
-    "CriterionAdditionalProperties": {
-      "type": "object",
-      "properties": {
-        "gt": { "type": "integer", "format": "int64" },
-        "gte": { "type": "integer", "format": "int64" },
-        "lt": { "type": "integer", "format": "int64" },
-        "lte": { "type": "integer", "format": "int64" },
-        "eq": { "type": "array", "items": { "type": "string" } },
-        "neq": { "type": "array", "items": { "type": "string" } }
-      },
-      "additionalProperties": false
-    },
     "Criterion": {
+      "additionalProperties": false,
       "description": "Map of filter criteria.",
-      "type": "object",
       "patternProperties": {
         "\\w": { "$ref": "#/definitions/CriterionAdditionalProperties" }
       },
-      "additionalProperties": false
+      "type": "object"
+    },
+    "CriterionAdditionalProperties": {
+      "additionalProperties": false,
+      "properties": {
+        "eq": { "items": { "type": "string" }, "type": "array" },
+        "gt": { "format": "int64", "type": "integer" },
+        "gte": { "format": "int64", "type": "integer" },
+        "lt": { "format": "int64", "type": "integer" },
+        "lte": { "format": "int64", "type": "integer" },
+        "neq": { "items": { "type": "string" }, "type": "array" }
+      },
+      "type": "object"
     },
     "FindingCriteria": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": { "Criterion": { "$ref": "#/definitions/Criterion" } },
-      "additionalProperties": false
+      "type": "object"
     },
-    "FindingFilterAction": { "type": "string", "enum": ["ARCHIVE", "NOOP"] },
+    "FindingFilterAction": { "enum": ["ARCHIVE", "NOOP"], "type": "string" },
     "FindingsFilterListItem": {
       "description": "Returned by ListHandler representing filter name and ID.",
-      "type": "object",
-      "properties": { "Id": { "type": "string" }, "Name": { "type": "string" } }
+      "properties": {
+        "Id": { "type": "string" },
+        "Name": { "type": "string" }
+      },
+      "type": "object"
     },
     "Tag": {
+      "additionalProperties": false,
       "description": "A key-value pair to associate with a resource.",
-      "type": "object",
       "properties": {
-        "Key": { "type": "string", "description": "The tag's key." },
-        "Value": { "type": "string", "description": "The tag's value." }
+        "Key": { "description": "The tag's key.", "type": "string" },
+        "Value": { "description": "The tag's value.", "type": "string" }
       },
       "required": ["Value", "Key"],
-      "additionalProperties": false
+      "type": "object"
     }
   },
-  "properties": {
-    "Name": { "description": "Findings filter name", "type": "string" },
-    "Description": {
-      "description": "Findings filter description",
-      "type": "string"
-    },
-    "FindingCriteria": {
-      "description": "Findings filter criteria.",
-      "$ref": "#/definitions/FindingCriteria"
-    },
-    "Action": {
-      "description": "Findings filter action.",
-      "$ref": "#/definitions/FindingFilterAction"
-    },
-    "Position": {
-      "description": "Findings filter position.",
-      "type": "integer"
-    },
-    "Id": { "description": "Findings filter ID.", "type": "string" },
-    "Arn": { "description": "Findings filter ARN.", "type": "string" },
-    "Tags": {
-      "description": "A collection of tags associated with a resource",
-      "type": "array",
-      "insertionOrder": false,
-      "items": { "$ref": "#/definitions/Tag" }
-    }
-  },
-  "tagging": {
-    "taggable": true,
-    "tagOnCreate": true,
-    "tagUpdatable": true,
-    "cloudFormationSystemTags": true,
-    "tagProperty": "/properties/Tags"
-  },
-  "required": ["Name", "FindingCriteria"],
-  "additionalProperties": false,
-  "readOnlyProperties": ["/properties/Id", "/properties/Arn"],
-  "primaryIdentifier": ["/properties/Id"],
-  "additionalIdentifiers": [["/properties/Arn"], ["/properties/Name"]],
+  "description": "Macie FindingsFilter resource schema.",
   "handlers": {
     "create": {
       "permissions": [
@@ -92,6 +57,8 @@
         "macie2:TagResource"
       ]
     },
+    "delete": { "permissions": ["macie2:DeleteFindingsFilter"] },
+    "list": { "permissions": ["macie2:ListFindingsFilters"] },
     "read": { "permissions": ["macie2:GetFindingsFilter"] },
     "update": {
       "permissions": [
@@ -100,9 +67,45 @@
         "macie2:TagResource",
         "macie2:UntagResource"
       ]
-    },
-    "delete": { "permissions": ["macie2:DeleteFindingsFilter"] },
-    "list": { "permissions": ["macie2:ListFindingsFilters"] }
+    }
   },
-  "$hash": "581e9048bc725d76e177a697b3a62cbf04593e06"
+  "primaryIdentifier": ["/properties/Id"],
+  "properties": {
+    "Action": {
+      "$ref": "#/definitions/FindingFilterAction",
+      "description": "Findings filter action."
+    },
+    "Arn": { "description": "Findings filter ARN.", "type": "string" },
+    "Description": {
+      "description": "Findings filter description",
+      "type": "string"
+    },
+    "FindingCriteria": {
+      "$ref": "#/definitions/FindingCriteria",
+      "description": "Findings filter criteria."
+    },
+    "Id": { "description": "Findings filter ID.", "type": "string" },
+    "Name": { "description": "Findings filter name", "type": "string" },
+    "Position": {
+      "description": "Findings filter position.",
+      "type": "integer"
+    },
+    "Tags": {
+      "description": "A collection of tags associated with a resource",
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/Tag" },
+      "type": "array"
+    }
+  },
+  "readOnlyProperties": ["/properties/Id", "/properties/Arn"],
+  "required": ["Name", "FindingCriteria"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-macie.git",
+  "tagging": {
+    "cloudFormationSystemTags": true,
+    "tagOnCreate": true,
+    "tagProperty": "/properties/Tags",
+    "tagUpdatable": true,
+    "taggable": true
+  },
+  "typeName": "AWS::Macie::FindingsFilter"
 }

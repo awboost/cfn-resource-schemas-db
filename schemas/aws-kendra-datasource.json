@@ -1,232 +1,825 @@
 {
-  "typeName": "AWS::Kendra::DataSource",
-  "description": "Kendra DataSource",
-  "sourceUrl": "https://docs.aws.amazon.com/kendra/latest/dg/hiw-data-source.html",
+  "$hash": "94a7d584eab593e2d1e6d0c7226c3ca0b1175013",
+  "additionalProperties": false,
+  "createOnlyProperties": ["/properties/Type"],
   "definitions": {
-    "IndexId": {
-      "description": "ID of Index",
-      "type": "string",
-      "minLength": 36,
-      "maxLength": 36
+    "AccessControlListConfiguration": {
+      "additionalProperties": false,
+      "properties": { "KeyPath": { "$ref": "#/definitions/S3ObjectKey" } },
+      "type": "object"
     },
-    "Tag": {
-      "description": "A label for tagging Kendra resources",
-      "type": "object",
+    "AclConfiguration": {
+      "additionalProperties": false,
       "properties": {
-        "Key": {
-          "description": "A string used to identify this tag",
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 128
+        "AllowedGroupsColumnName": { "$ref": "#/definitions/ColumnName" }
+      },
+      "required": ["AllowedGroupsColumnName"],
+      "type": "object"
+    },
+    "Arn": { "maxLength": 1000, "type": "string" },
+    "ChangeDetectingColumns": {
+      "items": { "$ref": "#/definitions/ColumnName" },
+      "maxItems": 5,
+      "minItems": 1,
+      "type": "array"
+    },
+    "ColumnConfiguration": {
+      "additionalProperties": false,
+      "properties": {
+        "ChangeDetectingColumns": {
+          "$ref": "#/definitions/ChangeDetectingColumns"
         },
-        "Value": {
-          "description": "A string containing the value for the tag",
-          "type": "string",
-          "minLength": 0,
-          "maxLength": 256
+        "DocumentDataColumnName": { "$ref": "#/definitions/ColumnName" },
+        "DocumentIdColumnName": { "$ref": "#/definitions/ColumnName" },
+        "DocumentTitleColumnName": { "$ref": "#/definitions/ColumnName" },
+        "FieldMappings": {
+          "$ref": "#/definitions/DataSourceToIndexFieldMappingList"
         }
       },
-      "required": ["Key", "Value"],
-      "additionalProperties": false
+      "required": [
+        "DocumentIdColumnName",
+        "DocumentDataColumnName",
+        "ChangeDetectingColumns"
+      ],
+      "type": "object"
     },
-    "TagList": {
-      "description": "List of tags",
-      "type": "array",
-      "maxItems": 200,
-      "items": { "$ref": "#/definitions/Tag" }
+    "ColumnName": { "maxLength": 100, "minLength": 1, "type": "string" },
+    "ConditionOperator": {
+      "enum": [
+        "GreaterThan",
+        "GreaterThanOrEquals",
+        "LessThan",
+        "LessThanOrEquals",
+        "Equals",
+        "NotEquals",
+        "Contains",
+        "NotContains",
+        "Exists",
+        "NotExists",
+        "BeginsWith"
+      ],
+      "type": "string"
     },
-    "DataSourceInclusionsExclusionsStrings": {
-      "type": "array",
-      "maxItems": 100,
-      "items": { "type": "string", "minLength": 1, "maxLength": 50 }
-    },
-    "S3Path": {
-      "type": "object",
-      "properties": {
-        "Bucket": { "$ref": "#/definitions/S3BucketName" },
-        "Key": { "$ref": "#/definitions/S3ObjectKey" }
-      },
+    "ConfluenceAttachmentConfiguration": {
       "additionalProperties": false,
-      "required": ["Bucket", "Key"]
-    },
-    "S3BucketName": {
-      "type": "string",
-      "minLength": 3,
-      "maxLength": 63,
-      "pattern": "[a-z0-9][\\.\\-a-z0-9]{1,61}[a-z0-9]"
-    },
-    "S3ObjectKey": { "type": "string", "minLength": 1, "maxLength": 1024 },
-    "DocumentsMetadataConfiguration": {
-      "type": "object",
-      "properties": { "S3Prefix": { "$ref": "#/definitions/S3ObjectKey" } },
-      "additionalProperties": false
-    },
-    "AccessControlListConfiguration": {
-      "type": "object",
-      "properties": { "KeyPath": { "$ref": "#/definitions/S3ObjectKey" } },
-      "additionalProperties": false
-    },
-    "S3DataSourceConfiguration": {
-      "description": "S3 data source configuration",
-      "type": "object",
       "properties": {
-        "BucketName": { "$ref": "#/definitions/S3BucketName" },
-        "InclusionPrefixes": {
+        "AttachmentFieldMappings": {
+          "$ref": "#/definitions/ConfluenceAttachmentFieldMappingsList"
+        },
+        "CrawlAttachments": { "type": "boolean" }
+      },
+      "type": "object"
+    },
+    "ConfluenceAttachmentFieldMappingsList": {
+      "items": {
+        "$ref": "#/definitions/ConfluenceAttachmentToIndexFieldMapping"
+      },
+      "maxItems": 11,
+      "minItems": 1,
+      "type": "array"
+    },
+    "ConfluenceAttachmentFieldName": {
+      "enum": [
+        "AUTHOR",
+        "CONTENT_TYPE",
+        "CREATED_DATE",
+        "DISPLAY_URL",
+        "FILE_SIZE",
+        "ITEM_TYPE",
+        "PARENT_ID",
+        "SPACE_KEY",
+        "SPACE_NAME",
+        "URL",
+        "VERSION"
+      ],
+      "type": "string"
+    },
+    "ConfluenceAttachmentToIndexFieldMapping": {
+      "additionalProperties": false,
+      "properties": {
+        "DataSourceFieldName": {
+          "$ref": "#/definitions/ConfluenceAttachmentFieldName"
+        },
+        "DateFieldFormat": { "$ref": "#/definitions/DateFieldFormat" },
+        "IndexFieldName": { "$ref": "#/definitions/IndexFieldName" }
+      },
+      "required": ["DataSourceFieldName", "IndexFieldName"],
+      "type": "object"
+    },
+    "ConfluenceBlogConfiguration": {
+      "additionalProperties": false,
+      "properties": {
+        "BlogFieldMappings": {
+          "$ref": "#/definitions/ConfluenceBlogFieldMappingsList"
+        }
+      },
+      "type": "object"
+    },
+    "ConfluenceBlogFieldMappingsList": {
+      "items": { "$ref": "#/definitions/ConfluenceBlogToIndexFieldMapping" },
+      "maxItems": 9,
+      "minItems": 1,
+      "type": "array"
+    },
+    "ConfluenceBlogFieldName": {
+      "enum": [
+        "AUTHOR",
+        "DISPLAY_URL",
+        "ITEM_TYPE",
+        "LABELS",
+        "PUBLISH_DATE",
+        "SPACE_KEY",
+        "SPACE_NAME",
+        "URL",
+        "VERSION"
+      ],
+      "type": "string"
+    },
+    "ConfluenceBlogToIndexFieldMapping": {
+      "additionalProperties": false,
+      "properties": {
+        "DataSourceFieldName": {
+          "$ref": "#/definitions/ConfluenceBlogFieldName"
+        },
+        "DateFieldFormat": { "$ref": "#/definitions/DateFieldFormat" },
+        "IndexFieldName": { "$ref": "#/definitions/IndexFieldName" }
+      },
+      "required": ["DataSourceFieldName", "IndexFieldName"],
+      "type": "object"
+    },
+    "ConfluenceConfiguration": {
+      "additionalProperties": false,
+      "properties": {
+        "AttachmentConfiguration": {
+          "$ref": "#/definitions/ConfluenceAttachmentConfiguration"
+        },
+        "BlogConfiguration": {
+          "$ref": "#/definitions/ConfluenceBlogConfiguration"
+        },
+        "ExclusionPatterns": {
           "$ref": "#/definitions/DataSourceInclusionsExclusionsStrings"
         },
         "InclusionPatterns": {
           "$ref": "#/definitions/DataSourceInclusionsExclusionsStrings"
         },
-        "ExclusionPatterns": {
-          "$ref": "#/definitions/DataSourceInclusionsExclusionsStrings"
+        "PageConfiguration": {
+          "$ref": "#/definitions/ConfluencePageConfiguration"
         },
-        "DocumentsMetadataConfiguration": {
-          "$ref": "#/definitions/DocumentsMetadataConfiguration"
+        "SecretArn": { "$ref": "#/definitions/SecretArn" },
+        "ServerUrl": { "$ref": "#/definitions/Url" },
+        "SpaceConfiguration": {
+          "$ref": "#/definitions/ConfluenceSpaceConfiguration"
         },
-        "AccessControlListConfiguration": {
-          "$ref": "#/definitions/AccessControlListConfiguration"
+        "Version": { "$ref": "#/definitions/ConfluenceVersion" },
+        "VpcConfiguration": {
+          "$ref": "#/definitions/DataSourceVpcConfiguration"
         }
       },
+      "required": ["ServerUrl", "SecretArn", "Version"],
+      "type": "object"
+    },
+    "ConfluencePageConfiguration": {
       "additionalProperties": false,
-      "required": ["BucketName"]
-    },
-    "Url": {
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 2048,
-      "pattern": "^(https?|ftp|file)://([^\\s]*)"
-    },
-    "SecretArn": {
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 1284,
-      "pattern": "arn:[a-z0-9-\\.]{1,63}:[a-z0-9-\\.]{0,63}:[a-z0-9-\\.]{0,63}:[a-z0-9-\\.]{0,63}:[^/].{0,1023}"
-    },
-    "DataSourceVpcConfiguration": {
-      "type": "object",
       "properties": {
-        "SubnetIds": {
-          "type": "array",
-          "maxItems": 6,
-          "items": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 200,
-            "pattern": "[\\-0-9a-zA-Z]+"
-          }
-        },
-        "SecurityGroupIds": {
-          "type": "array",
-          "maxItems": 10,
-          "items": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 200,
-            "pattern": "[\\-0-9a-zA-Z]+"
-          }
+        "PageFieldMappings": {
+          "$ref": "#/definitions/ConfluencePageFieldMappingsList"
         }
       },
+      "type": "object"
+    },
+    "ConfluencePageFieldMappingsList": {
+      "items": { "$ref": "#/definitions/ConfluencePageToIndexFieldMapping" },
+      "maxItems": 12,
+      "minItems": 1,
+      "type": "array"
+    },
+    "ConfluencePageFieldName": {
+      "enum": [
+        "AUTHOR",
+        "CONTENT_STATUS",
+        "CREATED_DATE",
+        "DISPLAY_URL",
+        "ITEM_TYPE",
+        "LABELS",
+        "MODIFIED_DATE",
+        "PARENT_ID",
+        "SPACE_KEY",
+        "SPACE_NAME",
+        "URL",
+        "VERSION"
+      ],
+      "type": "string"
+    },
+    "ConfluencePageToIndexFieldMapping": {
       "additionalProperties": false,
-      "required": ["SubnetIds", "SecurityGroupIds"]
+      "properties": {
+        "DataSourceFieldName": {
+          "$ref": "#/definitions/ConfluencePageFieldName"
+        },
+        "DateFieldFormat": { "$ref": "#/definitions/DateFieldFormat" },
+        "IndexFieldName": { "$ref": "#/definitions/IndexFieldName" }
+      },
+      "required": ["DataSourceFieldName", "IndexFieldName"],
+      "type": "object"
+    },
+    "ConfluenceSpaceConfiguration": {
+      "additionalProperties": false,
+      "properties": {
+        "CrawlArchivedSpaces": { "type": "boolean" },
+        "CrawlPersonalSpaces": { "type": "boolean" },
+        "ExcludeSpaces": { "$ref": "#/definitions/ConfluenceSpaceList" },
+        "IncludeSpaces": { "$ref": "#/definitions/ConfluenceSpaceList" },
+        "SpaceFieldMappings": {
+          "$ref": "#/definitions/ConfluenceSpaceFieldMappingsList"
+        }
+      },
+      "type": "object"
+    },
+    "ConfluenceSpaceFieldMappingsList": {
+      "items": { "$ref": "#/definitions/ConfluenceSpaceToIndexFieldMapping" },
+      "maxItems": 4,
+      "minItems": 1,
+      "type": "array"
+    },
+    "ConfluenceSpaceFieldName": {
+      "enum": ["DISPLAY_URL", "ITEM_TYPE", "SPACE_KEY", "URL"],
+      "type": "string"
+    },
+    "ConfluenceSpaceIdentifier": {
+      "maxLength": 255,
+      "minLength": 1,
+      "type": "string"
+    },
+    "ConfluenceSpaceList": {
+      "items": { "$ref": "#/definitions/ConfluenceSpaceIdentifier" },
+      "minItems": 1,
+      "type": "array"
+    },
+    "ConfluenceSpaceToIndexFieldMapping": {
+      "additionalProperties": false,
+      "properties": {
+        "DataSourceFieldName": {
+          "$ref": "#/definitions/ConfluenceSpaceFieldName"
+        },
+        "DateFieldFormat": { "$ref": "#/definitions/DateFieldFormat" },
+        "IndexFieldName": { "$ref": "#/definitions/IndexFieldName" }
+      },
+      "required": ["DataSourceFieldName", "IndexFieldName"],
+      "type": "object"
+    },
+    "ConfluenceVersion": { "enum": ["CLOUD", "SERVER"], "type": "string" },
+    "ConnectionConfiguration": {
+      "additionalProperties": false,
+      "properties": {
+        "DatabaseHost": { "$ref": "#/definitions/DatabaseHost" },
+        "DatabaseName": { "$ref": "#/definitions/DatabaseName" },
+        "DatabasePort": { "$ref": "#/definitions/DatabasePort" },
+        "SecretArn": { "$ref": "#/definitions/SecretArn" },
+        "TableName": { "$ref": "#/definitions/TableName" }
+      },
+      "required": [
+        "DatabaseHost",
+        "DatabasePort",
+        "DatabaseName",
+        "TableName",
+        "SecretArn"
+      ],
+      "type": "object"
+    },
+    "CustomDocumentEnrichmentConfiguration": {
+      "additionalProperties": false,
+      "properties": {
+        "InlineConfigurations": {
+          "$ref": "#/definitions/InlineConfigurations"
+        },
+        "PostExtractionHookConfiguration": {
+          "$ref": "#/definitions/HookConfiguration"
+        },
+        "PreExtractionHookConfiguration": {
+          "$ref": "#/definitions/HookConfiguration"
+        },
+        "RoleArn": { "$ref": "#/definitions/RoleArn" }
+      },
+      "type": "object"
+    },
+    "DataSourceConfiguration": {
+      "additionalProperties": false,
+      "oneOf": [
+        { "required": ["S3Configuration"] },
+        { "required": ["SharePointConfiguration"] },
+        { "required": ["SalesforceConfiguration"] },
+        { "required": ["OneDriveConfiguration"] },
+        { "required": ["ServiceNowConfiguration"] },
+        { "required": ["DatabaseConfiguration"] },
+        { "required": ["ConfluenceConfiguration"] },
+        { "required": ["GoogleDriveConfiguration"] },
+        { "required": ["WebCrawlerConfiguration"] },
+        { "required": ["WorkDocsConfiguration"] }
+      ],
+      "properties": {
+        "ConfluenceConfiguration": {
+          "$ref": "#/definitions/ConfluenceConfiguration"
+        },
+        "DatabaseConfiguration": {
+          "$ref": "#/definitions/DatabaseConfiguration"
+        },
+        "GoogleDriveConfiguration": {
+          "$ref": "#/definitions/GoogleDriveConfiguration"
+        },
+        "OneDriveConfiguration": {
+          "$ref": "#/definitions/OneDriveConfiguration"
+        },
+        "S3Configuration": {
+          "$ref": "#/definitions/S3DataSourceConfiguration"
+        },
+        "SalesforceConfiguration": {
+          "$ref": "#/definitions/SalesforceConfiguration"
+        },
+        "ServiceNowConfiguration": {
+          "$ref": "#/definitions/ServiceNowConfiguration"
+        },
+        "SharePointConfiguration": {
+          "$ref": "#/definitions/SharePointConfiguration"
+        },
+        "WebCrawlerConfiguration": {
+          "$ref": "#/definitions/WebCrawlerConfiguration"
+        },
+        "WorkDocsConfiguration": {
+          "$ref": "#/definitions/WorkDocsConfiguration"
+        }
+      },
+      "type": "object"
     },
     "DataSourceFieldName": {
-      "type": "string",
+      "maxLength": 100,
       "minLength": 1,
-      "maxLength": 100
+      "type": "string"
+    },
+    "DataSourceInclusionsExclusionsStrings": {
+      "items": { "maxLength": 50, "minLength": 1, "type": "string" },
+      "maxItems": 100,
+      "type": "array"
     },
     "DataSourceToIndexFieldMapping": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "DataSourceFieldName": { "$ref": "#/definitions/DataSourceFieldName" },
         "DateFieldFormat": { "$ref": "#/definitions/DateFieldFormat" },
         "IndexFieldName": { "$ref": "#/definitions/IndexFieldName" }
       },
-      "additionalProperties": false,
-      "required": ["DataSourceFieldName", "IndexFieldName"]
+      "required": ["DataSourceFieldName", "IndexFieldName"],
+      "type": "object"
     },
-    "DateFieldFormat": { "type": "string", "minLength": 4, "maxLength": 40 },
-    "IndexFieldName": { "type": "string", "minLength": 1, "maxLength": 30 },
     "DataSourceToIndexFieldMappingList": {
-      "type": "array",
+      "items": { "$ref": "#/definitions/DataSourceToIndexFieldMapping" },
       "maxItems": 100,
-      "items": { "$ref": "#/definitions/DataSourceToIndexFieldMapping" }
+      "type": "array"
+    },
+    "DataSourceVpcConfiguration": {
+      "additionalProperties": false,
+      "properties": {
+        "SecurityGroupIds": {
+          "items": {
+            "maxLength": 200,
+            "minLength": 1,
+            "pattern": "[\\-0-9a-zA-Z]+",
+            "type": "string"
+          },
+          "maxItems": 10,
+          "type": "array"
+        },
+        "SubnetIds": {
+          "items": {
+            "maxLength": 200,
+            "minLength": 1,
+            "pattern": "[\\-0-9a-zA-Z]+",
+            "type": "string"
+          },
+          "maxItems": 6,
+          "type": "array"
+        }
+      },
+      "required": ["SubnetIds", "SecurityGroupIds"],
+      "type": "object"
+    },
+    "DatabaseConfiguration": {
+      "additionalProperties": false,
+      "properties": {
+        "AclConfiguration": { "$ref": "#/definitions/AclConfiguration" },
+        "ColumnConfiguration": { "$ref": "#/definitions/ColumnConfiguration" },
+        "ConnectionConfiguration": {
+          "$ref": "#/definitions/ConnectionConfiguration"
+        },
+        "DatabaseEngineType": { "$ref": "#/definitions/DatabaseEngineType" },
+        "SqlConfiguration": { "$ref": "#/definitions/SqlConfiguration" },
+        "VpcConfiguration": {
+          "$ref": "#/definitions/DataSourceVpcConfiguration"
+        }
+      },
+      "required": [
+        "ConnectionConfiguration",
+        "ColumnConfiguration",
+        "DatabaseEngineType"
+      ],
+      "type": "object"
+    },
+    "DatabaseEngineType": {
+      "enum": [
+        "RDS_AURORA_MYSQL",
+        "RDS_AURORA_POSTGRESQL",
+        "RDS_MYSQL",
+        "RDS_POSTGRESQL"
+      ],
+      "type": "string"
+    },
+    "DatabaseHost": { "maxLength": 253, "minLength": 1, "type": "string" },
+    "DatabaseName": { "maxLength": 100, "minLength": 1, "type": "string" },
+    "DatabasePort": { "maximum": 65535, "minimum": 1, "type": "integer" },
+    "DateFieldFormat": { "maxLength": 40, "minLength": 4, "type": "string" },
+    "Description": {
+      "description": "Description of data source",
+      "maxLength": 1000,
+      "minLength": 1,
+      "type": "string"
     },
     "DisableLocalGroups": { "type": "boolean" },
-    "SharePointConfiguration": {
-      "description": "SharePoint configuration",
-      "type": "object",
+    "DocumentAttributeCondition": {
+      "additionalProperties": false,
       "properties": {
-        "SharePointVersion": {
-          "type": "string",
-          "enum": ["SHAREPOINT_ONLINE", "SHAREPOINT_2013", "SHAREPOINT_2016"]
+        "ConditionDocumentAttributeKey": {
+          "$ref": "#/definitions/DocumentAttributeKey"
         },
-        "Urls": {
-          "type": "array",
-          "maxItems": 100,
-          "items": { "$ref": "#/definitions/Url" }
+        "ConditionOnValue": { "$ref": "#/definitions/DocumentAttributeValue" },
+        "Operator": { "$ref": "#/definitions/ConditionOperator" }
+      },
+      "required": ["ConditionDocumentAttributeKey", "Operator"],
+      "type": "object"
+    },
+    "DocumentAttributeKey": {
+      "maxLength": 200,
+      "minLength": 1,
+      "pattern": "[a-zA-Z0-9_][a-zA-Z0-9_-]*",
+      "type": "string"
+    },
+    "DocumentAttributeTarget": {
+      "additionalProperties": false,
+      "properties": {
+        "TargetDocumentAttributeKey": {
+          "$ref": "#/definitions/DocumentAttributeKey"
         },
-        "SecretArn": { "$ref": "#/definitions/SecretArn" },
-        "CrawlAttachments": { "type": "boolean" },
-        "UseChangeLog": { "type": "boolean" },
-        "InclusionPatterns": {
-          "$ref": "#/definitions/DataSourceInclusionsExclusionsStrings"
+        "TargetDocumentAttributeValue": {
+          "$ref": "#/definitions/DocumentAttributeValue"
+        },
+        "TargetDocumentAttributeValueDeletion": { "type": "boolean" }
+      },
+      "required": ["TargetDocumentAttributeKey"],
+      "type": "object"
+    },
+    "DocumentAttributeValue": {
+      "additionalProperties": false,
+      "properties": {
+        "DateValue": { "$ref": "#/definitions/Timestamp" },
+        "LongValue": { "$ref": "#/definitions/Long" },
+        "StringListValue": { "items": { "type": "string" }, "type": "array" },
+        "StringValue": { "maxLength": 2048, "minLength": 1, "type": "string" }
+      },
+      "type": "object"
+    },
+    "DocumentsMetadataConfiguration": {
+      "additionalProperties": false,
+      "properties": { "S3Prefix": { "$ref": "#/definitions/S3ObjectKey" } },
+      "type": "object"
+    },
+    "ExcludeMimeTypesList": {
+      "items": { "$ref": "#/definitions/MimeType" },
+      "maxItems": 30,
+      "minItems": 0,
+      "type": "array"
+    },
+    "ExcludeSharedDrivesList": {
+      "items": { "$ref": "#/definitions/SharedDriveId" },
+      "maxItems": 100,
+      "minItems": 0,
+      "type": "array"
+    },
+    "ExcludeUserAccountsList": {
+      "items": { "$ref": "#/definitions/UserAccount" },
+      "maxItems": 100,
+      "minItems": 0,
+      "type": "array"
+    },
+    "GoogleDriveConfiguration": {
+      "additionalProperties": false,
+      "properties": {
+        "ExcludeMimeTypes": { "$ref": "#/definitions/ExcludeMimeTypesList" },
+        "ExcludeSharedDrives": {
+          "$ref": "#/definitions/ExcludeSharedDrivesList"
+        },
+        "ExcludeUserAccounts": {
+          "$ref": "#/definitions/ExcludeUserAccountsList"
         },
         "ExclusionPatterns": {
           "$ref": "#/definitions/DataSourceInclusionsExclusionsStrings"
         },
-        "VpcConfiguration": {
-          "$ref": "#/definitions/DataSourceVpcConfiguration"
+        "FieldMappings": {
+          "$ref": "#/definitions/DataSourceToIndexFieldMappingList"
+        },
+        "InclusionPatterns": {
+          "$ref": "#/definitions/DataSourceInclusionsExclusionsStrings"
+        },
+        "SecretArn": { "$ref": "#/definitions/SecretArn" }
+      },
+      "required": ["SecretArn"],
+      "type": "object"
+    },
+    "HookConfiguration": {
+      "additionalProperties": false,
+      "properties": {
+        "InvocationCondition": {
+          "$ref": "#/definitions/DocumentAttributeCondition"
+        },
+        "LambdaArn": { "$ref": "#/definitions/LambdaArn" },
+        "S3Bucket": { "$ref": "#/definitions/S3BucketName" }
+      },
+      "required": ["LambdaArn", "S3Bucket"],
+      "type": "object"
+    },
+    "Id": {
+      "description": "ID of data source",
+      "maxLength": 100,
+      "minLength": 1,
+      "type": "string"
+    },
+    "IndexFieldName": { "maxLength": 30, "minLength": 1, "type": "string" },
+    "IndexId": {
+      "description": "ID of Index",
+      "maxLength": 36,
+      "minLength": 36,
+      "type": "string"
+    },
+    "InlineConfigurations": {
+      "description": "List of InlineCustomDocumentEnrichmentConfigurations",
+      "items": {
+        "$ref": "#/definitions/InlineCustomDocumentEnrichmentConfiguration"
+      },
+      "maxItems": 100,
+      "type": "array"
+    },
+    "InlineCustomDocumentEnrichmentConfiguration": {
+      "additionalProperties": false,
+      "properties": {
+        "Condition": { "$ref": "#/definitions/DocumentAttributeCondition" },
+        "DocumentContentDeletion": { "type": "boolean" },
+        "Target": { "$ref": "#/definitions/DocumentAttributeTarget" }
+      },
+      "type": "object"
+    },
+    "LambdaArn": { "maxLength": 2048, "minLength": 1, "type": "string" },
+    "LanguageCode": {
+      "description": "The code for a language.",
+      "maxLength": 10,
+      "minLength": 2,
+      "pattern": "[a-zA-Z-]*",
+      "type": "string"
+    },
+    "Long": { "format": "int64", "type": "integer" },
+    "MimeType": { "maxLength": 256, "minLength": 1, "type": "string" },
+    "Name": {
+      "description": "Name of data source",
+      "maxLength": 1000,
+      "minLength": 1,
+      "type": "string"
+    },
+    "OneDriveConfiguration": {
+      "additionalProperties": false,
+      "properties": {
+        "DisableLocalGroups": { "$ref": "#/definitions/DisableLocalGroups" },
+        "ExclusionPatterns": {
+          "$ref": "#/definitions/DataSourceInclusionsExclusionsStrings"
         },
         "FieldMappings": {
           "$ref": "#/definitions/DataSourceToIndexFieldMappingList"
         },
+        "InclusionPatterns": {
+          "$ref": "#/definitions/DataSourceInclusionsExclusionsStrings"
+        },
+        "OneDriveUsers": { "$ref": "#/definitions/OneDriveUsers" },
+        "SecretArn": { "$ref": "#/definitions/SecretArn" },
+        "TenantDomain": { "$ref": "#/definitions/TenantDomain" }
+      },
+      "required": ["TenantDomain", "SecretArn", "OneDriveUsers"],
+      "type": "object"
+    },
+    "OneDriveUser": {
+      "maxLength": 256,
+      "minLength": 1,
+      "pattern": "^(?!\\s).+@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$",
+      "type": "string"
+    },
+    "OneDriveUserList": {
+      "items": { "$ref": "#/definitions/OneDriveUser" },
+      "maxItems": 100,
+      "minItems": 1,
+      "type": "array"
+    },
+    "OneDriveUsers": {
+      "additionalProperties": false,
+      "oneOf": [
+        { "required": ["OneDriveUserList"] },
+        { "required": ["OneDriveUserS3Path"] }
+      ],
+      "properties": {
+        "OneDriveUserList": { "$ref": "#/definitions/OneDriveUserList" },
+        "OneDriveUserS3Path": { "$ref": "#/definitions/S3Path" }
+      },
+      "type": "object"
+    },
+    "ProxyConfiguration": {
+      "additionalProperties": false,
+      "properties": {
+        "Credentials": { "$ref": "#/definitions/SecretArn" },
+        "Host": {
+          "maxLength": 253,
+          "minLength": 1,
+          "pattern": "([^\\s]*)",
+          "type": "string"
+        },
+        "Port": { "maximum": 65535, "minimum": 1, "type": "integer" }
+      },
+      "required": ["Host", "Port"],
+      "type": "object"
+    },
+    "QueryIdentifiersEnclosingOption": {
+      "enum": ["DOUBLE_QUOTES", "NONE"],
+      "type": "string"
+    },
+    "RoleArn": {
+      "description": "Role ARN",
+      "maxLength": 1284,
+      "minLength": 1,
+      "pattern": "arn:[a-z0-9-\\.]{1,63}:[a-z0-9-\\.]{0,63}:[a-z0-9-\\.]{0,63}:[a-z0-9-\\.]{0,63}:[^/].{0,1023}",
+      "type": "string"
+    },
+    "S3BucketName": {
+      "maxLength": 63,
+      "minLength": 3,
+      "pattern": "[a-z0-9][\\.\\-a-z0-9]{1,61}[a-z0-9]",
+      "type": "string"
+    },
+    "S3DataSourceConfiguration": {
+      "additionalProperties": false,
+      "description": "S3 data source configuration",
+      "properties": {
+        "AccessControlListConfiguration": {
+          "$ref": "#/definitions/AccessControlListConfiguration"
+        },
+        "BucketName": { "$ref": "#/definitions/S3BucketName" },
+        "DocumentsMetadataConfiguration": {
+          "$ref": "#/definitions/DocumentsMetadataConfiguration"
+        },
+        "ExclusionPatterns": {
+          "$ref": "#/definitions/DataSourceInclusionsExclusionsStrings"
+        },
+        "InclusionPatterns": {
+          "$ref": "#/definitions/DataSourceInclusionsExclusionsStrings"
+        },
+        "InclusionPrefixes": {
+          "$ref": "#/definitions/DataSourceInclusionsExclusionsStrings"
+        }
+      },
+      "required": ["BucketName"],
+      "type": "object"
+    },
+    "S3ObjectKey": { "maxLength": 1024, "minLength": 1, "type": "string" },
+    "S3Path": {
+      "additionalProperties": false,
+      "properties": {
+        "Bucket": { "$ref": "#/definitions/S3BucketName" },
+        "Key": { "$ref": "#/definitions/S3ObjectKey" }
+      },
+      "required": ["Bucket", "Key"],
+      "type": "object"
+    },
+    "SalesforceChatterFeedConfiguration": {
+      "additionalProperties": false,
+      "properties": {
+        "DocumentDataFieldName": {
+          "$ref": "#/definitions/DataSourceFieldName"
+        },
         "DocumentTitleFieldName": {
           "$ref": "#/definitions/DataSourceFieldName"
         },
-        "DisableLocalGroups": { "$ref": "#/definitions/DisableLocalGroups" },
-        "SslCertificateS3Path": { "$ref": "#/definitions/S3Path" }
+        "FieldMappings": {
+          "$ref": "#/definitions/DataSourceToIndexFieldMappingList"
+        },
+        "IncludeFilterTypes": {
+          "$ref": "#/definitions/SalesforceChatterFeedIncludeFilterTypes"
+        }
       },
-      "additionalProperties": false,
-      "required": ["Urls", "SecretArn", "SharePointVersion"]
+      "required": ["DocumentDataFieldName"],
+      "type": "object"
+    },
+    "SalesforceChatterFeedIncludeFilterType": {
+      "enum": ["ACTIVE_USER", "STANDARD_USER"],
+      "type": "string"
+    },
+    "SalesforceChatterFeedIncludeFilterTypes": {
+      "items": {
+        "$ref": "#/definitions/SalesforceChatterFeedIncludeFilterType"
+      },
+      "maxItems": 2,
+      "minItems": 1,
+      "type": "array"
     },
     "SalesforceConfiguration": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
-        "ServerUrl": { "$ref": "#/definitions/Url" },
-        "SecretArn": { "$ref": "#/definitions/SecretArn" },
-        "StandardObjectConfigurations": {
-          "$ref": "#/definitions/SalesforceStandardObjectConfigurationList"
-        },
-        "KnowledgeArticleConfiguration": {
-          "$ref": "#/definitions/SalesforceKnowledgeArticleConfiguration"
-        },
         "ChatterFeedConfiguration": {
           "$ref": "#/definitions/SalesforceChatterFeedConfiguration"
         },
         "CrawlAttachments": { "type": "boolean" },
-        "StandardObjectAttachmentConfiguration": {
-          "$ref": "#/definitions/SalesforceStandardObjectAttachmentConfiguration"
+        "ExcludeAttachmentFilePatterns": {
+          "$ref": "#/definitions/DataSourceInclusionsExclusionsStrings"
         },
         "IncludeAttachmentFilePatterns": {
           "$ref": "#/definitions/DataSourceInclusionsExclusionsStrings"
         },
-        "ExcludeAttachmentFilePatterns": {
-          "$ref": "#/definitions/DataSourceInclusionsExclusionsStrings"
+        "KnowledgeArticleConfiguration": {
+          "$ref": "#/definitions/SalesforceKnowledgeArticleConfiguration"
+        },
+        "SecretArn": { "$ref": "#/definitions/SecretArn" },
+        "ServerUrl": { "$ref": "#/definitions/Url" },
+        "StandardObjectAttachmentConfiguration": {
+          "$ref": "#/definitions/SalesforceStandardObjectAttachmentConfiguration"
+        },
+        "StandardObjectConfigurations": {
+          "$ref": "#/definitions/SalesforceStandardObjectConfigurationList"
         }
       },
+      "required": ["ServerUrl", "SecretArn"],
+      "type": "object"
+    },
+    "SalesforceCustomKnowledgeArticleTypeConfiguration": {
       "additionalProperties": false,
-      "required": ["ServerUrl", "SecretArn"]
-    },
-    "SalesforceStandardObjectConfigurationList": {
-      "type": "array",
-      "minItems": 1,
-      "maxItems": 17,
-      "items": { "$ref": "#/definitions/SalesforceStandardObjectConfiguration" }
-    },
-    "SalesforceStandardObjectConfiguration": {
-      "type": "object",
       "properties": {
-        "Name": { "$ref": "#/definitions/SalesforceStandardObjectName" },
+        "DocumentDataFieldName": {
+          "$ref": "#/definitions/DataSourceFieldName"
+        },
+        "DocumentTitleFieldName": {
+          "$ref": "#/definitions/DataSourceFieldName"
+        },
+        "FieldMappings": {
+          "$ref": "#/definitions/DataSourceToIndexFieldMappingList"
+        },
+        "Name": {
+          "$ref": "#/definitions/SalesforceCustomKnowledgeArticleTypeName"
+        }
+      },
+      "required": ["Name", "DocumentDataFieldName"],
+      "type": "object"
+    },
+    "SalesforceCustomKnowledgeArticleTypeConfigurationList": {
+      "items": {
+        "$ref": "#/definitions/SalesforceCustomKnowledgeArticleTypeConfiguration"
+      },
+      "maxItems": 10,
+      "minItems": 1,
+      "type": "array"
+    },
+    "SalesforceCustomKnowledgeArticleTypeName": {
+      "maxLength": 100,
+      "minLength": 1,
+      "type": "string"
+    },
+    "SalesforceKnowledgeArticleConfiguration": {
+      "additionalProperties": false,
+      "properties": {
+        "CustomKnowledgeArticleTypeConfigurations": {
+          "$ref": "#/definitions/SalesforceCustomKnowledgeArticleTypeConfigurationList"
+        },
+        "IncludedStates": {
+          "$ref": "#/definitions/SalesforceKnowledgeArticleStateList"
+        },
+        "StandardKnowledgeArticleTypeConfiguration": {
+          "$ref": "#/definitions/SalesforceStandardKnowledgeArticleTypeConfiguration"
+        }
+      },
+      "required": ["IncludedStates"],
+      "type": "object"
+    },
+    "SalesforceKnowledgeArticleState": {
+      "enum": ["DRAFT", "PUBLISHED", "ARCHIVED"],
+      "type": "string"
+    },
+    "SalesforceKnowledgeArticleStateList": {
+      "items": { "$ref": "#/definitions/SalesforceKnowledgeArticleState" },
+      "maxItems": 3,
+      "minItems": 1,
+      "type": "array"
+    },
+    "SalesforceStandardKnowledgeArticleTypeConfiguration": {
+      "additionalProperties": false,
+      "properties": {
         "DocumentDataFieldName": {
           "$ref": "#/definitions/DataSourceFieldName"
         },
@@ -237,11 +830,47 @@
           "$ref": "#/definitions/DataSourceToIndexFieldMappingList"
         }
       },
+      "required": ["DocumentDataFieldName"],
+      "type": "object"
+    },
+    "SalesforceStandardObjectAttachmentConfiguration": {
       "additionalProperties": false,
-      "required": ["Name", "DocumentDataFieldName"]
+      "properties": {
+        "DocumentTitleFieldName": {
+          "$ref": "#/definitions/DataSourceFieldName"
+        },
+        "FieldMappings": {
+          "$ref": "#/definitions/DataSourceToIndexFieldMappingList"
+        }
+      },
+      "type": "object"
+    },
+    "SalesforceStandardObjectConfiguration": {
+      "additionalProperties": false,
+      "properties": {
+        "DocumentDataFieldName": {
+          "$ref": "#/definitions/DataSourceFieldName"
+        },
+        "DocumentTitleFieldName": {
+          "$ref": "#/definitions/DataSourceFieldName"
+        },
+        "FieldMappings": {
+          "$ref": "#/definitions/DataSourceToIndexFieldMappingList"
+        },
+        "Name": { "$ref": "#/definitions/SalesforceStandardObjectName" }
+      },
+      "required": ["Name", "DocumentDataFieldName"],
+      "type": "object"
+    },
+    "SalesforceStandardObjectConfigurationList": {
+      "items": {
+        "$ref": "#/definitions/SalesforceStandardObjectConfiguration"
+      },
+      "maxItems": 17,
+      "minItems": 1,
+      "type": "array"
     },
     "SalesforceStandardObjectName": {
-      "type": "string",
       "enum": [
         "ACCOUNT",
         "CAMPAIGN",
@@ -260,828 +889,192 @@
         "SOLUTION",
         "TASK",
         "USER"
-      ]
+      ],
+      "type": "string"
     },
-    "SalesforceKnowledgeArticleConfiguration": {
-      "type": "object",
-      "properties": {
-        "IncludedStates": {
-          "$ref": "#/definitions/SalesforceKnowledgeArticleStateList"
-        },
-        "StandardKnowledgeArticleTypeConfiguration": {
-          "$ref": "#/definitions/SalesforceStandardKnowledgeArticleTypeConfiguration"
-        },
-        "CustomKnowledgeArticleTypeConfigurations": {
-          "$ref": "#/definitions/SalesforceCustomKnowledgeArticleTypeConfigurationList"
-        }
-      },
-      "additionalProperties": false,
-      "required": ["IncludedStates"]
+    "Schedule": {
+      "description": "Schedule",
+      "maxLength": 1000,
+      "type": "string"
     },
-    "SalesforceKnowledgeArticleStateList": {
-      "type": "array",
-      "minItems": 1,
-      "maxItems": 3,
-      "items": { "$ref": "#/definitions/SalesforceKnowledgeArticleState" }
-    },
-    "SalesforceKnowledgeArticleState": {
-      "type": "string",
-      "enum": ["DRAFT", "PUBLISHED", "ARCHIVED"]
-    },
-    "SalesforceStandardKnowledgeArticleTypeConfiguration": {
-      "type": "object",
-      "properties": {
-        "DocumentDataFieldName": {
-          "$ref": "#/definitions/DataSourceFieldName"
-        },
-        "DocumentTitleFieldName": {
-          "$ref": "#/definitions/DataSourceFieldName"
-        },
-        "FieldMappings": {
-          "$ref": "#/definitions/DataSourceToIndexFieldMappingList"
-        }
-      },
-      "additionalProperties": false,
-      "required": ["DocumentDataFieldName"]
-    },
-    "SalesforceCustomKnowledgeArticleTypeConfigurationList": {
-      "type": "array",
-      "minItems": 1,
-      "maxItems": 10,
-      "items": {
-        "$ref": "#/definitions/SalesforceCustomKnowledgeArticleTypeConfiguration"
-      }
-    },
-    "SalesforceCustomKnowledgeArticleTypeConfiguration": {
-      "type": "object",
-      "properties": {
-        "Name": {
-          "$ref": "#/definitions/SalesforceCustomKnowledgeArticleTypeName"
-        },
-        "DocumentDataFieldName": {
-          "$ref": "#/definitions/DataSourceFieldName"
-        },
-        "DocumentTitleFieldName": {
-          "$ref": "#/definitions/DataSourceFieldName"
-        },
-        "FieldMappings": {
-          "$ref": "#/definitions/DataSourceToIndexFieldMappingList"
-        }
-      },
-      "additionalProperties": false,
-      "required": ["Name", "DocumentDataFieldName"]
-    },
-    "SalesforceCustomKnowledgeArticleTypeName": {
-      "type": "string",
+    "SecretArn": {
+      "maxLength": 1284,
       "minLength": 1,
-      "maxLength": 100
+      "pattern": "arn:[a-z0-9-\\.]{1,63}:[a-z0-9-\\.]{0,63}:[a-z0-9-\\.]{0,63}:[a-z0-9-\\.]{0,63}:[^/].{0,1023}",
+      "type": "string"
     },
-    "SalesforceChatterFeedConfiguration": {
-      "type": "object",
-      "properties": {
-        "DocumentDataFieldName": {
-          "$ref": "#/definitions/DataSourceFieldName"
-        },
-        "DocumentTitleFieldName": {
-          "$ref": "#/definitions/DataSourceFieldName"
-        },
-        "FieldMappings": {
-          "$ref": "#/definitions/DataSourceToIndexFieldMappingList"
-        },
-        "IncludeFilterTypes": {
-          "$ref": "#/definitions/SalesforceChatterFeedIncludeFilterTypes"
-        }
-      },
-      "additionalProperties": false,
-      "required": ["DocumentDataFieldName"]
+    "ServiceNowAuthenticationType": {
+      "enum": ["HTTP_BASIC", "OAUTH2"],
+      "type": "string"
     },
-    "SalesforceChatterFeedIncludeFilterTypes": {
-      "type": "array",
-      "minItems": 1,
-      "maxItems": 2,
-      "items": {
-        "$ref": "#/definitions/SalesforceChatterFeedIncludeFilterType"
-      }
-    },
-    "SalesforceChatterFeedIncludeFilterType": {
-      "type": "string",
-      "enum": ["ACTIVE_USER", "STANDARD_USER"]
-    },
-    "SalesforceStandardObjectAttachmentConfiguration": {
-      "type": "object",
-      "properties": {
-        "DocumentTitleFieldName": {
-          "$ref": "#/definitions/DataSourceFieldName"
-        },
-        "FieldMappings": {
-          "$ref": "#/definitions/DataSourceToIndexFieldMappingList"
-        }
-      },
-      "additionalProperties": false
-    },
-    "DatabaseConfiguration": {
-      "type": "object",
-      "properties": {
-        "DatabaseEngineType": { "$ref": "#/definitions/DatabaseEngineType" },
-        "ConnectionConfiguration": {
-          "$ref": "#/definitions/ConnectionConfiguration"
-        },
-        "VpcConfiguration": {
-          "$ref": "#/definitions/DataSourceVpcConfiguration"
-        },
-        "ColumnConfiguration": { "$ref": "#/definitions/ColumnConfiguration" },
-        "AclConfiguration": { "$ref": "#/definitions/AclConfiguration" },
-        "SqlConfiguration": { "$ref": "#/definitions/SqlConfiguration" }
-      },
-      "additionalProperties": false,
-      "required": [
-        "ConnectionConfiguration",
-        "ColumnConfiguration",
-        "DatabaseEngineType"
-      ]
-    },
-    "DatabaseEngineType": {
-      "type": "string",
-      "enum": [
-        "RDS_AURORA_MYSQL",
-        "RDS_AURORA_POSTGRESQL",
-        "RDS_MYSQL",
-        "RDS_POSTGRESQL"
-      ]
-    },
-    "ConnectionConfiguration": {
-      "type": "object",
-      "properties": {
-        "DatabaseHost": { "$ref": "#/definitions/DatabaseHost" },
-        "DatabasePort": { "$ref": "#/definitions/DatabasePort" },
-        "DatabaseName": { "$ref": "#/definitions/DatabaseName" },
-        "TableName": { "$ref": "#/definitions/TableName" },
-        "SecretArn": { "$ref": "#/definitions/SecretArn" }
-      },
-      "additionalProperties": false,
-      "required": [
-        "DatabaseHost",
-        "DatabasePort",
-        "DatabaseName",
-        "TableName",
-        "SecretArn"
-      ]
-    },
-    "DatabaseHost": { "type": "string", "minLength": 1, "maxLength": 253 },
-    "DatabasePort": { "type": "integer", "minimum": 1, "maximum": 65535 },
-    "DatabaseName": { "type": "string", "minLength": 1, "maxLength": 100 },
-    "TableName": { "type": "string", "minLength": 1, "maxLength": 100 },
-    "ColumnConfiguration": {
-      "type": "object",
-      "properties": {
-        "DocumentIdColumnName": { "$ref": "#/definitions/ColumnName" },
-        "DocumentDataColumnName": { "$ref": "#/definitions/ColumnName" },
-        "DocumentTitleColumnName": { "$ref": "#/definitions/ColumnName" },
-        "FieldMappings": {
-          "$ref": "#/definitions/DataSourceToIndexFieldMappingList"
-        },
-        "ChangeDetectingColumns": {
-          "$ref": "#/definitions/ChangeDetectingColumns"
-        }
-      },
-      "additionalProperties": false,
-      "required": [
-        "DocumentIdColumnName",
-        "DocumentDataColumnName",
-        "ChangeDetectingColumns"
-      ]
-    },
-    "ChangeDetectingColumns": {
-      "type": "array",
-      "minItems": 1,
-      "maxItems": 5,
-      "items": { "$ref": "#/definitions/ColumnName" }
-    },
-    "ColumnName": { "type": "string", "minLength": 1, "maxLength": 100 },
-    "SqlConfiguration": {
-      "type": "object",
-      "properties": {
-        "QueryIdentifiersEnclosingOption": {
-          "$ref": "#/definitions/QueryIdentifiersEnclosingOption"
-        }
-      },
-      "additionalProperties": false
-    },
-    "QueryIdentifiersEnclosingOption": {
-      "type": "string",
-      "enum": ["DOUBLE_QUOTES", "NONE"]
-    },
-    "AclConfiguration": {
-      "type": "object",
-      "properties": {
-        "AllowedGroupsColumnName": { "$ref": "#/definitions/ColumnName" }
-      },
-      "additionalProperties": false,
-      "required": ["AllowedGroupsColumnName"]
-    },
-    "OneDriveConfiguration": {
-      "type": "object",
-      "properties": {
-        "TenantDomain": { "$ref": "#/definitions/TenantDomain" },
-        "SecretArn": { "$ref": "#/definitions/SecretArn" },
-        "OneDriveUsers": { "$ref": "#/definitions/OneDriveUsers" },
-        "InclusionPatterns": {
-          "$ref": "#/definitions/DataSourceInclusionsExclusionsStrings"
-        },
-        "ExclusionPatterns": {
-          "$ref": "#/definitions/DataSourceInclusionsExclusionsStrings"
-        },
-        "FieldMappings": {
-          "$ref": "#/definitions/DataSourceToIndexFieldMappingList"
-        },
-        "DisableLocalGroups": { "$ref": "#/definitions/DisableLocalGroups" }
-      },
-      "additionalProperties": false,
-      "required": ["TenantDomain", "SecretArn", "OneDriveUsers"]
-    },
-    "TenantDomain": {
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 256,
-      "pattern": "^([a-zA-Z0-9]+(-[a-zA-Z0-9]+)*\\.)+[a-z]{2,}$"
-    },
-    "OneDriveUsers": {
-      "type": "object",
-      "properties": {
-        "OneDriveUserList": { "$ref": "#/definitions/OneDriveUserList" },
-        "OneDriveUserS3Path": { "$ref": "#/definitions/S3Path" }
-      },
-      "additionalProperties": false,
-      "oneOf": [
-        { "required": ["OneDriveUserList"] },
-        { "required": ["OneDriveUserS3Path"] }
-      ]
-    },
-    "OneDriveUserList": {
-      "type": "array",
-      "minItems": 1,
-      "maxItems": 100,
-      "items": { "$ref": "#/definitions/OneDriveUser" }
-    },
-    "OneDriveUser": {
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 256,
-      "pattern": "^(?!\\s).+@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$"
+    "ServiceNowBuildVersionType": {
+      "enum": ["LONDON", "OTHERS"],
+      "type": "string"
     },
     "ServiceNowConfiguration": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
-        "HostUrl": { "$ref": "#/definitions/ServiceNowHostUrl" },
-        "SecretArn": { "$ref": "#/definitions/SecretArn" },
-        "ServiceNowBuildVersion": {
-          "$ref": "#/definitions/ServiceNowBuildVersionType"
-        },
         "AuthenticationType": {
           "$ref": "#/definitions/ServiceNowAuthenticationType"
         },
+        "HostUrl": { "$ref": "#/definitions/ServiceNowHostUrl" },
         "KnowledgeArticleConfiguration": {
           "$ref": "#/definitions/ServiceNowKnowledgeArticleConfiguration"
         },
+        "SecretArn": { "$ref": "#/definitions/SecretArn" },
         "ServiceCatalogConfiguration": {
           "$ref": "#/definitions/ServiceNowServiceCatalogConfiguration"
+        },
+        "ServiceNowBuildVersion": {
+          "$ref": "#/definitions/ServiceNowBuildVersionType"
         }
       },
-      "additionalProperties": false,
-      "required": ["HostUrl", "SecretArn", "ServiceNowBuildVersion"]
-    },
-    "ServiceNowBuildVersionType": {
-      "type": "string",
-      "enum": ["LONDON", "OTHERS"]
-    },
-    "ServiceNowAuthenticationType": {
-      "type": "string",
-      "enum": ["HTTP_BASIC", "OAUTH2"]
-    },
-    "ServiceNowServiceCatalogConfiguration": {
-      "type": "object",
-      "properties": {
-        "CrawlAttachments": { "type": "boolean" },
-        "IncludeAttachmentFilePatterns": {
-          "$ref": "#/definitions/DataSourceInclusionsExclusionsStrings"
-        },
-        "ExcludeAttachmentFilePatterns": {
-          "$ref": "#/definitions/DataSourceInclusionsExclusionsStrings"
-        },
-        "DocumentDataFieldName": {
-          "$ref": "#/definitions/DataSourceFieldName"
-        },
-        "DocumentTitleFieldName": {
-          "$ref": "#/definitions/DataSourceFieldName"
-        },
-        "FieldMappings": {
-          "$ref": "#/definitions/DataSourceToIndexFieldMappingList"
-        }
-      },
-      "additionalProperties": false,
-      "required": ["DocumentDataFieldName"]
+      "required": ["HostUrl", "SecretArn", "ServiceNowBuildVersion"],
+      "type": "object"
     },
     "ServiceNowHostUrl": {
-      "type": "string",
-      "minLength": 1,
       "maxLength": 2048,
-      "pattern": "^(?!(^(https?|ftp|file):\\/\\/))[a-z0-9-]+(\\.service-now\\.com)$"
+      "minLength": 1,
+      "pattern": "^(?!(^(https?|ftp|file):\\/\\/))[a-z0-9-]+(\\.service-now\\.com)$",
+      "type": "string"
     },
     "ServiceNowKnowledgeArticleConfiguration": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "CrawlAttachments": { "type": "boolean" },
-        "IncludeAttachmentFilePatterns": {
-          "$ref": "#/definitions/DataSourceInclusionsExclusionsStrings"
-        },
-        "ExcludeAttachmentFilePatterns": {
-          "$ref": "#/definitions/DataSourceInclusionsExclusionsStrings"
-        },
         "DocumentDataFieldName": {
           "$ref": "#/definitions/DataSourceFieldName"
         },
         "DocumentTitleFieldName": {
           "$ref": "#/definitions/DataSourceFieldName"
+        },
+        "ExcludeAttachmentFilePatterns": {
+          "$ref": "#/definitions/DataSourceInclusionsExclusionsStrings"
         },
         "FieldMappings": {
           "$ref": "#/definitions/DataSourceToIndexFieldMappingList"
         },
         "FilterQuery": {
           "$ref": "#/definitions/ServiceNowKnowledgeArticleFilterQuery"
+        },
+        "IncludeAttachmentFilePatterns": {
+          "$ref": "#/definitions/DataSourceInclusionsExclusionsStrings"
         }
       },
-      "additionalProperties": false,
-      "required": ["DocumentDataFieldName"]
+      "required": ["DocumentDataFieldName"],
+      "type": "object"
     },
     "ServiceNowKnowledgeArticleFilterQuery": {
-      "type": "string",
+      "maxLength": 2048,
       "minLength": 1,
-      "maxLength": 2048
+      "type": "string"
     },
-    "ConfluenceConfiguration": {
-      "type": "object",
-      "properties": {
-        "ServerUrl": { "$ref": "#/definitions/Url" },
-        "SecretArn": { "$ref": "#/definitions/SecretArn" },
-        "Version": { "$ref": "#/definitions/ConfluenceVersion" },
-        "SpaceConfiguration": {
-          "$ref": "#/definitions/ConfluenceSpaceConfiguration"
-        },
-        "PageConfiguration": {
-          "$ref": "#/definitions/ConfluencePageConfiguration"
-        },
-        "BlogConfiguration": {
-          "$ref": "#/definitions/ConfluenceBlogConfiguration"
-        },
-        "AttachmentConfiguration": {
-          "$ref": "#/definitions/ConfluenceAttachmentConfiguration"
-        },
-        "VpcConfiguration": {
-          "$ref": "#/definitions/DataSourceVpcConfiguration"
-        },
-        "InclusionPatterns": {
-          "$ref": "#/definitions/DataSourceInclusionsExclusionsStrings"
-        },
-        "ExclusionPatterns": {
-          "$ref": "#/definitions/DataSourceInclusionsExclusionsStrings"
-        }
-      },
+    "ServiceNowServiceCatalogConfiguration": {
       "additionalProperties": false,
-      "required": ["ServerUrl", "SecretArn", "Version"]
-    },
-    "ConfluenceVersion": { "type": "string", "enum": ["CLOUD", "SERVER"] },
-    "ConfluenceSpaceConfiguration": {
-      "type": "object",
-      "properties": {
-        "CrawlPersonalSpaces": { "type": "boolean" },
-        "CrawlArchivedSpaces": { "type": "boolean" },
-        "IncludeSpaces": { "$ref": "#/definitions/ConfluenceSpaceList" },
-        "ExcludeSpaces": { "$ref": "#/definitions/ConfluenceSpaceList" },
-        "SpaceFieldMappings": {
-          "$ref": "#/definitions/ConfluenceSpaceFieldMappingsList"
-        }
-      },
-      "additionalProperties": false
-    },
-    "ConfluenceSpaceFieldMappingsList": {
-      "type": "array",
-      "minItems": 1,
-      "maxItems": 4,
-      "items": { "$ref": "#/definitions/ConfluenceSpaceToIndexFieldMapping" }
-    },
-    "ConfluenceSpaceToIndexFieldMapping": {
-      "type": "object",
-      "properties": {
-        "DataSourceFieldName": {
-          "$ref": "#/definitions/ConfluenceSpaceFieldName"
-        },
-        "DateFieldFormat": { "$ref": "#/definitions/DateFieldFormat" },
-        "IndexFieldName": { "$ref": "#/definitions/IndexFieldName" }
-      },
-      "additionalProperties": false,
-      "required": ["DataSourceFieldName", "IndexFieldName"]
-    },
-    "ConfluenceSpaceFieldName": {
-      "type": "string",
-      "enum": ["DISPLAY_URL", "ITEM_TYPE", "SPACE_KEY", "URL"]
-    },
-    "ConfluenceSpaceList": {
-      "type": "array",
-      "minItems": 1,
-      "items": { "$ref": "#/definitions/ConfluenceSpaceIdentifier" }
-    },
-    "ConfluenceSpaceIdentifier": {
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 255
-    },
-    "ConfluencePageConfiguration": {
-      "type": "object",
-      "properties": {
-        "PageFieldMappings": {
-          "$ref": "#/definitions/ConfluencePageFieldMappingsList"
-        }
-      },
-      "additionalProperties": false
-    },
-    "ConfluencePageFieldMappingsList": {
-      "type": "array",
-      "minItems": 1,
-      "maxItems": 12,
-      "items": { "$ref": "#/definitions/ConfluencePageToIndexFieldMapping" }
-    },
-    "ConfluencePageToIndexFieldMapping": {
-      "type": "object",
-      "properties": {
-        "DataSourceFieldName": {
-          "$ref": "#/definitions/ConfluencePageFieldName"
-        },
-        "DateFieldFormat": { "$ref": "#/definitions/DateFieldFormat" },
-        "IndexFieldName": { "$ref": "#/definitions/IndexFieldName" }
-      },
-      "additionalProperties": false,
-      "required": ["DataSourceFieldName", "IndexFieldName"]
-    },
-    "ConfluencePageFieldName": {
-      "type": "string",
-      "enum": [
-        "AUTHOR",
-        "CONTENT_STATUS",
-        "CREATED_DATE",
-        "DISPLAY_URL",
-        "ITEM_TYPE",
-        "LABELS",
-        "MODIFIED_DATE",
-        "PARENT_ID",
-        "SPACE_KEY",
-        "SPACE_NAME",
-        "URL",
-        "VERSION"
-      ]
-    },
-    "ConfluenceBlogConfiguration": {
-      "type": "object",
-      "properties": {
-        "BlogFieldMappings": {
-          "$ref": "#/definitions/ConfluenceBlogFieldMappingsList"
-        }
-      },
-      "additionalProperties": false
-    },
-    "ConfluenceBlogFieldMappingsList": {
-      "type": "array",
-      "minItems": 1,
-      "maxItems": 9,
-      "items": { "$ref": "#/definitions/ConfluenceBlogToIndexFieldMapping" }
-    },
-    "ConfluenceBlogToIndexFieldMapping": {
-      "type": "object",
-      "properties": {
-        "DataSourceFieldName": {
-          "$ref": "#/definitions/ConfluenceBlogFieldName"
-        },
-        "DateFieldFormat": { "$ref": "#/definitions/DateFieldFormat" },
-        "IndexFieldName": { "$ref": "#/definitions/IndexFieldName" }
-      },
-      "additionalProperties": false,
-      "required": ["DataSourceFieldName", "IndexFieldName"]
-    },
-    "ConfluenceBlogFieldName": {
-      "type": "string",
-      "enum": [
-        "AUTHOR",
-        "DISPLAY_URL",
-        "ITEM_TYPE",
-        "LABELS",
-        "PUBLISH_DATE",
-        "SPACE_KEY",
-        "SPACE_NAME",
-        "URL",
-        "VERSION"
-      ]
-    },
-    "ConfluenceAttachmentConfiguration": {
-      "type": "object",
       "properties": {
         "CrawlAttachments": { "type": "boolean" },
-        "AttachmentFieldMappings": {
-          "$ref": "#/definitions/ConfluenceAttachmentFieldMappingsList"
+        "DocumentDataFieldName": {
+          "$ref": "#/definitions/DataSourceFieldName"
+        },
+        "DocumentTitleFieldName": {
+          "$ref": "#/definitions/DataSourceFieldName"
+        },
+        "ExcludeAttachmentFilePatterns": {
+          "$ref": "#/definitions/DataSourceInclusionsExclusionsStrings"
+        },
+        "FieldMappings": {
+          "$ref": "#/definitions/DataSourceToIndexFieldMappingList"
+        },
+        "IncludeAttachmentFilePatterns": {
+          "$ref": "#/definitions/DataSourceInclusionsExclusionsStrings"
         }
       },
-      "additionalProperties": false
+      "required": ["DocumentDataFieldName"],
+      "type": "object"
     },
-    "ConfluenceAttachmentFieldMappingsList": {
-      "type": "array",
-      "minItems": 1,
-      "maxItems": 11,
-      "items": {
-        "$ref": "#/definitions/ConfluenceAttachmentToIndexFieldMapping"
-      }
-    },
-    "ConfluenceAttachmentToIndexFieldMapping": {
-      "type": "object",
-      "properties": {
-        "DataSourceFieldName": {
-          "$ref": "#/definitions/ConfluenceAttachmentFieldName"
-        },
-        "DateFieldFormat": { "$ref": "#/definitions/DateFieldFormat" },
-        "IndexFieldName": { "$ref": "#/definitions/IndexFieldName" }
-      },
+    "SharePointConfiguration": {
       "additionalProperties": false,
-      "required": ["DataSourceFieldName", "IndexFieldName"]
-    },
-    "GoogleDriveConfiguration": {
-      "type": "object",
+      "description": "SharePoint configuration",
       "properties": {
+        "CrawlAttachments": { "type": "boolean" },
+        "DisableLocalGroups": { "$ref": "#/definitions/DisableLocalGroups" },
+        "DocumentTitleFieldName": {
+          "$ref": "#/definitions/DataSourceFieldName"
+        },
+        "ExclusionPatterns": {
+          "$ref": "#/definitions/DataSourceInclusionsExclusionsStrings"
+        },
+        "FieldMappings": {
+          "$ref": "#/definitions/DataSourceToIndexFieldMappingList"
+        },
+        "InclusionPatterns": {
+          "$ref": "#/definitions/DataSourceInclusionsExclusionsStrings"
+        },
         "SecretArn": { "$ref": "#/definitions/SecretArn" },
-        "InclusionPatterns": {
-          "$ref": "#/definitions/DataSourceInclusionsExclusionsStrings"
+        "SharePointVersion": {
+          "enum": ["SHAREPOINT_ONLINE", "SHAREPOINT_2013", "SHAREPOINT_2016"],
+          "type": "string"
         },
-        "ExclusionPatterns": {
-          "$ref": "#/definitions/DataSourceInclusionsExclusionsStrings"
+        "SslCertificateS3Path": { "$ref": "#/definitions/S3Path" },
+        "Urls": {
+          "items": { "$ref": "#/definitions/Url" },
+          "maxItems": 100,
+          "type": "array"
         },
-        "FieldMappings": {
-          "$ref": "#/definitions/DataSourceToIndexFieldMappingList"
-        },
-        "ExcludeMimeTypes": { "$ref": "#/definitions/ExcludeMimeTypesList" },
-        "ExcludeUserAccounts": {
-          "$ref": "#/definitions/ExcludeUserAccountsList"
-        },
-        "ExcludeSharedDrives": {
-          "$ref": "#/definitions/ExcludeSharedDrivesList"
-        }
-      },
-      "additionalProperties": false,
-      "required": ["SecretArn"]
-    },
-    "ExcludeMimeTypesList": {
-      "type": "array",
-      "minItems": 0,
-      "maxItems": 30,
-      "items": { "$ref": "#/definitions/MimeType" }
-    },
-    "MimeType": { "type": "string", "minLength": 1, "maxLength": 256 },
-    "ExcludeUserAccountsList": {
-      "type": "array",
-      "minItems": 0,
-      "maxItems": 100,
-      "items": { "$ref": "#/definitions/UserAccount" }
-    },
-    "UserAccount": { "type": "string", "minLength": 1, "maxLength": 256 },
-    "ExcludeSharedDrivesList": {
-      "type": "array",
-      "minItems": 0,
-      "maxItems": 100,
-      "items": { "$ref": "#/definitions/SharedDriveId" }
-    },
-    "SharedDriveId": { "type": "string", "minLength": 1, "maxLength": 256 },
-    "ConfluenceAttachmentFieldName": {
-      "type": "string",
-      "enum": [
-        "AUTHOR",
-        "CONTENT_TYPE",
-        "CREATED_DATE",
-        "DISPLAY_URL",
-        "FILE_SIZE",
-        "ITEM_TYPE",
-        "PARENT_ID",
-        "SPACE_KEY",
-        "SPACE_NAME",
-        "URL",
-        "VERSION"
-      ]
-    },
-    "WebCrawlerSiteMap": {
-      "type": "string",
-      "pattern": "^(https?):\\/\\/([^\\s]*)",
-      "minLength": 1,
-      "maxLength": 2048
-    },
-    "WebCrawlerSiteMaps": {
-      "type": "array",
-      "minItems": 0,
-      "maxItems": 3,
-      "items": { "$ref": "#/definitions/WebCrawlerSiteMap" }
-    },
-    "WebCrawlerSiteMapsConfiguration": {
-      "type": "object",
-      "properties": {
-        "SiteMaps": { "$ref": "#/definitions/WebCrawlerSiteMaps" }
-      },
-      "additionalProperties": false,
-      "required": ["SiteMaps"]
-    },
-    "WebCrawlerSeedUrl": {
-      "type": "string",
-      "pattern": "^(https?)://([^\\s]*)",
-      "minLength": 1,
-      "maxLength": 2048
-    },
-    "WebCrawlerSeedUrlList": {
-      "type": "array",
-      "minItems": 0,
-      "maxItems": 100,
-      "items": { "$ref": "#/definitions/WebCrawlerSeedUrl" }
-    },
-    "WebCrawlerSeedUrlConfiguration": {
-      "type": "object",
-      "properties": {
-        "SeedUrls": { "$ref": "#/definitions/WebCrawlerSeedUrlList" },
-        "WebCrawlerMode": {
-          "type": "string",
-          "enum": ["HOST_ONLY", "SUBDOMAINS", "EVERYTHING"]
-        }
-      },
-      "additionalProperties": false,
-      "required": ["SeedUrls"]
-    },
-    "WebCrawlerUrls": {
-      "type": "object",
-      "properties": {
-        "SeedUrlConfiguration": {
-          "$ref": "#/definitions/WebCrawlerSeedUrlConfiguration"
-        },
-        "SiteMapsConfiguration": {
-          "$ref": "#/definitions/WebCrawlerSiteMapsConfiguration"
-        }
-      },
-      "additionalProperties": false
-    },
-    "ProxyConfiguration": {
-      "type": "object",
-      "properties": {
-        "Host": {
-          "type": "string",
-          "pattern": "([^\\s]*)",
-          "minLength": 1,
-          "maxLength": 253
-        },
-        "Port": { "type": "integer", "minimum": 1, "maximum": 65535 },
-        "Credentials": { "$ref": "#/definitions/SecretArn" }
-      },
-      "additionalProperties": false,
-      "required": ["Host", "Port"]
-    },
-    "WebCrawlerBasicAuthentication": {
-      "type": "object",
-      "properties": {
-        "Host": {
-          "type": "string",
-          "pattern": "([^\\s]*)",
-          "minLength": 1,
-          "maxLength": 253
-        },
-        "Port": { "type": "integer", "minimum": 1, "maximum": 65535 },
-        "Credentials": { "$ref": "#/definitions/SecretArn" }
-      },
-      "additionalProperties": false,
-      "required": ["Host", "Port", "Credentials"]
-    },
-    "WebCrawlerBasicAuthenticationList": {
-      "type": "array",
-      "maxItems": 10,
-      "items": { "$ref": "#/definitions/WebCrawlerBasicAuthentication" }
-    },
-    "WebCrawlerAuthenticationConfiguration": {
-      "type": "object",
-      "properties": {
-        "BasicAuthentication": {
-          "$ref": "#/definitions/WebCrawlerBasicAuthenticationList"
-        }
-      },
-      "additionalProperties": false
-    },
-    "WebCrawlerConfiguration": {
-      "type": "object",
-      "properties": {
-        "Urls": { "$ref": "#/definitions/WebCrawlerUrls" },
-        "CrawlDepth": { "type": "integer", "minimum": 1, "maximum": 10 },
-        "MaxLinksPerPage": { "type": "integer", "minimum": 1, "maximum": 1000 },
-        "MaxContentSizePerPageInMegaBytes": {
-          "type": "number",
-          "minimum": 0,
-          "maximum": 50
-        },
-        "MaxUrlsPerMinuteCrawlRate": {
-          "type": "integer",
-          "minimum": 1,
-          "maximum": 300
-        },
-        "UrlInclusionPatterns": {
-          "$ref": "#/definitions/DataSourceInclusionsExclusionsStrings"
-        },
-        "UrlExclusionPatterns": {
-          "$ref": "#/definitions/DataSourceInclusionsExclusionsStrings"
-        },
-        "ProxyConfiguration": { "$ref": "#/definitions/ProxyConfiguration" },
-        "AuthenticationConfiguration": {
-          "$ref": "#/definitions/WebCrawlerAuthenticationConfiguration"
-        }
-      },
-      "additionalProperties": false,
-      "required": ["Urls"]
-    },
-    "WorkDocsConfiguration": {
-      "type": "object",
-      "properties": {
-        "OrganizationId": {
-          "type": "string",
-          "minLength": 12,
-          "maxLength": 12,
-          "pattern": "d-[0-9a-fA-F]{10}"
-        },
-        "CrawlComments": { "type": "boolean" },
         "UseChangeLog": { "type": "boolean" },
-        "InclusionPatterns": {
-          "$ref": "#/definitions/DataSourceInclusionsExclusionsStrings"
-        },
-        "ExclusionPatterns": {
-          "$ref": "#/definitions/DataSourceInclusionsExclusionsStrings"
-        },
-        "FieldMappings": {
-          "$ref": "#/definitions/DataSourceToIndexFieldMappingList"
+        "VpcConfiguration": {
+          "$ref": "#/definitions/DataSourceVpcConfiguration"
         }
       },
-      "additionalProperties": false,
-      "required": ["OrganizationId"]
+      "required": ["Urls", "SecretArn", "SharePointVersion"],
+      "type": "object"
     },
-    "DataSourceConfiguration": {
-      "type": "object",
+    "SharedDriveId": { "maxLength": 256, "minLength": 1, "type": "string" },
+    "SqlConfiguration": {
+      "additionalProperties": false,
       "properties": {
-        "S3Configuration": {
-          "$ref": "#/definitions/S3DataSourceConfiguration"
-        },
-        "SharePointConfiguration": {
-          "$ref": "#/definitions/SharePointConfiguration"
-        },
-        "SalesforceConfiguration": {
-          "$ref": "#/definitions/SalesforceConfiguration"
-        },
-        "OneDriveConfiguration": {
-          "$ref": "#/definitions/OneDriveConfiguration"
-        },
-        "ServiceNowConfiguration": {
-          "$ref": "#/definitions/ServiceNowConfiguration"
-        },
-        "DatabaseConfiguration": {
-          "$ref": "#/definitions/DatabaseConfiguration"
-        },
-        "ConfluenceConfiguration": {
-          "$ref": "#/definitions/ConfluenceConfiguration"
-        },
-        "GoogleDriveConfiguration": {
-          "$ref": "#/definitions/GoogleDriveConfiguration"
-        },
-        "WebCrawlerConfiguration": {
-          "$ref": "#/definitions/WebCrawlerConfiguration"
-        },
-        "WorkDocsConfiguration": {
-          "$ref": "#/definitions/WorkDocsConfiguration"
+        "QueryIdentifiersEnclosingOption": {
+          "$ref": "#/definitions/QueryIdentifiersEnclosingOption"
         }
       },
+      "type": "object"
+    },
+    "TableName": { "maxLength": 100, "minLength": 1, "type": "string" },
+    "Tag": {
       "additionalProperties": false,
-      "oneOf": [
-        { "required": ["S3Configuration"] },
-        { "required": ["SharePointConfiguration"] },
-        { "required": ["SalesforceConfiguration"] },
-        { "required": ["OneDriveConfiguration"] },
-        { "required": ["ServiceNowConfiguration"] },
-        { "required": ["DatabaseConfiguration"] },
-        { "required": ["ConfluenceConfiguration"] },
-        { "required": ["GoogleDriveConfiguration"] },
-        { "required": ["WebCrawlerConfiguration"] },
-        { "required": ["WorkDocsConfiguration"] }
-      ]
+      "description": "A label for tagging Kendra resources",
+      "properties": {
+        "Key": {
+          "description": "A string used to identify this tag",
+          "maxLength": 128,
+          "minLength": 1,
+          "type": "string"
+        },
+        "Value": {
+          "description": "A string containing the value for the tag",
+          "maxLength": 256,
+          "minLength": 0,
+          "type": "string"
+        }
+      },
+      "required": ["Key", "Value"],
+      "type": "object"
     },
-    "Name": {
-      "description": "Name of data source",
-      "type": "string",
+    "TagList": {
+      "description": "List of tags",
+      "items": { "$ref": "#/definitions/Tag" },
+      "maxItems": 200,
+      "type": "array"
+    },
+    "TenantDomain": {
+      "maxLength": 256,
       "minLength": 1,
-      "maxLength": 1000
+      "pattern": "^([a-zA-Z0-9]+(-[a-zA-Z0-9]+)*\\.)+[a-z]{2,}$",
+      "type": "string"
     },
+    "Timestamp": { "type": "string" },
     "Type": {
       "description": "Data source type",
-      "type": "string",
       "enum": [
         "S3",
         "SHAREPOINT",
@@ -1094,169 +1087,157 @@
         "GOOGLEDRIVE",
         "WEBCRAWLER",
         "WORKDOCS"
-      ]
+      ],
+      "type": "string"
     },
-    "Description": {
-      "description": "Description of data source",
-      "type": "string",
+    "Url": {
+      "maxLength": 2048,
       "minLength": 1,
-      "maxLength": 1000
+      "pattern": "^(https?|ftp|file)://([^\\s]*)",
+      "type": "string"
     },
-    "LanguageCode": {
-      "description": "The code for a language.",
-      "type": "string",
-      "minLength": 2,
-      "maxLength": 10,
-      "pattern": "[a-zA-Z-]*"
-    },
-    "RoleArn": {
-      "description": "Role ARN",
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 1284,
-      "pattern": "arn:[a-z0-9-\\.]{1,63}:[a-z0-9-\\.]{0,63}:[a-z0-9-\\.]{0,63}:[a-z0-9-\\.]{0,63}:[^/].{0,1023}"
-    },
-    "Schedule": {
-      "description": "Schedule",
-      "type": "string",
-      "maxLength": 1000
-    },
-    "Id": {
-      "description": "ID of data source",
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 100
-    },
-    "Arn": { "type": "string", "maxLength": 1000 },
-    "CustomDocumentEnrichmentConfiguration": {
-      "type": "object",
+    "UserAccount": { "maxLength": 256, "minLength": 1, "type": "string" },
+    "WebCrawlerAuthenticationConfiguration": {
+      "additionalProperties": false,
       "properties": {
-        "InlineConfigurations": {
-          "$ref": "#/definitions/InlineConfigurations"
-        },
-        "PreExtractionHookConfiguration": {
-          "$ref": "#/definitions/HookConfiguration"
-        },
-        "PostExtractionHookConfiguration": {
-          "$ref": "#/definitions/HookConfiguration"
-        },
-        "RoleArn": { "$ref": "#/definitions/RoleArn" }
-      },
-      "additionalProperties": false
-    },
-    "InlineConfigurations": {
-      "description": "List of InlineCustomDocumentEnrichmentConfigurations",
-      "type": "array",
-      "maxItems": 100,
-      "items": {
-        "$ref": "#/definitions/InlineCustomDocumentEnrichmentConfiguration"
-      }
-    },
-    "InlineCustomDocumentEnrichmentConfiguration": {
-      "type": "object",
-      "properties": {
-        "Condition": { "$ref": "#/definitions/DocumentAttributeCondition" },
-        "Target": { "$ref": "#/definitions/DocumentAttributeTarget" },
-        "DocumentContentDeletion": { "type": "boolean" }
-      },
-      "additionalProperties": false
-    },
-    "DocumentAttributeCondition": {
-      "type": "object",
-      "properties": {
-        "ConditionDocumentAttributeKey": {
-          "$ref": "#/definitions/DocumentAttributeKey"
-        },
-        "Operator": { "$ref": "#/definitions/ConditionOperator" },
-        "ConditionOnValue": { "$ref": "#/definitions/DocumentAttributeValue" }
-      },
-      "required": ["ConditionDocumentAttributeKey", "Operator"],
-      "additionalProperties": false
-    },
-    "DocumentAttributeTarget": {
-      "type": "object",
-      "properties": {
-        "TargetDocumentAttributeKey": {
-          "$ref": "#/definitions/DocumentAttributeKey"
-        },
-        "TargetDocumentAttributeValueDeletion": { "type": "boolean" },
-        "TargetDocumentAttributeValue": {
-          "$ref": "#/definitions/DocumentAttributeValue"
+        "BasicAuthentication": {
+          "$ref": "#/definitions/WebCrawlerBasicAuthenticationList"
         }
       },
-      "required": ["TargetDocumentAttributeKey"],
-      "additionalProperties": false
+      "type": "object"
     },
-    "ConditionOperator": {
-      "type": "string",
-      "enum": [
-        "GreaterThan",
-        "GreaterThanOrEquals",
-        "LessThan",
-        "LessThanOrEquals",
-        "Equals",
-        "NotEquals",
-        "Contains",
-        "NotContains",
-        "Exists",
-        "NotExists",
-        "BeginsWith"
-      ]
-    },
-    "DocumentAttributeKey": {
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 200,
-      "pattern": "[a-zA-Z0-9_][a-zA-Z0-9_-]*"
-    },
-    "DocumentAttributeValue": {
-      "type": "object",
+    "WebCrawlerBasicAuthentication": {
+      "additionalProperties": false,
       "properties": {
-        "StringValue": { "type": "string", "minLength": 1, "maxLength": 2048 },
-        "StringListValue": { "type": "array", "items": { "type": "string" } },
-        "LongValue": { "$ref": "#/definitions/Long" },
-        "DateValue": { "$ref": "#/definitions/Timestamp" }
-      },
-      "additionalProperties": false
-    },
-    "Long": { "type": "integer", "format": "int64" },
-    "Timestamp": { "type": "string" },
-    "HookConfiguration": {
-      "type": "object",
-      "properties": {
-        "InvocationCondition": {
-          "$ref": "#/definitions/DocumentAttributeCondition"
+        "Credentials": { "$ref": "#/definitions/SecretArn" },
+        "Host": {
+          "maxLength": 253,
+          "minLength": 1,
+          "pattern": "([^\\s]*)",
+          "type": "string"
         },
-        "LambdaArn": { "$ref": "#/definitions/LambdaArn" },
-        "S3Bucket": { "$ref": "#/definitions/S3BucketName" }
+        "Port": { "maximum": 65535, "minimum": 1, "type": "integer" }
       },
-      "required": ["LambdaArn", "S3Bucket"],
-      "additionalProperties": false
+      "required": ["Host", "Port", "Credentials"],
+      "type": "object"
     },
-    "LambdaArn": { "type": "string", "minLength": 1, "maxLength": 2048 }
+    "WebCrawlerBasicAuthenticationList": {
+      "items": { "$ref": "#/definitions/WebCrawlerBasicAuthentication" },
+      "maxItems": 10,
+      "type": "array"
+    },
+    "WebCrawlerConfiguration": {
+      "additionalProperties": false,
+      "properties": {
+        "AuthenticationConfiguration": {
+          "$ref": "#/definitions/WebCrawlerAuthenticationConfiguration"
+        },
+        "CrawlDepth": { "maximum": 10, "minimum": 1, "type": "integer" },
+        "MaxContentSizePerPageInMegaBytes": {
+          "maximum": 50,
+          "minimum": 0,
+          "type": "number"
+        },
+        "MaxLinksPerPage": { "maximum": 1000, "minimum": 1, "type": "integer" },
+        "MaxUrlsPerMinuteCrawlRate": {
+          "maximum": 300,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "ProxyConfiguration": { "$ref": "#/definitions/ProxyConfiguration" },
+        "UrlExclusionPatterns": {
+          "$ref": "#/definitions/DataSourceInclusionsExclusionsStrings"
+        },
+        "UrlInclusionPatterns": {
+          "$ref": "#/definitions/DataSourceInclusionsExclusionsStrings"
+        },
+        "Urls": { "$ref": "#/definitions/WebCrawlerUrls" }
+      },
+      "required": ["Urls"],
+      "type": "object"
+    },
+    "WebCrawlerSeedUrl": {
+      "maxLength": 2048,
+      "minLength": 1,
+      "pattern": "^(https?)://([^\\s]*)",
+      "type": "string"
+    },
+    "WebCrawlerSeedUrlConfiguration": {
+      "additionalProperties": false,
+      "properties": {
+        "SeedUrls": { "$ref": "#/definitions/WebCrawlerSeedUrlList" },
+        "WebCrawlerMode": {
+          "enum": ["HOST_ONLY", "SUBDOMAINS", "EVERYTHING"],
+          "type": "string"
+        }
+      },
+      "required": ["SeedUrls"],
+      "type": "object"
+    },
+    "WebCrawlerSeedUrlList": {
+      "items": { "$ref": "#/definitions/WebCrawlerSeedUrl" },
+      "maxItems": 100,
+      "minItems": 0,
+      "type": "array"
+    },
+    "WebCrawlerSiteMap": {
+      "maxLength": 2048,
+      "minLength": 1,
+      "pattern": "^(https?):\\/\\/([^\\s]*)",
+      "type": "string"
+    },
+    "WebCrawlerSiteMaps": {
+      "items": { "$ref": "#/definitions/WebCrawlerSiteMap" },
+      "maxItems": 3,
+      "minItems": 0,
+      "type": "array"
+    },
+    "WebCrawlerSiteMapsConfiguration": {
+      "additionalProperties": false,
+      "properties": {
+        "SiteMaps": { "$ref": "#/definitions/WebCrawlerSiteMaps" }
+      },
+      "required": ["SiteMaps"],
+      "type": "object"
+    },
+    "WebCrawlerUrls": {
+      "additionalProperties": false,
+      "properties": {
+        "SeedUrlConfiguration": {
+          "$ref": "#/definitions/WebCrawlerSeedUrlConfiguration"
+        },
+        "SiteMapsConfiguration": {
+          "$ref": "#/definitions/WebCrawlerSiteMapsConfiguration"
+        }
+      },
+      "type": "object"
+    },
+    "WorkDocsConfiguration": {
+      "additionalProperties": false,
+      "properties": {
+        "CrawlComments": { "type": "boolean" },
+        "ExclusionPatterns": {
+          "$ref": "#/definitions/DataSourceInclusionsExclusionsStrings"
+        },
+        "FieldMappings": {
+          "$ref": "#/definitions/DataSourceToIndexFieldMappingList"
+        },
+        "InclusionPatterns": {
+          "$ref": "#/definitions/DataSourceInclusionsExclusionsStrings"
+        },
+        "OrganizationId": {
+          "maxLength": 12,
+          "minLength": 12,
+          "pattern": "d-[0-9a-fA-F]{10}",
+          "type": "string"
+        },
+        "UseChangeLog": { "type": "boolean" }
+      },
+      "required": ["OrganizationId"],
+      "type": "object"
+    }
   },
-  "properties": {
-    "Id": { "$ref": "#/definitions/Id" },
-    "Arn": { "$ref": "#/definitions/Arn" },
-    "Name": { "$ref": "#/definitions/Name" },
-    "IndexId": { "$ref": "#/definitions/IndexId" },
-    "Type": { "$ref": "#/definitions/Type" },
-    "DataSourceConfiguration": {
-      "$ref": "#/definitions/DataSourceConfiguration"
-    },
-    "Description": { "$ref": "#/definitions/Description" },
-    "Schedule": { "$ref": "#/definitions/Schedule" },
-    "RoleArn": { "$ref": "#/definitions/RoleArn" },
-    "Tags": {
-      "description": "Tags for labeling the data source",
-      "$ref": "#/definitions/TagList"
-    },
-    "CustomDocumentEnrichmentConfiguration": {
-      "$ref": "#/definitions/CustomDocumentEnrichmentConfiguration"
-    },
-    "LanguageCode": { "$ref": "#/definitions/LanguageCode" }
-  },
-  "required": ["Name", "IndexId", "Type"],
+  "description": "Kendra DataSource",
   "handlers": {
     "create": {
       "permissions": [
@@ -1267,14 +1248,14 @@
         "kendra:TagResource"
       ]
     },
-    "read": {
-      "permissions": ["kendra:DescribeDataSource", "kendra:ListTagsForResource"]
-    },
     "delete": {
       "permissions": ["kendra:DescribeDataSource", "kendra:DeleteDataSource"],
       "timeoutInMinutes": 720
     },
     "list": { "permissions": ["kendra:ListDataSources"] },
+    "read": {
+      "permissions": ["kendra:DescribeDataSource", "kendra:ListTagsForResource"]
+    },
     "update": {
       "permissions": [
         "kendra:DescribeDataSource",
@@ -1286,9 +1267,30 @@
       ]
     }
   },
-  "additionalProperties": false,
   "primaryIdentifier": ["/properties/Id", "/properties/IndexId"],
+  "properties": {
+    "Arn": { "$ref": "#/definitions/Arn" },
+    "CustomDocumentEnrichmentConfiguration": {
+      "$ref": "#/definitions/CustomDocumentEnrichmentConfiguration"
+    },
+    "DataSourceConfiguration": {
+      "$ref": "#/definitions/DataSourceConfiguration"
+    },
+    "Description": { "$ref": "#/definitions/Description" },
+    "Id": { "$ref": "#/definitions/Id" },
+    "IndexId": { "$ref": "#/definitions/IndexId" },
+    "LanguageCode": { "$ref": "#/definitions/LanguageCode" },
+    "Name": { "$ref": "#/definitions/Name" },
+    "RoleArn": { "$ref": "#/definitions/RoleArn" },
+    "Schedule": { "$ref": "#/definitions/Schedule" },
+    "Tags": {
+      "$ref": "#/definitions/TagList",
+      "description": "Tags for labeling the data source"
+    },
+    "Type": { "$ref": "#/definitions/Type" }
+  },
   "readOnlyProperties": ["/properties/Id", "/properties/Arn"],
-  "createOnlyProperties": ["/properties/Type"],
-  "$hash": "94a7d584eab593e2d1e6d0c7226c3ca0b1175013"
+  "required": ["Name", "IndexId", "Type"],
+  "sourceUrl": "https://docs.aws.amazon.com/kendra/latest/dg/hiw-data-source.html",
+  "typeName": "AWS::Kendra::DataSource"
 }

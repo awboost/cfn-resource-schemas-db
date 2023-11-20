@@ -1,43 +1,99 @@
 {
-  "typeName": "AWS::ApplicationAutoScaling::ScalableTarget",
-  "description": "Resource Type definition for AWS::ApplicationAutoScaling::ScalableTarget",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+  "$hash": "f922126c6fe27bce5287cc24ebd61847e0151b8e",
   "additionalProperties": false,
+  "createOnlyProperties": [
+    "/properties/ResourceId",
+    "/properties/ScalableDimension",
+    "/properties/ServiceNamespace"
+  ],
   "definitions": {
-    "SuspendedState": {
-      "type": "object",
-      "additionalProperties": false,
-      "description": "specifies whether the scaling activities for a scalable target are in a suspended state",
-      "properties": {
-        "ScheduledScalingSuspended": { "type": "boolean" },
-        "DynamicScalingOutSuspended": { "type": "boolean" },
-        "DynamicScalingInSuspended": { "type": "boolean" }
-      }
-    },
-    "ScheduledAction": {
-      "type": "object",
-      "additionalProperties": false,
-      "description": "specifies a scheduled action for a scalable target",
-      "properties": {
-        "Timezone": { "type": "string" },
-        "ScheduledActionName": { "type": "string" },
-        "EndTime": { "type": "string" },
-        "Schedule": { "type": "string" },
-        "StartTime": { "type": "string" },
-        "ScalableTargetAction": { "$ref": "#/definitions/ScalableTargetAction" }
-      },
-      "required": ["ScheduledActionName", "Schedule"]
-    },
     "ScalableTargetAction": {
-      "type": "object",
       "additionalProperties": false,
       "description": "specifies the minimum and maximum capacity",
       "properties": {
-        "MinCapacity": { "type": "integer" },
-        "MaxCapacity": { "type": "integer" }
-      }
+        "MaxCapacity": { "type": "integer" },
+        "MinCapacity": { "type": "integer" }
+      },
+      "type": "object"
+    },
+    "ScheduledAction": {
+      "additionalProperties": false,
+      "description": "specifies a scheduled action for a scalable target",
+      "properties": {
+        "EndTime": { "type": "string" },
+        "ScalableTargetAction": {
+          "$ref": "#/definitions/ScalableTargetAction"
+        },
+        "Schedule": { "type": "string" },
+        "ScheduledActionName": { "type": "string" },
+        "StartTime": { "type": "string" },
+        "Timezone": { "type": "string" }
+      },
+      "required": ["ScheduledActionName", "Schedule"],
+      "type": "object"
+    },
+    "SuspendedState": {
+      "additionalProperties": false,
+      "description": "specifies whether the scaling activities for a scalable target are in a suspended state",
+      "properties": {
+        "DynamicScalingInSuspended": { "type": "boolean" },
+        "DynamicScalingOutSuspended": { "type": "boolean" },
+        "ScheduledScalingSuspended": { "type": "boolean" }
+      },
+      "type": "object"
     }
   },
+  "description": "Resource Type definition for AWS::ApplicationAutoScaling::ScalableTarget",
+  "handlers": {
+    "create": {
+      "permissions": [
+        "application-autoscaling:DescribeScalableTargets",
+        "application-autoscaling:RegisterScalableTarget",
+        "application-autoscaling:DescribeScheduledActions",
+        "application-autoscaling:PutScheduledAction",
+        "iam:PassRole",
+        "iam:CreateServiceLinkedRole",
+        "cloudwatch:PutMetricAlarm",
+        "cloudwatch:DeleteAlarms",
+        "cloudwatch:DescribeAlarms",
+        "lambda:GetProvisionedConcurrencyConfig",
+        "lambda:PutProvisionedConcurrencyConfig",
+        "lambda:DeleteProvisionedConcurrencyConfig"
+      ]
+    },
+    "delete": {
+      "permissions": ["application-autoscaling:DeregisterScalableTarget"]
+    },
+    "list": {
+      "permissions": ["application-autoscaling:DescribeScalableTargets"]
+    },
+    "read": {
+      "permissions": [
+        "application-autoscaling:DescribeScalableTargets",
+        "application-autoscaling:DescribeScheduledActions"
+      ]
+    },
+    "update": {
+      "permissions": [
+        "application-autoscaling:RegisterScalableTarget",
+        "application-autoscaling:DescribeScalableTargets",
+        "application-autoscaling:DescribeScheduledActions",
+        "application-autoscaling:DeleteScheduledAction",
+        "application-autoscaling:PutScheduledAction",
+        "cloudwatch:PutMetricAlarm",
+        "cloudwatch:DeleteAlarms",
+        "cloudwatch:DescribeAlarms",
+        "lambda:GetProvisionedConcurrencyConfig",
+        "lambda:PutProvisionedConcurrencyConfig",
+        "lambda:DeleteProvisionedConcurrencyConfig"
+      ]
+    }
+  },
+  "primaryIdentifier": [
+    "/properties/ResourceId",
+    "/properties/ScalableDimension",
+    "/properties/ServiceNamespace"
+  ],
   "properties": {
     "Id": {
       "description": "This value can be returned by using the Ref function. Ref returns the Cloudformation generated ID of the resource in format - ResourceId|ScalableDimension|ServiceNamespace",
@@ -65,20 +121,21 @@
     },
     "ScheduledActions": {
       "description": "The scheduled actions for the scalable target. Duplicates aren't allowed.",
-      "type": "array",
-      "uniqueItems": true,
       "insertionOrder": false,
-      "items": { "$ref": "#/definitions/ScheduledAction" }
+      "items": { "$ref": "#/definitions/ScheduledAction" },
+      "type": "array",
+      "uniqueItems": true
     },
     "ServiceNamespace": {
       "description": "The namespace of the AWS service that provides the resource, or a custom-resource",
       "type": "string"
     },
     "SuspendedState": {
-      "description": "An embedded object that contains attributes and attribute values that are used to suspend and resume automatic scaling. Setting the value of an attribute to true suspends the specified scaling activities. Setting it to false (default) resumes the specified scaling activities.",
-      "$ref": "#/definitions/SuspendedState"
+      "$ref": "#/definitions/SuspendedState",
+      "description": "An embedded object that contains attributes and attribute values that are used to suspend and resume automatic scaling. Setting the value of an attribute to true suspends the specified scaling activities. Setting it to false (default) resumes the specified scaling activities."
     }
   },
+  "readOnlyProperties": ["/properties/Id"],
   "required": [
     "ResourceId",
     "ServiceNamespace",
@@ -86,68 +143,13 @@
     "MinCapacity",
     "MaxCapacity"
   ],
-  "createOnlyProperties": [
-    "/properties/ResourceId",
-    "/properties/ScalableDimension",
-    "/properties/ServiceNamespace"
-  ],
-  "primaryIdentifier": [
-    "/properties/ResourceId",
-    "/properties/ScalableDimension",
-    "/properties/ServiceNamespace"
-  ],
-  "readOnlyProperties": ["/properties/Id"],
-  "writeOnlyProperties": ["/properties/RoleARN"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
   "tagging": {
-    "taggable": false,
+    "cloudFormationSystemTags": false,
     "tagOnCreate": false,
     "tagUpdatable": false,
-    "cloudFormationSystemTags": false
+    "taggable": false
   },
-  "handlers": {
-    "create": {
-      "permissions": [
-        "application-autoscaling:DescribeScalableTargets",
-        "application-autoscaling:RegisterScalableTarget",
-        "application-autoscaling:DescribeScheduledActions",
-        "application-autoscaling:PutScheduledAction",
-        "iam:PassRole",
-        "iam:CreateServiceLinkedRole",
-        "cloudwatch:PutMetricAlarm",
-        "cloudwatch:DeleteAlarms",
-        "cloudwatch:DescribeAlarms",
-        "lambda:GetProvisionedConcurrencyConfig",
-        "lambda:PutProvisionedConcurrencyConfig",
-        "lambda:DeleteProvisionedConcurrencyConfig"
-      ]
-    },
-    "read": {
-      "permissions": [
-        "application-autoscaling:DescribeScalableTargets",
-        "application-autoscaling:DescribeScheduledActions"
-      ]
-    },
-    "list": {
-      "permissions": ["application-autoscaling:DescribeScalableTargets"]
-    },
-    "update": {
-      "permissions": [
-        "application-autoscaling:RegisterScalableTarget",
-        "application-autoscaling:DescribeScalableTargets",
-        "application-autoscaling:DescribeScheduledActions",
-        "application-autoscaling:DeleteScheduledAction",
-        "application-autoscaling:PutScheduledAction",
-        "cloudwatch:PutMetricAlarm",
-        "cloudwatch:DeleteAlarms",
-        "cloudwatch:DescribeAlarms",
-        "lambda:GetProvisionedConcurrencyConfig",
-        "lambda:PutProvisionedConcurrencyConfig",
-        "lambda:DeleteProvisionedConcurrencyConfig"
-      ]
-    },
-    "delete": {
-      "permissions": ["application-autoscaling:DeregisterScalableTarget"]
-    }
-  },
-  "$hash": "f922126c6fe27bce5287cc24ebd61847e0151b8e"
+  "typeName": "AWS::ApplicationAutoScaling::ScalableTarget",
+  "writeOnlyProperties": ["/properties/RoleARN"]
 }

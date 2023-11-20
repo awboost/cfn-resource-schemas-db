@@ -1,88 +1,27 @@
 {
-  "typeName": "AWS::SageMaker::Endpoint",
-  "description": "Resource Type definition for AWS::SageMaker::Endpoint",
+  "$hash": "39bb861886d5f0db558888c05d46eb1af68b1d3e",
   "additionalProperties": false,
-  "properties": {
-    "RetainAllVariantProperties": { "type": "boolean" },
-    "EndpointName": { "type": "string" },
-    "ExcludeRetainedVariantProperties": {
-      "type": "array",
-      "uniqueItems": false,
-      "items": { "$ref": "#/definitions/VariantProperty" }
-    },
-    "EndpointConfigName": { "type": "string" },
-    "Id": { "type": "string" },
-    "DeploymentConfig": { "$ref": "#/definitions/DeploymentConfig" },
-    "RetainDeploymentConfig": { "type": "boolean" },
-    "Tags": {
-      "type": "array",
-      "uniqueItems": false,
-      "items": { "$ref": "#/definitions/Tag" }
-    }
-  },
+  "createOnlyProperties": ["/properties/EndpointName"],
   "definitions": {
-    "CapacitySize": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "Value": { "type": "integer" },
-        "Type": { "type": "string" }
-      },
-      "required": ["Type", "Value"]
-    },
-    "RollingUpdatePolicy": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "MaximumExecutionTimeoutInSeconds": { "type": "integer" },
-        "MaximumBatchSize": { "$ref": "#/definitions/CapacitySize" },
-        "WaitIntervalInSeconds": { "type": "integer" },
-        "RollbackMaximumBatchSize": { "$ref": "#/definitions/CapacitySize" }
-      },
-      "required": ["MaximumBatchSize", "WaitIntervalInSeconds"]
-    },
     "Alarm": {
-      "type": "object",
       "additionalProperties": false,
       "properties": { "AlarmName": { "type": "string" } },
-      "required": ["AlarmName"]
-    },
-    "Tag": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "Value": { "type": "string" },
-        "Key": { "type": "string" }
-      },
-      "required": ["Value", "Key"]
+      "required": ["AlarmName"],
+      "type": "object"
     },
     "AutoRollbackConfig": {
-      "type": "object",
       "additionalProperties": false,
       "properties": {
         "Alarms": {
+          "items": { "$ref": "#/definitions/Alarm" },
           "type": "array",
-          "uniqueItems": false,
-          "items": { "$ref": "#/definitions/Alarm" }
+          "uniqueItems": false
         }
       },
-      "required": ["Alarms"]
-    },
-    "DeploymentConfig": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "AutoRollbackConfiguration": {
-          "$ref": "#/definitions/AutoRollbackConfig"
-        },
-        "RollingUpdatePolicy": { "$ref": "#/definitions/RollingUpdatePolicy" },
-        "BlueGreenUpdatePolicy": {
-          "$ref": "#/definitions/BlueGreenUpdatePolicy"
-        }
-      }
+      "required": ["Alarms"],
+      "type": "object"
     },
     "BlueGreenUpdatePolicy": {
-      "type": "object",
       "additionalProperties": false,
       "properties": {
         "MaximumExecutionTimeoutInSeconds": { "type": "integer" },
@@ -91,28 +30,89 @@
           "$ref": "#/definitions/TrafficRoutingConfig"
         }
       },
-      "required": ["TrafficRoutingConfiguration"]
+      "required": ["TrafficRoutingConfiguration"],
+      "type": "object"
     },
-    "TrafficRoutingConfig": {
-      "type": "object",
+    "CapacitySize": {
       "additionalProperties": false,
       "properties": {
         "Type": { "type": "string" },
-        "LinearStepSize": { "$ref": "#/definitions/CapacitySize" },
-        "CanarySize": { "$ref": "#/definitions/CapacitySize" },
+        "Value": { "type": "integer" }
+      },
+      "required": ["Type", "Value"],
+      "type": "object"
+    },
+    "DeploymentConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "AutoRollbackConfiguration": {
+          "$ref": "#/definitions/AutoRollbackConfig"
+        },
+        "BlueGreenUpdatePolicy": {
+          "$ref": "#/definitions/BlueGreenUpdatePolicy"
+        },
+        "RollingUpdatePolicy": { "$ref": "#/definitions/RollingUpdatePolicy" }
+      },
+      "type": "object"
+    },
+    "RollingUpdatePolicy": {
+      "additionalProperties": false,
+      "properties": {
+        "MaximumBatchSize": { "$ref": "#/definitions/CapacitySize" },
+        "MaximumExecutionTimeoutInSeconds": { "type": "integer" },
+        "RollbackMaximumBatchSize": { "$ref": "#/definitions/CapacitySize" },
         "WaitIntervalInSeconds": { "type": "integer" }
       },
-      "required": ["Type"]
+      "required": ["MaximumBatchSize", "WaitIntervalInSeconds"],
+      "type": "object"
+    },
+    "Tag": {
+      "additionalProperties": false,
+      "properties": {
+        "Key": { "type": "string" },
+        "Value": { "type": "string" }
+      },
+      "required": ["Value", "Key"],
+      "type": "object"
+    },
+    "TrafficRoutingConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "CanarySize": { "$ref": "#/definitions/CapacitySize" },
+        "LinearStepSize": { "$ref": "#/definitions/CapacitySize" },
+        "Type": { "type": "string" },
+        "WaitIntervalInSeconds": { "type": "integer" }
+      },
+      "required": ["Type"],
+      "type": "object"
     },
     "VariantProperty": {
-      "type": "object",
       "additionalProperties": false,
-      "properties": { "VariantPropertyType": { "type": "string" } }
+      "properties": { "VariantPropertyType": { "type": "string" } },
+      "type": "object"
     }
   },
-  "required": ["EndpointConfigName"],
-  "createOnlyProperties": ["/properties/EndpointName"],
+  "description": "Resource Type definition for AWS::SageMaker::Endpoint",
   "primaryIdentifier": ["/properties/Id"],
+  "properties": {
+    "DeploymentConfig": { "$ref": "#/definitions/DeploymentConfig" },
+    "EndpointConfigName": { "type": "string" },
+    "EndpointName": { "type": "string" },
+    "ExcludeRetainedVariantProperties": {
+      "items": { "$ref": "#/definitions/VariantProperty" },
+      "type": "array",
+      "uniqueItems": false
+    },
+    "Id": { "type": "string" },
+    "RetainAllVariantProperties": { "type": "boolean" },
+    "RetainDeploymentConfig": { "type": "boolean" },
+    "Tags": {
+      "items": { "$ref": "#/definitions/Tag" },
+      "type": "array",
+      "uniqueItems": false
+    }
+  },
   "readOnlyProperties": ["/properties/Id"],
-  "$hash": "39bb861886d5f0db558888c05d46eb1af68b1d3e"
+  "required": ["EndpointConfigName"],
+  "typeName": "AWS::SageMaker::Endpoint"
 }

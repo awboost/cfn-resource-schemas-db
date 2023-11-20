@@ -1,89 +1,91 @@
 {
-  "typeName": "AWS::Glue::MLTransform",
-  "description": "Resource Type definition for AWS::Glue::MLTransform",
+  "$hash": "cdf64621f8e476ca9c4d9c41b448c534de9ac529",
   "additionalProperties": false,
-  "properties": {
-    "MaxRetries": { "type": "integer" },
-    "Description": { "type": "string" },
-    "TransformEncryption": { "$ref": "#/definitions/TransformEncryption" },
-    "Timeout": { "type": "integer" },
-    "Name": { "type": "string" },
-    "Role": { "type": "string" },
-    "WorkerType": { "type": "string" },
-    "GlueVersion": { "type": "string" },
-    "TransformParameters": { "$ref": "#/definitions/TransformParameters" },
-    "Id": { "type": "string" },
-    "InputRecordTables": { "$ref": "#/definitions/InputRecordTables" },
-    "NumberOfWorkers": { "type": "integer" },
-    "Tags": { "type": "object" },
-    "MaxCapacity": { "type": "number" }
-  },
+  "createOnlyProperties": ["/properties/InputRecordTables"],
   "definitions": {
-    "GlueTables": {
-      "type": "object",
+    "FindMatchesParameters": {
       "additionalProperties": false,
       "properties": {
+        "AccuracyCostTradeoff": { "type": "number" },
+        "EnforceProvidedLabels": { "type": "boolean" },
+        "PrecisionRecallTradeoff": { "type": "number" },
+        "PrimaryKeyColumnName": { "type": "string" }
+      },
+      "required": ["PrimaryKeyColumnName"],
+      "type": "object"
+    },
+    "GlueTables": {
+      "additionalProperties": false,
+      "properties": {
+        "CatalogId": { "type": "string" },
         "ConnectionName": { "type": "string" },
         "DatabaseName": { "type": "string" },
-        "TableName": { "type": "string" },
-        "CatalogId": { "type": "string" }
+        "TableName": { "type": "string" }
       },
-      "required": ["TableName", "DatabaseName"]
+      "required": ["TableName", "DatabaseName"],
+      "type": "object"
     },
-    "TransformEncryption": {
-      "type": "object",
+    "InputRecordTables": {
       "additionalProperties": false,
       "properties": {
-        "TaskRunSecurityConfigurationName": { "type": "string" },
-        "MLUserDataEncryption": { "$ref": "#/definitions/MLUserDataEncryption" }
-      }
+        "GlueTables": {
+          "items": { "$ref": "#/definitions/GlueTables" },
+          "type": "array",
+          "uniqueItems": false
+        }
+      },
+      "type": "object"
     },
     "MLUserDataEncryption": {
-      "type": "object",
       "additionalProperties": false,
       "properties": {
         "KmsKeyId": { "type": "string" },
         "MLUserDataEncryptionMode": { "type": "string" }
       },
-      "required": ["MLUserDataEncryptionMode"]
+      "required": ["MLUserDataEncryptionMode"],
+      "type": "object"
+    },
+    "TransformEncryption": {
+      "additionalProperties": false,
+      "properties": {
+        "MLUserDataEncryption": {
+          "$ref": "#/definitions/MLUserDataEncryption"
+        },
+        "TaskRunSecurityConfigurationName": { "type": "string" }
+      },
+      "type": "object"
     },
     "TransformParameters": {
-      "type": "object",
       "additionalProperties": false,
       "properties": {
-        "TransformType": { "type": "string" },
         "FindMatchesParameters": {
           "$ref": "#/definitions/FindMatchesParameters"
-        }
+        },
+        "TransformType": { "type": "string" }
       },
-      "required": ["TransformType"]
-    },
-    "InputRecordTables": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "GlueTables": {
-          "type": "array",
-          "uniqueItems": false,
-          "items": { "$ref": "#/definitions/GlueTables" }
-        }
-      }
-    },
-    "FindMatchesParameters": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "PrecisionRecallTradeoff": { "type": "number" },
-        "EnforceProvidedLabels": { "type": "boolean" },
-        "PrimaryKeyColumnName": { "type": "string" },
-        "AccuracyCostTradeoff": { "type": "number" }
-      },
-      "required": ["PrimaryKeyColumnName"]
+      "required": ["TransformType"],
+      "type": "object"
     }
   },
-  "required": ["Role", "TransformParameters", "InputRecordTables"],
-  "createOnlyProperties": ["/properties/InputRecordTables"],
+  "description": "Resource Type definition for AWS::Glue::MLTransform",
   "primaryIdentifier": ["/properties/Id"],
+  "properties": {
+    "Description": { "type": "string" },
+    "GlueVersion": { "type": "string" },
+    "Id": { "type": "string" },
+    "InputRecordTables": { "$ref": "#/definitions/InputRecordTables" },
+    "MaxCapacity": { "type": "number" },
+    "MaxRetries": { "type": "integer" },
+    "Name": { "type": "string" },
+    "NumberOfWorkers": { "type": "integer" },
+    "Role": { "type": "string" },
+    "Tags": { "type": "object" },
+    "Timeout": { "type": "integer" },
+    "TransformEncryption": { "$ref": "#/definitions/TransformEncryption" },
+    "TransformParameters": { "$ref": "#/definitions/TransformParameters" },
+    "WorkerType": { "type": "string" }
+  },
   "readOnlyProperties": ["/properties/Id"],
-  "$hash": "cdf64621f8e476ca9c4d9c41b448c534de9ac529"
+  "required": ["Role", "TransformParameters", "InputRecordTables"],
+  "typeName": "AWS::Glue::MLTransform"
 }

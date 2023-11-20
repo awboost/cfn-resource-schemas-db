@@ -1,54 +1,14 @@
 {
-  "typeName": "AWS::Cassandra::Keyspace",
-  "description": "Resource schema for AWS::Cassandra::Keyspace",
-  "properties": {
-    "KeyspaceName": {
-      "description": "Name for Cassandra keyspace",
-      "type": "string",
-      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_]{1,47}$"
-    },
-    "Tags": {
-      "type": "array",
-      "uniqueItems": true,
-      "items": { "$ref": "#/definitions/Tag" },
-      "minItems": 0,
-      "maxItems": 50
-    },
-    "ReplicationSpecification": {
-      "$ref": "#/definitions/ReplicationSpecification"
-    }
-  },
+  "$hash": "80a786748c68957d5a03cbd20e5e3d8173c53a89",
+  "additionalProperties": false,
+  "createOnlyProperties": [
+    "/properties/ReplicationSpecification",
+    "/properties/KeyspaceName"
+  ],
   "definitions": {
-    "Tag": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "Key": { "type": "string", "minLength": 1, "maxLength": 128 },
-        "Value": { "type": "string", "minLength": 1, "maxLength": 256 }
-      },
-      "required": ["Value", "Key"]
-    },
-    "ReplicationSpecification": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "ReplicationStrategy": {
-          "type": "string",
-          "enum": ["SINGLE_REGION", "MULTI_REGION"]
-        },
-        "RegionList": { "$ref": "#/definitions/RegionList" }
-      },
-      "default": {
-        "properties": {
-          "ReplicationStrategy": { "type": "string", "const": "SINGLE_REGION" }
-        }
-      },
-      "dependencies": { "RegionList": ["ReplicationStrategy"] }
-    },
     "RegionList": {
-      "type": "array",
+      "insertionOrder": false,
       "items": {
-        "type": "string",
         "enum": [
           "ap-northeast-1",
           "ap-northeast-2",
@@ -66,21 +26,42 @@
           "us-east-2",
           "us-west-1",
           "us-west-2"
-        ]
+        ],
+        "type": "string"
       },
-      "uniqueItems": true,
-      "insertionOrder": false,
+      "maxItems": 6,
       "minItems": 2,
-      "maxItems": 6
+      "type": "array",
+      "uniqueItems": true
+    },
+    "ReplicationSpecification": {
+      "additionalProperties": false,
+      "default": {
+        "properties": {
+          "ReplicationStrategy": { "const": "SINGLE_REGION", "type": "string" }
+        }
+      },
+      "dependencies": { "RegionList": ["ReplicationStrategy"] },
+      "properties": {
+        "RegionList": { "$ref": "#/definitions/RegionList" },
+        "ReplicationStrategy": {
+          "enum": ["SINGLE_REGION", "MULTI_REGION"],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Tag": {
+      "additionalProperties": false,
+      "properties": {
+        "Key": { "maxLength": 128, "minLength": 1, "type": "string" },
+        "Value": { "maxLength": 256, "minLength": 1, "type": "string" }
+      },
+      "required": ["Value", "Key"],
+      "type": "object"
     }
   },
-  "additionalProperties": false,
-  "required": [],
-  "createOnlyProperties": [
-    "/properties/ReplicationSpecification",
-    "/properties/KeyspaceName"
-  ],
-  "primaryIdentifier": ["/properties/KeyspaceName"],
+  "description": "Resource schema for AWS::Cassandra::Keyspace",
   "handlers": {
     "create": {
       "permissions": [
@@ -92,6 +73,17 @@
         "cassandra:TagMultiRegionResource",
         "iam:CreateServiceLinkedRole"
       ]
+    },
+    "delete": {
+      "permissions": [
+        "cassandra:Drop",
+        "cassandra:DropMultiRegionResource",
+        "cassandra:Select",
+        "cassandra:SelectMultiRegionResource"
+      ]
+    },
+    "list": {
+      "permissions": ["cassandra:Select", "cassandra:SelectMultiRegionResource"]
     },
     "read": {
       "permissions": ["cassandra:Select", "cassandra:SelectMultiRegionResource"]
@@ -107,18 +99,26 @@
         "cassandra:UntagResource",
         "cassandra:UntagMultiRegionResource"
       ]
-    },
-    "delete": {
-      "permissions": [
-        "cassandra:Drop",
-        "cassandra:DropMultiRegionResource",
-        "cassandra:Select",
-        "cassandra:SelectMultiRegionResource"
-      ]
-    },
-    "list": {
-      "permissions": ["cassandra:Select", "cassandra:SelectMultiRegionResource"]
     }
   },
-  "$hash": "80a786748c68957d5a03cbd20e5e3d8173c53a89"
+  "primaryIdentifier": ["/properties/KeyspaceName"],
+  "properties": {
+    "KeyspaceName": {
+      "description": "Name for Cassandra keyspace",
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_]{1,47}$",
+      "type": "string"
+    },
+    "ReplicationSpecification": {
+      "$ref": "#/definitions/ReplicationSpecification"
+    },
+    "Tags": {
+      "items": { "$ref": "#/definitions/Tag" },
+      "maxItems": 50,
+      "minItems": 0,
+      "type": "array",
+      "uniqueItems": true
+    }
+  },
+  "required": [],
+  "typeName": "AWS::Cassandra::Keyspace"
 }

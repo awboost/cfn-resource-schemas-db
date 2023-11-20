@@ -1,154 +1,109 @@
 {
-  "typeName": "AWS::RoboMaker::SimulationApplication",
-  "description": "This schema is for testing purpose only.",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+  "$hash": "69ddc3c30b59baa99daa920be627ef2e7b57e9d1",
+  "additionalProperties": false,
+  "createOnlyProperties": ["/properties/Name"],
   "definitions": {
     "Arn": {
-      "type": "string",
-      "pattern": "arn:[\\w+=/,.@-]+:[\\w+=/,.@-]+:[\\w+=/,.@-]*:[0-9]*:[\\w+=,.@-]+(/[\\w+=,.@-]+)*"
-    },
-    "Tags": {
-      "description": "A key-value pair to associate with a resource.",
-      "type": "object",
-      "additionalProperties": false,
-      "patternProperties": {
-        "^[a-zA-Z0-9-]{1,128}$": {
-          "type": "string",
-          "description": "The value for the tag. You can specify a value that is 1 to 255 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
-          "minLength": 1,
-          "maxLength": 256
-        }
-      }
+      "pattern": "arn:[\\w+=/,.@-]+:[\\w+=/,.@-]+:[\\w+=/,.@-]*:[0-9]*:[\\w+=,.@-]+(/[\\w+=,.@-]+)*",
+      "type": "string"
     },
     "RenderingEngine": {
+      "additionalProperties": false,
       "description": "Information about a rendering engine.",
-      "type": "object",
       "properties": {
         "Name": {
-          "type": "string",
           "description": "The name of the rendering engine.",
-          "enum": ["OGRE"]
+          "enum": ["OGRE"],
+          "type": "string"
         },
         "Version": {
-          "type": "string",
           "description": "The version of the rendering engine.",
-          "pattern": "1.x"
+          "pattern": "1.x",
+          "type": "string"
         }
       },
       "required": ["Name", "Version"],
-      "additionalProperties": false
+      "type": "object"
     },
     "RobotSoftwareSuite": {
+      "additionalProperties": false,
       "description": "Information about a robot software suite.",
-      "type": "object",
       "properties": {
         "Name": {
-          "type": "string",
           "description": "The name of the robot software suite.",
-          "enum": ["ROS", "ROS2", "General"]
+          "enum": ["ROS", "ROS2", "General"],
+          "type": "string"
         },
         "Version": {
-          "type": "string",
           "description": "The version of the robot software suite.",
-          "enum": ["Kinetic", "Melodic", "Dashing", "Foxy"]
+          "enum": ["Kinetic", "Melodic", "Dashing", "Foxy"],
+          "type": "string"
         }
       },
       "required": ["Name"],
-      "additionalProperties": false
+      "type": "object"
+    },
+    "SimulationSoftwareSuite": {
+      "additionalProperties": false,
+      "description": "Information about a simulation software suite.",
+      "properties": {
+        "Name": {
+          "description": "The name of the simulation software suite.",
+          "enum": ["Gazebo", "RosbagPlay", "SimulationRuntime"],
+          "type": "string"
+        },
+        "Version": {
+          "description": "The version of the simulation software suite.",
+          "enum": ["7", "9", "11", "Kinetic", "Melodic", "Dashing", "Foxy"],
+          "type": "string"
+        }
+      },
+      "required": ["Name"],
+      "type": "object"
     },
     "SourceConfig": {
-      "type": "object",
+      "additionalProperties": false,
       "description": "Information about a source configuration.",
       "properties": {
+        "Architecture": {
+          "description": "The target processor architecture for the application.",
+          "enum": ["X86_64", "ARM64", "ARMHF"],
+          "type": "string"
+        },
         "S3Bucket": {
-          "type": "string",
           "description": "The Amazon S3 bucket name.",
-          "pattern": "[a-z0-9][a-z0-9.\\-]*[a-z0-9]"
+          "pattern": "[a-z0-9][a-z0-9.\\-]*[a-z0-9]",
+          "type": "string"
         },
         "S3Key": {
-          "type": "string",
           "description": "The s3 object key.",
+          "maxLength": 1024,
           "minLength": 1,
-          "maxLength": 1024
-        },
-        "Architecture": {
-          "type": "string",
-          "description": "The target processor architecture for the application.",
-          "enum": ["X86_64", "ARM64", "ARMHF"]
+          "type": "string"
         }
       },
       "required": ["S3Bucket", "S3Key", "Architecture"],
-      "additionalProperties": false
+      "type": "object"
     },
-    "SimulationSoftwareSuite": {
-      "description": "Information about a simulation software suite.",
-      "type": "object",
-      "properties": {
-        "Name": {
-          "type": "string",
-          "description": "The name of the simulation software suite.",
-          "enum": ["Gazebo", "RosbagPlay", "SimulationRuntime"]
-        },
-        "Version": {
-          "type": "string",
-          "description": "The version of the simulation software suite.",
-          "enum": ["7", "9", "11", "Kinetic", "Melodic", "Dashing", "Foxy"]
+    "Tags": {
+      "additionalProperties": false,
+      "description": "A key-value pair to associate with a resource.",
+      "patternProperties": {
+        "^[a-zA-Z0-9-]{1,128}$": {
+          "description": "The value for the tag. You can specify a value that is 1 to 255 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+          "maxLength": 256,
+          "minLength": 1,
+          "type": "string"
         }
       },
-      "required": ["Name"],
-      "additionalProperties": false
+      "type": "object"
     }
   },
-  "properties": {
-    "Arn": { "$ref": "#/definitions/Arn" },
-    "Name": {
-      "description": "The name of the simulation application.",
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 255,
-      "pattern": "[a-zA-Z0-9_\\-]*"
-    },
-    "CurrentRevisionId": {
-      "description": "The current revision id.",
-      "type": "string"
-    },
-    "RenderingEngine": {
-      "description": "The rendering engine for the simulation application.",
-      "$ref": "#/definitions/RenderingEngine"
-    },
-    "RobotSoftwareSuite": {
-      "description": "The robot software suite used by the simulation application.",
-      "$ref": "#/definitions/RobotSoftwareSuite"
-    },
-    "SimulationSoftwareSuite": {
-      "description": "The simulation software suite used by the simulation application.",
-      "$ref": "#/definitions/SimulationSoftwareSuite"
-    },
-    "Sources": {
-      "description": "The sources of the simulation application.",
-      "type": "array",
-      "insertionOrder": false,
-      "items": { "$ref": "#/definitions/SourceConfig" }
-    },
-    "Environment": {
-      "description": "The URI of the Docker image for the robot application.",
-      "type": "string"
-    },
-    "Tags": { "$ref": "#/definitions/Tags" }
-  },
-  "additionalProperties": false,
-  "required": ["RobotSoftwareSuite", "SimulationSoftwareSuite"],
-  "readOnlyProperties": ["/properties/Arn"],
-  "writeOnlyProperties": [
-    "/properties/RenderingEngine",
-    "/properties/RobotSoftwareSuite/Version",
-    "/properties/Sources",
-    "/properties/SimulationSoftwareSuite/Version"
-  ],
-  "createOnlyProperties": ["/properties/Name"],
-  "primaryIdentifier": ["/properties/Arn"],
+  "description": "This schema is for testing purpose only.",
   "handlers": {
     "create": { "permissions": ["robomaker:CreateSimulationApplication"] },
+    "delete": { "permissions": ["robomaker:DeleteSimulationApplication"] },
+    "list": { "permissions": ["robomaker:ListSimulationApplications"] },
     "read": { "permissions": ["robomaker:DescribeSimulationApplication"] },
     "update": {
       "permissions": [
@@ -156,9 +111,54 @@
         "robomaker:UntagResource",
         "robomaker:UpdateSimulationApplication"
       ]
-    },
-    "delete": { "permissions": ["robomaker:DeleteSimulationApplication"] },
-    "list": { "permissions": ["robomaker:ListSimulationApplications"] }
+    }
   },
-  "$hash": "69ddc3c30b59baa99daa920be627ef2e7b57e9d1"
+  "primaryIdentifier": ["/properties/Arn"],
+  "properties": {
+    "Arn": { "$ref": "#/definitions/Arn" },
+    "CurrentRevisionId": {
+      "description": "The current revision id.",
+      "type": "string"
+    },
+    "Environment": {
+      "description": "The URI of the Docker image for the robot application.",
+      "type": "string"
+    },
+    "Name": {
+      "description": "The name of the simulation application.",
+      "maxLength": 255,
+      "minLength": 1,
+      "pattern": "[a-zA-Z0-9_\\-]*",
+      "type": "string"
+    },
+    "RenderingEngine": {
+      "$ref": "#/definitions/RenderingEngine",
+      "description": "The rendering engine for the simulation application."
+    },
+    "RobotSoftwareSuite": {
+      "$ref": "#/definitions/RobotSoftwareSuite",
+      "description": "The robot software suite used by the simulation application."
+    },
+    "SimulationSoftwareSuite": {
+      "$ref": "#/definitions/SimulationSoftwareSuite",
+      "description": "The simulation software suite used by the simulation application."
+    },
+    "Sources": {
+      "description": "The sources of the simulation application.",
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/SourceConfig" },
+      "type": "array"
+    },
+    "Tags": { "$ref": "#/definitions/Tags" }
+  },
+  "readOnlyProperties": ["/properties/Arn"],
+  "required": ["RobotSoftwareSuite", "SimulationSoftwareSuite"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+  "typeName": "AWS::RoboMaker::SimulationApplication",
+  "writeOnlyProperties": [
+    "/properties/RenderingEngine",
+    "/properties/RobotSoftwareSuite/Version",
+    "/properties/Sources",
+    "/properties/SimulationSoftwareSuite/Version"
+  ]
 }

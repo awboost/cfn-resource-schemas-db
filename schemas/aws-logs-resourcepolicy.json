@@ -1,31 +1,14 @@
 {
-  "typeName": "AWS::Logs::ResourcePolicy",
-  "description": "The resource schema for AWSLogs ResourcePolicy",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-logs.git",
-  "properties": {
-    "PolicyName": {
-      "description": "A name for resource policy",
-      "type": "string",
-      "pattern": "^([^:*\\/]+\\/?)*[^:*\\/]+$",
-      "minLength": 1,
-      "maxLength": 255
-    },
-    "PolicyDocument": {
-      "description": "The policy document",
-      "type": "string",
-      "pattern": "[\\u0009\\u000A\\u000D\\u0020-\\u00FF]+",
-      "minLength": 1,
-      "maxLength": 5120
-    }
-  },
+  "$hash": "7b058730bbc9aedc904e0e0fee6f7aaa88055f5b",
   "additionalProperties": false,
-  "taggable": false,
-  "primaryIdentifier": ["/properties/PolicyName"],
   "createOnlyProperties": ["/properties/PolicyName"],
+  "description": "The resource schema for AWSLogs ResourcePolicy",
   "handlers": {
     "create": {
       "permissions": ["logs:PutResourcePolicy", "logs:DescribeResourcePolicies"]
     },
+    "delete": { "permissions": ["logs:DeleteResourcePolicy"] },
+    "list": { "permissions": ["logs:DescribeResourcePolicies"] },
     "read": { "permissions": ["logs:DescribeResourcePolicies"] },
     "update": {
       "permissions": [
@@ -33,10 +16,27 @@
         "logs:DescribeResourcePolicies",
         "logs:DeleteResourcePolicy"
       ]
+    }
+  },
+  "primaryIdentifier": ["/properties/PolicyName"],
+  "properties": {
+    "PolicyDocument": {
+      "description": "The policy document",
+      "maxLength": 5120,
+      "minLength": 1,
+      "pattern": "[\\u0009\\u000A\\u000D\\u0020-\\u00FF]+",
+      "type": "string"
     },
-    "delete": { "permissions": ["logs:DeleteResourcePolicy"] },
-    "list": { "permissions": ["logs:DescribeResourcePolicies"] }
+    "PolicyName": {
+      "description": "A name for resource policy",
+      "maxLength": 255,
+      "minLength": 1,
+      "pattern": "^([^:*\\/]+\\/?)*[^:*\\/]+$",
+      "type": "string"
+    }
   },
   "required": ["PolicyName", "PolicyDocument"],
-  "$hash": "7b058730bbc9aedc904e0e0fee6f7aaa88055f5b"
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-logs.git",
+  "taggable": false,
+  "typeName": "AWS::Logs::ResourcePolicy"
 }

@@ -1,145 +1,46 @@
 {
-  "typeName": "AWS::SSM::Association",
-  "description": "The AWS::SSM::Association resource associates an SSM document in AWS Systems Manager with EC2 instances that contain a configuration agent to process the document.",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-ssm",
+  "$hash": "e7c1c002db8e58617e0727cfc46c009f3a5cde35",
+  "additionalProperties": false,
   "definitions": {
-    "Target": {
-      "type": "object",
-      "properties": {
-        "Key": {
-          "type": "string",
-          "pattern": "^[\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]{1,128}$|resource-groups:Name"
-        },
-        "Values": {
-          "type": "array",
-          "items": { "type": "string" },
-          "minItems": 0,
-          "maxItems": 50
-        }
-      },
-      "additionalProperties": false,
-      "required": ["Key", "Values"]
-    },
-    "ParameterValues": { "type": "array", "items": { "type": "string" } },
-    "S3Region": { "type": "string", "minLength": 3, "maxLength": 20 },
-    "S3BucketName": { "type": "string", "minLength": 3, "maxLength": 63 },
-    "S3KeyPrefix": { "type": "string", "maxLength": 1024 },
-    "S3OutputLocation": {
-      "type": "object",
-      "properties": {
-        "OutputS3Region": { "$ref": "#/definitions/S3Region" },
-        "OutputS3BucketName": { "$ref": "#/definitions/S3BucketName" },
-        "OutputS3KeyPrefix": { "$ref": "#/definitions/S3KeyPrefix" }
-      },
-      "additionalProperties": false
-    },
     "InstanceAssociationOutputLocation": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "S3Location": { "$ref": "#/definitions/S3OutputLocation" }
       },
-      "additionalProperties": false
+      "type": "object"
+    },
+    "ParameterValues": { "items": { "type": "string" }, "type": "array" },
+    "S3BucketName": { "maxLength": 63, "minLength": 3, "type": "string" },
+    "S3KeyPrefix": { "maxLength": 1024, "type": "string" },
+    "S3OutputLocation": {
+      "additionalProperties": false,
+      "properties": {
+        "OutputS3BucketName": { "$ref": "#/definitions/S3BucketName" },
+        "OutputS3KeyPrefix": { "$ref": "#/definitions/S3KeyPrefix" },
+        "OutputS3Region": { "$ref": "#/definitions/S3Region" }
+      },
+      "type": "object"
+    },
+    "S3Region": { "maxLength": 20, "minLength": 3, "type": "string" },
+    "Target": {
+      "additionalProperties": false,
+      "properties": {
+        "Key": {
+          "pattern": "^[\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]{1,128}$|resource-groups:Name",
+          "type": "string"
+        },
+        "Values": {
+          "items": { "type": "string" },
+          "maxItems": 50,
+          "minItems": 0,
+          "type": "array"
+        }
+      },
+      "required": ["Key", "Values"],
+      "type": "object"
     }
   },
-  "properties": {
-    "AssociationId": {
-      "description": "Unique identifier of the association.",
-      "type": "string",
-      "pattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}",
-      "examples": [
-        "88df7b09-95e8-48c4-a3cb-08c2c20d5110",
-        "203dd0ec-0055-4bf0-a872-707f72ef06aa"
-      ]
-    },
-    "AssociationName": {
-      "description": "The name of the association.",
-      "type": "string",
-      "pattern": "^[a-zA-Z0-9_\\-.]{3,128}$"
-    },
-    "DocumentVersion": {
-      "description": "The version of the SSM document to associate with the target.",
-      "type": "string",
-      "pattern": "([$]LATEST|[$]DEFAULT|^[1-9][0-9]*$)"
-    },
-    "InstanceId": {
-      "description": "The ID of the instance that the SSM document is associated with.",
-      "type": "string",
-      "pattern": "(^i-(\\w{8}|\\w{17})$)|(^mi-\\w{17}$)",
-      "examples": ["i-0e60836d21cf313c4", "mi-0532c22e49636ee13"]
-    },
-    "Name": {
-      "description": "The name of the SSM document.",
-      "type": "string",
-      "pattern": "^[a-zA-Z0-9_\\-.:/]{3,200}$",
-      "examples": ["AWS-GatherSoftwareInventory", "MyCustomSSMDocument"]
-    },
-    "Parameters": {
-      "description": "Parameter values that the SSM document uses at runtime.",
-      "type": "object",
-      "patternProperties": {
-        ".*{1,255}": { "$ref": "#/definitions/ParameterValues" }
-      },
-      "additionalProperties": false
-    },
-    "ScheduleExpression": {
-      "description": "A Cron or Rate expression that specifies when the association is applied to the target.",
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 256,
-      "examples": [
-        "cron(0 0 */1 * * ? *)",
-        "cron(0 16 ? * TUE *)",
-        "rate(30 minutes)",
-        "rate(7 days)"
-      ]
-    },
-    "Targets": {
-      "description": "The targets that the SSM document sends commands to.",
-      "type": "array",
-      "items": { "$ref": "#/definitions/Target" },
-      "minItems": 0,
-      "maxItems": 5
-    },
-    "OutputLocation": {
-      "$ref": "#/definitions/InstanceAssociationOutputLocation"
-    },
-    "AutomationTargetParameterName": {
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 50
-    },
-    "MaxErrors": {
-      "type": "string",
-      "pattern": "^([1-9][0-9]{0,6}|[0]|[1-9][0-9]%|[0-9]%|100%)$",
-      "examples": ["1%", "10%", "50%", "1"]
-    },
-    "MaxConcurrency": {
-      "type": "string",
-      "pattern": "^([1-9][0-9]{0,6}|[1-9][0-9]%|[1-9]%|100%)$",
-      "examples": ["1%", "10%", "50%", "1"]
-    },
-    "ComplianceSeverity": {
-      "type": "string",
-      "enum": ["CRITICAL", "HIGH", "MEDIUM", "LOW", "UNSPECIFIED"]
-    },
-    "SyncCompliance": { "type": "string", "enum": ["AUTO", "MANUAL"] },
-    "WaitForSuccessTimeoutSeconds": {
-      "type": "integer",
-      "minimum": 15,
-      "maximum": 172800
-    },
-    "ApplyOnlyAtCronInterval": { "type": "boolean" },
-    "CalendarNames": {
-      "type": "array",
-      "items": { "type": "string" },
-      "examples": [["calendar1", "calendar2"], ["calendar3"]]
-    },
-    "ScheduleOffset": { "type": "integer", "minimum": 1, "maximum": 6 }
-  },
-  "required": ["Name"],
-  "readOnlyProperties": ["/properties/AssociationId"],
-  "primaryIdentifier": ["/properties/AssociationId"],
-  "tagging": { "taggable": false },
+  "description": "The AWS::SSM::Association resource associates an SSM document in AWS Systems Manager with EC2 instances that contain a configuration agent to process the document.",
   "handlers": {
     "create": {
       "permissions": [
@@ -150,7 +51,7 @@
       ]
     },
     "delete": { "permissions": ["ssm:DeleteAssociation"] },
-    "update": { "permissions": ["iam:PassRole", "ssm:UpdateAssociation"] },
+    "list": { "permissions": ["ssm:ListAssociations"] },
     "read": {
       "permissions": [
         "ssm:DescribeAssociation",
@@ -159,8 +60,107 @@
         "resource-groups:ListGroupResources"
       ]
     },
-    "list": { "permissions": ["ssm:ListAssociations"] }
+    "update": { "permissions": ["iam:PassRole", "ssm:UpdateAssociation"] }
   },
-  "additionalProperties": false,
-  "$hash": "e7c1c002db8e58617e0727cfc46c009f3a5cde35"
+  "primaryIdentifier": ["/properties/AssociationId"],
+  "properties": {
+    "ApplyOnlyAtCronInterval": { "type": "boolean" },
+    "AssociationId": {
+      "description": "Unique identifier of the association.",
+      "examples": [
+        "88df7b09-95e8-48c4-a3cb-08c2c20d5110",
+        "203dd0ec-0055-4bf0-a872-707f72ef06aa"
+      ],
+      "pattern": "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}",
+      "type": "string"
+    },
+    "AssociationName": {
+      "description": "The name of the association.",
+      "pattern": "^[a-zA-Z0-9_\\-.]{3,128}$",
+      "type": "string"
+    },
+    "AutomationTargetParameterName": {
+      "maxLength": 50,
+      "minLength": 1,
+      "type": "string"
+    },
+    "CalendarNames": {
+      "examples": [["calendar1", "calendar2"], ["calendar3"]],
+      "items": { "type": "string" },
+      "type": "array"
+    },
+    "ComplianceSeverity": {
+      "enum": ["CRITICAL", "HIGH", "MEDIUM", "LOW", "UNSPECIFIED"],
+      "type": "string"
+    },
+    "DocumentVersion": {
+      "description": "The version of the SSM document to associate with the target.",
+      "pattern": "([$]LATEST|[$]DEFAULT|^[1-9][0-9]*$)",
+      "type": "string"
+    },
+    "InstanceId": {
+      "description": "The ID of the instance that the SSM document is associated with.",
+      "examples": ["i-0e60836d21cf313c4", "mi-0532c22e49636ee13"],
+      "pattern": "(^i-(\\w{8}|\\w{17})$)|(^mi-\\w{17}$)",
+      "type": "string"
+    },
+    "MaxConcurrency": {
+      "examples": ["1%", "10%", "50%", "1"],
+      "pattern": "^([1-9][0-9]{0,6}|[1-9][0-9]%|[1-9]%|100%)$",
+      "type": "string"
+    },
+    "MaxErrors": {
+      "examples": ["1%", "10%", "50%", "1"],
+      "pattern": "^([1-9][0-9]{0,6}|[0]|[1-9][0-9]%|[0-9]%|100%)$",
+      "type": "string"
+    },
+    "Name": {
+      "description": "The name of the SSM document.",
+      "examples": ["AWS-GatherSoftwareInventory", "MyCustomSSMDocument"],
+      "pattern": "^[a-zA-Z0-9_\\-.:/]{3,200}$",
+      "type": "string"
+    },
+    "OutputLocation": {
+      "$ref": "#/definitions/InstanceAssociationOutputLocation"
+    },
+    "Parameters": {
+      "additionalProperties": false,
+      "description": "Parameter values that the SSM document uses at runtime.",
+      "patternProperties": {
+        ".*{1,255}": { "$ref": "#/definitions/ParameterValues" }
+      },
+      "type": "object"
+    },
+    "ScheduleExpression": {
+      "description": "A Cron or Rate expression that specifies when the association is applied to the target.",
+      "examples": [
+        "cron(0 0 */1 * * ? *)",
+        "cron(0 16 ? * TUE *)",
+        "rate(30 minutes)",
+        "rate(7 days)"
+      ],
+      "maxLength": 256,
+      "minLength": 1,
+      "type": "string"
+    },
+    "ScheduleOffset": { "maximum": 6, "minimum": 1, "type": "integer" },
+    "SyncCompliance": { "enum": ["AUTO", "MANUAL"], "type": "string" },
+    "Targets": {
+      "description": "The targets that the SSM document sends commands to.",
+      "items": { "$ref": "#/definitions/Target" },
+      "maxItems": 5,
+      "minItems": 0,
+      "type": "array"
+    },
+    "WaitForSuccessTimeoutSeconds": {
+      "maximum": 172800,
+      "minimum": 15,
+      "type": "integer"
+    }
+  },
+  "readOnlyProperties": ["/properties/AssociationId"],
+  "required": ["Name"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-ssm",
+  "tagging": { "taggable": false },
+  "typeName": "AWS::SSM::Association"
 }

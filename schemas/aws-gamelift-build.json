@@ -1,11 +1,14 @@
 {
-  "typeName": "AWS::GameLift::Build",
-  "description": "Resource Type definition for AWS::GameLift::Build",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+  "$hash": "fdda18c3e576b7999ee486533ce2c888bbe6ca9e",
+  "additionalProperties": false,
+  "createOnlyProperties": [
+    "/properties/StorageLocation",
+    "/properties/OperatingSystem",
+    "/properties/ServerSdkVersion"
+  ],
   "definitions": {
     "StorageLocation": {
       "$comment": "Contains object details present in the S3 Bucket",
-      "type": "object",
       "additionalProperties": false,
       "properties": {
         "Bucket": {
@@ -25,9 +28,23 @@
           "type": "string"
         }
       },
-      "required": ["Bucket", "Key", "RoleArn"]
+      "required": ["Bucket", "Key", "RoleArn"],
+      "type": "object"
     }
   },
+  "description": "Resource Type definition for AWS::GameLift::Build",
+  "handlers": {
+    "create": {
+      "permissions": ["gamelift:DescribeBuild", "gamelift:CreateBuild"]
+    },
+    "delete": {
+      "permissions": ["gamelift:DescribeBuild", "gamelift:DeleteBuild"]
+    },
+    "list": { "permissions": ["gamelift:ListBuilds"] },
+    "read": { "permissions": ["gamelift:DescribeBuild"] },
+    "update": { "permissions": ["gamelift:UpdateBuild"] }
+  },
+  "primaryIdentifier": ["/properties/BuildId"],
   "properties": {
     "BuildId": {
       "description": "A unique identifier for a build to be deployed on the new fleet. If you are deploying the fleet with a custom game build, you must specify this property. The build must have been successfully uploaded to Amazon GameLift and be in a READY status. This fleet setting cannot be changed once the fleet is created.",
@@ -39,57 +56,40 @@
     },
     "OperatingSystem": {
       "description": "The operating system that the game server binaries are built to run on. This value determines the type of fleet resources that you can use for this build. If your game build contains multiple executables, they all must run on the same operating system. If an operating system is not specified when creating a build, Amazon GameLift uses the default value (WINDOWS_2012). This value cannot be changed later.",
-      "type": "string",
       "enum": [
         "AMAZON_LINUX",
         "AMAZON_LINUX_2",
         "AMAZON_LINUX_2023",
         "WINDOWS_2012",
         "WINDOWS_2016"
-      ]
-    },
-    "StorageLocation": {
-      "description": "Information indicating where your game build files are stored. Use this parameter only when creating a build with files stored in an Amazon S3 bucket that you own. The storage location must specify an Amazon S3 bucket name and key. The location must also specify a role ARN that you set up to allow Amazon GameLift to access your Amazon S3 bucket. The S3 bucket and your new build must be in the same Region.",
-      "$ref": "#/definitions/StorageLocation"
-    },
-    "Version": {
-      "description": "Version information that is associated with this build. Version strings do not need to be unique.",
+      ],
       "type": "string"
     },
     "ServerSdkVersion": {
       "description": "A server SDK version you used when integrating your game server build with Amazon GameLift. By default Amazon GameLift sets this value to 4.0.2.",
       "type": "string"
+    },
+    "StorageLocation": {
+      "$ref": "#/definitions/StorageLocation",
+      "description": "Information indicating where your game build files are stored. Use this parameter only when creating a build with files stored in an Amazon S3 bucket that you own. The storage location must specify an Amazon S3 bucket name and key. The location must also specify a role ARN that you set up to allow Amazon GameLift to access your Amazon S3 bucket. The S3 bucket and your new build must be in the same Region."
+    },
+    "Version": {
+      "description": "Version information that is associated with this build. Version strings do not need to be unique.",
+      "type": "string"
     }
   },
-  "additionalProperties": false,
+  "readOnlyProperties": ["/properties/BuildId"],
+  "required": [],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
   "tagging": {
-    "taggable": false,
+    "cloudFormationSystemTags": false,
     "tagOnCreate": false,
     "tagUpdatable": false,
-    "cloudFormationSystemTags": false
+    "taggable": false
   },
-  "required": [],
-  "createOnlyProperties": [
-    "/properties/StorageLocation",
-    "/properties/OperatingSystem",
-    "/properties/ServerSdkVersion"
-  ],
+  "typeName": "AWS::GameLift::Build",
   "writeOnlyProperties": [
     "/properties/StorageLocation",
     "/properties/ServerSdkVersion"
-  ],
-  "readOnlyProperties": ["/properties/BuildId"],
-  "primaryIdentifier": ["/properties/BuildId"],
-  "handlers": {
-    "create": {
-      "permissions": ["gamelift:DescribeBuild", "gamelift:CreateBuild"]
-    },
-    "read": { "permissions": ["gamelift:DescribeBuild"] },
-    "update": { "permissions": ["gamelift:UpdateBuild"] },
-    "delete": {
-      "permissions": ["gamelift:DescribeBuild", "gamelift:DeleteBuild"]
-    },
-    "list": { "permissions": ["gamelift:ListBuilds"] }
-  },
-  "$hash": "fdda18c3e576b7999ee486533ce2c888bbe6ca9e"
+  ]
 }

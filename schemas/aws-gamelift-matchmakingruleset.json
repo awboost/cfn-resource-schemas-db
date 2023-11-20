@@ -1,72 +1,31 @@
 {
+  "$hash": "c536b5ebeadaeabc7431bb44b7e262f3ace284d5",
   "$schema": "https://schema.cloudformation.us-east-1.amazonaws.com/provider.definition.schema.v1.json",
-  "typeName": "AWS::GameLift::MatchmakingRuleSet",
-  "description": "The AWS::GameLift::MatchmakingRuleSet resource creates an Amazon GameLift (GameLift) matchmaking rule set.",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-gamelift.git",
-  "tagging": {
-    "taggable": true,
-    "cloudFormationSystemTags": false,
-    "tagProperty": "/properties/Tags"
-  },
+  "additionalProperties": false,
+  "createOnlyProperties": ["/properties/Name", "/properties/RuleSetBody"],
   "definitions": {
     "Tag": {
+      "additionalProperties": false,
       "description": "A key-value pair to associate with a resource.",
-      "type": "object",
       "properties": {
         "Key": {
-          "type": "string",
           "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length.",
+          "maxLength": 128,
           "minLength": 1,
-          "maxLength": 128
+          "type": "string"
         },
         "Value": {
-          "type": "string",
           "description": "The value for the tag. You can specify a value that is 1 to 256 Unicode characters in length.",
+          "maxLength": 256,
           "minLength": 1,
-          "maxLength": 256
+          "type": "string"
         }
       },
       "required": ["Key", "Value"],
-      "additionalProperties": false
+      "type": "object"
     }
   },
-  "properties": {
-    "Name": {
-      "description": "A unique identifier for the matchmaking rule set.",
-      "type": "string",
-      "maxLength": 128,
-      "pattern": "[a-zA-Z0-9-\\.]*"
-    },
-    "RuleSetBody": {
-      "description": "A collection of matchmaking rules, formatted as a JSON string.",
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 65535
-    },
-    "CreationTime": {
-      "description": "A time stamp indicating when this data object was created. Format is a number expressed in Unix time as milliseconds.",
-      "type": "string"
-    },
-    "Arn": {
-      "description": "The Amazon Resource Name (ARN) that is assigned to a Amazon GameLift matchmaking rule set resource and uniquely identifies it.",
-      "type": "string",
-      "pattern": "^arn:.*:matchmakingruleset\\/[a-zA-Z0-9-\\.]*"
-    },
-    "Tags": {
-      "description": "An array of key-value pairs to apply to this resource.",
-      "type": "array",
-      "uniqueItems": true,
-      "insertionOrder": false,
-      "minItems": 1,
-      "maxItems": 200,
-      "items": { "$ref": "#/definitions/Tag" }
-    }
-  },
-  "additionalProperties": false,
-  "required": ["Name", "RuleSetBody"],
-  "createOnlyProperties": ["/properties/Name", "/properties/RuleSetBody"],
-  "readOnlyProperties": ["/properties/Arn", "/properties/CreationTime"],
-  "primaryIdentifier": ["/properties/Name"],
+  "description": "The AWS::GameLift::MatchmakingRuleSet resource creates an Amazon GameLift (GameLift) matchmaking rule set.",
   "handlers": {
     "create": {
       "permissions": [
@@ -77,6 +36,8 @@
         "gamelift:TagResource"
       ]
     },
+    "delete": { "permissions": ["gamelift:DeleteMatchmakingRuleSet"] },
+    "list": { "permissions": ["gamelift:DescribeMatchmakingRuleSets"] },
     "read": {
       "permissions": [
         "gamelift:DescribeMatchmakingRuleSets",
@@ -84,7 +45,6 @@
         "gamelift:ListTagsForResource"
       ]
     },
-    "delete": { "permissions": ["gamelift:DeleteMatchmakingRuleSet"] },
     "update": {
       "permissions": [
         "gamelift:DescribeMatchmakingRuleSets",
@@ -92,8 +52,48 @@
         "gamelift:TagResource",
         "gamelift:UntagResource"
       ]
-    },
-    "list": { "permissions": ["gamelift:DescribeMatchmakingRuleSets"] }
+    }
   },
-  "$hash": "c536b5ebeadaeabc7431bb44b7e262f3ace284d5"
+  "primaryIdentifier": ["/properties/Name"],
+  "properties": {
+    "Arn": {
+      "description": "The Amazon Resource Name (ARN) that is assigned to a Amazon GameLift matchmaking rule set resource and uniquely identifies it.",
+      "pattern": "^arn:.*:matchmakingruleset\\/[a-zA-Z0-9-\\.]*",
+      "type": "string"
+    },
+    "CreationTime": {
+      "description": "A time stamp indicating when this data object was created. Format is a number expressed in Unix time as milliseconds.",
+      "type": "string"
+    },
+    "Name": {
+      "description": "A unique identifier for the matchmaking rule set.",
+      "maxLength": 128,
+      "pattern": "[a-zA-Z0-9-\\.]*",
+      "type": "string"
+    },
+    "RuleSetBody": {
+      "description": "A collection of matchmaking rules, formatted as a JSON string.",
+      "maxLength": 65535,
+      "minLength": 1,
+      "type": "string"
+    },
+    "Tags": {
+      "description": "An array of key-value pairs to apply to this resource.",
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/Tag" },
+      "maxItems": 200,
+      "minItems": 1,
+      "type": "array",
+      "uniqueItems": true
+    }
+  },
+  "readOnlyProperties": ["/properties/Arn", "/properties/CreationTime"],
+  "required": ["Name", "RuleSetBody"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-gamelift.git",
+  "tagging": {
+    "cloudFormationSystemTags": false,
+    "tagProperty": "/properties/Tags",
+    "taggable": true
+  },
+  "typeName": "AWS::GameLift::MatchmakingRuleSet"
 }

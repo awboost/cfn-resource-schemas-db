@@ -1,42 +1,22 @@
 {
-  "typeName": "AWS::StepFunctions::Activity",
-  "description": "Resource schema for Activity",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-stepfunctions.git",
+  "$hash": "67410d89562d506b44520f0bd597601b34f7a683",
+  "additionalProperties": false,
+  "createOnlyProperties": ["/properties/Name"],
   "definitions": {
     "TagsEntry": {
-      "type": "object",
-      "properties": {
-        "Key": { "type": "string", "minLength": 1, "maxLength": 128 },
-        "Value": { "type": "string", "minLength": 1, "maxLength": 256 }
-      },
       "additionalProperties": false,
-      "required": ["Key", "Value"]
+      "properties": {
+        "Key": { "maxLength": 128, "minLength": 1, "type": "string" },
+        "Value": { "maxLength": 256, "minLength": 1, "type": "string" }
+      },
+      "required": ["Key", "Value"],
+      "type": "object"
     }
   },
-  "properties": {
-    "Arn": { "type": "string", "minLength": 1, "maxLength": 2048 },
-    "Name": { "type": "string", "minLength": 1, "maxLength": 80 },
-    "Tags": {
-      "type": "array",
-      "uniqueItems": false,
-      "insertionOrder": false,
-      "items": { "$ref": "#/definitions/TagsEntry" }
-    }
-  },
-  "additionalProperties": false,
-  "tagging": {
-    "taggable": true,
-    "tagOnCreate": true,
-    "tagUpdatable": true,
-    "cloudFormationSystemTags": true,
-    "tagProperty": "/properties/Tags"
-  },
-  "required": ["Name"],
-  "primaryIdentifier": ["/properties/Arn"],
-  "readOnlyProperties": ["/properties/Arn"],
-  "createOnlyProperties": ["/properties/Name"],
+  "description": "Resource schema for Activity",
   "handlers": {
     "create": { "permissions": ["states:CreateActivity"] },
+    "delete": { "permissions": ["states:DeleteActivity"] },
     "read": {
       "permissions": ["states:DescribeActivity", "states:ListTagsForResource"]
     },
@@ -46,8 +26,28 @@
         "states:TagResource",
         "states:UntagResource"
       ]
-    },
-    "delete": { "permissions": ["states:DeleteActivity"] }
+    }
   },
-  "$hash": "67410d89562d506b44520f0bd597601b34f7a683"
+  "primaryIdentifier": ["/properties/Arn"],
+  "properties": {
+    "Arn": { "maxLength": 2048, "minLength": 1, "type": "string" },
+    "Name": { "maxLength": 80, "minLength": 1, "type": "string" },
+    "Tags": {
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/TagsEntry" },
+      "type": "array",
+      "uniqueItems": false
+    }
+  },
+  "readOnlyProperties": ["/properties/Arn"],
+  "required": ["Name"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-stepfunctions.git",
+  "tagging": {
+    "cloudFormationSystemTags": true,
+    "tagOnCreate": true,
+    "tagProperty": "/properties/Tags",
+    "tagUpdatable": true,
+    "taggable": true
+  },
+  "typeName": "AWS::StepFunctions::Activity"
 }

@@ -1,59 +1,18 @@
 {
-  "typeName": "AWS::Logs::QueryDefinition",
-  "description": "The resource schema for AWSLogs QueryDefinition",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-logs.git",
+  "$hash": "f4568ab84f3e69270d00685911186373590d3f22",
+  "additionalProperties": false,
   "definitions": {
     "LogGroup": {
-      "type": "string",
+      "maxLength": 512,
+      "minLength": 1,
       "pattern": "[\\.\\-_/#A-Za-z0-9]+",
-      "minLength": 1,
-      "maxLength": 512
+      "type": "string"
     }
   },
-  "properties": {
-    "Name": {
-      "description": "A name for the saved query definition",
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 255
-    },
-    "QueryString": {
-      "description": "The query string to use for this definition",
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 10000
-    },
-    "LogGroupNames": {
-      "description": "Optionally define specific log groups as part of your query definition",
-      "type": "array",
-      "insertionOrder": false,
-      "items": {
-        "description": "LogGroup name",
-        "$ref": "#/definitions/LogGroup"
-      }
-    },
-    "QueryDefinitionId": {
-      "description": "Unique identifier of a query definition",
-      "type": "string",
-      "minLength": 0,
-      "maxLength": 256
-    }
-  },
-  "required": ["Name", "QueryString"],
-  "additionalProperties": false,
-  "readOnlyProperties": ["/properties/QueryDefinitionId"],
-  "primaryIdentifier": ["/properties/QueryDefinitionId"],
+  "description": "The resource schema for AWSLogs QueryDefinition",
   "handlers": {
     "create": {
       "permissions": ["logs:PutQueryDefinition", "logs:DescribeQueryDefinition"]
-    },
-    "read": { "permissions": ["logs:DescribeQueryDefinition"] },
-    "update": {
-      "permissions": [
-        "logs:PutQueryDefinition",
-        "logs:DescribeQueryDefinition",
-        "logs:DeleteQueryDefinition"
-      ]
     },
     "delete": {
       "permissions": [
@@ -61,8 +20,49 @@
         "logs:DeleteQueryDefinition"
       ]
     },
-    "list": { "permissions": ["logs:DescribeQueryDefinition"] }
+    "list": { "permissions": ["logs:DescribeQueryDefinition"] },
+    "read": { "permissions": ["logs:DescribeQueryDefinition"] },
+    "update": {
+      "permissions": [
+        "logs:PutQueryDefinition",
+        "logs:DescribeQueryDefinition",
+        "logs:DeleteQueryDefinition"
+      ]
+    }
   },
+  "primaryIdentifier": ["/properties/QueryDefinitionId"],
+  "properties": {
+    "LogGroupNames": {
+      "description": "Optionally define specific log groups as part of your query definition",
+      "insertionOrder": false,
+      "items": {
+        "$ref": "#/definitions/LogGroup",
+        "description": "LogGroup name"
+      },
+      "type": "array"
+    },
+    "Name": {
+      "description": "A name for the saved query definition",
+      "maxLength": 255,
+      "minLength": 1,
+      "type": "string"
+    },
+    "QueryDefinitionId": {
+      "description": "Unique identifier of a query definition",
+      "maxLength": 256,
+      "minLength": 0,
+      "type": "string"
+    },
+    "QueryString": {
+      "description": "The query string to use for this definition",
+      "maxLength": 10000,
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "readOnlyProperties": ["/properties/QueryDefinitionId"],
+  "required": ["Name", "QueryString"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-logs.git",
   "taggable": false,
-  "$hash": "f4568ab84f3e69270d00685911186373590d3f22"
+  "typeName": "AWS::Logs::QueryDefinition"
 }

@@ -1,71 +1,64 @@
 {
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-codedeploy",
-  "tagging": {
-    "taggable": false,
-    "tagOnCreate": false,
-    "tagUpdatable": false,
-    "cloudFormationSystemTags": false
-  },
-  "handlers": {
-    "read": { "permissions": ["codedeploy:GetDeploymentConfig"] },
-    "create": { "permissions": ["codedeploy:CreateDeploymentConfig"] },
-    "list": { "permissions": ["codedeploy:ListDeploymentConfigs"] },
-    "delete": {
-      "permissions": [
-        "codedeploy:GetDeploymentConfig",
-        "codedeploy:DeleteDeploymentConfig"
-      ]
-    }
-  },
-  "typeName": "AWS::CodeDeploy::DeploymentConfig",
-  "description": "Resource Type definition for AWS::CodeDeploy::DeploymentConfig",
+  "$hash": "9eb41ebb293e9d3be9e12d86d0b2a41b401a7970",
+  "additionalProperties": false,
   "createOnlyProperties": [
     "/properties/DeploymentConfigName",
     "/properties/MinimumHealthyHosts",
     "/properties/ComputePlatform",
     "/properties/TrafficRoutingConfig"
   ],
-  "additionalProperties": false,
-  "primaryIdentifier": ["/properties/DeploymentConfigName"],
   "definitions": {
-    "TimeBasedLinear": {
-      "additionalProperties": false,
-      "type": "object",
-      "properties": {
-        "LinearInterval": { "type": "integer" },
-        "LinearPercentage": { "type": "integer" }
-      },
-      "required": ["LinearInterval", "LinearPercentage"]
-    },
-    "TimeBasedCanary": {
-      "additionalProperties": false,
-      "type": "object",
-      "properties": {
-        "CanaryPercentage": { "type": "integer" },
-        "CanaryInterval": { "type": "integer" }
-      },
-      "required": ["CanaryPercentage", "CanaryInterval"]
-    },
-    "TrafficRoutingConfig": {
-      "additionalProperties": false,
-      "type": "object",
-      "properties": {
-        "Type": { "type": "string" },
-        "TimeBasedLinear": { "$ref": "#/definitions/TimeBasedLinear" },
-        "TimeBasedCanary": { "$ref": "#/definitions/TimeBasedCanary" }
-      },
-      "required": ["Type"]
-    },
     "MinimumHealthyHosts": {
       "additionalProperties": false,
-      "type": "object",
       "properties": {
         "Type": { "type": "string" },
         "Value": { "type": "integer" }
       },
-      "required": ["Type", "Value"]
+      "required": ["Type", "Value"],
+      "type": "object"
+    },
+    "TimeBasedCanary": {
+      "additionalProperties": false,
+      "properties": {
+        "CanaryInterval": { "type": "integer" },
+        "CanaryPercentage": { "type": "integer" }
+      },
+      "required": ["CanaryPercentage", "CanaryInterval"],
+      "type": "object"
+    },
+    "TimeBasedLinear": {
+      "additionalProperties": false,
+      "properties": {
+        "LinearInterval": { "type": "integer" },
+        "LinearPercentage": { "type": "integer" }
+      },
+      "required": ["LinearInterval", "LinearPercentage"],
+      "type": "object"
+    },
+    "TrafficRoutingConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "TimeBasedCanary": { "$ref": "#/definitions/TimeBasedCanary" },
+        "TimeBasedLinear": { "$ref": "#/definitions/TimeBasedLinear" },
+        "Type": { "type": "string" }
+      },
+      "required": ["Type"],
+      "type": "object"
     }
   },
+  "description": "Resource Type definition for AWS::CodeDeploy::DeploymentConfig",
+  "handlers": {
+    "create": { "permissions": ["codedeploy:CreateDeploymentConfig"] },
+    "delete": {
+      "permissions": [
+        "codedeploy:GetDeploymentConfig",
+        "codedeploy:DeleteDeploymentConfig"
+      ]
+    },
+    "list": { "permissions": ["codedeploy:ListDeploymentConfigs"] },
+    "read": { "permissions": ["codedeploy:GetDeploymentConfig"] }
+  },
+  "primaryIdentifier": ["/properties/DeploymentConfigName"],
   "properties": {
     "ComputePlatform": {
       "description": "The destination platform type for the deployment (Lambda, Server, or ECS).",
@@ -75,14 +68,21 @@
       "description": "A name for the deployment configuration. If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the deployment configuration name. For more information, see Name Type.",
       "type": "string"
     },
-    "TrafficRoutingConfig": {
-      "description": "The configuration that specifies how the deployment traffic is routed.",
-      "$ref": "#/definitions/TrafficRoutingConfig"
-    },
     "MinimumHealthyHosts": {
-      "description": "The minimum number of healthy instances that should be available at any time during the deployment. There are two parameters expected in the input: type and value.",
-      "$ref": "#/definitions/MinimumHealthyHosts"
+      "$ref": "#/definitions/MinimumHealthyHosts",
+      "description": "The minimum number of healthy instances that should be available at any time during the deployment. There are two parameters expected in the input: type and value."
+    },
+    "TrafficRoutingConfig": {
+      "$ref": "#/definitions/TrafficRoutingConfig",
+      "description": "The configuration that specifies how the deployment traffic is routed."
     }
   },
-  "$hash": "9eb41ebb293e9d3be9e12d86d0b2a41b401a7970"
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-codedeploy",
+  "tagging": {
+    "cloudFormationSystemTags": false,
+    "tagOnCreate": false,
+    "tagUpdatable": false,
+    "taggable": false
+  },
+  "typeName": "AWS::CodeDeploy::DeploymentConfig"
 }

@@ -1,56 +1,26 @@
 {
-  "typeName": "AWS::DataBrew::Schedule",
-  "description": "Resource schema for AWS::DataBrew::Schedule.",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-databrew.git",
-  "taggable": true,
-  "properties": {
-    "JobNames": {
-      "type": "array",
-      "insertionOrder": true,
-      "uniqueItems": true,
-      "items": { "$ref": "#/definitions/JobName" }
-    },
-    "CronExpression": {
-      "description": "Schedule cron",
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 512
-    },
-    "Name": {
-      "description": "Schedule Name",
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 255
-    },
-    "Tags": {
-      "type": "array",
-      "insertionOrder": false,
-      "uniqueItems": false,
-      "items": { "$ref": "#/definitions/Tag" }
-    }
-  },
+  "$hash": "09ef9d20586d26b4314e2e008b46f746ed7e73b3",
+  "additionalProperties": false,
+  "createOnlyProperties": ["/properties/Name", "/properties/Tags"],
   "definitions": {
     "JobName": {
       "description": "Job name",
-      "type": "string",
+      "maxLength": 255,
       "minLength": 1,
-      "maxLength": 255
+      "type": "string"
     },
     "Tag": {
-      "description": "A key-value pair to associate with a resource.",
-      "type": "object",
-      "properties": {
-        "Key": { "type": "string", "minLength": 1, "maxLength": 128 },
-        "Value": { "type": "string", "minLength": 0, "maxLength": 256 }
-      },
       "additionalProperties": false,
-      "required": ["Value", "Key"]
+      "description": "A key-value pair to associate with a resource.",
+      "properties": {
+        "Key": { "maxLength": 128, "minLength": 1, "type": "string" },
+        "Value": { "maxLength": 256, "minLength": 0, "type": "string" }
+      },
+      "required": ["Value", "Key"],
+      "type": "object"
     }
   },
-  "additionalProperties": false,
-  "required": ["Name", "CronExpression"],
-  "primaryIdentifier": ["/properties/Name"],
-  "createOnlyProperties": ["/properties/Name", "/properties/Tags"],
+  "description": "Resource schema for AWS::DataBrew::Schedule.",
   "handlers": {
     "create": {
       "permissions": [
@@ -60,14 +30,6 @@
         "iam:PassRole"
       ]
     },
-    "read": {
-      "permissions": [
-        "databrew:DescribeSchedule",
-        "databrew:ListTagsForResource",
-        "iam:ListRoles"
-      ]
-    },
-    "update": { "permissions": ["databrew:UpdateSchedule"] },
     "delete": { "permissions": ["databrew:DeleteSchedule"] },
     "list": {
       "permissions": [
@@ -75,7 +37,45 @@
         "databrew:ListTagsForResource",
         "iam:ListRoles"
       ]
+    },
+    "read": {
+      "permissions": [
+        "databrew:DescribeSchedule",
+        "databrew:ListTagsForResource",
+        "iam:ListRoles"
+      ]
+    },
+    "update": { "permissions": ["databrew:UpdateSchedule"] }
+  },
+  "primaryIdentifier": ["/properties/Name"],
+  "properties": {
+    "CronExpression": {
+      "description": "Schedule cron",
+      "maxLength": 512,
+      "minLength": 1,
+      "type": "string"
+    },
+    "JobNames": {
+      "insertionOrder": true,
+      "items": { "$ref": "#/definitions/JobName" },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "Name": {
+      "description": "Schedule Name",
+      "maxLength": 255,
+      "minLength": 1,
+      "type": "string"
+    },
+    "Tags": {
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/Tag" },
+      "type": "array",
+      "uniqueItems": false
     }
   },
-  "$hash": "09ef9d20586d26b4314e2e008b46f746ed7e73b3"
+  "required": ["Name", "CronExpression"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-databrew.git",
+  "taggable": true,
+  "typeName": "AWS::DataBrew::Schedule"
 }

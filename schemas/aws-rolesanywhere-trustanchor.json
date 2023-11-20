@@ -1,107 +1,77 @@
 {
-  "typeName": "AWS::RolesAnywhere::TrustAnchor",
-  "description": "Definition of AWS::RolesAnywhere::TrustAnchor Resource Type.",
+  "$hash": "3335320ea9fd8f29d3fdd4c8ef30eba10628a323",
+  "additionalProperties": false,
   "definitions": {
-    "NotificationChannel": { "type": "string", "enum": ["ALL"] },
+    "NotificationChannel": { "enum": ["ALL"], "type": "string" },
     "NotificationEvent": {
-      "type": "string",
-      "enum": ["CA_CERTIFICATE_EXPIRY", "END_ENTITY_CERTIFICATE_EXPIRY"]
+      "enum": ["CA_CERTIFICATE_EXPIRY", "END_ENTITY_CERTIFICATE_EXPIRY"],
+      "type": "string"
     },
     "NotificationSetting": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
+        "Channel": { "$ref": "#/definitions/NotificationChannel" },
         "Enabled": { "type": "boolean" },
         "Event": { "$ref": "#/definitions/NotificationEvent" },
-        "Threshold": { "type": "number", "maximum": 360, "minimum": 1 },
-        "Channel": { "$ref": "#/definitions/NotificationChannel" }
+        "Threshold": { "maximum": 360, "minimum": 1, "type": "number" }
       },
       "required": ["Enabled", "Event"],
-      "additionalProperties": false
+      "type": "object"
     },
     "Source": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
-        "SourceType": { "$ref": "#/definitions/TrustAnchorType" },
-        "SourceData": { "$ref": "#/definitions/SourceData" }
+        "SourceData": { "$ref": "#/definitions/SourceData" },
+        "SourceType": { "$ref": "#/definitions/TrustAnchorType" }
       },
-      "additionalProperties": false
+      "type": "object"
     },
     "SourceData": {
       "oneOf": [
         {
-          "type": "object",
-          "title": "X509CertificateData",
+          "additionalProperties": false,
           "properties": { "X509CertificateData": { "type": "string" } },
           "required": ["X509CertificateData"],
-          "additionalProperties": false
+          "title": "X509CertificateData",
+          "type": "object"
         },
         {
-          "type": "object",
-          "title": "AcmPcaArn",
+          "additionalProperties": false,
           "properties": { "AcmPcaArn": { "type": "string" } },
           "required": ["AcmPcaArn"],
-          "additionalProperties": false
+          "title": "AcmPcaArn",
+          "type": "object"
         }
       ]
     },
     "Tag": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
-        "Key": { "type": "string", "maxLength": 128, "minLength": 1 },
-        "Value": { "type": "string", "maxLength": 256, "minLength": 0 }
+        "Key": { "maxLength": 128, "minLength": 1, "type": "string" },
+        "Value": { "maxLength": 256, "minLength": 0, "type": "string" }
       },
       "required": ["Key", "Value"],
-      "additionalProperties": false
+      "type": "object"
     },
     "TrustAnchorType": {
-      "type": "string",
-      "enum": ["AWS_ACM_PCA", "CERTIFICATE_BUNDLE", "SELF_SIGNED_REPOSITORY"]
+      "enum": ["AWS_ACM_PCA", "CERTIFICATE_BUNDLE", "SELF_SIGNED_REPOSITORY"],
+      "type": "string"
     }
   },
-  "properties": {
-    "Enabled": { "type": "boolean" },
-    "Name": { "type": "string" },
-    "NotificationSettings": {
-      "type": "array",
-      "items": { "$ref": "#/definitions/NotificationSetting" },
-      "maxItems": 50,
-      "minItems": 0
-    },
-    "Source": { "$ref": "#/definitions/Source" },
-    "Tags": {
-      "type": "array",
-      "items": { "$ref": "#/definitions/Tag" },
-      "maxItems": 200,
-      "minItems": 0
-    },
-    "TrustAnchorId": {
-      "type": "string",
-      "pattern": "[a-f0-9]{8}-([a-z0-9]{4}-){3}[a-z0-9]{12}"
-    },
-    "TrustAnchorArn": {
-      "type": "string",
-      "pattern": "[a-f0-9]{8}-([a-z0-9]{4}-){3}[a-z0-9]{12}"
-    }
-  },
-  "tagging": {
-    "taggable": true,
-    "tagOnCreate": true,
-    "tagUpdatable": true,
-    "cloudFormationSystemTags": true,
-    "tagProperty": "/properties/Tags"
-  },
-  "required": ["Name", "Source"],
-  "readOnlyProperties": [
-    "/properties/TrustAnchorId",
-    "/properties/TrustAnchorArn"
-  ],
-  "primaryIdentifier": ["/properties/TrustAnchorId"],
+  "description": "Definition of AWS::RolesAnywhere::TrustAnchor Resource Type.",
   "handlers": {
     "create": {
       "permissions": [
         "iam:CreateServiceLinkedRole",
         "rolesanywhere:CreateTrustAnchor",
         "rolesanywhere:TagResource",
+        "rolesanywhere:ListTagsForResource"
+      ]
+    },
+    "delete": { "permissions": ["rolesanywhere:DeleteTrustAnchor"] },
+    "list": {
+      "permissions": [
+        "rolesanywhere:ListTrustAnchors",
         "rolesanywhere:ListTagsForResource"
       ]
     },
@@ -124,15 +94,45 @@
         "rolesanywhere:PutNotificationSettings",
         "rolesanywhere:ResetNotificationSettings"
       ]
-    },
-    "delete": { "permissions": ["rolesanywhere:DeleteTrustAnchor"] },
-    "list": {
-      "permissions": [
-        "rolesanywhere:ListTrustAnchors",
-        "rolesanywhere:ListTagsForResource"
-      ]
     }
   },
-  "additionalProperties": false,
-  "$hash": "3335320ea9fd8f29d3fdd4c8ef30eba10628a323"
+  "primaryIdentifier": ["/properties/TrustAnchorId"],
+  "properties": {
+    "Enabled": { "type": "boolean" },
+    "Name": { "type": "string" },
+    "NotificationSettings": {
+      "items": { "$ref": "#/definitions/NotificationSetting" },
+      "maxItems": 50,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Source": { "$ref": "#/definitions/Source" },
+    "Tags": {
+      "items": { "$ref": "#/definitions/Tag" },
+      "maxItems": 200,
+      "minItems": 0,
+      "type": "array"
+    },
+    "TrustAnchorArn": {
+      "pattern": "[a-f0-9]{8}-([a-z0-9]{4}-){3}[a-z0-9]{12}",
+      "type": "string"
+    },
+    "TrustAnchorId": {
+      "pattern": "[a-f0-9]{8}-([a-z0-9]{4}-){3}[a-z0-9]{12}",
+      "type": "string"
+    }
+  },
+  "readOnlyProperties": [
+    "/properties/TrustAnchorId",
+    "/properties/TrustAnchorArn"
+  ],
+  "required": ["Name", "Source"],
+  "tagging": {
+    "cloudFormationSystemTags": true,
+    "tagOnCreate": true,
+    "tagProperty": "/properties/Tags",
+    "tagUpdatable": true,
+    "taggable": true
+  },
+  "typeName": "AWS::RolesAnywhere::TrustAnchor"
 }

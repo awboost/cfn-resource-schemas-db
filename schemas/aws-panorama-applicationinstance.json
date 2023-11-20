@@ -1,17 +1,6 @@
 {
-  "taggable": true,
-  "typeName": "AWS::Panorama::ApplicationInstance",
-  "readOnlyProperties": [
-    "/properties/ApplicationInstanceId",
-    "/properties/Arn",
-    "/properties/Status",
-    "/properties/HealthStatus",
-    "/properties/StatusDescription",
-    "/properties/DefaultRuntimeContextDeviceName",
-    "/properties/CreatedTime",
-    "/properties/LastUpdatedTime"
-  ],
-  "description": "Schema for ApplicationInstance CloudFormation Resource",
+  "$hash": "6954c4dbb589ef62819fd04b28f444df30931bb9",
+  "additionalProperties": false,
   "createOnlyProperties": [
     "/properties/Name",
     "/properties/Description",
@@ -21,20 +10,147 @@
     "/properties/DefaultRuntimeContextDevice",
     "/properties/ApplicationInstanceIdToReplace"
   ],
-  "primaryIdentifier": ["/properties/ApplicationInstanceId"],
-  "required": ["ManifestPayload", "DefaultRuntimeContextDevice"],
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
-  "handlers": {
-    "read": {
-      "permissions": [
-        "panorama:DescribeApplicationInstance",
-        "panorama:DescribeApplicationInstanceDetails",
-        "panorama:ListTagsForResource",
-        "s3:ListObjects",
-        "s3:GetObject",
-        "s3:GetObjectVersion"
-      ]
+  "definitions": {
+    "ApplicationInstanceArn": {
+      "maxLength": 255,
+      "minLength": 1,
+      "type": "string"
     },
+    "ApplicationInstanceHealthStatus": {
+      "enum": ["RUNNING", "ERROR", "NOT_AVAILABLE"],
+      "type": "string"
+    },
+    "ApplicationInstanceId": {
+      "maxLength": 255,
+      "minLength": 1,
+      "pattern": "^[a-zA-Z0-9\\-\\_]+$",
+      "type": "string"
+    },
+    "ApplicationInstanceStatus": {
+      "enum": [
+        "DEPLOYMENT_PENDING",
+        "DEPLOYMENT_REQUESTED",
+        "DEPLOYMENT_IN_PROGRESS",
+        "DEPLOYMENT_ERROR",
+        "DEPLOYMENT_SUCCEEDED",
+        "REMOVAL_PENDING",
+        "REMOVAL_REQUESTED",
+        "REMOVAL_IN_PROGRESS",
+        "REMOVAL_FAILED",
+        "REMOVAL_SUCCEEDED"
+      ],
+      "type": "string"
+    },
+    "ApplicationInstanceStatusDescription": {
+      "maxLength": 255,
+      "minLength": 1,
+      "type": "string"
+    },
+    "DefaultRuntimeContextDevice": {
+      "maxLength": 255,
+      "minLength": 1,
+      "pattern": "^[a-zA-Z0-9\\-\\_]+$",
+      "type": "string"
+    },
+    "Description": {
+      "maxLength": 255,
+      "minLength": 0,
+      "pattern": "^.*$",
+      "type": "string"
+    },
+    "DeviceId": {
+      "maxLength": 255,
+      "minLength": 1,
+      "pattern": "^[a-zA-Z0-9\\-\\_]+$",
+      "type": "string"
+    },
+    "DeviceName": {
+      "maxLength": 255,
+      "minLength": 1,
+      "pattern": "^[a-zA-Z0-9\\-\\_]+$",
+      "type": "string"
+    },
+    "ManifestOverridesPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "PayloadData": { "$ref": "#/definitions/ManifestOverridesPayloadData" }
+      },
+      "type": "object"
+    },
+    "ManifestOverridesPayloadData": {
+      "maxLength": 51200,
+      "minLength": 0,
+      "pattern": "^.+$",
+      "type": "string"
+    },
+    "ManifestPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "PayloadData": { "$ref": "#/definitions/ManifestPayloadData" }
+      },
+      "type": "object"
+    },
+    "ManifestPayloadData": {
+      "maxLength": 51200,
+      "minLength": 1,
+      "pattern": "^.+$",
+      "type": "string"
+    },
+    "Name": {
+      "maxLength": 255,
+      "minLength": 1,
+      "pattern": "^[a-zA-Z0-9\\-\\_]+$",
+      "type": "string"
+    },
+    "RuntimeRoleArn": {
+      "maxLength": 255,
+      "minLength": 1,
+      "pattern": "^arn:[a-z0-9][-.a-z0-9]{0,62}:iam::[0-9]{12}:role/.+$",
+      "type": "string"
+    },
+    "StatusFilter": {
+      "enum": [
+        "DEPLOYMENT_SUCCEEDED",
+        "DEPLOYMENT_ERROR",
+        "REMOVAL_SUCCEEDED",
+        "REMOVAL_FAILED",
+        "PROCESSING_DEPLOYMENT",
+        "PROCESSING_REMOVAL"
+      ],
+      "type": "string"
+    },
+    "Tag": {
+      "additionalProperties": false,
+      "properties": {
+        "Key": {
+          "description": "A string used to identify this tag",
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^.+$",
+          "type": "string"
+        },
+        "Value": {
+          "description": "A string containing the value for the tag",
+          "maxLength": 256,
+          "minLength": 0,
+          "pattern": "^.+$",
+          "type": "string"
+        }
+      },
+      "required": ["Key", "Value"],
+      "type": "object"
+    },
+    "TagList": {
+      "description": "List of tags",
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/Tag" },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "Timestamp": { "type": "integer" }
+  },
+  "description": "Schema for ApplicationInstance CloudFormation Resource",
+  "handlers": {
     "create": {
       "permissions": [
         "panorama:CreateApplicationInstance",
@@ -45,26 +161,6 @@
         "iam:PassRole",
         "s3:ListBucket",
         "s3:PutObject",
-        "s3:GetObject",
-        "s3:GetObjectVersion"
-      ]
-    },
-    "update": {
-      "permissions": [
-        "panorama:ListTagsForResource",
-        "panorama:TagResource",
-        "panorama:UntagResource",
-        "panorama:DescribeApplicationInstance",
-        "panorama:DescribeApplicationInstanceDetails",
-        "s3:ListObjects",
-        "s3:GetObject",
-        "s3:GetObjectVersion"
-      ]
-    },
-    "list": {
-      "permissions": [
-        "panorama:ListApplicationInstances",
-        "s3:ListBucket",
         "s3:GetObject",
         "s3:GetObjectVersion"
       ]
@@ -81,174 +177,78 @@
         "s3:GetObject",
         "s3:GetObjectVersion"
       ]
-    }
-  },
-  "writeOnlyProperties": ["/properties/ApplicationInstanceIdToReplace"],
-  "additionalProperties": false,
-  "definitions": {
-    "DefaultRuntimeContextDevice": {
-      "minLength": 1,
-      "pattern": "^[a-zA-Z0-9\\-\\_]+$",
-      "type": "string",
-      "maxLength": 255
     },
-    "Description": {
-      "minLength": 0,
-      "pattern": "^.*$",
-      "type": "string",
-      "maxLength": 255
-    },
-    "DeviceId": {
-      "minLength": 1,
-      "pattern": "^[a-zA-Z0-9\\-\\_]+$",
-      "type": "string",
-      "maxLength": 255
-    },
-    "ApplicationInstanceStatus": {
-      "type": "string",
-      "enum": [
-        "DEPLOYMENT_PENDING",
-        "DEPLOYMENT_REQUESTED",
-        "DEPLOYMENT_IN_PROGRESS",
-        "DEPLOYMENT_ERROR",
-        "DEPLOYMENT_SUCCEEDED",
-        "REMOVAL_PENDING",
-        "REMOVAL_REQUESTED",
-        "REMOVAL_IN_PROGRESS",
-        "REMOVAL_FAILED",
-        "REMOVAL_SUCCEEDED"
+    "list": {
+      "permissions": [
+        "panorama:ListApplicationInstances",
+        "s3:ListBucket",
+        "s3:GetObject",
+        "s3:GetObjectVersion"
       ]
     },
-    "ManifestOverridesPayload": {
-      "additionalProperties": false,
-      "type": "object",
-      "properties": {
-        "PayloadData": { "$ref": "#/definitions/ManifestOverridesPayloadData" }
-      }
-    },
-    "RuntimeRoleArn": {
-      "minLength": 1,
-      "pattern": "^arn:[a-z0-9][-.a-z0-9]{0,62}:iam::[0-9]{12}:role/.+$",
-      "type": "string",
-      "maxLength": 255
-    },
-    "Timestamp": { "type": "integer" },
-    "Name": {
-      "minLength": 1,
-      "pattern": "^[a-zA-Z0-9\\-\\_]+$",
-      "type": "string",
-      "maxLength": 255
-    },
-    "ApplicationInstanceId": {
-      "minLength": 1,
-      "pattern": "^[a-zA-Z0-9\\-\\_]+$",
-      "type": "string",
-      "maxLength": 255
-    },
-    "ManifestPayloadData": {
-      "minLength": 1,
-      "pattern": "^.+$",
-      "type": "string",
-      "maxLength": 51200
-    },
-    "ApplicationInstanceHealthStatus": {
-      "type": "string",
-      "enum": ["RUNNING", "ERROR", "NOT_AVAILABLE"]
-    },
-    "StatusFilter": {
-      "type": "string",
-      "enum": [
-        "DEPLOYMENT_SUCCEEDED",
-        "DEPLOYMENT_ERROR",
-        "REMOVAL_SUCCEEDED",
-        "REMOVAL_FAILED",
-        "PROCESSING_DEPLOYMENT",
-        "PROCESSING_REMOVAL"
+    "read": {
+      "permissions": [
+        "panorama:DescribeApplicationInstance",
+        "panorama:DescribeApplicationInstanceDetails",
+        "panorama:ListTagsForResource",
+        "s3:ListObjects",
+        "s3:GetObject",
+        "s3:GetObjectVersion"
       ]
     },
-    "TagList": {
-      "uniqueItems": true,
-      "description": "List of tags",
-      "insertionOrder": false,
-      "type": "array",
-      "items": { "$ref": "#/definitions/Tag" }
-    },
-    "ManifestPayload": {
-      "additionalProperties": false,
-      "type": "object",
-      "properties": {
-        "PayloadData": { "$ref": "#/definitions/ManifestPayloadData" }
-      }
-    },
-    "ApplicationInstanceArn": {
-      "minLength": 1,
-      "type": "string",
-      "maxLength": 255
-    },
-    "ManifestOverridesPayloadData": {
-      "minLength": 0,
-      "pattern": "^.+$",
-      "type": "string",
-      "maxLength": 51200
-    },
-    "ApplicationInstanceStatusDescription": {
-      "minLength": 1,
-      "type": "string",
-      "maxLength": 255
-    },
-    "Tag": {
-      "additionalProperties": false,
-      "type": "object",
-      "properties": {
-        "Value": {
-          "minLength": 0,
-          "pattern": "^.+$",
-          "description": "A string containing the value for the tag",
-          "type": "string",
-          "maxLength": 256
-        },
-        "Key": {
-          "minLength": 1,
-          "pattern": "^.+$",
-          "description": "A string used to identify this tag",
-          "type": "string",
-          "maxLength": 128
-        }
-      },
-      "required": ["Key", "Value"]
-    },
-    "DeviceName": {
-      "minLength": 1,
-      "pattern": "^[a-zA-Z0-9\\-\\_]+$",
-      "type": "string",
-      "maxLength": 255
+    "update": {
+      "permissions": [
+        "panorama:ListTagsForResource",
+        "panorama:TagResource",
+        "panorama:UntagResource",
+        "panorama:DescribeApplicationInstance",
+        "panorama:DescribeApplicationInstanceDetails",
+        "s3:ListObjects",
+        "s3:GetObject",
+        "s3:GetObjectVersion"
+      ]
     }
   },
+  "primaryIdentifier": ["/properties/ApplicationInstanceId"],
   "properties": {
-    "DefaultRuntimeContextDeviceName": { "$ref": "#/definitions/DeviceName" },
-    "Status": { "$ref": "#/definitions/ApplicationInstanceStatus" },
-    "DefaultRuntimeContextDevice": {
-      "$ref": "#/definitions/DefaultRuntimeContextDevice"
-    },
-    "Description": { "$ref": "#/definitions/Description" },
+    "ApplicationInstanceId": { "$ref": "#/definitions/ApplicationInstanceId" },
     "ApplicationInstanceIdToReplace": {
       "$ref": "#/definitions/ApplicationInstanceId"
     },
+    "Arn": { "$ref": "#/definitions/ApplicationInstanceArn" },
     "CreatedTime": { "$ref": "#/definitions/Timestamp" },
+    "DefaultRuntimeContextDevice": {
+      "$ref": "#/definitions/DefaultRuntimeContextDevice"
+    },
+    "DefaultRuntimeContextDeviceName": { "$ref": "#/definitions/DeviceName" },
+    "Description": { "$ref": "#/definitions/Description" },
     "HealthStatus": { "$ref": "#/definitions/ApplicationInstanceHealthStatus" },
+    "LastUpdatedTime": { "$ref": "#/definitions/Timestamp" },
     "ManifestOverridesPayload": {
       "$ref": "#/definitions/ManifestOverridesPayload"
     },
-    "LastUpdatedTime": { "$ref": "#/definitions/Timestamp" },
-    "RuntimeRoleArn": { "$ref": "#/definitions/RuntimeRoleArn" },
+    "ManifestPayload": { "$ref": "#/definitions/ManifestPayload" },
     "Name": { "$ref": "#/definitions/Name" },
-    "ApplicationInstanceId": { "$ref": "#/definitions/ApplicationInstanceId" },
+    "RuntimeRoleArn": { "$ref": "#/definitions/RuntimeRoleArn" },
+    "Status": { "$ref": "#/definitions/ApplicationInstanceStatus" },
     "StatusDescription": {
       "$ref": "#/definitions/ApplicationInstanceStatusDescription"
     },
-    "ManifestPayload": { "$ref": "#/definitions/ManifestPayload" },
-    "Arn": { "$ref": "#/definitions/ApplicationInstanceArn" },
     "Tags": { "$ref": "#/definitions/TagList" }
   },
-  "$hash": "6954c4dbb589ef62819fd04b28f444df30931bb9"
+  "readOnlyProperties": [
+    "/properties/ApplicationInstanceId",
+    "/properties/Arn",
+    "/properties/Status",
+    "/properties/HealthStatus",
+    "/properties/StatusDescription",
+    "/properties/DefaultRuntimeContextDeviceName",
+    "/properties/CreatedTime",
+    "/properties/LastUpdatedTime"
+  ],
+  "required": ["ManifestPayload", "DefaultRuntimeContextDevice"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+  "taggable": true,
+  "typeName": "AWS::Panorama::ApplicationInstance",
+  "writeOnlyProperties": ["/properties/ApplicationInstanceIdToReplace"]
 }

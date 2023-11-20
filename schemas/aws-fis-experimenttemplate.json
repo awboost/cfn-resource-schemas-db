@@ -1,15 +1,237 @@
 {
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-fis.git",
-  "handlers": {
-    "read": {
-      "permissions": ["fis:GetExperimentTemplate", "fis:ListTagsForResource"]
+  "$hash": "1c06c2e21f4c6d69a9bb30a383470eaaf2bb2a97",
+  "additionalProperties": false,
+  "createOnlyProperties": ["/properties/Tags"],
+  "definitions": {
+    "ActionId": {
+      "description": "The ID of the action.",
+      "maxLength": 64,
+      "type": "string"
     },
+    "ExperimentTemplateAction": {
+      "additionalProperties": false,
+      "description": "Specifies an action for the experiment template.",
+      "properties": {
+        "ActionId": { "$ref": "#/definitions/ActionId" },
+        "Description": {
+          "$ref": "#/definitions/ExperimentTemplateActionItemDescription"
+        },
+        "Parameters": {
+          "additionalProperties": false,
+          "description": "The parameters for the action, if applicable.",
+          "patternProperties": {
+            ".{1,64}": {
+              "$ref": "#/definitions/ExperimentTemplateActionItemParameter"
+            }
+          },
+          "type": "object"
+        },
+        "StartAfter": {
+          "$ref": "#/definitions/ExperimentTemplateActionItemStartAfterList"
+        },
+        "Targets": {
+          "additionalProperties": false,
+          "description": "One or more targets for the action.",
+          "patternProperties": {
+            ".{1,64}": {
+              "$ref": "#/definitions/ExperimentTemplateActionItemTarget"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "required": ["ActionId"],
+      "type": "object"
+    },
+    "ExperimentTemplateActionItemDescription": {
+      "description": "A description for the action.",
+      "maxLength": 512,
+      "type": "string"
+    },
+    "ExperimentTemplateActionItemParameter": {
+      "maxLength": 1024,
+      "type": "string"
+    },
+    "ExperimentTemplateActionItemStartAfter": {
+      "maxLength": 64,
+      "type": "string"
+    },
+    "ExperimentTemplateActionItemStartAfterList": {
+      "description": "The names of the actions that must be completed before the current action starts.",
+      "items": {
+        "$ref": "#/definitions/ExperimentTemplateActionItemStartAfter"
+      },
+      "type": "array"
+    },
+    "ExperimentTemplateActionItemTarget": { "maxLength": 64, "type": "string" },
+    "ExperimentTemplateActionMap": {
+      "additionalProperties": false,
+      "description": "The actions for the experiment.",
+      "patternProperties": {
+        "[\\S]{1,64}": { "$ref": "#/definitions/ExperimentTemplateAction" }
+      },
+      "type": "object"
+    },
+    "ExperimentTemplateDescription": {
+      "description": "A description for the experiment template.",
+      "maxLength": 512,
+      "type": "string"
+    },
+    "ExperimentTemplateId": { "type": "string" },
+    "ExperimentTemplateLogConfiguration": {
+      "additionalProperties": false,
+      "properties": {
+        "CloudWatchLogsConfiguration": {
+          "additionalProperties": false,
+          "properties": {
+            "LogGroupArn": {
+              "maxLength": 2048,
+              "minLength": 20,
+              "type": "string"
+            }
+          },
+          "required": ["LogGroupArn"],
+          "type": "object"
+        },
+        "LogSchemaVersion": { "minimum": 1, "type": "integer" },
+        "S3Configuration": {
+          "additionalProperties": false,
+          "properties": {
+            "BucketName": { "maxLength": 63, "minLength": 3, "type": "string" },
+            "Prefix": { "maxLength": 1024, "minLength": 1, "type": "string" }
+          },
+          "required": ["BucketName"],
+          "type": "object"
+        }
+      },
+      "required": ["LogSchemaVersion"],
+      "type": "object"
+    },
+    "ExperimentTemplateStopCondition": {
+      "additionalProperties": false,
+      "properties": {
+        "Source": { "$ref": "#/definitions/StopConditionSource" },
+        "Value": { "$ref": "#/definitions/StopConditionValue" }
+      },
+      "required": ["Source"],
+      "type": "object"
+    },
+    "ExperimentTemplateStopConditionList": {
+      "description": "One or more stop conditions.",
+      "items": { "$ref": "#/definitions/ExperimentTemplateStopCondition" },
+      "type": "array"
+    },
+    "ExperimentTemplateTarget": {
+      "additionalProperties": false,
+      "description": "Specifies a target for an experiment.",
+      "properties": {
+        "Filters": {
+          "$ref": "#/definitions/ExperimentTemplateTargetFilterList"
+        },
+        "Parameters": {
+          "additionalProperties": false,
+          "patternProperties": {
+            ".{1,64}": { "maxLength": 1024, "type": "string" }
+          },
+          "type": "object"
+        },
+        "ResourceArns": { "$ref": "#/definitions/ResourceArnList" },
+        "ResourceTags": {
+          "additionalProperties": false,
+          "patternProperties": {
+            ".{1,128}": { "maxLength": 256, "type": "string" }
+          },
+          "type": "object"
+        },
+        "ResourceType": { "$ref": "#/definitions/ResourceType" },
+        "SelectionMode": {
+          "$ref": "#/definitions/ExperimentTemplateTargetSelectionMode"
+        }
+      },
+      "required": ["ResourceType", "SelectionMode"],
+      "type": "object"
+    },
+    "ExperimentTemplateTargetFilter": {
+      "additionalProperties": false,
+      "description": "Describes a filter used for the target resource input in an experiment template.",
+      "properties": {
+        "Path": { "$ref": "#/definitions/ExperimentTemplateTargetFilterPath" },
+        "Values": {
+          "$ref": "#/definitions/ExperimentTemplateTargetFilterValues"
+        }
+      },
+      "required": ["Path", "Values"],
+      "type": "object"
+    },
+    "ExperimentTemplateTargetFilterList": {
+      "items": { "$ref": "#/definitions/ExperimentTemplateTargetFilter" },
+      "type": "array"
+    },
+    "ExperimentTemplateTargetFilterPath": {
+      "description": "The attribute path for the filter.",
+      "maxLength": 256,
+      "type": "string"
+    },
+    "ExperimentTemplateTargetFilterValue": {
+      "maxLength": 128,
+      "type": "string"
+    },
+    "ExperimentTemplateTargetFilterValues": {
+      "description": "The attribute values for the filter.",
+      "items": { "$ref": "#/definitions/ExperimentTemplateTargetFilterValue" },
+      "type": "array"
+    },
+    "ExperimentTemplateTargetMap": {
+      "additionalProperties": false,
+      "description": "The targets for the experiment.",
+      "patternProperties": {
+        ".{1,64}": { "$ref": "#/definitions/ExperimentTemplateTarget" }
+      },
+      "type": "object"
+    },
+    "ExperimentTemplateTargetSelectionMode": {
+      "description": "Scopes the identified resources to a specific number of the resources at random, or a percentage of the resources.",
+      "maxLength": 64,
+      "type": "string"
+    },
+    "ResourceArn": { "maxLength": 2048, "minLength": 20, "type": "string" },
+    "ResourceArnList": {
+      "description": "The Amazon Resource Names (ARNs) of the target resources.",
+      "items": { "$ref": "#/definitions/ResourceArn" },
+      "type": "array"
+    },
+    "ResourceType": {
+      "description": "The AWS resource type. The resource type must be supported for the specified action.",
+      "maxLength": 64,
+      "type": "string"
+    },
+    "RoleArn": {
+      "description": "The Amazon Resource Name (ARN) of an IAM role that grants the AWS FIS service permission to perform service actions on your behalf.",
+      "maxLength": 1224,
+      "type": "string"
+    },
+    "StopConditionSource": { "maxLength": 64, "type": "string" },
+    "StopConditionValue": {
+      "maxLength": 2048,
+      "minLength": 20,
+      "type": "string"
+    }
+  },
+  "description": "Resource schema for AWS::FIS::ExperimentTemplate",
+  "handlers": {
     "create": {
       "permissions": [
         "fis:CreateExperimentTemplate",
         "fis:TagResource",
         "iam:PassRole"
       ]
+    },
+    "delete": { "permissions": ["fis:DeleteExperimentTemplate"] },
+    "list": {
+      "permissions": ["fis:ListExperimentTemplates", "fis:ListTagsForResource"]
+    },
+    "read": {
+      "permissions": ["fis:GetExperimentTemplate", "fis:ListTagsForResource"]
     },
     "update": {
       "permissions": [
@@ -18,253 +240,31 @@
         "fis:UntagResource",
         "iam:PassRole"
       ]
-    },
-    "list": {
-      "permissions": ["fis:ListExperimentTemplates", "fis:ListTagsForResource"]
-    },
-    "delete": { "permissions": ["fis:DeleteExperimentTemplate"] }
-  },
-  "typeName": "AWS::FIS::ExperimentTemplate",
-  "readOnlyProperties": ["/properties/Id"],
-  "description": "Resource schema for AWS::FIS::ExperimentTemplate",
-  "createOnlyProperties": ["/properties/Tags"],
-  "additionalProperties": false,
-  "primaryIdentifier": ["/properties/Id"],
-  "definitions": {
-    "ExperimentTemplateActionItemDescription": {
-      "description": "A description for the action.",
-      "type": "string",
-      "maxLength": 512
-    },
-    "StopConditionSource": { "type": "string", "maxLength": 64 },
-    "ExperimentTemplateStopCondition": {
-      "additionalProperties": false,
-      "type": "object",
-      "properties": {
-        "Value": { "$ref": "#/definitions/StopConditionValue" },
-        "Source": { "$ref": "#/definitions/StopConditionSource" }
-      },
-      "required": ["Source"]
-    },
-    "ExperimentTemplateActionItemStartAfter": {
-      "type": "string",
-      "maxLength": 64
-    },
-    "ExperimentTemplateLogConfiguration": {
-      "additionalProperties": false,
-      "type": "object",
-      "properties": {
-        "S3Configuration": {
-          "additionalProperties": false,
-          "type": "object",
-          "properties": {
-            "BucketName": { "minLength": 3, "type": "string", "maxLength": 63 },
-            "Prefix": { "minLength": 1, "type": "string", "maxLength": 1024 }
-          },
-          "required": ["BucketName"]
-        },
-        "LogSchemaVersion": { "type": "integer", "minimum": 1 },
-        "CloudWatchLogsConfiguration": {
-          "additionalProperties": false,
-          "type": "object",
-          "properties": {
-            "LogGroupArn": {
-              "minLength": 20,
-              "type": "string",
-              "maxLength": 2048
-            }
-          },
-          "required": ["LogGroupArn"]
-        }
-      },
-      "required": ["LogSchemaVersion"]
-    },
-    "ExperimentTemplateId": { "type": "string" },
-    "ExperimentTemplateTargetSelectionMode": {
-      "description": "Scopes the identified resources to a specific number of the resources at random, or a percentage of the resources.",
-      "type": "string",
-      "maxLength": 64
-    },
-    "ExperimentTemplateDescription": {
-      "description": "A description for the experiment template.",
-      "type": "string",
-      "maxLength": 512
-    },
-    "ExperimentTemplateTargetFilterList": {
-      "type": "array",
-      "items": { "$ref": "#/definitions/ExperimentTemplateTargetFilter" }
-    },
-    "StopConditionValue": {
-      "minLength": 20,
-      "type": "string",
-      "maxLength": 2048
-    },
-    "ExperimentTemplateTarget": {
-      "description": "Specifies a target for an experiment.",
-      "additionalProperties": false,
-      "type": "object",
-      "properties": {
-        "Filters": {
-          "$ref": "#/definitions/ExperimentTemplateTargetFilterList"
-        },
-        "Parameters": {
-          "patternProperties": {
-            ".{1,64}": { "type": "string", "maxLength": 1024 }
-          },
-          "additionalProperties": false,
-          "type": "object"
-        },
-        "ResourceTags": {
-          "patternProperties": {
-            ".{1,128}": { "type": "string", "maxLength": 256 }
-          },
-          "additionalProperties": false,
-          "type": "object"
-        },
-        "ResourceType": { "$ref": "#/definitions/ResourceType" },
-        "ResourceArns": { "$ref": "#/definitions/ResourceArnList" },
-        "SelectionMode": {
-          "$ref": "#/definitions/ExperimentTemplateTargetSelectionMode"
-        }
-      },
-      "required": ["ResourceType", "SelectionMode"]
-    },
-    "ExperimentTemplateActionItemTarget": { "type": "string", "maxLength": 64 },
-    "ExperimentTemplateTargetMap": {
-      "patternProperties": {
-        ".{1,64}": { "$ref": "#/definitions/ExperimentTemplateTarget" }
-      },
-      "description": "The targets for the experiment.",
-      "additionalProperties": false,
-      "type": "object"
-    },
-    "ExperimentTemplateActionItemStartAfterList": {
-      "description": "The names of the actions that must be completed before the current action starts.",
-      "type": "array",
-      "items": {
-        "$ref": "#/definitions/ExperimentTemplateActionItemStartAfter"
-      }
-    },
-    "ExperimentTemplateTargetFilterPath": {
-      "description": "The attribute path for the filter.",
-      "type": "string",
-      "maxLength": 256
-    },
-    "ExperimentTemplateActionItemParameter": {
-      "type": "string",
-      "maxLength": 1024
-    },
-    "ExperimentTemplateTargetFilter": {
-      "description": "Describes a filter used for the target resource input in an experiment template.",
-      "additionalProperties": false,
-      "type": "object",
-      "properties": {
-        "Path": { "$ref": "#/definitions/ExperimentTemplateTargetFilterPath" },
-        "Values": {
-          "$ref": "#/definitions/ExperimentTemplateTargetFilterValues"
-        }
-      },
-      "required": ["Path", "Values"]
-    },
-    "ResourceType": {
-      "description": "The AWS resource type. The resource type must be supported for the specified action.",
-      "type": "string",
-      "maxLength": 64
-    },
-    "ExperimentTemplateActionMap": {
-      "patternProperties": {
-        "[\\S]{1,64}": { "$ref": "#/definitions/ExperimentTemplateAction" }
-      },
-      "description": "The actions for the experiment.",
-      "additionalProperties": false,
-      "type": "object"
-    },
-    "RoleArn": {
-      "description": "The Amazon Resource Name (ARN) of an IAM role that grants the AWS FIS service permission to perform service actions on your behalf.",
-      "type": "string",
-      "maxLength": 1224
-    },
-    "ResourceArnList": {
-      "description": "The Amazon Resource Names (ARNs) of the target resources.",
-      "type": "array",
-      "items": { "$ref": "#/definitions/ResourceArn" }
-    },
-    "ResourceArn": { "minLength": 20, "type": "string", "maxLength": 2048 },
-    "ActionId": {
-      "description": "The ID of the action.",
-      "type": "string",
-      "maxLength": 64
-    },
-    "ExperimentTemplateStopConditionList": {
-      "description": "One or more stop conditions.",
-      "type": "array",
-      "items": { "$ref": "#/definitions/ExperimentTemplateStopCondition" }
-    },
-    "ExperimentTemplateAction": {
-      "description": "Specifies an action for the experiment template.",
-      "additionalProperties": false,
-      "type": "object",
-      "properties": {
-        "ActionId": { "$ref": "#/definitions/ActionId" },
-        "Description": {
-          "$ref": "#/definitions/ExperimentTemplateActionItemDescription"
-        },
-        "Parameters": {
-          "patternProperties": {
-            ".{1,64}": {
-              "$ref": "#/definitions/ExperimentTemplateActionItemParameter"
-            }
-          },
-          "description": "The parameters for the action, if applicable.",
-          "additionalProperties": false,
-          "type": "object"
-        },
-        "Targets": {
-          "patternProperties": {
-            ".{1,64}": {
-              "$ref": "#/definitions/ExperimentTemplateActionItemTarget"
-            }
-          },
-          "description": "One or more targets for the action.",
-          "additionalProperties": false,
-          "type": "object"
-        },
-        "StartAfter": {
-          "$ref": "#/definitions/ExperimentTemplateActionItemStartAfterList"
-        }
-      },
-      "required": ["ActionId"]
-    },
-    "ExperimentTemplateTargetFilterValues": {
-      "description": "The attribute values for the filter.",
-      "type": "array",
-      "items": { "$ref": "#/definitions/ExperimentTemplateTargetFilterValue" }
-    },
-    "ExperimentTemplateTargetFilterValue": {
-      "type": "string",
-      "maxLength": 128
     }
   },
-  "required": ["Description", "StopConditions", "Targets", "RoleArn", "Tags"],
+  "primaryIdentifier": ["/properties/Id"],
   "properties": {
-    "Description": { "$ref": "#/definitions/ExperimentTemplateDescription" },
     "Actions": { "$ref": "#/definitions/ExperimentTemplateActionMap" },
-    "StopConditions": {
-      "$ref": "#/definitions/ExperimentTemplateStopConditionList"
-    },
-    "Targets": { "$ref": "#/definitions/ExperimentTemplateTargetMap" },
+    "Description": { "$ref": "#/definitions/ExperimentTemplateDescription" },
     "Id": { "$ref": "#/definitions/ExperimentTemplateId" },
     "LogConfiguration": {
       "$ref": "#/definitions/ExperimentTemplateLogConfiguration"
     },
     "RoleArn": { "$ref": "#/definitions/RoleArn" },
+    "StopConditions": {
+      "$ref": "#/definitions/ExperimentTemplateStopConditionList"
+    },
     "Tags": {
-      "patternProperties": {
-        ".{1,128}": { "type": "string", "maxLength": 256 }
-      },
       "additionalProperties": false,
+      "patternProperties": {
+        ".{1,128}": { "maxLength": 256, "type": "string" }
+      },
       "type": "object"
-    }
+    },
+    "Targets": { "$ref": "#/definitions/ExperimentTemplateTargetMap" }
   },
-  "$hash": "1c06c2e21f4c6d69a9bb30a383470eaaf2bb2a97"
+  "readOnlyProperties": ["/properties/Id"],
+  "required": ["Description", "StopConditions", "Targets", "RoleArn", "Tags"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-fis.git",
+  "typeName": "AWS::FIS::ExperimentTemplate"
 }

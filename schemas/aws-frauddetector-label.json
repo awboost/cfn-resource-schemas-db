@@ -1,59 +1,19 @@
 {
-  "typeName": "AWS::FraudDetector::Label",
-  "description": "An label for fraud detector.",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+  "$hash": "4f3db885ccd7b735d2fd8b72bd49bb045348da43",
+  "additionalProperties": false,
+  "createOnlyProperties": ["/properties/Name"],
   "definitions": {
     "Tag": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
-        "Key": { "type": "string", "minLength": 1, "maxLength": 128 },
-        "Value": { "type": "string", "minLength": 0, "maxLength": 256 }
+        "Key": { "maxLength": 128, "minLength": 1, "type": "string" },
+        "Value": { "maxLength": 256, "minLength": 0, "type": "string" }
       },
       "required": ["Key", "Value"],
-      "additionalProperties": false
+      "type": "object"
     }
   },
-  "properties": {
-    "Name": {
-      "description": "The name of the label.",
-      "type": "string",
-      "pattern": "^[0-9a-z_-]+$",
-      "minLength": 1,
-      "maxLength": 64
-    },
-    "Tags": {
-      "description": "Tags associated with this label.",
-      "type": "array",
-      "uniqueItems": false,
-      "insertionOrder": false,
-      "maxItems": 200,
-      "items": { "$ref": "#/definitions/Tag" }
-    },
-    "Description": {
-      "description": "The label description.",
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 128
-    },
-    "Arn": { "description": "The label ARN.", "type": "string" },
-    "CreatedTime": {
-      "description": "The timestamp when the label was created.",
-      "type": "string"
-    },
-    "LastUpdatedTime": {
-      "description": "The timestamp when the label was last updated.",
-      "type": "string"
-    }
-  },
-  "createOnlyProperties": ["/properties/Name"],
-  "readOnlyProperties": [
-    "/properties/Arn",
-    "/properties/CreatedTime",
-    "/properties/LastUpdatedTime"
-  ],
-  "additionalProperties": false,
-  "required": ["Name"],
-  "primaryIdentifier": ["/properties/Arn"],
+  "description": "An label for fraud detector.",
   "handlers": {
     "create": {
       "permissions": [
@@ -61,6 +21,15 @@
         "frauddetector:PutLabel",
         "frauddetector:ListTagsForResource",
         "frauddetector:TagResource"
+      ]
+    },
+    "delete": {
+      "permissions": ["frauddetector:GetLabels", "frauddetector:DeleteLabel"]
+    },
+    "list": {
+      "permissions": [
+        "frauddetector:GetLabels",
+        "frauddetector:ListTagsForResource"
       ]
     },
     "read": {
@@ -77,16 +46,47 @@
         "frauddetector:TagResource",
         "frauddetector:UntagResource"
       ]
-    },
-    "delete": {
-      "permissions": ["frauddetector:GetLabels", "frauddetector:DeleteLabel"]
-    },
-    "list": {
-      "permissions": [
-        "frauddetector:GetLabels",
-        "frauddetector:ListTagsForResource"
-      ]
     }
   },
-  "$hash": "4f3db885ccd7b735d2fd8b72bd49bb045348da43"
+  "primaryIdentifier": ["/properties/Arn"],
+  "properties": {
+    "Arn": { "description": "The label ARN.", "type": "string" },
+    "CreatedTime": {
+      "description": "The timestamp when the label was created.",
+      "type": "string"
+    },
+    "Description": {
+      "description": "The label description.",
+      "maxLength": 128,
+      "minLength": 1,
+      "type": "string"
+    },
+    "LastUpdatedTime": {
+      "description": "The timestamp when the label was last updated.",
+      "type": "string"
+    },
+    "Name": {
+      "description": "The name of the label.",
+      "maxLength": 64,
+      "minLength": 1,
+      "pattern": "^[0-9a-z_-]+$",
+      "type": "string"
+    },
+    "Tags": {
+      "description": "Tags associated with this label.",
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/Tag" },
+      "maxItems": 200,
+      "type": "array",
+      "uniqueItems": false
+    }
+  },
+  "readOnlyProperties": [
+    "/properties/Arn",
+    "/properties/CreatedTime",
+    "/properties/LastUpdatedTime"
+  ],
+  "required": ["Name"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+  "typeName": "AWS::FraudDetector::Label"
 }

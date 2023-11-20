@@ -1,59 +1,22 @@
 {
-  "typeName": "AWS::IoT::Authorizer",
-  "description": "Creates an authorizer.",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
-  "definitions": {
-    "Tag": {
-      "type": "object",
-      "properties": {
-        "Key": { "type": "string" },
-        "Value": { "type": "string" }
-      },
-      "additionalProperties": false,
-      "required": ["Key", "Value"]
-    }
-  },
-  "properties": {
-    "AuthorizerFunctionArn": { "type": "string" },
-    "Arn": { "type": "string" },
-    "AuthorizerName": {
-      "type": "string",
-      "pattern": "[\\w=,@-]+",
-      "minLength": 1,
-      "maxLength": 128
-    },
-    "SigningDisabled": { "type": "boolean" },
-    "Status": { "type": "string", "enum": ["ACTIVE", "INACTIVE"] },
-    "TokenKeyName": { "type": "string" },
-    "TokenSigningPublicKeys": {
-      "type": "object",
-      "additionalProperties": false,
-      "patternProperties": {
-        "[a-zA-Z0-9:_-]+": { "type": "string", "maxLength": 5120 }
-      }
-    },
-    "EnableCachingForHttp": { "type": "boolean" },
-    "Tags": {
-      "type": "array",
-      "insertionOrder": true,
-      "items": { "$ref": "#/definitions/Tag" }
-    }
-  },
-  "tagging": {
-    "taggable": true,
-    "tagOnCreate": true,
-    "tagUpdatable": true,
-    "cloudFormationSystemTags": true,
-    "tagProperty": "/properties/Tags"
-  },
+  "$hash": "4cf9486a0b7d179daafcbda89c6a81f4043ce6dd",
   "additionalProperties": false,
-  "required": ["AuthorizerFunctionArn"],
   "createOnlyProperties": [
     "/properties/SigningDisabled",
     "/properties/AuthorizerName"
   ],
-  "readOnlyProperties": ["/properties/Arn"],
-  "primaryIdentifier": ["/properties/AuthorizerName"],
+  "definitions": {
+    "Tag": {
+      "additionalProperties": false,
+      "properties": {
+        "Key": { "type": "string" },
+        "Value": { "type": "string" }
+      },
+      "required": ["Key", "Value"],
+      "type": "object"
+    }
+  },
+  "description": "Creates an authorizer.",
   "handlers": {
     "create": {
       "permissions": [
@@ -63,6 +26,14 @@
         "iot:ListTagsForResource"
       ]
     },
+    "delete": {
+      "permissions": [
+        "iot:UpdateAuthorizer",
+        "iot:DeleteAuthorizer",
+        "iot:DescribeAuthorizer"
+      ]
+    },
+    "list": { "permissions": ["iot:ListAuthorizers"] },
     "read": {
       "permissions": ["iot:DescribeAuthorizer", "iot:ListTagsForResource"]
     },
@@ -74,15 +45,44 @@
         "iot:UntagResource",
         "iot:ListTagsForResource"
       ]
-    },
-    "delete": {
-      "permissions": [
-        "iot:UpdateAuthorizer",
-        "iot:DeleteAuthorizer",
-        "iot:DescribeAuthorizer"
-      ]
-    },
-    "list": { "permissions": ["iot:ListAuthorizers"] }
+    }
   },
-  "$hash": "4cf9486a0b7d179daafcbda89c6a81f4043ce6dd"
+  "primaryIdentifier": ["/properties/AuthorizerName"],
+  "properties": {
+    "Arn": { "type": "string" },
+    "AuthorizerFunctionArn": { "type": "string" },
+    "AuthorizerName": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "[\\w=,@-]+",
+      "type": "string"
+    },
+    "EnableCachingForHttp": { "type": "boolean" },
+    "SigningDisabled": { "type": "boolean" },
+    "Status": { "enum": ["ACTIVE", "INACTIVE"], "type": "string" },
+    "Tags": {
+      "insertionOrder": true,
+      "items": { "$ref": "#/definitions/Tag" },
+      "type": "array"
+    },
+    "TokenKeyName": { "type": "string" },
+    "TokenSigningPublicKeys": {
+      "additionalProperties": false,
+      "patternProperties": {
+        "[a-zA-Z0-9:_-]+": { "maxLength": 5120, "type": "string" }
+      },
+      "type": "object"
+    }
+  },
+  "readOnlyProperties": ["/properties/Arn"],
+  "required": ["AuthorizerFunctionArn"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+  "tagging": {
+    "cloudFormationSystemTags": true,
+    "tagOnCreate": true,
+    "tagProperty": "/properties/Tags",
+    "tagUpdatable": true,
+    "taggable": true
+  },
+  "typeName": "AWS::IoT::Authorizer"
 }

@@ -1,176 +1,209 @@
 {
-  "typeName": "AWS::LookoutMetrics::AnomalyDetector",
-  "description": "An Amazon Lookout for Metrics Detector",
-  "sourceUrl": "https://docs.aws.amazon.com/lookoutmetrics/latest/dev/lookoutmetrics-welcome.html",
+  "$hash": "6a1d7d7f7fca6c2cb8946ff3a01810817d5e314e",
+  "additionalProperties": false,
+  "createOnlyProperties": [
+    "/properties/AnomalyDetectorName",
+    "/properties/MetricSource"
+  ],
   "definitions": {
+    "AnomalyDetectorConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "AnomalyDetectorFrequency": {
+          "$ref": "#/definitions/AnomalyDetectorFrequency",
+          "description": "Frequency of anomaly detection"
+        }
+      },
+      "required": ["AnomalyDetectorFrequency"],
+      "type": "object"
+    },
+    "AnomalyDetectorFrequency": {
+      "description": "Frequency of anomaly detection",
+      "enum": ["PT5M", "PT10M", "PT1H", "P1D"],
+      "type": "string"
+    },
+    "AppFlowConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "FlowName": {
+          "maxLength": 256,
+          "pattern": "[a-zA-Z0-9][\\w!@#.-]+",
+          "type": "string"
+        },
+        "RoleArn": { "$ref": "#/definitions/Arn" }
+      },
+      "required": ["RoleArn", "FlowName"],
+      "type": "object"
+    },
     "Arn": {
-      "type": "string",
       "maxLength": 256,
-      "pattern": "arn:([a-z\\d-]+):.*:.*:.*:.+"
+      "pattern": "arn:([a-z\\d-]+):.*:.*:.*:.+",
+      "type": "string"
+    },
+    "Charset": {
+      "maxLength": 63,
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\-_]*",
+      "type": "string"
+    },
+    "CloudwatchConfig": {
+      "additionalProperties": false,
+      "properties": { "RoleArn": { "$ref": "#/definitions/Arn" } },
+      "required": ["RoleArn"],
+      "type": "object"
     },
     "ColumnName": {
       "description": "Name of a column in the data.",
-      "type": "string",
+      "maxLength": 63,
       "minLength": 1,
-      "maxLength": 63,
-      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\-_]*"
-    },
-    "Charset": {
-      "type": "string",
-      "maxLength": 63,
-      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\-_]*"
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\-_]*",
+      "type": "string"
     },
     "CsvFormatDescriptor": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
-        "FileCompression": { "type": "string", "enum": ["NONE", "GZIP"] },
         "Charset": { "$ref": "#/definitions/Charset" },
+        "ContainsHeader": { "type": "boolean" },
         "Delimiter": {
-          "type": "string",
           "maxLength": 1,
-          "pattern": "[^\\r\\n]"
+          "pattern": "[^\\r\\n]",
+          "type": "string"
         },
+        "FileCompression": { "enum": ["NONE", "GZIP"], "type": "string" },
         "HeaderList": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/ColumnName" }
+          "items": { "$ref": "#/definitions/ColumnName" },
+          "type": "array"
         },
         "QuoteSymbol": {
-          "type": "string",
           "maxLength": 1,
-          "pattern": "[^\\r\\n]|^$"
-        },
-        "ContainsHeader": { "type": "boolean" }
+          "pattern": "[^\\r\\n]|^$",
+          "type": "string"
+        }
       },
-      "additionalProperties": false
+      "type": "object"
     },
-    "JsonFormatDescriptor": {
-      "type": "object",
-      "properties": {
-        "FileCompression": { "type": "string", "enum": ["NONE", "GZIP"] },
-        "Charset": { "$ref": "#/definitions/Charset" }
-      },
-      "additionalProperties": false
+    "DatabaseHost": {
+      "maxLength": 253,
+      "minLength": 1,
+      "pattern": ".*\\S.*",
+      "type": "string"
     },
+    "DatabasePort": { "maximum": 65535, "minimum": 1, "type": "integer" },
     "FileFormatDescriptor": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "CsvFormatDescriptor": { "$ref": "#/definitions/CsvFormatDescriptor" },
         "JsonFormatDescriptor": { "$ref": "#/definitions/JsonFormatDescriptor" }
       },
-      "additionalProperties": false
+      "type": "object"
     },
-    "S3SourceConfig": {
-      "type": "object",
-      "properties": {
-        "RoleArn": { "$ref": "#/definitions/Arn" },
-        "TemplatedPathList": {
-          "type": "array",
-          "minItems": 1,
-          "maxItems": 1,
-          "items": {
-            "type": "string",
-            "maxLength": 1024,
-            "pattern": "^s3://[a-zA-Z0-9_\\-\\/ {}=]+$"
-          }
-        },
-        "HistoricalDataPathList": {
-          "type": "array",
-          "minItems": 1,
-          "maxItems": 1,
-          "items": {
-            "type": "string",
-            "maxLength": 1024,
-            "pattern": "^s3://[a-z0-9].+$"
-          }
-        },
-        "FileFormatDescriptor": { "$ref": "#/definitions/FileFormatDescriptor" }
-      },
+    "JsonFormatDescriptor": {
       "additionalProperties": false,
-      "required": ["RoleArn", "FileFormatDescriptor"]
-    },
-    "AppFlowConfig": {
-      "type": "object",
       "properties": {
-        "RoleArn": { "$ref": "#/definitions/Arn" },
-        "FlowName": {
-          "type": "string",
-          "maxLength": 256,
-          "pattern": "[a-zA-Z0-9][\\w!@#.-]+"
+        "Charset": { "$ref": "#/definitions/Charset" },
+        "FileCompression": { "enum": ["NONE", "GZIP"], "type": "string" }
+      },
+      "type": "object"
+    },
+    "Metric": {
+      "additionalProperties": false,
+      "properties": {
+        "AggregationFunction": {
+          "description": "Operator used to aggregate metric values",
+          "enum": ["AVG", "SUM"],
+          "type": "string"
+        },
+        "MetricName": { "$ref": "#/definitions/ColumnName" },
+        "Namespace": {
+          "maxLength": 255,
+          "minLength": 1,
+          "pattern": "[^:].*",
+          "type": "string"
         }
       },
-      "required": ["RoleArn", "FlowName"],
-      "additionalProperties": false
+      "required": ["MetricName", "AggregationFunction"],
+      "type": "object"
     },
-    "CloudwatchConfig": {
-      "type": "object",
-      "properties": { "RoleArn": { "$ref": "#/definitions/Arn" } },
-      "required": ["RoleArn"],
-      "additionalProperties": false
-    },
-    "DatabaseHost": {
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 253,
-      "pattern": ".*\\S.*"
-    },
-    "DatabasePort": { "type": "integer", "minimum": 1, "maximum": 65535 },
-    "TableName": {
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 100,
-      "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$"
-    },
-    "SubnetIdList": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "maxLength": 255,
-        "pattern": "[\\-0-9a-zA-Z]+"
-      }
-    },
-    "SecurityGroupIdList": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "minLength": 1,
-        "maxLength": 255,
-        "pattern": "[-0-9a-zA-Z]+"
-      }
-    },
-    "VpcConfiguration": {
-      "type": "object",
+    "MetricSet": {
+      "additionalProperties": false,
       "properties": {
-        "SubnetIdList": { "$ref": "#/definitions/SubnetIdList" },
-        "SecurityGroupIdList": { "$ref": "#/definitions/SecurityGroupIdList" }
+        "DimensionList": {
+          "description": "Dimensions for this MetricSet.",
+          "insertionOrder": false,
+          "items": { "$ref": "#/definitions/ColumnName" },
+          "minItems": 0,
+          "type": "array"
+        },
+        "MetricList": {
+          "description": "Metrics captured by this MetricSet.",
+          "insertionOrder": false,
+          "items": { "$ref": "#/definitions/Metric" },
+          "minItems": 1,
+          "type": "array"
+        },
+        "MetricSetDescription": {
+          "description": "A description for the MetricSet.",
+          "maxLength": 256,
+          "pattern": ".*\\S.*",
+          "type": "string"
+        },
+        "MetricSetFrequency": {
+          "description": "A frequency period to aggregate the data",
+          "enum": ["PT5M", "PT10M", "PT1H", "P1D"],
+          "type": "string"
+        },
+        "MetricSetName": {
+          "description": "The name of the MetricSet.",
+          "maxLength": 63,
+          "minLength": 1,
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\-_]*",
+          "type": "string"
+        },
+        "MetricSource": { "$ref": "#/definitions/MetricSource" },
+        "Offset": {
+          "description": "Offset, in seconds, between the frequency interval and the time at which the metrics are available.",
+          "maximum": 432000,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "TimestampColumn": { "$ref": "#/definitions/TimestampColumn" },
+        "Timezone": { "maxLength": 60, "pattern": ".*\\S.*", "type": "string" }
       },
-      "required": ["SubnetIdList", "SecurityGroupIdList"],
-      "additionalProperties": false
+      "required": ["MetricSetName", "MetricList", "MetricSource"],
+      "type": "object"
     },
-    "SecretManagerArn": {
-      "type": "string",
-      "maxLength": 256,
-      "pattern": "arn:([a-z\\d-]+):.*:.*:secret:AmazonLookoutMetrics-.+"
+    "MetricSource": {
+      "additionalProperties": false,
+      "properties": {
+        "AppFlowConfig": { "$ref": "#/definitions/AppFlowConfig" },
+        "CloudwatchConfig": { "$ref": "#/definitions/CloudwatchConfig" },
+        "RDSSourceConfig": { "$ref": "#/definitions/RDSSourceConfig" },
+        "RedshiftSourceConfig": {
+          "$ref": "#/definitions/RedshiftSourceConfig"
+        },
+        "S3SourceConfig": { "$ref": "#/definitions/S3SourceConfig" }
+      },
+      "type": "object"
     },
     "RDSSourceConfig": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "DBInstanceIdentifier": {
-          "type": "string",
-          "minLength": 1,
           "maxLength": 63,
-          "pattern": "^[a-zA-Z](?!.*--)(?!.*-$)[0-9a-zA-Z\\-]*$"
+          "minLength": 1,
+          "pattern": "^[a-zA-Z](?!.*--)(?!.*-$)[0-9a-zA-Z\\-]*$",
+          "type": "string"
         },
         "DatabaseHost": { "$ref": "#/definitions/DatabaseHost" },
-        "DatabasePort": { "$ref": "#/definitions/DatabasePort" },
-        "SecretManagerArn": { "$ref": "#/definitions/SecretManagerArn" },
         "DatabaseName": {
-          "type": "string",
-          "minLength": 1,
           "maxLength": 64,
-          "pattern": "[a-zA-Z0-9_]+"
+          "minLength": 1,
+          "pattern": "[a-zA-Z0-9_]+",
+          "type": "string"
         },
-        "TableName": { "$ref": "#/definitions/TableName" },
+        "DatabasePort": { "$ref": "#/definitions/DatabasePort" },
         "RoleArn": { "$ref": "#/definitions/Arn" },
+        "SecretManagerArn": { "$ref": "#/definitions/SecretManagerArn" },
+        "TableName": { "$ref": "#/definitions/TableName" },
         "VpcConfiguration": { "$ref": "#/definitions/VpcConfiguration" }
       },
       "required": [
@@ -183,28 +216,28 @@
         "RoleArn",
         "VpcConfiguration"
       ],
-      "additionalProperties": false
+      "type": "object"
     },
     "RedshiftSourceConfig": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "ClusterIdentifier": {
-          "type": "string",
-          "minLength": 1,
           "maxLength": 63,
-          "pattern": "^[a-z](?!.*--)(?!.*-$)[0-9a-z\\-]*$"
+          "minLength": 1,
+          "pattern": "^[a-z](?!.*--)(?!.*-$)[0-9a-z\\-]*$",
+          "type": "string"
         },
         "DatabaseHost": { "$ref": "#/definitions/DatabaseHost" },
-        "DatabasePort": { "$ref": "#/definitions/DatabasePort" },
-        "SecretManagerArn": { "$ref": "#/definitions/SecretManagerArn" },
         "DatabaseName": {
-          "type": "string",
-          "minLength": 1,
           "maxLength": 100,
-          "pattern": "[a-z0-9]+"
+          "minLength": 1,
+          "pattern": "[a-z0-9]+",
+          "type": "string"
         },
-        "TableName": { "$ref": "#/definitions/TableName" },
+        "DatabasePort": { "$ref": "#/definitions/DatabasePort" },
         "RoleArn": { "$ref": "#/definitions/Arn" },
+        "SecretManagerArn": { "$ref": "#/definitions/SecretManagerArn" },
+        "TableName": { "$ref": "#/definitions/TableName" },
         "VpcConfiguration": { "$ref": "#/definitions/VpcConfiguration" }
       },
       "required": [
@@ -217,160 +250,91 @@
         "RoleArn",
         "VpcConfiguration"
       ],
-      "additionalProperties": false
+      "type": "object"
     },
-    "MetricSource": {
-      "type": "object",
+    "S3SourceConfig": {
+      "additionalProperties": false,
       "properties": {
-        "S3SourceConfig": { "$ref": "#/definitions/S3SourceConfig" },
-        "RDSSourceConfig": { "$ref": "#/definitions/RDSSourceConfig" },
-        "RedshiftSourceConfig": {
-          "$ref": "#/definitions/RedshiftSourceConfig"
+        "FileFormatDescriptor": {
+          "$ref": "#/definitions/FileFormatDescriptor"
         },
-        "CloudwatchConfig": { "$ref": "#/definitions/CloudwatchConfig" },
-        "AppFlowConfig": { "$ref": "#/definitions/AppFlowConfig" }
+        "HistoricalDataPathList": {
+          "items": {
+            "maxLength": 1024,
+            "pattern": "^s3://[a-z0-9].+$",
+            "type": "string"
+          },
+          "maxItems": 1,
+          "minItems": 1,
+          "type": "array"
+        },
+        "RoleArn": { "$ref": "#/definitions/Arn" },
+        "TemplatedPathList": {
+          "items": {
+            "maxLength": 1024,
+            "pattern": "^s3://[a-zA-Z0-9_\\-\\/ {}=]+$",
+            "type": "string"
+          },
+          "maxItems": 1,
+          "minItems": 1,
+          "type": "array"
+        }
       },
-      "additionalProperties": false
+      "required": ["RoleArn", "FileFormatDescriptor"],
+      "type": "object"
+    },
+    "SecretManagerArn": {
+      "maxLength": 256,
+      "pattern": "arn:([a-z\\d-]+):.*:.*:secret:AmazonLookoutMetrics-.+",
+      "type": "string"
+    },
+    "SecurityGroupIdList": {
+      "items": {
+        "maxLength": 255,
+        "minLength": 1,
+        "pattern": "[-0-9a-zA-Z]+",
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "SubnetIdList": {
+      "items": {
+        "maxLength": 255,
+        "pattern": "[\\-0-9a-zA-Z]+",
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "TableName": {
+      "maxLength": 100,
+      "minLength": 1,
+      "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$",
+      "type": "string"
     },
     "TimestampColumn": {
-      "type": "object",
       "additionalProperties": false,
       "properties": {
-        "ColumnName": { "$ref": "#/definitions/ColumnName" },
         "ColumnFormat": {
           "description": "A timestamp format for the timestamps in the dataset",
-          "type": "string",
           "maxLength": 63,
-          "pattern": ".*\\S.*"
-        }
-      }
+          "pattern": ".*\\S.*",
+          "type": "string"
+        },
+        "ColumnName": { "$ref": "#/definitions/ColumnName" }
+      },
+      "type": "object"
     },
-    "Metric": {
-      "type": "object",
+    "VpcConfiguration": {
       "additionalProperties": false,
       "properties": {
-        "MetricName": { "$ref": "#/definitions/ColumnName" },
-        "AggregationFunction": {
-          "description": "Operator used to aggregate metric values",
-          "type": "string",
-          "enum": ["AVG", "SUM"]
-        },
-        "Namespace": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 255,
-          "pattern": "[^:].*"
-        }
+        "SecurityGroupIdList": { "$ref": "#/definitions/SecurityGroupIdList" },
+        "SubnetIdList": { "$ref": "#/definitions/SubnetIdList" }
       },
-      "required": ["MetricName", "AggregationFunction"]
-    },
-    "MetricSet": {
-      "type": "object",
-      "properties": {
-        "MetricSetName": {
-          "description": "The name of the MetricSet.",
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 63,
-          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\-_]*"
-        },
-        "MetricSetDescription": {
-          "description": "A description for the MetricSet.",
-          "type": "string",
-          "maxLength": 256,
-          "pattern": ".*\\S.*"
-        },
-        "MetricSource": { "$ref": "#/definitions/MetricSource" },
-        "MetricList": {
-          "description": "Metrics captured by this MetricSet.",
-          "type": "array",
-          "insertionOrder": false,
-          "minItems": 1,
-          "items": { "$ref": "#/definitions/Metric" }
-        },
-        "Offset": {
-          "description": "Offset, in seconds, between the frequency interval and the time at which the metrics are available.",
-          "type": "integer",
-          "minimum": 0,
-          "maximum": 432000
-        },
-        "TimestampColumn": { "$ref": "#/definitions/TimestampColumn" },
-        "DimensionList": {
-          "description": "Dimensions for this MetricSet.",
-          "type": "array",
-          "insertionOrder": false,
-          "minItems": 0,
-          "items": { "$ref": "#/definitions/ColumnName" }
-        },
-        "MetricSetFrequency": {
-          "description": "A frequency period to aggregate the data",
-          "type": "string",
-          "enum": ["PT5M", "PT10M", "PT1H", "P1D"]
-        },
-        "Timezone": { "type": "string", "maxLength": 60, "pattern": ".*\\S.*" }
-      },
-      "required": ["MetricSetName", "MetricList", "MetricSource"],
-      "additionalProperties": false
-    },
-    "AnomalyDetectorFrequency": {
-      "description": "Frequency of anomaly detection",
-      "type": "string",
-      "enum": ["PT5M", "PT10M", "PT1H", "P1D"]
-    },
-    "AnomalyDetectorConfig": {
-      "type": "object",
-      "properties": {
-        "AnomalyDetectorFrequency": {
-          "description": "Frequency of anomaly detection",
-          "$ref": "#/definitions/AnomalyDetectorFrequency"
-        }
-      },
-      "required": ["AnomalyDetectorFrequency"],
-      "additionalProperties": false
+      "required": ["SubnetIdList", "SecurityGroupIdList"],
+      "type": "object"
     }
   },
-  "properties": {
-    "Arn": { "$ref": "#/definitions/Arn" },
-    "AnomalyDetectorName": {
-      "description": "Name for the Amazon Lookout for Metrics Anomaly Detector",
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 63,
-      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\-_]*"
-    },
-    "AnomalyDetectorDescription": {
-      "description": "A description for the AnomalyDetector.",
-      "type": "string",
-      "maxLength": 256,
-      "pattern": ".*\\S.*"
-    },
-    "AnomalyDetectorConfig": {
-      "description": "Configuration options for the AnomalyDetector",
-      "$ref": "#/definitions/AnomalyDetectorConfig"
-    },
-    "MetricSetList": {
-      "description": "List of metric sets for anomaly detection",
-      "type": "array",
-      "minItems": 1,
-      "maxItems": 1,
-      "items": { "$ref": "#/definitions/MetricSet" }
-    },
-    "KmsKeyArn": {
-      "description": "KMS key used to encrypt the AnomalyDetector data",
-      "type": "string",
-      "minLength": 20,
-      "maxLength": 2048,
-      "pattern": "arn:aws.*:kms:.*:[0-9]{12}:key/.*"
-    }
-  },
-  "additionalProperties": false,
-  "required": ["AnomalyDetectorConfig", "MetricSetList"],
-  "readOnlyProperties": ["/properties/Arn"],
-  "createOnlyProperties": [
-    "/properties/AnomalyDetectorName",
-    "/properties/MetricSource"
-  ],
-  "primaryIdentifier": ["/properties/Arn"],
+  "description": "An Amazon Lookout for Metrics Detector",
   "handlers": {
     "create": {
       "permissions": [
@@ -379,6 +343,17 @@
         "lookoutmetrics:CreateMetricSet",
         "iam:PassRole"
       ],
+      "timeoutInMinutes": 15
+    },
+    "delete": {
+      "permissions": [
+        "lookoutmetrics:DescribeAnomalyDetector",
+        "lookoutmetrics:DeleteAnomalyDetector"
+      ],
+      "timeoutInMinutes": 15
+    },
+    "list": {
+      "permissions": ["lookoutmetrics:ListAnomalyDetectors"],
       "timeoutInMinutes": 15
     },
     "read": {
@@ -395,18 +370,45 @@
         "lookoutmetrics:UpdateMetricSet"
       ],
       "timeoutInMinutes": 15
-    },
-    "delete": {
-      "permissions": [
-        "lookoutmetrics:DescribeAnomalyDetector",
-        "lookoutmetrics:DeleteAnomalyDetector"
-      ],
-      "timeoutInMinutes": 15
-    },
-    "list": {
-      "permissions": ["lookoutmetrics:ListAnomalyDetectors"],
-      "timeoutInMinutes": 15
     }
   },
-  "$hash": "6a1d7d7f7fca6c2cb8946ff3a01810817d5e314e"
+  "primaryIdentifier": ["/properties/Arn"],
+  "properties": {
+    "AnomalyDetectorConfig": {
+      "$ref": "#/definitions/AnomalyDetectorConfig",
+      "description": "Configuration options for the AnomalyDetector"
+    },
+    "AnomalyDetectorDescription": {
+      "description": "A description for the AnomalyDetector.",
+      "maxLength": 256,
+      "pattern": ".*\\S.*",
+      "type": "string"
+    },
+    "AnomalyDetectorName": {
+      "description": "Name for the Amazon Lookout for Metrics Anomaly Detector",
+      "maxLength": 63,
+      "minLength": 1,
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\-_]*",
+      "type": "string"
+    },
+    "Arn": { "$ref": "#/definitions/Arn" },
+    "KmsKeyArn": {
+      "description": "KMS key used to encrypt the AnomalyDetector data",
+      "maxLength": 2048,
+      "minLength": 20,
+      "pattern": "arn:aws.*:kms:.*:[0-9]{12}:key/.*",
+      "type": "string"
+    },
+    "MetricSetList": {
+      "description": "List of metric sets for anomaly detection",
+      "items": { "$ref": "#/definitions/MetricSet" },
+      "maxItems": 1,
+      "minItems": 1,
+      "type": "array"
+    }
+  },
+  "readOnlyProperties": ["/properties/Arn"],
+  "required": ["AnomalyDetectorConfig", "MetricSetList"],
+  "sourceUrl": "https://docs.aws.amazon.com/lookoutmetrics/latest/dev/lookoutmetrics-welcome.html",
+  "typeName": "AWS::LookoutMetrics::AnomalyDetector"
 }

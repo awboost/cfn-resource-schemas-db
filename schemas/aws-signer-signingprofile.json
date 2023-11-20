@@ -1,96 +1,56 @@
 {
-  "typeName": "AWS::Signer::SigningProfile",
-  "description": "A signing profile is a signing template that can be used to carry out a pre-defined signing job.",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
-  "definitions": {
-    "PlatformId": {
-      "type": "string",
-      "enum": ["AWSLambda-SHA384-ECDSA", "Notation-OCI-SHA384-ECDSA"]
-    },
-    "Arn": {
-      "type": "string",
-      "pattern": "^arn:aws(-(cn|gov))?:[a-z-]+:(([a-z]+-)+[0-9])?:([0-9]{12})?:[^.]+$"
-    },
-    "ProfileVersion": { "type": "string", "pattern": "^[0-9a-zA-Z]{10}$" },
-    "SignatureValidityPeriod": {
-      "type": "object",
-      "properties": {
-        "Value": { "type": "integer" },
-        "Type": { "type": "string", "enum": ["DAYS", "MONTHS", "YEARS"] }
-      },
-      "additionalProperties": false
-    },
-    "Tag": {
-      "type": "object",
-      "properties": {
-        "Key": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 127,
-          "pattern": "^(?!aws:)[a-zA-Z+-=._:/]+$"
-        },
-        "Value": { "type": "string", "minLength": 1, "maxLength": 255 }
-      },
-      "additionalProperties": false
-    }
-  },
-  "properties": {
-    "ProfileName": {
-      "description": "A name for the signing profile. AWS CloudFormation generates a unique physical ID and uses that ID for the signing profile name. ",
-      "type": "string"
-    },
-    "ProfileVersion": {
-      "description": "A version for the signing profile. AWS Signer generates a unique version for each profile of the same profile name.",
-      "$ref": "#/definitions/ProfileVersion"
-    },
-    "Arn": {
-      "description": "The Amazon Resource Name (ARN) of the specified signing profile.",
-      "$ref": "#/definitions/Arn"
-    },
-    "ProfileVersionArn": {
-      "description": "The Amazon Resource Name (ARN) of the specified signing profile version.",
-      "$ref": "#/definitions/Arn"
-    },
-    "SignatureValidityPeriod": {
-      "description": "Signature validity period of the profile.",
-      "$ref": "#/definitions/SignatureValidityPeriod"
-    },
-    "PlatformId": {
-      "description": "The ID of the target signing platform.",
-      "$ref": "#/definitions/PlatformId"
-    },
-    "Tags": {
-      "type": "array",
-      "description": "A list of tags associated with the signing profile.",
-      "items": { "$ref": "#/definitions/Tag" }
-    }
-  },
-  "additionalProperties": false,
-  "required": ["PlatformId"],
-  "createOnlyProperties": [
-    "/properties/PlatformId",
-    "/properties/SignatureValidityPeriod"
-  ],
-  "readOnlyProperties": [
-    "/properties/ProfileName",
-    "/properties/ProfileVersion",
-    "/properties/Arn",
-    "/properties/ProfileVersionArn"
-  ],
-  "primaryIdentifier": ["/properties/Arn"],
+  "$hash": "57adcad7e47a2f1ea2de1c9086d6e8ab448d9b2d",
   "additionalIdentifiers": [
     ["/properties/ProfileName"],
     ["/properties/ProfileVersionArn"]
   ],
+  "additionalProperties": false,
+  "createOnlyProperties": [
+    "/properties/PlatformId",
+    "/properties/SignatureValidityPeriod"
+  ],
+  "definitions": {
+    "Arn": {
+      "pattern": "^arn:aws(-(cn|gov))?:[a-z-]+:(([a-z]+-)+[0-9])?:([0-9]{12})?:[^.]+$",
+      "type": "string"
+    },
+    "PlatformId": {
+      "enum": ["AWSLambda-SHA384-ECDSA", "Notation-OCI-SHA384-ECDSA"],
+      "type": "string"
+    },
+    "ProfileVersion": { "pattern": "^[0-9a-zA-Z]{10}$", "type": "string" },
+    "SignatureValidityPeriod": {
+      "additionalProperties": false,
+      "properties": {
+        "Type": { "enum": ["DAYS", "MONTHS", "YEARS"], "type": "string" },
+        "Value": { "type": "integer" }
+      },
+      "type": "object"
+    },
+    "Tag": {
+      "additionalProperties": false,
+      "properties": {
+        "Key": {
+          "maxLength": 127,
+          "minLength": 1,
+          "pattern": "^(?!aws:)[a-zA-Z+-=._:/]+$",
+          "type": "string"
+        },
+        "Value": { "maxLength": 255, "minLength": 1, "type": "string" }
+      },
+      "type": "object"
+    }
+  },
+  "description": "A signing profile is a signing template that can be used to carry out a pre-defined signing job.",
   "handlers": {
     "create": {
       "permissions": ["signer:PutSigningProfile", "signer:TagResource"]
     },
-    "read": { "permissions": ["signer:GetSigningProfile"] },
     "delete": {
       "permissions": ["signer:CancelSigningProfile", "signer:GetSigningProfile"]
     },
     "list": { "permissions": ["signer:ListSigningProfiles"] },
+    "read": { "permissions": ["signer:GetSigningProfile"] },
     "update": {
       "permissions": [
         "signer:TagResource",
@@ -99,5 +59,45 @@
       ]
     }
   },
-  "$hash": "57adcad7e47a2f1ea2de1c9086d6e8ab448d9b2d"
+  "primaryIdentifier": ["/properties/Arn"],
+  "properties": {
+    "Arn": {
+      "$ref": "#/definitions/Arn",
+      "description": "The Amazon Resource Name (ARN) of the specified signing profile."
+    },
+    "PlatformId": {
+      "$ref": "#/definitions/PlatformId",
+      "description": "The ID of the target signing platform."
+    },
+    "ProfileName": {
+      "description": "A name for the signing profile. AWS CloudFormation generates a unique physical ID and uses that ID for the signing profile name. ",
+      "type": "string"
+    },
+    "ProfileVersion": {
+      "$ref": "#/definitions/ProfileVersion",
+      "description": "A version for the signing profile. AWS Signer generates a unique version for each profile of the same profile name."
+    },
+    "ProfileVersionArn": {
+      "$ref": "#/definitions/Arn",
+      "description": "The Amazon Resource Name (ARN) of the specified signing profile version."
+    },
+    "SignatureValidityPeriod": {
+      "$ref": "#/definitions/SignatureValidityPeriod",
+      "description": "Signature validity period of the profile."
+    },
+    "Tags": {
+      "description": "A list of tags associated with the signing profile.",
+      "items": { "$ref": "#/definitions/Tag" },
+      "type": "array"
+    }
+  },
+  "readOnlyProperties": [
+    "/properties/ProfileName",
+    "/properties/ProfileVersion",
+    "/properties/Arn",
+    "/properties/ProfileVersionArn"
+  ],
+  "required": ["PlatformId"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+  "typeName": "AWS::Signer::SigningProfile"
 }

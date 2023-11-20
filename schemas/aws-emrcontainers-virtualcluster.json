@@ -1,50 +1,49 @@
 {
-  "typeName": "AWS::EMRContainers::VirtualCluster",
-  "description": "Resource Schema of AWS::EMRContainers::VirtualCluster Type",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+  "$hash": "86c8cec4658fc247f95001c421b41b8d0b4a004b",
+  "additionalProperties": false,
+  "createOnlyProperties": ["/properties/ContainerProvider", "/properties/Name"],
   "definitions": {
+    "ContainerInfo": {
+      "additionalProperties": false,
+      "properties": { "EksInfo": { "$ref": "#/definitions/EksInfo" } },
+      "required": ["EksInfo"],
+      "type": "object"
+    },
     "ContainerProvider": {
-      "type": "object",
       "additionalProperties": false,
       "properties": {
+        "Id": {
+          "description": "The ID of the container cluster",
+          "maxLength": 100,
+          "minLength": 1,
+          "pattern": "^[0-9A-Za-z][A-Za-z0-9\\-_]*",
+          "type": "string"
+        },
+        "Info": { "$ref": "#/definitions/ContainerInfo" },
         "Type": {
           "description": "The type of the container provider",
           "type": "string"
-        },
-        "Id": {
-          "description": "The ID of the container cluster",
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 100,
-          "pattern": "^[0-9A-Za-z][A-Za-z0-9\\-_]*"
-        },
-        "Info": { "$ref": "#/definitions/ContainerInfo" }
+        }
       },
-      "required": ["Type", "Id", "Info"]
-    },
-    "ContainerInfo": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": { "EksInfo": { "$ref": "#/definitions/EksInfo" } },
-      "required": ["EksInfo"]
+      "required": ["Type", "Id", "Info"],
+      "type": "object"
     },
     "EksInfo": {
-      "type": "object",
       "additionalProperties": false,
       "properties": {
         "Namespace": {
-          "type": "string",
-          "minLength": 1,
           "maxLength": 63,
-          "pattern": "[a-z0-9]([-a-z0-9]*[a-z0-9])?"
+          "minLength": 1,
+          "pattern": "[a-z0-9]([-a-z0-9]*[a-z0-9])?",
+          "type": "string"
         }
       },
-      "required": ["Namespace"]
+      "required": ["Namespace"],
+      "type": "object"
     },
     "Tag": {
-      "description": "An arbitrary set of tags (key-value pairs) for this virtual cluster.",
-      "type": "object",
       "additionalProperties": false,
+      "description": "An arbitrary set of tags (key-value pairs) for this virtual cluster.",
       "properties": {
         "Key": {
           "description": "The key name of the tag. You can specify a value that is 1 to 127 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
@@ -55,41 +54,11 @@
           "type": "string"
         }
       },
-      "required": ["Value", "Key"]
+      "required": ["Value", "Key"],
+      "type": "object"
     }
   },
-  "properties": {
-    "Arn": { "type": "string" },
-    "ContainerProvider": {
-      "description": "Container provider of the virtual cluster.",
-      "$ref": "#/definitions/ContainerProvider"
-    },
-    "Id": {
-      "description": "Id of the virtual cluster.",
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 64
-    },
-    "Name": {
-      "description": "Name of the virtual cluster.",
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 64,
-      "pattern": "[\\.\\-_/#A-Za-z0-9]+"
-    },
-    "Tags": {
-      "description": "An array of key-value pairs to apply to this virtual cluster.",
-      "type": "array",
-      "uniqueItems": true,
-      "insertionOrder": false,
-      "items": { "$ref": "#/definitions/Tag" }
-    }
-  },
-  "additionalProperties": false,
-  "required": ["Name", "ContainerProvider"],
-  "createOnlyProperties": ["/properties/ContainerProvider", "/properties/Name"],
-  "readOnlyProperties": ["/properties/Arn", "/properties/Id"],
-  "primaryIdentifier": ["/properties/Id"],
+  "description": "Resource Schema of AWS::EMRContainers::VirtualCluster Type",
   "handlers": {
     "create": {
       "permissions": [
@@ -98,9 +67,9 @@
         "iam:CreateServiceLinkedRole"
       ]
     },
-    "read": { "permissions": ["emr-containers:DescribeVirtualCluster"] },
     "delete": { "permissions": ["emr-containers:DeleteVirtualCluster"] },
     "list": { "permissions": ["emr-containers:ListVirtualClusters"] },
+    "read": { "permissions": ["emr-containers:DescribeVirtualCluster"] },
     "update": {
       "permissions": [
         "emr-containers:DescribeVirtualCluster",
@@ -110,5 +79,36 @@
       ]
     }
   },
-  "$hash": "86c8cec4658fc247f95001c421b41b8d0b4a004b"
+  "primaryIdentifier": ["/properties/Id"],
+  "properties": {
+    "Arn": { "type": "string" },
+    "ContainerProvider": {
+      "$ref": "#/definitions/ContainerProvider",
+      "description": "Container provider of the virtual cluster."
+    },
+    "Id": {
+      "description": "Id of the virtual cluster.",
+      "maxLength": 64,
+      "minLength": 1,
+      "type": "string"
+    },
+    "Name": {
+      "description": "Name of the virtual cluster.",
+      "maxLength": 64,
+      "minLength": 1,
+      "pattern": "[\\.\\-_/#A-Za-z0-9]+",
+      "type": "string"
+    },
+    "Tags": {
+      "description": "An array of key-value pairs to apply to this virtual cluster.",
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/Tag" },
+      "type": "array",
+      "uniqueItems": true
+    }
+  },
+  "readOnlyProperties": ["/properties/Arn", "/properties/Id"],
+  "required": ["Name", "ContainerProvider"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+  "typeName": "AWS::EMRContainers::VirtualCluster"
 }

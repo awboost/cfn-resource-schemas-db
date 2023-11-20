@@ -1,93 +1,22 @@
 {
-  "typeName": "AWS::IVS::Channel",
-  "description": "Resource Type definition for AWS::IVS::Channel",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+  "$hash": "52acd9bd25f943d0db7393220de10b2c3fafcb06",
+  "additionalProperties": false,
   "definitions": {
     "Tag": {
-      "type": "object",
       "additionalProperties": false,
       "properties": {
-        "Key": { "type": "string", "minLength": 1, "maxLength": 128 },
-        "Value": { "type": "string", "minLength": 1, "maxLength": 256 }
+        "Key": { "maxLength": 128, "minLength": 1, "type": "string" },
+        "Value": { "maxLength": 256, "minLength": 1, "type": "string" }
       },
-      "required": ["Value", "Key"]
+      "required": ["Value", "Key"],
+      "type": "object"
     }
   },
-  "properties": {
-    "Arn": {
-      "description": "Channel ARN is automatically generated on creation and assigned as the unique identifier.",
-      "type": "string",
-      "pattern": "^arn:aws:ivs:[a-z0-9-]+:[0-9]+:channel/[a-zA-Z0-9-]+$",
-      "minLength": 1,
-      "maxLength": 128
-    },
-    "Name": {
-      "description": "Channel",
-      "type": "string",
-      "minLength": 0,
-      "maxLength": 128,
-      "pattern": "^[a-zA-Z0-9-_]*$",
-      "default": "-"
-    },
-    "Authorized": {
-      "description": "Whether the channel is authorized.",
-      "type": "boolean",
-      "default": false
-    },
-    "InsecureIngest": {
-      "description": "Whether the channel allows insecure ingest.",
-      "type": "boolean",
-      "default": false
-    },
-    "LatencyMode": {
-      "description": "Channel latency mode.",
-      "type": "string",
-      "enum": ["NORMAL", "LOW"],
-      "default": "LOW"
-    },
-    "Type": {
-      "description": "Channel type, which determines the allowable resolution and bitrate. If you exceed the allowable resolution or bitrate, the stream probably will disconnect immediately.",
-      "type": "string",
-      "enum": ["STANDARD", "BASIC", "ADVANCED_SD", "ADVANCED_HD"],
-      "default": "STANDARD"
-    },
-    "Tags": {
-      "description": "A list of key-value pairs that contain metadata for the asset model.",
-      "type": "array",
-      "uniqueItems": true,
-      "insertionOrder": false,
-      "maxItems": 50,
-      "items": { "$ref": "#/definitions/Tag" }
-    },
-    "PlaybackUrl": { "description": "Channel Playback URL.", "type": "string" },
-    "IngestEndpoint": {
-      "description": "Channel ingest endpoint, part of the definition of an ingest server, used when you set up streaming software.",
-      "type": "string"
-    },
-    "RecordingConfigurationArn": {
-      "description": "Recording Configuration ARN. A value other than an empty string indicates that recording is enabled. Default: \"\" (recording is disabled).",
-      "type": "string",
-      "default": "",
-      "pattern": "^$|arn:aws:ivs:[a-z0-9-]+:[0-9]+:recording-configuration/[a-zA-Z0-9-]+$",
-      "minLength": 0,
-      "maxLength": 128
-    },
-    "Preset": {
-      "description": "Optional transcode preset for the channel. This is selectable only for ADVANCED_HD and ADVANCED_SD channel types. For those channel types, the default preset is HIGHER_BANDWIDTH_DELIVERY. For other channel types (BASIC and STANDARD), preset is the empty string (\"\").",
-      "type": "string",
-      "enum": ["HIGHER_BANDWIDTH_DELIVERY", "CONSTRAINED_BANDWIDTH_DELIVERY"]
-    }
-  },
-  "additionalProperties": false,
-  "required": [],
-  "readOnlyProperties": [
-    "/properties/Arn",
-    "/properties/PlaybackUrl",
-    "/properties/IngestEndpoint"
-  ],
-  "primaryIdentifier": ["/properties/Arn"],
+  "description": "Resource Type definition for AWS::IVS::Channel",
   "handlers": {
     "create": { "permissions": ["ivs:CreateChannel", "ivs:TagResource"] },
+    "delete": { "permissions": ["ivs:DeleteChannel", "ivs:UnTagResource"] },
+    "list": { "permissions": ["ivs:ListChannels", "ivs:ListTagsForResource"] },
     "read": { "permissions": ["ivs:GetChannel", "ivs:ListTagsForResource"] },
     "update": {
       "permissions": [
@@ -97,9 +26,80 @@
         "ivs:UnTagResource",
         "ivs:ListTagsForResource"
       ]
-    },
-    "delete": { "permissions": ["ivs:DeleteChannel", "ivs:UnTagResource"] },
-    "list": { "permissions": ["ivs:ListChannels", "ivs:ListTagsForResource"] }
+    }
   },
-  "$hash": "52acd9bd25f943d0db7393220de10b2c3fafcb06"
+  "primaryIdentifier": ["/properties/Arn"],
+  "properties": {
+    "Arn": {
+      "description": "Channel ARN is automatically generated on creation and assigned as the unique identifier.",
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^arn:aws:ivs:[a-z0-9-]+:[0-9]+:channel/[a-zA-Z0-9-]+$",
+      "type": "string"
+    },
+    "Authorized": {
+      "default": false,
+      "description": "Whether the channel is authorized.",
+      "type": "boolean"
+    },
+    "IngestEndpoint": {
+      "description": "Channel ingest endpoint, part of the definition of an ingest server, used when you set up streaming software.",
+      "type": "string"
+    },
+    "InsecureIngest": {
+      "default": false,
+      "description": "Whether the channel allows insecure ingest.",
+      "type": "boolean"
+    },
+    "LatencyMode": {
+      "default": "LOW",
+      "description": "Channel latency mode.",
+      "enum": ["NORMAL", "LOW"],
+      "type": "string"
+    },
+    "Name": {
+      "default": "-",
+      "description": "Channel",
+      "maxLength": 128,
+      "minLength": 0,
+      "pattern": "^[a-zA-Z0-9-_]*$",
+      "type": "string"
+    },
+    "PlaybackUrl": { "description": "Channel Playback URL.", "type": "string" },
+    "Preset": {
+      "description": "Optional transcode preset for the channel. This is selectable only for ADVANCED_HD and ADVANCED_SD channel types. For those channel types, the default preset is HIGHER_BANDWIDTH_DELIVERY. For other channel types (BASIC and STANDARD), preset is the empty string (\"\").",
+      "enum": ["HIGHER_BANDWIDTH_DELIVERY", "CONSTRAINED_BANDWIDTH_DELIVERY"],
+      "type": "string"
+    },
+    "RecordingConfigurationArn": {
+      "default": "",
+      "description": "Recording Configuration ARN. A value other than an empty string indicates that recording is enabled. Default: \"\" (recording is disabled).",
+      "maxLength": 128,
+      "minLength": 0,
+      "pattern": "^$|arn:aws:ivs:[a-z0-9-]+:[0-9]+:recording-configuration/[a-zA-Z0-9-]+$",
+      "type": "string"
+    },
+    "Tags": {
+      "description": "A list of key-value pairs that contain metadata for the asset model.",
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/Tag" },
+      "maxItems": 50,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "Type": {
+      "default": "STANDARD",
+      "description": "Channel type, which determines the allowable resolution and bitrate. If you exceed the allowable resolution or bitrate, the stream probably will disconnect immediately.",
+      "enum": ["STANDARD", "BASIC", "ADVANCED_SD", "ADVANCED_HD"],
+      "type": "string"
+    }
+  },
+  "readOnlyProperties": [
+    "/properties/Arn",
+    "/properties/PlaybackUrl",
+    "/properties/IngestEndpoint"
+  ],
+  "required": [],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+  "typeName": "AWS::IVS::Channel"
 }

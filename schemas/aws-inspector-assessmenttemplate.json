@@ -1,36 +1,6 @@
 {
-  "typeName": "AWS::Inspector::AssessmentTemplate",
-  "description": "Resource Type definition for AWS::Inspector::AssessmentTemplate",
+  "$hash": "3f24b688c8495438508e1d46ef67f8b2ac43ee38",
   "additionalProperties": false,
-  "properties": {
-    "Arn": { "type": "string" },
-    "AssessmentTargetArn": { "type": "string" },
-    "DurationInSeconds": { "type": "integer" },
-    "AssessmentTemplateName": { "type": "string" },
-    "RulesPackageArns": {
-      "type": "array",
-      "uniqueItems": false,
-      "items": { "type": "string" }
-    },
-    "UserAttributesForFindings": {
-      "type": "array",
-      "uniqueItems": false,
-      "items": { "$ref": "#/definitions/Tag" }
-    }
-  },
-  "definitions": {
-    "Tag": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "Key": { "type": "string" },
-        "Value": { "type": "string" }
-      },
-      "required": ["Value", "Key"]
-    }
-  },
-  "required": ["AssessmentTargetArn", "DurationInSeconds", "RulesPackageArns"],
-  "readOnlyProperties": ["/properties/Arn"],
   "createOnlyProperties": [
     "/properties/DurationInSeconds",
     "/properties/AssessmentTemplateName",
@@ -38,8 +8,18 @@
     "/properties/AssessmentTargetArn",
     "/properties/RulesPackageArns"
   ],
-  "primaryIdentifier": ["/properties/Arn"],
-  "taggable": false,
+  "definitions": {
+    "Tag": {
+      "additionalProperties": false,
+      "properties": {
+        "Key": { "type": "string" },
+        "Value": { "type": "string" }
+      },
+      "required": ["Value", "Key"],
+      "type": "object"
+    }
+  },
+  "description": "Resource Type definition for AWS::Inspector::AssessmentTemplate",
   "handlers": {
     "create": {
       "permissions": [
@@ -48,9 +28,29 @@
         "inspector:DescribeAssessmentTemplates"
       ]
     },
-    "read": { "permissions": ["inspector:DescribeAssessmentTemplates"] },
     "delete": { "permissions": ["inspector:DeleteAssessmentTemplate"] },
-    "list": { "permissions": ["inspector:ListAssessmentTemplates"] }
+    "list": { "permissions": ["inspector:ListAssessmentTemplates"] },
+    "read": { "permissions": ["inspector:DescribeAssessmentTemplates"] }
   },
-  "$hash": "3f24b688c8495438508e1d46ef67f8b2ac43ee38"
+  "primaryIdentifier": ["/properties/Arn"],
+  "properties": {
+    "Arn": { "type": "string" },
+    "AssessmentTargetArn": { "type": "string" },
+    "AssessmentTemplateName": { "type": "string" },
+    "DurationInSeconds": { "type": "integer" },
+    "RulesPackageArns": {
+      "items": { "type": "string" },
+      "type": "array",
+      "uniqueItems": false
+    },
+    "UserAttributesForFindings": {
+      "items": { "$ref": "#/definitions/Tag" },
+      "type": "array",
+      "uniqueItems": false
+    }
+  },
+  "readOnlyProperties": ["/properties/Arn"],
+  "required": ["AssessmentTargetArn", "DurationInSeconds", "RulesPackageArns"],
+  "taggable": false,
+  "typeName": "AWS::Inspector::AssessmentTemplate"
 }

@@ -1,27 +1,16 @@
 {
-  "typeName": "AWS::ElasticBeanstalk::ConfigurationTemplate",
-  "description": "Resource Type definition for AWS::ElasticBeanstalk::ConfigurationTemplate",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-elasticbeanstalk.git",
+  "$hash": "daf769ed4a769ed91f6cabcf026a585193e73479",
   "$schema": "https://raw.githubusercontent.com/aws-cloudformation/cloudformation-resource-schema/master/src/main/resources/schema/provider.definition.schema.v1.json",
   "additionalProperties": false,
+  "createOnlyProperties": [
+    "/properties/ApplicationName",
+    "/properties/EnvironmentId",
+    "/properties/PlatformArn",
+    "/properties/SolutionStackName",
+    "/properties/SourceConfiguration"
+  ],
   "definitions": {
-    "SourceConfiguration": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "ApplicationName": {
-          "description": "The name of the application associated with the configuration.",
-          "type": "string"
-        },
-        "TemplateName": {
-          "description": "The name of the configuration template.",
-          "type": "string"
-        }
-      },
-      "required": ["TemplateName", "ApplicationName"]
-    },
     "ConfigurationOptionSetting": {
-      "type": "object",
       "additionalProperties": false,
       "properties": {
         "Namespace": {
@@ -41,9 +30,48 @@
           "type": "string"
         }
       },
-      "required": ["Namespace", "OptionName"]
+      "required": ["Namespace", "OptionName"],
+      "type": "object"
+    },
+    "SourceConfiguration": {
+      "additionalProperties": false,
+      "properties": {
+        "ApplicationName": {
+          "description": "The name of the application associated with the configuration.",
+          "type": "string"
+        },
+        "TemplateName": {
+          "description": "The name of the configuration template.",
+          "type": "string"
+        }
+      },
+      "required": ["TemplateName", "ApplicationName"],
+      "type": "object"
     }
   },
+  "description": "Resource Type definition for AWS::ElasticBeanstalk::ConfigurationTemplate",
+  "handlers": {
+    "create": {
+      "permissions": ["elasticbeanstalk:CreateConfigurationTemplate"]
+    },
+    "delete": {
+      "permissions": [
+        "elasticbeanstalk:DeleteConfigurationTemplate",
+        "elasticbeanstalk:DescribeConfigurationSettings"
+      ]
+    },
+    "list": { "permissions": ["elasticbeanstalk:DescribeApplications"] },
+    "read": {
+      "permissions": ["elasticbeanstalk:DescribeConfigurationSettings"]
+    },
+    "update": {
+      "permissions": ["elasticbeanstalk:UpdateConfigurationTemplate"]
+    }
+  },
+  "primaryIdentifier": [
+    "/properties/ApplicationName",
+    "/properties/TemplateName"
+  ],
   "properties": {
     "ApplicationName": {
       "description": "The name of the Elastic Beanstalk application to associate with this configuration template. ",
@@ -58,12 +86,12 @@
       "type": "string"
     },
     "OptionSettings": {
-      "description": "Option values for the Elastic Beanstalk configuration, such as the instance type. If specified, these values override the values obtained from the solution stack or the source configuration template. For a complete list of Elastic Beanstalk configuration options, see [Option Values](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/command-options.html) in the AWS Elastic Beanstalk Developer Guide. ",
-      "type": "array",
       "arrayType": "AttributeList",
-      "uniqueItems": false,
+      "description": "Option values for the Elastic Beanstalk configuration, such as the instance type. If specified, these values override the values obtained from the solution stack or the source configuration template. For a complete list of Elastic Beanstalk configuration options, see [Option Values](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/command-options.html) in the AWS Elastic Beanstalk Developer Guide. ",
       "insertionOrder": false,
-      "items": { "$ref": "#/definitions/ConfigurationOptionSetting" }
+      "items": { "$ref": "#/definitions/ConfigurationOptionSetting" },
+      "type": "array",
+      "uniqueItems": false
     },
     "PlatformArn": {
       "description": "The Amazon Resource Name (ARN) of the custom platform. For more information, see [Custom Platforms](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/custom-platforms.html) in the AWS Elastic Beanstalk Developer Guide. ",
@@ -74,50 +102,22 @@
       "type": "string"
     },
     "SourceConfiguration": {
-      "description": "An Elastic Beanstalk configuration template to base this one on. If specified, Elastic Beanstalk uses the configuration values from the specified configuration template to create a new configuration.\n\nValues specified in OptionSettings override any values obtained from the SourceConfiguration.\n\nYou must specify SourceConfiguration if you don't specify PlatformArn, EnvironmentId, or SolutionStackName.\n\nConstraint: If both solution stack name and source configuration are specified, the solution stack of the source configuration template must match the specified solution stack name. ",
-      "$ref": "#/definitions/SourceConfiguration"
+      "$ref": "#/definitions/SourceConfiguration",
+      "description": "An Elastic Beanstalk configuration template to base this one on. If specified, Elastic Beanstalk uses the configuration values from the specified configuration template to create a new configuration.\n\nValues specified in OptionSettings override any values obtained from the SourceConfiguration.\n\nYou must specify SourceConfiguration if you don't specify PlatformArn, EnvironmentId, or SolutionStackName.\n\nConstraint: If both solution stack name and source configuration are specified, the solution stack of the source configuration template must match the specified solution stack name. "
     },
     "TemplateName": {
       "description": "The name of the configuration template",
       "type": "string"
     }
   },
-  "required": ["ApplicationName"],
-  "tagging": { "taggable": false },
-  "createOnlyProperties": [
-    "/properties/ApplicationName",
-    "/properties/EnvironmentId",
-    "/properties/PlatformArn",
-    "/properties/SolutionStackName",
-    "/properties/SourceConfiguration"
-  ],
-  "primaryIdentifier": [
-    "/properties/ApplicationName",
-    "/properties/TemplateName"
-  ],
   "readOnlyProperties": ["/properties/TemplateName"],
+  "required": ["ApplicationName"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-elasticbeanstalk.git",
+  "tagging": { "taggable": false },
+  "typeName": "AWS::ElasticBeanstalk::ConfigurationTemplate",
   "writeOnlyProperties": [
     "/properties/EnvironmentId",
     "/properties/SourceConfiguration/ApplicationName",
     "/properties/SourceConfiguration/TemplateName"
-  ],
-  "handlers": {
-    "create": {
-      "permissions": ["elasticbeanstalk:CreateConfigurationTemplate"]
-    },
-    "read": {
-      "permissions": ["elasticbeanstalk:DescribeConfigurationSettings"]
-    },
-    "update": {
-      "permissions": ["elasticbeanstalk:UpdateConfigurationTemplate"]
-    },
-    "delete": {
-      "permissions": [
-        "elasticbeanstalk:DeleteConfigurationTemplate",
-        "elasticbeanstalk:DescribeConfigurationSettings"
-      ]
-    },
-    "list": { "permissions": ["elasticbeanstalk:DescribeApplications"] }
-  },
-  "$hash": "daf769ed4a769ed91f6cabcf026a585193e73479"
+  ]
 }

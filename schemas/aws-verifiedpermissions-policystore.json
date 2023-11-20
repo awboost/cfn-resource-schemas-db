@@ -1,49 +1,22 @@
 {
-  "typeName": "AWS::VerifiedPermissions::PolicyStore",
-  "description": "Definition of AWS::VerifiedPermissions::PolicyStore Resource Type",
+  "$hash": "410a5c31cccef5e77563bf86777c2453118a303c",
+  "additionalProperties": false,
   "definitions": {
-    "ValidationMode": { "type": "string", "enum": ["OFF", "STRICT"] },
-    "ValidationSettings": {
-      "type": "object",
-      "properties": { "Mode": { "$ref": "#/definitions/ValidationMode" } },
-      "required": ["Mode"],
-      "additionalProperties": false
+    "SchemaDefinition": {
+      "additionalProperties": false,
+      "properties": { "CedarJson": { "$ref": "#/definitions/SchemaJson" } },
+      "type": "object"
     },
     "SchemaJson": { "type": "string" },
-    "SchemaDefinition": {
-      "type": "object",
-      "properties": { "CedarJson": { "$ref": "#/definitions/SchemaJson" } },
-      "additionalProperties": false
+    "ValidationMode": { "enum": ["OFF", "STRICT"], "type": "string" },
+    "ValidationSettings": {
+      "additionalProperties": false,
+      "properties": { "Mode": { "$ref": "#/definitions/ValidationMode" } },
+      "required": ["Mode"],
+      "type": "object"
     }
   },
-  "properties": {
-    "Arn": {
-      "type": "string",
-      "maxLength": 2500,
-      "minLength": 1,
-      "pattern": "^arn:[^:]*:[^:]*:[^:]*:[^:]*:.*$"
-    },
-    "PolicyStoreId": {
-      "type": "string",
-      "maxLength": 200,
-      "minLength": 1,
-      "pattern": "^[a-zA-Z0-9-]*$"
-    },
-    "ValidationSettings": { "$ref": "#/definitions/ValidationSettings" },
-    "Schema": { "$ref": "#/definitions/SchemaDefinition" }
-  },
-  "required": ["ValidationSettings"],
-  "readOnlyProperties": ["/properties/Arn", "/properties/PolicyStoreId"],
-  "primaryIdentifier": ["/properties/PolicyStoreId"],
-  "propertyTransform": {
-    "/properties/Schema/CedarJson": "$join([CedarJson, \"{}\"])"
-  },
-  "tagging": {
-    "taggable": false,
-    "tagOnCreate": false,
-    "tagUpdatable": false,
-    "cloudFormationSystemTags": false
-  },
+  "description": "Definition of AWS::VerifiedPermissions::PolicyStore Resource Type",
   "handlers": {
     "create": {
       "permissions": [
@@ -51,25 +24,6 @@
         "verifiedpermissions:GetPolicyStore",
         "verifiedpermissions:UpdatePolicyStore",
         "verifiedpermissions:DeletePolicyStore",
-        "verifiedpermissions:PutSchema"
-      ]
-    },
-    "read": {
-      "permissions": [
-        "verifiedpermissions:CreatePolicyStore",
-        "verifiedpermissions:GetPolicyStore",
-        "verifiedpermissions:UpdatePolicyStore",
-        "verifiedpermissions:DeletePolicyStore",
-        "verifiedpermissions:GetSchema"
-      ]
-    },
-    "update": {
-      "permissions": [
-        "verifiedpermissions:CreatePolicyStore",
-        "verifiedpermissions:GetPolicyStore",
-        "verifiedpermissions:UpdatePolicyStore",
-        "verifiedpermissions:DeletePolicyStore",
-        "verifiedpermissions:GetSchema",
         "verifiedpermissions:PutSchema"
       ]
     },
@@ -90,8 +44,54 @@
         "verifiedpermissions:ListPolicyStores",
         "verifiedpermissions:GetSchema"
       ]
+    },
+    "read": {
+      "permissions": [
+        "verifiedpermissions:CreatePolicyStore",
+        "verifiedpermissions:GetPolicyStore",
+        "verifiedpermissions:UpdatePolicyStore",
+        "verifiedpermissions:DeletePolicyStore",
+        "verifiedpermissions:GetSchema"
+      ]
+    },
+    "update": {
+      "permissions": [
+        "verifiedpermissions:CreatePolicyStore",
+        "verifiedpermissions:GetPolicyStore",
+        "verifiedpermissions:UpdatePolicyStore",
+        "verifiedpermissions:DeletePolicyStore",
+        "verifiedpermissions:GetSchema",
+        "verifiedpermissions:PutSchema"
+      ]
     }
   },
-  "additionalProperties": false,
-  "$hash": "410a5c31cccef5e77563bf86777c2453118a303c"
+  "primaryIdentifier": ["/properties/PolicyStoreId"],
+  "properties": {
+    "Arn": {
+      "maxLength": 2500,
+      "minLength": 1,
+      "pattern": "^arn:[^:]*:[^:]*:[^:]*:[^:]*:.*$",
+      "type": "string"
+    },
+    "PolicyStoreId": {
+      "maxLength": 200,
+      "minLength": 1,
+      "pattern": "^[a-zA-Z0-9-]*$",
+      "type": "string"
+    },
+    "Schema": { "$ref": "#/definitions/SchemaDefinition" },
+    "ValidationSettings": { "$ref": "#/definitions/ValidationSettings" }
+  },
+  "propertyTransform": {
+    "/properties/Schema/CedarJson": "$join([CedarJson, \"{}\"])"
+  },
+  "readOnlyProperties": ["/properties/Arn", "/properties/PolicyStoreId"],
+  "required": ["ValidationSettings"],
+  "tagging": {
+    "cloudFormationSystemTags": false,
+    "tagOnCreate": false,
+    "tagUpdatable": false,
+    "taggable": false
+  },
+  "typeName": "AWS::VerifiedPermissions::PolicyStore"
 }

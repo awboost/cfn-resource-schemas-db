@@ -1,68 +1,41 @@
 {
-  "typeName": "AWS::IAM::OIDCProvider",
-  "description": "Resource Type definition for AWS::IAM::OIDCProvider",
+  "$hash": "c92ea8aefb1bd695efd031a563c534fdb166cf8b",
   "additionalProperties": false,
-  "properties": {
-    "ClientIdList": {
-      "type": "array",
-      "insertionOrder": false,
-      "items": { "minLength": 1, "maxLength": 255, "type": "string" }
-    },
-    "Url": { "minLength": 1, "maxLength": 255, "type": "string" },
-    "ThumbprintList": {
-      "type": "array",
-      "insertionOrder": false,
-      "items": {
-        "minLength": 40,
-        "maxLength": 40,
-        "pattern": "[0-9A-Fa-f]{40}",
-        "type": "string"
-      },
-      "maxItems": 5
-    },
-    "Arn": {
-      "description": "Amazon Resource Name (ARN) of the OIDC provider",
-      "minLength": 20,
-      "maxLength": 2048,
-      "type": "string"
-    },
-    "Tags": {
-      "type": "array",
-      "uniqueItems": false,
-      "insertionOrder": false,
-      "items": { "$ref": "#/definitions/Tag" }
-    }
-  },
+  "createOnlyProperties": ["/properties/Url"],
   "definitions": {
     "Tag": {
-      "description": "A key-value pair to associate with a resource.",
-      "type": "object",
       "additionalProperties": false,
+      "description": "A key-value pair to associate with a resource.",
       "properties": {
-        "Value": {
-          "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 256
-        },
         "Key": {
           "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
-          "type": "string",
+          "maxLength": 128,
           "minLength": 1,
-          "maxLength": 128
+          "type": "string"
+        },
+        "Value": {
+          "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+          "maxLength": 256,
+          "minLength": 1,
+          "type": "string"
         }
       },
-      "required": ["Value", "Key"]
+      "required": ["Value", "Key"],
+      "type": "object"
     }
   },
-  "required": ["ThumbprintList"],
-  "createOnlyProperties": ["/properties/Url"],
-  "readOnlyProperties": ["/properties/Arn"],
-  "primaryIdentifier": ["/properties/Arn"],
+  "description": "Resource Type definition for AWS::IAM::OIDCProvider",
   "handlers": {
     "create": {
       "permissions": [
         "iam:CreateOpenIDConnectProvider",
+        "iam:GetOpenIDConnectProvider"
+      ]
+    },
+    "delete": { "permissions": ["iam:DeleteOpenIDConnectProvider"] },
+    "list": {
+      "permissions": [
+        "iam:ListOpenIDConnectProvider",
         "iam:GetOpenIDConnectProvider"
       ]
     },
@@ -77,20 +50,47 @@
         "iam:UntagOpenIDConnectProvider",
         "iam:ListOpenIDConnectProviderTags"
       ]
-    },
-    "delete": { "permissions": ["iam:DeleteOpenIDConnectProvider"] },
-    "list": {
-      "permissions": [
-        "iam:ListOpenIDConnectProvider",
-        "iam:GetOpenIDConnectProvider"
-      ]
     }
   },
+  "primaryIdentifier": ["/properties/Arn"],
+  "properties": {
+    "Arn": {
+      "description": "Amazon Resource Name (ARN) of the OIDC provider",
+      "maxLength": 2048,
+      "minLength": 20,
+      "type": "string"
+    },
+    "ClientIdList": {
+      "insertionOrder": false,
+      "items": { "maxLength": 255, "minLength": 1, "type": "string" },
+      "type": "array"
+    },
+    "Tags": {
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/Tag" },
+      "type": "array",
+      "uniqueItems": false
+    },
+    "ThumbprintList": {
+      "insertionOrder": false,
+      "items": {
+        "maxLength": 40,
+        "minLength": 40,
+        "pattern": "[0-9A-Fa-f]{40}",
+        "type": "string"
+      },
+      "maxItems": 5,
+      "type": "array"
+    },
+    "Url": { "maxLength": 255, "minLength": 1, "type": "string" }
+  },
+  "readOnlyProperties": ["/properties/Arn"],
+  "required": ["ThumbprintList"],
   "tagging": {
-    "taggable": true,
+    "cloudFormationSystemTags": false,
     "tagOnCreate": true,
     "tagUpdatable": true,
-    "cloudFormationSystemTags": false
+    "taggable": true
   },
-  "$hash": "c92ea8aefb1bd695efd031a563c534fdb166cf8b"
+  "typeName": "AWS::IAM::OIDCProvider"
 }

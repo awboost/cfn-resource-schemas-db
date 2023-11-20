@@ -1,173 +1,63 @@
 {
-  "tagging": {
-    "taggable": false,
-    "tagOnCreate": false,
-    "tagUpdatable": false,
-    "cloudFormationSystemTags": false
-  },
-  "typeName": "AWS::ElasticLoadBalancingV2::Listener",
-  "readOnlyProperties": ["/properties/ListenerArn"],
-  "description": "Resource Type definition for AWS::ElasticLoadBalancingV2::Listener",
-  "createOnlyProperties": ["/properties/LoadBalancerArn"],
-  "primaryIdentifier": ["/properties/ListenerArn"],
-  "required": ["LoadBalancerArn", "DefaultActions"],
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-elasticloadbalancingv2.git",
-  "handlers": {
-    "read": { "permissions": ["elasticloadbalancing:DescribeListeners"] },
-    "create": {
-      "permissions": [
-        "elasticloadbalancing:CreateListener",
-        "elasticloadbalancing:DescribeListeners",
-        "cognito-idp:DescribeUserPoolClient"
-      ]
-    },
-    "update": {
-      "permissions": [
-        "elasticloadbalancing:ModifyListener",
-        "elasticloadbalancing:DescribeListeners",
-        "cognito-idp:DescribeUserPoolClient"
-      ]
-    },
-    "list": {
-      "permissions": ["elasticloadbalancing:DescribeListeners"],
-      "handlerSchema": {
-        "oneOf": [
-          { "required": ["LoadBalancerArn"] },
-          { "required": ["ListenerArns"] }
-        ],
-        "properties": {
-          "LoadBalancerArn": {
-            "$ref": "resource-schema.json#/properties/LoadBalancerArn"
-          },
-          "ListenerArns": {
-            "uniqueItems": false,
-            "type": "array",
-            "items": { "$ref": "resource-schema.json#/properties/ListenerArn" }
-          }
-        }
-      }
-    },
-    "delete": {
-      "permissions": [
-        "elasticloadbalancing:DeleteListener",
-        "elasticloadbalancing:DescribeListeners"
-      ]
-    }
-  },
-  "writeOnlyProperties": [
-    "/properties/DefaultActions/*/AuthenticateOidcConfig/ClientSecret"
-  ],
+  "$hash": "19ab791e7404f42b45fafceeb1017a1fa62b5e98",
   "additionalProperties": false,
+  "createOnlyProperties": ["/properties/LoadBalancerArn"],
   "definitions": {
-    "FixedResponseConfig": {
-      "additionalProperties": false,
-      "type": "object",
-      "properties": {
-        "ContentType": { "type": "string" },
-        "StatusCode": { "type": "string" },
-        "MessageBody": { "type": "string" }
-      },
-      "required": ["StatusCode"]
-    },
-    "TargetGroupTuple": {
-      "additionalProperties": false,
-      "type": "object",
-      "properties": {
-        "TargetGroupArn": { "type": "string" },
-        "Weight": { "type": "integer" }
-      }
-    },
     "Action": {
       "additionalProperties": false,
-      "type": "object",
       "properties": {
-        "Order": { "type": "integer" },
-        "TargetGroupArn": { "type": "string" },
-        "FixedResponseConfig": { "$ref": "#/definitions/FixedResponseConfig" },
         "AuthenticateCognitoConfig": {
           "$ref": "#/definitions/AuthenticateCognitoConfig"
         },
-        "Type": { "type": "string" },
-        "RedirectConfig": { "$ref": "#/definitions/RedirectConfig" },
-        "ForwardConfig": { "$ref": "#/definitions/ForwardConfig" },
         "AuthenticateOidcConfig": {
           "$ref": "#/definitions/AuthenticateOidcConfig"
-        }
+        },
+        "FixedResponseConfig": { "$ref": "#/definitions/FixedResponseConfig" },
+        "ForwardConfig": { "$ref": "#/definitions/ForwardConfig" },
+        "Order": { "type": "integer" },
+        "RedirectConfig": { "$ref": "#/definitions/RedirectConfig" },
+        "TargetGroupArn": { "type": "string" },
+        "Type": { "type": "string" }
       },
-      "required": ["Type"]
+      "required": ["Type"],
+      "type": "object"
     },
     "AuthenticateCognitoConfig": {
       "additionalProperties": false,
-      "type": "object",
       "properties": {
-        "OnUnauthenticatedRequest": { "type": "string" },
-        "UserPoolClientId": { "type": "string" },
-        "UserPoolDomain": { "type": "string" },
-        "SessionTimeout": { "type": "string" },
-        "Scope": { "type": "string" },
-        "SessionCookieName": { "type": "string" },
-        "UserPoolArn": { "type": "string" },
         "AuthenticationRequestExtraParams": {
           "patternProperties": { "[a-zA-Z0-9]+": { "type": "string" } },
           "type": "object"
-        }
-      },
-      "required": ["UserPoolClientId", "UserPoolDomain", "UserPoolArn"]
-    },
-    "RedirectConfig": {
-      "additionalProperties": false,
-      "type": "object",
-      "properties": {
-        "Path": { "type": "string" },
-        "Query": { "type": "string" },
-        "Port": { "type": "string" },
-        "Host": { "type": "string" },
-        "Protocol": { "type": "string" },
-        "StatusCode": { "type": "string" }
-      },
-      "required": ["StatusCode"]
-    },
-    "TargetGroupStickinessConfig": {
-      "additionalProperties": false,
-      "type": "object",
-      "properties": {
-        "Enabled": { "type": "boolean" },
-        "DurationSeconds": { "type": "integer" }
-      }
-    },
-    "ForwardConfig": {
-      "additionalProperties": false,
-      "type": "object",
-      "properties": {
-        "TargetGroupStickinessConfig": {
-          "$ref": "#/definitions/TargetGroupStickinessConfig"
         },
-        "TargetGroups": {
-          "uniqueItems": true,
-          "type": "array",
-          "items": { "$ref": "#/definitions/TargetGroupTuple" }
-        }
-      }
+        "OnUnauthenticatedRequest": { "type": "string" },
+        "Scope": { "type": "string" },
+        "SessionCookieName": { "type": "string" },
+        "SessionTimeout": { "type": "string" },
+        "UserPoolArn": { "type": "string" },
+        "UserPoolClientId": { "type": "string" },
+        "UserPoolDomain": { "type": "string" }
+      },
+      "required": ["UserPoolClientId", "UserPoolDomain", "UserPoolArn"],
+      "type": "object"
     },
     "AuthenticateOidcConfig": {
       "additionalProperties": false,
-      "type": "object",
       "properties": {
-        "OnUnauthenticatedRequest": { "type": "string" },
-        "TokenEndpoint": { "type": "string" },
-        "UseExistingClientSecret": { "type": "boolean" },
-        "SessionTimeout": { "type": "string" },
-        "Scope": { "type": "string" },
-        "Issuer": { "type": "string" },
-        "ClientSecret": { "type": "string" },
-        "UserInfoEndpoint": { "type": "string" },
-        "ClientId": { "type": "string" },
-        "AuthorizationEndpoint": { "type": "string" },
-        "SessionCookieName": { "type": "string" },
         "AuthenticationRequestExtraParams": {
           "patternProperties": { "[a-zA-Z0-9]+": { "type": "string" } },
           "type": "object"
-        }
+        },
+        "AuthorizationEndpoint": { "type": "string" },
+        "ClientId": { "type": "string" },
+        "ClientSecret": { "type": "string" },
+        "Issuer": { "type": "string" },
+        "OnUnauthenticatedRequest": { "type": "string" },
+        "Scope": { "type": "string" },
+        "SessionCookieName": { "type": "string" },
+        "SessionTimeout": { "type": "string" },
+        "TokenEndpoint": { "type": "string" },
+        "UseExistingClientSecret": { "type": "boolean" },
+        "UserInfoEndpoint": { "type": "string" }
       },
       "required": [
         "TokenEndpoint",
@@ -175,31 +65,141 @@
         "UserInfoEndpoint",
         "ClientId",
         "AuthorizationEndpoint"
-      ]
+      ],
+      "type": "object"
     },
     "Certificate": {
       "additionalProperties": false,
-      "type": "object",
-      "properties": { "CertificateArn": { "type": "string" } }
+      "properties": { "CertificateArn": { "type": "string" } },
+      "type": "object"
+    },
+    "FixedResponseConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "ContentType": { "type": "string" },
+        "MessageBody": { "type": "string" },
+        "StatusCode": { "type": "string" }
+      },
+      "required": ["StatusCode"],
+      "type": "object"
+    },
+    "ForwardConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "TargetGroupStickinessConfig": {
+          "$ref": "#/definitions/TargetGroupStickinessConfig"
+        },
+        "TargetGroups": {
+          "items": { "$ref": "#/definitions/TargetGroupTuple" },
+          "type": "array",
+          "uniqueItems": true
+        }
+      },
+      "type": "object"
+    },
+    "RedirectConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "Host": { "type": "string" },
+        "Path": { "type": "string" },
+        "Port": { "type": "string" },
+        "Protocol": { "type": "string" },
+        "Query": { "type": "string" },
+        "StatusCode": { "type": "string" }
+      },
+      "required": ["StatusCode"],
+      "type": "object"
+    },
+    "TargetGroupStickinessConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "DurationSeconds": { "type": "integer" },
+        "Enabled": { "type": "boolean" }
+      },
+      "type": "object"
+    },
+    "TargetGroupTuple": {
+      "additionalProperties": false,
+      "properties": {
+        "TargetGroupArn": { "type": "string" },
+        "Weight": { "type": "integer" }
+      },
+      "type": "object"
     }
   },
-  "properties": {
-    "ListenerArn": { "type": "string" },
-    "AlpnPolicy": { "type": "array", "items": { "type": "string" } },
-    "SslPolicy": { "type": "string" },
-    "LoadBalancerArn": { "type": "string" },
-    "DefaultActions": {
-      "uniqueItems": true,
-      "type": "array",
-      "items": { "$ref": "#/definitions/Action" }
+  "description": "Resource Type definition for AWS::ElasticLoadBalancingV2::Listener",
+  "handlers": {
+    "create": {
+      "permissions": [
+        "elasticloadbalancing:CreateListener",
+        "elasticloadbalancing:DescribeListeners",
+        "cognito-idp:DescribeUserPoolClient"
+      ]
     },
-    "Port": { "type": "integer" },
-    "Certificates": {
-      "uniqueItems": true,
-      "type": "array",
-      "items": { "$ref": "#/definitions/Certificate" }
+    "delete": {
+      "permissions": [
+        "elasticloadbalancing:DeleteListener",
+        "elasticloadbalancing:DescribeListeners"
+      ]
     },
-    "Protocol": { "type": "string" }
+    "list": {
+      "handlerSchema": {
+        "oneOf": [
+          { "required": ["LoadBalancerArn"] },
+          { "required": ["ListenerArns"] }
+        ],
+        "properties": {
+          "ListenerArns": {
+            "items": { "$ref": "resource-schema.json#/properties/ListenerArn" },
+            "type": "array",
+            "uniqueItems": false
+          },
+          "LoadBalancerArn": {
+            "$ref": "resource-schema.json#/properties/LoadBalancerArn"
+          }
+        }
+      },
+      "permissions": ["elasticloadbalancing:DescribeListeners"]
+    },
+    "read": { "permissions": ["elasticloadbalancing:DescribeListeners"] },
+    "update": {
+      "permissions": [
+        "elasticloadbalancing:ModifyListener",
+        "elasticloadbalancing:DescribeListeners",
+        "cognito-idp:DescribeUserPoolClient"
+      ]
+    }
   },
-  "$hash": "19ab791e7404f42b45fafceeb1017a1fa62b5e98"
+  "primaryIdentifier": ["/properties/ListenerArn"],
+  "properties": {
+    "AlpnPolicy": { "items": { "type": "string" }, "type": "array" },
+    "Certificates": {
+      "items": { "$ref": "#/definitions/Certificate" },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "DefaultActions": {
+      "items": { "$ref": "#/definitions/Action" },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "ListenerArn": { "type": "string" },
+    "LoadBalancerArn": { "type": "string" },
+    "Port": { "type": "integer" },
+    "Protocol": { "type": "string" },
+    "SslPolicy": { "type": "string" }
+  },
+  "readOnlyProperties": ["/properties/ListenerArn"],
+  "required": ["LoadBalancerArn", "DefaultActions"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-elasticloadbalancingv2.git",
+  "tagging": {
+    "cloudFormationSystemTags": false,
+    "tagOnCreate": false,
+    "tagUpdatable": false,
+    "taggable": false
+  },
+  "typeName": "AWS::ElasticLoadBalancingV2::Listener",
+  "writeOnlyProperties": [
+    "/properties/DefaultActions/*/AuthenticateOidcConfig/ClientSecret"
+  ]
 }

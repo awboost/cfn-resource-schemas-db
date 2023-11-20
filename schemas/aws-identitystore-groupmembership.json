@@ -1,65 +1,26 @@
 {
-  "typeName": "AWS::IdentityStore::GroupMembership",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-identitystore",
-  "description": "Resource Type Definition for AWS:IdentityStore::GroupMembership",
+  "$hash": "25eb4c54403ebecc90ed015a90a9d3aecc0eaf13",
+  "additionalProperties": false,
+  "createOnlyProperties": ["/properties/IdentityStoreId"],
   "definitions": {
     "MemberId": {
+      "additionalProperties": false,
       "description": "An object containing the identifier of a group member.",
-      "type": "object",
-      "title": "UserId",
       "properties": {
         "UserId": {
           "description": "The identifier for a user in the identity store.",
-          "type": "string",
           "maxLength": 47,
           "minLength": 1,
-          "pattern": "^([0-9a-f]{10}-|)[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}$"
+          "pattern": "^([0-9a-f]{10}-|)[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}$",
+          "type": "string"
         }
       },
       "required": ["UserId"],
-      "additionalProperties": false
+      "title": "UserId",
+      "type": "object"
     }
   },
-  "properties": {
-    "GroupId": {
-      "description": "The unique identifier for a group in the identity store.",
-      "type": "string",
-      "maxLength": 47,
-      "minLength": 1,
-      "pattern": "^([0-9a-f]{10}-|)[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}$"
-    },
-    "IdentityStoreId": {
-      "description": "The globally unique identifier for the identity store.",
-      "type": "string",
-      "maxLength": 36,
-      "minLength": 1,
-      "pattern": "^d-[0-9a-f]{10}$|^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
-    },
-    "MemberId": {
-      "description": "An object containing the identifier of a group member.",
-      "$ref": "#/definitions/MemberId"
-    },
-    "MembershipId": {
-      "description": "The identifier for a GroupMembership in the identity store.",
-      "type": "string",
-      "maxLength": 47,
-      "minLength": 1,
-      "pattern": "^([0-9a-f]{10}-|)[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}$"
-    }
-  },
-  "tagging": {
-    "taggable": false,
-    "tagOnCreate": false,
-    "tagUpdatable": false,
-    "cloudFormationSystemTags": false
-  },
-  "required": ["IdentityStoreId", "GroupId", "MemberId"],
-  "readOnlyProperties": ["/properties/MembershipId"],
-  "createOnlyProperties": ["/properties/IdentityStoreId"],
-  "primaryIdentifier": [
-    "/properties/MembershipId",
-    "/properties/IdentityStoreId"
-  ],
+  "description": "Resource Type Definition for AWS:IdentityStore::GroupMembership",
   "handlers": {
     "create": {
       "permissions": [
@@ -67,7 +28,6 @@
         "identitystore:DescribeGroupMembership"
       ]
     },
-    "read": { "permissions": ["identitystore:DescribeGroupMembership"] },
     "delete": {
       "permissions": [
         "identitystore:DeleteGroupMembership",
@@ -75,18 +35,58 @@
       ]
     },
     "list": {
-      "permissions": ["identitystore:ListGroupMemberships"],
       "handlerSchema": {
         "properties": {
+          "GroupId": { "$ref": "resource-schema.json#/properties/GroupId" },
           "IdentityStoreId": {
             "$ref": "resource-schema.json#/properties/IdentityStoreId"
-          },
-          "GroupId": { "$ref": "resource-schema.json#/properties/GroupId" }
+          }
         },
         "required": ["IdentityStoreId", "GroupId"]
-      }
+      },
+      "permissions": ["identitystore:ListGroupMemberships"]
+    },
+    "read": { "permissions": ["identitystore:DescribeGroupMembership"] }
+  },
+  "primaryIdentifier": [
+    "/properties/MembershipId",
+    "/properties/IdentityStoreId"
+  ],
+  "properties": {
+    "GroupId": {
+      "description": "The unique identifier for a group in the identity store.",
+      "maxLength": 47,
+      "minLength": 1,
+      "pattern": "^([0-9a-f]{10}-|)[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}$",
+      "type": "string"
+    },
+    "IdentityStoreId": {
+      "description": "The globally unique identifier for the identity store.",
+      "maxLength": 36,
+      "minLength": 1,
+      "pattern": "^d-[0-9a-f]{10}$|^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+      "type": "string"
+    },
+    "MemberId": {
+      "$ref": "#/definitions/MemberId",
+      "description": "An object containing the identifier of a group member."
+    },
+    "MembershipId": {
+      "description": "The identifier for a GroupMembership in the identity store.",
+      "maxLength": 47,
+      "minLength": 1,
+      "pattern": "^([0-9a-f]{10}-|)[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}$",
+      "type": "string"
     }
   },
-  "additionalProperties": false,
-  "$hash": "25eb4c54403ebecc90ed015a90a9d3aecc0eaf13"
+  "readOnlyProperties": ["/properties/MembershipId"],
+  "required": ["IdentityStoreId", "GroupId", "MemberId"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-identitystore",
+  "tagging": {
+    "cloudFormationSystemTags": false,
+    "tagOnCreate": false,
+    "tagUpdatable": false,
+    "taggable": false
+  },
+  "typeName": "AWS::IdentityStore::GroupMembership"
 }

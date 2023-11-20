@@ -1,32 +1,67 @@
 {
-  "typeName": "AWS::EC2::NetworkInsightsAccessScope",
-  "description": "Resource schema for AWS::EC2::NetworkInsightsAccessScope",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-ec2-ni.git",
+  "$hash": "4445accb5c82e7a66e6b8dffa04304e65742f8cc",
+  "additionalIdentifiers": [["/properties/NetworkInsightsAccessScopeArn"]],
+  "additionalProperties": false,
+  "createOnlyProperties": [
+    "/properties/MatchPaths",
+    "/properties/ExcludePaths"
+  ],
   "definitions": {
-    "Tag": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "Key": { "type": "string" },
-        "Value": { "type": "string" }
-      },
-      "required": ["Key"]
-    },
     "AccessScopePathRequest": {
-      "type": "object",
       "additionalProperties": false,
       "properties": {
-        "Source": { "$ref": "#/definitions/PathStatementRequest" },
         "Destination": { "$ref": "#/definitions/PathStatementRequest" },
+        "Source": { "$ref": "#/definitions/PathStatementRequest" },
         "ThroughResources": {
-          "type": "array",
           "insertionOrder": true,
-          "items": { "$ref": "#/definitions/ThroughResourcesStatementRequest" }
+          "items": { "$ref": "#/definitions/ThroughResourcesStatementRequest" },
+          "type": "array"
         }
-      }
+      },
+      "type": "object"
+    },
+    "PacketHeaderStatementRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "DestinationAddresses": {
+          "insertionOrder": true,
+          "items": { "type": "string" },
+          "type": "array"
+        },
+        "DestinationPorts": {
+          "insertionOrder": true,
+          "items": { "type": "string" },
+          "type": "array"
+        },
+        "DestinationPrefixLists": {
+          "insertionOrder": true,
+          "items": { "type": "string" },
+          "type": "array"
+        },
+        "Protocols": {
+          "insertionOrder": true,
+          "items": { "$ref": "#/definitions/Protocol" },
+          "type": "array"
+        },
+        "SourceAddresses": {
+          "insertionOrder": true,
+          "items": { "type": "string" },
+          "type": "array"
+        },
+        "SourcePorts": {
+          "insertionOrder": true,
+          "items": { "type": "string" },
+          "type": "array"
+        },
+        "SourcePrefixLists": {
+          "insertionOrder": true,
+          "items": { "type": "string" },
+          "type": "array"
+        }
+      },
+      "type": "object"
     },
     "PathStatementRequest": {
-      "type": "object",
       "additionalProperties": false,
       "properties": {
         "PacketHeaderStatement": {
@@ -35,111 +70,46 @@
         "ResourceStatement": {
           "$ref": "#/definitions/ResourceStatementRequest"
         }
-      }
+      },
+      "type": "object"
     },
-    "PacketHeaderStatementRequest": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "SourceAddresses": {
-          "type": "array",
-          "insertionOrder": true,
-          "items": { "type": "string" }
-        },
-        "DestinationAddresses": {
-          "type": "array",
-          "insertionOrder": true,
-          "items": { "type": "string" }
-        },
-        "SourcePorts": {
-          "type": "array",
-          "insertionOrder": true,
-          "items": { "type": "string" }
-        },
-        "DestinationPorts": {
-          "type": "array",
-          "insertionOrder": true,
-          "items": { "type": "string" }
-        },
-        "SourcePrefixLists": {
-          "type": "array",
-          "insertionOrder": true,
-          "items": { "type": "string" }
-        },
-        "DestinationPrefixLists": {
-          "type": "array",
-          "insertionOrder": true,
-          "items": { "type": "string" }
-        },
-        "Protocols": {
-          "type": "array",
-          "insertionOrder": true,
-          "items": { "$ref": "#/definitions/Protocol" }
-        }
-      }
-    },
-    "Protocol": { "type": "string", "enum": ["tcp", "udp"] },
+    "Protocol": { "enum": ["tcp", "udp"], "type": "string" },
     "ResourceStatementRequest": {
-      "type": "object",
       "additionalProperties": false,
       "properties": {
-        "Resources": {
-          "type": "array",
-          "insertionOrder": true,
-          "items": { "type": "string" }
-        },
         "ResourceTypes": {
-          "type": "array",
           "insertionOrder": true,
-          "items": { "type": "string" }
+          "items": { "type": "string" },
+          "type": "array"
+        },
+        "Resources": {
+          "insertionOrder": true,
+          "items": { "type": "string" },
+          "type": "array"
         }
-      }
+      },
+      "type": "object"
+    },
+    "Tag": {
+      "additionalProperties": false,
+      "properties": {
+        "Key": { "type": "string" },
+        "Value": { "type": "string" }
+      },
+      "required": ["Key"],
+      "type": "object"
     },
     "ThroughResourcesStatementRequest": {
-      "type": "object",
       "additionalProperties": false,
       "properties": {
         "ResourceStatement": {
           "$ref": "#/definitions/ResourceStatementRequest"
         }
-      }
+      },
+      "type": "object"
     }
   },
-  "properties": {
-    "NetworkInsightsAccessScopeId": { "type": "string" },
-    "NetworkInsightsAccessScopeArn": { "type": "string" },
-    "CreatedDate": { "type": "string" },
-    "UpdatedDate": { "type": "string" },
-    "Tags": {
-      "type": "array",
-      "insertionOrder": false,
-      "items": { "$ref": "#/definitions/Tag" }
-    },
-    "MatchPaths": {
-      "type": "array",
-      "insertionOrder": true,
-      "items": { "$ref": "#/definitions/AccessScopePathRequest" }
-    },
-    "ExcludePaths": {
-      "type": "array",
-      "insertionOrder": true,
-      "items": { "$ref": "#/definitions/AccessScopePathRequest" }
-    }
-  },
-  "additionalProperties": false,
-  "readOnlyProperties": [
-    "/properties/NetworkInsightsAccessScopeId",
-    "/properties/NetworkInsightsAccessScopeArn",
-    "/properties/CreatedDate",
-    "/properties/UpdatedDate"
-  ],
-  "createOnlyProperties": [
-    "/properties/MatchPaths",
-    "/properties/ExcludePaths"
-  ],
-  "writeOnlyProperties": ["/properties/MatchPaths", "/properties/ExcludePaths"],
-  "primaryIdentifier": ["/properties/NetworkInsightsAccessScopeId"],
-  "additionalIdentifiers": [["/properties/NetworkInsightsAccessScopeArn"]],
+  "description": "Resource schema for AWS::EC2::NetworkInsightsAccessScope",
   "handlers": {
     "create": {
       "permissions": [
@@ -148,6 +118,10 @@
         "tiros:CreateQuery"
       ]
     },
+    "delete": {
+      "permissions": ["ec2:DeleteNetworkInsightsAccessScope", "ec2:DeleteTags"]
+    },
+    "list": { "permissions": ["ec2:DescribeNetworkInsightsAccessScopes"] },
     "read": {
       "permissions": [
         "ec2:DescribeNetworkInsightsAccessScopes",
@@ -161,11 +135,37 @@
         "ec2:CreateTags",
         "ec2:DeleteTags"
       ]
-    },
-    "delete": {
-      "permissions": ["ec2:DeleteNetworkInsightsAccessScope", "ec2:DeleteTags"]
-    },
-    "list": { "permissions": ["ec2:DescribeNetworkInsightsAccessScopes"] }
+    }
   },
-  "$hash": "4445accb5c82e7a66e6b8dffa04304e65742f8cc"
+  "primaryIdentifier": ["/properties/NetworkInsightsAccessScopeId"],
+  "properties": {
+    "CreatedDate": { "type": "string" },
+    "ExcludePaths": {
+      "insertionOrder": true,
+      "items": { "$ref": "#/definitions/AccessScopePathRequest" },
+      "type": "array"
+    },
+    "MatchPaths": {
+      "insertionOrder": true,
+      "items": { "$ref": "#/definitions/AccessScopePathRequest" },
+      "type": "array"
+    },
+    "NetworkInsightsAccessScopeArn": { "type": "string" },
+    "NetworkInsightsAccessScopeId": { "type": "string" },
+    "Tags": {
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/Tag" },
+      "type": "array"
+    },
+    "UpdatedDate": { "type": "string" }
+  },
+  "readOnlyProperties": [
+    "/properties/NetworkInsightsAccessScopeId",
+    "/properties/NetworkInsightsAccessScopeArn",
+    "/properties/CreatedDate",
+    "/properties/UpdatedDate"
+  ],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-ec2-ni.git",
+  "typeName": "AWS::EC2::NetworkInsightsAccessScope",
+  "writeOnlyProperties": ["/properties/MatchPaths", "/properties/ExcludePaths"]
 }

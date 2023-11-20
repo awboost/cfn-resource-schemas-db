@@ -1,77 +1,42 @@
 {
-  "typeName": "AWS::AppFlow::Connector",
-  "description": "Resource schema for AWS::AppFlow::Connector",
-  "sourceUrl": "https://docs.aws.amazon.com/appflow/latest/userguide/what-is-appflow.html",
+  "$hash": "d14b5442f2759c78d3e61f1fa622a5e38288d237",
   "additionalProperties": false,
-  "properties": {
-    "ConnectorLabel": {
-      "description": " The name of the connector. The name is unique for each ConnectorRegistration in your AWS account.",
-      "type": "string",
-      "pattern": "[a-zA-Z0-9][\\w!@#.-]+",
-      "maxLength": 512
-    },
-    "ConnectorArn": {
-      "description": " The arn of the connector. The arn is unique for each ConnectorRegistration in your AWS account.",
-      "type": "string",
-      "pattern": "arn:*:appflow:.*:[0-9]+:.*",
-      "maxLength": 512
-    },
-    "ConnectorProvisioningType": {
-      "description": "The provisioning type of the connector. Currently the only supported value is LAMBDA. ",
-      "type": "string",
-      "pattern": "[a-zA-Z0-9][\\w!@#.-]+",
-      "maxLength": 256,
-      "minLength": 1
-    },
-    "ConnectorProvisioningConfig": {
-      "description": "Contains information about the configuration of the connector being registered.",
-      "$ref": "#/definitions/ConnectorProvisioningConfig"
-    },
-    "Description": {
-      "description": "A description about the connector that's being registered.",
-      "type": "string",
-      "pattern": "[\\s\\w/!@#+=.-]*",
-      "maxLength": 2048
-    }
-  },
+  "createOnlyProperties": ["/properties/ConnectorLabel"],
   "definitions": {
     "ConnectorProvisioningConfig": {
+      "additionalProperties": false,
       "description": "Contains information about the configuration of the connector being registered.",
-      "type": "object",
       "properties": {
         "Lambda": {
-          "description": "Contains information about the configuration of the lambda which is being registered as the connector.",
-          "$ref": "#/definitions/LambdaConnectorProvisioningConfig"
+          "$ref": "#/definitions/LambdaConnectorProvisioningConfig",
+          "description": "Contains information about the configuration of the lambda which is being registered as the connector."
         }
       },
-      "additionalProperties": false
+      "type": "object"
     },
     "LambdaConnectorProvisioningConfig": {
+      "additionalProperties": false,
       "description": "Contains information about the configuration of the lambda which is being registered as the connector.",
-      "type": "object",
       "properties": {
         "LambdaArn": {
           "description": "Lambda ARN of the connector being registered.",
-          "type": "string",
+          "maxLength": 512,
           "pattern": "arn:*:.*:.*:[0-9]+:.*",
-          "maxLength": 512
+          "type": "string"
         }
       },
       "required": ["LambdaArn"],
-      "additionalProperties": false
+      "type": "object"
     }
   },
-  "required": ["ConnectorProvisioningType", "ConnectorProvisioningConfig"],
-  "createOnlyProperties": ["/properties/ConnectorLabel"],
-  "readOnlyProperties": ["/properties/ConnectorArn"],
-  "primaryIdentifier": ["/properties/ConnectorLabel"],
+  "description": "Resource schema for AWS::AppFlow::Connector",
   "handlers": {
     "create": {
       "permissions": ["appflow:RegisterConnector", "lambda:InvokeFunction"]
     },
-    "read": { "permissions": ["appflow:DescribeConnector"] },
     "delete": { "permissions": ["appflow:UnRegisterConnector"] },
     "list": { "permissions": ["appflow:ListConnectors"] },
+    "read": { "permissions": ["appflow:DescribeConnector"] },
     "update": {
       "permissions": [
         "appflow:UpdateConnectorRegistration",
@@ -79,11 +44,46 @@
       ]
     }
   },
+  "primaryIdentifier": ["/properties/ConnectorLabel"],
+  "properties": {
+    "ConnectorArn": {
+      "description": " The arn of the connector. The arn is unique for each ConnectorRegistration in your AWS account.",
+      "maxLength": 512,
+      "pattern": "arn:*:appflow:.*:[0-9]+:.*",
+      "type": "string"
+    },
+    "ConnectorLabel": {
+      "description": " The name of the connector. The name is unique for each ConnectorRegistration in your AWS account.",
+      "maxLength": 512,
+      "pattern": "[a-zA-Z0-9][\\w!@#.-]+",
+      "type": "string"
+    },
+    "ConnectorProvisioningConfig": {
+      "$ref": "#/definitions/ConnectorProvisioningConfig",
+      "description": "Contains information about the configuration of the connector being registered."
+    },
+    "ConnectorProvisioningType": {
+      "description": "The provisioning type of the connector. Currently the only supported value is LAMBDA. ",
+      "maxLength": 256,
+      "minLength": 1,
+      "pattern": "[a-zA-Z0-9][\\w!@#.-]+",
+      "type": "string"
+    },
+    "Description": {
+      "description": "A description about the connector that's being registered.",
+      "maxLength": 2048,
+      "pattern": "[\\s\\w/!@#+=.-]*",
+      "type": "string"
+    }
+  },
+  "readOnlyProperties": ["/properties/ConnectorArn"],
+  "required": ["ConnectorProvisioningType", "ConnectorProvisioningConfig"],
+  "sourceUrl": "https://docs.aws.amazon.com/appflow/latest/userguide/what-is-appflow.html",
   "tagging": {
-    "taggable": false,
+    "cloudFormationSystemTags": false,
     "tagOnCreate": false,
     "tagUpdatable": false,
-    "cloudFormationSystemTags": false
+    "taggable": false
   },
-  "$hash": "d14b5442f2759c78d3e61f1fa622a5e38288d237"
+  "typeName": "AWS::AppFlow::Connector"
 }

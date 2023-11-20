@@ -1,46 +1,23 @@
 {
-  "typeName": "AWS::EC2::IPAMAllocation",
-  "description": "Resource Schema of AWS::EC2::IPAMAllocation Type",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
-  "definitions": {
-    "Cidr": {
-      "description": "Represents a single IPv4 or IPv6 CIDR",
-      "type": "string"
-    }
-  },
-  "properties": {
-    "IpamPoolAllocationId": {
-      "description": "Id of the allocation.",
-      "type": "string"
-    },
-    "IpamPoolId": { "description": "Id of the IPAM Pool.", "type": "string" },
-    "Cidr": { "$ref": "#/definitions/Cidr" },
-    "NetmaskLength": {
-      "description": "The desired netmask length of the allocation. If set, IPAM will choose a block of free space with this size and return the CIDR representing it.",
-      "type": "integer"
-    },
-    "Description": { "type": "string" }
-  },
+  "$hash": "10b8ef3380d8b594d74fd624cff5c8b792e886bd",
   "additionalProperties": false,
-  "required": ["IpamPoolId"],
-  "primaryIdentifier": [
-    "/properties/IpamPoolId",
-    "/properties/IpamPoolAllocationId",
-    "/properties/Cidr"
-  ],
   "createOnlyProperties": [
     "/properties/IpamPoolId",
     "/properties/Cidr",
     "/properties/Description",
     "/properties/NetmaskLength"
   ],
-  "readOnlyProperties": ["/properties/IpamPoolAllocationId"],
-  "writeOnlyProperties": ["/properties/NetmaskLength"],
+  "definitions": {
+    "Cidr": {
+      "description": "Represents a single IPv4 or IPv6 CIDR",
+      "type": "string"
+    }
+  },
+  "description": "Resource Schema of AWS::EC2::IPAMAllocation Type",
   "handlers": {
     "create": {
       "permissions": ["ec2:AllocateIpamPoolCidr", "ec2:GetIpamPoolAllocations"]
     },
-    "read": { "permissions": ["ec2:GetIpamPoolAllocations"] },
     "delete": { "permissions": ["ec2:ReleaseIpamPoolAllocation"] },
     "list": {
       "handlerSchema": {
@@ -52,13 +29,36 @@
         "required": ["IpamPoolId"]
       },
       "permissions": ["ec2:GetIpamPoolAllocations"]
+    },
+    "read": { "permissions": ["ec2:GetIpamPoolAllocations"] }
+  },
+  "primaryIdentifier": [
+    "/properties/IpamPoolId",
+    "/properties/IpamPoolAllocationId",
+    "/properties/Cidr"
+  ],
+  "properties": {
+    "Cidr": { "$ref": "#/definitions/Cidr" },
+    "Description": { "type": "string" },
+    "IpamPoolAllocationId": {
+      "description": "Id of the allocation.",
+      "type": "string"
+    },
+    "IpamPoolId": { "description": "Id of the IPAM Pool.", "type": "string" },
+    "NetmaskLength": {
+      "description": "The desired netmask length of the allocation. If set, IPAM will choose a block of free space with this size and return the CIDR representing it.",
+      "type": "integer"
     }
   },
+  "readOnlyProperties": ["/properties/IpamPoolAllocationId"],
+  "required": ["IpamPoolId"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
   "tagging": {
-    "taggable": false,
+    "cloudFormationSystemTags": false,
     "tagOnCreate": false,
     "tagUpdatable": false,
-    "cloudFormationSystemTags": false
+    "taggable": false
   },
-  "$hash": "10b8ef3380d8b594d74fd624cff5c8b792e886bd"
+  "typeName": "AWS::EC2::IPAMAllocation",
+  "writeOnlyProperties": ["/properties/NetmaskLength"]
 }

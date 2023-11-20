@@ -1,59 +1,22 @@
 {
-  "typeName": "AWS::Oam::Link",
-  "description": "Definition of AWS::Oam::Link Resource Type",
+  "$hash": "b2d4837acc301dd77e33ee7a264954920e2692d9",
+  "additionalProperties": false,
+  "createOnlyProperties": [
+    "/properties/SinkIdentifier",
+    "/properties/LabelTemplate"
+  ],
   "definitions": {
     "ResourceType": {
-      "type": "string",
       "enum": [
         "AWS::CloudWatch::Metric",
         "AWS::Logs::LogGroup",
         "AWS::XRay::Trace",
         "AWS::ApplicationInsights::Application"
-      ]
+      ],
+      "type": "string"
     }
   },
-  "properties": {
-    "Arn": { "type": "string", "maxLength": 2048 },
-    "Label": { "type": "string" },
-    "LabelTemplate": { "type": "string", "maxLength": 64, "minLength": 1 },
-    "ResourceTypes": {
-      "type": "array",
-      "insertionOrder": false,
-      "items": { "$ref": "#/definitions/ResourceType" },
-      "maxItems": 50,
-      "minItems": 1,
-      "uniqueItems": true
-    },
-    "SinkIdentifier": { "type": "string", "maxLength": 2048, "minLength": 1 },
-    "Tags": {
-      "description": "Tags to apply to the link",
-      "type": "object",
-      "additionalProperties": false,
-      "patternProperties": {
-        "^(?!aws:.*)[a-zA-Z0-9\\s\\_\\.\\/\\=\\+\\-]{1,128}$": {
-          "type": "string",
-          "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
-          "pattern": "^(?!aws:.*)[a-zA-Z0-9\\s\\_\\.\\/\\=\\+\\-]{0,256}$",
-          "minLength": 0,
-          "maxLength": 256
-        }
-      }
-    }
-  },
-  "tagging": {
-    "taggable": true,
-    "tagOnCreate": true,
-    "tagUpdatable": true,
-    "cloudFormationSystemTags": false
-  },
-  "required": ["ResourceTypes", "SinkIdentifier"],
-  "readOnlyProperties": ["/properties/Arn", "/properties/Label"],
-  "createOnlyProperties": [
-    "/properties/SinkIdentifier",
-    "/properties/LabelTemplate"
-  ],
-  "writeOnlyProperties": ["/properties/LabelTemplate"],
-  "primaryIdentifier": ["/properties/Arn"],
+  "description": "Definition of AWS::Oam::Link Resource Type",
   "handlers": {
     "create": {
       "permissions": [
@@ -65,6 +28,8 @@
         "applicationinsights:Link"
       ]
     },
+    "delete": { "permissions": ["oam:DeleteLink", "oam:GetLink"] },
+    "list": { "permissions": ["oam:ListLinks"] },
     "read": { "permissions": ["oam:GetLink"] },
     "update": {
       "permissions": [
@@ -77,11 +42,46 @@
         "oam:TagResource",
         "oam:UntagResource"
       ]
-    },
-    "delete": { "permissions": ["oam:DeleteLink", "oam:GetLink"] },
-    "list": { "permissions": ["oam:ListLinks"] }
+    }
   },
+  "primaryIdentifier": ["/properties/Arn"],
+  "properties": {
+    "Arn": { "maxLength": 2048, "type": "string" },
+    "Label": { "type": "string" },
+    "LabelTemplate": { "maxLength": 64, "minLength": 1, "type": "string" },
+    "ResourceTypes": {
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/ResourceType" },
+      "maxItems": 50,
+      "minItems": 1,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "SinkIdentifier": { "maxLength": 2048, "minLength": 1, "type": "string" },
+    "Tags": {
+      "additionalProperties": false,
+      "description": "Tags to apply to the link",
+      "patternProperties": {
+        "^(?!aws:.*)[a-zA-Z0-9\\s\\_\\.\\/\\=\\+\\-]{1,128}$": {
+          "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+          "maxLength": 256,
+          "minLength": 0,
+          "pattern": "^(?!aws:.*)[a-zA-Z0-9\\s\\_\\.\\/\\=\\+\\-]{0,256}$",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "readOnlyProperties": ["/properties/Arn", "/properties/Label"],
   "replacementStrategy": "delete_then_create",
-  "additionalProperties": false,
-  "$hash": "b2d4837acc301dd77e33ee7a264954920e2692d9"
+  "required": ["ResourceTypes", "SinkIdentifier"],
+  "tagging": {
+    "cloudFormationSystemTags": false,
+    "tagOnCreate": true,
+    "tagUpdatable": true,
+    "taggable": true
+  },
+  "typeName": "AWS::Oam::Link",
+  "writeOnlyProperties": ["/properties/LabelTemplate"]
 }

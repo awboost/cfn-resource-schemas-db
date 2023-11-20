@@ -1,79 +1,30 @@
 {
-  "typeName": "AWS::IoT::ScheduledAudit",
-  "description": "Scheduled audits can be used to specify the checks you want to perform during an audit and how often the audit should be run.",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-iot.git",
+  "$hash": "d2d51b706b13ee82f05dcb5759d9212bf949389d",
+  "additionalProperties": false,
+  "createOnlyProperties": ["/properties/ScheduledAuditName"],
   "definitions": {
     "Tag": {
+      "additionalProperties": false,
       "description": "A key-value pair to associate with a resource.",
-      "type": "object",
       "properties": {
         "Key": {
-          "type": "string",
           "description": "The tag's key.",
+          "maxLength": 128,
           "minLength": 1,
-          "maxLength": 128
+          "type": "string"
         },
         "Value": {
-          "type": "string",
           "description": "The tag's value.",
+          "maxLength": 256,
           "minLength": 1,
-          "maxLength": 256
+          "type": "string"
         }
       },
       "required": ["Value", "Key"],
-      "additionalProperties": false
+      "type": "object"
     }
   },
-  "properties": {
-    "ScheduledAuditName": {
-      "description": "The name you want to give to the scheduled audit.",
-      "type": "string",
-      "pattern": "[a-zA-Z0-9:_-]+",
-      "minLength": 1,
-      "maxLength": 128
-    },
-    "Frequency": {
-      "description": "How often the scheduled audit takes place. Can be one of DAILY, WEEKLY, BIWEEKLY, or MONTHLY.",
-      "type": "string",
-      "enum": ["DAILY", "WEEKLY", "BIWEEKLY", "MONTHLY"]
-    },
-    "DayOfMonth": {
-      "description": "The day of the month on which the scheduled audit takes place. Can be 1 through 31 or LAST. This field is required if the frequency parameter is set to MONTHLY.",
-      "type": "string",
-      "pattern": "^([1-9]|[12][0-9]|3[01])$|^LAST$|^UNSET_VALUE$"
-    },
-    "DayOfWeek": {
-      "description": "The day of the week on which the scheduled audit takes place. Can be one of SUN, MON, TUE,WED, THU, FRI, or SAT. This field is required if the frequency parameter is set to WEEKLY or BIWEEKLY.",
-      "type": "string",
-      "enum": ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT", "UNSET_VALUE"]
-    },
-    "TargetCheckNames": {
-      "description": "Which checks are performed during the scheduled audit. Checks must be enabled for your account.",
-      "type": "array",
-      "uniqueItems": true,
-      "insertionOrder": false,
-      "items": { "type": "string" }
-    },
-    "ScheduledAuditArn": {
-      "description": "The ARN (Amazon resource name) of the scheduled audit.",
-      "type": "string",
-      "minLength": 20,
-      "maxLength": 2048
-    },
-    "Tags": {
-      "type": "array",
-      "maxItems": 50,
-      "uniqueItems": true,
-      "insertionOrder": false,
-      "description": "An array of key-value pairs to apply to this resource.",
-      "items": { "$ref": "#/definitions/Tag" }
-    }
-  },
-  "additionalProperties": false,
-  "primaryIdentifier": ["/properties/ScheduledAuditName"],
-  "required": ["Frequency", "TargetCheckNames"],
-  "createOnlyProperties": ["/properties/ScheduledAuditName"],
-  "readOnlyProperties": ["/properties/ScheduledAuditArn"],
+  "description": "Scheduled audits can be used to specify the checks you want to perform during an audit and how often the audit should be run.",
   "handlers": {
     "create": {
       "permissions": [
@@ -82,6 +33,10 @@
         "iot:TagResource"
       ]
     },
+    "delete": {
+      "permissions": ["iot:DescribeScheduledAudit", "iot:DeleteScheduledAudit"]
+    },
+    "list": { "permissions": ["iot:ListScheduledAudits"] },
     "read": {
       "permissions": ["iot:DescribeScheduledAudit", "iot:ListTagsForResource"]
     },
@@ -92,11 +47,56 @@
         "iot:UntagResource",
         "iot:TagResource"
       ]
-    },
-    "delete": {
-      "permissions": ["iot:DescribeScheduledAudit", "iot:DeleteScheduledAudit"]
-    },
-    "list": { "permissions": ["iot:ListScheduledAudits"] }
+    }
   },
-  "$hash": "d2d51b706b13ee82f05dcb5759d9212bf949389d"
+  "primaryIdentifier": ["/properties/ScheduledAuditName"],
+  "properties": {
+    "DayOfMonth": {
+      "description": "The day of the month on which the scheduled audit takes place. Can be 1 through 31 or LAST. This field is required if the frequency parameter is set to MONTHLY.",
+      "pattern": "^([1-9]|[12][0-9]|3[01])$|^LAST$|^UNSET_VALUE$",
+      "type": "string"
+    },
+    "DayOfWeek": {
+      "description": "The day of the week on which the scheduled audit takes place. Can be one of SUN, MON, TUE,WED, THU, FRI, or SAT. This field is required if the frequency parameter is set to WEEKLY or BIWEEKLY.",
+      "enum": ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT", "UNSET_VALUE"],
+      "type": "string"
+    },
+    "Frequency": {
+      "description": "How often the scheduled audit takes place. Can be one of DAILY, WEEKLY, BIWEEKLY, or MONTHLY.",
+      "enum": ["DAILY", "WEEKLY", "BIWEEKLY", "MONTHLY"],
+      "type": "string"
+    },
+    "ScheduledAuditArn": {
+      "description": "The ARN (Amazon resource name) of the scheduled audit.",
+      "maxLength": 2048,
+      "minLength": 20,
+      "type": "string"
+    },
+    "ScheduledAuditName": {
+      "description": "The name you want to give to the scheduled audit.",
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "[a-zA-Z0-9:_-]+",
+      "type": "string"
+    },
+    "Tags": {
+      "description": "An array of key-value pairs to apply to this resource.",
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/Tag" },
+      "maxItems": 50,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "TargetCheckNames": {
+      "description": "Which checks are performed during the scheduled audit. Checks must be enabled for your account.",
+      "insertionOrder": false,
+      "items": { "type": "string" },
+      "type": "array",
+      "uniqueItems": true
+    }
+  },
+  "readOnlyProperties": ["/properties/ScheduledAuditArn"],
+  "required": ["Frequency", "TargetCheckNames"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-iot.git",
+  "typeName": "AWS::IoT::ScheduledAudit"
 }

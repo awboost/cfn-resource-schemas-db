@@ -1,90 +1,28 @@
 {
-  "typeName": "AWS::VpcLattice::Service",
-  "description": "A service is any software application that can run on instances containers, or serverless functions within an account or virtual private cloud (VPC).",
+  "$hash": "ea37f6075bd3bbd09393b47cb7b049e2e0b83d9e",
+  "additionalIdentifiers": [["/properties/Id"], ["/properties/Name"]],
   "additionalProperties": false,
+  "createOnlyProperties": ["/properties/Name", "/properties/CustomDomainName"],
   "definitions": {
     "DnsEntry": {
-      "type": "object",
       "additionalProperties": false,
       "properties": {
         "DomainName": { "type": "string" },
         "HostedZoneId": { "type": "string" }
-      }
+      },
+      "type": "object"
     },
     "Tag": {
-      "type": "object",
       "additionalProperties": false,
       "properties": {
-        "Key": { "type": "string", "minLength": 1, "maxLength": 128 },
-        "Value": { "type": "string", "minLength": 1, "maxLength": 256 }
+        "Key": { "maxLength": 128, "minLength": 1, "type": "string" },
+        "Value": { "maxLength": 256, "minLength": 1, "type": "string" }
       },
-      "required": ["Key", "Value"]
+      "required": ["Key", "Value"],
+      "type": "object"
     }
   },
-  "properties": {
-    "Arn": {
-      "type": "string",
-      "maxLength": 2048,
-      "minLength": 20,
-      "pattern": "^arn:[a-z0-9\\-]+:vpc-lattice:[a-zA-Z0-9\\-]+:\\d{12}:service/svc-[0-9a-z]{17}$"
-    },
-    "AuthType": {
-      "type": "string",
-      "default": "NONE",
-      "enum": ["NONE", "AWS_IAM"]
-    },
-    "CreatedAt": { "type": "string" },
-    "DnsEntry": { "$ref": "#/definitions/DnsEntry" },
-    "Id": {
-      "type": "string",
-      "maxLength": 21,
-      "minLength": 21,
-      "pattern": "^svc-[0-9a-z]{17}$"
-    },
-    "LastUpdatedAt": { "type": "string" },
-    "Name": {
-      "type": "string",
-      "maxLength": 40,
-      "minLength": 3,
-      "pattern": "^(?!svc-)(?![-])(?!.*[-]$)(?!.*[-]{2})[a-z0-9-]+$"
-    },
-    "Status": {
-      "type": "string",
-      "enum": [
-        "ACTIVE",
-        "CREATE_IN_PROGRESS",
-        "DELETE_IN_PROGRESS",
-        "CREATE_FAILED",
-        "DELETE_FAILED"
-      ]
-    },
-    "CertificateArn": {
-      "type": "string",
-      "maxLength": 2048,
-      "pattern": "^(arn(:[a-z0-9]+([.-][a-z0-9]+)*){2}(:([a-z0-9]+([.-][a-z0-9]+)*)?){2}:certificate/[0-9a-z-]+)?$"
-    },
-    "CustomDomainName": { "type": "string", "maxLength": 255, "minLength": 3 },
-    "Tags": {
-      "type": "array",
-      "insertionOrder": false,
-      "uniqueItems": true,
-      "minItems": 0,
-      "maxItems": 50,
-      "items": { "$ref": "#/definitions/Tag" }
-    }
-  },
-  "readOnlyProperties": [
-    "/properties/Arn",
-    "/properties/CreatedAt",
-    "/properties/DnsEntry/DomainName",
-    "/properties/DnsEntry/HostedZoneId",
-    "/properties/Id",
-    "/properties/LastUpdatedAt",
-    "/properties/Status"
-  ],
-  "createOnlyProperties": ["/properties/Name", "/properties/CustomDomainName"],
-  "primaryIdentifier": ["/properties/Arn"],
-  "additionalIdentifiers": [["/properties/Id"], ["/properties/Name"]],
+  "description": "A service is any software application that can run on instances containers, or serverless functions within an account or virtual private cloud (VPC).",
   "handlers": {
     "create": {
       "permissions": [
@@ -97,6 +35,10 @@
         "iam:CreateServiceLinkedRole"
       ]
     },
+    "delete": {
+      "permissions": ["vpc-lattice:DeleteService", "vpc-lattice:GetService"]
+    },
+    "list": { "permissions": ["vpc-lattice:ListServices"] },
     "read": {
       "permissions": [
         "vpc-lattice:GetService",
@@ -111,18 +53,76 @@
         "vpc-lattice:GetService",
         "vpc-lattice:ListTagsForResource"
       ]
-    },
-    "delete": {
-      "permissions": ["vpc-lattice:DeleteService", "vpc-lattice:GetService"]
-    },
-    "list": { "permissions": ["vpc-lattice:ListServices"] }
+    }
   },
+  "primaryIdentifier": ["/properties/Arn"],
+  "properties": {
+    "Arn": {
+      "maxLength": 2048,
+      "minLength": 20,
+      "pattern": "^arn:[a-z0-9\\-]+:vpc-lattice:[a-zA-Z0-9\\-]+:\\d{12}:service/svc-[0-9a-z]{17}$",
+      "type": "string"
+    },
+    "AuthType": {
+      "default": "NONE",
+      "enum": ["NONE", "AWS_IAM"],
+      "type": "string"
+    },
+    "CertificateArn": {
+      "maxLength": 2048,
+      "pattern": "^(arn(:[a-z0-9]+([.-][a-z0-9]+)*){2}(:([a-z0-9]+([.-][a-z0-9]+)*)?){2}:certificate/[0-9a-z-]+)?$",
+      "type": "string"
+    },
+    "CreatedAt": { "type": "string" },
+    "CustomDomainName": { "maxLength": 255, "minLength": 3, "type": "string" },
+    "DnsEntry": { "$ref": "#/definitions/DnsEntry" },
+    "Id": {
+      "maxLength": 21,
+      "minLength": 21,
+      "pattern": "^svc-[0-9a-z]{17}$",
+      "type": "string"
+    },
+    "LastUpdatedAt": { "type": "string" },
+    "Name": {
+      "maxLength": 40,
+      "minLength": 3,
+      "pattern": "^(?!svc-)(?![-])(?!.*[-]$)(?!.*[-]{2})[a-z0-9-]+$",
+      "type": "string"
+    },
+    "Status": {
+      "enum": [
+        "ACTIVE",
+        "CREATE_IN_PROGRESS",
+        "DELETE_IN_PROGRESS",
+        "CREATE_FAILED",
+        "DELETE_FAILED"
+      ],
+      "type": "string"
+    },
+    "Tags": {
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/Tag" },
+      "maxItems": 50,
+      "minItems": 0,
+      "type": "array",
+      "uniqueItems": true
+    }
+  },
+  "readOnlyProperties": [
+    "/properties/Arn",
+    "/properties/CreatedAt",
+    "/properties/DnsEntry/DomainName",
+    "/properties/DnsEntry/HostedZoneId",
+    "/properties/Id",
+    "/properties/LastUpdatedAt",
+    "/properties/Status"
+  ],
   "tagging": {
-    "taggable": true,
-    "tagOnCreate": true,
-    "tagUpdatable": true,
     "cloudFormationSystemTags": true,
-    "tagProperty": "/properties/Tags"
+    "tagOnCreate": true,
+    "tagProperty": "/properties/Tags",
+    "tagUpdatable": true,
+    "taggable": true
   },
-  "$hash": "ea37f6075bd3bbd09393b47cb7b049e2e0b83d9e"
+  "typeName": "AWS::VpcLattice::Service"
 }

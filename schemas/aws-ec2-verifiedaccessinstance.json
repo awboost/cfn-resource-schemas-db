@@ -1,101 +1,34 @@
 {
-  "typeName": "AWS::EC2::VerifiedAccessInstance",
-  "description": "The AWS::EC2::VerifiedAccessInstance resource creates an AWS EC2 Verified Access Instance.",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-ec2-verified-access.aws-ec2-verifiedaccessinstance",
-  "properties": {
-    "VerifiedAccessInstanceId": {
-      "description": "The ID of the AWS Verified Access instance.",
-      "type": "string"
-    },
-    "VerifiedAccessTrustProviders": {
-      "description": "AWS Verified Access trust providers.",
-      "type": "array",
-      "uniqueItems": true,
-      "insertionOrder": false,
-      "items": { "$ref": "#/definitions/VerifiedAccessTrustProvider" }
-    },
-    "VerifiedAccessTrustProviderIds": {
-      "description": "The IDs of the AWS Verified Access trust providers.",
-      "type": "array",
-      "uniqueItems": true,
-      "insertionOrder": false,
-      "items": { "$ref": "#/definitions/VerifiedAccessTrustProviderId" }
-    },
-    "CreationTime": {
-      "description": "Time this Verified Access Instance was created.",
-      "type": "string"
-    },
-    "LastUpdatedTime": {
-      "description": "Time this Verified Access Instance was last updated.",
-      "type": "string"
-    },
-    "Description": {
-      "description": "A description for the AWS Verified Access instance.",
-      "type": "string"
-    },
-    "LoggingConfigurations": {
-      "description": "The configuration options for AWS Verified Access instances.",
-      "$ref": "#/definitions/VerifiedAccessLogs"
-    },
-    "Tags": {
-      "description": "An array of key-value pairs to apply to this resource.",
-      "type": "array",
-      "uniqueItems": true,
-      "insertionOrder": false,
-      "items": { "$ref": "#/definitions/Tag" }
-    },
-    "FipsEnabled": {
-      "description": "Indicates whether FIPS is enabled",
-      "type": "boolean"
-    }
-  },
+  "$hash": "c6e8a7cad3671229d48ea4858bf67add3e053a81",
+  "additionalProperties": false,
   "definitions": {
-    "VerifiedAccessTrustProvider": {
-      "description": "A Verified Access Trust Provider.",
-      "type": "object",
+    "Tag": {
+      "additionalProperties": false,
+      "description": "A key-value pair to associate with a resource.",
       "properties": {
-        "VerifiedAccessTrustProviderId": {
-          "description": "The ID of the trust provider.",
+        "Key": {
+          "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+          "maxLength": 128,
+          "minLength": 1,
           "type": "string"
         },
-        "Description": {
-          "description": "The description of trust provider.",
-          "type": "string"
-        },
-        "TrustProviderType": {
-          "description": "The type of trust provider (user- or device-based).",
-          "type": "string"
-        },
-        "UserTrustProviderType": {
-          "description": "The type of user-based trust provider.",
-          "type": "string"
-        },
-        "DeviceTrustProviderType": {
-          "description": "The type of device-based trust provider.",
+        "Value": {
+          "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+          "maxLength": 256,
+          "minLength": 0,
           "type": "string"
         }
       },
-      "additionalProperties": false
-    },
-    "VerifiedAccessTrustProviderId": {
-      "description": "The ID of the AWS Verified Access trust provider.",
-      "type": "string"
+      "required": ["Key", "Value"],
+      "type": "object"
     },
     "VerifiedAccessLogs": {
+      "additionalProperties": false,
       "description": "The configuration options for AWS Verified Access instances.",
-      "type": "object",
       "properties": {
-        "LogVersion": {
-          "description": "Select log version for Verified Access logs.",
-          "type": "string"
-        },
-        "IncludeTrustContext": {
-          "description": "Include claims from trust providers in Verified Access logs.",
-          "type": "boolean"
-        },
         "CloudWatchLogs": {
+          "additionalProperties": false,
           "description": "Sends Verified Access logs to CloudWatch Logs.",
-          "type": "object",
           "properties": {
             "Enabled": {
               "description": "Indicates whether logging is enabled.",
@@ -106,31 +39,35 @@
               "type": "string"
             }
           },
-          "additionalProperties": false
+          "type": "object"
+        },
+        "IncludeTrustContext": {
+          "description": "Include claims from trust providers in Verified Access logs.",
+          "type": "boolean"
         },
         "KinesisDataFirehose": {
+          "additionalProperties": false,
           "description": "Sends Verified Access logs to Kinesis.",
-          "type": "object",
           "properties": {
-            "Enabled": {
-              "description": "Indicates whether logging is enabled.",
-              "type": "boolean"
-            },
             "DeliveryStream": {
               "description": "The ID of the delivery stream.",
               "type": "string"
-            }
-          },
-          "additionalProperties": false
-        },
-        "S3": {
-          "description": "Sends Verified Access logs to Amazon S3.",
-          "type": "object",
-          "properties": {
+            },
             "Enabled": {
               "description": "Indicates whether logging is enabled.",
               "type": "boolean"
-            },
+            }
+          },
+          "type": "object"
+        },
+        "LogVersion": {
+          "description": "Select log version for Verified Access logs.",
+          "type": "string"
+        },
+        "S3": {
+          "additionalProperties": false,
+          "description": "Sends Verified Access logs to Amazon S3.",
+          "properties": {
             "BucketName": {
               "description": "The bucket name.",
               "type": "string"
@@ -139,48 +76,50 @@
               "description": "The ID of the AWS account that owns the Amazon S3 bucket.",
               "type": "string"
             },
+            "Enabled": {
+              "description": "Indicates whether logging is enabled.",
+              "type": "boolean"
+            },
             "Prefix": { "description": "The bucket prefix.", "type": "string" }
           },
-          "additionalProperties": false
+          "type": "object"
         }
       },
-      "additionalProperties": false
+      "type": "object"
     },
-    "Tag": {
-      "description": "A key-value pair to associate with a resource.",
-      "type": "object",
+    "VerifiedAccessTrustProvider": {
+      "additionalProperties": false,
+      "description": "A Verified Access Trust Provider.",
       "properties": {
-        "Key": {
-          "type": "string",
-          "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
-          "minLength": 1,
-          "maxLength": 128
+        "Description": {
+          "description": "The description of trust provider.",
+          "type": "string"
         },
-        "Value": {
-          "type": "string",
-          "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
-          "minLength": 0,
-          "maxLength": 256
+        "DeviceTrustProviderType": {
+          "description": "The type of device-based trust provider.",
+          "type": "string"
+        },
+        "TrustProviderType": {
+          "description": "The type of trust provider (user- or device-based).",
+          "type": "string"
+        },
+        "UserTrustProviderType": {
+          "description": "The type of user-based trust provider.",
+          "type": "string"
+        },
+        "VerifiedAccessTrustProviderId": {
+          "description": "The ID of the trust provider.",
+          "type": "string"
         }
       },
-      "required": ["Key", "Value"],
-      "additionalProperties": false
+      "type": "object"
+    },
+    "VerifiedAccessTrustProviderId": {
+      "description": "The ID of the AWS Verified Access trust provider.",
+      "type": "string"
     }
   },
-  "additionalProperties": false,
-  "readOnlyProperties": [
-    "/properties/VerifiedAccessInstanceId",
-    "/properties/CreationTime",
-    "/properties/LastUpdatedTime"
-  ],
-  "primaryIdentifier": ["/properties/VerifiedAccessInstanceId"],
-  "tagging": {
-    "taggable": true,
-    "tagOnCreate": true,
-    "tagUpdatable": true,
-    "cloudFormationSystemTags": false,
-    "tagProperty": "/properties/Tags"
-  },
+  "description": "The AWS::EC2::VerifiedAccessInstance resource creates an AWS EC2 Verified Access Instance.",
   "handlers": {
     "create": {
       "permissions": [
@@ -209,6 +148,28 @@
         "logs:DescribeResourcePolicies",
         "iam:CreateServiceLinkedRole",
         "verified-access:AllowVerifiedAccess"
+      ]
+    },
+    "delete": {
+      "permissions": [
+        "ec2:DeleteVerifiedAccessInstance",
+        "ec2:DeleteTags",
+        "ec2:DescribeVerifiedAccessInstances",
+        "ec2:DescribeVerifiedAccessInstanceLoggingConfigurations",
+        "ec2:DetachVerifiedAccessTrustProvider",
+        "ec2:GetVerifiedAccessGroupPolicy",
+        "ec2:DescribeTags",
+        "logs:ListLogDeliveries",
+        "logs:GetLogDelivery",
+        "logs:DeleteLogDelivery"
+      ]
+    },
+    "list": {
+      "permissions": [
+        "ec2:DescribeVerifiedAccessInstances",
+        "ec2:DescribeTags",
+        "logs:ListLogDeliveries",
+        "logs:GetLogDelivery"
       ]
     },
     "read": {
@@ -250,29 +211,68 @@
         "iam:CreateServiceLinkedRole",
         "logs:DescribeResourcePolicies"
       ]
-    },
-    "delete": {
-      "permissions": [
-        "ec2:DeleteVerifiedAccessInstance",
-        "ec2:DeleteTags",
-        "ec2:DescribeVerifiedAccessInstances",
-        "ec2:DescribeVerifiedAccessInstanceLoggingConfigurations",
-        "ec2:DetachVerifiedAccessTrustProvider",
-        "ec2:GetVerifiedAccessGroupPolicy",
-        "ec2:DescribeTags",
-        "logs:ListLogDeliveries",
-        "logs:GetLogDelivery",
-        "logs:DeleteLogDelivery"
-      ]
-    },
-    "list": {
-      "permissions": [
-        "ec2:DescribeVerifiedAccessInstances",
-        "ec2:DescribeTags",
-        "logs:ListLogDeliveries",
-        "logs:GetLogDelivery"
-      ]
     }
   },
-  "$hash": "c6e8a7cad3671229d48ea4858bf67add3e053a81"
+  "primaryIdentifier": ["/properties/VerifiedAccessInstanceId"],
+  "properties": {
+    "CreationTime": {
+      "description": "Time this Verified Access Instance was created.",
+      "type": "string"
+    },
+    "Description": {
+      "description": "A description for the AWS Verified Access instance.",
+      "type": "string"
+    },
+    "FipsEnabled": {
+      "description": "Indicates whether FIPS is enabled",
+      "type": "boolean"
+    },
+    "LastUpdatedTime": {
+      "description": "Time this Verified Access Instance was last updated.",
+      "type": "string"
+    },
+    "LoggingConfigurations": {
+      "$ref": "#/definitions/VerifiedAccessLogs",
+      "description": "The configuration options for AWS Verified Access instances."
+    },
+    "Tags": {
+      "description": "An array of key-value pairs to apply to this resource.",
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/Tag" },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "VerifiedAccessInstanceId": {
+      "description": "The ID of the AWS Verified Access instance.",
+      "type": "string"
+    },
+    "VerifiedAccessTrustProviderIds": {
+      "description": "The IDs of the AWS Verified Access trust providers.",
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/VerifiedAccessTrustProviderId" },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "VerifiedAccessTrustProviders": {
+      "description": "AWS Verified Access trust providers.",
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/VerifiedAccessTrustProvider" },
+      "type": "array",
+      "uniqueItems": true
+    }
+  },
+  "readOnlyProperties": [
+    "/properties/VerifiedAccessInstanceId",
+    "/properties/CreationTime",
+    "/properties/LastUpdatedTime"
+  ],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-ec2-verified-access.aws-ec2-verifiedaccessinstance",
+  "tagging": {
+    "cloudFormationSystemTags": false,
+    "tagOnCreate": true,
+    "tagProperty": "/properties/Tags",
+    "tagUpdatable": true,
+    "taggable": true
+  },
+  "typeName": "AWS::EC2::VerifiedAccessInstance"
 }

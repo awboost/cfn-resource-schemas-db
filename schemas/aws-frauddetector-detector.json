@@ -1,31 +1,135 @@
 {
-  "typeName": "AWS::FraudDetector::Detector",
-  "description": "A resource schema for a Detector in Amazon Fraud Detector.",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+  "$hash": "dbb9da0e587dc265b1ae14c021c78d4c56ca879e",
+  "additionalProperties": false,
+  "createOnlyProperties": ["/properties/DetectorId"],
   "definitions": {
-    "Tag": {
-      "type": "object",
-      "properties": {
-        "Key": { "type": "string", "minLength": 1, "maxLength": 128 },
-        "Value": { "type": "string", "minLength": 0, "maxLength": 256 }
-      },
-      "required": ["Key", "Value"],
-      "additionalProperties": false
-    },
-    "EventVariable": {
-      "type": "object",
+    "EntityType": {
+      "additionalProperties": false,
       "properties": {
         "Arn": { "type": "string" },
+        "CreatedTime": {
+          "description": "The time when the entity type was created.",
+          "type": "string"
+        },
+        "Description": {
+          "description": "The description.",
+          "maxLength": 256,
+          "minLength": 1,
+          "type": "string"
+        },
         "Inline": { "type": "boolean" },
+        "LastUpdatedTime": {
+          "description": "The time when the entity type was last updated.",
+          "type": "string"
+        },
         "Name": { "type": "string" },
-        "DataSource": { "type": "string", "enum": ["EVENT"] },
+        "Tags": {
+          "description": "Tags associated with this entity type.",
+          "insertionOrder": false,
+          "items": { "$ref": "#/definitions/Tag" },
+          "maxItems": 200,
+          "type": "array",
+          "uniqueItems": false
+        }
+      },
+      "type": "object"
+    },
+    "EventType": {
+      "additionalProperties": false,
+      "properties": {
+        "Arn": {
+          "description": "The ARN of the event type.",
+          "type": "string"
+        },
+        "CreatedTime": {
+          "description": "The time when the event type was created.",
+          "type": "string"
+        },
+        "Description": {
+          "description": "The description of the event type.",
+          "maxLength": 128,
+          "minLength": 1,
+          "type": "string"
+        },
+        "EntityTypes": {
+          "insertionOrder": false,
+          "items": { "$ref": "#/definitions/EntityType" },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": false
+        },
+        "EventVariables": {
+          "insertionOrder": false,
+          "items": { "$ref": "#/definitions/EventVariable" },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": false
+        },
+        "Inline": { "type": "boolean" },
+        "Labels": {
+          "insertionOrder": false,
+          "items": { "$ref": "#/definitions/Label" },
+          "minItems": 2,
+          "type": "array",
+          "uniqueItems": false
+        },
+        "LastUpdatedTime": {
+          "description": "The time when the event type was last updated.",
+          "type": "string"
+        },
+        "Name": {
+          "description": "The name for the event type",
+          "maxLength": 64,
+          "minLength": 1,
+          "pattern": "^[0-9a-z_-]+$",
+          "type": "string"
+        },
+        "Tags": {
+          "description": "Tags associated with this event type.",
+          "insertionOrder": false,
+          "items": { "$ref": "#/definitions/Tag" },
+          "maxItems": 200,
+          "type": "array",
+          "uniqueItems": false
+        }
+      },
+      "type": "object"
+    },
+    "EventVariable": {
+      "additionalProperties": false,
+      "properties": {
+        "Arn": { "type": "string" },
+        "CreatedTime": {
+          "description": "The time when the event variable was created.",
+          "type": "string"
+        },
+        "DataSource": { "enum": ["EVENT"], "type": "string" },
         "DataType": {
-          "type": "string",
-          "enum": ["STRING", "INTEGER", "FLOAT", "BOOLEAN"]
+          "enum": ["STRING", "INTEGER", "FLOAT", "BOOLEAN"],
+          "type": "string"
         },
         "DefaultValue": { "type": "string" },
+        "Description": {
+          "description": "The description.",
+          "maxLength": 256,
+          "minLength": 1,
+          "type": "string"
+        },
+        "Inline": { "type": "boolean" },
+        "LastUpdatedTime": {
+          "description": "The time when the event variable was last updated.",
+          "type": "string"
+        },
+        "Name": { "type": "string" },
+        "Tags": {
+          "description": "Tags associated with this event variable.",
+          "insertionOrder": false,
+          "items": { "$ref": "#/definitions/Tag" },
+          "maxItems": 200,
+          "type": "array",
+          "uniqueItems": false
+        },
         "VariableType": {
-          "type": "string",
           "enum": [
             "AUTH_CODE",
             "AVS",
@@ -60,329 +164,132 @@
             "SHIPPING_STATE",
             "SHIPPING_ZIP",
             "USERAGENT"
-          ]
-        },
-        "Description": {
-          "description": "The description.",
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 256
-        },
-        "Tags": {
-          "description": "Tags associated with this event variable.",
-          "type": "array",
-          "uniqueItems": false,
-          "insertionOrder": false,
-          "maxItems": 200,
-          "items": { "$ref": "#/definitions/Tag" }
-        },
-        "CreatedTime": {
-          "description": "The time when the event variable was created.",
-          "type": "string"
-        },
-        "LastUpdatedTime": {
-          "description": "The time when the event variable was last updated.",
+          ],
           "type": "string"
         }
       },
-      "additionalProperties": false
+      "type": "object"
     },
     "Label": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "Arn": { "type": "string" },
-        "Inline": { "type": "boolean" },
-        "Name": { "type": "string" },
-        "Description": {
-          "description": "The description.",
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 256
-        },
-        "Tags": {
-          "description": "Tags associated with this label.",
-          "type": "array",
-          "uniqueItems": false,
-          "insertionOrder": false,
-          "maxItems": 200,
-          "items": { "$ref": "#/definitions/Tag" }
-        },
         "CreatedTime": {
           "description": "The time when the label was created.",
           "type": "string"
         },
+        "Description": {
+          "description": "The description.",
+          "maxLength": 256,
+          "minLength": 1,
+          "type": "string"
+        },
+        "Inline": { "type": "boolean" },
         "LastUpdatedTime": {
           "description": "The time when the label was last updated.",
           "type": "string"
+        },
+        "Name": { "type": "string" },
+        "Tags": {
+          "description": "Tags associated with this label.",
+          "insertionOrder": false,
+          "items": { "$ref": "#/definitions/Tag" },
+          "maxItems": 200,
+          "type": "array",
+          "uniqueItems": false
         }
       },
-      "additionalProperties": false
+      "type": "object"
+    },
+    "Model": {
+      "additionalProperties": false,
+      "description": "A model to associate with a detector.",
+      "properties": { "Arn": { "type": "string" } },
+      "type": "object"
     },
     "Outcome": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "Arn": { "type": "string" },
-        "Inline": { "type": "boolean" },
-        "Name": { "type": "string" },
-        "Description": {
-          "description": "The description.",
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 256
-        },
-        "Tags": {
-          "description": "Tags associated with this outcome.",
-          "type": "array",
-          "uniqueItems": false,
-          "insertionOrder": false,
-          "maxItems": 200,
-          "items": { "$ref": "#/definitions/Tag" }
-        },
         "CreatedTime": {
           "description": "The time when the outcome was created.",
           "type": "string"
         },
+        "Description": {
+          "description": "The description.",
+          "maxLength": 256,
+          "minLength": 1,
+          "type": "string"
+        },
+        "Inline": { "type": "boolean" },
         "LastUpdatedTime": {
           "description": "The time when the outcome was last updated.",
           "type": "string"
+        },
+        "Name": { "type": "string" },
+        "Tags": {
+          "description": "Tags associated with this outcome.",
+          "insertionOrder": false,
+          "items": { "$ref": "#/definitions/Tag" },
+          "maxItems": 200,
+          "type": "array",
+          "uniqueItems": false
         }
       },
-      "additionalProperties": false
+      "type": "object"
     },
     "Rule": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
-        "RuleId": { "type": "string" },
-        "RuleVersion": { "type": "string" },
+        "Arn": { "type": "string" },
+        "CreatedTime": {
+          "description": "The time when the event type was created.",
+          "type": "string"
+        },
+        "Description": {
+          "description": "The description.",
+          "maxLength": 256,
+          "minLength": 1,
+          "type": "string"
+        },
         "DetectorId": { "type": "string" },
         "Expression": { "type": "string" },
-        "Language": { "type": "string", "enum": ["DETECTORPL"] },
+        "Language": { "enum": ["DETECTORPL"], "type": "string" },
+        "LastUpdatedTime": {
+          "description": "The time when the event type was last updated.",
+          "type": "string"
+        },
         "Outcomes": {
-          "type": "array",
-          "uniqueItems": false,
           "insertionOrder": false,
+          "items": { "$ref": "#/definitions/Outcome" },
           "minItems": 1,
-          "items": { "$ref": "#/definitions/Outcome" }
+          "type": "array",
+          "uniqueItems": false
         },
-        "Arn": { "type": "string" },
-        "Description": {
-          "description": "The description.",
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 256
-        },
+        "RuleId": { "type": "string" },
+        "RuleVersion": { "type": "string" },
         "Tags": {
           "description": "Tags associated with this event type.",
-          "type": "array",
-          "uniqueItems": false,
           "insertionOrder": false,
+          "items": { "$ref": "#/definitions/Tag" },
           "maxItems": 200,
-          "items": { "$ref": "#/definitions/Tag" }
-        },
-        "CreatedTime": {
-          "description": "The time when the event type was created.",
-          "type": "string"
-        },
-        "LastUpdatedTime": {
-          "description": "The time when the event type was last updated.",
-          "type": "string"
+          "type": "array",
+          "uniqueItems": false
         }
       },
-      "additionalProperties": false
+      "type": "object"
     },
-    "EntityType": {
-      "type": "object",
+    "Tag": {
+      "additionalProperties": false,
       "properties": {
-        "Arn": { "type": "string" },
-        "Inline": { "type": "boolean" },
-        "Name": { "type": "string" },
-        "Description": {
-          "description": "The description.",
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 256
-        },
-        "Tags": {
-          "description": "Tags associated with this entity type.",
-          "type": "array",
-          "uniqueItems": false,
-          "insertionOrder": false,
-          "maxItems": 200,
-          "items": { "$ref": "#/definitions/Tag" }
-        },
-        "CreatedTime": {
-          "description": "The time when the entity type was created.",
-          "type": "string"
-        },
-        "LastUpdatedTime": {
-          "description": "The time when the entity type was last updated.",
-          "type": "string"
-        }
+        "Key": { "maxLength": 128, "minLength": 1, "type": "string" },
+        "Value": { "maxLength": 256, "minLength": 0, "type": "string" }
       },
-      "additionalProperties": false
-    },
-    "EventType": {
-      "type": "object",
-      "properties": {
-        "Name": {
-          "description": "The name for the event type",
-          "type": "string",
-          "pattern": "^[0-9a-z_-]+$",
-          "minLength": 1,
-          "maxLength": 64
-        },
-        "Inline": { "type": "boolean" },
-        "Tags": {
-          "description": "Tags associated with this event type.",
-          "type": "array",
-          "uniqueItems": false,
-          "insertionOrder": false,
-          "maxItems": 200,
-          "items": { "$ref": "#/definitions/Tag" }
-        },
-        "Description": {
-          "description": "The description of the event type.",
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 128
-        },
-        "EventVariables": {
-          "type": "array",
-          "uniqueItems": false,
-          "insertionOrder": false,
-          "minItems": 1,
-          "items": { "$ref": "#/definitions/EventVariable" }
-        },
-        "Labels": {
-          "type": "array",
-          "uniqueItems": false,
-          "insertionOrder": false,
-          "minItems": 2,
-          "items": { "$ref": "#/definitions/Label" }
-        },
-        "EntityTypes": {
-          "type": "array",
-          "uniqueItems": false,
-          "insertionOrder": false,
-          "minItems": 1,
-          "items": { "$ref": "#/definitions/EntityType" }
-        },
-        "Arn": {
-          "description": "The ARN of the event type.",
-          "type": "string"
-        },
-        "CreatedTime": {
-          "description": "The time when the event type was created.",
-          "type": "string"
-        },
-        "LastUpdatedTime": {
-          "description": "The time when the event type was last updated.",
-          "type": "string"
-        }
-      },
-      "additionalProperties": false
-    },
-    "Model": {
-      "description": "A model to associate with a detector.",
-      "type": "object",
-      "properties": { "Arn": { "type": "string" } },
-      "additionalProperties": false
+      "required": ["Key", "Value"],
+      "type": "object"
     }
   },
-  "properties": {
-    "DetectorId": {
-      "description": "The ID of the detector",
-      "type": "string",
-      "pattern": "^[0-9a-z_-]+$",
-      "minLength": 1,
-      "maxLength": 64
-    },
-    "DetectorVersionStatus": {
-      "description": "The desired detector version status for the detector",
-      "type": "string",
-      "enum": ["DRAFT", "ACTIVE"]
-    },
-    "DetectorVersionId": {
-      "description": "The active version ID of the detector",
-      "type": "string"
-    },
-    "RuleExecutionMode": {
-      "type": "string",
-      "enum": ["FIRST_MATCHED", "ALL_MATCHED"]
-    },
-    "Tags": {
-      "description": "Tags associated with this detector.",
-      "type": "array",
-      "uniqueItems": false,
-      "insertionOrder": false,
-      "maxItems": 200,
-      "items": { "$ref": "#/definitions/Tag" }
-    },
-    "Description": {
-      "description": "The description of the detector.",
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 128
-    },
-    "Rules": {
-      "type": "array",
-      "uniqueItems": false,
-      "insertionOrder": false,
-      "minItems": 1,
-      "items": { "$ref": "#/definitions/Rule" }
-    },
-    "EventType": {
-      "description": "The event type to associate this detector with.",
-      "$ref": "#/definitions/EventType"
-    },
-    "Arn": { "description": "The ARN of the detector.", "type": "string" },
-    "CreatedTime": {
-      "description": "The time when the detector was created.",
-      "type": "string"
-    },
-    "LastUpdatedTime": {
-      "description": "The time when the detector was last updated.",
-      "type": "string"
-    },
-    "AssociatedModels": {
-      "description": "The models to associate with this detector.",
-      "type": "array",
-      "uniqueItems": false,
-      "insertionOrder": false,
-      "maxItems": 10,
-      "items": { "$ref": "#/definitions/Model" }
-    }
-  },
-  "additionalProperties": false,
-  "required": ["DetectorId", "EventType", "Rules"],
-  "createOnlyProperties": ["/properties/DetectorId"],
-  "readOnlyProperties": [
-    "/properties/Arn",
-    "/properties/DetectorVersionId",
-    "/properties/CreatedTime",
-    "/properties/LastUpdatedTime",
-    "/properties/Rules/*/RuleVersion",
-    "/properties/Rules/*/Arn",
-    "/properties/Rules/*/CreatedTime",
-    "/properties/Rules/*/LastUpdatedTime",
-    "/properties/Rules/*/Outcomes/*/Arn",
-    "/properties/Rules/*/Outcomes/*/CreatedTime",
-    "/properties/Rules/*/Outcomes/*/LastUpdatedTime",
-    "/properties/EventType/Arn",
-    "/properties/EventType/CreatedTime",
-    "/properties/EventType/LastUpdatedTime",
-    "/properties/EventType/EventVariables/*/Arn",
-    "/properties/EventType/EventVariables/*/CreatedTime",
-    "/properties/EventType/EventVariables/*/LastUpdatedTime",
-    "/properties/EventType/Labels/*/Arn",
-    "/properties/EventType/Labels/*/CreatedTime",
-    "/properties/EventType/Labels/*/LastUpdatedTime",
-    "/properties/EventType/EntityTypes/*/Arn",
-    "/properties/EventType/EntityTypes/*/CreatedTime",
-    "/properties/EventType/EntityTypes/*/LastUpdatedTime",
-    "/properties/AssociatedModels/*/Arn"
-  ],
-  "primaryIdentifier": ["/properties/Arn"],
+  "description": "A resource schema for a Detector in Amazon Fraud Detector.",
   "handlers": {
     "create": {
       "permissions": [
@@ -398,6 +305,60 @@
         "frauddetector:DescribeDetector",
         "frauddetector:GetDetectors",
         "frauddetector:GetDetectorVersion",
+        "frauddetector:GetRules",
+        "frauddetector:GetVariables",
+        "frauddetector:GetEventTypes",
+        "frauddetector:GetExternalModels",
+        "frauddetector:GetModelVersion",
+        "frauddetector:GetLabels",
+        "frauddetector:GetOutcomes",
+        "frauddetector:GetEntityTypes",
+        "frauddetector:ListTagsForResource"
+      ]
+    },
+    "delete": {
+      "permissions": [
+        "frauddetector:GetDetectors",
+        "frauddetector:GetDetectorVersion",
+        "frauddetector:DescribeDetector",
+        "frauddetector:GetRules",
+        "frauddetector:GetVariables",
+        "frauddetector:GetEventTypes",
+        "frauddetector:GetLabels",
+        "frauddetector:GetOutcomes",
+        "frauddetector:GetEntityTypes",
+        "frauddetector:DeleteDetector",
+        "frauddetector:DeleteDetectorVersion",
+        "frauddetector:DeleteRule",
+        "frauddetector:DeleteEventType",
+        "frauddetector:DeleteVariable",
+        "frauddetector:DeleteLabel",
+        "frauddetector:DeleteOutcome",
+        "frauddetector:DeleteEntityType",
+        "frauddetector:ListTagsForResource"
+      ]
+    },
+    "list": {
+      "permissions": [
+        "frauddetector:GetDetectors",
+        "frauddetector:GetDetectorVersion",
+        "frauddetector:DescribeDetector",
+        "frauddetector:GetRules",
+        "frauddetector:GetVariables",
+        "frauddetector:GetEventTypes",
+        "frauddetector:GetExternalModels",
+        "frauddetector:GetModelVersion",
+        "frauddetector:GetLabels",
+        "frauddetector:GetOutcomes",
+        "frauddetector:GetEntityTypes",
+        "frauddetector:ListTagsForResource"
+      ]
+    },
+    "read": {
+      "permissions": [
+        "frauddetector:GetDetectors",
+        "frauddetector:GetDetectorVersion",
+        "frauddetector:DescribeDetector",
         "frauddetector:GetRules",
         "frauddetector:GetVariables",
         "frauddetector:GetEventTypes",
@@ -442,61 +403,100 @@
         "frauddetector:TagResource",
         "frauddetector:UntagResource"
       ]
-    },
-    "delete": {
-      "permissions": [
-        "frauddetector:GetDetectors",
-        "frauddetector:GetDetectorVersion",
-        "frauddetector:DescribeDetector",
-        "frauddetector:GetRules",
-        "frauddetector:GetVariables",
-        "frauddetector:GetEventTypes",
-        "frauddetector:GetLabels",
-        "frauddetector:GetOutcomes",
-        "frauddetector:GetEntityTypes",
-        "frauddetector:DeleteDetector",
-        "frauddetector:DeleteDetectorVersion",
-        "frauddetector:DeleteRule",
-        "frauddetector:DeleteEventType",
-        "frauddetector:DeleteVariable",
-        "frauddetector:DeleteLabel",
-        "frauddetector:DeleteOutcome",
-        "frauddetector:DeleteEntityType",
-        "frauddetector:ListTagsForResource"
-      ]
-    },
-    "read": {
-      "permissions": [
-        "frauddetector:GetDetectors",
-        "frauddetector:GetDetectorVersion",
-        "frauddetector:DescribeDetector",
-        "frauddetector:GetRules",
-        "frauddetector:GetVariables",
-        "frauddetector:GetEventTypes",
-        "frauddetector:GetExternalModels",
-        "frauddetector:GetModelVersion",
-        "frauddetector:GetLabels",
-        "frauddetector:GetOutcomes",
-        "frauddetector:GetEntityTypes",
-        "frauddetector:ListTagsForResource"
-      ]
-    },
-    "list": {
-      "permissions": [
-        "frauddetector:GetDetectors",
-        "frauddetector:GetDetectorVersion",
-        "frauddetector:DescribeDetector",
-        "frauddetector:GetRules",
-        "frauddetector:GetVariables",
-        "frauddetector:GetEventTypes",
-        "frauddetector:GetExternalModels",
-        "frauddetector:GetModelVersion",
-        "frauddetector:GetLabels",
-        "frauddetector:GetOutcomes",
-        "frauddetector:GetEntityTypes",
-        "frauddetector:ListTagsForResource"
-      ]
     }
   },
-  "$hash": "dbb9da0e587dc265b1ae14c021c78d4c56ca879e"
+  "primaryIdentifier": ["/properties/Arn"],
+  "properties": {
+    "Arn": { "description": "The ARN of the detector.", "type": "string" },
+    "AssociatedModels": {
+      "description": "The models to associate with this detector.",
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/Model" },
+      "maxItems": 10,
+      "type": "array",
+      "uniqueItems": false
+    },
+    "CreatedTime": {
+      "description": "The time when the detector was created.",
+      "type": "string"
+    },
+    "Description": {
+      "description": "The description of the detector.",
+      "maxLength": 128,
+      "minLength": 1,
+      "type": "string"
+    },
+    "DetectorId": {
+      "description": "The ID of the detector",
+      "maxLength": 64,
+      "minLength": 1,
+      "pattern": "^[0-9a-z_-]+$",
+      "type": "string"
+    },
+    "DetectorVersionId": {
+      "description": "The active version ID of the detector",
+      "type": "string"
+    },
+    "DetectorVersionStatus": {
+      "description": "The desired detector version status for the detector",
+      "enum": ["DRAFT", "ACTIVE"],
+      "type": "string"
+    },
+    "EventType": {
+      "$ref": "#/definitions/EventType",
+      "description": "The event type to associate this detector with."
+    },
+    "LastUpdatedTime": {
+      "description": "The time when the detector was last updated.",
+      "type": "string"
+    },
+    "RuleExecutionMode": {
+      "enum": ["FIRST_MATCHED", "ALL_MATCHED"],
+      "type": "string"
+    },
+    "Rules": {
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/Rule" },
+      "minItems": 1,
+      "type": "array",
+      "uniqueItems": false
+    },
+    "Tags": {
+      "description": "Tags associated with this detector.",
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/Tag" },
+      "maxItems": 200,
+      "type": "array",
+      "uniqueItems": false
+    }
+  },
+  "readOnlyProperties": [
+    "/properties/Arn",
+    "/properties/DetectorVersionId",
+    "/properties/CreatedTime",
+    "/properties/LastUpdatedTime",
+    "/properties/Rules/*/RuleVersion",
+    "/properties/Rules/*/Arn",
+    "/properties/Rules/*/CreatedTime",
+    "/properties/Rules/*/LastUpdatedTime",
+    "/properties/Rules/*/Outcomes/*/Arn",
+    "/properties/Rules/*/Outcomes/*/CreatedTime",
+    "/properties/Rules/*/Outcomes/*/LastUpdatedTime",
+    "/properties/EventType/Arn",
+    "/properties/EventType/CreatedTime",
+    "/properties/EventType/LastUpdatedTime",
+    "/properties/EventType/EventVariables/*/Arn",
+    "/properties/EventType/EventVariables/*/CreatedTime",
+    "/properties/EventType/EventVariables/*/LastUpdatedTime",
+    "/properties/EventType/Labels/*/Arn",
+    "/properties/EventType/Labels/*/CreatedTime",
+    "/properties/EventType/Labels/*/LastUpdatedTime",
+    "/properties/EventType/EntityTypes/*/Arn",
+    "/properties/EventType/EntityTypes/*/CreatedTime",
+    "/properties/EventType/EntityTypes/*/LastUpdatedTime",
+    "/properties/AssociatedModels/*/Arn"
+  ],
+  "required": ["DetectorId", "EventType", "Rules"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+  "typeName": "AWS::FraudDetector::Detector"
 }

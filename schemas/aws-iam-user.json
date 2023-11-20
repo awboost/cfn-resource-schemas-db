@@ -1,63 +1,24 @@
 {
-  "typeName": "AWS::IAM::User",
-  "description": "Resource Type definition for AWS::IAM::User",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-iam.git",
+  "$hash": "caf03f6d075f9bb974766479361299716b85c0dd",
   "additionalProperties": false,
-  "properties": {
-    "Path": {
-      "description": "The path to the user. For more information about paths, see IAM identifiers in the IAM User Guide. The ARN of the policy used to set the permissions boundary for the user.",
-      "type": "string"
-    },
-    "ManagedPolicyArns": {
-      "description": "A list of Amazon Resource Names (ARNs) of the IAM managed policies that you want to attach to the role.",
-      "type": "array",
-      "uniqueItems": true,
-      "insertionOrder": false,
-      "items": { "type": "string" }
-    },
-    "Policies": {
-      "description": "Adds or updates an inline policy document that is embedded in the specified IAM role.",
-      "type": "array",
-      "uniqueItems": false,
-      "insertionOrder": false,
-      "items": { "$ref": "#/definitions/Policy" }
-    },
-    "UserName": {
-      "description": "The friendly name identifying the user.",
-      "type": "string"
-    },
-    "Groups": {
-      "description": "A list of group names to which you want to add the user.",
-      "type": "array",
-      "uniqueItems": false,
-      "insertionOrder": false,
-      "items": { "type": "string" }
-    },
-    "Arn": {
-      "description": "The Amazon Resource Name (ARN) that identifies the user. For more information about ARNs and how to use ARNs in policies, see IAM Identifiers in the IAM User Guide.",
-      "type": "string"
-    },
-    "LoginProfile": {
-      "description": "Creates a password for the specified IAM user. A password allows an IAM user to access AWS services through the AWS Management Console.",
-      "$ref": "#/definitions/LoginProfile"
-    },
-    "Tags": {
-      "description": "A list of tags that are associated with the user. For more information about tagging, see Tagging IAM resources in the IAM User Guide.",
-      "type": "array",
-      "uniqueItems": false,
-      "insertionOrder": false,
-      "items": { "$ref": "#/definitions/Tag" }
-    },
-    "PermissionsBoundary": {
-      "description": "The ARN of the policy that is used to set the permissions boundary for the user.",
-      "type": "string"
-    }
-  },
+  "createOnlyProperties": ["/properties/UserName"],
   "definitions": {
-    "Policy": {
-      "description": "Contains information about an attached policy.",
-      "type": "object",
+    "LoginProfile": {
       "additionalProperties": false,
+      "description": "Contains the user name and password create date for a user.",
+      "properties": {
+        "Password": { "description": "The user's password.", "type": "string" },
+        "PasswordResetRequired": {
+          "description": "Specifies whether the user is required to set a new password on next sign-in.",
+          "type": "boolean"
+        }
+      },
+      "required": ["Password"],
+      "type": "object"
+    },
+    "Policy": {
+      "additionalProperties": false,
+      "description": "Contains information about an attached policy.",
       "properties": {
         "PolicyDocument": {
           "description": "The policy document.",
@@ -68,49 +29,27 @@
           "type": "string"
         }
       },
-      "required": ["PolicyName", "PolicyDocument"]
+      "required": ["PolicyName", "PolicyDocument"],
+      "type": "object"
     },
     "Tag": {
-      "description": "A key-value pair to associate with a resource.",
-      "type": "object",
       "additionalProperties": false,
+      "description": "A key-value pair to associate with a resource.",
       "properties": {
         "Key": {
-          "type": "string",
-          "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -."
+          "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+          "type": "string"
         },
         "Value": {
-          "type": "string",
-          "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -."
+          "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+          "type": "string"
         }
       },
-      "required": ["Key", "Value"]
-    },
-    "LoginProfile": {
-      "description": "Contains the user name and password create date for a user.",
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "PasswordResetRequired": {
-          "description": "Specifies whether the user is required to set a new password on next sign-in.",
-          "type": "boolean"
-        },
-        "Password": { "description": "The user's password.", "type": "string" }
-      },
-      "required": ["Password"]
+      "required": ["Key", "Value"],
+      "type": "object"
     }
   },
-  "createOnlyProperties": ["/properties/UserName"],
-  "primaryIdentifier": ["/properties/UserName"],
-  "readOnlyProperties": ["/properties/Arn"],
-  "writeOnlyProperties": ["/properties/LoginProfile/Password"],
-  "tagging": {
-    "taggable": true,
-    "tagOnCreate": true,
-    "tagUpdatable": true,
-    "cloudFormationSystemTags": false,
-    "tagProperty": "/properties/Tags"
-  },
+  "description": "Resource Type definition for AWS::IAM::User",
   "handlers": {
     "create": {
       "permissions": [
@@ -123,6 +62,24 @@
         "iam:TagUser"
       ]
     },
+    "delete": {
+      "permissions": [
+        "iam:DeleteAccessKey",
+        "iam:RemoveUserFromGroup",
+        "iam:DeleteUserPolicy",
+        "iam:DeleteUser",
+        "iam:DetachUserPolicy",
+        "iam:DeleteLoginProfile",
+        "iam:ListAccessKeys",
+        "iam:GetUserPolicy",
+        "iam:ListGroupsForUser",
+        "iam:ListAttachedUserPolicies",
+        "iam:ListUserPolicies",
+        "iam:GetUser",
+        "iam:GetLoginProfile"
+      ]
+    },
+    "list": { "permissions": ["iam:listUsers"] },
     "read": {
       "permissions": [
         "iam:GetUserPolicy",
@@ -153,25 +110,68 @@
         "iam:GetUser",
         "iam:ListUserTags"
       ]
-    },
-    "delete": {
-      "permissions": [
-        "iam:DeleteAccessKey",
-        "iam:RemoveUserFromGroup",
-        "iam:DeleteUserPolicy",
-        "iam:DeleteUser",
-        "iam:DetachUserPolicy",
-        "iam:DeleteLoginProfile",
-        "iam:ListAccessKeys",
-        "iam:GetUserPolicy",
-        "iam:ListGroupsForUser",
-        "iam:ListAttachedUserPolicies",
-        "iam:ListUserPolicies",
-        "iam:GetUser",
-        "iam:GetLoginProfile"
-      ]
-    },
-    "list": { "permissions": ["iam:listUsers"] }
+    }
   },
-  "$hash": "caf03f6d075f9bb974766479361299716b85c0dd"
+  "primaryIdentifier": ["/properties/UserName"],
+  "properties": {
+    "Arn": {
+      "description": "The Amazon Resource Name (ARN) that identifies the user. For more information about ARNs and how to use ARNs in policies, see IAM Identifiers in the IAM User Guide.",
+      "type": "string"
+    },
+    "Groups": {
+      "description": "A list of group names to which you want to add the user.",
+      "insertionOrder": false,
+      "items": { "type": "string" },
+      "type": "array",
+      "uniqueItems": false
+    },
+    "LoginProfile": {
+      "$ref": "#/definitions/LoginProfile",
+      "description": "Creates a password for the specified IAM user. A password allows an IAM user to access AWS services through the AWS Management Console."
+    },
+    "ManagedPolicyArns": {
+      "description": "A list of Amazon Resource Names (ARNs) of the IAM managed policies that you want to attach to the role.",
+      "insertionOrder": false,
+      "items": { "type": "string" },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "Path": {
+      "description": "The path to the user. For more information about paths, see IAM identifiers in the IAM User Guide. The ARN of the policy used to set the permissions boundary for the user.",
+      "type": "string"
+    },
+    "PermissionsBoundary": {
+      "description": "The ARN of the policy that is used to set the permissions boundary for the user.",
+      "type": "string"
+    },
+    "Policies": {
+      "description": "Adds or updates an inline policy document that is embedded in the specified IAM role.",
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/Policy" },
+      "type": "array",
+      "uniqueItems": false
+    },
+    "Tags": {
+      "description": "A list of tags that are associated with the user. For more information about tagging, see Tagging IAM resources in the IAM User Guide.",
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/Tag" },
+      "type": "array",
+      "uniqueItems": false
+    },
+    "UserName": {
+      "description": "The friendly name identifying the user.",
+      "type": "string"
+    }
+  },
+  "readOnlyProperties": ["/properties/Arn"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-iam.git",
+  "tagging": {
+    "cloudFormationSystemTags": false,
+    "tagOnCreate": true,
+    "tagProperty": "/properties/Tags",
+    "tagUpdatable": true,
+    "taggable": true
+  },
+  "typeName": "AWS::IAM::User",
+  "writeOnlyProperties": ["/properties/LoginProfile/Password"]
 }

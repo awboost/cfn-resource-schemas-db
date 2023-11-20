@@ -1,62 +1,36 @@
 {
-  "typeName": "AWS::IAM::SAMLProvider",
-  "description": "Resource Type definition for AWS::IAM::SAMLProvider",
+  "$hash": "5033b68e61b595b99d07075d301adb10f58e3a0b",
   "additionalProperties": false,
-  "properties": {
-    "Name": {
-      "minLength": 1,
-      "maxLength": 128,
-      "pattern": "[\\w._-]+",
-      "type": "string"
-    },
-    "SamlMetadataDocument": {
-      "minLength": 1000,
-      "maxLength": 10000000,
-      "type": "string"
-    },
-    "Arn": {
-      "description": "Amazon Resource Name (ARN) of the SAML provider",
-      "minLength": 1,
-      "maxLength": 1600,
-      "type": "string"
-    },
-    "Tags": {
-      "type": "array",
-      "uniqueItems": false,
-      "insertionOrder": false,
-      "items": { "$ref": "#/definitions/Tag" }
-    }
-  },
+  "createOnlyProperties": ["/properties/Name"],
   "definitions": {
     "Tag": {
-      "description": "A key-value pair to associate with a resource.",
-      "type": "object",
       "additionalProperties": false,
+      "description": "A key-value pair to associate with a resource.",
       "properties": {
-        "Value": {
-          "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 256
-        },
         "Key": {
           "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
-          "type": "string",
+          "maxLength": 128,
           "minLength": 1,
-          "maxLength": 128
+          "type": "string"
+        },
+        "Value": {
+          "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
+          "maxLength": 256,
+          "minLength": 1,
+          "type": "string"
         }
       },
-      "required": ["Value", "Key"]
+      "required": ["Value", "Key"],
+      "type": "object"
     }
   },
-  "required": ["SamlMetadataDocument"],
-  "createOnlyProperties": ["/properties/Name"],
-  "readOnlyProperties": ["/properties/Arn"],
-  "primaryIdentifier": ["/properties/Arn"],
+  "description": "Resource Type definition for AWS::IAM::SAMLProvider",
   "handlers": {
     "create": {
       "permissions": ["iam:CreateSAMLProvider", "iam:GetSAMLProvider"]
     },
+    "delete": { "permissions": ["iam:DeleteSAMLProvider"] },
+    "list": { "permissions": ["iam:ListSAMLProviders", "iam:GetSAMLProvider"] },
     "read": { "permissions": ["iam:GetSAMLProvider"] },
     "update": {
       "permissions": [
@@ -65,15 +39,41 @@
         "iam:TagSAMLProvider",
         "iam:UntagSAMLProvider"
       ]
-    },
-    "delete": { "permissions": ["iam:DeleteSAMLProvider"] },
-    "list": { "permissions": ["iam:ListSAMLProviders", "iam:GetSAMLProvider"] }
+    }
   },
+  "primaryIdentifier": ["/properties/Arn"],
+  "properties": {
+    "Arn": {
+      "description": "Amazon Resource Name (ARN) of the SAML provider",
+      "maxLength": 1600,
+      "minLength": 1,
+      "type": "string"
+    },
+    "Name": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "[\\w._-]+",
+      "type": "string"
+    },
+    "SamlMetadataDocument": {
+      "maxLength": 10000000,
+      "minLength": 1000,
+      "type": "string"
+    },
+    "Tags": {
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/Tag" },
+      "type": "array",
+      "uniqueItems": false
+    }
+  },
+  "readOnlyProperties": ["/properties/Arn"],
+  "required": ["SamlMetadataDocument"],
   "tagging": {
-    "taggable": true,
+    "cloudFormationSystemTags": false,
     "tagOnCreate": true,
     "tagUpdatable": true,
-    "cloudFormationSystemTags": false
+    "taggable": true
   },
-  "$hash": "5033b68e61b595b99d07075d301adb10f58e3a0b"
+  "typeName": "AWS::IAM::SAMLProvider"
 }

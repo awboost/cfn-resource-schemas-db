@@ -1,44 +1,37 @@
 {
-  "typeName": "AWS::SES::Template",
-  "description": "Resource Type definition for AWS::SES::Template",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-ses.git",
+  "$hash": "b19428cbfe5def5943f90d02e994b0cb0d80cee8",
+  "additionalProperties": false,
+  "createOnlyProperties": ["/properties/Template/TemplateName"],
   "definitions": {
     "Template": {
-      "type": "object",
       "additionalProperties": false,
       "description": "The content of the email, composed of a subject line, an HTML part, and a text-only part",
       "properties": {
-        "TemplateName": {
-          "description": "The name of the template.",
-          "type": "string",
-          "pattern": "^[a-zA-Z0-9_-]{1,64}$",
-          "maxLength": 64,
-          "minLength": 1
+        "HtmlPart": {
+          "description": "The HTML body of the email.",
+          "type": "string"
         },
         "SubjectPart": {
           "description": "The subject line of the email.",
           "type": "string"
         },
+        "TemplateName": {
+          "description": "The name of the template.",
+          "maxLength": 64,
+          "minLength": 1,
+          "pattern": "^[a-zA-Z0-9_-]{1,64}$",
+          "type": "string"
+        },
         "TextPart": {
           "description": "The email body that is visible to recipients whose email clients do not display HTML content.",
           "type": "string"
-        },
-        "HtmlPart": {
-          "description": "The HTML body of the email.",
-          "type": "string"
         }
       },
-      "required": ["SubjectPart"]
+      "required": ["SubjectPart"],
+      "type": "object"
     }
   },
-  "properties": {
-    "Id": { "type": "string" },
-    "Template": { "$ref": "#/definitions/Template" }
-  },
-  "additionalProperties": false,
-  "readOnlyProperties": ["/properties/Id"],
-  "primaryIdentifier": ["/properties/Id"],
-  "createOnlyProperties": ["/properties/Template/TemplateName"],
+  "description": "Resource Type definition for AWS::SES::Template",
   "handlers": {
     "create": {
       "permissions": [
@@ -48,10 +41,11 @@
         "ses:GetTemplate"
       ]
     },
-    "read": { "permissions": ["ses:GetEmailTemplate", "ses:GetTemplate"] },
     "delete": {
       "permissions": ["ses:DeleteEmailTemplate", "ses:DeleteTemplate"]
     },
+    "list": { "permissions": ["ses:ListEmailTemplates", "ses:ListTemplates"] },
+    "read": { "permissions": ["ses:GetEmailTemplate", "ses:GetTemplate"] },
     "update": {
       "permissions": [
         "ses:GetEmailTemplate",
@@ -59,8 +53,14 @@
         "ses:GetTemplate",
         "ses:UpdateTemplate"
       ]
-    },
-    "list": { "permissions": ["ses:ListEmailTemplates", "ses:ListTemplates"] }
+    }
   },
-  "$hash": "b19428cbfe5def5943f90d02e994b0cb0d80cee8"
+  "primaryIdentifier": ["/properties/Id"],
+  "properties": {
+    "Id": { "type": "string" },
+    "Template": { "$ref": "#/definitions/Template" }
+  },
+  "readOnlyProperties": ["/properties/Id"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-ses.git",
+  "typeName": "AWS::SES::Template"
 }

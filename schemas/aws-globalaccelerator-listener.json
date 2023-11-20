@@ -1,67 +1,30 @@
 {
-  "typeName": "AWS::GlobalAccelerator::Listener",
-  "description": "Resource Type definition for AWS::GlobalAccelerator::Listener",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-globalaccelerator",
+  "$hash": "58ce9973f066aed2e7c7db2d727901ac219d137c",
+  "additionalProperties": false,
+  "createOnlyProperties": ["/properties/AcceleratorArn"],
   "definitions": {
     "Port": {
       "description": "A network port number",
-      "type": "integer",
+      "maximum": 65535,
       "minimum": 0,
-      "maximum": 65535
+      "type": "integer"
     },
     "PortRange": {
+      "additionalProperties": false,
       "description": "A port range to support for connections from  clients to your accelerator.",
-      "type": "object",
       "properties": {
         "FromPort": { "$ref": "#/definitions/Port" },
         "ToPort": { "$ref": "#/definitions/Port" }
       },
       "required": ["FromPort", "ToPort"],
-      "additionalProperties": false
+      "type": "object"
     }
   },
-  "properties": {
-    "ListenerArn": {
-      "description": "The Amazon Resource Name (ARN) of the listener.",
-      "type": "string"
-    },
-    "AcceleratorArn": {
-      "description": "The Amazon Resource Name (ARN) of the accelerator.",
-      "type": "string"
-    },
-    "PortRanges": {
-      "type": "array",
-      "items": { "$ref": "#/definitions/PortRange" }
-    },
-    "Protocol": {
-      "description": "The protocol for the listener.",
-      "type": "string",
-      "default": "TCP",
-      "enum": ["TCP", "UDP"]
-    },
-    "ClientAffinity": {
-      "description": "Client affinity lets you direct all requests from a user to the same endpoint.",
-      "type": "string",
-      "default": "NONE",
-      "enum": ["NONE", "SOURCE_IP"]
-    }
-  },
-  "required": ["AcceleratorArn", "PortRanges", "Protocol"],
-  "createOnlyProperties": ["/properties/AcceleratorArn"],
-  "readOnlyProperties": ["/properties/ListenerArn"],
-  "primaryIdentifier": ["/properties/ListenerArn"],
+  "description": "Resource Type definition for AWS::GlobalAccelerator::Listener",
   "handlers": {
     "create": {
       "permissions": [
         "globalaccelerator:CreateListener",
-        "globalaccelerator:DescribeListener",
-        "globalaccelerator:DescribeAccelerator"
-      ]
-    },
-    "read": { "permissions": ["globalaccelerator:DescribeListener"] },
-    "update": {
-      "permissions": [
-        "globalaccelerator:UpdateListener",
         "globalaccelerator:DescribeListener",
         "globalaccelerator:DescribeAccelerator"
       ]
@@ -73,8 +36,45 @@
         "globalaccelerator:DescribeAccelerator"
       ]
     },
-    "list": { "permissions": ["globalaccelerator:ListListeners"] }
+    "list": { "permissions": ["globalaccelerator:ListListeners"] },
+    "read": { "permissions": ["globalaccelerator:DescribeListener"] },
+    "update": {
+      "permissions": [
+        "globalaccelerator:UpdateListener",
+        "globalaccelerator:DescribeListener",
+        "globalaccelerator:DescribeAccelerator"
+      ]
+    }
   },
-  "additionalProperties": false,
-  "$hash": "58ce9973f066aed2e7c7db2d727901ac219d137c"
+  "primaryIdentifier": ["/properties/ListenerArn"],
+  "properties": {
+    "AcceleratorArn": {
+      "description": "The Amazon Resource Name (ARN) of the accelerator.",
+      "type": "string"
+    },
+    "ClientAffinity": {
+      "default": "NONE",
+      "description": "Client affinity lets you direct all requests from a user to the same endpoint.",
+      "enum": ["NONE", "SOURCE_IP"],
+      "type": "string"
+    },
+    "ListenerArn": {
+      "description": "The Amazon Resource Name (ARN) of the listener.",
+      "type": "string"
+    },
+    "PortRanges": {
+      "items": { "$ref": "#/definitions/PortRange" },
+      "type": "array"
+    },
+    "Protocol": {
+      "default": "TCP",
+      "description": "The protocol for the listener.",
+      "enum": ["TCP", "UDP"],
+      "type": "string"
+    }
+  },
+  "readOnlyProperties": ["/properties/ListenerArn"],
+  "required": ["AcceleratorArn", "PortRanges", "Protocol"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-globalaccelerator",
+  "typeName": "AWS::GlobalAccelerator::Listener"
 }

@@ -1,63 +1,29 @@
 {
-  "typeName": "AWS::IoT::ProvisioningTemplate",
-  "description": "Creates a fleet provisioning template.",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
-  "definitions": {
-    "ProvisioningHook": {
-      "type": "object",
-      "properties": {
-        "TargetArn": { "type": "string" },
-        "PayloadVersion": { "type": "string" }
-      }
-    },
-    "Tag": {
-      "type": "object",
-      "properties": {
-        "Key": { "type": "string" },
-        "Value": { "type": "string" }
-      },
-      "additionalProperties": false,
-      "required": ["Key", "Value"]
-    }
-  },
-  "properties": {
-    "TemplateArn": { "type": "string" },
-    "TemplateName": {
-      "type": "string",
-      "pattern": "^[0-9A-Za-z_-]+$",
-      "minLength": 1,
-      "maxLength": 36
-    },
-    "Description": { "type": "string", "maxLength": 500 },
-    "Enabled": { "type": "boolean" },
-    "ProvisioningRoleArn": { "type": "string" },
-    "TemplateBody": { "type": "string" },
-    "TemplateType": {
-      "type": "string",
-      "enum": ["FLEET_PROVISIONING", "JITP"]
-    },
-    "PreProvisioningHook": { "$ref": "#/definitions/ProvisioningHook" },
-    "Tags": {
-      "type": "array",
-      "insertionOrder": true,
-      "items": { "$ref": "#/definitions/Tag" }
-    }
-  },
-  "tagging": {
-    "taggable": true,
-    "tagOnCreate": true,
-    "tagUpdatable": true,
-    "cloudFormationSystemTags": true,
-    "tagProperty": "/properties/Tags"
-  },
+  "$hash": "dedef13853f4c8a81c0bbf9ce21c8b93edcef563",
   "additionalProperties": false,
-  "required": ["ProvisioningRoleArn", "TemplateBody"],
   "createOnlyProperties": [
     "/properties/TemplateName",
     "/properties/TemplateType"
   ],
-  "readOnlyProperties": ["/properties/TemplateArn"],
-  "primaryIdentifier": ["/properties/TemplateName"],
+  "definitions": {
+    "ProvisioningHook": {
+      "properties": {
+        "PayloadVersion": { "type": "string" },
+        "TargetArn": { "type": "string" }
+      },
+      "type": "object"
+    },
+    "Tag": {
+      "additionalProperties": false,
+      "properties": {
+        "Key": { "type": "string" },
+        "Value": { "type": "string" }
+      },
+      "required": ["Key", "Value"],
+      "type": "object"
+    }
+  },
+  "description": "Creates a fleet provisioning template.",
   "handlers": {
     "create": {
       "permissions": [
@@ -69,6 +35,13 @@
         "iot:ListTagsForResource"
       ]
     },
+    "delete": {
+      "permissions": [
+        "iot:DeleteProvisioningTemplate",
+        "iot:DescribeProvisioningTemplate"
+      ]
+    },
+    "list": { "permissions": ["iot:ListProvisioningTemplates"] },
     "read": {
       "permissions": [
         "iot:DescribeProvisioningTemplate",
@@ -88,14 +61,38 @@
         "iot:UntagResource",
         "iot:ListTagsForResource"
       ]
-    },
-    "delete": {
-      "permissions": [
-        "iot:DeleteProvisioningTemplate",
-        "iot:DescribeProvisioningTemplate"
-      ]
-    },
-    "list": { "permissions": ["iot:ListProvisioningTemplates"] }
+    }
   },
-  "$hash": "dedef13853f4c8a81c0bbf9ce21c8b93edcef563"
+  "primaryIdentifier": ["/properties/TemplateName"],
+  "properties": {
+    "Description": { "maxLength": 500, "type": "string" },
+    "Enabled": { "type": "boolean" },
+    "PreProvisioningHook": { "$ref": "#/definitions/ProvisioningHook" },
+    "ProvisioningRoleArn": { "type": "string" },
+    "Tags": {
+      "insertionOrder": true,
+      "items": { "$ref": "#/definitions/Tag" },
+      "type": "array"
+    },
+    "TemplateArn": { "type": "string" },
+    "TemplateBody": { "type": "string" },
+    "TemplateName": {
+      "maxLength": 36,
+      "minLength": 1,
+      "pattern": "^[0-9A-Za-z_-]+$",
+      "type": "string"
+    },
+    "TemplateType": { "enum": ["FLEET_PROVISIONING", "JITP"], "type": "string" }
+  },
+  "readOnlyProperties": ["/properties/TemplateArn"],
+  "required": ["ProvisioningRoleArn", "TemplateBody"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+  "tagging": {
+    "cloudFormationSystemTags": true,
+    "tagOnCreate": true,
+    "tagProperty": "/properties/Tags",
+    "tagUpdatable": true,
+    "taggable": true
+  },
+  "typeName": "AWS::IoT::ProvisioningTemplate"
 }

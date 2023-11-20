@@ -1,58 +1,36 @@
 {
-  "typeName": "AWS::ResourceExplorer2::View",
-  "description": "Definition of AWS::ResourceExplorer2::View Resource Type",
+  "$hash": "d05465d8c204259a5c369880bf90a2e316dff05e",
+  "additionalProperties": false,
+  "createOnlyProperties": ["/properties/Scope", "/properties/ViewName"],
   "definitions": {
     "IncludedProperty": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
-        "Name": { "type": "string", "maxLength": 1011, "minLength": 1 }
+        "Name": { "maxLength": 1011, "minLength": 1, "type": "string" }
       },
       "required": ["Name"],
-      "additionalProperties": false
+      "type": "object"
     },
     "SearchFilter": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
-        "FilterString": { "type": "string", "maxLength": 2048, "minLength": 0 }
+        "FilterString": { "maxLength": 2048, "minLength": 0, "type": "string" }
       },
       "required": ["FilterString"],
-      "additionalProperties": false
+      "type": "object"
     },
     "TagMap": {
-      "type": "object",
+      "additionalProperties": false,
       "patternProperties": { ".+": { "type": "string" } },
-      "additionalProperties": false
+      "type": "object"
     }
   },
-  "properties": {
-    "Filters": { "$ref": "#/definitions/SearchFilter" },
-    "IncludedProperties": {
-      "type": "array",
-      "items": { "$ref": "#/definitions/IncludedProperty" }
-    },
-    "Scope": { "type": "string" },
-    "Tags": { "$ref": "#/definitions/TagMap" },
-    "ViewArn": { "type": "string" },
-    "ViewName": { "type": "string", "pattern": "^[a-zA-Z0-9\\-]{1,64}$" }
-  },
-  "required": ["ViewName"],
-  "readOnlyProperties": ["/properties/ViewArn"],
-  "createOnlyProperties": ["/properties/Scope", "/properties/ViewName"],
-  "primaryIdentifier": ["/properties/ViewArn"],
+  "description": "Definition of AWS::ResourceExplorer2::View Resource Type",
   "handlers": {
     "create": {
       "permissions": [
         "resource-explorer-2:CreateView",
         "resource-explorer-2:TagResource"
-      ]
-    },
-    "read": { "permissions": ["resource-explorer-2:GetView"] },
-    "update": {
-      "permissions": [
-        "resource-explorer-2:UpdateView",
-        "resource-explorer-2:TagResource",
-        "resource-explorer-2:UntagResource",
-        "resource-explorer-2:ListTagsForResource"
       ]
     },
     "delete": {
@@ -62,15 +40,37 @@
         "resource-explorer-2:UntagResource"
       ]
     },
-    "list": { "permissions": ["resource-explorer-2:ListViews"] }
+    "list": { "permissions": ["resource-explorer-2:ListViews"] },
+    "read": { "permissions": ["resource-explorer-2:GetView"] },
+    "update": {
+      "permissions": [
+        "resource-explorer-2:UpdateView",
+        "resource-explorer-2:TagResource",
+        "resource-explorer-2:UntagResource",
+        "resource-explorer-2:ListTagsForResource"
+      ]
+    }
   },
+  "primaryIdentifier": ["/properties/ViewArn"],
+  "properties": {
+    "Filters": { "$ref": "#/definitions/SearchFilter" },
+    "IncludedProperties": {
+      "items": { "$ref": "#/definitions/IncludedProperty" },
+      "type": "array"
+    },
+    "Scope": { "type": "string" },
+    "Tags": { "$ref": "#/definitions/TagMap" },
+    "ViewArn": { "type": "string" },
+    "ViewName": { "pattern": "^[a-zA-Z0-9\\-]{1,64}$", "type": "string" }
+  },
+  "readOnlyProperties": ["/properties/ViewArn"],
+  "required": ["ViewName"],
   "tagging": {
-    "taggable": true,
-    "tagOnCreate": true,
     "cloudFormationSystemTags": false,
+    "tagOnCreate": true,
+    "tagProperty": "/properties/Tags",
     "tagUpdatable": true,
-    "tagProperty": "/properties/Tags"
+    "taggable": true
   },
-  "additionalProperties": false,
-  "$hash": "d05465d8c204259a5c369880bf90a2e316dff05e"
+  "typeName": "AWS::ResourceExplorer2::View"
 }

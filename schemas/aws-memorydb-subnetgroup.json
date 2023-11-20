@@ -1,67 +1,32 @@
 {
-  "typeName": "AWS::MemoryDB::SubnetGroup",
-  "description": "The AWS::MemoryDB::SubnetGroup resource creates an Amazon MemoryDB Subnet Group.",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-memorydb",
-  "taggable": true,
+  "$hash": "41b5aa9deb5144cfcd7ac00ffff79e3c927eb32c",
+  "additionalProperties": false,
+  "createOnlyProperties": ["/properties/SubnetGroupName"],
   "definitions": {
     "Tag": {
-      "description": "A key-value pair to associate with a resource.",
-      "type": "object",
       "additionalProperties": false,
+      "description": "A key-value pair to associate with a resource.",
       "properties": {
         "Key": {
           "description": "The key for the tag. May not be null.",
-          "pattern": "^(?!aws:)(?!memorydb:)[a-zA-Z0-9 _\\.\\/=+:\\-@]{1,128}$",
-          "type": "string",
+          "maxLength": 128,
           "minLength": 1,
-          "maxLength": 128
+          "pattern": "^(?!aws:)(?!memorydb:)[a-zA-Z0-9 _\\.\\/=+:\\-@]{1,128}$",
+          "type": "string"
         },
         "Value": {
           "description": "The tag's value. May be null.",
-          "type": "string",
-          "pattern": "^(?!aws:)(?!memorydb:)[a-zA-Z0-9 _\\.\\/=+:\\-@]{1,256}$",
+          "maxLength": 256,
           "minLength": 1,
-          "maxLength": 256
+          "pattern": "^(?!aws:)(?!memorydb:)[a-zA-Z0-9 _\\.\\/=+:\\-@]{1,256}$",
+          "type": "string"
         }
       },
-      "required": ["Key", "Value"]
+      "required": ["Key", "Value"],
+      "type": "object"
     }
   },
-  "properties": {
-    "SubnetGroupName": {
-      "description": "The name of the subnet group. This value must be unique as it also serves as the subnet group identifier.",
-      "pattern": "[a-z][a-z0-9\\-]*",
-      "type": "string"
-    },
-    "Description": {
-      "description": "An optional description of the subnet group.",
-      "type": "string"
-    },
-    "SubnetIds": {
-      "description": "A list of VPC subnet IDs for the subnet group.",
-      "type": "array",
-      "uniqueItems": true,
-      "insertionOrder": false,
-      "items": { "type": "string" }
-    },
-    "Tags": {
-      "description": "An array of key-value pairs to apply to this subnet group.",
-      "type": "array",
-      "maxItems": 50,
-      "uniqueItems": true,
-      "insertionOrder": false,
-      "items": { "$ref": "#/definitions/Tag" }
-    },
-    "ARN": {
-      "description": "The Amazon Resource Name (ARN) of the subnet group.",
-      "type": "string"
-    }
-  },
-  "additionalProperties": false,
-  "required": ["SubnetGroupName", "SubnetIds"],
-  "primaryIdentifier": ["/properties/SubnetGroupName"],
-  "createOnlyProperties": ["/properties/SubnetGroupName"],
-  "readOnlyProperties": ["/properties/ARN"],
+  "description": "The AWS::MemoryDB::SubnetGroup resource creates an Amazon MemoryDB Subnet Group.",
   "handlers": {
     "create": {
       "permissions": [
@@ -70,6 +35,13 @@
         "memorydb:ListTags"
       ]
     },
+    "delete": {
+      "permissions": [
+        "memorydb:DeleteSubnetGroup",
+        "memorydb:DescribeSubnetGroups"
+      ]
+    },
+    "list": { "permissions": ["memorydb:DescribeSubnetGroups"] },
     "read": {
       "permissions": ["memorydb:DescribeSubnetGroups", "memorydb:ListTags"]
     },
@@ -81,14 +53,42 @@
         "memorydb:TagResource",
         "memorydb:UntagResource"
       ]
-    },
-    "delete": {
-      "permissions": [
-        "memorydb:DeleteSubnetGroup",
-        "memorydb:DescribeSubnetGroups"
-      ]
-    },
-    "list": { "permissions": ["memorydb:DescribeSubnetGroups"] }
+    }
   },
-  "$hash": "41b5aa9deb5144cfcd7ac00ffff79e3c927eb32c"
+  "primaryIdentifier": ["/properties/SubnetGroupName"],
+  "properties": {
+    "ARN": {
+      "description": "The Amazon Resource Name (ARN) of the subnet group.",
+      "type": "string"
+    },
+    "Description": {
+      "description": "An optional description of the subnet group.",
+      "type": "string"
+    },
+    "SubnetGroupName": {
+      "description": "The name of the subnet group. This value must be unique as it also serves as the subnet group identifier.",
+      "pattern": "[a-z][a-z0-9\\-]*",
+      "type": "string"
+    },
+    "SubnetIds": {
+      "description": "A list of VPC subnet IDs for the subnet group.",
+      "insertionOrder": false,
+      "items": { "type": "string" },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "Tags": {
+      "description": "An array of key-value pairs to apply to this subnet group.",
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/Tag" },
+      "maxItems": 50,
+      "type": "array",
+      "uniqueItems": true
+    }
+  },
+  "readOnlyProperties": ["/properties/ARN"],
+  "required": ["SubnetGroupName", "SubnetIds"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-memorydb",
+  "taggable": true,
+  "typeName": "AWS::MemoryDB::SubnetGroup"
 }

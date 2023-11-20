@@ -1,34 +1,53 @@
 {
-  "typeName": "AWS::Location::RouteCalculator",
-  "description": "Definition of AWS::Location::RouteCalculator Resource Type",
+  "$hash": "50f1bebf57365cb976ee357c92837a11605e7025",
+  "additionalProperties": false,
+  "createOnlyProperties": [
+    "/properties/CalculatorName",
+    "/properties/DataSource",
+    "/properties/Description",
+    "/properties/PricingPlan"
+  ],
   "definitions": {
-    "PricingPlan": { "type": "string", "enum": ["RequestBasedUsage"] },
+    "PricingPlan": { "enum": ["RequestBasedUsage"], "type": "string" },
     "iso8601UTC": {
       "description": "The datetime value in ISO 8601 format. The timezone is always UTC. (YYYY-MM-DDThh:mm:ss.sssZ)",
-      "type": "string",
-      "pattern": "^([0-2]\\d{3})-(0[0-9]|1[0-2])-([0-2]\\d|3[01])T([01]\\d|2[0-4]):([0-5]\\d):([0-6]\\d)((\\.\\d{3})?)Z$"
+      "pattern": "^([0-2]\\d{3})-(0[0-9]|1[0-2])-([0-2]\\d|3[01])T([01]\\d|2[0-4]):([0-5]\\d):([0-6]\\d)((\\.\\d{3})?)Z$",
+      "type": "string"
     }
   },
-  "properties": {
-    "CalculatorArn": {
-      "type": "string",
-      "maxLength": 1600,
-      "pattern": "^arn(:[a-z0-9]+([.-][a-z0-9]+)*){2}(:([a-z0-9]+([.-][a-z0-9]+)*)?){2}:([^/].*)?$"
+  "description": "Definition of AWS::Location::RouteCalculator Resource Type",
+  "handlers": {
+    "create": {
+      "permissions": [
+        "geo:CreateRouteCalculator",
+        "geo:DescribeRouteCalculator"
+      ]
     },
+    "delete": { "permissions": ["geo:DeleteRouteCalculator"] },
+    "list": { "permissions": ["geo:ListRouteCalculators"] },
+    "read": { "permissions": ["geo:DescribeRouteCalculator"] }
+  },
+  "primaryIdentifier": ["/properties/CalculatorName"],
+  "properties": {
     "Arn": {
-      "type": "string",
       "maxLength": 1600,
-      "pattern": "^arn(:[a-z0-9]+([.-][a-z0-9]+)*){2}(:([a-z0-9]+([.-][a-z0-9]+)*)?){2}:([^/].*)?$"
+      "pattern": "^arn(:[a-z0-9]+([.-][a-z0-9]+)*){2}(:([a-z0-9]+([.-][a-z0-9]+)*)?){2}:([^/].*)?$",
+      "type": "string"
+    },
+    "CalculatorArn": {
+      "maxLength": 1600,
+      "pattern": "^arn(:[a-z0-9]+([.-][a-z0-9]+)*){2}(:([a-z0-9]+([.-][a-z0-9]+)*)?){2}:([^/].*)?$",
+      "type": "string"
     },
     "CalculatorName": {
-      "type": "string",
       "maxLength": 100,
       "minLength": 1,
-      "pattern": "^[-._\\w]+$"
+      "pattern": "^[-._\\w]+$",
+      "type": "string"
     },
     "CreateTime": { "$ref": "#/definitions/iso8601UTC" },
     "DataSource": { "type": "string" },
-    "Description": { "type": "string", "maxLength": 1000, "minLength": 0 },
+    "Description": { "maxLength": 1000, "minLength": 0, "type": "string" },
     "PricingPlan": { "$ref": "#/definitions/PricingPlan" },
     "UpdateTime": { "$ref": "#/definitions/iso8601UTC" }
   },
@@ -38,25 +57,6 @@
     "/properties/CreateTime",
     "/properties/UpdateTime"
   ],
-  "createOnlyProperties": [
-    "/properties/CalculatorName",
-    "/properties/DataSource",
-    "/properties/Description",
-    "/properties/PricingPlan"
-  ],
   "required": ["CalculatorName", "DataSource"],
-  "primaryIdentifier": ["/properties/CalculatorName"],
-  "additionalProperties": false,
-  "handlers": {
-    "create": {
-      "permissions": [
-        "geo:CreateRouteCalculator",
-        "geo:DescribeRouteCalculator"
-      ]
-    },
-    "read": { "permissions": ["geo:DescribeRouteCalculator"] },
-    "delete": { "permissions": ["geo:DeleteRouteCalculator"] },
-    "list": { "permissions": ["geo:ListRouteCalculators"] }
-  },
-  "$hash": "50f1bebf57365cb976ee357c92837a11605e7025"
+  "typeName": "AWS::Location::RouteCalculator"
 }

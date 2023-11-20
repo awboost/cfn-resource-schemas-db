@@ -1,119 +1,119 @@
 {
-  "typeName": "AWS::SES::ReceiptRule",
-  "description": "Resource Type definition for AWS::SES::ReceiptRule",
+  "$hash": "a1d456ac67e57d178fc51aaea8533985ea17a00b",
   "additionalProperties": false,
-  "properties": {
-    "Id": { "type": "string" },
-    "After": { "type": "string" },
-    "Rule": { "$ref": "#/definitions/Rule" },
-    "RuleSetName": { "type": "string" }
-  },
+  "createOnlyProperties": ["/properties/RuleSetName"],
   "definitions": {
-    "Rule": {
-      "type": "object",
+    "Action": {
       "additionalProperties": false,
       "properties": {
-        "ScanEnabled": { "type": "boolean" },
-        "Recipients": {
-          "type": "array",
-          "uniqueItems": false,
-          "items": { "type": "string" }
-        },
+        "AddHeaderAction": { "$ref": "#/definitions/AddHeaderAction" },
+        "BounceAction": { "$ref": "#/definitions/BounceAction" },
+        "LambdaAction": { "$ref": "#/definitions/LambdaAction" },
+        "S3Action": { "$ref": "#/definitions/S3Action" },
+        "SNSAction": { "$ref": "#/definitions/SNSAction" },
+        "StopAction": { "$ref": "#/definitions/StopAction" },
+        "WorkmailAction": { "$ref": "#/definitions/WorkmailAction" }
+      },
+      "type": "object"
+    },
+    "AddHeaderAction": {
+      "additionalProperties": false,
+      "properties": {
+        "HeaderName": { "type": "string" },
+        "HeaderValue": { "type": "string" }
+      },
+      "required": ["HeaderName", "HeaderValue"],
+      "type": "object"
+    },
+    "BounceAction": {
+      "additionalProperties": false,
+      "properties": {
+        "Message": { "type": "string" },
+        "Sender": { "type": "string" },
+        "SmtpReplyCode": { "type": "string" },
+        "StatusCode": { "type": "string" },
+        "TopicArn": { "type": "string" }
+      },
+      "required": ["Sender", "SmtpReplyCode", "Message"],
+      "type": "object"
+    },
+    "LambdaAction": {
+      "additionalProperties": false,
+      "properties": {
+        "FunctionArn": { "type": "string" },
+        "InvocationType": { "type": "string" },
+        "TopicArn": { "type": "string" }
+      },
+      "required": ["FunctionArn"],
+      "type": "object"
+    },
+    "Rule": {
+      "additionalProperties": false,
+      "properties": {
         "Actions": {
+          "items": { "$ref": "#/definitions/Action" },
           "type": "array",
-          "uniqueItems": false,
-          "items": { "$ref": "#/definitions/Action" }
+          "uniqueItems": false
         },
         "Enabled": { "type": "boolean" },
         "Name": { "type": "string" },
+        "Recipients": {
+          "items": { "type": "string" },
+          "type": "array",
+          "uniqueItems": false
+        },
+        "ScanEnabled": { "type": "boolean" },
         "TlsPolicy": { "type": "string" }
-      }
+      },
+      "type": "object"
     },
-    "Action": {
-      "type": "object",
+    "S3Action": {
       "additionalProperties": false,
       "properties": {
-        "BounceAction": { "$ref": "#/definitions/BounceAction" },
-        "S3Action": { "$ref": "#/definitions/S3Action" },
-        "StopAction": { "$ref": "#/definitions/StopAction" },
-        "SNSAction": { "$ref": "#/definitions/SNSAction" },
-        "WorkmailAction": { "$ref": "#/definitions/WorkmailAction" },
-        "AddHeaderAction": { "$ref": "#/definitions/AddHeaderAction" },
-        "LambdaAction": { "$ref": "#/definitions/LambdaAction" }
-      }
+        "BucketName": { "type": "string" },
+        "KmsKeyArn": { "type": "string" },
+        "ObjectKeyPrefix": { "type": "string" },
+        "TopicArn": { "type": "string" }
+      },
+      "required": ["BucketName"],
+      "type": "object"
     },
     "SNSAction": {
-      "type": "object",
       "additionalProperties": false,
       "properties": {
-        "TopicArn": { "type": "string" },
-        "Encoding": { "type": "string" }
-      }
-    },
-    "WorkmailAction": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "TopicArn": { "type": "string" },
-        "OrganizationArn": { "type": "string" }
+        "Encoding": { "type": "string" },
+        "TopicArn": { "type": "string" }
       },
-      "required": ["OrganizationArn"]
+      "type": "object"
     },
     "StopAction": {
-      "type": "object",
       "additionalProperties": false,
       "properties": {
         "Scope": { "type": "string" },
         "TopicArn": { "type": "string" }
       },
-      "required": ["Scope"]
+      "required": ["Scope"],
+      "type": "object"
     },
-    "AddHeaderAction": {
-      "type": "object",
+    "WorkmailAction": {
       "additionalProperties": false,
       "properties": {
-        "HeaderValue": { "type": "string" },
-        "HeaderName": { "type": "string" }
+        "OrganizationArn": { "type": "string" },
+        "TopicArn": { "type": "string" }
       },
-      "required": ["HeaderName", "HeaderValue"]
-    },
-    "BounceAction": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "Sender": { "type": "string" },
-        "SmtpReplyCode": { "type": "string" },
-        "Message": { "type": "string" },
-        "TopicArn": { "type": "string" },
-        "StatusCode": { "type": "string" }
-      },
-      "required": ["Sender", "SmtpReplyCode", "Message"]
-    },
-    "LambdaAction": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "FunctionArn": { "type": "string" },
-        "TopicArn": { "type": "string" },
-        "InvocationType": { "type": "string" }
-      },
-      "required": ["FunctionArn"]
-    },
-    "S3Action": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "BucketName": { "type": "string" },
-        "KmsKeyArn": { "type": "string" },
-        "TopicArn": { "type": "string" },
-        "ObjectKeyPrefix": { "type": "string" }
-      },
-      "required": ["BucketName"]
+      "required": ["OrganizationArn"],
+      "type": "object"
     }
   },
-  "required": ["RuleSetName", "Rule"],
-  "createOnlyProperties": ["/properties/RuleSetName"],
+  "description": "Resource Type definition for AWS::SES::ReceiptRule",
   "primaryIdentifier": ["/properties/Id"],
+  "properties": {
+    "After": { "type": "string" },
+    "Id": { "type": "string" },
+    "Rule": { "$ref": "#/definitions/Rule" },
+    "RuleSetName": { "type": "string" }
+  },
   "readOnlyProperties": ["/properties/Id"],
-  "$hash": "a1d456ac67e57d178fc51aaea8533985ea17a00b"
+  "required": ["RuleSetName", "Rule"],
+  "typeName": "AWS::SES::ReceiptRule"
 }

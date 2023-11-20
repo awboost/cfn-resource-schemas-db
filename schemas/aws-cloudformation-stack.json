@@ -1,49 +1,106 @@
 {
-  "typeName": "AWS::CloudFormation::Stack",
-  "description": "The AWS::CloudFormation::Stack resource nests a stack as a resource in a top-level template.",
+  "$hash": "e230745b0853172779ee9b487942ad6ae64c85f6",
+  "additionalIdentifiers": [["/properties/StackName"]],
   "additionalProperties": false,
+  "createOnlyProperties": ["/properties/StackName"],
+  "definitions": {
+    "Output": {
+      "additionalProperties": false,
+      "properties": {
+        "Description": { "type": "string" },
+        "ExportName": { "type": "string" },
+        "OutputKey": { "type": "string" },
+        "OutputValue": { "type": "string" }
+      },
+      "type": "object"
+    },
+    "Tag": {
+      "additionalProperties": false,
+      "properties": {
+        "Key": { "type": "string" },
+        "Value": { "type": "string" }
+      },
+      "required": ["Value", "Key"],
+      "type": "object"
+    }
+  },
+  "description": "The AWS::CloudFormation::Stack resource nests a stack as a resource in a top-level template.",
+  "handlers": {
+    "create": {
+      "permissions": [
+        "cloudformation:DescribeStacks",
+        "cloudformation:CreateStack",
+        "iam:PassRole"
+      ]
+    },
+    "delete": {
+      "permissions": [
+        "cloudformation:DescribeStacks",
+        "cloudformation:DeleteStack"
+      ]
+    },
+    "list": { "permissions": ["cloudformation:ListStacks"] },
+    "read": {
+      "permissions": [
+        "cloudformation:DescribeStacks",
+        "cloudformation:GetStackPolicy",
+        "cloudformation:GetTemplate"
+      ]
+    },
+    "update": {
+      "permissions": [
+        "cloudformation:DescribeStacks",
+        "cloudformation:UpdateStack",
+        "cloudformation:UpdateTerminationProtection",
+        "cloudformation:SetStackPolicy",
+        "iam:PassRole"
+      ]
+    }
+  },
+  "primaryIdentifier": ["/properties/StackId"],
   "properties": {
     "Capabilities": {
-      "type": "array",
-      "uniqueItems": false,
       "items": {
-        "type": "string",
         "enum": [
           "CAPABILITY_IAM",
           "CAPABILITY_NAMED_IAM",
           "CAPABILITY_AUTO_EXPAND"
-        ]
-      }
-    },
-    "RoleARN": { "type": "string" },
-    "Outputs": {
+        ],
+        "type": "string"
+      },
       "type": "array",
-      "uniqueItems": false,
-      "items": { "$ref": "#/definitions/Output" }
+      "uniqueItems": false
     },
-    "Description": { "type": "string", "minLength": 1, "maxLength": 1024 },
+    "ChangeSetId": { "type": "string" },
+    "CreationTime": { "type": "string" },
+    "Description": { "maxLength": 1024, "minLength": 1, "type": "string" },
     "DisableRollback": { "type": "boolean" },
     "EnableTerminationProtection": { "type": "boolean" },
+    "LastUpdateTime": { "type": "string" },
     "NotificationARNs": {
-      "type": "array",
-      "uniqueItems": false,
       "items": { "type": "string" },
-      "maxItems": 5
+      "maxItems": 5,
+      "type": "array",
+      "uniqueItems": false
+    },
+    "Outputs": {
+      "items": { "$ref": "#/definitions/Output" },
+      "type": "array",
+      "uniqueItems": false
     },
     "Parameters": {
-      "type": "object",
       "additionalProperties": false,
-      "patternProperties": { "[a-zA-Z0-9]+": { "type": "string" } }
+      "patternProperties": { "[a-zA-Z0-9]+": { "type": "string" } },
+      "type": "object"
     },
     "ParentId": { "type": "string" },
+    "RoleARN": { "type": "string" },
     "RootId": { "type": "string" },
-    "ChangeSetId": { "type": "string" },
-    "StackName": { "type": "string" },
     "StackId": { "type": "string" },
+    "StackName": { "type": "string" },
     "StackPolicyBody": { "type": "object" },
     "StackPolicyURL": { "type": "string" },
     "StackStatus": {
-      "type": "string",
       "enum": [
         "CREATE_IN_PROGRESS",
         "CREATE_FAILED",
@@ -68,44 +125,21 @@
         "IMPORT_ROLLBACK_IN_PROGRESS",
         "IMPORT_ROLLBACK_FAILED",
         "IMPORT_ROLLBACK_COMPLETE"
-      ]
+      ],
+      "type": "string"
     },
     "StackStatusReason": { "type": "string" },
     "Tags": {
-      "type": "array",
-      "uniqueItems": false,
       "insertionOrder": false,
       "items": { "$ref": "#/definitions/Tag" },
-      "maxItems": 50
+      "maxItems": 50,
+      "type": "array",
+      "uniqueItems": false
     },
     "TemplateBody": { "type": "object" },
-    "TemplateURL": { "type": "string", "minLength": 1, "maxLength": 1024 },
-    "TimeoutInMinutes": { "type": "integer", "minimum": 1 },
-    "LastUpdateTime": { "type": "string" },
-    "CreationTime": { "type": "string" }
+    "TemplateURL": { "maxLength": 1024, "minLength": 1, "type": "string" },
+    "TimeoutInMinutes": { "minimum": 1, "type": "integer" }
   },
-  "definitions": {
-    "Tag": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "Key": { "type": "string" },
-        "Value": { "type": "string" }
-      },
-      "required": ["Value", "Key"]
-    },
-    "Output": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "Description": { "type": "string" },
-        "ExportName": { "type": "string" },
-        "OutputKey": { "type": "string" },
-        "OutputValue": { "type": "string" }
-      }
-    }
-  },
-  "required": ["StackName"],
   "readOnlyProperties": [
     "/properties/StackId",
     "/properties/StackStatus",
@@ -116,51 +150,17 @@
     "/properties/Outputs",
     "/properties/LastUpdateTime"
   ],
+  "required": ["StackName"],
+  "tagging": {
+    "cloudFormationSystemTags": true,
+    "tagOnCreate": true,
+    "tagProperty": "/properties/Tags",
+    "tagUpdatable": true,
+    "taggable": true
+  },
+  "typeName": "AWS::CloudFormation::Stack",
   "writeOnlyProperties": [
     "/properties/TemplateURL",
     "/properties/StackPolicyURL"
-  ],
-  "createOnlyProperties": ["/properties/StackName"],
-  "primaryIdentifier": ["/properties/StackId"],
-  "additionalIdentifiers": [["/properties/StackName"]],
-  "tagging": {
-    "taggable": true,
-    "tagOnCreate": true,
-    "tagUpdatable": true,
-    "cloudFormationSystemTags": true,
-    "tagProperty": "/properties/Tags"
-  },
-  "handlers": {
-    "create": {
-      "permissions": [
-        "cloudformation:DescribeStacks",
-        "cloudformation:CreateStack",
-        "iam:PassRole"
-      ]
-    },
-    "update": {
-      "permissions": [
-        "cloudformation:DescribeStacks",
-        "cloudformation:UpdateStack",
-        "cloudformation:UpdateTerminationProtection",
-        "cloudformation:SetStackPolicy",
-        "iam:PassRole"
-      ]
-    },
-    "delete": {
-      "permissions": [
-        "cloudformation:DescribeStacks",
-        "cloudformation:DeleteStack"
-      ]
-    },
-    "read": {
-      "permissions": [
-        "cloudformation:DescribeStacks",
-        "cloudformation:GetStackPolicy",
-        "cloudformation:GetTemplate"
-      ]
-    },
-    "list": { "permissions": ["cloudformation:ListStacks"] }
-  },
-  "$hash": "e230745b0853172779ee9b487942ad6ae64c85f6"
+  ]
 }

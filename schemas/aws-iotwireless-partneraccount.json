@@ -1,111 +1,71 @@
 {
-  "typeName": "AWS::IoTWireless::PartnerAccount",
-  "description": "Create and manage partner account",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+  "$hash": "01296966aff43be7f56ddeb26aae2e4d5bfa10ff",
+  "additionalProperties": false,
+  "createOnlyProperties": ["/properties/PartnerAccountId"],
   "definitions": {
     "SidewalkAccountInfo": {
-      "type": "object",
       "additionalProperties": false,
       "properties": {
         "AppServerPrivateKey": {
-          "type": "string",
-          "pattern": "[a-fA-F0-9]{64}",
+          "maxLength": 4096,
           "minLength": 1,
-          "maxLength": 4096
+          "pattern": "[a-fA-F0-9]{64}",
+          "type": "string"
         }
       },
-      "required": ["AppServerPrivateKey"]
+      "required": ["AppServerPrivateKey"],
+      "type": "object"
     },
     "SidewalkAccountInfoWithFingerprint": {
-      "type": "object",
       "additionalProperties": false,
       "properties": {
-        "AmazonId": { "type": "string", "maxLength": 2048 },
+        "AmazonId": { "maxLength": 2048, "type": "string" },
+        "Arn": { "type": "string" },
         "Fingerprint": {
-          "type": "string",
-          "pattern": "[a-fA-F0-9]{64}",
+          "maxLength": 64,
           "minLength": 64,
-          "maxLength": 64
-        },
-        "Arn": { "type": "string" }
-      }
+          "pattern": "[a-fA-F0-9]{64}",
+          "type": "string"
+        }
+      },
+      "type": "object"
     },
     "SidewalkUpdateAccount": {
-      "type": "object",
       "additionalProperties": false,
       "properties": {
         "AppServerPrivateKey": {
-          "type": "string",
-          "pattern": "[a-fA-F0-9]{64}",
+          "maxLength": 4096,
           "minLength": 1,
-          "maxLength": 4096
+          "pattern": "[a-fA-F0-9]{64}",
+          "type": "string"
         }
-      }
+      },
+      "type": "object"
     },
     "Tag": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
-        "Key": { "type": "string", "minLength": 1, "maxLength": 127 },
-        "Value": { "type": "string", "minLength": 1, "maxLength": 255 }
+        "Key": { "maxLength": 127, "minLength": 1, "type": "string" },
+        "Value": { "maxLength": 255, "minLength": 1, "type": "string" }
       },
-      "additionalProperties": false
+      "type": "object"
     }
   },
-  "properties": {
-    "Sidewalk": {
-      "description": "The Sidewalk account credentials.",
-      "$ref": "#/definitions/SidewalkAccountInfo"
-    },
-    "PartnerAccountId": {
-      "description": "The partner account ID to disassociate from the AWS account",
-      "type": "string",
-      "maxLength": 256
-    },
-    "PartnerType": {
-      "description": "The partner type",
-      "type": "string",
-      "enum": ["Sidewalk"]
-    },
-    "SidewalkResponse": {
-      "description": "The Sidewalk account credentials.",
-      "$ref": "#/definitions/SidewalkAccountInfoWithFingerprint"
-    },
-    "AccountLinked": {
-      "description": "Whether the partner account is linked to the AWS account.",
-      "type": "boolean"
-    },
-    "SidewalkUpdate": {
-      "description": "The Sidewalk account credentials.",
-      "$ref": "#/definitions/SidewalkUpdateAccount"
-    },
-    "Fingerprint": {
-      "description": "The fingerprint of the Sidewalk application server private key.",
-      "type": "string"
-    },
-    "Arn": {
-      "description": "PartnerAccount arn. Returned after successful create.",
-      "type": "string"
-    },
-    "Tags": {
-      "description": "A list of key-value pairs that contain metadata for the destination.",
-      "type": "array",
-      "uniqueItems": true,
-      "maxItems": 200,
-      "insertionOrder": false,
-      "items": { "$ref": "#/definitions/Tag" }
-    }
-  },
-  "additionalProperties": false,
-  "readOnlyProperties": ["/properties/Arn", "/properties/Fingerprint"],
-  "writeOnlyProperties": ["/properties/SidewalkUpdate", "/properties/Sidewalk"],
-  "createOnlyProperties": ["/properties/PartnerAccountId"],
-  "primaryIdentifier": ["/properties/PartnerAccountId"],
-  "taggable": true,
+  "description": "Create and manage partner account",
   "handlers": {
     "create": {
       "permissions": [
         "iotwireless:AssociateAwsAccountWithPartnerAccount",
         "iotwireless:TagResource",
+        "iotwireless:ListTagsForResource"
+      ]
+    },
+    "delete": {
+      "permissions": ["iotwireless:DisassociateAwsAccountFromPartnerAccount"]
+    },
+    "list": {
+      "permissions": [
+        "iotwireless:ListPartnerAccounts",
         "iotwireless:ListTagsForResource"
       ]
     },
@@ -115,22 +75,62 @@
         "iotwireless:ListTagsForResource"
       ]
     },
-    "list": {
-      "permissions": [
-        "iotwireless:ListPartnerAccounts",
-        "iotwireless:ListTagsForResource"
-      ]
-    },
     "update": {
       "permissions": [
         "iotwireless:UpdatePartnerAccount",
         "iotwireless:UntagResource",
         "iotwireless:ListTagsForResource"
       ]
-    },
-    "delete": {
-      "permissions": ["iotwireless:DisassociateAwsAccountFromPartnerAccount"]
     }
   },
-  "$hash": "01296966aff43be7f56ddeb26aae2e4d5bfa10ff"
+  "primaryIdentifier": ["/properties/PartnerAccountId"],
+  "properties": {
+    "AccountLinked": {
+      "description": "Whether the partner account is linked to the AWS account.",
+      "type": "boolean"
+    },
+    "Arn": {
+      "description": "PartnerAccount arn. Returned after successful create.",
+      "type": "string"
+    },
+    "Fingerprint": {
+      "description": "The fingerprint of the Sidewalk application server private key.",
+      "type": "string"
+    },
+    "PartnerAccountId": {
+      "description": "The partner account ID to disassociate from the AWS account",
+      "maxLength": 256,
+      "type": "string"
+    },
+    "PartnerType": {
+      "description": "The partner type",
+      "enum": ["Sidewalk"],
+      "type": "string"
+    },
+    "Sidewalk": {
+      "$ref": "#/definitions/SidewalkAccountInfo",
+      "description": "The Sidewalk account credentials."
+    },
+    "SidewalkResponse": {
+      "$ref": "#/definitions/SidewalkAccountInfoWithFingerprint",
+      "description": "The Sidewalk account credentials."
+    },
+    "SidewalkUpdate": {
+      "$ref": "#/definitions/SidewalkUpdateAccount",
+      "description": "The Sidewalk account credentials."
+    },
+    "Tags": {
+      "description": "A list of key-value pairs that contain metadata for the destination.",
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/Tag" },
+      "maxItems": 200,
+      "type": "array",
+      "uniqueItems": true
+    }
+  },
+  "readOnlyProperties": ["/properties/Arn", "/properties/Fingerprint"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+  "taggable": true,
+  "typeName": "AWS::IoTWireless::PartnerAccount",
+  "writeOnlyProperties": ["/properties/SidewalkUpdate", "/properties/Sidewalk"]
 }

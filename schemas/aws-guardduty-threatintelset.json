@@ -1,39 +1,19 @@
 {
-  "typeName": "AWS::GuardDuty::ThreatIntelSet",
-  "description": "Resource Type definition for AWS::GuardDuty::ThreatIntelSet",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-guardduty",
+  "$hash": "2158deca80f426be153bb1ab7d0caafe938889c4",
   "additionalProperties": false,
-  "tagging": {
-    "taggable": true,
-    "tagOnCreate": true,
-    "tagUpdatable": false,
-    "cloudFormationSystemTags": false
-  },
-  "properties": {
-    "Id": { "type": "string" },
-    "Format": { "type": "string", "minLength": 1, "maxLength": 300 },
-    "Activate": { "type": "boolean" },
-    "DetectorId": { "type": "string", "minLength": 1, "maxLength": 32 },
-    "Name": { "type": "string" },
-    "Location": { "type": "string", "minLength": 1, "maxLength": 300 },
-    "Tags": { "type": "array", "items": { "$ref": "#/definitions/TagItem" } }
-  },
+  "createOnlyProperties": ["/properties/Format", "/properties/DetectorId"],
   "definitions": {
     "TagItem": {
-      "type": "object",
       "additionalProperties": false,
       "properties": {
-        "Key": { "type": "string", "minLength": 1, "maxLength": 128 },
-        "Value": { "type": "string", "minLength": 0, "maxLength": 256 }
+        "Key": { "maxLength": 128, "minLength": 1, "type": "string" },
+        "Value": { "maxLength": 256, "minLength": 0, "type": "string" }
       },
-      "required": ["Key", "Value"]
+      "required": ["Key", "Value"],
+      "type": "object"
     }
   },
-  "required": ["Format", "Location", "Name"],
-  "primaryIdentifier": ["/properties/Id", "/properties/DetectorId"],
-  "readOnlyProperties": ["/properties/Id"],
-  "createOnlyProperties": ["/properties/Format", "/properties/DetectorId"],
-  "writeOnlyProperties": ["/properties/Activate"],
+  "description": "Resource Type definition for AWS::GuardDuty::ThreatIntelSet",
   "handlers": {
     "create": {
       "permissions": [
@@ -43,7 +23,6 @@
         "iam:PutRolePolicy"
       ]
     },
-    "read": { "permissions": ["guardduty:GetThreatIntelSet"] },
     "delete": {
       "permissions": [
         "guardduty:ListDetectors",
@@ -53,6 +32,11 @@
         "iam:DeleteRolePolicy"
       ]
     },
+    "list": {
+      "handlerSchema": { "properties": { "DetectorId": { "type": "string" } } },
+      "permissions": ["guardduty:ListThreatIntelSets"]
+    },
+    "read": { "permissions": ["guardduty:GetThreatIntelSet"] },
     "update": {
       "permissions": [
         "guardduty:UpdateThreatIntelSet",
@@ -60,11 +44,27 @@
         "guardduty:ListThreatIntelSets",
         "iam:PutRolePolicy"
       ]
-    },
-    "list": {
-      "handlerSchema": { "properties": { "DetectorId": { "type": "string" } } },
-      "permissions": ["guardduty:ListThreatIntelSets"]
     }
   },
-  "$hash": "2158deca80f426be153bb1ab7d0caafe938889c4"
+  "primaryIdentifier": ["/properties/Id", "/properties/DetectorId"],
+  "properties": {
+    "Activate": { "type": "boolean" },
+    "DetectorId": { "maxLength": 32, "minLength": 1, "type": "string" },
+    "Format": { "maxLength": 300, "minLength": 1, "type": "string" },
+    "Id": { "type": "string" },
+    "Location": { "maxLength": 300, "minLength": 1, "type": "string" },
+    "Name": { "type": "string" },
+    "Tags": { "items": { "$ref": "#/definitions/TagItem" }, "type": "array" }
+  },
+  "readOnlyProperties": ["/properties/Id"],
+  "required": ["Format", "Location", "Name"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-guardduty",
+  "tagging": {
+    "cloudFormationSystemTags": false,
+    "tagOnCreate": true,
+    "tagUpdatable": false,
+    "taggable": true
+  },
+  "typeName": "AWS::GuardDuty::ThreatIntelSet",
+  "writeOnlyProperties": ["/properties/Activate"]
 }

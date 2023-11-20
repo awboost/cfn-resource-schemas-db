@@ -1,42 +1,59 @@
 {
-  "typeName": "AWS::Location::PlaceIndex",
-  "description": "Definition of AWS::Location::PlaceIndex Resource Type",
+  "$hash": "dd88535148d6e000cdef58e27e04ccd4156ae508",
+  "additionalProperties": false,
+  "createOnlyProperties": [
+    "/properties/IndexName",
+    "/properties/DataSource",
+    "/properties/DataSourceConfiguration",
+    "/properties/Description",
+    "/properties/PricingPlan"
+  ],
   "definitions": {
     "DataSourceConfiguration": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": { "IntendedUse": { "$ref": "#/definitions/IntendedUse" } },
-      "additionalProperties": false
+      "type": "object"
     },
-    "IntendedUse": { "type": "string", "enum": ["SingleUse", "Storage"] },
-    "PricingPlan": { "type": "string", "enum": ["RequestBasedUsage"] },
+    "IntendedUse": { "enum": ["SingleUse", "Storage"], "type": "string" },
+    "PricingPlan": { "enum": ["RequestBasedUsage"], "type": "string" },
     "iso8601UTC": {
       "description": "The datetime value in ISO 8601 format. The timezone is always UTC. (YYYY-MM-DDThh:mm:ss.sssZ)",
-      "type": "string",
-      "pattern": "^([0-2]\\d{3})-(0[0-9]|1[0-2])-([0-2]\\d|3[01])T([01]\\d|2[0-4]):([0-5]\\d):([0-6]\\d)((\\.\\d{3})?)Z$"
+      "pattern": "^([0-2]\\d{3})-(0[0-9]|1[0-2])-([0-2]\\d|3[01])T([01]\\d|2[0-4]):([0-5]\\d):([0-6]\\d)((\\.\\d{3})?)Z$",
+      "type": "string"
     }
   },
+  "description": "Definition of AWS::Location::PlaceIndex Resource Type",
+  "handlers": {
+    "create": {
+      "permissions": ["geo:CreatePlaceIndex", "geo:DescribePlaceIndex"]
+    },
+    "delete": { "permissions": ["geo:DeletePlaceIndex"] },
+    "list": { "permissions": ["geo:ListPlaceIndexes"] },
+    "read": { "permissions": ["geo:DescribePlaceIndex"] }
+  },
+  "primaryIdentifier": ["/properties/IndexName"],
   "properties": {
+    "Arn": {
+      "maxLength": 1600,
+      "pattern": "^arn(:[a-z0-9]+([.-][a-z0-9]+)*){2}(:([a-z0-9]+([.-][a-z0-9]+)*)?){2}:([^/].*)?$",
+      "type": "string"
+    },
     "CreateTime": { "$ref": "#/definitions/iso8601UTC" },
     "DataSource": { "type": "string" },
     "DataSourceConfiguration": {
       "$ref": "#/definitions/DataSourceConfiguration"
     },
-    "Description": { "type": "string", "maxLength": 1000, "minLength": 0 },
+    "Description": { "maxLength": 1000, "minLength": 0, "type": "string" },
     "IndexArn": {
-      "type": "string",
       "maxLength": 1600,
-      "pattern": "^arn(:[a-z0-9]+([.-][a-z0-9]+)*){2}(:([a-z0-9]+([.-][a-z0-9]+)*)?){2}:([^/].*)?$"
-    },
-    "Arn": {
-      "type": "string",
-      "maxLength": 1600,
-      "pattern": "^arn(:[a-z0-9]+([.-][a-z0-9]+)*){2}(:([a-z0-9]+([.-][a-z0-9]+)*)?){2}:([^/].*)?$"
+      "pattern": "^arn(:[a-z0-9]+([.-][a-z0-9]+)*){2}(:([a-z0-9]+([.-][a-z0-9]+)*)?){2}:([^/].*)?$",
+      "type": "string"
     },
     "IndexName": {
-      "type": "string",
       "maxLength": 100,
       "minLength": 1,
-      "pattern": "^[-._\\w]+$"
+      "pattern": "^[-._\\w]+$",
+      "type": "string"
     },
     "PricingPlan": { "$ref": "#/definitions/PricingPlan" },
     "UpdateTime": { "$ref": "#/definitions/iso8601UTC" }
@@ -47,23 +64,6 @@
     "/properties/Arn",
     "/properties/UpdateTime"
   ],
-  "createOnlyProperties": [
-    "/properties/IndexName",
-    "/properties/DataSource",
-    "/properties/DataSourceConfiguration",
-    "/properties/Description",
-    "/properties/PricingPlan"
-  ],
   "required": ["IndexName", "DataSource"],
-  "primaryIdentifier": ["/properties/IndexName"],
-  "additionalProperties": false,
-  "handlers": {
-    "create": {
-      "permissions": ["geo:CreatePlaceIndex", "geo:DescribePlaceIndex"]
-    },
-    "read": { "permissions": ["geo:DescribePlaceIndex"] },
-    "delete": { "permissions": ["geo:DeletePlaceIndex"] },
-    "list": { "permissions": ["geo:ListPlaceIndexes"] }
-  },
-  "$hash": "dd88535148d6e000cdef58e27e04ccd4156ae508"
+  "typeName": "AWS::Location::PlaceIndex"
 }

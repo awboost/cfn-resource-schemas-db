@@ -1,65 +1,36 @@
 {
-  "typeName": "AWS::Glue::Registry",
-  "description": "This resource creates a Registry for authoring schemas as part of Glue Schema Registry.",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-glue.git",
+  "$hash": "76860a79668d1a4a699eb2bdc8d08e4ead54eecb",
+  "additionalProperties": false,
+  "createOnlyProperties": ["/properties/Name"],
   "definitions": {
     "Tag": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "Key": {
           "description": "A key to identify the tag.",
-          "type": "string",
+          "maxLength": 128,
           "minLength": 1,
-          "maxLength": 128
+          "type": "string"
         },
         "Value": {
           "description": "Corresponding tag value for the key.",
-          "type": "string",
+          "maxLength": 256,
           "minLength": 0,
-          "maxLength": 256
+          "type": "string"
         }
       },
       "required": ["Key", "Value"],
-      "additionalProperties": false
+      "type": "object"
     }
   },
-  "properties": {
-    "Arn": {
-      "description": "Amazon Resource Name for the created Registry.",
-      "type": "string",
-      "pattern": "arn:aws(-(cn|us-gov|iso(-[bef])?))?:glue:.*"
-    },
-    "Name": {
-      "description": "Name of the registry to be created of max length of 255, and may only contain letters, numbers, hyphen, underscore, dollar sign, or hash mark.  No whitespace.",
-      "type": "string",
-      "maxLength": 255,
-      "minLength": 1
-    },
-    "Description": {
-      "description": "A description of the registry. If description is not provided, there will not be any default value for this.",
-      "type": "string",
-      "maxLength": 1000,
-      "minLength": 0
-    },
-    "Tags": {
-      "description": "List of tags to tag the Registry",
-      "type": "array",
-      "minItems": 0,
-      "maxItems": 10,
-      "items": { "$ref": "#/definitions/Tag" }
-    }
-  },
-  "createOnlyProperties": ["/properties/Name"],
-  "readOnlyProperties": ["/properties/Arn"],
-  "primaryIdentifier": ["/properties/Arn"],
-  "additionalProperties": false,
-  "required": ["Name"],
+  "description": "This resource creates a Registry for authoring schemas as part of Glue Schema Registry.",
   "handlers": {
     "create": {
       "permissions": ["glue:CreateRegistry", "glue:GetRegistry", "glue:GetTags"]
     },
-    "read": { "permissions": ["glue:GetRegistry", "glue:GetTags"] },
     "delete": { "permissions": ["glue:DeleteRegistry"] },
+    "list": { "permissions": ["glue:ListRegistries"] },
+    "read": { "permissions": ["glue:GetRegistry", "glue:GetTags"] },
     "update": {
       "permissions": [
         "glue:UpdateRegistry",
@@ -68,8 +39,37 @@
         "glue:UntagResource",
         "glue:GetTags"
       ]
-    },
-    "list": { "permissions": ["glue:ListRegistries"] }
+    }
   },
-  "$hash": "76860a79668d1a4a699eb2bdc8d08e4ead54eecb"
+  "primaryIdentifier": ["/properties/Arn"],
+  "properties": {
+    "Arn": {
+      "description": "Amazon Resource Name for the created Registry.",
+      "pattern": "arn:aws(-(cn|us-gov|iso(-[bef])?))?:glue:.*",
+      "type": "string"
+    },
+    "Description": {
+      "description": "A description of the registry. If description is not provided, there will not be any default value for this.",
+      "maxLength": 1000,
+      "minLength": 0,
+      "type": "string"
+    },
+    "Name": {
+      "description": "Name of the registry to be created of max length of 255, and may only contain letters, numbers, hyphen, underscore, dollar sign, or hash mark.  No whitespace.",
+      "maxLength": 255,
+      "minLength": 1,
+      "type": "string"
+    },
+    "Tags": {
+      "description": "List of tags to tag the Registry",
+      "items": { "$ref": "#/definitions/Tag" },
+      "maxItems": 10,
+      "minItems": 0,
+      "type": "array"
+    }
+  },
+  "readOnlyProperties": ["/properties/Arn"],
+  "required": ["Name"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-glue.git",
+  "typeName": "AWS::Glue::Registry"
 }

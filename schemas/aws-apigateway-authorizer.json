@@ -1,13 +1,27 @@
 {
-  "typeName": "AWS::ApiGateway::Authorizer",
+  "$hash": "5f67bb293af23709848ce7fae4c270ae43c0b1aa",
+  "additionalProperties": false,
+  "createOnlyProperties": ["/properties/RestApiId"],
   "description": "The ``AWS::ApiGateway::Authorizer`` resource creates an authorization layer that API Gateway activates for methods that have authorization enabled. API Gateway activates the authorizer when a client calls those methods.",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-apigateway.git",
-  "properties": {
-    "RestApiId": {
-      "description": "The string identifier of the associated RestApi.",
-      "type": "string"
+  "handlers": {
+    "create": { "permissions": ["apigateway:POST", "iam:PassRole"] },
+    "delete": { "permissions": ["apigateway:DELETE"] },
+    "list": {
+      "handlerSchema": {
+        "properties": {
+          "RestApiId": { "$ref": "resource-schema.json#/properties/RestApiId" }
+        },
+        "required": ["RestApiId"]
+      },
+      "permissions": ["apigateway:GET"]
     },
-    "AuthorizerId": { "type": "string", "description": "" },
+    "read": { "permissions": ["apigateway:GET"] },
+    "update": {
+      "permissions": ["apigateway:GET", "apigateway:PATCH", "iam:PassRole"]
+    }
+  },
+  "primaryIdentifier": ["/properties/RestApiId", "/properties/AuthorizerId"],
+  "properties": {
     "AuthType": {
       "description": "Optional customer-defined field, used in OpenAPI imports and exports without functional impact.",
       "type": "string"
@@ -16,6 +30,7 @@
       "description": "Specifies the required credentials as an IAM role for API Gateway to invoke the authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To use resource-based permissions on the Lambda function, specify null.",
       "type": "string"
     },
+    "AuthorizerId": { "description": "", "type": "string" },
     "AuthorizerResultTtlInSeconds": {
       "description": "The TTL in seconds of cached authorizer results. If it equals 0, authorization caching is disabled. If it is greater than 0, API Gateway will cache authorizer responses. If this field is not set, the default value is 300. The maximum value is 3600, or 1 hour.",
       "type": "integer"
@@ -35,43 +50,28 @@
     "Name": { "description": "The name of the authorizer.", "type": "string" },
     "ProviderARNs": {
       "description": "A list of the Amazon Cognito user pool ARNs for the ``COGNITO_USER_POOLS`` authorizer. Each element is of this format: ``arn:aws:cognito-idp:{region}:{account_id}:userpool/{user_pool_id}``. For a ``TOKEN`` or ``REQUEST`` authorizer, this is not defined.",
-      "type": "array",
-      "uniqueItems": true,
+      "insertionOrder": false,
       "items": { "type": "string" },
-      "insertionOrder": false
+      "type": "array",
+      "uniqueItems": true
+    },
+    "RestApiId": {
+      "description": "The string identifier of the associated RestApi.",
+      "type": "string"
     },
     "Type": {
       "description": "The authorizer type. Valid values are ``TOKEN`` for a Lambda function using a single authorization token submitted in a custom header, ``REQUEST`` for a Lambda function using incoming request parameters, and ``COGNITO_USER_POOLS`` for using an Amazon Cognito user pool.",
       "type": "string"
     }
   },
+  "readOnlyProperties": ["/properties/AuthorizerId"],
+  "required": ["RestApiId", "Type", "Name"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-apigateway.git",
   "tagging": {
-    "taggable": false,
+    "cloudFormationSystemTags": false,
     "tagOnCreate": false,
     "tagUpdatable": false,
-    "cloudFormationSystemTags": false
+    "taggable": false
   },
-  "additionalProperties": false,
-  "required": ["RestApiId", "Type", "Name"],
-  "createOnlyProperties": ["/properties/RestApiId"],
-  "primaryIdentifier": ["/properties/RestApiId", "/properties/AuthorizerId"],
-  "readOnlyProperties": ["/properties/AuthorizerId"],
-  "handlers": {
-    "create": { "permissions": ["apigateway:POST", "iam:PassRole"] },
-    "read": { "permissions": ["apigateway:GET"] },
-    "update": {
-      "permissions": ["apigateway:GET", "apigateway:PATCH", "iam:PassRole"]
-    },
-    "delete": { "permissions": ["apigateway:DELETE"] },
-    "list": {
-      "handlerSchema": {
-        "properties": {
-          "RestApiId": { "$ref": "resource-schema.json#/properties/RestApiId" }
-        },
-        "required": ["RestApiId"]
-      },
-      "permissions": ["apigateway:GET"]
-    }
-  },
-  "$hash": "5f67bb293af23709848ce7fae4c270ae43c0b1aa"
+  "typeName": "AWS::ApiGateway::Authorizer"
 }

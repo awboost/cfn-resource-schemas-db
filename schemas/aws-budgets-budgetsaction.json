@@ -1,114 +1,128 @@
 {
-  "typeName": "AWS::Budgets::BudgetsAction",
-  "description": "An example resource schema demonstrating some basic constructs and validation rules.",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+  "$hash": "24493d3490bd7440d5702c254bcb8eabf951e642",
+  "additionalProperties": false,
+  "createOnlyProperties": ["/properties/ActionType", "/properties/BudgetName"],
   "definitions": {
-    "Subscriber": {
-      "type": "object",
-      "properties": {
-        "Type": { "type": "string", "enum": ["SNS", "EMAIL"] },
-        "Address": { "type": "string" }
-      },
-      "required": ["Type", "Address"],
-      "additionalProperties": false
-    },
     "ActionThreshold": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
-        "Value": { "type": "number" },
-        "Type": { "type": "string", "enum": ["PERCENTAGE", "ABSOLUTE_VALUE"] }
+        "Type": { "enum": ["PERCENTAGE", "ABSOLUTE_VALUE"], "type": "string" },
+        "Value": { "type": "number" }
       },
       "required": ["Value", "Type"],
-      "additionalProperties": false
-    },
-    "IamActionDefinition": {
-      "type": "object",
-      "properties": {
-        "PolicyArn": { "type": "string" },
-        "Roles": {
-          "type": "array",
-          "items": { "type": "string" },
-          "minItems": 1,
-          "maxItems": 100
-        },
-        "Groups": {
-          "type": "array",
-          "items": { "type": "string" },
-          "minItems": 1,
-          "maxItems": 100
-        },
-        "Users": {
-          "type": "array",
-          "items": { "type": "string" },
-          "minItems": 1,
-          "maxItems": 100
-        }
-      },
-      "required": ["PolicyArn"],
-      "additionalProperties": false
-    },
-    "ScpActionDefinition": {
-      "type": "object",
-      "properties": {
-        "PolicyId": { "type": "string" },
-        "TargetIds": {
-          "type": "array",
-          "items": { "type": "string" },
-          "minItems": 1,
-          "maxItems": 100
-        }
-      },
-      "required": ["PolicyId", "TargetIds"],
-      "additionalProperties": false
-    },
-    "SsmActionDefinition": {
-      "type": "object",
-      "properties": {
-        "Subtype": {
-          "type": "string",
-          "enum": ["STOP_EC2_INSTANCES", "STOP_RDS_INSTANCES"]
-        },
-        "Region": { "type": "string" },
-        "InstanceIds": {
-          "type": "array",
-          "items": { "type": "string" },
-          "minItems": 1,
-          "maxItems": 100
-        }
-      },
-      "required": ["Subtype", "Region", "InstanceIds"],
-      "additionalProperties": false
+      "type": "object"
     },
     "Definition": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "IamActionDefinition": { "$ref": "#/definitions/IamActionDefinition" },
         "ScpActionDefinition": { "$ref": "#/definitions/ScpActionDefinition" },
         "SsmActionDefinition": { "$ref": "#/definitions/SsmActionDefinition" }
       },
-      "additionalProperties": false
+      "type": "object"
+    },
+    "IamActionDefinition": {
+      "additionalProperties": false,
+      "properties": {
+        "Groups": {
+          "items": { "type": "string" },
+          "maxItems": 100,
+          "minItems": 1,
+          "type": "array"
+        },
+        "PolicyArn": { "type": "string" },
+        "Roles": {
+          "items": { "type": "string" },
+          "maxItems": 100,
+          "minItems": 1,
+          "type": "array"
+        },
+        "Users": {
+          "items": { "type": "string" },
+          "maxItems": 100,
+          "minItems": 1,
+          "type": "array"
+        }
+      },
+      "required": ["PolicyArn"],
+      "type": "object"
+    },
+    "ScpActionDefinition": {
+      "additionalProperties": false,
+      "properties": {
+        "PolicyId": { "type": "string" },
+        "TargetIds": {
+          "items": { "type": "string" },
+          "maxItems": 100,
+          "minItems": 1,
+          "type": "array"
+        }
+      },
+      "required": ["PolicyId", "TargetIds"],
+      "type": "object"
+    },
+    "SsmActionDefinition": {
+      "additionalProperties": false,
+      "properties": {
+        "InstanceIds": {
+          "items": { "type": "string" },
+          "maxItems": 100,
+          "minItems": 1,
+          "type": "array"
+        },
+        "Region": { "type": "string" },
+        "Subtype": {
+          "enum": ["STOP_EC2_INSTANCES", "STOP_RDS_INSTANCES"],
+          "type": "string"
+        }
+      },
+      "required": ["Subtype", "Region", "InstanceIds"],
+      "type": "object"
+    },
+    "Subscriber": {
+      "additionalProperties": false,
+      "properties": {
+        "Address": { "type": "string" },
+        "Type": { "enum": ["SNS", "EMAIL"], "type": "string" }
+      },
+      "required": ["Type", "Address"],
+      "type": "object"
     }
   },
+  "description": "An example resource schema demonstrating some basic constructs and validation rules.",
+  "handlers": {
+    "create": { "permissions": ["budgets:CreateBudgetAction", "iam:PassRole"] },
+    "delete": { "permissions": ["budgets:DeleteBudgetAction"] },
+    "list": {
+      "permissions": [
+        "budgets:DescribeBudgetActionsForAccount",
+        "budgets:DescribeBudgetActionsForBudget"
+      ]
+    },
+    "read": { "permissions": ["budgets:DescribeBudgetAction"] },
+    "update": { "permissions": ["budgets:UpdateBudgetAction", "iam:PassRole"] }
+  },
+  "primaryIdentifier": ["/properties/ActionId", "/properties/BudgetName"],
   "properties": {
     "ActionId": { "type": "string" },
-    "BudgetName": { "type": "string" },
-    "NotificationType": { "type": "string", "enum": ["ACTUAL", "FORECASTED"] },
-    "ActionType": {
-      "type": "string",
-      "enum": ["APPLY_IAM_POLICY", "APPLY_SCP_POLICY", "RUN_SSM_DOCUMENTS"]
-    },
     "ActionThreshold": { "$ref": "#/definitions/ActionThreshold" },
+    "ActionType": {
+      "enum": ["APPLY_IAM_POLICY", "APPLY_SCP_POLICY", "RUN_SSM_DOCUMENTS"],
+      "type": "string"
+    },
+    "ApprovalModel": { "enum": ["AUTOMATIC", "MANUAL"], "type": "string" },
+    "BudgetName": { "type": "string" },
+    "Definition": { "$ref": "#/definitions/Definition" },
     "ExecutionRoleArn": { "type": "string" },
-    "ApprovalModel": { "type": "string", "enum": ["AUTOMATIC", "MANUAL"] },
+    "NotificationType": { "enum": ["ACTUAL", "FORECASTED"], "type": "string" },
     "Subscribers": {
-      "type": "array",
       "items": { "$ref": "#/definitions/Subscriber" },
       "maxItems": 11,
-      "minItems": 1
-    },
-    "Definition": { "$ref": "#/definitions/Definition" }
+      "minItems": 1,
+      "type": "array"
+    }
   },
-  "additionalProperties": false,
+  "readOnlyProperties": ["/properties/ActionId"],
   "required": [
     "BudgetName",
     "NotificationType",
@@ -118,20 +132,6 @@
     "Definition",
     "Subscribers"
   ],
-  "readOnlyProperties": ["/properties/ActionId"],
-  "createOnlyProperties": ["/properties/ActionType", "/properties/BudgetName"],
-  "primaryIdentifier": ["/properties/ActionId", "/properties/BudgetName"],
-  "handlers": {
-    "create": { "permissions": ["budgets:CreateBudgetAction", "iam:PassRole"] },
-    "read": { "permissions": ["budgets:DescribeBudgetAction"] },
-    "update": { "permissions": ["budgets:UpdateBudgetAction", "iam:PassRole"] },
-    "delete": { "permissions": ["budgets:DeleteBudgetAction"] },
-    "list": {
-      "permissions": [
-        "budgets:DescribeBudgetActionsForAccount",
-        "budgets:DescribeBudgetActionsForBudget"
-      ]
-    }
-  },
-  "$hash": "24493d3490bd7440d5702c254bcb8eabf951e642"
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+  "typeName": "AWS::Budgets::BudgetsAction"
 }

@@ -1,130 +1,34 @@
 {
-  "typeName": "AWS::Transfer::Agreement",
-  "description": "Resource Type definition for AWS::Transfer::Agreement",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-transfer",
+  "$hash": "5e357feba06305faa7602db3360abb8b98e0e63b",
+  "additionalProperties": false,
+  "createOnlyProperties": ["/properties/ServerId"],
   "definitions": {
     "Tag": {
+      "additionalProperties": false,
       "description": "Creates a key-value pair for a specific resource.",
-      "type": "object",
       "properties": {
         "Key": {
-          "type": "string",
           "description": "The name assigned to the tag that you create.",
+          "maxLength": 128,
           "minLength": 1,
-          "maxLength": 128
+          "type": "string"
         },
         "Value": {
-          "type": "string",
           "description": "Contains one or more values that you assigned to the key name you create.",
+          "maxLength": 256,
           "minLength": 0,
-          "maxLength": 256
+          "type": "string"
         }
       },
       "required": ["Key", "Value"],
-      "additionalProperties": false
+      "type": "object"
     }
   },
-  "properties": {
-    "Description": {
-      "description": "A textual description for the agreement.",
-      "type": "string",
-      "pattern": "^[\\w\\- ]*$",
-      "minLength": 1,
-      "maxLength": 200
-    },
-    "ServerId": {
-      "description": "A unique identifier for the server.",
-      "type": "string",
-      "pattern": "^s-([0-9a-f]{17})$",
-      "minLength": 19,
-      "maxLength": 19
-    },
-    "LocalProfileId": {
-      "description": "A unique identifier for the local profile.",
-      "type": "string",
-      "pattern": "^p-([0-9a-f]{17})$",
-      "minLength": 19,
-      "maxLength": 19
-    },
-    "PartnerProfileId": {
-      "description": "A unique identifier for the partner profile.",
-      "type": "string",
-      "pattern": "^p-([0-9a-f]{17})$",
-      "minLength": 19,
-      "maxLength": 19
-    },
-    "BaseDirectory": {
-      "description": "Specifies the base directory for the agreement.",
-      "type": "string",
-      "pattern": "^$|/.*",
-      "maxLength": 1024
-    },
-    "AccessRole": {
-      "description": "Specifies the access role for the agreement.",
-      "type": "string",
-      "pattern": "arn:.*role/.*",
-      "minLength": 20,
-      "maxLength": 2048
-    },
-    "Status": {
-      "description": "Specifies the status of the agreement.",
-      "type": "string",
-      "enum": ["ACTIVE", "INACTIVE"]
-    },
-    "Tags": {
-      "description": "Key-value pairs that can be used to group and search for agreements. Tags are metadata attached to agreements for any purpose.",
-      "type": "array",
-      "maxItems": 50,
-      "uniqueItems": true,
-      "insertionOrder": false,
-      "items": { "$ref": "#/definitions/Tag" }
-    },
-    "AgreementId": {
-      "description": "A unique identifier for the agreement.",
-      "type": "string",
-      "pattern": "^a-([0-9a-f]{17})$",
-      "minLength": 19,
-      "maxLength": 19
-    },
-    "Arn": {
-      "description": "Specifies the unique Amazon Resource Name (ARN) for the agreement.",
-      "type": "string",
-      "pattern": "arn:.*",
-      "minLength": 20,
-      "maxLength": 1600
-    }
-  },
-  "additionalProperties": false,
-  "required": [
-    "ServerId",
-    "LocalProfileId",
-    "PartnerProfileId",
-    "BaseDirectory",
-    "AccessRole"
-  ],
-  "readOnlyProperties": ["/properties/AgreementId", "/properties/Arn"],
-  "createOnlyProperties": ["/properties/ServerId"],
-  "primaryIdentifier": ["/properties/AgreementId", "/properties/ServerId"],
-  "tagging": {
-    "taggable": true,
-    "tagOnCreate": true,
-    "tagUpdatable": true,
-    "cloudFormationSystemTags": true,
-    "tagProperty": "/properties/Tags"
-  },
+  "description": "Resource Type definition for AWS::Transfer::Agreement",
   "handlers": {
     "create": {
       "permissions": [
         "transfer:CreateAgreement",
-        "transfer:TagResource",
-        "iam:PassRole"
-      ]
-    },
-    "read": { "permissions": ["transfer:DescribeAgreement"] },
-    "update": {
-      "permissions": [
-        "transfer:UpdateAgreement",
-        "transfer:UnTagResource",
         "transfer:TagResource",
         "iam:PassRole"
       ]
@@ -138,7 +42,103 @@
         "required": ["ServerId"]
       },
       "permissions": ["transfer:ListAgreements"]
+    },
+    "read": { "permissions": ["transfer:DescribeAgreement"] },
+    "update": {
+      "permissions": [
+        "transfer:UpdateAgreement",
+        "transfer:UnTagResource",
+        "transfer:TagResource",
+        "iam:PassRole"
+      ]
     }
   },
-  "$hash": "5e357feba06305faa7602db3360abb8b98e0e63b"
+  "primaryIdentifier": ["/properties/AgreementId", "/properties/ServerId"],
+  "properties": {
+    "AccessRole": {
+      "description": "Specifies the access role for the agreement.",
+      "maxLength": 2048,
+      "minLength": 20,
+      "pattern": "arn:.*role/.*",
+      "type": "string"
+    },
+    "AgreementId": {
+      "description": "A unique identifier for the agreement.",
+      "maxLength": 19,
+      "minLength": 19,
+      "pattern": "^a-([0-9a-f]{17})$",
+      "type": "string"
+    },
+    "Arn": {
+      "description": "Specifies the unique Amazon Resource Name (ARN) for the agreement.",
+      "maxLength": 1600,
+      "minLength": 20,
+      "pattern": "arn:.*",
+      "type": "string"
+    },
+    "BaseDirectory": {
+      "description": "Specifies the base directory for the agreement.",
+      "maxLength": 1024,
+      "pattern": "^$|/.*",
+      "type": "string"
+    },
+    "Description": {
+      "description": "A textual description for the agreement.",
+      "maxLength": 200,
+      "minLength": 1,
+      "pattern": "^[\\w\\- ]*$",
+      "type": "string"
+    },
+    "LocalProfileId": {
+      "description": "A unique identifier for the local profile.",
+      "maxLength": 19,
+      "minLength": 19,
+      "pattern": "^p-([0-9a-f]{17})$",
+      "type": "string"
+    },
+    "PartnerProfileId": {
+      "description": "A unique identifier for the partner profile.",
+      "maxLength": 19,
+      "minLength": 19,
+      "pattern": "^p-([0-9a-f]{17})$",
+      "type": "string"
+    },
+    "ServerId": {
+      "description": "A unique identifier for the server.",
+      "maxLength": 19,
+      "minLength": 19,
+      "pattern": "^s-([0-9a-f]{17})$",
+      "type": "string"
+    },
+    "Status": {
+      "description": "Specifies the status of the agreement.",
+      "enum": ["ACTIVE", "INACTIVE"],
+      "type": "string"
+    },
+    "Tags": {
+      "description": "Key-value pairs that can be used to group and search for agreements. Tags are metadata attached to agreements for any purpose.",
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/Tag" },
+      "maxItems": 50,
+      "type": "array",
+      "uniqueItems": true
+    }
+  },
+  "readOnlyProperties": ["/properties/AgreementId", "/properties/Arn"],
+  "required": [
+    "ServerId",
+    "LocalProfileId",
+    "PartnerProfileId",
+    "BaseDirectory",
+    "AccessRole"
+  ],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-transfer",
+  "tagging": {
+    "cloudFormationSystemTags": true,
+    "tagOnCreate": true,
+    "tagProperty": "/properties/Tags",
+    "tagUpdatable": true,
+    "taggable": true
+  },
+  "typeName": "AWS::Transfer::Agreement"
 }

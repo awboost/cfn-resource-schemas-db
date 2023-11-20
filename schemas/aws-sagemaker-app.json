@@ -1,66 +1,19 @@
 {
-  "typeName": "AWS::SageMaker::App",
-  "description": "Resource Type definition for AWS::SageMaker::App",
+  "$hash": "83b93c3aa115fb047534ebe673c18a7b4f72439b",
   "additionalProperties": false,
-  "properties": {
-    "AppArn": {
-      "type": "string",
-      "description": "The Amazon Resource Name (ARN) of the app.",
-      "minLength": 1,
-      "maxLength": 256,
-      "pattern": "arn:aws[a-z\\-]*:sagemaker:[a-z0-9\\-]*:[0-9]{12}:app/.*"
-    },
-    "AppName": {
-      "type": "string",
-      "description": "The name of the app.",
-      "minLength": 1,
-      "maxLength": 63,
-      "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9]){0,62}"
-    },
-    "AppType": {
-      "type": "string",
-      "description": "The type of app.",
-      "enum": [
-        "JupyterServer",
-        "KernelGateway",
-        "RStudioServerPro",
-        "RSessionGateway",
-        "Canvas"
-      ]
-    },
-    "DomainId": {
-      "type": "string",
-      "description": "The domain ID.",
-      "minLength": 1,
-      "maxLength": 63
-    },
-    "ResourceSpec": {
-      "$ref": "#/definitions/ResourceSpec",
-      "description": "The instance type and the Amazon Resource Name (ARN) of the SageMaker image created on the instance."
-    },
-    "Tags": {
-      "type": "array",
-      "description": "A list of tags to apply to the app.",
-      "uniqueItems": false,
-      "minItems": 0,
-      "maxItems": 50,
-      "items": { "$ref": "#/definitions/Tag" }
-    },
-    "UserProfileName": {
-      "type": "string",
-      "description": "The user profile name.",
-      "minLength": 1,
-      "maxLength": 63,
-      "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9]){0,62}"
-    }
-  },
+  "createOnlyProperties": [
+    "/properties/AppName",
+    "/properties/AppType",
+    "/properties/DomainId",
+    "/properties/UserProfileName",
+    "/properties/Tags",
+    "/properties/ResourceSpec"
+  ],
   "definitions": {
     "ResourceSpec": {
-      "type": "object",
       "additionalProperties": false,
       "properties": {
         "InstanceType": {
-          "type": "string",
           "description": "The instance type that the image version runs on.",
           "enum": [
             "system",
@@ -123,58 +76,105 @@
             "ml.p4d.24xlarge",
             "ml.p4de.24xlarge",
             "ml.geospatial.interactive"
-          ]
+          ],
+          "type": "string"
         },
         "SageMakerImageArn": {
-          "type": "string",
           "description": "The ARN of the SageMaker image that the image version belongs to.",
-          "minLength": 1,
           "maxLength": 256,
-          "pattern": "^arn:aws(-[\\w]+)*:sagemaker:.+:[0-9]{12}:image/[a-z0-9]([-.]?[a-z0-9])*$"
+          "minLength": 1,
+          "pattern": "^arn:aws(-[\\w]+)*:sagemaker:.+:[0-9]{12}:image/[a-z0-9]([-.]?[a-z0-9])*$",
+          "type": "string"
         },
         "SageMakerImageVersionArn": {
-          "type": "string",
           "description": "The ARN of the image version created on the instance.",
-          "minLength": 1,
           "maxLength": 256,
-          "pattern": "^arn:aws(-[\\w]+)*:sagemaker:.+:[0-9]{12}:image-version/[a-z0-9]([-.]?[a-z0-9])*/[0-9]+$"
+          "minLength": 1,
+          "pattern": "^arn:aws(-[\\w]+)*:sagemaker:.+:[0-9]{12}:image-version/[a-z0-9]([-.]?[a-z0-9])*/[0-9]+$",
+          "type": "string"
         }
-      }
+      },
+      "type": "object"
     },
     "Tag": {
-      "type": "object",
       "additionalProperties": false,
       "properties": {
-        "Value": { "type": "string", "minLength": 1, "maxLength": 128 },
-        "Key": { "type": "string", "minLength": 1, "maxLength": 128 }
+        "Key": { "maxLength": 128, "minLength": 1, "type": "string" },
+        "Value": { "maxLength": 128, "minLength": 1, "type": "string" }
       },
-      "required": ["Key", "Value"]
+      "required": ["Key", "Value"],
+      "type": "object"
     }
   },
-  "required": ["AppName", "AppType", "DomainId", "UserProfileName"],
-  "createOnlyProperties": [
-    "/properties/AppName",
-    "/properties/AppType",
-    "/properties/DomainId",
-    "/properties/UserProfileName",
-    "/properties/Tags",
-    "/properties/ResourceSpec"
-  ],
-  "writeOnlyProperties": ["/properties/Tags"],
+  "description": "Resource Type definition for AWS::SageMaker::App",
+  "handlers": {
+    "create": {
+      "permissions": ["sagemaker:CreateApp", "sagemaker:DescribeApp"]
+    },
+    "delete": { "permissions": ["sagemaker:DeleteApp"] },
+    "list": { "permissions": ["sagemaker:ListApps"] },
+    "read": { "permissions": ["sagemaker:DescribeApp"] }
+  },
   "primaryIdentifier": [
     "/properties/AppName",
     "/properties/AppType",
     "/properties/DomainId",
     "/properties/UserProfileName"
   ],
-  "readOnlyProperties": ["/properties/AppArn"],
-  "handlers": {
-    "create": {
-      "permissions": ["sagemaker:CreateApp", "sagemaker:DescribeApp"]
+  "properties": {
+    "AppArn": {
+      "description": "The Amazon Resource Name (ARN) of the app.",
+      "maxLength": 256,
+      "minLength": 1,
+      "pattern": "arn:aws[a-z\\-]*:sagemaker:[a-z0-9\\-]*:[0-9]{12}:app/.*",
+      "type": "string"
     },
-    "read": { "permissions": ["sagemaker:DescribeApp"] },
-    "delete": { "permissions": ["sagemaker:DeleteApp"] },
-    "list": { "permissions": ["sagemaker:ListApps"] }
+    "AppName": {
+      "description": "The name of the app.",
+      "maxLength": 63,
+      "minLength": 1,
+      "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9]){0,62}",
+      "type": "string"
+    },
+    "AppType": {
+      "description": "The type of app.",
+      "enum": [
+        "JupyterServer",
+        "KernelGateway",
+        "RStudioServerPro",
+        "RSessionGateway",
+        "Canvas"
+      ],
+      "type": "string"
+    },
+    "DomainId": {
+      "description": "The domain ID.",
+      "maxLength": 63,
+      "minLength": 1,
+      "type": "string"
+    },
+    "ResourceSpec": {
+      "$ref": "#/definitions/ResourceSpec",
+      "description": "The instance type and the Amazon Resource Name (ARN) of the SageMaker image created on the instance."
+    },
+    "Tags": {
+      "description": "A list of tags to apply to the app.",
+      "items": { "$ref": "#/definitions/Tag" },
+      "maxItems": 50,
+      "minItems": 0,
+      "type": "array",
+      "uniqueItems": false
+    },
+    "UserProfileName": {
+      "description": "The user profile name.",
+      "maxLength": 63,
+      "minLength": 1,
+      "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9]){0,62}",
+      "type": "string"
+    }
   },
-  "$hash": "83b93c3aa115fb047534ebe673c18a7b4f72439b"
+  "readOnlyProperties": ["/properties/AppArn"],
+  "required": ["AppName", "AppType", "DomainId", "UserProfileName"],
+  "typeName": "AWS::SageMaker::App",
+  "writeOnlyProperties": ["/properties/Tags"]
 }

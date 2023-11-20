@@ -1,55 +1,27 @@
 {
-  "typeName": "AWS::Cognito::UserPoolRiskConfigurationAttachment",
-  "description": "Resource Type definition for AWS::Cognito::UserPoolRiskConfigurationAttachment",
+  "$hash": "e94920c1be29337fa71184155270cf61471f547d",
   "additionalProperties": false,
-  "properties": {
-    "Id": { "type": "string" },
-    "CompromisedCredentialsRiskConfiguration": {
-      "$ref": "#/definitions/CompromisedCredentialsRiskConfigurationType"
-    },
-    "UserPoolId": { "type": "string" },
-    "ClientId": { "type": "string" },
-    "AccountTakeoverRiskConfiguration": {
-      "$ref": "#/definitions/AccountTakeoverRiskConfigurationType"
-    },
-    "RiskExceptionConfiguration": {
-      "$ref": "#/definitions/RiskExceptionConfigurationType"
-    }
-  },
+  "createOnlyProperties": ["/properties/UserPoolId", "/properties/ClientId"],
   "definitions": {
-    "RiskExceptionConfigurationType": {
-      "type": "object",
+    "AccountTakeoverActionType": {
       "additionalProperties": false,
       "properties": {
-        "BlockedIPRangeList": {
-          "type": "array",
-          "uniqueItems": false,
-          "items": { "type": "string" }
-        },
-        "SkippedIPRangeList": {
-          "type": "array",
-          "uniqueItems": false,
-          "items": { "type": "string" }
-        }
-      }
-    },
-    "CompromisedCredentialsRiskConfigurationType": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "Actions": {
-          "$ref": "#/definitions/CompromisedCredentialsActionsType"
-        },
-        "EventFilter": {
-          "type": "array",
-          "uniqueItems": false,
-          "items": { "type": "string" }
-        }
+        "EventAction": { "type": "string" },
+        "Notify": { "type": "boolean" }
       },
-      "required": ["Actions"]
+      "required": ["Notify", "EventAction"],
+      "type": "object"
+    },
+    "AccountTakeoverActionsType": {
+      "additionalProperties": false,
+      "properties": {
+        "HighAction": { "$ref": "#/definitions/AccountTakeoverActionType" },
+        "LowAction": { "$ref": "#/definitions/AccountTakeoverActionType" },
+        "MediumAction": { "$ref": "#/definitions/AccountTakeoverActionType" }
+      },
+      "type": "object"
     },
     "AccountTakeoverRiskConfigurationType": {
-      "type": "object",
       "additionalProperties": false,
       "properties": {
         "Actions": { "$ref": "#/definitions/AccountTakeoverActionsType" },
@@ -57,59 +29,87 @@
           "$ref": "#/definitions/NotifyConfigurationType"
         }
       },
-      "required": ["Actions"]
+      "required": ["Actions"],
+      "type": "object"
+    },
+    "CompromisedCredentialsActionsType": {
+      "additionalProperties": false,
+      "properties": { "EventAction": { "type": "string" } },
+      "required": ["EventAction"],
+      "type": "object"
+    },
+    "CompromisedCredentialsRiskConfigurationType": {
+      "additionalProperties": false,
+      "properties": {
+        "Actions": {
+          "$ref": "#/definitions/CompromisedCredentialsActionsType"
+        },
+        "EventFilter": {
+          "items": { "type": "string" },
+          "type": "array",
+          "uniqueItems": false
+        }
+      },
+      "required": ["Actions"],
+      "type": "object"
     },
     "NotifyConfigurationType": {
-      "type": "object",
       "additionalProperties": false,
       "properties": {
         "BlockEmail": { "$ref": "#/definitions/NotifyEmailType" },
-        "ReplyTo": { "type": "string" },
-        "SourceArn": { "type": "string" },
-        "NoActionEmail": { "$ref": "#/definitions/NotifyEmailType" },
         "From": { "type": "string" },
-        "MfaEmail": { "$ref": "#/definitions/NotifyEmailType" }
+        "MfaEmail": { "$ref": "#/definitions/NotifyEmailType" },
+        "NoActionEmail": { "$ref": "#/definitions/NotifyEmailType" },
+        "ReplyTo": { "type": "string" },
+        "SourceArn": { "type": "string" }
       },
-      "required": ["SourceArn"]
-    },
-    "CompromisedCredentialsActionsType": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": { "EventAction": { "type": "string" } },
-      "required": ["EventAction"]
-    },
-    "AccountTakeoverActionsType": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "HighAction": { "$ref": "#/definitions/AccountTakeoverActionType" },
-        "LowAction": { "$ref": "#/definitions/AccountTakeoverActionType" },
-        "MediumAction": { "$ref": "#/definitions/AccountTakeoverActionType" }
-      }
-    },
-    "AccountTakeoverActionType": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "Notify": { "type": "boolean" },
-        "EventAction": { "type": "string" }
-      },
-      "required": ["Notify", "EventAction"]
+      "required": ["SourceArn"],
+      "type": "object"
     },
     "NotifyEmailType": {
-      "type": "object",
       "additionalProperties": false,
       "properties": {
-        "TextBody": { "type": "string" },
         "HtmlBody": { "type": "string" },
-        "Subject": { "type": "string" }
+        "Subject": { "type": "string" },
+        "TextBody": { "type": "string" }
       },
-      "required": ["Subject"]
+      "required": ["Subject"],
+      "type": "object"
+    },
+    "RiskExceptionConfigurationType": {
+      "additionalProperties": false,
+      "properties": {
+        "BlockedIPRangeList": {
+          "items": { "type": "string" },
+          "type": "array",
+          "uniqueItems": false
+        },
+        "SkippedIPRangeList": {
+          "items": { "type": "string" },
+          "type": "array",
+          "uniqueItems": false
+        }
+      },
+      "type": "object"
     }
   },
-  "required": ["ClientId", "UserPoolId"],
-  "createOnlyProperties": ["/properties/UserPoolId", "/properties/ClientId"],
-  "readOnlyProperties": ["/properties/Id"],
+  "description": "Resource Type definition for AWS::Cognito::UserPoolRiskConfigurationAttachment",
   "primaryIdentifier": ["/properties/Id"],
-  "$hash": "e94920c1be29337fa71184155270cf61471f547d"
+  "properties": {
+    "AccountTakeoverRiskConfiguration": {
+      "$ref": "#/definitions/AccountTakeoverRiskConfigurationType"
+    },
+    "ClientId": { "type": "string" },
+    "CompromisedCredentialsRiskConfiguration": {
+      "$ref": "#/definitions/CompromisedCredentialsRiskConfigurationType"
+    },
+    "Id": { "type": "string" },
+    "RiskExceptionConfiguration": {
+      "$ref": "#/definitions/RiskExceptionConfigurationType"
+    },
+    "UserPoolId": { "type": "string" }
+  },
+  "readOnlyProperties": ["/properties/Id"],
+  "required": ["ClientId", "UserPoolId"],
+  "typeName": "AWS::Cognito::UserPoolRiskConfigurationAttachment"
 }

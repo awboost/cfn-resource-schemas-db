@@ -1,94 +1,49 @@
 {
-  "typeName": "AWS::IoT::SoftwarePackageVersion",
-  "description": "resource definition",
-  "definitions": {
-    "PackageVersionStatus": {
-      "type": "string",
-      "enum": ["DRAFT", "PUBLISHED", "DEPRECATED"]
-    },
-    "ResourceAttributes": {
-      "type": "object",
-      "patternProperties": {
-        "^[a-zA-Z0-9:_-]+$": {
-          "type": "string",
-          "minLength": 1,
-          "pattern": "^[^\\p{C}]+$"
-        }
-      },
-      "additionalProperties": false
-    },
-    "Tag": {
-      "description": "A key-value pair to associate with a resource.",
-      "type": "object",
-      "properties": {
-        "Key": {
-          "type": "string",
-          "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
-          "minLength": 1,
-          "maxLength": 128,
-          "pattern": "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$"
-        },
-        "Value": {
-          "type": "string",
-          "description": "The value for the tag. You can specify a value that is 1 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
-          "minLength": 1,
-          "maxLength": 256
-        }
-      },
-      "required": ["Key", "Value"],
-      "additionalProperties": false
-    }
-  },
-  "properties": {
-    "Attributes": { "$ref": "#/definitions/ResourceAttributes" },
-    "Description": {
-      "type": "string",
-      "maxLength": 1024,
-      "minLength": 0,
-      "pattern": "^[^\\p{C}]+$"
-    },
-    "ErrorReason": { "type": "string" },
-    "PackageName": {
-      "type": "string",
-      "maxLength": 128,
-      "minLength": 1,
-      "pattern": "^[a-zA-Z0-9-_.]+$"
-    },
-    "PackageVersionArn": { "type": "string" },
-    "Status": { "$ref": "#/definitions/PackageVersionStatus" },
-    "Tags": {
-      "description": "An array of key-value pairs to apply to this resource.",
-      "type": "array",
-      "maxItems": 50,
-      "uniqueItems": true,
-      "insertionOrder": false,
-      "items": { "$ref": "#/definitions/Tag" }
-    },
-    "VersionName": {
-      "type": "string",
-      "maxLength": 64,
-      "minLength": 1,
-      "pattern": "^[a-zA-Z0-9-_.]+$"
-    }
-  },
-  "tagging": {
-    "taggable": true,
-    "tagOnCreate": true,
-    "tagUpdatable": true,
-    "cloudFormationSystemTags": true,
-    "tagProperty": "/properties/Tags"
-  },
-  "required": ["PackageName"],
-  "readOnlyProperties": [
-    "/properties/ErrorReason",
-    "/properties/PackageVersionArn",
-    "/properties/Status"
-  ],
+  "$hash": "c7f24e3d9bcfa0db00daba1e425de4ce6ca0e884",
+  "additionalProperties": false,
   "createOnlyProperties": [
     "/properties/PackageName",
     "/properties/VersionName"
   ],
-  "primaryIdentifier": ["/properties/PackageName", "/properties/VersionName"],
+  "definitions": {
+    "PackageVersionStatus": {
+      "enum": ["DRAFT", "PUBLISHED", "DEPRECATED"],
+      "type": "string"
+    },
+    "ResourceAttributes": {
+      "additionalProperties": false,
+      "patternProperties": {
+        "^[a-zA-Z0-9:_-]+$": {
+          "minLength": 1,
+          "pattern": "^[^\\p{C}]+$",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Tag": {
+      "additionalProperties": false,
+      "description": "A key-value pair to associate with a resource.",
+      "properties": {
+        "Key": {
+          "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$",
+          "type": "string"
+        },
+        "Value": {
+          "description": "The value for the tag. You can specify a value that is 1 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -. ",
+          "maxLength": 256,
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": ["Key", "Value"],
+      "type": "object"
+    }
+  },
+  "description": "resource definition",
   "handlers": {
     "create": {
       "permissions": [
@@ -98,6 +53,15 @@
         "iot:GetIndexingConfiguration"
       ]
     },
+    "delete": {
+      "permissions": [
+        "iot:DeletePackageVersion",
+        "iot:UpdatePackageVersion",
+        "iot:GetPackageVersion",
+        "iot:GetIndexingConfiguration"
+      ]
+    },
+    "list": { "permissions": ["iot:ListPackageVersions"] },
     "read": {
       "permissions": ["iot:GetPackageVersion", "iot:ListTagsForResource"]
     },
@@ -110,17 +74,53 @@
         "iot:UntagResource",
         "iot:GetIndexingConfiguration"
       ]
-    },
-    "delete": {
-      "permissions": [
-        "iot:DeletePackageVersion",
-        "iot:UpdatePackageVersion",
-        "iot:GetPackageVersion",
-        "iot:GetIndexingConfiguration"
-      ]
-    },
-    "list": { "permissions": ["iot:ListPackageVersions"] }
+    }
   },
-  "additionalProperties": false,
-  "$hash": "c7f24e3d9bcfa0db00daba1e425de4ce6ca0e884"
+  "primaryIdentifier": ["/properties/PackageName", "/properties/VersionName"],
+  "properties": {
+    "Attributes": { "$ref": "#/definitions/ResourceAttributes" },
+    "Description": {
+      "maxLength": 1024,
+      "minLength": 0,
+      "pattern": "^[^\\p{C}]+$",
+      "type": "string"
+    },
+    "ErrorReason": { "type": "string" },
+    "PackageName": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[a-zA-Z0-9-_.]+$",
+      "type": "string"
+    },
+    "PackageVersionArn": { "type": "string" },
+    "Status": { "$ref": "#/definitions/PackageVersionStatus" },
+    "Tags": {
+      "description": "An array of key-value pairs to apply to this resource.",
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/Tag" },
+      "maxItems": 50,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "VersionName": {
+      "maxLength": 64,
+      "minLength": 1,
+      "pattern": "^[a-zA-Z0-9-_.]+$",
+      "type": "string"
+    }
+  },
+  "readOnlyProperties": [
+    "/properties/ErrorReason",
+    "/properties/PackageVersionArn",
+    "/properties/Status"
+  ],
+  "required": ["PackageName"],
+  "tagging": {
+    "cloudFormationSystemTags": true,
+    "tagOnCreate": true,
+    "tagProperty": "/properties/Tags",
+    "tagUpdatable": true,
+    "taggable": true
+  },
+  "typeName": "AWS::IoT::SoftwarePackageVersion"
 }

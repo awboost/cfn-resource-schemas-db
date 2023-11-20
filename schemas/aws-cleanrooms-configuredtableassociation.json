@@ -1,82 +1,23 @@
 {
-  "typeName": "AWS::CleanRooms::ConfiguredTableAssociation",
-  "description": "Represents a table that can be queried within a collaboration",
-  "definitions": {
-    "Tag": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "Key": { "type": "string", "minLength": 1, "maxLength": 128 },
-        "Value": { "type": "string", "minLength": 1, "maxLength": 256 }
-      },
-      "required": ["Value", "Key"]
-    }
-  },
-  "properties": {
-    "Arn": { "type": "string", "maxLength": 100 },
-    "Tags": {
-      "description": "An arbitrary set of tags (key-value pairs) for this cleanrooms collaboration.",
-      "insertionOrder": false,
-      "items": { "$ref": "#/definitions/Tag" },
-      "type": "array"
-    },
-    "ConfiguredTableAssociationIdentifier": {
-      "type": "string",
-      "maxLength": 36,
-      "minLength": 36,
-      "pattern": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
-    },
-    "ConfiguredTableIdentifier": {
-      "type": "string",
-      "maxLength": 36,
-      "minLength": 36,
-      "pattern": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
-    },
-    "Description": {
-      "type": "string",
-      "maxLength": 255,
-      "pattern": "^[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDBFF-\\uDC00\\uDFFF\\t\\r\\n]*$"
-    },
-    "MembershipIdentifier": {
-      "type": "string",
-      "maxLength": 36,
-      "minLength": 36,
-      "pattern": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
-    },
-    "Name": {
-      "type": "string",
-      "maxLength": 128,
-      "pattern": "^[a-zA-Z0-9_](([a-zA-Z0-9_ ]+-)*([a-zA-Z0-9_ ]+))?$"
-    },
-    "RoleArn": { "type": "string", "maxLength": 512, "minLength": 32 }
-  },
-  "required": [
-    "ConfiguredTableIdentifier",
-    "Name",
-    "RoleArn",
-    "MembershipIdentifier"
-  ],
-  "readOnlyProperties": [
-    "/properties/ConfiguredTableAssociationIdentifier",
-    "/properties/Arn"
-  ],
+  "$hash": "1687f2c449160c52600d8f6d3b85ba1c2e64444f",
+  "additionalProperties": false,
   "createOnlyProperties": [
     "/properties/ConfiguredTableIdentifier",
     "/properties/Name",
     "/properties/MembershipIdentifier"
   ],
-  "primaryIdentifier": [
-    "/properties/ConfiguredTableAssociationIdentifier",
-    "/properties/MembershipIdentifier"
-  ],
-  "tagging": {
-    "taggable": true,
-    "tagOnCreate": true,
-    "tagUpdatable": true,
-    "cloudFormationSystemTags": true,
-    "tagProperty": "/properties/Tags"
+  "definitions": {
+    "Tag": {
+      "additionalProperties": false,
+      "properties": {
+        "Key": { "maxLength": 128, "minLength": 1, "type": "string" },
+        "Value": { "maxLength": 256, "minLength": 1, "type": "string" }
+      },
+      "required": ["Value", "Key"],
+      "type": "object"
+    }
   },
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-cleanrooms",
+  "description": "Represents a table that can be queried within a collaboration",
   "handlers": {
     "create": {
       "permissions": [
@@ -87,6 +28,26 @@
         "cleanrooms:GetConfiguredTableAssociation",
         "cleanrooms:ListConfiguredTableAssociations"
       ]
+    },
+    "delete": {
+      "permissions": [
+        "cleanrooms:DeleteConfiguredTableAssociation",
+        "cleanrooms:GetConfiguredTableAssociation",
+        "cleanrooms:ListConfiguredTableAssociations",
+        "cleanrooms:ListTagsForResource",
+        "cleanrooms:UntagResource"
+      ]
+    },
+    "list": {
+      "handlerSchema": {
+        "properties": {
+          "MembershipIdentifier": {
+            "$ref": "resource-schema.json#/properties/MembershipIdentifier"
+          }
+        },
+        "required": ["MembershipIdentifier"]
+      },
+      "permissions": ["cleanrooms:ListConfiguredTableAssociations"]
     },
     "read": {
       "permissions": [
@@ -103,28 +64,67 @@
         "cleanrooms:TagResource",
         "cleanrooms:UntagResource"
       ]
-    },
-    "delete": {
-      "permissions": [
-        "cleanrooms:DeleteConfiguredTableAssociation",
-        "cleanrooms:GetConfiguredTableAssociation",
-        "cleanrooms:ListConfiguredTableAssociations",
-        "cleanrooms:ListTagsForResource",
-        "cleanrooms:UntagResource"
-      ]
-    },
-    "list": {
-      "permissions": ["cleanrooms:ListConfiguredTableAssociations"],
-      "handlerSchema": {
-        "properties": {
-          "MembershipIdentifier": {
-            "$ref": "resource-schema.json#/properties/MembershipIdentifier"
-          }
-        },
-        "required": ["MembershipIdentifier"]
-      }
     }
   },
-  "additionalProperties": false,
-  "$hash": "1687f2c449160c52600d8f6d3b85ba1c2e64444f"
+  "primaryIdentifier": [
+    "/properties/ConfiguredTableAssociationIdentifier",
+    "/properties/MembershipIdentifier"
+  ],
+  "properties": {
+    "Arn": { "maxLength": 100, "type": "string" },
+    "ConfiguredTableAssociationIdentifier": {
+      "maxLength": 36,
+      "minLength": 36,
+      "pattern": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}",
+      "type": "string"
+    },
+    "ConfiguredTableIdentifier": {
+      "maxLength": 36,
+      "minLength": 36,
+      "pattern": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}",
+      "type": "string"
+    },
+    "Description": {
+      "maxLength": 255,
+      "pattern": "^[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDBFF-\\uDC00\\uDFFF\\t\\r\\n]*$",
+      "type": "string"
+    },
+    "MembershipIdentifier": {
+      "maxLength": 36,
+      "minLength": 36,
+      "pattern": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}",
+      "type": "string"
+    },
+    "Name": {
+      "maxLength": 128,
+      "pattern": "^[a-zA-Z0-9_](([a-zA-Z0-9_ ]+-)*([a-zA-Z0-9_ ]+))?$",
+      "type": "string"
+    },
+    "RoleArn": { "maxLength": 512, "minLength": 32, "type": "string" },
+    "Tags": {
+      "description": "An arbitrary set of tags (key-value pairs) for this cleanrooms collaboration.",
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/Tag" },
+      "type": "array"
+    }
+  },
+  "readOnlyProperties": [
+    "/properties/ConfiguredTableAssociationIdentifier",
+    "/properties/Arn"
+  ],
+  "required": [
+    "ConfiguredTableIdentifier",
+    "Name",
+    "RoleArn",
+    "MembershipIdentifier"
+  ],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-cleanrooms",
+  "tagging": {
+    "cloudFormationSystemTags": true,
+    "tagOnCreate": true,
+    "tagProperty": "/properties/Tags",
+    "tagUpdatable": true,
+    "taggable": true
+  },
+  "typeName": "AWS::CleanRooms::ConfiguredTableAssociation"
 }

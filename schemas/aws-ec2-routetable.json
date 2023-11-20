@@ -1,41 +1,19 @@
 {
-  "typeName": "AWS::EC2::RouteTable",
-  "description": "Resource Type definition for AWS::EC2::RouteTable",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-ec2",
+  "$hash": "1e75cab1382ffcc839e088937d9832d7e392745b",
+  "additionalProperties": false,
+  "createOnlyProperties": ["/properties/VpcId"],
   "definitions": {
     "Tag": {
-      "type": "object",
       "additionalProperties": false,
       "properties": {
         "Key": { "type": "string" },
         "Value": { "type": "string" }
       },
-      "required": ["Value", "Key"]
+      "required": ["Value", "Key"],
+      "type": "object"
     }
   },
-  "properties": {
-    "RouteTableId": { "description": "The route table ID.", "type": "string" },
-    "Tags": {
-      "description": "Any tags assigned to the route table.",
-      "type": "array",
-      "uniqueItems": false,
-      "insertionOrder": false,
-      "items": { "$ref": "#/definitions/Tag" }
-    },
-    "VpcId": { "description": "The ID of the VPC.", "type": "string" }
-  },
-  "additionalProperties": false,
-  "required": ["VpcId"],
-  "createOnlyProperties": ["/properties/VpcId"],
-  "readOnlyProperties": ["/properties/RouteTableId"],
-  "primaryIdentifier": ["/properties/RouteTableId"],
-  "tagging": {
-    "taggable": true,
-    "tagOnCreate": true,
-    "tagUpdatable": true,
-    "cloudFormationSystemTags": true,
-    "tagProperty": "/properties/Tags"
-  },
+  "description": "Resource Type definition for AWS::EC2::RouteTable",
   "handlers": {
     "create": {
       "permissions": [
@@ -44,6 +22,10 @@
         "ec2:DescribeRouteTables"
       ]
     },
+    "delete": {
+      "permissions": ["ec2:DescribeRouteTables", "ec2:DeleteRouteTable"]
+    },
+    "list": { "permissions": ["ec2:DescribeRouteTables"] },
     "read": { "permissions": ["ec2:DescribeRouteTables"] },
     "update": {
       "permissions": [
@@ -51,11 +33,29 @@
         "ec2:DeleteTags",
         "ec2:DescribeRouteTables"
       ]
-    },
-    "delete": {
-      "permissions": ["ec2:DescribeRouteTables", "ec2:DeleteRouteTable"]
-    },
-    "list": { "permissions": ["ec2:DescribeRouteTables"] }
+    }
   },
-  "$hash": "1e75cab1382ffcc839e088937d9832d7e392745b"
+  "primaryIdentifier": ["/properties/RouteTableId"],
+  "properties": {
+    "RouteTableId": { "description": "The route table ID.", "type": "string" },
+    "Tags": {
+      "description": "Any tags assigned to the route table.",
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/Tag" },
+      "type": "array",
+      "uniqueItems": false
+    },
+    "VpcId": { "description": "The ID of the VPC.", "type": "string" }
+  },
+  "readOnlyProperties": ["/properties/RouteTableId"],
+  "required": ["VpcId"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-ec2",
+  "tagging": {
+    "cloudFormationSystemTags": true,
+    "tagOnCreate": true,
+    "tagProperty": "/properties/Tags",
+    "tagUpdatable": true,
+    "taggable": true
+  },
+  "typeName": "AWS::EC2::RouteTable"
 }

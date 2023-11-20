@@ -1,88 +1,28 @@
 {
-  "typeName": "AWS::WorkSpacesWeb::NetworkSettings",
-  "description": "Definition of AWS::WorkSpacesWeb::NetworkSettings Resource Type",
+  "$hash": "342a6d53b6f8ba15b8a1afd1b3e10483d04072d3",
+  "additionalProperties": false,
   "definitions": {
     "Tag": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "Key": {
-          "type": "string",
           "maxLength": 128,
           "minLength": 1,
-          "pattern": "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$"
+          "pattern": "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$",
+          "type": "string"
         },
         "Value": {
-          "type": "string",
           "maxLength": 256,
           "minLength": 0,
-          "pattern": "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$"
+          "pattern": "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$",
+          "type": "string"
         }
       },
       "required": ["Key", "Value"],
-      "additionalProperties": false
+      "type": "object"
     }
   },
-  "properties": {
-    "AssociatedPortalArns": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "maxLength": 2048,
-        "minLength": 20,
-        "pattern": "^arn:[\\w+=\\/,.@-]+:[a-zA-Z0-9\\-]+:[a-zA-Z0-9\\-]*:[a-zA-Z0-9]{1,12}:[a-zA-Z]+(\\/[a-fA-F0-9\\-]{36})+$"
-      },
-      "insertionOrder": false
-    },
-    "NetworkSettingsArn": {
-      "type": "string",
-      "maxLength": 2048,
-      "minLength": 20,
-      "pattern": "^arn:[\\w+=\\/,.@-]+:[a-zA-Z0-9\\-]+:[a-zA-Z0-9\\-]*:[a-zA-Z0-9]{1,12}:[a-zA-Z]+(\\/[a-fA-F0-9\\-]{36})+$"
-    },
-    "SecurityGroupIds": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "maxLength": 128,
-        "minLength": 1,
-        "pattern": "^[\\w+\\-]+$"
-      },
-      "maxItems": 5,
-      "minItems": 1,
-      "insertionOrder": false
-    },
-    "SubnetIds": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "maxLength": 32,
-        "minLength": 1,
-        "pattern": "^subnet-([0-9a-f]{8}|[0-9a-f]{17})$"
-      },
-      "maxItems": 3,
-      "minItems": 2,
-      "insertionOrder": false
-    },
-    "Tags": {
-      "type": "array",
-      "items": { "$ref": "#/definitions/Tag" },
-      "maxItems": 200,
-      "minItems": 0,
-      "insertionOrder": false
-    },
-    "VpcId": {
-      "type": "string",
-      "maxLength": 255,
-      "minLength": 1,
-      "pattern": "^vpc-[0-9a-z]*$"
-    }
-  },
-  "required": ["SecurityGroupIds", "SubnetIds", "VpcId"],
-  "readOnlyProperties": [
-    "/properties/AssociatedPortalArns",
-    "/properties/NetworkSettingsArn"
-  ],
-  "primaryIdentifier": ["/properties/NetworkSettingsArn"],
+  "description": "Definition of AWS::WorkSpacesWeb::NetworkSettings Resource Type",
   "handlers": {
     "create": {
       "permissions": [
@@ -92,6 +32,13 @@
         "workspaces-web:TagResource"
       ]
     },
+    "delete": {
+      "permissions": [
+        "workspaces-web:GetNetworkSettings",
+        "workspaces-web:DeleteNetworkSettings"
+      ]
+    },
+    "list": { "permissions": ["workspaces-web:ListNetworkSettings"] },
     "read": {
       "permissions": [
         "workspaces-web:GetNetworkSettings",
@@ -107,15 +54,69 @@
         "workspaces-web:GetNetworkSettings",
         "workspaces-web:ListTagsForResource"
       ]
-    },
-    "delete": {
-      "permissions": [
-        "workspaces-web:GetNetworkSettings",
-        "workspaces-web:DeleteNetworkSettings"
-      ]
-    },
-    "list": { "permissions": ["workspaces-web:ListNetworkSettings"] }
+    }
   },
+  "primaryIdentifier": ["/properties/NetworkSettingsArn"],
+  "properties": {
+    "AssociatedPortalArns": {
+      "insertionOrder": false,
+      "items": {
+        "maxLength": 2048,
+        "minLength": 20,
+        "pattern": "^arn:[\\w+=\\/,.@-]+:[a-zA-Z0-9\\-]+:[a-zA-Z0-9\\-]*:[a-zA-Z0-9]{1,12}:[a-zA-Z]+(\\/[a-fA-F0-9\\-]{36})+$",
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "NetworkSettingsArn": {
+      "maxLength": 2048,
+      "minLength": 20,
+      "pattern": "^arn:[\\w+=\\/,.@-]+:[a-zA-Z0-9\\-]+:[a-zA-Z0-9\\-]*:[a-zA-Z0-9]{1,12}:[a-zA-Z]+(\\/[a-fA-F0-9\\-]{36})+$",
+      "type": "string"
+    },
+    "SecurityGroupIds": {
+      "insertionOrder": false,
+      "items": {
+        "maxLength": 128,
+        "minLength": 1,
+        "pattern": "^[\\w+\\-]+$",
+        "type": "string"
+      },
+      "maxItems": 5,
+      "minItems": 1,
+      "type": "array"
+    },
+    "SubnetIds": {
+      "insertionOrder": false,
+      "items": {
+        "maxLength": 32,
+        "minLength": 1,
+        "pattern": "^subnet-([0-9a-f]{8}|[0-9a-f]{17})$",
+        "type": "string"
+      },
+      "maxItems": 3,
+      "minItems": 2,
+      "type": "array"
+    },
+    "Tags": {
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/Tag" },
+      "maxItems": 200,
+      "minItems": 0,
+      "type": "array"
+    },
+    "VpcId": {
+      "maxLength": 255,
+      "minLength": 1,
+      "pattern": "^vpc-[0-9a-z]*$",
+      "type": "string"
+    }
+  },
+  "readOnlyProperties": [
+    "/properties/AssociatedPortalArns",
+    "/properties/NetworkSettingsArn"
+  ],
+  "required": ["SecurityGroupIds", "SubnetIds", "VpcId"],
   "tagging": {
     "cloudFormationSystemTags": false,
     "tagOnCreate": true,
@@ -123,6 +124,5 @@
     "tagUpdatable": true,
     "taggable": true
   },
-  "additionalProperties": false,
-  "$hash": "342a6d53b6f8ba15b8a1afd1b3e10483d04072d3"
+  "typeName": "AWS::WorkSpacesWeb::NetworkSettings"
 }

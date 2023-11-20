@@ -1,57 +1,6 @@
 {
-  "typeName": "AWS::MediaConnect::Gateway",
-  "description": "Resource schema for AWS::MediaConnect::Gateway",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-mediaconnect.git",
-  "definitions": {
-    "GatewayNetwork": {
-      "description": "The network settings for a gateway.",
-      "type": "object",
-      "properties": {
-        "Name": {
-          "type": "string",
-          "description": "The name of the network. This name is used to reference the network and must be unique among networks in this gateway."
-        },
-        "CidrBlock": {
-          "type": "string",
-          "description": "A unique IP address range to use for this network. These IP addresses should be in the form of a Classless Inter-Domain Routing (CIDR) block; for example, 10.0.0.0/16."
-        }
-      },
-      "additionalProperties": false,
-      "required": ["Name", "CidrBlock"]
-    }
-  },
-  "properties": {
-    "Name": {
-      "description": "The name of the gateway. This name can not be modified after the gateway is created.",
-      "type": "string"
-    },
-    "GatewayArn": {
-      "description": "The Amazon Resource Name (ARN) of the gateway.",
-      "type": "string"
-    },
-    "GatewayState": {
-      "description": "The current status of the gateway.",
-      "type": "string",
-      "enum": ["CREATING", "ACTIVE", "UPDATING", "ERROR", "DELETING", "DELETED"]
-    },
-    "EgressCidrBlocks": {
-      "description": "The range of IP addresses that contribute content or initiate output requests for flows communicating with this gateway. These IP addresses should be in the form of a Classless Inter-Domain Routing (CIDR) block; for example, 10.0.0.0/16.",
-      "type": "array",
-      "items": { "type": "string" },
-      "insertionOrder": true
-    },
-    "Networks": {
-      "type": "array",
-      "description": "The list of networks in the gateway.",
-      "minItems": 1,
-      "maxItems": 4,
-      "items": { "$ref": "#/definitions/GatewayNetwork" },
-      "insertionOrder": true
-    }
-  },
-  "required": ["Name", "EgressCidrBlocks", "Networks"],
+  "$hash": "ec279dd321fece30282e5a35026cf4ad01228ddb",
   "additionalProperties": false,
-  "readOnlyProperties": ["/properties/GatewayArn", "/properties/GatewayState"],
   "createOnlyProperties": [
     "/properties/Name",
     "/properties/EgressCidrBlocks",
@@ -59,7 +8,25 @@
     "/properties/Networks/Name",
     "/properties/Networks/CidrBlock"
   ],
-  "primaryIdentifier": ["/properties/GatewayArn"],
+  "definitions": {
+    "GatewayNetwork": {
+      "additionalProperties": false,
+      "description": "The network settings for a gateway.",
+      "properties": {
+        "CidrBlock": {
+          "description": "A unique IP address range to use for this network. These IP addresses should be in the form of a Classless Inter-Domain Routing (CIDR) block; for example, 10.0.0.0/16.",
+          "type": "string"
+        },
+        "Name": {
+          "description": "The name of the network. This name is used to reference the network and must be unique among networks in this gateway.",
+          "type": "string"
+        }
+      },
+      "required": ["Name", "CidrBlock"],
+      "type": "object"
+    }
+  },
+  "description": "Resource schema for AWS::MediaConnect::Gateway",
   "handlers": {
     "create": {
       "permissions": [
@@ -68,7 +35,6 @@
         "mediaconnect:DescribeGateway"
       ]
     },
-    "read": { "permissions": ["mediaconnect:DescribeGateway"] },
     "delete": {
       "permissions": [
         "iam:CreateServiceLinkedRole",
@@ -76,8 +42,49 @@
         "mediaconnect:DeleteGateway"
       ]
     },
-    "list": { "permissions": ["mediaconnect:ListGateways"] }
+    "list": { "permissions": ["mediaconnect:ListGateways"] },
+    "read": { "permissions": ["mediaconnect:DescribeGateway"] }
   },
+  "primaryIdentifier": ["/properties/GatewayArn"],
+  "properties": {
+    "EgressCidrBlocks": {
+      "description": "The range of IP addresses that contribute content or initiate output requests for flows communicating with this gateway. These IP addresses should be in the form of a Classless Inter-Domain Routing (CIDR) block; for example, 10.0.0.0/16.",
+      "insertionOrder": true,
+      "items": { "type": "string" },
+      "type": "array"
+    },
+    "GatewayArn": {
+      "description": "The Amazon Resource Name (ARN) of the gateway.",
+      "type": "string"
+    },
+    "GatewayState": {
+      "description": "The current status of the gateway.",
+      "enum": [
+        "CREATING",
+        "ACTIVE",
+        "UPDATING",
+        "ERROR",
+        "DELETING",
+        "DELETED"
+      ],
+      "type": "string"
+    },
+    "Name": {
+      "description": "The name of the gateway. This name can not be modified after the gateway is created.",
+      "type": "string"
+    },
+    "Networks": {
+      "description": "The list of networks in the gateway.",
+      "insertionOrder": true,
+      "items": { "$ref": "#/definitions/GatewayNetwork" },
+      "maxItems": 4,
+      "minItems": 1,
+      "type": "array"
+    }
+  },
+  "readOnlyProperties": ["/properties/GatewayArn", "/properties/GatewayState"],
+  "required": ["Name", "EgressCidrBlocks", "Networks"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-mediaconnect.git",
   "tagging": { "taggable": false },
-  "$hash": "ec279dd321fece30282e5a35026cf4ad01228ddb"
+  "typeName": "AWS::MediaConnect::Gateway"
 }

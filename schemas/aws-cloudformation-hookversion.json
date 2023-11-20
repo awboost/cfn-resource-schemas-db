@@ -1,43 +1,77 @@
 {
-  "typeName": "AWS::CloudFormation::HookVersion",
-  "description": "Publishes new or first hook version to AWS CloudFormation Registry.",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-cloudformation",
+  "$hash": "7720b712eb14c95a892afb006f5664752830b566",
+  "additionalProperties": false,
+  "createOnlyProperties": [
+    "/properties/ExecutionRoleArn",
+    "/properties/LoggingConfig",
+    "/properties/SchemaHandlerPackage",
+    "/properties/TypeName"
+  ],
   "definitions": {
     "LoggingConfig": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "LogGroupName": {
           "description": "The Amazon CloudWatch log group to which CloudFormation sends error logging information when invoking the type's handlers.",
-          "type": "string",
-          "pattern": "^[\\.\\-_/#A-Za-z0-9]+$",
+          "maxLength": 512,
           "minLength": 1,
-          "maxLength": 512
+          "pattern": "^[\\.\\-_/#A-Za-z0-9]+$",
+          "type": "string"
         },
         "LogRoleArn": {
           "description": "The ARN of the role that CloudFormation should assume when sending log entries to CloudWatch logs.",
-          "type": "string",
+          "maxLength": 256,
           "minLength": 1,
-          "maxLength": 256
+          "type": "string"
         }
       },
-      "additionalProperties": false
+      "type": "object"
     }
   },
+  "description": "Publishes new or first hook version to AWS CloudFormation Registry.",
+  "handlers": {
+    "create": {
+      "permissions": [
+        "cloudformation:DescribeType",
+        "cloudformation:DescribeTypeRegistration",
+        "cloudformation:RegisterType",
+        "iam:PassRole",
+        "s3:GetObject",
+        "s3:ListBucket",
+        "kms:Decrypt"
+      ]
+    },
+    "delete": {
+      "permissions": [
+        "cloudformation:DeregisterType",
+        "cloudformation:DescribeType"
+      ]
+    },
+    "list": {
+      "handlerSchema": {
+        "properties": {
+          "TypeArn": { "$ref": "resource-schema.json#/properties/TypeArn" },
+          "TypeName": { "$ref": "resource-schema.json#/properties/TypeName" }
+        }
+      },
+      "permissions": [
+        "cloudformation:ListTypes",
+        "cloudformation:ListTypeVersions"
+      ]
+    },
+    "read": { "permissions": ["cloudformation:DescribeType"] }
+  },
+  "primaryIdentifier": ["/properties/Arn"],
   "properties": {
     "Arn": {
       "description": "The Amazon Resource Name (ARN) of the type, here the HookVersion. This is used to uniquely identify a HookVersion resource",
       "pattern": "^arn:aws[A-Za-z0-9-]{0,64}:cloudformation:[A-Za-z0-9-]{1,64}:([0-9]{12})?:type/hook/.+$",
       "type": "string"
     },
-    "TypeArn": {
-      "description": "The Amazon Resource Name (ARN) of the type without the versionID.",
-      "pattern": "^arn:aws[A-Za-z0-9-]{0,64}:cloudformation:[A-Za-z0-9-]{1,64}:([0-9]{12})?:type/hook/.+$",
-      "type": "string"
-    },
     "ExecutionRoleArn": {
       "description": "The Amazon Resource Name (ARN) of the IAM execution role to use to register the type. If your resource type calls AWS APIs in any of its handlers, you must create an IAM execution role that includes the necessary permissions to call those AWS APIs, and provision that execution role in your account. CloudFormation then assumes that execution role to provide your resource type with the appropriate credentials.",
-      "pattern": "arn:.+:iam::[0-9]{12}:role/.+",
       "maxLength": 256,
+      "pattern": "arn:.+:iam::[0-9]{12}:role/.+",
       "type": "string"
     },
     "IsDefaultVersion": {
@@ -51,6 +85,11 @@
     "SchemaHandlerPackage": {
       "description": "A url to the S3 bucket containing the schema handler package that contains the schema, event handlers, and associated files for the type you want to register.\n\nFor information on generating a schema handler package for the type you want to register, see submit in the CloudFormation CLI User Guide.",
       "maxLength": 4096,
+      "type": "string"
+    },
+    "TypeArn": {
+      "description": "The Amazon Resource Name (ARN) of the type without the versionID.",
+      "pattern": "^arn:aws[A-Za-z0-9-]{0,64}:cloudformation:[A-Za-z0-9-]{1,64}:([0-9]{12})?:type/hook/.+$",
       "type": "string"
     },
     "TypeName": {
@@ -69,8 +108,6 @@
       "type": "string"
     }
   },
-  "required": ["SchemaHandlerPackage", "TypeName"],
-  "writeOnlyProperties": ["/properties/SchemaHandlerPackage"],
   "readOnlyProperties": [
     "/properties/Arn",
     "/properties/IsDefaultVersion",
@@ -78,51 +115,14 @@
     "/properties/VersionId",
     "/properties/TypeArn"
   ],
-  "createOnlyProperties": [
-    "/properties/ExecutionRoleArn",
-    "/properties/LoggingConfig",
-    "/properties/SchemaHandlerPackage",
-    "/properties/TypeName"
-  ],
-  "primaryIdentifier": ["/properties/Arn"],
+  "required": ["SchemaHandlerPackage", "TypeName"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-cloudformation",
   "tagging": {
-    "taggable": false,
+    "cloudFormationSystemTags": false,
     "tagOnCreate": false,
     "tagUpdatable": false,
-    "cloudFormationSystemTags": false
+    "taggable": false
   },
-  "handlers": {
-    "create": {
-      "permissions": [
-        "cloudformation:DescribeType",
-        "cloudformation:DescribeTypeRegistration",
-        "cloudformation:RegisterType",
-        "iam:PassRole",
-        "s3:GetObject",
-        "s3:ListBucket",
-        "kms:Decrypt"
-      ]
-    },
-    "read": { "permissions": ["cloudformation:DescribeType"] },
-    "delete": {
-      "permissions": [
-        "cloudformation:DeregisterType",
-        "cloudformation:DescribeType"
-      ]
-    },
-    "list": {
-      "handlerSchema": {
-        "properties": {
-          "TypeName": { "$ref": "resource-schema.json#/properties/TypeName" },
-          "TypeArn": { "$ref": "resource-schema.json#/properties/TypeArn" }
-        }
-      },
-      "permissions": [
-        "cloudformation:ListTypes",
-        "cloudformation:ListTypeVersions"
-      ]
-    }
-  },
-  "additionalProperties": false,
-  "$hash": "7720b712eb14c95a892afb006f5664752830b566"
+  "typeName": "AWS::CloudFormation::HookVersion",
+  "writeOnlyProperties": ["/properties/SchemaHandlerPackage"]
 }

@@ -1,96 +1,40 @@
 {
-  "typeName": "AWS::OpenSearchServerless::Collection",
-  "description": "Amazon OpenSearchServerless collection resource",
-  "tagging": {
-    "taggable": true,
-    "tagOnCreate": true,
-    "tagUpdatable": false,
-    "cloudFormationSystemTags": true,
-    "tagProperty": "/properties/Tags"
-  },
-  "definitions": {
-    "Tag": {
-      "type": "object",
-      "description": "A key-value pair metadata associated with resource",
-      "properties": {
-        "Key": {
-          "type": "string",
-          "maxLength": 128,
-          "minLength": 1,
-          "description": "The key in the key-value pair"
-        },
-        "Value": {
-          "type": "string",
-          "maxLength": 256,
-          "minLength": 0,
-          "description": "The value in the key-value pair"
-        }
-      },
-      "required": ["Key", "Value"],
-      "additionalProperties": false
-    },
-    "CollectionType": {
-      "type": "string",
-      "description": "The possible types for the collection",
-      "enum": ["SEARCH", "TIMESERIES", "VECTORSEARCH"]
-    }
-  },
-  "properties": {
-    "Description": {
-      "type": "string",
-      "maxLength": 1000,
-      "description": "The description of the collection"
-    },
-    "Id": {
-      "type": "string",
-      "maxLength": 40,
-      "minLength": 3,
-      "description": "The identifier of the collection"
-    },
-    "Name": {
-      "type": "string",
-      "maxLength": 32,
-      "minLength": 3,
-      "pattern": "^[a-z][a-z0-9-]{2,31}$",
-      "description": "The name of the collection.\n\nThe name must meet the following criteria:\nUnique to your account and AWS Region\nStarts with a lowercase letter\nContains only lowercase letters a-z, the numbers 0-9 and the hyphen (-)\nContains between 3 and 32 characters\n"
-    },
-    "Tags": {
-      "type": "array",
-      "items": { "$ref": "#/definitions/Tag" },
-      "maxItems": 50,
-      "minItems": 0,
-      "insertionOrder": false,
-      "description": "List of tags to be added to the resource"
-    },
-    "Arn": {
-      "description": "The Amazon Resource Name (ARN) of the collection.",
-      "type": "string"
-    },
-    "CollectionEndpoint": {
-      "description": "The endpoint for the collection.",
-      "type": "string"
-    },
-    "DashboardEndpoint": {
-      "description": "The OpenSearch Dashboards endpoint for the collection.",
-      "type": "string"
-    },
-    "Type": { "$ref": "#/definitions/CollectionType" }
-  },
-  "required": ["Name"],
-  "readOnlyProperties": [
-    "/properties/Id",
-    "/properties/Arn",
-    "/properties/CollectionEndpoint",
-    "/properties/DashboardEndpoint"
-  ],
-  "writeOnlyProperties": ["/properties/Tags"],
+  "$hash": "698081c6501a8db5b231167828ce88f8471bfd14",
+  "additionalIdentifiers": [["/properties/Name"], ["/properties/Arn"]],
+  "additionalProperties": false,
   "createOnlyProperties": [
     "/properties/Name",
     "/properties/Tags",
     "/properties/Type"
   ],
-  "primaryIdentifier": ["/properties/Id"],
-  "additionalIdentifiers": [["/properties/Name"], ["/properties/Arn"]],
+  "definitions": {
+    "CollectionType": {
+      "description": "The possible types for the collection",
+      "enum": ["SEARCH", "TIMESERIES", "VECTORSEARCH"],
+      "type": "string"
+    },
+    "Tag": {
+      "additionalProperties": false,
+      "description": "A key-value pair metadata associated with resource",
+      "properties": {
+        "Key": {
+          "description": "The key in the key-value pair",
+          "maxLength": 128,
+          "minLength": 1,
+          "type": "string"
+        },
+        "Value": {
+          "description": "The value in the key-value pair",
+          "maxLength": 256,
+          "minLength": 0,
+          "type": "string"
+        }
+      },
+      "required": ["Key", "Value"],
+      "type": "object"
+    }
+  },
+  "description": "Amazon OpenSearchServerless collection resource",
   "handlers": {
     "create": {
       "permissions": [
@@ -108,6 +52,62 @@
       "permissions": ["aoss:UpdateCollection", "aoss:BatchGetCollection"]
     }
   },
-  "additionalProperties": false,
-  "$hash": "698081c6501a8db5b231167828ce88f8471bfd14"
+  "primaryIdentifier": ["/properties/Id"],
+  "properties": {
+    "Arn": {
+      "description": "The Amazon Resource Name (ARN) of the collection.",
+      "type": "string"
+    },
+    "CollectionEndpoint": {
+      "description": "The endpoint for the collection.",
+      "type": "string"
+    },
+    "DashboardEndpoint": {
+      "description": "The OpenSearch Dashboards endpoint for the collection.",
+      "type": "string"
+    },
+    "Description": {
+      "description": "The description of the collection",
+      "maxLength": 1000,
+      "type": "string"
+    },
+    "Id": {
+      "description": "The identifier of the collection",
+      "maxLength": 40,
+      "minLength": 3,
+      "type": "string"
+    },
+    "Name": {
+      "description": "The name of the collection.\n\nThe name must meet the following criteria:\nUnique to your account and AWS Region\nStarts with a lowercase letter\nContains only lowercase letters a-z, the numbers 0-9 and the hyphen (-)\nContains between 3 and 32 characters\n",
+      "maxLength": 32,
+      "minLength": 3,
+      "pattern": "^[a-z][a-z0-9-]{2,31}$",
+      "type": "string"
+    },
+    "Tags": {
+      "description": "List of tags to be added to the resource",
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/Tag" },
+      "maxItems": 50,
+      "minItems": 0,
+      "type": "array"
+    },
+    "Type": { "$ref": "#/definitions/CollectionType" }
+  },
+  "readOnlyProperties": [
+    "/properties/Id",
+    "/properties/Arn",
+    "/properties/CollectionEndpoint",
+    "/properties/DashboardEndpoint"
+  ],
+  "required": ["Name"],
+  "tagging": {
+    "cloudFormationSystemTags": true,
+    "tagOnCreate": true,
+    "tagProperty": "/properties/Tags",
+    "tagUpdatable": false,
+    "taggable": true
+  },
+  "typeName": "AWS::OpenSearchServerless::Collection",
+  "writeOnlyProperties": ["/properties/Tags"]
 }

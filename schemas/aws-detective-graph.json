@@ -1,62 +1,33 @@
 {
-  "typeName": "AWS::Detective::Graph",
-  "description": "Resource schema for AWS::Detective::Graph",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-detective.git",
+  "$hash": "6ef1e41246a8331fb22f42875725bbaf789d4dc9",
+  "additionalProperties": false,
   "definitions": {
     "Tag": {
+      "additionalProperties": false,
       "description": "A key-value pair to associate with a resource.",
-      "type": "object",
       "properties": {
         "Key": {
-          "type": "string",
           "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. Valid characters are Unicode letters, digits, white space, and any of the following symbols: _ . : / = + - @ ",
+          "maxLength": 128,
           "minLength": 1,
-          "maxLength": 128
+          "type": "string"
         },
         "Value": {
-          "type": "string",
           "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. Valid characters are Unicode letters, digits, white space, and any of the following symbols: _ . : / = + - @ ",
+          "maxLength": 256,
           "minLength": 0,
-          "maxLength": 256
+          "type": "string"
         }
       },
-      "additionalProperties": false
+      "type": "object"
     }
   },
-  "properties": {
-    "Arn": { "type": "string", "description": "The Detective graph ARN" },
-    "Tags": { "type": "array", "items": { "$ref": "#/definitions/Tag" } },
-    "AutoEnableMembers": {
-      "type": "boolean",
-      "default": false,
-      "description": "Indicates whether to automatically enable new organization accounts as member accounts in the organization behavior graph."
-    }
-  },
-  "additionalProperties": false,
-  "readOnlyProperties": ["/properties/Arn"],
-  "primaryIdentifier": ["/properties/Arn"],
+  "description": "Resource schema for AWS::Detective::Graph",
   "handlers": {
     "create": {
       "permissions": [
         "detective:CreateGraph",
         "detective:UpdateOrganizationConfiguration",
-        "organizations:DescribeOrganization"
-      ]
-    },
-    "update": {
-      "permissions": [
-        "detective:UntagResource",
-        "detective:TagResource",
-        "detective:ListTagsForResource",
-        "detective:UpdateOrganizationConfiguration",
-        "organizations:DescribeOrganization"
-      ]
-    },
-    "read": {
-      "permissions": [
-        "detective:ListGraphs",
-        "detective:ListTagsForResource",
-        "detective:DescribeOrganizationConfiguration",
         "organizations:DescribeOrganization"
       ]
     },
@@ -68,7 +39,36 @@
         "detective:DescribeOrganizationConfiguration",
         "organizations:DescribeOrganization"
       ]
+    },
+    "read": {
+      "permissions": [
+        "detective:ListGraphs",
+        "detective:ListTagsForResource",
+        "detective:DescribeOrganizationConfiguration",
+        "organizations:DescribeOrganization"
+      ]
+    },
+    "update": {
+      "permissions": [
+        "detective:UntagResource",
+        "detective:TagResource",
+        "detective:ListTagsForResource",
+        "detective:UpdateOrganizationConfiguration",
+        "organizations:DescribeOrganization"
+      ]
     }
   },
-  "$hash": "6ef1e41246a8331fb22f42875725bbaf789d4dc9"
+  "primaryIdentifier": ["/properties/Arn"],
+  "properties": {
+    "Arn": { "description": "The Detective graph ARN", "type": "string" },
+    "AutoEnableMembers": {
+      "default": false,
+      "description": "Indicates whether to automatically enable new organization accounts as member accounts in the organization behavior graph.",
+      "type": "boolean"
+    },
+    "Tags": { "items": { "$ref": "#/definitions/Tag" }, "type": "array" }
+  },
+  "readOnlyProperties": ["/properties/Arn"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-detective.git",
+  "typeName": "AWS::Detective::Graph"
 }

@@ -1,54 +1,53 @@
 {
-  "typeName": "AWS::Route53::HostedZone",
-  "description": "Resource schema for AWS::Route53::HostedZone.",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-route53.git",
+  "$hash": "1975c3e4aa9fa901103b11dfe20acb413f4fc47e",
+  "additionalProperties": false,
+  "createOnlyProperties": ["/properties/Name"],
   "definitions": {
     "HostedZoneConfig": {
-      "description": "A complex type that contains an optional comment.\n\nIf you don't want to specify a comment, omit the HostedZoneConfig and Comment elements.",
-      "type": "object",
       "additionalProperties": false,
+      "description": "A complex type that contains an optional comment.\n\nIf you don't want to specify a comment, omit the HostedZoneConfig and Comment elements.",
       "properties": {
         "Comment": {
           "description": "Any comments that you want to include about the hosted zone.",
-          "type": "string",
-          "maxLength": 256
-        }
-      }
-    },
-    "HostedZoneTag": {
-      "description": "A complex type that contains information about a tag that you want to add or edit for the specified health check or hosted zone.",
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "Key": {
-          "type": "string",
-          "description": "The key name of the tag.",
-          "maxLength": 128
-        },
-        "Value": {
-          "type": "string",
-          "description": "The value for the tag.",
-          "maxLength": 256
+          "maxLength": 256,
+          "type": "string"
         }
       },
-      "required": ["Value", "Key"]
+      "type": "object"
+    },
+    "HostedZoneTag": {
+      "additionalProperties": false,
+      "description": "A complex type that contains information about a tag that you want to add or edit for the specified health check or hosted zone.",
+      "properties": {
+        "Key": {
+          "description": "The key name of the tag.",
+          "maxLength": 128,
+          "type": "string"
+        },
+        "Value": {
+          "description": "The value for the tag.",
+          "maxLength": 256,
+          "type": "string"
+        }
+      },
+      "required": ["Value", "Key"],
+      "type": "object"
     },
     "QueryLoggingConfig": {
-      "description": "A complex type that contains information about a configuration for DNS query logging.",
-      "type": "object",
       "additionalProperties": false,
+      "description": "A complex type that contains information about a configuration for DNS query logging.",
       "properties": {
         "CloudWatchLogsLogGroupArn": {
           "description": "The Amazon Resource Name (ARN) of the CloudWatch Logs log group that Amazon Route 53 is publishing logs to.",
           "type": "string"
         }
       },
-      "required": ["CloudWatchLogsLogGroupArn"]
+      "required": ["CloudWatchLogsLogGroupArn"],
+      "type": "object"
     },
     "VPC": {
-      "description": "A complex type that contains information about an Amazon VPC. Route 53 Resolver uses the records in the private hosted zone to route traffic in that VPC.",
-      "type": "object",
       "additionalProperties": false,
+      "description": "A complex type that contains information about an Amazon VPC. Route 53 Resolver uses the records in the private hosted zone to route traffic in that VPC.",
       "properties": {
         "VPCId": {
           "description": "The ID of an Amazon VPC.",
@@ -59,42 +58,11 @@
           "type": "string"
         }
       },
-      "required": ["VPCId", "VPCRegion"]
+      "required": ["VPCId", "VPCRegion"],
+      "type": "object"
     }
   },
-  "properties": {
-    "Id": { "type": "string" },
-    "HostedZoneConfig": { "$ref": "#/definitions/HostedZoneConfig" },
-    "HostedZoneTags": {
-      "description": "Adds, edits, or deletes tags for a health check or a hosted zone.\n\nFor information about using tags for cost allocation, see Using Cost Allocation Tags in the AWS Billing and Cost Management User Guide.",
-      "type": "array",
-      "uniqueItems": true,
-      "insertionOrder": false,
-      "items": { "$ref": "#/definitions/HostedZoneTag" }
-    },
-    "Name": {
-      "description": "The name of the domain. Specify a fully qualified domain name, for example, www.example.com. The trailing dot is optional; Amazon Route 53 assumes that the domain name is fully qualified. This means that Route 53 treats www.example.com (without a trailing dot) and www.example.com. (with a trailing dot) as identical.\n\nIf you're creating a public hosted zone, this is the name you have registered with your DNS registrar. If your domain name is registered with a registrar other than Route 53, change the name servers for your domain to the set of NameServers that are returned by the Fn::GetAtt intrinsic function.",
-      "type": "string",
-      "maxLength": 1024
-    },
-    "QueryLoggingConfig": { "$ref": "#/definitions/QueryLoggingConfig" },
-    "VPCs": {
-      "description": "A complex type that contains information about the VPCs that are associated with the specified hosted zone.",
-      "type": "array",
-      "uniqueItems": true,
-      "insertionOrder": false,
-      "items": { "$ref": "#/definitions/VPC" }
-    },
-    "NameServers": {
-      "type": "array",
-      "uniqueItems": false,
-      "items": { "type": "string" }
-    }
-  },
-  "additionalProperties": false,
-  "createOnlyProperties": ["/properties/Name"],
-  "readOnlyProperties": ["/properties/Id", "/properties/NameServers"],
-  "primaryIdentifier": ["/properties/Id"],
+  "description": "Resource schema for AWS::Route53::HostedZone.",
   "handlers": {
     "create": {
       "permissions": [
@@ -104,6 +72,23 @@
         "route53:GetChange",
         "route53:AssociateVPCWithHostedZone",
         "ec2:DescribeVpcs"
+      ]
+    },
+    "delete": {
+      "permissions": [
+        "route53:DeleteHostedZone",
+        "route53:DeleteQueryLoggingConfig",
+        "route53:ListQueryLoggingConfigs",
+        "route53:GetChange"
+      ]
+    },
+    "list": {
+      "permissions": [
+        "route53:GetHostedZone",
+        "route53:ListHostedZones",
+        "route53:ListHostedZonesByName",
+        "route53:ListQueryLoggingConfigs",
+        "route53:ListTagsForResource"
       ]
     },
     "read": {
@@ -125,24 +110,39 @@
         "route53:DeleteQueryLoggingConfig",
         "ec2:DescribeVpcs"
       ]
-    },
-    "delete": {
-      "permissions": [
-        "route53:DeleteHostedZone",
-        "route53:DeleteQueryLoggingConfig",
-        "route53:ListQueryLoggingConfigs",
-        "route53:GetChange"
-      ]
-    },
-    "list": {
-      "permissions": [
-        "route53:GetHostedZone",
-        "route53:ListHostedZones",
-        "route53:ListHostedZonesByName",
-        "route53:ListQueryLoggingConfigs",
-        "route53:ListTagsForResource"
-      ]
     }
   },
-  "$hash": "1975c3e4aa9fa901103b11dfe20acb413f4fc47e"
+  "primaryIdentifier": ["/properties/Id"],
+  "properties": {
+    "HostedZoneConfig": { "$ref": "#/definitions/HostedZoneConfig" },
+    "HostedZoneTags": {
+      "description": "Adds, edits, or deletes tags for a health check or a hosted zone.\n\nFor information about using tags for cost allocation, see Using Cost Allocation Tags in the AWS Billing and Cost Management User Guide.",
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/HostedZoneTag" },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "Id": { "type": "string" },
+    "Name": {
+      "description": "The name of the domain. Specify a fully qualified domain name, for example, www.example.com. The trailing dot is optional; Amazon Route 53 assumes that the domain name is fully qualified. This means that Route 53 treats www.example.com (without a trailing dot) and www.example.com. (with a trailing dot) as identical.\n\nIf you're creating a public hosted zone, this is the name you have registered with your DNS registrar. If your domain name is registered with a registrar other than Route 53, change the name servers for your domain to the set of NameServers that are returned by the Fn::GetAtt intrinsic function.",
+      "maxLength": 1024,
+      "type": "string"
+    },
+    "NameServers": {
+      "items": { "type": "string" },
+      "type": "array",
+      "uniqueItems": false
+    },
+    "QueryLoggingConfig": { "$ref": "#/definitions/QueryLoggingConfig" },
+    "VPCs": {
+      "description": "A complex type that contains information about the VPCs that are associated with the specified hosted zone.",
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/VPC" },
+      "type": "array",
+      "uniqueItems": true
+    }
+  },
+  "readOnlyProperties": ["/properties/Id", "/properties/NameServers"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-route53.git",
+  "typeName": "AWS::Route53::HostedZone"
 }

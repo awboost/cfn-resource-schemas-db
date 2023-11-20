@@ -1,60 +1,28 @@
 {
-  "typeName": "AWS::SecurityHub::Standard",
-  "description": "The AWS::SecurityHub::Standard resource represents the implementation of an individual AWS Security Hub Standard in your account. It requires you have SecurityHub enabled before you can enable the Standard.",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-securityhub",
+  "$hash": "6ff64676653ebb256fd82482bf3d45f70906e7bc",
+  "additionalIdentifiers": [["/properties/StandardsArn"]],
+  "additionalProperties": false,
+  "createOnlyProperties": ["/properties/StandardsArn"],
   "definitions": {
     "StandardsControl": {
+      "additionalProperties": false,
       "description": "An individual StandardsControl within the Standard.",
-      "type": "object",
       "properties": {
-        "StandardsControlArn": {
-          "type": "string",
-          "description": "the Arn for the standard control.",
-          "pattern": "arn:aws\\S*:securityhub:\\S*"
-        },
         "Reason": {
-          "type": "string",
-          "description": "the reason the standard control is disabled"
+          "description": "the reason the standard control is disabled",
+          "type": "string"
+        },
+        "StandardsControlArn": {
+          "description": "the Arn for the standard control.",
+          "pattern": "arn:aws\\S*:securityhub:\\S*",
+          "type": "string"
         }
       },
       "required": ["StandardsControlArn"],
-      "additionalProperties": false
+      "type": "object"
     }
   },
-  "properties": {
-    "StandardsSubscriptionArn": {
-      "description": "The ARN of the StandardsSubscription for the account ID, region, and Standard.",
-      "type": "string",
-      "pattern": "arn:aws\\S*:securityhub:\\S*"
-    },
-    "StandardsArn": {
-      "description": "The ARN of the Standard being enabled",
-      "type": "string",
-      "pattern": "arn:aws\\S*:securityhub:\\S"
-    },
-    "DisabledStandardsControls": {
-      "description": "StandardsControls to disable from this Standard.",
-      "type": "array",
-      "minItems": 0,
-      "maxItems": 100,
-      "items": { "$ref": "#/definitions/StandardsControl" },
-      "insertionOrder": true,
-      "uniqueItems": true
-    }
-  },
-  "additionalProperties": false,
-  "required": ["StandardsArn"],
-  "createOnlyProperties": ["/properties/StandardsArn"],
-  "readOnlyProperties": ["/properties/StandardsSubscriptionArn"],
-  "primaryIdentifier": ["/properties/StandardsSubscriptionArn"],
-  "additionalIdentifiers": [["/properties/StandardsArn"]],
-  "tagging": {
-    "taggable": false,
-    "tagOnCreate": false,
-    "tagUpdatable": false,
-    "cloudFormationSystemTags": false,
-    "tagProperty": "/properties/Tags"
-  },
+  "description": "The AWS::SecurityHub::Standard resource represents the implementation of an individual AWS Security Hub Standard in your account. It requires you have SecurityHub enabled before you can enable the Standard.",
   "handlers": {
     "create": {
       "permissions": [
@@ -63,6 +31,13 @@
         "securityhub:UpdateStandardsControl"
       ]
     },
+    "delete": {
+      "permissions": [
+        "securityhub:GetEnabledStandards",
+        "securityhub:BatchDisableStandards"
+      ]
+    },
+    "list": { "permissions": ["securityhub:GetEnabledStandards"] },
     "read": {
       "permissions": [
         "securityhub:GetEnabledStandards",
@@ -74,14 +49,39 @@
         "securityhub:GetEnabledStandards",
         "securityhub:UpdateStandardsControl"
       ]
-    },
-    "delete": {
-      "permissions": [
-        "securityhub:GetEnabledStandards",
-        "securityhub:BatchDisableStandards"
-      ]
-    },
-    "list": { "permissions": ["securityhub:GetEnabledStandards"] }
+    }
   },
-  "$hash": "6ff64676653ebb256fd82482bf3d45f70906e7bc"
+  "primaryIdentifier": ["/properties/StandardsSubscriptionArn"],
+  "properties": {
+    "DisabledStandardsControls": {
+      "description": "StandardsControls to disable from this Standard.",
+      "insertionOrder": true,
+      "items": { "$ref": "#/definitions/StandardsControl" },
+      "maxItems": 100,
+      "minItems": 0,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "StandardsArn": {
+      "description": "The ARN of the Standard being enabled",
+      "pattern": "arn:aws\\S*:securityhub:\\S",
+      "type": "string"
+    },
+    "StandardsSubscriptionArn": {
+      "description": "The ARN of the StandardsSubscription for the account ID, region, and Standard.",
+      "pattern": "arn:aws\\S*:securityhub:\\S*",
+      "type": "string"
+    }
+  },
+  "readOnlyProperties": ["/properties/StandardsSubscriptionArn"],
+  "required": ["StandardsArn"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-securityhub",
+  "tagging": {
+    "cloudFormationSystemTags": false,
+    "tagOnCreate": false,
+    "tagProperty": "/properties/Tags",
+    "tagUpdatable": false,
+    "taggable": false
+  },
+  "typeName": "AWS::SecurityHub::Standard"
 }

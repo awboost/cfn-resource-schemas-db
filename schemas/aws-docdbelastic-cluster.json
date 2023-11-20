@@ -1,86 +1,29 @@
 {
-  "typeName": "AWS::DocDBElastic::Cluster",
-  "description": "The AWS::DocDBElastic::Cluster Amazon DocumentDB (with MongoDB compatibility) Elastic Scale resource describes a Cluster",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-docdbelastic/",
-  "definitions": {
-    "Tag": {
-      "type": "object",
-      "properties": {
-        "Key": {
-          "type": "string",
-          "pattern": "^(?!aws:)[a-zA-Z+-=._:/]+$",
-          "maxLength": 128,
-          "minLength": 1
-        },
-        "Value": { "type": "string", "maxLength": 256, "minLength": 0 }
-      },
-      "required": ["Key", "Value"],
-      "additionalProperties": false
-    }
-  },
-  "properties": {
-    "ClusterName": {
-      "type": "string",
-      "pattern": "[a-zA-z][a-zA-Z0-9]*(-[a-zA-Z0-9]+)*",
-      "maxLength": 50,
-      "minLength": 1
-    },
-    "ClusterArn": { "type": "string" },
-    "ClusterEndpoint": { "type": "string" },
-    "AdminUserName": { "type": "string" },
-    "AdminUserPassword": { "type": "string" },
-    "ShardCapacity": { "type": "integer" },
-    "ShardCount": { "type": "integer" },
-    "VpcSecurityGroupIds": {
-      "type": "array",
-      "uniqueItems": false,
-      "insertionOrder": false,
-      "items": { "type": "string" }
-    },
-    "SubnetIds": {
-      "type": "array",
-      "uniqueItems": false,
-      "insertionOrder": false,
-      "items": { "type": "string" }
-    },
-    "PreferredMaintenanceWindow": { "type": "string" },
-    "KmsKeyId": { "type": "string" },
-    "Tags": {
-      "type": "array",
-      "items": { "$ref": "#/definitions/Tag" },
-      "insertionOrder": false,
-      "uniqueItems": true,
-      "maxItems": 50,
-      "minItems": 0
-    },
-    "AuthType": { "type": "string" }
-  },
-  "required": [
-    "ClusterName",
-    "AdminUserName",
-    "ShardCapacity",
-    "ShardCount",
-    "AuthType"
-  ],
-  "primaryIdentifier": ["/properties/ClusterArn"],
-  "readOnlyProperties": [
-    "/properties/ClusterArn",
-    "/properties/ClusterEndpoint"
-  ],
+  "$hash": "a6961f06ded9e1b260903aedf95344695c29879e",
+  "additionalProperties": false,
   "createOnlyProperties": [
     "/properties/AdminUserName",
     "/properties/AuthType",
     "/properties/ClusterName",
     "/properties/KmsKeyId"
   ],
-  "writeOnlyProperties": ["/properties/AdminUserPassword"],
-  "tagging": {
-    "taggable": true,
-    "tagOnCreate": true,
-    "tagUpdatable": true,
-    "cloudFormationSystemTags": false,
-    "tagProperty": "/properties/Tags"
+  "definitions": {
+    "Tag": {
+      "additionalProperties": false,
+      "properties": {
+        "Key": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^(?!aws:)[a-zA-Z+-=._:/]+$",
+          "type": "string"
+        },
+        "Value": { "maxLength": 256, "minLength": 0, "type": "string" }
+      },
+      "required": ["Key", "Value"],
+      "type": "object"
+    }
   },
+  "description": "The AWS::DocDBElastic::Cluster Amazon DocumentDB (with MongoDB compatibility) Elastic Scale resource describes a Cluster",
   "handlers": {
     "create": {
       "permissions": [
@@ -106,6 +49,20 @@
         "iam:CreateServiceLinkedRole"
       ]
     },
+    "delete": {
+      "permissions": [
+        "docdb-elastic:DeleteCluster",
+        "ec2:DescribeVpcEndpoints",
+        "ec2:DeleteVpcEndpoints",
+        "ec2:ModifyVpcEndpoint",
+        "ec2:DescribeSecurityGroups",
+        "ec2:DescribeSubnets",
+        "ec2:DescribeVpcAttribute",
+        "ec2:DescribeVpcs",
+        "ec2:DescribeAvailabilityZones"
+      ]
+    },
+    "list": { "permissions": ["docdb-elastic:ListClusters"] },
     "read": {
       "permissions": [
         "docdb-elastic:GetCluster",
@@ -136,22 +93,65 @@
         "kms:GenerateDataKey",
         "kms:Decrypt"
       ]
-    },
-    "delete": {
-      "permissions": [
-        "docdb-elastic:DeleteCluster",
-        "ec2:DescribeVpcEndpoints",
-        "ec2:DeleteVpcEndpoints",
-        "ec2:ModifyVpcEndpoint",
-        "ec2:DescribeSecurityGroups",
-        "ec2:DescribeSubnets",
-        "ec2:DescribeVpcAttribute",
-        "ec2:DescribeVpcs",
-        "ec2:DescribeAvailabilityZones"
-      ]
-    },
-    "list": { "permissions": ["docdb-elastic:ListClusters"] }
+    }
   },
-  "additionalProperties": false,
-  "$hash": "a6961f06ded9e1b260903aedf95344695c29879e"
+  "primaryIdentifier": ["/properties/ClusterArn"],
+  "properties": {
+    "AdminUserName": { "type": "string" },
+    "AdminUserPassword": { "type": "string" },
+    "AuthType": { "type": "string" },
+    "ClusterArn": { "type": "string" },
+    "ClusterEndpoint": { "type": "string" },
+    "ClusterName": {
+      "maxLength": 50,
+      "minLength": 1,
+      "pattern": "[a-zA-z][a-zA-Z0-9]*(-[a-zA-Z0-9]+)*",
+      "type": "string"
+    },
+    "KmsKeyId": { "type": "string" },
+    "PreferredMaintenanceWindow": { "type": "string" },
+    "ShardCapacity": { "type": "integer" },
+    "ShardCount": { "type": "integer" },
+    "SubnetIds": {
+      "insertionOrder": false,
+      "items": { "type": "string" },
+      "type": "array",
+      "uniqueItems": false
+    },
+    "Tags": {
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/Tag" },
+      "maxItems": 50,
+      "minItems": 0,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "VpcSecurityGroupIds": {
+      "insertionOrder": false,
+      "items": { "type": "string" },
+      "type": "array",
+      "uniqueItems": false
+    }
+  },
+  "readOnlyProperties": [
+    "/properties/ClusterArn",
+    "/properties/ClusterEndpoint"
+  ],
+  "required": [
+    "ClusterName",
+    "AdminUserName",
+    "ShardCapacity",
+    "ShardCount",
+    "AuthType"
+  ],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-docdbelastic/",
+  "tagging": {
+    "cloudFormationSystemTags": false,
+    "tagOnCreate": true,
+    "tagProperty": "/properties/Tags",
+    "tagUpdatable": true,
+    "taggable": true
+  },
+  "typeName": "AWS::DocDBElastic::Cluster",
+  "writeOnlyProperties": ["/properties/AdminUserPassword"]
 }

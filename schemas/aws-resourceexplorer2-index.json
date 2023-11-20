@@ -1,27 +1,19 @@
 {
-  "typeName": "AWS::ResourceExplorer2::Index",
-  "description": "Definition of AWS::ResourceExplorer2::Index Resource Type",
+  "$hash": "2e23eb30f73befed365d1c0d5ea1977bb5611e5f",
+  "additionalProperties": false,
   "definitions": {
-    "IndexType": { "type": "string", "enum": ["LOCAL", "AGGREGATOR"] },
-    "TagMap": {
-      "type": "object",
-      "patternProperties": { ".+": { "type": "string" } },
-      "additionalProperties": false
-    },
     "IndexState": {
-      "type": "string",
-      "enum": ["ACTIVE", "CREATING", "DELETING", "DELETED", "UPDATING"]
+      "enum": ["ACTIVE", "CREATING", "DELETING", "DELETED", "UPDATING"],
+      "type": "string"
+    },
+    "IndexType": { "enum": ["LOCAL", "AGGREGATOR"], "type": "string" },
+    "TagMap": {
+      "additionalProperties": false,
+      "patternProperties": { ".+": { "type": "string" } },
+      "type": "object"
     }
   },
-  "properties": {
-    "Arn": { "type": "string" },
-    "Tags": { "$ref": "#/definitions/TagMap" },
-    "Type": { "$ref": "#/definitions/IndexType" },
-    "IndexState": { "$ref": "#/definitions/IndexState" }
-  },
-  "required": ["Type"],
-  "readOnlyProperties": ["/properties/Arn", "/properties/IndexState"],
-  "primaryIdentifier": ["/properties/Arn"],
+  "description": "Definition of AWS::ResourceExplorer2::Index Resource Type",
   "handlers": {
     "create": {
       "permissions": [
@@ -32,15 +24,6 @@
         "resource-explorer-2:DeleteIndex"
       ]
     },
-    "update": {
-      "permissions": [
-        "resource-explorer-2:GetIndex",
-        "resource-explorer-2:UpdateIndexType",
-        "resource-explorer-2:TagResource",
-        "resource-explorer-2:UntagResource",
-        "resource-explorer-2:ListTagsForResource"
-      ]
-    },
     "delete": {
       "permissions": [
         "resource-explorer-2:DeleteIndex",
@@ -49,15 +32,32 @@
       ]
     },
     "list": { "permissions": ["resource-explorer-2:ListIndexes"] },
-    "read": { "permissions": ["resource-explorer-2:GetIndex"] }
+    "read": { "permissions": ["resource-explorer-2:GetIndex"] },
+    "update": {
+      "permissions": [
+        "resource-explorer-2:GetIndex",
+        "resource-explorer-2:UpdateIndexType",
+        "resource-explorer-2:TagResource",
+        "resource-explorer-2:UntagResource",
+        "resource-explorer-2:ListTagsForResource"
+      ]
+    }
   },
+  "primaryIdentifier": ["/properties/Arn"],
+  "properties": {
+    "Arn": { "type": "string" },
+    "IndexState": { "$ref": "#/definitions/IndexState" },
+    "Tags": { "$ref": "#/definitions/TagMap" },
+    "Type": { "$ref": "#/definitions/IndexType" }
+  },
+  "readOnlyProperties": ["/properties/Arn", "/properties/IndexState"],
+  "required": ["Type"],
   "tagging": {
-    "taggable": true,
-    "tagOnCreate": true,
     "cloudFormationSystemTags": false,
+    "tagOnCreate": true,
+    "tagProperty": "/properties/Tags",
     "tagUpdatable": true,
-    "tagProperty": "/properties/Tags"
+    "taggable": true
   },
-  "additionalProperties": false,
-  "$hash": "2e23eb30f73befed365d1c0d5ea1977bb5611e5f"
+  "typeName": "AWS::ResourceExplorer2::Index"
 }

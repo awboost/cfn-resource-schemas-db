@@ -1,162 +1,110 @@
 {
-  "typeName": "AWS::IoTWireless::WirelessDevice",
-  "description": "Create and manage wireless gateways, including LoRa gateways.",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+  "$hash": "5a1ae46afee93a993d4c4e3bc8dc4affc1154f8e",
+  "additionalProperties": false,
   "definitions": {
-    "OtaaV10x": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "AppKey": { "type": "string", "pattern": "[a-fA-F0-9]{32}" },
-        "AppEui": { "type": "string", "pattern": "[a-fA-F0-9]{16}" }
-      },
-      "required": ["AppKey", "AppEui"]
-    },
-    "OtaaV11": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "AppKey": { "type": "string", "pattern": "[a-fA-F0-9]{32}" },
-        "NwkKey": { "type": "string", "pattern": "[a-fA-F0-9]{32}" },
-        "JoinEui": { "type": "string", "pattern": "[a-fA-F0-9]{16}" }
-      },
-      "required": ["AppKey", "NwkKey", "JoinEui"]
-    },
-    "SessionKeysAbpV11": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "FNwkSIntKey": { "type": "string", "pattern": "[a-fA-F0-9]{32}" },
-        "SNwkSIntKey": { "type": "string", "pattern": "[a-fA-F0-9]{32}" },
-        "NwkSEncKey": { "type": "string", "pattern": "[a-fA-F0-9]{32}" },
-        "AppSKey": { "type": "string", "pattern": "[a-fA-F0-9]{32}" }
-      },
-      "required": ["FNwkSIntKey", "SNwkSIntKey", "NwkSEncKey", "AppSKey"]
-    },
-    "AbpV11": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "DevAddr": { "type": "string", "pattern": "[a-fA-F0-9]{8}" },
-        "SessionKeys": { "$ref": "#/definitions/SessionKeysAbpV11" }
-      },
-      "required": ["DevAddr", "SessionKeys"]
-    },
-    "SessionKeysAbpV10x": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "NwkSKey": { "type": "string", "pattern": "[a-fA-F0-9]{32}" },
-        "AppSKey": { "type": "string", "pattern": "[a-fA-F0-9]{32}" }
-      },
-      "required": ["NwkSKey", "AppSKey"]
-    },
     "AbpV10x": {
-      "type": "object",
       "additionalProperties": false,
       "properties": {
-        "DevAddr": { "type": "string", "pattern": "[a-fA-F0-9]{8}" },
+        "DevAddr": { "pattern": "[a-fA-F0-9]{8}", "type": "string" },
         "SessionKeys": { "$ref": "#/definitions/SessionKeysAbpV10x" }
       },
-      "required": ["DevAddr", "SessionKeys"]
+      "required": ["DevAddr", "SessionKeys"],
+      "type": "object"
     },
-    "LoRaWANDevice": {
-      "type": "object",
+    "AbpV11": {
       "additionalProperties": false,
       "properties": {
-        "DevEui": { "type": "string", "pattern": "[a-f0-9]{16}" },
-        "DeviceProfileId": { "type": "string", "maxLength": 256 },
-        "ServiceProfileId": { "type": "string", "maxLength": 256 },
-        "OtaaV11": { "$ref": "#/definitions/OtaaV11" },
-        "OtaaV10x": { "$ref": "#/definitions/OtaaV10x" },
-        "AbpV11": { "$ref": "#/definitions/AbpV11" },
-        "AbpV10x": { "$ref": "#/definitions/AbpV10x" }
+        "DevAddr": { "pattern": "[a-fA-F0-9]{8}", "type": "string" },
+        "SessionKeys": { "$ref": "#/definitions/SessionKeysAbpV11" }
       },
+      "required": ["DevAddr", "SessionKeys"],
+      "type": "object"
+    },
+    "LoRaWANDevice": {
+      "additionalProperties": false,
       "oneOf": [
         { "required": ["OtaaV11"] },
         { "required": ["OtaaV10x"] },
         { "required": ["AbpV11"] },
         { "required": ["AbpV10x"] }
-      ]
+      ],
+      "properties": {
+        "AbpV10x": { "$ref": "#/definitions/AbpV10x" },
+        "AbpV11": { "$ref": "#/definitions/AbpV11" },
+        "DevEui": { "pattern": "[a-f0-9]{16}", "type": "string" },
+        "DeviceProfileId": { "maxLength": 256, "type": "string" },
+        "OtaaV10x": { "$ref": "#/definitions/OtaaV10x" },
+        "OtaaV11": { "$ref": "#/definitions/OtaaV11" },
+        "ServiceProfileId": { "maxLength": 256, "type": "string" }
+      },
+      "type": "object"
+    },
+    "OtaaV10x": {
+      "additionalProperties": false,
+      "properties": {
+        "AppEui": { "pattern": "[a-fA-F0-9]{16}", "type": "string" },
+        "AppKey": { "pattern": "[a-fA-F0-9]{32}", "type": "string" }
+      },
+      "required": ["AppKey", "AppEui"],
+      "type": "object"
+    },
+    "OtaaV11": {
+      "additionalProperties": false,
+      "properties": {
+        "AppKey": { "pattern": "[a-fA-F0-9]{32}", "type": "string" },
+        "JoinEui": { "pattern": "[a-fA-F0-9]{16}", "type": "string" },
+        "NwkKey": { "pattern": "[a-fA-F0-9]{32}", "type": "string" }
+      },
+      "required": ["AppKey", "NwkKey", "JoinEui"],
+      "type": "object"
+    },
+    "SessionKeysAbpV10x": {
+      "additionalProperties": false,
+      "properties": {
+        "AppSKey": { "pattern": "[a-fA-F0-9]{32}", "type": "string" },
+        "NwkSKey": { "pattern": "[a-fA-F0-9]{32}", "type": "string" }
+      },
+      "required": ["NwkSKey", "AppSKey"],
+      "type": "object"
+    },
+    "SessionKeysAbpV11": {
+      "additionalProperties": false,
+      "properties": {
+        "AppSKey": { "pattern": "[a-fA-F0-9]{32}", "type": "string" },
+        "FNwkSIntKey": { "pattern": "[a-fA-F0-9]{32}", "type": "string" },
+        "NwkSEncKey": { "pattern": "[a-fA-F0-9]{32}", "type": "string" },
+        "SNwkSIntKey": { "pattern": "[a-fA-F0-9]{32}", "type": "string" }
+      },
+      "required": ["FNwkSIntKey", "SNwkSIntKey", "NwkSEncKey", "AppSKey"],
+      "type": "object"
     },
     "Tag": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
-        "Key": { "type": "string", "minLength": 1, "maxLength": 128 },
-        "Value": { "type": "string", "minLength": 0, "maxLength": 256 }
+        "Key": { "maxLength": 128, "minLength": 1, "type": "string" },
+        "Value": { "maxLength": 256, "minLength": 0, "type": "string" }
       },
-      "additionalProperties": false
+      "type": "object"
     }
   },
-  "properties": {
-    "Type": {
-      "description": "Wireless device type, currently only Sidewalk and LoRa",
-      "type": "string",
-      "enum": ["Sidewalk", "LoRaWAN"]
-    },
-    "Name": {
-      "description": "Wireless device name",
-      "type": "string",
-      "maxLength": 256
-    },
-    "Description": {
-      "description": "Wireless device description",
-      "type": "string",
-      "maxLength": 2048
-    },
-    "DestinationName": {
-      "description": "Wireless device destination name",
-      "type": "string",
-      "maxLength": 128
-    },
-    "LoRaWAN": {
-      "description": "The combination of Package, Station and Model which represents the version of the LoRaWAN Wireless Device.",
-      "$ref": "#/definitions/LoRaWANDevice"
-    },
-    "Tags": {
-      "description": "A list of key-value pairs that contain metadata for the device. Currently not supported, will not create if tags are passed.",
-      "type": "array",
-      "uniqueItems": true,
-      "maxItems": 200,
-      "insertionOrder": false,
-      "items": { "$ref": "#/definitions/Tag" }
-    },
-    "Arn": {
-      "description": "Wireless device arn. Returned after successful create.",
-      "type": "string"
-    },
-    "Id": {
-      "description": "Wireless device Id. Returned after successful create.",
-      "type": "string",
-      "maxLength": 256
-    },
-    "ThingArn": {
-      "description": "Thing arn. Passed into update to associate Thing with Wireless device.",
-      "type": "string"
-    },
-    "ThingName": {
-      "description": "Thing Arn. If there is a Thing created, this can be returned with a Get call.",
-      "type": "string"
-    },
-    "LastUplinkReceivedAt": {
-      "description": "The date and time when the most recent uplink was received.",
-      "type": "string"
-    }
-  },
-  "additionalProperties": false,
-  "required": ["Type", "DestinationName"],
-  "readOnlyProperties": [
-    "/properties/ThingName",
-    "/properties/Id",
-    "/properties/Arn"
-  ],
-  "primaryIdentifier": ["/properties/Id"],
-  "taggable": true,
+  "description": "Create and manage wireless gateways, including LoRa gateways.",
   "handlers": {
     "create": {
       "permissions": [
         "iotwireless:CreateWirelessDevice",
         "iotwireless:TagResource",
+        "iotwireless:ListTagsForResource"
+      ]
+    },
+    "delete": {
+      "permissions": [
+        "iotwireless:DeleteWirelessDevice",
+        "iotwireless:DisassociateWirelessDeviceFromThing"
+      ]
+    },
+    "list": {
+      "permissions": [
+        "iotwireless:ListWirelessDevices",
         "iotwireless:ListTagsForResource"
       ]
     },
@@ -173,19 +121,71 @@
         "iotwireless:ListTagsForResource",
         "iotwireless:AssociateWirelessDeviceWithThing"
       ]
-    },
-    "delete": {
-      "permissions": [
-        "iotwireless:DeleteWirelessDevice",
-        "iotwireless:DisassociateWirelessDeviceFromThing"
-      ]
-    },
-    "list": {
-      "permissions": [
-        "iotwireless:ListWirelessDevices",
-        "iotwireless:ListTagsForResource"
-      ]
     }
   },
-  "$hash": "5a1ae46afee93a993d4c4e3bc8dc4affc1154f8e"
+  "primaryIdentifier": ["/properties/Id"],
+  "properties": {
+    "Arn": {
+      "description": "Wireless device arn. Returned after successful create.",
+      "type": "string"
+    },
+    "Description": {
+      "description": "Wireless device description",
+      "maxLength": 2048,
+      "type": "string"
+    },
+    "DestinationName": {
+      "description": "Wireless device destination name",
+      "maxLength": 128,
+      "type": "string"
+    },
+    "Id": {
+      "description": "Wireless device Id. Returned after successful create.",
+      "maxLength": 256,
+      "type": "string"
+    },
+    "LastUplinkReceivedAt": {
+      "description": "The date and time when the most recent uplink was received.",
+      "type": "string"
+    },
+    "LoRaWAN": {
+      "$ref": "#/definitions/LoRaWANDevice",
+      "description": "The combination of Package, Station and Model which represents the version of the LoRaWAN Wireless Device."
+    },
+    "Name": {
+      "description": "Wireless device name",
+      "maxLength": 256,
+      "type": "string"
+    },
+    "Tags": {
+      "description": "A list of key-value pairs that contain metadata for the device. Currently not supported, will not create if tags are passed.",
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/Tag" },
+      "maxItems": 200,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "ThingArn": {
+      "description": "Thing arn. Passed into update to associate Thing with Wireless device.",
+      "type": "string"
+    },
+    "ThingName": {
+      "description": "Thing Arn. If there is a Thing created, this can be returned with a Get call.",
+      "type": "string"
+    },
+    "Type": {
+      "description": "Wireless device type, currently only Sidewalk and LoRa",
+      "enum": ["Sidewalk", "LoRaWAN"],
+      "type": "string"
+    }
+  },
+  "readOnlyProperties": [
+    "/properties/ThingName",
+    "/properties/Id",
+    "/properties/Arn"
+  ],
+  "required": ["Type", "DestinationName"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+  "taggable": true,
+  "typeName": "AWS::IoTWireless::WirelessDevice"
 }

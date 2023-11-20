@@ -1,71 +1,36 @@
 {
-  "typeName": "AWS::IoT::Dimension",
-  "description": "A dimension can be used to limit the scope of a metric used in a security profile for AWS IoT Device Defender.",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-iot.git",
+  "$hash": "e73e5daaff89bcaa4983dce9af05edca240bd264",
+  "additionalProperties": false,
+  "createOnlyProperties": ["/properties/Name", "/properties/Type"],
   "definitions": {
     "Tag": {
+      "additionalProperties": false,
       "description": "A key-value pair to associate with a resource.",
-      "type": "object",
       "properties": {
         "Key": {
-          "type": "string",
           "description": "The tag's key.",
+          "maxLength": 128,
           "minLength": 1,
-          "maxLength": 128
+          "type": "string"
         },
         "Value": {
-          "type": "string",
           "description": "The tag's value.",
+          "maxLength": 256,
           "minLength": 1,
-          "maxLength": 256
+          "type": "string"
         }
       },
       "required": ["Value", "Key"],
-      "additionalProperties": false
+      "type": "object"
     }
   },
-  "properties": {
-    "Name": {
-      "description": "A unique identifier for the dimension.",
-      "type": "string",
-      "pattern": "[a-zA-Z0-9:_-]+",
-      "minLength": 1,
-      "maxLength": 128
-    },
-    "Type": {
-      "description": "Specifies the type of the dimension.",
-      "type": "string",
-      "enum": ["TOPIC_FILTER"]
-    },
-    "StringValues": {
-      "description": "Specifies the value or list of values for the dimension.",
-      "type": "array",
-      "uniqueItems": true,
-      "insertionOrder": false,
-      "items": { "type": "string", "minLength": 1, "maxLength": 256 },
-      "minItems": 1,
-      "maxItems": 5
-    },
-    "Tags": {
-      "description": "Metadata that can be used to manage the dimension.",
-      "type": "array",
-      "maxItems": 50,
-      "uniqueItems": true,
-      "insertionOrder": false,
-      "items": { "$ref": "#/definitions/Tag" }
-    },
-    "Arn": {
-      "description": "The ARN (Amazon resource name) of the created dimension.",
-      "type": "string"
-    }
-  },
-  "additionalProperties": false,
-  "primaryIdentifier": ["/properties/Name"],
-  "required": ["Type", "StringValues"],
-  "createOnlyProperties": ["/properties/Name", "/properties/Type"],
-  "readOnlyProperties": ["/properties/Arn"],
+  "description": "A dimension can be used to limit the scope of a metric used in a security profile for AWS IoT Device Defender.",
   "handlers": {
     "create": { "permissions": ["iot:CreateDimension", "iot:TagResource"] },
+    "delete": {
+      "permissions": ["iot:DescribeDimension", "iot:DeleteDimension"]
+    },
+    "list": { "permissions": ["iot:ListDimensions"] },
     "read": {
       "permissions": ["iot:DescribeDimension", "iot:ListTagsForResource"]
     },
@@ -76,11 +41,46 @@
         "iot:UntagResource",
         "iot:TagResource"
       ]
-    },
-    "delete": {
-      "permissions": ["iot:DescribeDimension", "iot:DeleteDimension"]
-    },
-    "list": { "permissions": ["iot:ListDimensions"] }
+    }
   },
-  "$hash": "e73e5daaff89bcaa4983dce9af05edca240bd264"
+  "primaryIdentifier": ["/properties/Name"],
+  "properties": {
+    "Arn": {
+      "description": "The ARN (Amazon resource name) of the created dimension.",
+      "type": "string"
+    },
+    "Name": {
+      "description": "A unique identifier for the dimension.",
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "[a-zA-Z0-9:_-]+",
+      "type": "string"
+    },
+    "StringValues": {
+      "description": "Specifies the value or list of values for the dimension.",
+      "insertionOrder": false,
+      "items": { "maxLength": 256, "minLength": 1, "type": "string" },
+      "maxItems": 5,
+      "minItems": 1,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "Tags": {
+      "description": "Metadata that can be used to manage the dimension.",
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/Tag" },
+      "maxItems": 50,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "Type": {
+      "description": "Specifies the type of the dimension.",
+      "enum": ["TOPIC_FILTER"],
+      "type": "string"
+    }
+  },
+  "readOnlyProperties": ["/properties/Arn"],
+  "required": ["Type", "StringValues"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-iot.git",
+  "typeName": "AWS::IoT::Dimension"
 }

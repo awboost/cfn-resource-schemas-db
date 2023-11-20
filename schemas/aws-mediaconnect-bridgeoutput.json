@@ -1,51 +1,36 @@
 {
-  "typeName": "AWS::MediaConnect::BridgeOutput",
-  "description": "Resource schema for AWS::MediaConnect::BridgeOutput",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-mediaconnect.git",
+  "$hash": "ba995ed100d0007941f4a28f10f0f394fbf16ebf",
+  "additionalProperties": false,
+  "createOnlyProperties": ["/properties/BridgeArn", "/properties/Name"],
   "definitions": {
     "BridgeNetworkOutput": {
-      "type": "object",
+      "additionalProperties": false,
       "description": "The output of the bridge. A network output is delivered to your premises.",
       "properties": {
-        "Protocol": {
-          "type": "string",
-          "enum": ["rtp-fec", "rtp", "udp"],
-          "description": "The network output protocol."
-        },
         "IpAddress": {
-          "type": "string",
-          "description": "The network output IP Address."
-        },
-        "Port": {
-          "type": "integer",
-          "description": "The network output port."
+          "description": "The network output IP Address.",
+          "type": "string"
         },
         "NetworkName": {
-          "type": "string",
-          "description": "The network output's gateway network name."
+          "description": "The network output's gateway network name.",
+          "type": "string"
         },
-        "Ttl": { "type": "integer", "description": "The network output TTL." }
+        "Port": {
+          "description": "The network output port.",
+          "type": "integer"
+        },
+        "Protocol": {
+          "description": "The network output protocol.",
+          "enum": ["rtp-fec", "rtp", "udp"],
+          "type": "string"
+        },
+        "Ttl": { "description": "The network output TTL.", "type": "integer" }
       },
       "required": ["Protocol", "IpAddress", "Port", "NetworkName", "Ttl"],
-      "additionalProperties": false
+      "type": "object"
     }
   },
-  "properties": {
-    "BridgeArn": {
-      "description": "The Amazon Resource Number (ARN) of the bridge.",
-      "type": "string"
-    },
-    "NetworkOutput": {
-      "description": "The output of the bridge.",
-      "$ref": "#/definitions/BridgeNetworkOutput"
-    },
-    "Name": { "type": "string", "description": "The network output name." }
-  },
-  "additionalProperties": false,
-  "required": ["BridgeArn", "Name", "NetworkOutput"],
-  "createOnlyProperties": ["/properties/BridgeArn", "/properties/Name"],
-  "primaryIdentifier": ["/properties/BridgeArn", "/properties/Name"],
-  "propertyTransform": { "/properties/Name": "$join([\"Output:\",Name])" },
+  "description": "Resource schema for AWS::MediaConnect::BridgeOutput",
   "handlers": {
     "create": {
       "permissions": [
@@ -53,15 +38,30 @@
         "mediaconnect:DescribeBridge"
       ]
     },
+    "delete": { "permissions": ["mediaconnect:RemoveBridgeOutput"] },
     "read": { "permissions": ["mediaconnect:DescribeBridge"] },
     "update": {
       "permissions": [
         "mediaconnect:DescribeBridge",
         "mediaconnect:UpdateBridgeOutput"
       ]
-    },
-    "delete": { "permissions": ["mediaconnect:RemoveBridgeOutput"] }
+    }
   },
+  "primaryIdentifier": ["/properties/BridgeArn", "/properties/Name"],
+  "properties": {
+    "BridgeArn": {
+      "description": "The Amazon Resource Number (ARN) of the bridge.",
+      "type": "string"
+    },
+    "Name": { "description": "The network output name.", "type": "string" },
+    "NetworkOutput": {
+      "$ref": "#/definitions/BridgeNetworkOutput",
+      "description": "The output of the bridge."
+    }
+  },
+  "propertyTransform": { "/properties/Name": "$join([\"Output:\",Name])" },
+  "required": ["BridgeArn", "Name", "NetworkOutput"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-mediaconnect.git",
   "tagging": { "taggable": false },
-  "$hash": "ba995ed100d0007941f4a28f10f0f394fbf16ebf"
+  "typeName": "AWS::MediaConnect::BridgeOutput"
 }

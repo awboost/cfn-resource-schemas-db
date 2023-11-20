@@ -1,5 +1,6 @@
 import { fetchResourceSchemas } from "@awboost/cfn-resource-schemas";
 import { mkdir, readFile, readdir, unlink, writeFile } from "fs/promises";
+import { canonicalize } from "json-canonicalize";
 import { join } from "path";
 import { format } from "prettier";
 import { IntegrityProps, addIntegrity } from "./integrity.js";
@@ -24,6 +25,7 @@ export async function download(): Promise<FileChange[]> {
     existing.delete(fileName);
 
     const newContents = addIntegrity(schema);
+    let changed = false;
 
     try {
       const oldContents = JSON.parse(
@@ -32,19 +34,23 @@ export async function download(): Promise<FileChange[]> {
 
       if (oldContents.$hash !== newContents.$hash) {
         changes.push({ type: "updated", fileName });
+        changed = true;
       }
     } catch (err: any) {
       if (err?.code === "ENOENT") {
         changes.push({ type: "added", fileName });
+        changed = true;
       } else {
         throw err;
       }
     }
 
-    const output = await format(JSON.stringify(newContents), {
-      filepath,
-    });
-    await writeFile(filepath, output);
+    if (changed) {
+      const output = await format(canonicalize(newContents), {
+        filepath,
+      });
+      await writeFile(filepath, output);
+    }
   }
 
   for (const fileName of existing) {

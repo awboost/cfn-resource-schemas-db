@@ -1,26 +1,78 @@
 {
-  "typeName": "AWS::IoTSiteWise::Portal",
-  "description": "Resource schema for AWS::IoTSiteWise::Portal",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-iotsitewise.git",
+  "$hash": "707d596a40f0b6567c95b66fde7340e9e1438431",
+  "additionalIdentifiers": [["/properties/PortalArn"]],
+  "additionalProperties": false,
+  "createOnlyProperties": ["/properties/PortalAuthMode"],
   "definitions": {
     "Tag": {
-      "description": "To add or update tag, provide both key and value. To delete tag, provide only tag key to be deleted.",
-      "type": "object",
       "additionalProperties": false,
+      "description": "To add or update tag, provide both key and value. To delete tag, provide only tag key to be deleted.",
       "properties": {
         "Key": { "type": "string" },
         "Value": { "type": "string" }
       },
-      "required": ["Key", "Value"]
+      "required": ["Key", "Value"],
+      "type": "object"
     }
   },
+  "description": "Resource schema for AWS::IoTSiteWise::Portal",
+  "handlers": {
+    "create": {
+      "permissions": [
+        "iotsitewise:CreatePortal",
+        "iotsitewise:TagResource",
+        "iam:PassRole",
+        "sso:CreateManagedApplicationInstance",
+        "sso:DescribeRegisteredRegions"
+      ]
+    },
+    "delete": {
+      "permissions": [
+        "iotsitewise:DeletePortal",
+        "sso:DeleteManagedApplicationInstance"
+      ]
+    },
+    "list": { "permissions": ["iotsitewise:ListPortals"] },
+    "read": { "permissions": ["iotsitewise:DescribePortal"] },
+    "update": {
+      "permissions": [
+        "iotsitewise:ListTagsForResource",
+        "iotsitewise:TagResource",
+        "iotsitewise:UpdatePortal",
+        "iotsitewise:UntagResource",
+        "iam:PassRole",
+        "sso:GetManagedApplicationInstance",
+        "sso:UpdateApplicationInstanceDisplayData"
+      ]
+    }
+  },
+  "primaryIdentifier": ["/properties/PortalId"],
   "properties": {
-    "PortalAuthMode": {
-      "description": "The service to use to authenticate users to the portal. Choose from SSO or IAM. You can't change this value after you create a portal.",
+    "Alarms": {
+      "additionalProperties": false,
+      "description": "Contains the configuration information of an alarm created in an AWS IoT SiteWise Monitor portal. You can use the alarm to monitor an asset property and get notified when the asset property value is outside a specified range.",
+      "properties": {
+        "AlarmRoleArn": {
+          "description": "The ARN of the IAM role that allows the alarm to perform actions and access AWS resources and services, such as AWS IoT Events.",
+          "type": "string"
+        },
+        "NotificationLambdaArn": {
+          "description": "The ARN of the AWS Lambda function that manages alarm notifications. For more information, see Managing alarm notifications in the AWS IoT Events Developer Guide.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "NotificationSenderEmail": {
+      "description": "The email address that sends alarm notifications.",
       "type": "string"
     },
     "PortalArn": {
       "description": "The ARN of the portal, which has the following format.",
+      "type": "string"
+    },
+    "PortalAuthMode": {
+      "description": "The service to use to authenticate users to the portal. Choose from SSO or IAM. You can't change this value after you create a portal.",
       "type": "string"
     },
     "PortalClientId": {
@@ -48,75 +100,23 @@
       "description": "The ARN of a service role that allows the portal's users to access your AWS IoT SiteWise resources on your behalf.",
       "type": "string"
     },
-    "NotificationSenderEmail": {
-      "description": "The email address that sends alarm notifications.",
-      "type": "string"
-    },
-    "Alarms": {
-      "type": "object",
-      "description": "Contains the configuration information of an alarm created in an AWS IoT SiteWise Monitor portal. You can use the alarm to monitor an asset property and get notified when the asset property value is outside a specified range.",
-      "additionalProperties": false,
-      "properties": {
-        "AlarmRoleArn": {
-          "type": "string",
-          "description": "The ARN of the IAM role that allows the alarm to perform actions and access AWS resources and services, such as AWS IoT Events."
-        },
-        "NotificationLambdaArn": {
-          "type": "string",
-          "description": "The ARN of the AWS Lambda function that manages alarm notifications. For more information, see Managing alarm notifications in the AWS IoT Events Developer Guide."
-        }
-      }
-    },
     "Tags": {
       "description": "A list of key-value pairs that contain metadata for the portal.",
-      "type": "array",
-      "uniqueItems": false,
       "insertionOrder": false,
-      "items": { "$ref": "#/definitions/Tag" }
+      "items": { "$ref": "#/definitions/Tag" },
+      "type": "array",
+      "uniqueItems": false
     }
   },
-  "additionalProperties": false,
-  "taggable": true,
-  "required": ["PortalContactEmail", "PortalName", "RoleArn"],
-  "createOnlyProperties": ["/properties/PortalAuthMode"],
   "readOnlyProperties": [
     "/properties/PortalArn",
     "/properties/PortalClientId",
     "/properties/PortalId",
     "/properties/PortalStartUrl"
   ],
-  "primaryIdentifier": ["/properties/PortalId"],
-  "additionalIdentifiers": [["/properties/PortalArn"]],
-  "writeOnlyProperties": ["/properties/Tags"],
-  "handlers": {
-    "create": {
-      "permissions": [
-        "iotsitewise:CreatePortal",
-        "iotsitewise:TagResource",
-        "iam:PassRole",
-        "sso:CreateManagedApplicationInstance",
-        "sso:DescribeRegisteredRegions"
-      ]
-    },
-    "read": { "permissions": ["iotsitewise:DescribePortal"] },
-    "update": {
-      "permissions": [
-        "iotsitewise:ListTagsForResource",
-        "iotsitewise:TagResource",
-        "iotsitewise:UpdatePortal",
-        "iotsitewise:UntagResource",
-        "iam:PassRole",
-        "sso:GetManagedApplicationInstance",
-        "sso:UpdateApplicationInstanceDisplayData"
-      ]
-    },
-    "delete": {
-      "permissions": [
-        "iotsitewise:DeletePortal",
-        "sso:DeleteManagedApplicationInstance"
-      ]
-    },
-    "list": { "permissions": ["iotsitewise:ListPortals"] }
-  },
-  "$hash": "707d596a40f0b6567c95b66fde7340e9e1438431"
+  "required": ["PortalContactEmail", "PortalName", "RoleArn"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-iotsitewise.git",
+  "taggable": true,
+  "typeName": "AWS::IoTSiteWise::Portal",
+  "writeOnlyProperties": ["/properties/Tags"]
 }

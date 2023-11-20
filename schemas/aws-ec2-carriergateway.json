@@ -1,57 +1,34 @@
 {
-  "typeName": "AWS::EC2::CarrierGateway",
-  "description": "An example resource schema demonstrating some basic constructs and validation rules.",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+  "$hash": "930ca411d680076686c8e79b99224176d26dd726",
+  "additionalProperties": false,
+  "createOnlyProperties": ["/properties/VpcId"],
   "definitions": {
-    "Tags": {
-      "type": "array",
-      "insertionOrder": false,
-      "uniqueItems": true,
-      "items": { "$ref": "#/definitions/Tag" }
-    },
     "Tag": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "Key": {
-          "type": "string",
-          "minLength": 1,
           "maxLength": 127,
-          "pattern": "^(?!aws:.*)"
+          "minLength": 1,
+          "pattern": "^(?!aws:.*)",
+          "type": "string"
         },
         "Value": {
-          "type": "string",
-          "minLength": 1,
           "maxLength": 255,
-          "pattern": "^(?!aws:.*)"
+          "minLength": 1,
+          "pattern": "^(?!aws:.*)",
+          "type": "string"
         }
       },
-      "additionalProperties": false
-    }
-  },
-  "properties": {
-    "CarrierGatewayId": {
-      "description": "The ID of the carrier gateway.",
-      "type": "string"
+      "type": "object"
     },
-    "State": {
-      "description": "The state of the carrier gateway.",
-      "type": "string"
-    },
-    "VpcId": { "description": "The ID of the VPC.", "type": "string" },
-    "OwnerId": { "description": "The ID of the owner.", "type": "string" },
     "Tags": {
-      "description": "The tags for the carrier gateway.",
-      "$ref": "#/definitions/Tags"
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/Tag" },
+      "type": "array",
+      "uniqueItems": true
     }
   },
-  "required": ["VpcId"],
-  "createOnlyProperties": ["/properties/VpcId"],
-  "readOnlyProperties": [
-    "/properties/CarrierGatewayId",
-    "/properties/OwnerId",
-    "/properties/State"
-  ],
-  "primaryIdentifier": ["/properties/CarrierGatewayId"],
+  "description": "An example resource schema demonstrating some basic constructs and validation rules.",
   "handlers": {
     "create": {
       "permissions": [
@@ -60,6 +37,10 @@
         "ec2:CreateTags"
       ]
     },
+    "delete": {
+      "permissions": ["ec2:DeleteCarrierGateway", "ec2:DescribeCarrierGateways"]
+    },
+    "list": { "permissions": ["ec2:DescribeCarrierGateways"] },
     "read": { "permissions": ["ec2:DescribeCarrierGateways"] },
     "update": {
       "permissions": [
@@ -67,12 +48,31 @@
         "ec2:CreateTags",
         "ec2:DeleteTags"
       ]
-    },
-    "delete": {
-      "permissions": ["ec2:DeleteCarrierGateway", "ec2:DescribeCarrierGateways"]
-    },
-    "list": { "permissions": ["ec2:DescribeCarrierGateways"] }
+    }
   },
-  "additionalProperties": false,
-  "$hash": "930ca411d680076686c8e79b99224176d26dd726"
+  "primaryIdentifier": ["/properties/CarrierGatewayId"],
+  "properties": {
+    "CarrierGatewayId": {
+      "description": "The ID of the carrier gateway.",
+      "type": "string"
+    },
+    "OwnerId": { "description": "The ID of the owner.", "type": "string" },
+    "State": {
+      "description": "The state of the carrier gateway.",
+      "type": "string"
+    },
+    "Tags": {
+      "$ref": "#/definitions/Tags",
+      "description": "The tags for the carrier gateway."
+    },
+    "VpcId": { "description": "The ID of the VPC.", "type": "string" }
+  },
+  "readOnlyProperties": [
+    "/properties/CarrierGatewayId",
+    "/properties/OwnerId",
+    "/properties/State"
+  ],
+  "required": ["VpcId"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+  "typeName": "AWS::EC2::CarrierGateway"
 }

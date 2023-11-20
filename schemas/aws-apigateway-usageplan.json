@@ -1,136 +1,98 @@
 {
-  "typeName": "AWS::ApiGateway::UsagePlan",
-  "description": "The ``AWS::ApiGateway::UsagePlan`` resource creates a usage plan for deployed APIs. A usage plan sets a target for the throttling and quota limits on individual client API keys. For more information, see [Creating and Using API Usage Plans in Amazon API Gateway](https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html) in the *API Gateway Developer Guide*.\n In some cases clients can exceed the targets that you set. Don’t rely on usage plans to control costs. Consider using [](https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html) to monitor costs and [](https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html) to manage API requests.",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-apigateway.git",
+  "$hash": "6d95504c7ec4e985a325a6527ffa0bdc2cced59e",
   "additionalProperties": false,
-  "properties": {
-    "Id": { "type": "string", "description": "" },
-    "ApiStages": {
-      "type": "array",
-      "description": "The associated API stages of a usage plan.",
-      "uniqueItems": true,
-      "items": { "$ref": "#/definitions/ApiStage" }
-    },
-    "Description": {
-      "type": "string",
-      "description": "The description of a usage plan."
-    },
-    "Quota": {
-      "$ref": "#/definitions/QuotaSettings",
-      "description": "The target maximum number of permitted requests per a given unit time interval."
-    },
-    "Tags": {
-      "type": "array",
-      "description": "The collection of tags. Each tag element is associated with a given resource.",
-      "insertionOrder": false,
-      "uniqueItems": false,
-      "items": { "$ref": "#/definitions/Tag" }
-    },
-    "Throttle": {
-      "$ref": "#/definitions/ThrottleSettings",
-      "description": "A map containing method level throttling information for API stage in a usage plan."
-    },
-    "UsagePlanName": {
-      "type": "string",
-      "description": "The name of a usage plan."
-    }
-  },
   "definitions": {
     "ApiStage": {
-      "type": "object",
       "additionalProperties": false,
+      "description": "API stage name of the associated API stage in a usage plan.",
       "properties": {
         "ApiId": {
-          "type": "string",
-          "description": "API Id of the associated API stage in a usage plan."
+          "description": "API Id of the associated API stage in a usage plan.",
+          "type": "string"
         },
         "Stage": {
-          "type": "string",
-          "description": "API stage name of the associated API stage in a usage plan."
+          "description": "API stage name of the associated API stage in a usage plan.",
+          "type": "string"
         },
         "Throttle": {
-          "type": "object",
-          "description": "Map containing method level throttling information for API stage in a usage plan.",
           "additionalProperties": false,
+          "description": "Map containing method level throttling information for API stage in a usage plan.",
           "patternProperties": {
             ".*": { "$ref": "#/definitions/ThrottleSettings" }
-          }
+          },
+          "type": "object"
         }
       },
-      "description": "API stage name of the associated API stage in a usage plan."
+      "type": "object"
     },
-    "ThrottleSettings": {
-      "type": "object",
+    "QuotaSettings": {
       "additionalProperties": false,
+      "description": "``QuotaSettings`` is a property of the [AWS::ApiGateway::UsagePlan](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-usageplan.html) resource that specifies a target for the maximum number of requests users can make to your REST APIs.\n In some cases clients can exceed the targets that you set. Don’t rely on usage plans to control costs. Consider using [](https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html) to monitor costs and [](https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html) to manage API requests.",
       "properties": {
-        "BurstLimit": {
-          "type": "integer",
+        "Limit": {
+          "description": "The target maximum number of requests that can be made in a given time period.",
           "minimum": 0,
-          "description": "The API target request burst rate limit. This allows more requests through for a period of time than the target rate limit."
+          "type": "integer"
         },
-        "RateLimit": {
-          "type": "number",
+        "Offset": {
+          "description": "The number of requests subtracted from the given limit in the initial time period.",
           "minimum": 0,
-          "description": "The API target request rate limit."
+          "type": "integer"
+        },
+        "Period": {
+          "description": "The time period in which the limit applies. Valid values are \"DAY\", \"WEEK\" or \"MONTH\".",
+          "type": "string"
         }
       },
-      "description": "``ThrottleSettings`` is a property of the [AWS::ApiGateway::UsagePlan](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-usageplan.html) resource that specifies the overall request rate (average requests per second) and burst capacity when users call your REST APIs."
+      "type": "object"
     },
     "Tag": {
-      "type": "object",
       "additionalProperties": false,
+      "description": "",
       "properties": {
         "Key": {
-          "type": "string",
-          "minLength": 1,
+          "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
           "maxLength": 128,
-          "description": "The key name of the tag. You can specify a value that is 1 to 128 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -."
+          "minLength": 1,
+          "type": "string"
         },
         "Value": {
-          "type": "string",
-          "minLength": 0,
+          "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -.",
           "maxLength": 256,
-          "description": "The value for the tag. You can specify a value that is 0 to 256 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -."
+          "minLength": 0,
+          "type": "string"
         }
       },
       "required": ["Value", "Key"],
-      "description": ""
+      "type": "object"
     },
-    "QuotaSettings": {
-      "type": "object",
+    "ThrottleSettings": {
       "additionalProperties": false,
+      "description": "``ThrottleSettings`` is a property of the [AWS::ApiGateway::UsagePlan](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-usageplan.html) resource that specifies the overall request rate (average requests per second) and burst capacity when users call your REST APIs.",
       "properties": {
-        "Limit": {
-          "type": "integer",
+        "BurstLimit": {
+          "description": "The API target request burst rate limit. This allows more requests through for a period of time than the target rate limit.",
           "minimum": 0,
-          "description": "The target maximum number of requests that can be made in a given time period."
+          "type": "integer"
         },
-        "Offset": {
-          "type": "integer",
+        "RateLimit": {
+          "description": "The API target request rate limit.",
           "minimum": 0,
-          "description": "The number of requests subtracted from the given limit in the initial time period."
-        },
-        "Period": {
-          "type": "string",
-          "description": "The time period in which the limit applies. Valid values are \"DAY\", \"WEEK\" or \"MONTH\"."
+          "type": "number"
         }
       },
-      "description": "``QuotaSettings`` is a property of the [AWS::ApiGateway::UsagePlan](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-usageplan.html) resource that specifies a target for the maximum number of requests users can make to your REST APIs.\n In some cases clients can exceed the targets that you set. Don’t rely on usage plans to control costs. Consider using [](https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html) to monitor costs and [](https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html) to manage API requests."
+      "type": "object"
     }
   },
-  "tagging": {
-    "taggable": true,
-    "tagOnCreate": true,
-    "tagUpdatable": true,
-    "cloudFormationSystemTags": true,
-    "tagProperty": "/properties/Tags"
-  },
-  "primaryIdentifier": ["/properties/Id"],
-  "readOnlyProperties": ["/properties/Id"],
+  "description": "The ``AWS::ApiGateway::UsagePlan`` resource creates a usage plan for deployed APIs. A usage plan sets a target for the throttling and quota limits on individual client API keys. For more information, see [Creating and Using API Usage Plans in Amazon API Gateway](https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html) in the *API Gateway Developer Guide*.\n In some cases clients can exceed the targets that you set. Don’t rely on usage plans to control costs. Consider using [](https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html) to monitor costs and [](https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html) to manage API requests.",
   "handlers": {
     "create": {
       "permissions": ["apigateway:POST", "apigateway:GET", "apigateway:PUT"]
     },
+    "delete": {
+      "permissions": ["apigateway:DELETE", "apigateway:GET", "apigateway:PATCH"]
+    },
+    "list": { "permissions": ["apigateway:GET"] },
     "read": { "permissions": ["apigateway:GET"] },
     "update": {
       "permissions": [
@@ -139,11 +101,49 @@
         "apigateway:PATCH",
         "apigateway:PUT"
       ]
-    },
-    "delete": {
-      "permissions": ["apigateway:DELETE", "apigateway:GET", "apigateway:PATCH"]
-    },
-    "list": { "permissions": ["apigateway:GET"] }
+    }
   },
-  "$hash": "6d95504c7ec4e985a325a6527ffa0bdc2cced59e"
+  "primaryIdentifier": ["/properties/Id"],
+  "properties": {
+    "ApiStages": {
+      "description": "The associated API stages of a usage plan.",
+      "items": { "$ref": "#/definitions/ApiStage" },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "Description": {
+      "description": "The description of a usage plan.",
+      "type": "string"
+    },
+    "Id": { "description": "", "type": "string" },
+    "Quota": {
+      "$ref": "#/definitions/QuotaSettings",
+      "description": "The target maximum number of permitted requests per a given unit time interval."
+    },
+    "Tags": {
+      "description": "The collection of tags. Each tag element is associated with a given resource.",
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/Tag" },
+      "type": "array",
+      "uniqueItems": false
+    },
+    "Throttle": {
+      "$ref": "#/definitions/ThrottleSettings",
+      "description": "A map containing method level throttling information for API stage in a usage plan."
+    },
+    "UsagePlanName": {
+      "description": "The name of a usage plan.",
+      "type": "string"
+    }
+  },
+  "readOnlyProperties": ["/properties/Id"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-apigateway.git",
+  "tagging": {
+    "cloudFormationSystemTags": true,
+    "tagOnCreate": true,
+    "tagProperty": "/properties/Tags",
+    "tagUpdatable": true,
+    "taggable": true
+  },
+  "typeName": "AWS::ApiGateway::UsagePlan"
 }

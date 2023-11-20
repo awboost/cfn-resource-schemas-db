@@ -1,66 +1,26 @@
 {
-  "typeName": "AWS::MediaPackage::Channel",
-  "description": "Resource schema for AWS::MediaPackage::Channel",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
-  "properties": {
-    "Arn": {
-      "description": "The Amazon Resource Name (ARN) assigned to the Channel.",
-      "type": "string"
-    },
-    "Id": {
-      "description": "The ID of the Channel.",
-      "type": "string",
-      "pattern": "\\A[0-9a-zA-Z-_]+\\Z",
-      "minLength": 1,
-      "maxLength": 256
-    },
-    "Description": {
-      "description": "A short text description of the Channel.",
-      "type": "string"
-    },
-    "HlsIngest": {
-      "description": "An HTTP Live Streaming (HLS) ingest resource configuration.",
-      "$ref": "#/definitions/HlsIngest"
-    },
-    "Tags": {
-      "description": "A collection of tags associated with a resource",
-      "type": "array",
-      "uniqueItems": true,
-      "items": { "$ref": "#/definitions/Tag" }
-    },
-    "EgressAccessLogs": {
-      "description": "The configuration parameters for egress access logging.",
-      "$ref": "#/definitions/LogConfiguration"
-    },
-    "IngressAccessLogs": {
-      "description": "The configuration parameters for egress access logging.",
-      "$ref": "#/definitions/LogConfiguration"
-    }
-  },
+  "$hash": "c84671be6b824a3e16b49fec38e79df25cf3ed92",
+  "additionalProperties": false,
+  "createOnlyProperties": ["/properties/Id", "/properties/Tags"],
   "definitions": {
     "HlsIngest": {
-      "description": "An HTTP Live Streaming (HLS) ingest resource configuration.",
-      "type": "object",
       "additionalProperties": false,
+      "description": "An HTTP Live Streaming (HLS) ingest resource configuration.",
       "properties": {
         "ingestEndpoints": {
           "description": "A list of endpoints to which the source stream should be sent.",
-          "type": "array",
-          "items": { "$ref": "#/definitions/IngestEndpoint" }
+          "items": { "$ref": "#/definitions/IngestEndpoint" },
+          "type": "array"
         }
-      }
+      },
+      "type": "object"
     },
     "IngestEndpoint": {
-      "description": "An endpoint for ingesting source content for a Channel.",
-      "type": "object",
       "additionalProperties": false,
+      "description": "An endpoint for ingesting source content for a Channel.",
       "properties": {
         "Id": {
           "description": "The system generated unique identifier for the IngestEndpoint",
-          "type": "string"
-        },
-        "Username": {
-          "description": "The system generated username for ingest authentication.",
           "type": "string"
         },
         "Password": {
@@ -70,44 +30,39 @@
         "Url": {
           "description": "The ingest URL to which the source stream should be sent.",
           "type": "string"
+        },
+        "Username": {
+          "description": "The system generated username for ingest authentication.",
+          "type": "string"
         }
       },
-      "required": ["Id", "Username", "Password", "Url"]
+      "required": ["Id", "Username", "Password", "Url"],
+      "type": "object"
+    },
+    "LogConfiguration": {
+      "additionalProperties": false,
+      "properties": {
+        "LogGroupName": {
+          "description": "Sets a custom AWS CloudWatch log group name for access logs. If a log group name isn't specified, the defaults are used: /aws/MediaPackage/EgressAccessLogs for egress access logs and /aws/MediaPackage/IngressAccessLogs for ingress access logs.",
+          "maxLength": 256,
+          "minLength": 1,
+          "pattern": "\\A^(\\/aws\\/MediaPackage\\/)[a-zA-Z0-9_-]+\\Z",
+          "type": "string"
+        }
+      },
+      "type": "object"
     },
     "Tag": {
-      "type": "object",
       "additionalProperties": false,
       "properties": {
         "Key": { "type": "string" },
         "Value": { "type": "string" }
       },
-      "required": ["Value", "Key"]
-    },
-    "LogConfiguration": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "LogGroupName": {
-          "description": "Sets a custom AWS CloudWatch log group name for access logs. If a log group name isn't specified, the defaults are used: /aws/MediaPackage/EgressAccessLogs for egress access logs and /aws/MediaPackage/IngressAccessLogs for ingress access logs.",
-          "type": "string",
-          "pattern": "\\A^(\\/aws\\/MediaPackage\\/)[a-zA-Z0-9_-]+\\Z",
-          "minLength": 1,
-          "maxLength": 256
-        }
-      }
+      "required": ["Value", "Key"],
+      "type": "object"
     }
   },
-  "additionalProperties": false,
-  "required": ["Id"],
-  "primaryIdentifier": ["/properties/Id"],
-  "readOnlyProperties": [
-    "/properties/Arn",
-    "/properties/HlsIngest/ingestEndpoints/*/Id",
-    "/properties/HlsIngest/ingestEndpoints/*/Username",
-    "/properties/HlsIngest/ingestEndpoints/*/Password",
-    "/properties/HlsIngest/ingestEndpoints/*/Url"
-  ],
-  "createOnlyProperties": ["/properties/Id", "/properties/Tags"],
+  "description": "Resource schema for AWS::MediaPackage::Channel",
   "handlers": {
     "create": {
       "permissions": [
@@ -119,6 +74,8 @@
         "iam:CreateServiceLinkedRole"
       ]
     },
+    "delete": { "permissions": ["mediapackage:DeleteChannel"] },
+    "list": { "permissions": ["mediapackage:ListChannels"] },
     "read": { "permissions": ["mediapackage:DescribeChannel"] },
     "update": {
       "permissions": [
@@ -126,9 +83,52 @@
         "mediapackage:ConfigureLogs",
         "iam:CreateServiceLinkedRole"
       ]
-    },
-    "delete": { "permissions": ["mediapackage:DeleteChannel"] },
-    "list": { "permissions": ["mediapackage:ListChannels"] }
+    }
   },
-  "$hash": "c84671be6b824a3e16b49fec38e79df25cf3ed92"
+  "primaryIdentifier": ["/properties/Id"],
+  "properties": {
+    "Arn": {
+      "description": "The Amazon Resource Name (ARN) assigned to the Channel.",
+      "type": "string"
+    },
+    "Description": {
+      "description": "A short text description of the Channel.",
+      "type": "string"
+    },
+    "EgressAccessLogs": {
+      "$ref": "#/definitions/LogConfiguration",
+      "description": "The configuration parameters for egress access logging."
+    },
+    "HlsIngest": {
+      "$ref": "#/definitions/HlsIngest",
+      "description": "An HTTP Live Streaming (HLS) ingest resource configuration."
+    },
+    "Id": {
+      "description": "The ID of the Channel.",
+      "maxLength": 256,
+      "minLength": 1,
+      "pattern": "\\A[0-9a-zA-Z-_]+\\Z",
+      "type": "string"
+    },
+    "IngressAccessLogs": {
+      "$ref": "#/definitions/LogConfiguration",
+      "description": "The configuration parameters for egress access logging."
+    },
+    "Tags": {
+      "description": "A collection of tags associated with a resource",
+      "items": { "$ref": "#/definitions/Tag" },
+      "type": "array",
+      "uniqueItems": true
+    }
+  },
+  "readOnlyProperties": [
+    "/properties/Arn",
+    "/properties/HlsIngest/ingestEndpoints/*/Id",
+    "/properties/HlsIngest/ingestEndpoints/*/Username",
+    "/properties/HlsIngest/ingestEndpoints/*/Password",
+    "/properties/HlsIngest/ingestEndpoints/*/Url"
+  ],
+  "required": ["Id"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+  "typeName": "AWS::MediaPackage::Channel"
 }

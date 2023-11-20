@@ -1,91 +1,56 @@
 {
-  "typeName": "AWS::Panorama::PackageVersion",
-  "description": "Schema for PackageVersion Resource Type",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-panorama.git",
-  "definitions": {
-    "PackageOwnerAccount": {
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 12,
-      "pattern": "^[0-9a-z\\_]+$"
-    },
-    "NodePackageId": {
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 255,
-      "pattern": "^[a-zA-Z0-9\\-\\_\\/]+$"
-    },
-    "NodePackageArn": { "type": "string", "minLength": 1, "maxLength": 255 },
-    "NodePackageName": {
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 128,
-      "pattern": "^[a-zA-Z0-9\\-\\_]+$"
-    },
-    "NodePackageVersion": {
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 255,
-      "pattern": "^([0-9]+)\\.([0-9]+)$"
-    },
-    "NodePackagePatchVersion": {
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 255,
-      "pattern": "^[a-z0-9]+$"
-    },
-    "PackageVersionStatus": {
-      "type": "string",
-      "enum": ["REGISTER_PENDING", "REGISTER_COMPLETED", "FAILED", "DELETING"]
-    },
-    "PackageVersionStatusDescription": {
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 255
-    },
-    "TimeStamp": { "type": "integer" }
-  },
-  "properties": {
-    "OwnerAccount": { "$ref": "#/definitions/PackageOwnerAccount" },
-    "PackageId": { "$ref": "#/definitions/NodePackageId" },
-    "PackageArn": { "$ref": "#/definitions/NodePackageArn" },
-    "PackageVersion": { "$ref": "#/definitions/NodePackageVersion" },
-    "PatchVersion": { "$ref": "#/definitions/NodePackagePatchVersion" },
-    "MarkLatest": { "type": "boolean" },
-    "IsLatestPatch": { "type": "boolean" },
-    "PackageName": { "$ref": "#/definitions/NodePackageName" },
-    "Status": { "$ref": "#/definitions/PackageVersionStatus" },
-    "StatusDescription": {
-      "$ref": "#/definitions/PackageVersionStatusDescription"
-    },
-    "RegisteredTime": { "$ref": "#/definitions/TimeStamp" },
-    "UpdatedLatestPatchVersion": {
-      "$ref": "#/definitions/NodePackagePatchVersion"
-    }
-  },
+  "$hash": "80d0605915b8bcf7ca4eec55064937a32a15578c",
   "additionalProperties": false,
-  "taggable": false,
-  "required": ["PackageId", "PackageVersion", "PatchVersion"],
-  "readOnlyProperties": [
-    "/properties/PackageName",
-    "/properties/PackageArn",
-    "/properties/Status",
-    "/properties/StatusDescription",
-    "/properties/IsLatestPatch",
-    "/properties/RegisteredTime"
-  ],
   "createOnlyProperties": [
     "/properties/OwnerAccount",
     "/properties/PackageId",
     "/properties/PackageVersion",
     "/properties/PatchVersion"
   ],
-  "writeOnlyProperties": ["/properties/UpdatedLatestPatchVersion"],
-  "primaryIdentifier": [
-    "/properties/PackageId",
-    "/properties/PackageVersion",
-    "/properties/PatchVersion"
-  ],
+  "definitions": {
+    "NodePackageArn": { "maxLength": 255, "minLength": 1, "type": "string" },
+    "NodePackageId": {
+      "maxLength": 255,
+      "minLength": 1,
+      "pattern": "^[a-zA-Z0-9\\-\\_\\/]+$",
+      "type": "string"
+    },
+    "NodePackageName": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[a-zA-Z0-9\\-\\_]+$",
+      "type": "string"
+    },
+    "NodePackagePatchVersion": {
+      "maxLength": 255,
+      "minLength": 1,
+      "pattern": "^[a-z0-9]+$",
+      "type": "string"
+    },
+    "NodePackageVersion": {
+      "maxLength": 255,
+      "minLength": 1,
+      "pattern": "^([0-9]+)\\.([0-9]+)$",
+      "type": "string"
+    },
+    "PackageOwnerAccount": {
+      "maxLength": 12,
+      "minLength": 1,
+      "pattern": "^[0-9a-z\\_]+$",
+      "type": "string"
+    },
+    "PackageVersionStatus": {
+      "enum": ["REGISTER_PENDING", "REGISTER_COMPLETED", "FAILED", "DELETING"],
+      "type": "string"
+    },
+    "PackageVersionStatusDescription": {
+      "maxLength": 255,
+      "minLength": 1,
+      "type": "string"
+    },
+    "TimeStamp": { "type": "integer" }
+  },
+  "description": "Schema for PackageVersion Resource Type",
   "handlers": {
     "create": {
       "permissions": [
@@ -93,6 +58,18 @@
         "panorama:DescribePackageVersion",
         "s3:ListBucket",
         "s3:PutObject",
+        "s3:GetObject",
+        "s3:GetObjectVersion"
+      ]
+    },
+    "delete": {
+      "permissions": [
+        "panorama:DeregisterPackageVersion",
+        "panorama:DescribePackageVersion",
+        "s3:DeleteObject",
+        "s3:DeleteObjectVersion",
+        "s3:DeleteObjectVersionTagging",
+        "s3:ListBucket",
         "s3:GetObject",
         "s3:GetObjectVersion"
       ]
@@ -114,19 +91,42 @@
         "s3:GetObject",
         "s3:GetObjectVersion"
       ]
-    },
-    "delete": {
-      "permissions": [
-        "panorama:DeregisterPackageVersion",
-        "panorama:DescribePackageVersion",
-        "s3:DeleteObject",
-        "s3:DeleteObjectVersion",
-        "s3:DeleteObjectVersionTagging",
-        "s3:ListBucket",
-        "s3:GetObject",
-        "s3:GetObjectVersion"
-      ]
     }
   },
-  "$hash": "80d0605915b8bcf7ca4eec55064937a32a15578c"
+  "primaryIdentifier": [
+    "/properties/PackageId",
+    "/properties/PackageVersion",
+    "/properties/PatchVersion"
+  ],
+  "properties": {
+    "IsLatestPatch": { "type": "boolean" },
+    "MarkLatest": { "type": "boolean" },
+    "OwnerAccount": { "$ref": "#/definitions/PackageOwnerAccount" },
+    "PackageArn": { "$ref": "#/definitions/NodePackageArn" },
+    "PackageId": { "$ref": "#/definitions/NodePackageId" },
+    "PackageName": { "$ref": "#/definitions/NodePackageName" },
+    "PackageVersion": { "$ref": "#/definitions/NodePackageVersion" },
+    "PatchVersion": { "$ref": "#/definitions/NodePackagePatchVersion" },
+    "RegisteredTime": { "$ref": "#/definitions/TimeStamp" },
+    "Status": { "$ref": "#/definitions/PackageVersionStatus" },
+    "StatusDescription": {
+      "$ref": "#/definitions/PackageVersionStatusDescription"
+    },
+    "UpdatedLatestPatchVersion": {
+      "$ref": "#/definitions/NodePackagePatchVersion"
+    }
+  },
+  "readOnlyProperties": [
+    "/properties/PackageName",
+    "/properties/PackageArn",
+    "/properties/Status",
+    "/properties/StatusDescription",
+    "/properties/IsLatestPatch",
+    "/properties/RegisteredTime"
+  ],
+  "required": ["PackageId", "PackageVersion", "PatchVersion"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-panorama.git",
+  "taggable": false,
+  "typeName": "AWS::Panorama::PackageVersion",
+  "writeOnlyProperties": ["/properties/UpdatedLatestPatchVersion"]
 }

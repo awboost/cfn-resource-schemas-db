@@ -1,26 +1,41 @@
 {
-  "typeName": "AWS::Greengrass::FunctionDefinitionVersion",
-  "description": "Resource Type definition for AWS::Greengrass::FunctionDefinitionVersion",
+  "$hash": "075a0e07c1a89578902f3f9ebc696c55bca88648",
   "additionalProperties": false,
-  "properties": {
-    "Id": { "type": "string" },
-    "DefaultConfig": { "$ref": "#/definitions/DefaultConfig" },
-    "Functions": {
-      "type": "array",
-      "uniqueItems": false,
-      "items": { "$ref": "#/definitions/Function" }
-    },
-    "FunctionDefinitionId": { "type": "string" }
-  },
+  "createOnlyProperties": [
+    "/properties/Functions",
+    "/properties/FunctionDefinitionId",
+    "/properties/DefaultConfig"
+  ],
   "definitions": {
     "DefaultConfig": {
-      "type": "object",
       "additionalProperties": false,
       "properties": { "Execution": { "$ref": "#/definitions/Execution" } },
-      "required": ["Execution"]
+      "required": ["Execution"],
+      "type": "object"
+    },
+    "Environment": {
+      "additionalProperties": false,
+      "properties": {
+        "AccessSysfs": { "type": "boolean" },
+        "Execution": { "$ref": "#/definitions/Execution" },
+        "ResourceAccessPolicies": {
+          "items": { "$ref": "#/definitions/ResourceAccessPolicy" },
+          "type": "array",
+          "uniqueItems": false
+        },
+        "Variables": { "type": "object" }
+      },
+      "type": "object"
+    },
+    "Execution": {
+      "additionalProperties": false,
+      "properties": {
+        "IsolationMode": { "type": "string" },
+        "RunAs": { "$ref": "#/definitions/RunAs" }
+      },
+      "type": "object"
     },
     "Function": {
-      "type": "object",
       "additionalProperties": false,
       "properties": {
         "FunctionArn": { "type": "string" },
@@ -29,68 +44,53 @@
         },
         "Id": { "type": "string" }
       },
-      "required": ["FunctionArn", "FunctionConfiguration", "Id"]
-    },
-    "Execution": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "IsolationMode": { "type": "string" },
-        "RunAs": { "$ref": "#/definitions/RunAs" }
-      }
+      "required": ["FunctionArn", "FunctionConfiguration", "Id"],
+      "type": "object"
     },
     "FunctionConfiguration": {
-      "type": "object",
       "additionalProperties": false,
       "properties": {
-        "MemorySize": { "type": "integer" },
-        "Pinned": { "type": "boolean" },
-        "ExecArgs": { "type": "string" },
-        "Timeout": { "type": "integer" },
         "EncodingType": { "type": "string" },
         "Environment": { "$ref": "#/definitions/Environment" },
-        "Executable": { "type": "string" }
-      }
-    },
-    "RunAs": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "Uid": { "type": "integer" },
-        "Gid": { "type": "integer" }
-      }
-    },
-    "Environment": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "Variables": { "type": "object" },
-        "Execution": { "$ref": "#/definitions/Execution" },
-        "ResourceAccessPolicies": {
-          "type": "array",
-          "uniqueItems": false,
-          "items": { "$ref": "#/definitions/ResourceAccessPolicy" }
-        },
-        "AccessSysfs": { "type": "boolean" }
-      }
+        "ExecArgs": { "type": "string" },
+        "Executable": { "type": "string" },
+        "MemorySize": { "type": "integer" },
+        "Pinned": { "type": "boolean" },
+        "Timeout": { "type": "integer" }
+      },
+      "type": "object"
     },
     "ResourceAccessPolicy": {
-      "type": "object",
       "additionalProperties": false,
       "properties": {
-        "ResourceId": { "type": "string" },
-        "Permission": { "type": "string" }
+        "Permission": { "type": "string" },
+        "ResourceId": { "type": "string" }
       },
-      "required": ["ResourceId"]
+      "required": ["ResourceId"],
+      "type": "object"
+    },
+    "RunAs": {
+      "additionalProperties": false,
+      "properties": {
+        "Gid": { "type": "integer" },
+        "Uid": { "type": "integer" }
+      },
+      "type": "object"
     }
   },
-  "required": ["FunctionDefinitionId", "Functions"],
-  "createOnlyProperties": [
-    "/properties/Functions",
-    "/properties/FunctionDefinitionId",
-    "/properties/DefaultConfig"
-  ],
+  "description": "Resource Type definition for AWS::Greengrass::FunctionDefinitionVersion",
   "primaryIdentifier": ["/properties/Id"],
+  "properties": {
+    "DefaultConfig": { "$ref": "#/definitions/DefaultConfig" },
+    "FunctionDefinitionId": { "type": "string" },
+    "Functions": {
+      "items": { "$ref": "#/definitions/Function" },
+      "type": "array",
+      "uniqueItems": false
+    },
+    "Id": { "type": "string" }
+  },
   "readOnlyProperties": ["/properties/Id"],
-  "$hash": "075a0e07c1a89578902f3f9ebc696c55bca88648"
+  "required": ["FunctionDefinitionId", "Functions"],
+  "typeName": "AWS::Greengrass::FunctionDefinitionVersion"
 }

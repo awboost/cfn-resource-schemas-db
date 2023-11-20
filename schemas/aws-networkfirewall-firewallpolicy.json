@@ -1,243 +1,207 @@
 {
-  "typeName": "AWS::NetworkFirewall::FirewallPolicy",
-  "description": "Resource type definition for AWS::NetworkFirewall::FirewallPolicy",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-networkfirewall.git",
+  "$hash": "a12208505562fa22ff4dc4a2d104bc7eebb0f503",
   "additionalProperties": false,
+  "createOnlyProperties": ["/properties/FirewallPolicyName"],
   "definitions": {
-    "ResourceArn": {
-      "description": "A resource ARN.",
-      "type": "string",
-      "pattern": "^(arn:aws.*)$",
-      "minLength": 1,
-      "maxLength": 256
-    },
-    "Tag": {
-      "type": "object",
+    "ActionDefinition": {
+      "additionalProperties": false,
       "properties": {
-        "Key": {
-          "type": "string",
-          "minLength": 1,
+        "PublishMetricAction": { "$ref": "#/definitions/PublishMetricAction" }
+      },
+      "type": "object"
+    },
+    "CustomAction": {
+      "additionalProperties": false,
+      "properties": {
+        "ActionDefinition": { "$ref": "#/definitions/ActionDefinition" },
+        "ActionName": {
           "maxLength": 128,
-          "pattern": "^.*$"
-        },
-        "Value": {
-          "type": "string",
-          "minLength": 0,
-          "maxLength": 255,
-          "pattern": "^.*$"
+          "minLength": 1,
+          "pattern": "^[a-zA-Z0-9]+$",
+          "type": "string"
         }
       },
-      "required": ["Key", "Value"],
-      "additionalProperties": false
+      "required": ["ActionName", "ActionDefinition"],
+      "type": "object"
+    },
+    "Dimension": {
+      "additionalProperties": false,
+      "properties": {
+        "Value": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^[a-zA-Z0-9-_ ]+$",
+          "type": "string"
+        }
+      },
+      "required": ["Value"],
+      "type": "object"
     },
     "FirewallPolicy": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
-        "StatelessDefaultActions": {
-          "type": "array",
-          "insertionOrder": true,
-          "uniqueItems": false,
-          "items": { "type": "string" }
-        },
-        "StatelessFragmentDefaultActions": {
-          "type": "array",
-          "insertionOrder": true,
-          "uniqueItems": false,
-          "items": { "type": "string" }
-        },
-        "StatelessCustomActions": {
-          "type": "array",
-          "insertionOrder": true,
-          "uniqueItems": false,
-          "items": { "$ref": "#/definitions/CustomAction" }
-        },
-        "StatelessRuleGroupReferences": {
-          "type": "array",
-          "insertionOrder": true,
-          "uniqueItems": false,
-          "items": { "$ref": "#/definitions/StatelessRuleGroupReference" }
-        },
-        "StatefulRuleGroupReferences": {
-          "type": "array",
-          "insertionOrder": true,
-          "uniqueItems": false,
-          "items": { "$ref": "#/definitions/StatefulRuleGroupReference" }
+        "PolicyVariables": {
+          "additionalProperties": false,
+          "properties": {
+            "RuleVariables": { "$ref": "#/definitions/RuleVariables" }
+          },
+          "type": "object"
         },
         "StatefulDefaultActions": {
-          "type": "array",
           "insertionOrder": true,
-          "uniqueItems": false,
-          "items": { "type": "string" }
+          "items": { "type": "string" },
+          "type": "array",
+          "uniqueItems": false
         },
         "StatefulEngineOptions": {
           "$ref": "#/definitions/StatefulEngineOptions"
         },
-        "PolicyVariables": {
-          "type": "object",
-          "properties": {
-            "RuleVariables": { "$ref": "#/definitions/RuleVariables" }
-          },
-          "additionalProperties": false
+        "StatefulRuleGroupReferences": {
+          "insertionOrder": true,
+          "items": { "$ref": "#/definitions/StatefulRuleGroupReference" },
+          "type": "array",
+          "uniqueItems": false
+        },
+        "StatelessCustomActions": {
+          "insertionOrder": true,
+          "items": { "$ref": "#/definitions/CustomAction" },
+          "type": "array",
+          "uniqueItems": false
+        },
+        "StatelessDefaultActions": {
+          "insertionOrder": true,
+          "items": { "type": "string" },
+          "type": "array",
+          "uniqueItems": false
+        },
+        "StatelessFragmentDefaultActions": {
+          "insertionOrder": true,
+          "items": { "type": "string" },
+          "type": "array",
+          "uniqueItems": false
+        },
+        "StatelessRuleGroupReferences": {
+          "insertionOrder": true,
+          "items": { "$ref": "#/definitions/StatelessRuleGroupReference" },
+          "type": "array",
+          "uniqueItems": false
         }
       },
       "required": [
         "StatelessDefaultActions",
         "StatelessFragmentDefaultActions"
       ],
-      "additionalProperties": false
+      "type": "object"
     },
-    "RuleVariables": {
-      "type": "object",
-      "patternProperties": {
-        "^[A-Za-z0-9_]{1,32}$": { "$ref": "#/definitions/IPSet" }
-      },
-      "additionalProperties": false
-    },
-    "CustomAction": {
-      "type": "object",
+    "IPSet": {
+      "additionalProperties": false,
       "properties": {
-        "ActionName": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 128,
-          "pattern": "^[a-zA-Z0-9]+$"
-        },
-        "ActionDefinition": { "$ref": "#/definitions/ActionDefinition" }
+        "Definition": {
+          "insertionOrder": true,
+          "items": { "$ref": "#/definitions/VariableDefinition" },
+          "type": "array",
+          "uniqueItems": false
+        }
       },
-      "required": ["ActionName", "ActionDefinition"],
-      "additionalProperties": false
+      "type": "object"
     },
-    "ActionDefinition": {
-      "type": "object",
-      "properties": {
-        "PublishMetricAction": { "$ref": "#/definitions/PublishMetricAction" }
-      },
-      "additionalProperties": false
-    },
+    "OverrideAction": { "enum": ["DROP_TO_ALERT"], "type": "string" },
+    "Priority": { "maximum": 65535, "minimum": 1, "type": "integer" },
     "PublishMetricAction": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "Dimensions": {
-          "type": "array",
           "insertionOrder": true,
-          "uniqueItems": false,
-          "items": { "$ref": "#/definitions/Dimension" }
+          "items": { "$ref": "#/definitions/Dimension" },
+          "type": "array",
+          "uniqueItems": false
         }
       },
       "required": ["Dimensions"],
-      "additionalProperties": false
+      "type": "object"
     },
-    "Dimension": {
-      "type": "object",
-      "properties": {
-        "Value": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 128,
-          "pattern": "^[a-zA-Z0-9-_ ]+$"
-        }
-      },
-      "required": ["Value"],
-      "additionalProperties": false
-    },
-    "StatefulRuleGroupReference": {
-      "type": "object",
-      "properties": {
-        "ResourceArn": { "$ref": "#/definitions/ResourceArn" },
-        "Priority": { "$ref": "#/definitions/Priority" },
-        "Override": { "$ref": "#/definitions/StatefulRuleGroupOverride" }
-      },
-      "required": ["ResourceArn"],
-      "additionalProperties": false
-    },
-    "StatelessRuleGroupReference": {
-      "type": "object",
-      "properties": {
-        "ResourceArn": { "$ref": "#/definitions/ResourceArn" },
-        "Priority": { "$ref": "#/definitions/Priority" }
-      },
-      "required": ["ResourceArn", "Priority"],
-      "additionalProperties": false
-    },
-    "Priority": { "type": "integer", "minimum": 1, "maximum": 65535 },
-    "VariableDefinition": {
-      "type": "string",
+    "ResourceArn": {
+      "description": "A resource ARN.",
+      "maxLength": 256,
       "minLength": 1,
-      "pattern": "^.*$"
+      "pattern": "^(arn:aws.*)$",
+      "type": "string"
     },
-    "IPSet": {
-      "type": "object",
-      "properties": {
-        "Definition": {
-          "type": "array",
-          "insertionOrder": true,
-          "uniqueItems": false,
-          "items": { "$ref": "#/definitions/VariableDefinition" }
-        }
+    "RuleOrder": {
+      "enum": ["DEFAULT_ACTION_ORDER", "STRICT_ORDER"],
+      "type": "string"
+    },
+    "RuleVariables": {
+      "additionalProperties": false,
+      "patternProperties": {
+        "^[A-Za-z0-9_]{1,32}$": { "$ref": "#/definitions/IPSet" }
       },
-      "additionalProperties": false
+      "type": "object"
     },
-    "StatefulRuleGroupOverride": {
-      "type": "object",
-      "properties": { "Action": { "$ref": "#/definitions/OverrideAction" } },
-      "additionalProperties": false
-    },
-    "OverrideAction": { "type": "string", "enum": ["DROP_TO_ALERT"] },
     "StatefulEngineOptions": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
         "RuleOrder": { "$ref": "#/definitions/RuleOrder" },
         "StreamExceptionPolicy": {
           "$ref": "#/definitions/StreamExceptionPolicy"
         }
       },
-      "additionalProperties": false
+      "type": "object"
     },
-    "RuleOrder": {
-      "type": "string",
-      "enum": ["DEFAULT_ACTION_ORDER", "STRICT_ORDER"]
+    "StatefulRuleGroupOverride": {
+      "additionalProperties": false,
+      "properties": { "Action": { "$ref": "#/definitions/OverrideAction" } },
+      "type": "object"
+    },
+    "StatefulRuleGroupReference": {
+      "additionalProperties": false,
+      "properties": {
+        "Override": { "$ref": "#/definitions/StatefulRuleGroupOverride" },
+        "Priority": { "$ref": "#/definitions/Priority" },
+        "ResourceArn": { "$ref": "#/definitions/ResourceArn" }
+      },
+      "required": ["ResourceArn"],
+      "type": "object"
+    },
+    "StatelessRuleGroupReference": {
+      "additionalProperties": false,
+      "properties": {
+        "Priority": { "$ref": "#/definitions/Priority" },
+        "ResourceArn": { "$ref": "#/definitions/ResourceArn" }
+      },
+      "required": ["ResourceArn", "Priority"],
+      "type": "object"
     },
     "StreamExceptionPolicy": {
-      "type": "string",
-      "enum": ["DROP", "CONTINUE", "REJECT"]
+      "enum": ["DROP", "CONTINUE", "REJECT"],
+      "type": "string"
+    },
+    "Tag": {
+      "additionalProperties": false,
+      "properties": {
+        "Key": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^.*$",
+          "type": "string"
+        },
+        "Value": {
+          "maxLength": 255,
+          "minLength": 0,
+          "pattern": "^.*$",
+          "type": "string"
+        }
+      },
+      "required": ["Key", "Value"],
+      "type": "object"
+    },
+    "VariableDefinition": {
+      "minLength": 1,
+      "pattern": "^.*$",
+      "type": "string"
     }
   },
-  "properties": {
-    "FirewallPolicyName": {
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 128,
-      "pattern": "^[a-zA-Z0-9-]+$"
-    },
-    "FirewallPolicyArn": { "$ref": "#/definitions/ResourceArn" },
-    "FirewallPolicy": { "$ref": "#/definitions/FirewallPolicy" },
-    "FirewallPolicyId": {
-      "type": "string",
-      "minLength": 36,
-      "maxLength": 36,
-      "pattern": "^([0-9a-f]{8})-([0-9a-f]{4}-){3}([0-9a-f]{12})$"
-    },
-    "Description": {
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 512,
-      "pattern": "^.*$"
-    },
-    "Tags": {
-      "type": "array",
-      "insertionOrder": false,
-      "uniqueItems": true,
-      "items": { "$ref": "#/definitions/Tag" }
-    }
-  },
-  "tagging": { "taggable": true },
-  "required": ["FirewallPolicyName", "FirewallPolicy"],
-  "readOnlyProperties": [
-    "/properties/FirewallPolicyArn",
-    "/properties/FirewallPolicyId"
-  ],
-  "primaryIdentifier": ["/properties/FirewallPolicyArn"],
-  "createOnlyProperties": ["/properties/FirewallPolicyName"],
+  "description": "Resource type definition for AWS::NetworkFirewall::FirewallPolicy",
   "handlers": {
     "create": {
       "permissions": [
@@ -247,6 +211,14 @@
         "network-firewall:ListRuleGroups"
       ]
     },
+    "delete": {
+      "permissions": [
+        "network-firewall:DeleteFirewallPolicy",
+        "network-firewall:DescribeFirewallPolicy",
+        "network-firewall:UntagResource"
+      ]
+    },
+    "list": { "permissions": ["network-firewall:ListFirewallPolicies"] },
     "read": {
       "permissions": [
         "network-firewall:DescribeFirewallPolicy",
@@ -261,15 +233,43 @@
         "network-firewall:UntagResource",
         "network-firewall:ListRuleGroups"
       ]
-    },
-    "delete": {
-      "permissions": [
-        "network-firewall:DeleteFirewallPolicy",
-        "network-firewall:DescribeFirewallPolicy",
-        "network-firewall:UntagResource"
-      ]
-    },
-    "list": { "permissions": ["network-firewall:ListFirewallPolicies"] }
+    }
   },
-  "$hash": "a12208505562fa22ff4dc4a2d104bc7eebb0f503"
+  "primaryIdentifier": ["/properties/FirewallPolicyArn"],
+  "properties": {
+    "Description": {
+      "maxLength": 512,
+      "minLength": 1,
+      "pattern": "^.*$",
+      "type": "string"
+    },
+    "FirewallPolicy": { "$ref": "#/definitions/FirewallPolicy" },
+    "FirewallPolicyArn": { "$ref": "#/definitions/ResourceArn" },
+    "FirewallPolicyId": {
+      "maxLength": 36,
+      "minLength": 36,
+      "pattern": "^([0-9a-f]{8})-([0-9a-f]{4}-){3}([0-9a-f]{12})$",
+      "type": "string"
+    },
+    "FirewallPolicyName": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^[a-zA-Z0-9-]+$",
+      "type": "string"
+    },
+    "Tags": {
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/Tag" },
+      "type": "array",
+      "uniqueItems": true
+    }
+  },
+  "readOnlyProperties": [
+    "/properties/FirewallPolicyArn",
+    "/properties/FirewallPolicyId"
+  ],
+  "required": ["FirewallPolicyName", "FirewallPolicy"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-networkfirewall.git",
+  "tagging": { "taggable": true },
+  "typeName": "AWS::NetworkFirewall::FirewallPolicy"
 }

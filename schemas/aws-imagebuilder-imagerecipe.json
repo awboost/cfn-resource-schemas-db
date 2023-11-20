@@ -1,60 +1,35 @@
 {
-  "typeName": "AWS::ImageBuilder::ImageRecipe",
-  "description": "Resource schema for AWS::ImageBuilder::ImageRecipe",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-imagebuilder.git",
-  "properties": {
-    "Arn": {
-      "description": "The Amazon Resource Name (ARN) of the image recipe.",
-      "type": "string"
-    },
-    "Name": {
-      "description": "The name of the image recipe.",
-      "type": "string"
-    },
-    "Description": {
-      "description": "The description of the image recipe.",
-      "type": "string"
-    },
-    "Version": {
-      "description": "The version of the image recipe.",
-      "type": "string"
-    },
-    "Components": {
-      "description": "The components of the image recipe.",
-      "type": "array",
-      "insertionOrder": true,
-      "items": { "$ref": "#/definitions/ComponentConfiguration" }
-    },
-    "BlockDeviceMappings": {
-      "description": "The block device mappings to apply when creating images from this recipe.",
-      "type": "array",
-      "insertionOrder": false,
-      "items": { "$ref": "#/definitions/InstanceBlockDeviceMapping" }
-    },
-    "ParentImage": {
-      "description": "The parent image of the image recipe.",
-      "type": "string"
-    },
-    "WorkingDirectory": {
-      "description": "The working directory to be used during build and test workflows.",
-      "type": "string"
-    },
-    "AdditionalInstanceConfiguration": {
-      "description": "Specify additional settings and launch scripts for your build instances.",
-      "$ref": "#/definitions/AdditionalInstanceConfiguration"
-    },
-    "Tags": {
-      "description": "The tags of the image recipe.",
-      "type": "object",
-      "additionalProperties": false,
-      "patternProperties": { ".{1,}": { "type": "string" } }
-    }
-  },
+  "$hash": "387d1441dbfcb96e993720ee2ccf65bc403c4b9c",
+  "additionalProperties": false,
+  "createOnlyProperties": [
+    "/properties/Name",
+    "/properties/Version",
+    "/properties/Components",
+    "/properties/ParentImage",
+    "/properties/Description",
+    "/properties/BlockDeviceMappings",
+    "/properties/WorkingDirectory",
+    "/properties/Tags"
+  ],
   "definitions": {
-    "ComponentConfiguration": {
-      "description": "Configuration details of the component.",
-      "type": "object",
+    "AdditionalInstanceConfiguration": {
       "additionalProperties": false,
+      "description": "Specify additional settings and launch scripts for your build instances.",
+      "properties": {
+        "SystemsManagerAgent": {
+          "$ref": "#/definitions/SystemsManagerAgent",
+          "description": "Contains settings for the SSM agent on your build instance."
+        },
+        "UserDataOverride": {
+          "description": "Use this property to provide commands or a command script to run when you launch your build instance.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ComponentConfiguration": {
+      "additionalProperties": false,
+      "description": "Configuration details of the component.",
       "properties": {
         "ComponentArn": {
           "description": "The Amazon Resource Name (ARN) of the component.",
@@ -62,46 +37,41 @@
         },
         "Parameters": {
           "description": "A group of parameter settings that are used to configure the component for a specific recipe.",
-          "type": "array",
           "insertionOrder": false,
-          "items": { "$ref": "#/definitions/ComponentParameter" }
+          "items": { "$ref": "#/definitions/ComponentParameter" },
+          "type": "array"
         }
-      }
+      },
+      "type": "object"
     },
-    "InstanceBlockDeviceMapping": {
-      "description": "Defines block device mappings for the instance used to configure your image. ",
-      "type": "object",
+    "ComponentParameter": {
       "additionalProperties": false,
+      "description": "Contains a key/value pair that sets the named component parameter.",
       "properties": {
-        "DeviceName": {
-          "description": "The device to which these mappings apply.",
+        "Name": {
+          "description": "The name of the component parameter to set.",
           "type": "string"
         },
-        "VirtualName": {
-          "description": "Use to manage instance ephemeral devices.",
-          "type": "string"
-        },
-        "NoDevice": {
-          "description": "Use to remove a mapping from the parent image.",
-          "type": "string"
-        },
-        "Ebs": {
-          "description": "Use to manage Amazon EBS-specific configuration for this mapping.",
-          "$ref": "#/definitions/EbsInstanceBlockDeviceSpecification"
+        "Value": {
+          "description": "Sets the value for the named component parameter.",
+          "insertionOrder": true,
+          "items": { "type": "string" },
+          "type": "array"
         }
-      }
+      },
+      "required": ["Name", "Value"],
+      "type": "object"
     },
     "EbsInstanceBlockDeviceSpecification": {
-      "description": "Amazon EBS-specific block device mapping specifications. ",
-      "type": "object",
       "additionalProperties": false,
+      "description": "Amazon EBS-specific block device mapping specifications. ",
       "properties": {
-        "Encrypted": {
-          "description": "Use to configure device encryption.",
-          "type": "boolean"
-        },
         "DeleteOnTermination": {
           "description": "Use to configure delete on termination of the associated device.",
+          "type": "boolean"
+        },
+        "Encrypted": {
+          "description": "Use to configure device encryption.",
           "type": "boolean"
         },
         "Iops": {
@@ -126,74 +96,48 @@
         },
         "VolumeType": {
           "description": "Use to override the device's volume type.",
-          "type": "string",
-          "enum": ["standard", "io1", "io2", "gp2", "gp3", "sc1", "st1"]
-        }
-      }
-    },
-    "AdditionalInstanceConfiguration": {
-      "additionalProperties": false,
-      "description": "Specify additional settings and launch scripts for your build instances.",
-      "type": "object",
-      "properties": {
-        "SystemsManagerAgent": {
-          "description": "Contains settings for the SSM agent on your build instance.",
-          "$ref": "#/definitions/SystemsManagerAgent"
-        },
-        "UserDataOverride": {
-          "description": "Use this property to provide commands or a command script to run when you launch your build instance.",
+          "enum": ["standard", "io1", "io2", "gp2", "gp3", "sc1", "st1"],
           "type": "string"
         }
-      }
+      },
+      "type": "object"
+    },
+    "InstanceBlockDeviceMapping": {
+      "additionalProperties": false,
+      "description": "Defines block device mappings for the instance used to configure your image. ",
+      "properties": {
+        "DeviceName": {
+          "description": "The device to which these mappings apply.",
+          "type": "string"
+        },
+        "Ebs": {
+          "$ref": "#/definitions/EbsInstanceBlockDeviceSpecification",
+          "description": "Use to manage Amazon EBS-specific configuration for this mapping."
+        },
+        "NoDevice": {
+          "description": "Use to remove a mapping from the parent image.",
+          "type": "string"
+        },
+        "VirtualName": {
+          "description": "Use to manage instance ephemeral devices.",
+          "type": "string"
+        }
+      },
+      "type": "object"
     },
     "SystemsManagerAgent": {
       "additionalProperties": false,
       "description": "Contains settings for the SSM agent on your build instance.",
-      "type": "object",
       "properties": {
         "UninstallAfterBuild": {
           "description": "Controls whether the SSM agent is removed from your final build image, prior to creating the new AMI. If this is set to true, then the agent is removed from the final image. If it's set to false, then the agent is left in, so that it is included in the new AMI. The default value is false.",
           "type": "boolean"
         }
-      }
-    },
-    "ComponentParameter": {
-      "additionalProperties": false,
-      "description": "Contains a key/value pair that sets the named component parameter.",
-      "type": "object",
-      "properties": {
-        "Name": {
-          "description": "The name of the component parameter to set.",
-          "type": "string"
-        },
-        "Value": {
-          "description": "Sets the value for the named component parameter.",
-          "type": "array",
-          "insertionOrder": true,
-          "items": { "type": "string" }
-        }
       },
-      "required": ["Name", "Value"]
+      "type": "object"
     }
   },
-  "additionalProperties": false,
-  "required": ["Name", "Version", "Components", "ParentImage"],
-  "primaryIdentifier": ["/properties/Arn"],
-  "readOnlyProperties": ["/properties/Arn"],
-  "createOnlyProperties": [
-    "/properties/Name",
-    "/properties/Version",
-    "/properties/Components",
-    "/properties/ParentImage",
-    "/properties/Description",
-    "/properties/BlockDeviceMappings",
-    "/properties/WorkingDirectory",
-    "/properties/Tags"
-  ],
-  "propertyTransform": {
-    "/properties/BlockDeviceMappings/*/Ebs/VolumeType": "$uppercase(VolumeType)"
-  },
-  "tagging": { "taggable": false },
+  "description": "Resource schema for AWS::ImageBuilder::ImageRecipe",
   "handlers": {
     "create": {
       "permissions": [
@@ -207,7 +151,6 @@
         "ec2:DescribeImages"
       ]
     },
-    "read": { "permissions": ["imagebuilder:GetImageRecipe"] },
     "delete": {
       "permissions": [
         "imagebuilder:UnTagResource",
@@ -215,7 +158,64 @@
         "imagebuilder:DeleteImageRecipe"
       ]
     },
-    "list": { "permissions": ["imagebuilder:ListImageRecipes"] }
+    "list": { "permissions": ["imagebuilder:ListImageRecipes"] },
+    "read": { "permissions": ["imagebuilder:GetImageRecipe"] }
   },
-  "$hash": "387d1441dbfcb96e993720ee2ccf65bc403c4b9c"
+  "primaryIdentifier": ["/properties/Arn"],
+  "properties": {
+    "AdditionalInstanceConfiguration": {
+      "$ref": "#/definitions/AdditionalInstanceConfiguration",
+      "description": "Specify additional settings and launch scripts for your build instances."
+    },
+    "Arn": {
+      "description": "The Amazon Resource Name (ARN) of the image recipe.",
+      "type": "string"
+    },
+    "BlockDeviceMappings": {
+      "description": "The block device mappings to apply when creating images from this recipe.",
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/InstanceBlockDeviceMapping" },
+      "type": "array"
+    },
+    "Components": {
+      "description": "The components of the image recipe.",
+      "insertionOrder": true,
+      "items": { "$ref": "#/definitions/ComponentConfiguration" },
+      "type": "array"
+    },
+    "Description": {
+      "description": "The description of the image recipe.",
+      "type": "string"
+    },
+    "Name": {
+      "description": "The name of the image recipe.",
+      "type": "string"
+    },
+    "ParentImage": {
+      "description": "The parent image of the image recipe.",
+      "type": "string"
+    },
+    "Tags": {
+      "additionalProperties": false,
+      "description": "The tags of the image recipe.",
+      "patternProperties": { ".{1,}": { "type": "string" } },
+      "type": "object"
+    },
+    "Version": {
+      "description": "The version of the image recipe.",
+      "type": "string"
+    },
+    "WorkingDirectory": {
+      "description": "The working directory to be used during build and test workflows.",
+      "type": "string"
+    }
+  },
+  "propertyTransform": {
+    "/properties/BlockDeviceMappings/*/Ebs/VolumeType": "$uppercase(VolumeType)"
+  },
+  "readOnlyProperties": ["/properties/Arn"],
+  "required": ["Name", "Version", "Components", "ParentImage"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-imagebuilder.git",
+  "tagging": { "taggable": false },
+  "typeName": "AWS::ImageBuilder::ImageRecipe"
 }

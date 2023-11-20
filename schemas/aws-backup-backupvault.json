@@ -1,66 +1,41 @@
 {
-  "typeName": "AWS::Backup::BackupVault",
-  "description": "Resource Type definition for AWS::Backup::BackupVault",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
-  "definitions": {
-    "NotificationObjectType": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "BackupVaultEvents": {
-          "type": "array",
-          "insertionOrder": false,
-          "uniqueItems": false,
-          "items": { "type": "string" }
-        },
-        "SNSTopicArn": { "type": "string" }
-      },
-      "required": ["SNSTopicArn", "BackupVaultEvents"]
-    },
-    "LockConfigurationType": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "MinRetentionDays": { "type": "integer" },
-        "MaxRetentionDays": { "type": "integer" },
-        "ChangeableForDays": { "type": "integer" }
-      },
-      "required": ["MinRetentionDays"]
-    },
-    "BackupVaultNamePattern": {
-      "type": "string",
-      "pattern": "^[a-zA-Z0-9\\-\\_]{2,50}$"
-    }
-  },
-  "properties": {
-    "AccessPolicy": { "type": ["object", "string"] },
-    "BackupVaultName": { "$ref": "#/definitions/BackupVaultNamePattern" },
-    "BackupVaultTags": {
-      "type": "object",
-      "additionalProperties": false,
-      "patternProperties": { "^.{1,128}$": { "type": "string" } }
-    },
-    "EncryptionKeyArn": { "type": "string" },
-    "Notifications": { "$ref": "#/definitions/NotificationObjectType" },
-    "LockConfiguration": { "$ref": "#/definitions/LockConfigurationType" },
-    "BackupVaultArn": { "type": "string" }
-  },
+  "$hash": "b018b87568ac040755d43ce6eb4a3b5f94544884",
   "additionalProperties": false,
-  "tagging": {
-    "taggable": true,
-    "tagOnCreate": true,
-    "tagUpdatable": true,
-    "cloudFormationSystemTags": true,
-    "tagProperty": "/properties/BackupVaultTags"
-  },
-  "required": ["BackupVaultName"],
   "createOnlyProperties": [
     "/properties/BackupVaultName",
     "/properties/EncryptionKeyArn"
   ],
-  "writeOnlyProperties": ["/properties/LockConfiguration/ChangeableForDays"],
-  "readOnlyProperties": ["/properties/BackupVaultArn"],
-  "primaryIdentifier": ["/properties/BackupVaultName"],
+  "definitions": {
+    "BackupVaultNamePattern": {
+      "pattern": "^[a-zA-Z0-9\\-\\_]{2,50}$",
+      "type": "string"
+    },
+    "LockConfigurationType": {
+      "additionalProperties": false,
+      "properties": {
+        "ChangeableForDays": { "type": "integer" },
+        "MaxRetentionDays": { "type": "integer" },
+        "MinRetentionDays": { "type": "integer" }
+      },
+      "required": ["MinRetentionDays"],
+      "type": "object"
+    },
+    "NotificationObjectType": {
+      "additionalProperties": false,
+      "properties": {
+        "BackupVaultEvents": {
+          "insertionOrder": false,
+          "items": { "type": "string" },
+          "type": "array",
+          "uniqueItems": false
+        },
+        "SNSTopicArn": { "type": "string" }
+      },
+      "required": ["SNSTopicArn", "BackupVaultEvents"],
+      "type": "object"
+    }
+  },
+  "description": "Resource Type definition for AWS::Backup::BackupVault",
   "handlers": {
     "create": {
       "permissions": [
@@ -78,6 +53,8 @@
         "kms:DescribeKey"
       ]
     },
+    "delete": { "permissions": ["backup:DeleteBackupVault"] },
+    "list": { "permissions": ["backup:ListBackupVaults"] },
     "read": {
       "permissions": [
         "backup:DescribeBackupVault",
@@ -99,9 +76,32 @@
         "backup:PutBackupVaultNotifications",
         "backup:PutBackupVaultLockConfiguration"
       ]
-    },
-    "delete": { "permissions": ["backup:DeleteBackupVault"] },
-    "list": { "permissions": ["backup:ListBackupVaults"] }
+    }
   },
-  "$hash": "b018b87568ac040755d43ce6eb4a3b5f94544884"
+  "primaryIdentifier": ["/properties/BackupVaultName"],
+  "properties": {
+    "AccessPolicy": { "type": ["object", "string"] },
+    "BackupVaultArn": { "type": "string" },
+    "BackupVaultName": { "$ref": "#/definitions/BackupVaultNamePattern" },
+    "BackupVaultTags": {
+      "additionalProperties": false,
+      "patternProperties": { "^.{1,128}$": { "type": "string" } },
+      "type": "object"
+    },
+    "EncryptionKeyArn": { "type": "string" },
+    "LockConfiguration": { "$ref": "#/definitions/LockConfigurationType" },
+    "Notifications": { "$ref": "#/definitions/NotificationObjectType" }
+  },
+  "readOnlyProperties": ["/properties/BackupVaultArn"],
+  "required": ["BackupVaultName"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+  "tagging": {
+    "cloudFormationSystemTags": true,
+    "tagOnCreate": true,
+    "tagProperty": "/properties/BackupVaultTags",
+    "tagUpdatable": true,
+    "taggable": true
+  },
+  "typeName": "AWS::Backup::BackupVault",
+  "writeOnlyProperties": ["/properties/LockConfiguration/ChangeableForDays"]
 }

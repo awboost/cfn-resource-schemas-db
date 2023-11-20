@@ -1,185 +1,156 @@
 {
-  "typeName": "AWS::GreengrassV2::ComponentVersion",
-  "description": "Resource for Greengrass component version.",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-greengrassv2",
-  "definitions": {
-    "LambdaFunctionRecipeSource": {
-      "type": "object",
-      "properties": {
-        "LambdaArn": {
-          "type": "string",
-          "pattern": "^arn:[^:]*:lambda:(([a-z]+-)+[0-9])?:([0-9]{12})?:[^.]+$"
-        },
-        "ComponentName": { "type": "string" },
-        "ComponentVersion": { "type": "string" },
-        "ComponentPlatforms": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/ComponentPlatform" },
-          "insertionOrder": false
-        },
-        "ComponentDependencies": {
-          "type": "object",
-          "patternProperties": {
-            ".*": { "$ref": "#/definitions/ComponentDependencyRequirement" }
-          },
-          "additionalProperties": false
-        },
-        "ComponentLambdaParameters": {
-          "$ref": "#/definitions/LambdaExecutionParameters"
-        }
-      },
-      "additionalProperties": false
-    },
-    "ComponentPlatform": {
-      "type": "object",
-      "properties": {
-        "Name": { "type": "string" },
-        "Attributes": {
-          "type": "object",
-          "patternProperties": { ".+": { "type": "string" } },
-          "additionalProperties": false
-        }
-      },
-      "additionalProperties": false
-    },
-    "ComponentDependencyRequirement": {
-      "type": "object",
-      "properties": {
-        "VersionRequirement": { "type": "string" },
-        "DependencyType": { "type": "string", "enum": ["SOFT", "HARD"] }
-      },
-      "additionalProperties": false
-    },
-    "LambdaExecutionParameters": {
-      "type": "object",
-      "properties": {
-        "EventSources": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/LambdaEventSource" },
-          "insertionOrder": false
-        },
-        "MaxQueueSize": { "type": "integer" },
-        "MaxInstancesCount": { "type": "integer" },
-        "MaxIdleTimeInSeconds": { "type": "integer" },
-        "TimeoutInSeconds": { "type": "integer" },
-        "StatusTimeoutInSeconds": { "type": "integer" },
-        "Pinned": { "type": "boolean" },
-        "InputPayloadEncodingType": {
-          "type": "string",
-          "enum": ["json", "binary"]
-        },
-        "ExecArgs": {
-          "type": "array",
-          "items": { "type": "string" },
-          "insertionOrder": true
-        },
-        "EnvironmentVariables": {
-          "type": "object",
-          "patternProperties": { ".+": { "type": "string" } },
-          "additionalProperties": false
-        },
-        "LinuxProcessParams": {
-          "$ref": "#/definitions/LambdaLinuxProcessParams"
-        }
-      },
-      "additionalProperties": false
-    },
-    "LambdaEventSource": {
-      "type": "object",
-      "properties": {
-        "Topic": { "type": "string" },
-        "Type": { "type": "string", "enum": ["PUB_SUB", "IOT_CORE"] }
-      },
-      "additionalProperties": false
-    },
-    "LambdaLinuxProcessParams": {
-      "type": "object",
-      "properties": {
-        "IsolationMode": {
-          "type": "string",
-          "enum": ["GreengrassContainer", "NoContainer"]
-        },
-        "ContainerParams": { "$ref": "#/definitions/LambdaContainerParams" }
-      },
-      "additionalProperties": false
-    },
-    "LambdaContainerParams": {
-      "type": "object",
-      "properties": {
-        "MemorySizeInKB": { "type": "integer" },
-        "MountROSysfs": { "type": "boolean" },
-        "Volumes": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/LambdaVolumeMount" },
-          "insertionOrder": false
-        },
-        "Devices": {
-          "type": "array",
-          "items": { "$ref": "#/definitions/LambdaDeviceMount" },
-          "insertionOrder": false
-        }
-      },
-      "additionalProperties": false
-    },
-    "LambdaVolumeMount": {
-      "type": "object",
-      "properties": {
-        "SourcePath": { "$ref": "#/definitions/FilesystemPath" },
-        "DestinationPath": { "$ref": "#/definitions/FilesystemPath" },
-        "Permission": { "$ref": "#/definitions/LambdaFilesystemPermission" },
-        "AddGroupOwner": { "$ref": "#/definitions/LambdaAddGroupOwnerBoolean" }
-      },
-      "additionalProperties": false
-    },
-    "LambdaDeviceMount": {
-      "type": "object",
-      "properties": {
-        "Path": { "$ref": "#/definitions/FilesystemPath" },
-        "Permission": { "$ref": "#/definitions/LambdaFilesystemPermission" },
-        "AddGroupOwner": { "$ref": "#/definitions/LambdaAddGroupOwnerBoolean" }
-      },
-      "additionalProperties": false
-    },
-    "FilesystemPath": { "type": "string" },
-    "LambdaFilesystemPermission": { "type": "string", "enum": ["ro", "rw"] },
-    "LambdaAddGroupOwnerBoolean": { "type": "boolean" }
-  },
-  "properties": {
-    "Arn": { "type": "string" },
-    "ComponentName": { "type": "string" },
-    "ComponentVersion": { "type": "string" },
-    "InlineRecipe": { "type": "string" },
-    "LambdaFunction": { "$ref": "#/definitions/LambdaFunctionRecipeSource" },
-    "Tags": {
-      "type": "object",
-      "patternProperties": {
-        "^(?!aws:)[a-zA-Z+-=._:/]{1,128}$": {
-          "type": "string",
-          "maxLength": 256
-        }
-      },
-      "maxProperties": 50,
-      "additionalProperties": false
-    }
-  },
+  "$hash": "ed92730203bf32043d5a6b72ca3520319885eb1a",
+  "additionalIdentifiers": [
+    ["/properties/ComponentName", "/properties/ComponentVersion"]
+  ],
   "additionalProperties": false,
   "createOnlyProperties": [
     "/properties/LambdaFunction",
     "/properties/InlineRecipe"
   ],
-  "readOnlyProperties": [
-    "/properties/Arn",
-    "/properties/ComponentName",
-    "/properties/ComponentVersion"
-  ],
-  "writeOnlyProperties": [
-    "/properties/LambdaFunction",
-    "/properties/InlineRecipe"
-  ],
-  "primaryIdentifier": ["/properties/Arn"],
-  "additionalIdentifiers": [
-    ["/properties/ComponentName", "/properties/ComponentVersion"]
-  ],
+  "definitions": {
+    "ComponentDependencyRequirement": {
+      "additionalProperties": false,
+      "properties": {
+        "DependencyType": { "enum": ["SOFT", "HARD"], "type": "string" },
+        "VersionRequirement": { "type": "string" }
+      },
+      "type": "object"
+    },
+    "ComponentPlatform": {
+      "additionalProperties": false,
+      "properties": {
+        "Attributes": {
+          "additionalProperties": false,
+          "patternProperties": { ".+": { "type": "string" } },
+          "type": "object"
+        },
+        "Name": { "type": "string" }
+      },
+      "type": "object"
+    },
+    "FilesystemPath": { "type": "string" },
+    "LambdaAddGroupOwnerBoolean": { "type": "boolean" },
+    "LambdaContainerParams": {
+      "additionalProperties": false,
+      "properties": {
+        "Devices": {
+          "insertionOrder": false,
+          "items": { "$ref": "#/definitions/LambdaDeviceMount" },
+          "type": "array"
+        },
+        "MemorySizeInKB": { "type": "integer" },
+        "MountROSysfs": { "type": "boolean" },
+        "Volumes": {
+          "insertionOrder": false,
+          "items": { "$ref": "#/definitions/LambdaVolumeMount" },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "LambdaDeviceMount": {
+      "additionalProperties": false,
+      "properties": {
+        "AddGroupOwner": { "$ref": "#/definitions/LambdaAddGroupOwnerBoolean" },
+        "Path": { "$ref": "#/definitions/FilesystemPath" },
+        "Permission": { "$ref": "#/definitions/LambdaFilesystemPermission" }
+      },
+      "type": "object"
+    },
+    "LambdaEventSource": {
+      "additionalProperties": false,
+      "properties": {
+        "Topic": { "type": "string" },
+        "Type": { "enum": ["PUB_SUB", "IOT_CORE"], "type": "string" }
+      },
+      "type": "object"
+    },
+    "LambdaExecutionParameters": {
+      "additionalProperties": false,
+      "properties": {
+        "EnvironmentVariables": {
+          "additionalProperties": false,
+          "patternProperties": { ".+": { "type": "string" } },
+          "type": "object"
+        },
+        "EventSources": {
+          "insertionOrder": false,
+          "items": { "$ref": "#/definitions/LambdaEventSource" },
+          "type": "array"
+        },
+        "ExecArgs": {
+          "insertionOrder": true,
+          "items": { "type": "string" },
+          "type": "array"
+        },
+        "InputPayloadEncodingType": {
+          "enum": ["json", "binary"],
+          "type": "string"
+        },
+        "LinuxProcessParams": {
+          "$ref": "#/definitions/LambdaLinuxProcessParams"
+        },
+        "MaxIdleTimeInSeconds": { "type": "integer" },
+        "MaxInstancesCount": { "type": "integer" },
+        "MaxQueueSize": { "type": "integer" },
+        "Pinned": { "type": "boolean" },
+        "StatusTimeoutInSeconds": { "type": "integer" },
+        "TimeoutInSeconds": { "type": "integer" }
+      },
+      "type": "object"
+    },
+    "LambdaFilesystemPermission": { "enum": ["ro", "rw"], "type": "string" },
+    "LambdaFunctionRecipeSource": {
+      "additionalProperties": false,
+      "properties": {
+        "ComponentDependencies": {
+          "additionalProperties": false,
+          "patternProperties": {
+            ".*": { "$ref": "#/definitions/ComponentDependencyRequirement" }
+          },
+          "type": "object"
+        },
+        "ComponentLambdaParameters": {
+          "$ref": "#/definitions/LambdaExecutionParameters"
+        },
+        "ComponentName": { "type": "string" },
+        "ComponentPlatforms": {
+          "insertionOrder": false,
+          "items": { "$ref": "#/definitions/ComponentPlatform" },
+          "type": "array"
+        },
+        "ComponentVersion": { "type": "string" },
+        "LambdaArn": {
+          "pattern": "^arn:[^:]*:lambda:(([a-z]+-)+[0-9])?:([0-9]{12})?:[^.]+$",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "LambdaLinuxProcessParams": {
+      "additionalProperties": false,
+      "properties": {
+        "ContainerParams": { "$ref": "#/definitions/LambdaContainerParams" },
+        "IsolationMode": {
+          "enum": ["GreengrassContainer", "NoContainer"],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "LambdaVolumeMount": {
+      "additionalProperties": false,
+      "properties": {
+        "AddGroupOwner": { "$ref": "#/definitions/LambdaAddGroupOwnerBoolean" },
+        "DestinationPath": { "$ref": "#/definitions/FilesystemPath" },
+        "Permission": { "$ref": "#/definitions/LambdaFilesystemPermission" },
+        "SourcePath": { "$ref": "#/definitions/FilesystemPath" }
+      },
+      "type": "object"
+    }
+  },
+  "description": "Resource for Greengrass component version.",
   "handlers": {
     "create": {
       "permissions": [
@@ -190,6 +161,14 @@
         "lambda:GetFunction",
         "s3:GetObject"
       ]
+    },
+    "delete": { "permissions": ["greengrass:DeleteComponent"] },
+    "list": {
+      "handlerSchema": {
+        "properties": { "Arn": { "type": "string" } },
+        "required": ["Arn"]
+      },
+      "permissions": ["greengrass:ListComponentVersions"]
     },
     "read": {
       "permissions": [
@@ -204,22 +183,43 @@
         "greengrass:TagResource",
         "greengrass:UntagResource"
       ]
-    },
-    "delete": { "permissions": ["greengrass:DeleteComponent"] },
-    "list": {
-      "handlerSchema": {
-        "properties": { "Arn": { "type": "string" } },
-        "required": ["Arn"]
-      },
-      "permissions": ["greengrass:ListComponentVersions"]
     }
   },
-  "tagging": {
-    "taggable": true,
-    "tagOnCreate": true,
-    "tagUpdatable": true,
-    "cloudFormationSystemTags": false,
-    "tagProperty": "/properties/Tags"
+  "primaryIdentifier": ["/properties/Arn"],
+  "properties": {
+    "Arn": { "type": "string" },
+    "ComponentName": { "type": "string" },
+    "ComponentVersion": { "type": "string" },
+    "InlineRecipe": { "type": "string" },
+    "LambdaFunction": { "$ref": "#/definitions/LambdaFunctionRecipeSource" },
+    "Tags": {
+      "additionalProperties": false,
+      "maxProperties": 50,
+      "patternProperties": {
+        "^(?!aws:)[a-zA-Z+-=._:/]{1,128}$": {
+          "maxLength": 256,
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
   },
-  "$hash": "ed92730203bf32043d5a6b72ca3520319885eb1a"
+  "readOnlyProperties": [
+    "/properties/Arn",
+    "/properties/ComponentName",
+    "/properties/ComponentVersion"
+  ],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-greengrassv2",
+  "tagging": {
+    "cloudFormationSystemTags": false,
+    "tagOnCreate": true,
+    "tagProperty": "/properties/Tags",
+    "tagUpdatable": true,
+    "taggable": true
+  },
+  "typeName": "AWS::GreengrassV2::ComponentVersion",
+  "writeOnlyProperties": [
+    "/properties/LambdaFunction",
+    "/properties/InlineRecipe"
+  ]
 }

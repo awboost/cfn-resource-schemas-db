@@ -1,51 +1,60 @@
 {
-  "typeName": "AWS::Wisdom::KnowledgeBase",
-  "description": "Definition of AWS::Wisdom::KnowledgeBase Resource Type",
+  "$hash": "6e2d05d22ba0563d8fc996a7b3c916c6d68ffa2a",
+  "additionalIdentifiers": [["/properties/KnowledgeBaseArn"]],
+  "additionalProperties": false,
+  "createOnlyProperties": [
+    "/properties/Description",
+    "/properties/KnowledgeBaseType",
+    "/properties/Name",
+    "/properties/ServerSideEncryptionConfiguration",
+    "/properties/SourceConfiguration",
+    "/properties/Tags"
+  ],
   "definitions": {
     "AppIntegrationsConfiguration": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
-        "ObjectFields": {
-          "type": "array",
-          "items": { "type": "string", "maxLength": 4096, "minLength": 1 },
-          "insertionOrder": false,
-          "maxItems": 100,
-          "minItems": 1
-        },
         "AppIntegrationArn": {
-          "type": "string",
           "maxLength": 2048,
           "minLength": 1,
-          "pattern": "^arn:[a-z-]+?:[a-z-]+?:[a-z0-9-]*?:([0-9]{12})?:[a-zA-Z0-9-:/]+$"
+          "pattern": "^arn:[a-z-]+?:[a-z-]+?:[a-z0-9-]*?:([0-9]{12})?:[a-zA-Z0-9-:/]+$",
+          "type": "string"
+        },
+        "ObjectFields": {
+          "insertionOrder": false,
+          "items": { "maxLength": 4096, "minLength": 1, "type": "string" },
+          "maxItems": 100,
+          "minItems": 1,
+          "type": "array"
         }
       },
       "required": ["AppIntegrationArn"],
-      "additionalProperties": false
+      "type": "object"
     },
-    "KnowledgeBaseType": { "type": "string", "enum": ["EXTERNAL", "CUSTOM"] },
+    "KnowledgeBaseType": { "enum": ["EXTERNAL", "CUSTOM"], "type": "string" },
     "RenderingConfiguration": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
-        "TemplateUri": { "type": "string", "maxLength": 4096, "minLength": 1 }
+        "TemplateUri": { "maxLength": 4096, "minLength": 1, "type": "string" }
       },
-      "additionalProperties": false
+      "type": "object"
     },
     "ServerSideEncryptionConfiguration": {
-      "type": "object",
+      "additionalProperties": false,
       "properties": {
-        "KmsKeyId": { "type": "string", "maxLength": 4096, "minLength": 1 }
+        "KmsKeyId": { "maxLength": 4096, "minLength": 1, "type": "string" }
       },
-      "additionalProperties": false
+      "type": "object"
     },
     "SourceConfiguration": {
-      "type": "object",
+      "additionalProperties": false,
+      "oneOf": [{ "required": ["AppIntegrations"] }],
       "properties": {
         "AppIntegrations": {
           "$ref": "#/definitions/AppIntegrationsConfiguration"
         }
       },
-      "oneOf": [{ "required": ["AppIntegrations"] }],
-      "additionalProperties": false
+      "type": "object"
     },
     "Tag": {
       "additionalProperties": false,
@@ -62,50 +71,7 @@
       "type": "object"
     }
   },
-  "properties": {
-    "Description": { "type": "string", "maxLength": 255, "minLength": 1 },
-    "KnowledgeBaseArn": {
-      "type": "string",
-      "pattern": "^arn:[a-z-]*?:wisdom:[a-z0-9-]*?:[0-9]{12}:[a-z-]*?/[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}(?:/[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})?$"
-    },
-    "KnowledgeBaseId": {
-      "type": "string",
-      "pattern": "^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$"
-    },
-    "KnowledgeBaseType": { "$ref": "#/definitions/KnowledgeBaseType" },
-    "Name": { "type": "string", "maxLength": 255, "minLength": 1 },
-    "RenderingConfiguration": {
-      "$ref": "#/definitions/RenderingConfiguration"
-    },
-    "ServerSideEncryptionConfiguration": {
-      "$ref": "#/definitions/ServerSideEncryptionConfiguration"
-    },
-    "SourceConfiguration": { "$ref": "#/definitions/SourceConfiguration" },
-    "Tags": {
-      "insertionOrder": false,
-      "uniqueItems": true,
-      "items": { "$ref": "#/definitions/Tag" },
-      "type": "array"
-    }
-  },
-  "required": ["KnowledgeBaseType", "Name"],
-  "readOnlyProperties": [
-    "/properties/KnowledgeBaseId",
-    "/properties/KnowledgeBaseArn"
-  ],
-  "createOnlyProperties": [
-    "/properties/Description",
-    "/properties/KnowledgeBaseType",
-    "/properties/Name",
-    "/properties/ServerSideEncryptionConfiguration",
-    "/properties/SourceConfiguration",
-    "/properties/Tags"
-  ],
-  "primaryIdentifier": ["/properties/KnowledgeBaseId"],
-  "additionalIdentifiers": [["/properties/KnowledgeBaseArn"]],
-  "additionalProperties": false,
-  "taggable": false,
-  "replacementStrategy": "delete_then_create",
+  "description": "Definition of AWS::Wisdom::KnowledgeBase Resource Type",
   "handlers": {
     "create": {
       "permissions": [
@@ -123,7 +89,6 @@
         "wisdom:TagResource"
       ]
     },
-    "update": { "permissions": [] },
     "delete": {
       "permissions": [
         "appflow:DeleteFlow",
@@ -133,7 +98,42 @@
       ]
     },
     "list": { "permissions": ["wisdom:ListKnowledgeBases"] },
-    "read": { "permissions": ["wisdom:GetKnowledgeBase"] }
+    "read": { "permissions": ["wisdom:GetKnowledgeBase"] },
+    "update": { "permissions": [] }
   },
-  "$hash": "6e2d05d22ba0563d8fc996a7b3c916c6d68ffa2a"
+  "primaryIdentifier": ["/properties/KnowledgeBaseId"],
+  "properties": {
+    "Description": { "maxLength": 255, "minLength": 1, "type": "string" },
+    "KnowledgeBaseArn": {
+      "pattern": "^arn:[a-z-]*?:wisdom:[a-z0-9-]*?:[0-9]{12}:[a-z-]*?/[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}(?:/[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})?$",
+      "type": "string"
+    },
+    "KnowledgeBaseId": {
+      "pattern": "^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$",
+      "type": "string"
+    },
+    "KnowledgeBaseType": { "$ref": "#/definitions/KnowledgeBaseType" },
+    "Name": { "maxLength": 255, "minLength": 1, "type": "string" },
+    "RenderingConfiguration": {
+      "$ref": "#/definitions/RenderingConfiguration"
+    },
+    "ServerSideEncryptionConfiguration": {
+      "$ref": "#/definitions/ServerSideEncryptionConfiguration"
+    },
+    "SourceConfiguration": { "$ref": "#/definitions/SourceConfiguration" },
+    "Tags": {
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/Tag" },
+      "type": "array",
+      "uniqueItems": true
+    }
+  },
+  "readOnlyProperties": [
+    "/properties/KnowledgeBaseId",
+    "/properties/KnowledgeBaseArn"
+  ],
+  "replacementStrategy": "delete_then_create",
+  "required": ["KnowledgeBaseType", "Name"],
+  "taggable": false,
+  "typeName": "AWS::Wisdom::KnowledgeBase"
 }

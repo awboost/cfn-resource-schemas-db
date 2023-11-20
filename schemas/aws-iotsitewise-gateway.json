@@ -1,116 +1,83 @@
 {
-  "typeName": "AWS::IoTSiteWise::Gateway",
-  "description": "Resource schema for AWS::IoTSiteWise::Gateway",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-IoTSiteWise.git",
+  "$hash": "17a9c666999c761d0d7493acbef14bc7b11ce877",
+  "additionalProperties": false,
+  "createOnlyProperties": ["/properties/GatewayPlatform"],
   "definitions": {
-    "GatewayPlatform": {
-      "description": "Contains a gateway's platform information.",
-      "type": "object",
+    "CapabilityConfiguration": {
+      "description": "The JSON document that defines the gateway capability's configuration.",
+      "type": "string"
+    },
+    "CapabilityNamespace": {
+      "description": "The namespace of the capability configuration.",
+      "type": "string"
+    },
+    "GatewayCapabilitySummary": {
       "additionalProperties": false,
+      "description": "Contains a summary of a gateway capability configuration.",
       "properties": {
-        "Greengrass": {
-          "description": "A gateway that runs on AWS IoT Greengrass V1.",
-          "$ref": "#/definitions/Greengrass"
+        "CapabilityConfiguration": {
+          "$ref": "#/definitions/CapabilityConfiguration"
         },
-        "GreengrassV2": {
-          "description": "A gateway that runs on AWS IoT Greengrass V2.",
-          "$ref": "#/definitions/GreengrassV2"
-        }
+        "CapabilityNamespace": { "$ref": "#/definitions/CapabilityNamespace" }
       },
+      "required": ["CapabilityNamespace"],
+      "type": "object"
+    },
+    "GatewayPlatform": {
+      "additionalProperties": false,
+      "description": "Contains a gateway's platform information.",
       "oneOf": [
         { "required": ["Greengrass"] },
         { "required": ["GreengrassV2"] }
-      ]
+      ],
+      "properties": {
+        "Greengrass": {
+          "$ref": "#/definitions/Greengrass",
+          "description": "A gateway that runs on AWS IoT Greengrass V1."
+        },
+        "GreengrassV2": {
+          "$ref": "#/definitions/GreengrassV2",
+          "description": "A gateway that runs on AWS IoT Greengrass V2."
+        }
+      },
+      "type": "object"
     },
     "Greengrass": {
-      "description": "Contains the ARN of AWS IoT Greengrass Group V1 that the gateway runs on.",
-      "type": "object",
       "additionalProperties": false,
+      "description": "Contains the ARN of AWS IoT Greengrass Group V1 that the gateway runs on.",
       "properties": {
         "GroupArn": {
           "description": "The ARN of the Greengrass group.",
           "type": "string"
         }
       },
-      "required": ["GroupArn"]
+      "required": ["GroupArn"],
+      "type": "object"
     },
     "GreengrassV2": {
-      "description": "Contains the CoreDeviceThingName of AWS IoT Greengrass Group V2 that the gateway runs on.",
-      "type": "object",
       "additionalProperties": false,
+      "description": "Contains the CoreDeviceThingName of AWS IoT Greengrass Group V2 that the gateway runs on.",
       "properties": {
         "CoreDeviceThingName": {
           "description": "The name of the CoreDevice in GreenGrass V2.",
           "type": "string"
         }
       },
-      "required": ["CoreDeviceThingName"]
+      "required": ["CoreDeviceThingName"],
+      "type": "object"
     },
     "Tag": {
-      "description": "To add or update tag, provide both key and value. To delete tag, provide only tag key to be deleted",
-      "type": "object",
       "additionalProperties": false,
+      "description": "To add or update tag, provide both key and value. To delete tag, provide only tag key to be deleted",
       "properties": {
         "Key": { "type": "string" },
         "Value": { "type": "string" }
       },
-      "required": ["Key", "Value"]
-    },
-    "CapabilityNamespace": {
-      "description": "The namespace of the capability configuration.",
-      "type": "string"
-    },
-    "CapabilityConfiguration": {
-      "description": "The JSON document that defines the gateway capability's configuration.",
-      "type": "string"
-    },
-    "GatewayCapabilitySummary": {
-      "description": "Contains a summary of a gateway capability configuration.",
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "CapabilityNamespace": { "$ref": "#/definitions/CapabilityNamespace" },
-        "CapabilityConfiguration": {
-          "$ref": "#/definitions/CapabilityConfiguration"
-        }
-      },
-      "required": ["CapabilityNamespace"]
+      "required": ["Key", "Value"],
+      "type": "object"
     }
   },
-  "properties": {
-    "GatewayName": {
-      "description": "A unique, friendly name for the gateway.",
-      "type": "string"
-    },
-    "GatewayPlatform": {
-      "description": "The gateway's platform. You can only specify one platform in a gateway.",
-      "$ref": "#/definitions/GatewayPlatform"
-    },
-    "Tags": {
-      "description": "A list of key-value pairs that contain metadata for the gateway.",
-      "type": "array",
-      "uniqueItems": false,
-      "insertionOrder": false,
-      "items": { "$ref": "#/definitions/Tag" }
-    },
-    "GatewayId": {
-      "description": "The ID of the gateway device.",
-      "type": "string"
-    },
-    "GatewayCapabilitySummaries": {
-      "description": "A list of gateway capability summaries that each contain a namespace and status.",
-      "type": "array",
-      "uniqueItems": true,
-      "insertionOrder": true,
-      "items": { "$ref": "#/definitions/GatewayCapabilitySummary" }
-    }
-  },
-  "additionalProperties": false,
-  "taggable": true,
-  "required": ["GatewayName", "GatewayPlatform"],
-  "readOnlyProperties": ["/properties/GatewayId"],
-  "createOnlyProperties": ["/properties/GatewayPlatform"],
-  "primaryIdentifier": ["/properties/GatewayId"],
+  "description": "Resource schema for AWS::IoTSiteWise::Gateway",
   "handlers": {
     "create": {
       "permissions": [
@@ -122,6 +89,8 @@
         "iot:DescribeThing"
       ]
     },
+    "delete": { "permissions": ["iotsitewise:DeleteGateway"] },
+    "list": { "permissions": ["iotsitewise:ListGateways"] },
     "read": {
       "permissions": [
         "iotsitewise:DescribeGateway",
@@ -138,9 +107,40 @@
         "iotsitewise:DescribeGateway",
         "iotsitewise:ListTagsForResource"
       ]
-    },
-    "delete": { "permissions": ["iotsitewise:DeleteGateway"] },
-    "list": { "permissions": ["iotsitewise:ListGateways"] }
+    }
   },
-  "$hash": "17a9c666999c761d0d7493acbef14bc7b11ce877"
+  "primaryIdentifier": ["/properties/GatewayId"],
+  "properties": {
+    "GatewayCapabilitySummaries": {
+      "description": "A list of gateway capability summaries that each contain a namespace and status.",
+      "insertionOrder": true,
+      "items": { "$ref": "#/definitions/GatewayCapabilitySummary" },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "GatewayId": {
+      "description": "The ID of the gateway device.",
+      "type": "string"
+    },
+    "GatewayName": {
+      "description": "A unique, friendly name for the gateway.",
+      "type": "string"
+    },
+    "GatewayPlatform": {
+      "$ref": "#/definitions/GatewayPlatform",
+      "description": "The gateway's platform. You can only specify one platform in a gateway."
+    },
+    "Tags": {
+      "description": "A list of key-value pairs that contain metadata for the gateway.",
+      "insertionOrder": false,
+      "items": { "$ref": "#/definitions/Tag" },
+      "type": "array",
+      "uniqueItems": false
+    }
+  },
+  "readOnlyProperties": ["/properties/GatewayId"],
+  "required": ["GatewayName", "GatewayPlatform"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-IoTSiteWise.git",
+  "taggable": true,
+  "typeName": "AWS::IoTSiteWise::Gateway"
 }

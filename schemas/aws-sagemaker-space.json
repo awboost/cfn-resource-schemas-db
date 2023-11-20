@@ -1,72 +1,64 @@
 {
-  "typeName": "AWS::SageMaker::Space",
-  "description": "Resource Type definition for AWS::SageMaker::Space",
+  "$hash": "c773817532d3babbce3e32ae7525cf0d13b5ff7a",
   "additionalProperties": false,
-  "properties": {
-    "SpaceArn": {
-      "type": "string",
-      "description": "The space Amazon Resource Name (ARN).",
-      "maxLength": 256,
-      "pattern": "arn:aws[a-z\\-]*:sagemaker:[a-z0-9\\-]*:[0-9]{12}:space/.*"
-    },
-    "DomainId": {
-      "type": "string",
-      "description": "The ID of the associated Domain.",
-      "minLength": 1,
-      "maxLength": 63
-    },
-    "SpaceName": {
-      "type": "string",
-      "description": "A name for the Space.",
-      "minLength": 1,
-      "maxLength": 63
-    },
-    "SpaceSettings": {
-      "$ref": "#/definitions/SpaceSettings",
-      "description": "A collection of settings.",
-      "uniqueItems": false,
-      "minItems": 0,
-      "maxItems": 50
-    },
-    "Tags": {
-      "type": "array",
-      "description": "A list of tags to apply to the space.",
-      "uniqueItems": false,
-      "minItems": 0,
-      "maxItems": 50,
-      "items": { "$ref": "#/definitions/Tag" }
-    }
-  },
+  "createOnlyProperties": ["/properties/DomainId", "/properties/SpaceName"],
   "definitions": {
-    "SpaceSettings": {
-      "type": "object",
-      "description": "A collection of settings that apply to spaces of Amazon SageMaker Studio. These settings are specified when the CreateSpace API is called.",
+    "CustomImage": {
       "additionalProperties": false,
+      "description": "A custom SageMaker image.",
       "properties": {
-        "JupyterServerAppSettings": {
-          "$ref": "#/definitions/JupyterServerAppSettings",
-          "description": "The Jupyter server's app settings."
+        "AppImageConfigName": {
+          "description": "The Name of the AppImageConfig.",
+          "maxLength": 63,
+          "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9]){0,62}",
+          "type": "string"
         },
-        "KernelGatewayAppSettings": {
-          "$ref": "#/definitions/KernelGatewayAppSettings",
-          "description": "The kernel gateway app settings."
+        "ImageName": {
+          "description": "The name of the CustomImage. Must be unique to your account.",
+          "maxLength": 63,
+          "pattern": "^[a-zA-Z0-9]([-.]?[a-zA-Z0-9]){0,62}$",
+          "type": "string"
+        },
+        "ImageVersionNumber": {
+          "description": "The version number of the CustomImage.",
+          "minimum": 0,
+          "type": "integer"
         }
-      }
+      },
+      "required": ["AppImageConfigName", "ImageName"],
+      "type": "object"
     },
     "JupyterServerAppSettings": {
-      "type": "object",
-      "description": "The JupyterServer app settings.",
       "additionalProperties": false,
+      "description": "The JupyterServer app settings.",
       "properties": {
         "DefaultResourceSpec": { "$ref": "#/definitions/ResourceSpec" }
-      }
+      },
+      "type": "object"
+    },
+    "KernelGatewayAppSettings": {
+      "additionalProperties": false,
+      "description": "The kernel gateway app settings.",
+      "properties": {
+        "CustomImages": {
+          "description": "A list of custom SageMaker images that are configured to run as a KernelGateway app.",
+          "items": { "$ref": "#/definitions/CustomImage" },
+          "maxItems": 30,
+          "minItems": 0,
+          "type": "array",
+          "uniqueItems": false
+        },
+        "DefaultResourceSpec": {
+          "$ref": "#/definitions/ResourceSpec",
+          "description": "The default instance type and the Amazon Resource Name (ARN) of the default SageMaker image used by the KernelGateway app."
+        }
+      },
+      "type": "object"
     },
     "ResourceSpec": {
-      "type": "object",
       "additionalProperties": false,
       "properties": {
         "InstanceType": {
-          "type": "string",
           "description": "The instance type that the image version runs on.",
           "enum": [
             "system",
@@ -129,100 +121,108 @@
             "ml.p4d.24xlarge",
             "ml.p4de.24xlarge",
             "ml.geospatial.interactive"
-          ]
+          ],
+          "type": "string"
         },
         "SageMakerImageArn": {
-          "type": "string",
           "description": "The ARN of the SageMaker image that the image version belongs to.",
           "maxLength": 256,
-          "pattern": "^arn:aws(-[\\w]+)*:sagemaker:.+:[0-9]{12}:image/[a-z0-9]([-.]?[a-z0-9])*$"
+          "pattern": "^arn:aws(-[\\w]+)*:sagemaker:.+:[0-9]{12}:image/[a-z0-9]([-.]?[a-z0-9])*$",
+          "type": "string"
         },
         "SageMakerImageVersionArn": {
-          "type": "string",
           "description": "The ARN of the image version created on the instance.",
           "maxLength": 256,
-          "pattern": "^arn:aws(-[\\w]+)*:sagemaker:.+:[0-9]{12}:image-version/[a-z0-9]([-.]?[a-z0-9])*/[0-9]+$"
-        }
-      }
-    },
-    "KernelGatewayAppSettings": {
-      "type": "object",
-      "description": "The kernel gateway app settings.",
-      "additionalProperties": false,
-      "properties": {
-        "CustomImages": {
-          "type": "array",
-          "description": "A list of custom SageMaker images that are configured to run as a KernelGateway app.",
-          "uniqueItems": false,
-          "minItems": 0,
-          "maxItems": 30,
-          "items": { "$ref": "#/definitions/CustomImage" }
-        },
-        "DefaultResourceSpec": {
-          "$ref": "#/definitions/ResourceSpec",
-          "description": "The default instance type and the Amazon Resource Name (ARN) of the default SageMaker image used by the KernelGateway app."
-        }
-      }
-    },
-    "CustomImage": {
-      "type": "object",
-      "description": "A custom SageMaker image.",
-      "additionalProperties": false,
-      "properties": {
-        "AppImageConfigName": {
-          "type": "string",
-          "description": "The Name of the AppImageConfig.",
-          "maxLength": 63,
-          "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9]){0,62}"
-        },
-        "ImageName": {
-          "type": "string",
-          "description": "The name of the CustomImage. Must be unique to your account.",
-          "maxLength": 63,
-          "pattern": "^[a-zA-Z0-9]([-.]?[a-zA-Z0-9]){0,62}$"
-        },
-        "ImageVersionNumber": {
-          "type": "integer",
-          "description": "The version number of the CustomImage.",
-          "minimum": 0
+          "pattern": "^arn:aws(-[\\w]+)*:sagemaker:.+:[0-9]{12}:image-version/[a-z0-9]([-.]?[a-z0-9])*/[0-9]+$",
+          "type": "string"
         }
       },
-      "required": ["AppImageConfigName", "ImageName"]
+      "type": "object"
+    },
+    "SpaceSettings": {
+      "additionalProperties": false,
+      "description": "A collection of settings that apply to spaces of Amazon SageMaker Studio. These settings are specified when the CreateSpace API is called.",
+      "properties": {
+        "JupyterServerAppSettings": {
+          "$ref": "#/definitions/JupyterServerAppSettings",
+          "description": "The Jupyter server's app settings."
+        },
+        "KernelGatewayAppSettings": {
+          "$ref": "#/definitions/KernelGatewayAppSettings",
+          "description": "The kernel gateway app settings."
+        }
+      },
+      "type": "object"
     },
     "Tag": {
-      "type": "object",
       "additionalProperties": false,
       "properties": {
-        "Value": { "type": "string", "minLength": 1, "maxLength": 128 },
-        "Key": { "type": "string", "minLength": 1, "maxLength": 128 }
+        "Key": { "maxLength": 128, "minLength": 1, "type": "string" },
+        "Value": { "maxLength": 128, "minLength": 1, "type": "string" }
       },
-      "required": ["Key", "Value"]
+      "required": ["Key", "Value"],
+      "type": "object"
     }
   },
-  "required": ["DomainId", "SpaceName"],
-  "createOnlyProperties": ["/properties/DomainId", "/properties/SpaceName"],
-  "writeOnlyProperties": ["/properties/SpaceSettings", "/properties/Tags"],
-  "primaryIdentifier": ["/properties/DomainId", "/properties/SpaceName"],
-  "readOnlyProperties": ["/properties/SpaceArn"],
-  "tagging": {
-    "taggable": true,
-    "tagOnCreate": true,
-    "tagUpdatable": true,
-    "cloudFormationSystemTags": false,
-    "tagProperty": "/properties/Tags"
-  },
+  "description": "Resource Type definition for AWS::SageMaker::Space",
   "handlers": {
     "create": {
       "permissions": ["sagemaker:CreateSpace", "sagemaker:DescribeSpace"]
     },
-    "read": { "permissions": ["sagemaker:DescribeSpace"] },
-    "update": {
-      "permissions": ["sagemaker:UpdateSpace", "sagemaker:DescribeSpace"]
-    },
     "delete": {
       "permissions": ["sagemaker:DeleteSpace", "sagemaker:DescribeSpace"]
     },
-    "list": { "permissions": ["sagemaker:ListSpaces"] }
+    "list": { "permissions": ["sagemaker:ListSpaces"] },
+    "read": { "permissions": ["sagemaker:DescribeSpace"] },
+    "update": {
+      "permissions": ["sagemaker:UpdateSpace", "sagemaker:DescribeSpace"]
+    }
   },
-  "$hash": "c773817532d3babbce3e32ae7525cf0d13b5ff7a"
+  "primaryIdentifier": ["/properties/DomainId", "/properties/SpaceName"],
+  "properties": {
+    "DomainId": {
+      "description": "The ID of the associated Domain.",
+      "maxLength": 63,
+      "minLength": 1,
+      "type": "string"
+    },
+    "SpaceArn": {
+      "description": "The space Amazon Resource Name (ARN).",
+      "maxLength": 256,
+      "pattern": "arn:aws[a-z\\-]*:sagemaker:[a-z0-9\\-]*:[0-9]{12}:space/.*",
+      "type": "string"
+    },
+    "SpaceName": {
+      "description": "A name for the Space.",
+      "maxLength": 63,
+      "minLength": 1,
+      "type": "string"
+    },
+    "SpaceSettings": {
+      "$ref": "#/definitions/SpaceSettings",
+      "description": "A collection of settings.",
+      "maxItems": 50,
+      "minItems": 0,
+      "uniqueItems": false
+    },
+    "Tags": {
+      "description": "A list of tags to apply to the space.",
+      "items": { "$ref": "#/definitions/Tag" },
+      "maxItems": 50,
+      "minItems": 0,
+      "type": "array",
+      "uniqueItems": false
+    }
+  },
+  "readOnlyProperties": ["/properties/SpaceArn"],
+  "required": ["DomainId", "SpaceName"],
+  "tagging": {
+    "cloudFormationSystemTags": false,
+    "tagOnCreate": true,
+    "tagProperty": "/properties/Tags",
+    "tagUpdatable": true,
+    "taggable": true
+  },
+  "typeName": "AWS::SageMaker::Space",
+  "writeOnlyProperties": ["/properties/SpaceSettings", "/properties/Tags"]
 }

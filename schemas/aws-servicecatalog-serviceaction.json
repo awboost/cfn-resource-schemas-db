@@ -1,34 +1,18 @@
 {
-  "typeName": "AWS::ServiceCatalog::ServiceAction",
-  "description": "Resource Schema for AWS::ServiceCatalog::ServiceAction",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+  "$hash": "eb0799c8d6291a57de1b10735bfc17ac4222f5df",
+  "additionalProperties": false,
   "definitions": {
     "DefinitionParameter": {
-      "type": "object",
-      "properties": {
-        "Key": { "type": "string", "minLength": 1, "maxLength": 1000 },
-        "Value": { "type": "string", "maxLength": 4096 }
-      },
       "additionalProperties": false,
-      "required": ["Key", "Value"]
+      "properties": {
+        "Key": { "maxLength": 1000, "minLength": 1, "type": "string" },
+        "Value": { "maxLength": 4096, "type": "string" }
+      },
+      "required": ["Key", "Value"],
+      "type": "object"
     }
   },
-  "properties": {
-    "AcceptLanguage": { "type": "string", "enum": ["en", "jp", "zh"] },
-    "Name": { "type": "string", "minLength": 1, "maxLength": 256 },
-    "DefinitionType": { "type": "string", "enum": ["SSM_AUTOMATION"] },
-    "Definition": {
-      "type": "array",
-      "items": { "$ref": "#/definitions/DefinitionParameter" }
-    },
-    "Description": { "type": "string", "maxLength": 1024 },
-    "Id": { "type": "string", "minLength": 1, "maxLength": 100 }
-  },
-  "additionalProperties": false,
-  "primaryIdentifier": ["/properties/Id"],
-  "writeOnlyProperties": ["/properties/AcceptLanguage"],
-  "readOnlyProperties": ["/properties/Id"],
-  "required": ["Name", "DefinitionType", "Definition"],
+  "description": "Resource Schema for AWS::ServiceCatalog::ServiceAction",
   "handlers": {
     "create": {
       "permissions": [
@@ -37,12 +21,28 @@
         "iam:GetRole"
       ]
     },
+    "delete": { "permissions": ["servicecatalog:DeleteServiceAction"] },
+    "list": { "permissions": ["servicecatalog:ListServiceActions"] },
     "read": { "permissions": ["servicecatalog:DescribeServiceAction"] },
     "update": {
       "permissions": ["servicecatalog:UpdateServiceAction", "iam:GetRole"]
-    },
-    "delete": { "permissions": ["servicecatalog:DeleteServiceAction"] },
-    "list": { "permissions": ["servicecatalog:ListServiceActions"] }
+    }
   },
-  "$hash": "eb0799c8d6291a57de1b10735bfc17ac4222f5df"
+  "primaryIdentifier": ["/properties/Id"],
+  "properties": {
+    "AcceptLanguage": { "enum": ["en", "jp", "zh"], "type": "string" },
+    "Definition": {
+      "items": { "$ref": "#/definitions/DefinitionParameter" },
+      "type": "array"
+    },
+    "DefinitionType": { "enum": ["SSM_AUTOMATION"], "type": "string" },
+    "Description": { "maxLength": 1024, "type": "string" },
+    "Id": { "maxLength": 100, "minLength": 1, "type": "string" },
+    "Name": { "maxLength": 256, "minLength": 1, "type": "string" }
+  },
+  "readOnlyProperties": ["/properties/Id"],
+  "required": ["Name", "DefinitionType", "Definition"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-rpdk.git",
+  "typeName": "AWS::ServiceCatalog::ServiceAction",
+  "writeOnlyProperties": ["/properties/AcceptLanguage"]
 }

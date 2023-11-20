@@ -1,63 +1,14 @@
 {
-  "typeName": "AWS::Logs::AccountPolicy",
+  "$hash": "323b6d6efe2817575351b9a5974692822c47b1b1",
+  "additionalProperties": false,
+  "createOnlyProperties": ["/properties/PolicyName", "/properties/PolicyType"],
   "description": "The AWS::Logs::AccountPolicy resource specifies a CloudWatch Logs AccountPolicy.",
-  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-logs.git",
-  "tagging": {
-    "taggable": false,
-    "tagOnCreate": false,
-    "tagUpdatable": false,
-    "cloudFormationSystemTags": false
-  },
-  "replacementStrategy": "delete_then_create",
-  "properties": {
-    "AccountId": {
-      "description": "User account id",
-      "type": "string",
-      "pattern": "^\\d{12}$"
-    },
-    "PolicyName": {
-      "description": "The name of the account policy",
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 256,
-      "pattern": "^[^:*]{1,256}$"
-    },
-    "PolicyDocument": {
-      "description": "The body of the policy document you want to use for this topic.\n\nYou can only add one policy per PolicyType.\n\nThe policy must be in JSON string format.\n\nLength Constraints: Maximum length of 30720",
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 30720
-    },
-    "PolicyType": {
-      "description": "Type of the policy.",
-      "type": "string",
-      "enum": ["DATA_PROTECTION_POLICY"]
-    },
-    "Scope": {
-      "description": "Scope for policy application",
-      "type": "string",
-      "enum": ["ALL"]
-    }
-  },
   "handlers": {
     "create": {
       "permissions": [
         "logs:PutAccountPolicy",
         "logs:PutDataProtectionPolicy",
         "logs:DescribeAccountPolicies",
-        "logs:CreateLogDelivery",
-        "s3:REST.PUT.OBJECT",
-        "firehose:TagDeliveryStream"
-      ]
-    },
-    "read": { "permissions": ["logs:DescribeAccountPolicies"] },
-    "update": {
-      "permissions": [
-        "logs:PutAccountPolicy",
-        "logs:PutDataProtectionPolicy",
-        "logs:DescribeAccountPolicies",
-        "logs:DeleteAccountPolicy",
-        "logs:DeleteDataProtectionPolicy",
         "logs:CreateLogDelivery",
         "s3:REST.PUT.OBJECT",
         "firehose:TagDeliveryStream"
@@ -71,7 +22,6 @@
       ]
     },
     "list": {
-      "permissions": ["logs:DescribeAccountPolicies"],
       "handlerSchema": {
         "properties": {
           "PolicyType": {
@@ -79,17 +29,67 @@
           }
         },
         "required": ["PolicyType"]
-      }
+      },
+      "permissions": ["logs:DescribeAccountPolicies"]
+    },
+    "read": { "permissions": ["logs:DescribeAccountPolicies"] },
+    "update": {
+      "permissions": [
+        "logs:PutAccountPolicy",
+        "logs:PutDataProtectionPolicy",
+        "logs:DescribeAccountPolicies",
+        "logs:DeleteAccountPolicy",
+        "logs:DeleteDataProtectionPolicy",
+        "logs:CreateLogDelivery",
+        "s3:REST.PUT.OBJECT",
+        "firehose:TagDeliveryStream"
+      ]
     }
   },
-  "required": ["PolicyName", "PolicyType", "PolicyDocument"],
-  "createOnlyProperties": ["/properties/PolicyName", "/properties/PolicyType"],
-  "readOnlyProperties": ["/properties/AccountId"],
   "primaryIdentifier": [
     "/properties/AccountId",
     "/properties/PolicyType",
     "/properties/PolicyName"
   ],
-  "additionalProperties": false,
-  "$hash": "323b6d6efe2817575351b9a5974692822c47b1b1"
+  "properties": {
+    "AccountId": {
+      "description": "User account id",
+      "pattern": "^\\d{12}$",
+      "type": "string"
+    },
+    "PolicyDocument": {
+      "description": "The body of the policy document you want to use for this topic.\n\nYou can only add one policy per PolicyType.\n\nThe policy must be in JSON string format.\n\nLength Constraints: Maximum length of 30720",
+      "maxLength": 30720,
+      "minLength": 1,
+      "type": "string"
+    },
+    "PolicyName": {
+      "description": "The name of the account policy",
+      "maxLength": 256,
+      "minLength": 1,
+      "pattern": "^[^:*]{1,256}$",
+      "type": "string"
+    },
+    "PolicyType": {
+      "description": "Type of the policy.",
+      "enum": ["DATA_PROTECTION_POLICY"],
+      "type": "string"
+    },
+    "Scope": {
+      "description": "Scope for policy application",
+      "enum": ["ALL"],
+      "type": "string"
+    }
+  },
+  "readOnlyProperties": ["/properties/AccountId"],
+  "replacementStrategy": "delete_then_create",
+  "required": ["PolicyName", "PolicyType", "PolicyDocument"],
+  "sourceUrl": "https://github.com/aws-cloudformation/aws-cloudformation-resource-providers-logs.git",
+  "tagging": {
+    "cloudFormationSystemTags": false,
+    "tagOnCreate": false,
+    "tagUpdatable": false,
+    "taggable": false
+  },
+  "typeName": "AWS::Logs::AccountPolicy"
 }
