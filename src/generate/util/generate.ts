@@ -173,9 +173,7 @@ function convertArrayToUnionType(
       { ...element, ...overrides },
       elementPtr.as<JSONSchema7>(),
     );
-    if (!type) {
-      //Logger.error(`${elementPtr}: couldn't process union element`);
-    } else {
+    if (type) {
       ret.types.push(type);
     }
   }
