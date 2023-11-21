@@ -106,7 +106,7 @@ export type ResourceNamespace = {
   attributes?: ObjectType;
   definitions: Record<string, TypeDefinition>;
   resource: ObjectType;
-  typeName: string;
+  awsTypeName: string;
 };
 
 export type IntegrityProps = { $hash: string };
