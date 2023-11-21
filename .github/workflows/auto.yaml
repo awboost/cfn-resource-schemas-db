@@ -22,12 +22,13 @@ jobs:
       - name: NPM install
         run: npm ci
 
-      - name: Download latest
+      - id: download
+        name: Download latest
         run: npm run download
         continue-on-error: true
 
       - name: Make PR
-        if: success()
+        if: steps.download.outcome == 'success'
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
