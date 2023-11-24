@@ -1,5 +1,5 @@
 {
-  "$hash": "3705afa719918851ca42f6e862d4d41ea5e4a297",
+  "$hash": "da86a0c4dde3d37d825f2027654e4bbaf9ce6897",
   "additionalProperties": false,
   "createOnlyProperties": ["/properties/WorkspaceId", "/properties/EntityId"],
   "definitions": {
@@ -51,6 +51,59 @@
         "Status": {
           "$ref": "#/definitions/Status",
           "description": "The current status of the entity."
+        }
+      },
+      "type": "object"
+    },
+    "CompositeComponent": {
+      "additionalProperties": false,
+      "properties": {
+        "ComponentName": {
+          "description": "The name of the component.",
+          "maxLength": 256,
+          "minLength": 1,
+          "pattern": "[a-zA-Z_\\-0-9]+",
+          "type": "string"
+        },
+        "ComponentPath": {
+          "description": "The path of the component.",
+          "maxLength": 256,
+          "minLength": 1,
+          "pattern": "[a-zA-Z_\\-0-9/]+",
+          "type": "string"
+        },
+        "ComponentTypeId": {
+          "description": "The ID of the component type.",
+          "maxLength": 256,
+          "minLength": 1,
+          "pattern": "[a-zA-Z_\\-0-9]+",
+          "type": "string"
+        },
+        "Description": {
+          "description": "The description of the component.",
+          "maxLength": 512,
+          "minLength": 0,
+          "type": "string"
+        },
+        "Properties": {
+          "additionalProperties": false,
+          "description": "An object that maps strings to the properties to set in the component type. Each string in the mapping must be unique to this object.",
+          "patternProperties": {
+            "[a-zA-Z_\\-0-9]+": { "$ref": "#/definitions/Property" }
+          },
+          "type": "object"
+        },
+        "PropertyGroups": {
+          "additionalProperties": false,
+          "description": "An object that maps strings to the property groups to set in the component type. Each string in the mapping must be unique to this object.",
+          "patternProperties": {
+            "[a-zA-Z_\\-0-9]+": { "$ref": "#/definitions/PropertyGroup" }
+          },
+          "type": "object"
+        },
+        "Status": {
+          "$ref": "#/definitions/Status",
+          "description": "The current status of the component."
         }
       },
       "type": "object"
@@ -325,6 +378,8 @@
         "iottwinmaker:GetWorkspace",
         "iottwinmaker:CreateEntity",
         "iottwinmaker:GetEntity",
+        "iottwinmaker:ListComponents",
+        "iottwinmaker:ListProperties",
         "iottwinmaker:ListTagsForResource",
         "iottwinmaker:TagResource"
       ]
@@ -357,6 +412,8 @@
       "permissions": [
         "iottwinmaker:GetComponentType",
         "iottwinmaker:GetEntity",
+        "iottwinmaker:ListComponents",
+        "iottwinmaker:ListProperties",
         "iottwinmaker:GetWorkspace",
         "iottwinmaker:ListEntities",
         "iottwinmaker:ListTagsForResource"
@@ -366,6 +423,8 @@
       "permissions": [
         "iottwinmaker:GetComponentType",
         "iottwinmaker:GetEntity",
+        "iottwinmaker:ListComponents",
+        "iottwinmaker:ListProperties",
         "iottwinmaker:GetWorkspace",
         "iottwinmaker:ListTagsForResource",
         "iottwinmaker:TagResource",
@@ -389,6 +448,14 @@
       "description": "A map that sets information about a component type.",
       "patternProperties": {
         "[a-zA-Z_\\-0-9]+": { "$ref": "#/definitions/Component" }
+      },
+      "type": "object"
+    },
+    "CompositeComponents": {
+      "additionalProperties": false,
+      "description": "A map that sets information about a composite component.",
+      "patternProperties": {
+        "[a-zA-Z_\\-0-9/]+": { "$ref": "#/definitions/CompositeComponent" }
       },
       "type": "object"
     },
