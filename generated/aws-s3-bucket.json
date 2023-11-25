@@ -580,6 +580,14 @@
           "type": {
             "type": "string"
           }
+        },
+        {
+          "name": "TargetObjectKeyFormat",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "TargetObjectKeyFormat"
+          }
         }
       ]
     },
@@ -838,6 +846,22 @@
               "BucketOwnerPreferred",
               "BucketOwnerEnforced"
             ]
+          }
+        }
+      ]
+    },
+    "PartitionedPrefix": {
+      "type": "object",
+      "description": "This format appends a time based prefix to the given log file prefix for delivering server access log file.",
+      "properties": [
+        {
+          "name": "PartitionDateSource",
+          "description": "Date Source for creating a partitioned prefix. This can be event time or delivery time.",
+          "optional": true,
+          "type": {
+            "type": "string",
+            "description": "Date Source for creating a partitioned prefix. This can be event time or delivery time.",
+            "allowedValues": ["EventTime", "DeliveryTime"]
           }
         }
       ]
@@ -1622,6 +1646,41 @@
         }
       ]
     },
+    "TargetObjectKeyFormat": {
+      "description": "Describes the key format for server access log file in the target bucket. You can choose between SimplePrefix and PartitionedPrefix.",
+      "type": "union",
+      "types": [
+        {
+          "type": "object",
+          "description": "Describes the key format for server access log file in the target bucket. You can choose between SimplePrefix and PartitionedPrefix.",
+          "properties": [
+            {
+              "name": "SimplePrefix",
+              "description": "This format defaults the prefix to the given log file prefix for delivering server access log file.",
+              "optional": false,
+              "type": {
+                "type": "record",
+                "description": "This format defaults the prefix to the given log file prefix for delivering server access log file."
+              }
+            }
+          ]
+        },
+        {
+          "type": "object",
+          "description": "Describes the key format for server access log file in the target bucket. You can choose between SimplePrefix and PartitionedPrefix.",
+          "properties": [
+            {
+              "name": "PartitionedPrefix",
+              "optional": false,
+              "type": {
+                "type": "ref",
+                "typeName": "PartitionedPrefix"
+              }
+            }
+          ]
+        }
+      ]
+    },
     "Tiering": {
       "type": "object",
       "properties": [
@@ -2060,5 +2119,5 @@
       }
     ]
   },
-  "$hash": "cc3c291d648f2f0ceb345a07429e27b8440b9da7"
+  "$hash": "ed0f6497726b539fb00018e6415f7ed51a4184ea"
 }
