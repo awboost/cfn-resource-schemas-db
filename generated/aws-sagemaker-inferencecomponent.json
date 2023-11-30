@@ -1,0 +1,448 @@
+{
+  "definitions": {
+    "ContainerImage": {
+      "type": "string",
+      "description": "The image to use for the container that will be materialized for the inference component",
+      "maxLength": 255,
+      "pattern": "[\\S]+"
+    },
+    "DeployedImage": {
+      "type": "object",
+      "description": "",
+      "properties": [
+        {
+          "name": "ResolutionTime",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Timestamp"
+          }
+        },
+        {
+          "name": "ResolvedImage",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ContainerImage"
+          }
+        },
+        {
+          "name": "SpecifiedImage",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ContainerImage"
+          }
+        }
+      ]
+    },
+    "EndpointArn": {
+      "type": "string",
+      "description": "The Amazon Resource Name (ARN) of the endpoint the inference component is associated with",
+      "maxLength": 256,
+      "minLength": 1
+    },
+    "EndpointName": {
+      "type": "string",
+      "description": "The name of the endpoint the inference component is associated with",
+      "maxLength": 63,
+      "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9])*$"
+    },
+    "EnvironmentMap": {
+      "type": "record",
+      "description": "Environment variables to specify on the container",
+      "valueType": {
+        "type": "string",
+        "maxLength": 1024,
+        "pattern": "^[\\S\\s]*$"
+      }
+    },
+    "FailureReason": {
+      "type": "string",
+      "description": "The failure reason if the inference component is in a failed state",
+      "maxLength": 63
+    },
+    "InferenceComponentArn": {
+      "type": "string",
+      "description": "The Amazon Resource Name (ARN) of the inference component",
+      "maxLength": 256,
+      "minLength": 1
+    },
+    "InferenceComponentComputeResourceRequirements": {
+      "type": "object",
+      "description": "",
+      "properties": [
+        {
+          "name": "MaxMemoryRequiredInMb",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "MemoryInMb"
+          }
+        },
+        {
+          "name": "MinMemoryRequiredInMb",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "MemoryInMb"
+          }
+        },
+        {
+          "name": "NumberOfAcceleratorDevicesRequired",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "NumberOfAcceleratorDevices"
+          }
+        },
+        {
+          "name": "NumberOfCpuCoresRequired",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "NumberOfCpuCores"
+          }
+        }
+      ]
+    },
+    "InferenceComponentContainerSpecification": {
+      "type": "object",
+      "description": "",
+      "properties": [
+        {
+          "name": "ArtifactUrl",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "Url"
+          }
+        },
+        {
+          "name": "DeployedImage",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "DeployedImage"
+          }
+        },
+        {
+          "name": "Environment",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "EnvironmentMap"
+          }
+        },
+        {
+          "name": "Image",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ContainerImage"
+          }
+        }
+      ]
+    },
+    "InferenceComponentCopyCount": {
+      "type": "number",
+      "description": "The number of copies for the inference component",
+      "isInteger": true,
+      "minimum": 0
+    },
+    "InferenceComponentName": {
+      "type": "string",
+      "description": "The name of the inference component",
+      "maxLength": 63,
+      "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9])*$"
+    },
+    "InferenceComponentRuntimeConfig": {
+      "type": "object",
+      "description": "The runtime config for the inference component",
+      "properties": [
+        {
+          "name": "CopyCount",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "InferenceComponentCopyCount"
+          }
+        },
+        {
+          "name": "CurrentCopyCount",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "InferenceComponentCopyCount"
+          }
+        },
+        {
+          "name": "DesiredCopyCount",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "InferenceComponentCopyCount"
+          }
+        }
+      ]
+    },
+    "InferenceComponentSpecification": {
+      "type": "object",
+      "description": "The specification for the inference component",
+      "properties": [
+        {
+          "name": "ComputeResourceRequirements",
+          "optional": false,
+          "type": {
+            "type": "ref",
+            "typeName": "InferenceComponentComputeResourceRequirements"
+          }
+        },
+        {
+          "name": "Container",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "InferenceComponentContainerSpecification"
+          }
+        },
+        {
+          "name": "ModelName",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "ModelName"
+          }
+        },
+        {
+          "name": "StartupParameters",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "InferenceComponentStartupParameters"
+          }
+        }
+      ]
+    },
+    "InferenceComponentStartupParameters": {
+      "type": "object",
+      "description": "",
+      "properties": [
+        {
+          "name": "ContainerStartupHealthCheckTimeoutInSeconds",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "StartupParameterTimeoutInSeconds"
+          }
+        },
+        {
+          "name": "ModelDataDownloadTimeoutInSeconds",
+          "optional": true,
+          "type": {
+            "type": "ref",
+            "typeName": "StartupParameterTimeoutInSeconds"
+          }
+        }
+      ]
+    },
+    "InferenceComponentStatus": {
+      "type": "string",
+      "allowedValues": [
+        "InService",
+        "Creating",
+        "Updating",
+        "Failed",
+        "Deleting"
+      ]
+    },
+    "MemoryInMb": {
+      "type": "number",
+      "isInteger": true,
+      "minimum": 128
+    },
+    "ModelName": {
+      "type": "string",
+      "description": "The name of the model to use with the inference component",
+      "maxLength": 63,
+      "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9])*$"
+    },
+    "NumberOfAcceleratorDevices": {
+      "type": "number",
+      "isInteger": false,
+      "minimum": 1
+    },
+    "NumberOfCpuCores": {
+      "type": "number",
+      "isInteger": false,
+      "minimum": 0.25
+    },
+    "StartupParameterTimeoutInSeconds": {
+      "type": "number",
+      "isInteger": true,
+      "maximum": 3600,
+      "minimum": 60
+    },
+    "Tag": {
+      "type": "object",
+      "description": "A tag in the form of a key-value pair to associate with the resource",
+      "properties": [
+        {
+          "name": "Key",
+          "description": "The key name of the tag. You can specify a value that is 1 to 127 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The key name of the tag. You can specify a value that is 1 to 127 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -",
+            "maxLength": 128,
+            "minLength": 1
+          }
+        },
+        {
+          "name": "Value",
+          "description": "The value for the tag. You can specify a value that is 1 to 255 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -",
+          "optional": false,
+          "type": {
+            "type": "string",
+            "description": "The value for the tag. You can specify a value that is 1 to 255 Unicode characters in length and cannot be prefixed with aws:. You can use any of the following characters: the set of Unicode letters, digits, whitespace, _, ., /, =, +, and -",
+            "maxLength": 256,
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "TagList": {
+      "type": "array",
+      "description": "An array of tags to apply to the resource",
+      "itemType": {
+        "type": "ref",
+        "typeName": "Tag"
+      },
+      "maxLength": 50
+    },
+    "Timestamp": {
+      "type": "string"
+    },
+    "Url": {
+      "type": "string",
+      "maxLength": 1024,
+      "pattern": "^(https|s3)://([^/]+)/?(.*)$"
+    },
+    "VariantName": {
+      "type": "string",
+      "description": "The name of the endpoint variant the inference component is associated with",
+      "maxLength": 63,
+      "pattern": "^[a-zA-Z0-9](-*[a-zA-Z0-9])*$"
+    }
+  },
+  "resource": {
+    "type": "object",
+    "description": "Resource Type definition for AWS::SageMaker::InferenceComponent",
+    "properties": [
+      {
+        "name": "EndpointArn",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "EndpointArn"
+        }
+      },
+      {
+        "name": "EndpointName",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "EndpointName"
+        }
+      },
+      {
+        "name": "InferenceComponentName",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "InferenceComponentName"
+        }
+      },
+      {
+        "name": "RuntimeConfig",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "InferenceComponentRuntimeConfig"
+        }
+      },
+      {
+        "name": "Specification",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "InferenceComponentSpecification"
+        }
+      },
+      {
+        "name": "Tags",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "TagList"
+        }
+      },
+      {
+        "name": "VariantName",
+        "optional": false,
+        "type": {
+          "type": "ref",
+          "typeName": "VariantName"
+        }
+      }
+    ]
+  },
+  "awsTypeName": "AWS::SageMaker::InferenceComponent",
+  "attributes": {
+    "type": "object",
+    "description": "Resource Type definition for AWS::SageMaker::InferenceComponent",
+    "properties": [
+      {
+        "name": "CreationTime",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "Timestamp"
+        }
+      },
+      {
+        "name": "FailureReason",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "FailureReason"
+        }
+      },
+      {
+        "name": "InferenceComponentArn",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "InferenceComponentArn"
+        }
+      },
+      {
+        "name": "InferenceComponentStatus",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "InferenceComponentStatus"
+        }
+      },
+      {
+        "name": "LastModifiedTime",
+        "optional": true,
+        "type": {
+          "type": "ref",
+          "typeName": "Timestamp"
+        }
+      }
+    ]
+  },
+  "$hash": "302f2c32422d12af1d49269ccb9db85c0192e277"
+}

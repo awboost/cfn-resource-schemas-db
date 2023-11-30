@@ -103,12 +103,49 @@
           }
         }
       ]
+    },
+    "UnusedAccessConfiguration": {
+      "type": "object",
+      "description": "The Configuration for Unused Access Analyzer",
+      "properties": [
+        {
+          "name": "UnusedAccessAge",
+          "description": "The specified access age in days for which to generate findings for unused access. For example, if you specify 90 days, the analyzer will generate findings for IAM entities within the accounts of the selected organization for any access that haven't been used in 90 or more days since the analyzer's last scan. You can choose a value between 1 and 180 days.",
+          "optional": true,
+          "type": {
+            "type": "number",
+            "description": "The specified access age in days for which to generate findings for unused access. For example, if you specify 90 days, the analyzer will generate findings for IAM entities within the accounts of the selected organization for any access that haven't been used in 90 or more days since the analyzer's last scan. You can choose a value between 1 and 180 days.",
+            "isInteger": true,
+            "maximum": 180,
+            "minimum": 1
+          }
+        }
+      ]
     }
   },
   "resource": {
     "type": "object",
     "description": "The AWS::AccessAnalyzer::Analyzer type specifies an analyzer of the user's account",
     "properties": [
+      {
+        "name": "AnalyzerConfiguration",
+        "description": "The configuration for the analyzer",
+        "optional": true,
+        "type": {
+          "type": "object",
+          "description": "The configuration for the analyzer",
+          "properties": [
+            {
+              "name": "UnusedAccessConfiguration",
+              "optional": true,
+              "type": {
+                "type": "ref",
+                "typeName": "UnusedAccessConfiguration"
+              }
+            }
+          ]
+        }
+      },
       {
         "name": "AnalyzerName",
         "description": "Analyzer name",
@@ -147,11 +184,11 @@
       },
       {
         "name": "Type",
-        "description": "The type of the analyzer, must be one of ACCOUNT, ORGANIZATION",
+        "description": "The type of the analyzer, must be one of ACCOUNT, ORGANIZATION, ACCOUNT_UNUSED_ACCESS or ORGANIZATION_UNUSED_ACCESS",
         "optional": false,
         "type": {
           "type": "string",
-          "description": "The type of the analyzer, must be one of ACCOUNT, ORGANIZATION",
+          "description": "The type of the analyzer, must be one of ACCOUNT, ORGANIZATION, ACCOUNT_UNUSED_ACCESS or ORGANIZATION_UNUSED_ACCESS",
           "maxLength": 1024,
           "minLength": 0
         }
@@ -176,5 +213,5 @@
       }
     ]
   },
-  "$hash": "5e5f438d85754d7b9d1617d379ce7c0d3705eb2e"
+  "$hash": "7a5e66415dfbeebdbf2315b223c12e6bd0b52c44"
 }
