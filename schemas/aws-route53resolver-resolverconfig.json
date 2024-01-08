@@ -1,5 +1,5 @@
 {
-  "$hash": "9c7598b79cad9ec240e9e777308242a88c5aa272",
+  "$hash": "8fde17a07bc19dc217027f4befb4ff31a0b71c77",
   "additionalProperties": false,
   "createOnlyProperties": [
     "/properties/ResourceId",
@@ -7,12 +7,28 @@
   ],
   "description": "Resource schema for AWS::Route53Resolver::ResolverConfig.",
   "handlers": {
-    "create": { "permissions": ["route53resolver:CreateConfig"] },
-    "delete": { "permissions": ["route53resolver:DeleteConfig"] },
-    "list": { "permissions": ["route53resolver:ListConfig"] },
-    "read": { "permissions": ["route53resolver:GetConfig"] }
+    "create": {
+      "permissions": [
+        "route53resolver:UpdateResolverConfig",
+        "route53resolver:GetResolverConfig",
+        "ec2:DescribeVpcs"
+      ]
+    },
+    "delete": {
+      "permissions": [
+        "route53resolver:UpdateResolverConfig",
+        "route53resolver:ListResolverConfigs",
+        "ec2:DescribeVpcs"
+      ]
+    },
+    "list": {
+      "permissions": ["route53resolver:ListResolverConfigs", "ec2:DescribeVpcs"]
+    },
+    "read": {
+      "permissions": ["route53resolver:GetResolverConfig", "ec2:DescribeVpcs"]
+    }
   },
-  "primaryIdentifier": ["/properties/Id"],
+  "primaryIdentifier": ["/properties/ResourceId"],
   "properties": {
     "AutodefinedReverse": {
       "description": "ResolverAutodefinedReverseStatus, possible values are ENABLING, ENABLED, DISABLING AND DISABLED.",
@@ -42,6 +58,9 @@
       "minLength": 1,
       "type": "string"
     }
+  },
+  "propertyTransform": {
+    "/properties/AutodefinedReverseFlag": "$join([AutodefinedReverseFlag, \"D\"])"
   },
   "readOnlyProperties": [
     "/properties/OwnerId",
