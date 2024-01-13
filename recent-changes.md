@@ -1,46 +1,744 @@
-- added `AWS::Backup::RestoreTestingPlan`
-- added `AWS::Backup::RestoreTestingSelection`
-- added `AWS::CodeStarConnections::RepositoryLink`
-- added `AWS::CodeStarConnections::SyncConfiguration`
-- added `AWS::ControlTower::LandingZone`
-- added `AWS::EKS::PodIdentityAssociation`
-- added `AWS::ElastiCache::ServerlessCache`
-- added `AWS::ElasticLoadBalancingV2::TrustStore`
-- added `AWS::ElasticLoadBalancingV2::TrustStoreRevocation`
-- added `AWS::Logs::Delivery`
-- added `AWS::Logs::DeliveryDestination`
-- added `AWS::Logs::DeliverySource`
-- added `AWS::Logs::LogAnomalyDetector`
-- added `AWS::S3Express::BucketPolicy`
-- added `AWS::S3Express::DirectoryBucket`
-- added `AWS::SageMaker::InferenceComponent`
-- updated `AWS::AccessAnalyzer::Analyzer`
-  - added definition `UnusedAccessConfiguration`
-  - added property `AnalyzerConfiguration`
-  - updated `createOnlyProperties`
-  - updated property `Type`
-- updated `AWS::ControlTower::EnabledControl`
-  - added definition `EnabledControlParameter`
-  - added property `Parameters`
-- updated `AWS::EC2::TransitGateway`
-  - removed property `SecurityGroupReferencingSupport`
-- updated `AWS::EC2::TransitGatewayVpcAttachment`
-  - updated property `Options`
-- updated `AWS::EFS::FileSystem`
-  - added definition `FileSystemProtection`
-  - added property `FileSystemProtection`
-  - updated `propertyTransform`
-  - updated definition `LifecyclePolicy`
+- added `AWS::ARCZonalShift::ZonalAutoshiftConfiguration`
+- added `AWS::B2BI::Capability`
+- added `AWS::B2BI::Partnership`
+- added `AWS::B2BI::Profile`
+- added `AWS::B2BI::Transformer`
+- added `AWS::CloudFront::KeyValueStore`
+- added `AWS::Connect::PredefinedAttribute`
+- added `AWS::DMS::DataProvider`
+- added `AWS::DMS::InstanceProfile`
+- added `AWS::DMS::MigrationProject`
+- added `AWS::DocDB::EventSubscription`
+- added `AWS::EC2::SnapshotBlockPublicAccess`
+- added `AWS::EKS::AccessEntry`
+- added `AWS::FIS::TargetAccountConfiguration`
+- added `AWS::Glue::CustomEntityType`
+- added `AWS::ImageBuilder::Workflow`
+- added `AWS::IoT::CertificateProvider`
+- added `AWS::Location::APIKey`
+- added `AWS::NeptuneGraph::Graph`
+- added `AWS::NeptuneGraph::PrivateGraphEndpoint`
+- added `AWS::NetworkFirewall::TLSInspectionConfiguration`
+- added `AWS::WorkSpacesThinClient::Environment`
+- updated `AWS::ACMPCA::CertificateAuthority`
+  - added definition `CrlDistributionPointExtensionConfiguration`
+  - updated `writeOnlyProperties`
+  - updated definition `CrlConfiguration`
   - updated handler permissions
-- updated `AWS::ElasticLoadBalancingV2::Listener`
-  - added definition `MutualAuthentication`
-  - added property `MutualAuthentication`
-- updated `AWS::Logs::LogGroup`
-  - added property `LogGroupClass`
-- updated `AWS::ManagedBlockchain::Accessor`
-  - added definition `NetworkAccessorType`
-  - added property `NetworkType`
+- updated `AWS::APS::Workspace`
+  - added `createOnlyProperties`
+  - added property `KmsKeyArn`
+  - updated handler permissions
+- updated `AWS::AccessAnalyzer::Analyzer`
+  - updated definition `UnusedAccessConfiguration`
+- updated `AWS::ApiGatewayV2::Api`
+  - updated property `ApiEndpoint`
+  - updated property `ApiId`
+- updated `AWS::ApiGatewayV2::ApiMapping`
+  - updated property `ApiMappingId`
+- updated `AWS::ApiGatewayV2::Authorizer`
+  - updated property `AuthorizerId`
+- updated `AWS::ApiGatewayV2::Deployment`
+  - updated property `DeploymentId`
+- updated `AWS::ApiGatewayV2::DomainName`
+  - updated property `RegionalDomainName`
+  - updated property `RegionalHostedZoneId`
+- updated `AWS::ApiGatewayV2::IntegrationResponse`
+  - updated property `IntegrationResponseId`
+- updated `AWS::ApiGatewayV2::Model`
+  - updated property `ModelId`
+- updated `AWS::ApiGatewayV2::Route`
+  - updated definition `ParameterConstraints`
+  - updated property `RouteId`
+- updated `AWS::ApiGatewayV2::RouteResponse`
+  - updated property `RouteResponseId`
+- updated `AWS::ApiGatewayV2::VpcLink`
+  - updated property `VpcLinkId`
+- updated `AWS::AppRunner::Service`
+  - updated definition `CodeConfigurationValues`
+- updated `AWS::AppSync::GraphQLApi`
+  - added property `GraphQLEndpointArn`
+  - added property `IntrospectionConfig`
+  - added property `QueryDepthLimit`
+  - added property `ResolverCountLimit`
+  - updated `readOnlyProperties`
+- updated `AWS::AutoScaling::AutoScalingGroup`
+  - updated definition `InstanceRequirements`
+  - updated handler permissions
+- updated `AWS::Batch::JobDefinition`
+  - added `sourceUrl`
+  - added `tagging`
+  - added `writeOnlyProperties`
+  - added definition `EFSAuthorizationConfig`
+  - added definition `EFSVolumeConfiguration`
+  - added definition `EksMetadata`
+  - added definition `EksPodProperties`
+  - added definition `Host`
+  - added definition `JobTimeout`
+  - added definition `MountPoint`
+  - added definition `Volume`
+  - added property `ContainerOrchestrationType`
+  - added property `JobDefinitionArn`
+  - added property `Revision`
+  - added property `Status`
+  - removed definition `AuthorizationConfig`
+  - removed definition `EfsVolumeConfiguration`
+  - removed definition `EphemeralStorage`
+  - removed definition `FargatePlatformConfiguration`
+  - removed definition `LinuxParameters`
+  - removed definition `LogConfiguration`
+  - removed definition `Metadata`
+  - removed definition `MountPoints`
+  - removed definition `NetworkConfiguration`
+  - removed definition `PodProperties`
+  - removed definition `RuntimePlatform`
+  - removed definition `Timeout`
+  - removed definition `VolumesHost`
+  - removed definition `Volumes`
+  - removed property `Id`
   - updated `createOnlyProperties`
-- updated `AWS::OpenSearchServerless::Collection`
-  - added definition `StandbyReplicas`
-  - added property `StandbyReplicas`
+  - updated `primaryIdentifier`
+  - updated `readOnlyProperties`
+  - updated definition `ContainerProperties`
+  - updated definition `Device`
+  - updated definition `EksContainerResourceRequirements`
+  - updated definition `EksContainer`
+  - updated definition `EksProperties`
+  - updated definition `NodeProperties`
+  - updated definition `RetryStrategy`
+  - updated definition `Secret`
+  - updated definition `Tmpfs`
+  - updated definition `Ulimit`
+  - updated handler permissions
+  - updated property `JobDefinitionName`
+  - updated property `Parameters`
+  - updated property `PlatformCapabilities`
+  - updated property `Tags`
+  - updated property `Timeout`
+- updated `AWS::BillingConductor::CustomLineItem`
+  - added property `AccountId`
+  - updated `createOnlyProperties`
+- updated `AWS::Chatbot::MicrosoftTeamsChannelConfiguration`
+  - updated property `TeamsChannelId`
+- updated `AWS::CleanRooms::Collaboration`
+  - added definition `PaymentConfiguration`
+  - added definition `QueryComputePaymentConfig`
+  - added property `CreatorPaymentConfiguration`
+  - updated `createOnlyProperties`
+  - updated definition `MemberSpecification`
+- updated `AWS::CleanRooms::Membership`
+  - added definition `MembershipPaymentConfiguration`
+  - added definition `MembershipQueryComputePaymentConfig`
+  - added property `PaymentConfiguration`
+- updated `AWS::Cloud9::EnvironmentEC2`
+  - updated `required`
+- updated `AWS::CloudFront::Function`
+  - added definition `KeyValueStoreAssociation`
+  - updated definition `FunctionConfig`
+- updated `AWS::CloudTrail::EventDataStore`
+  - added property `FederationEnabled`
+  - added property `FederationRoleArn`
+  - updated `readOnlyProperties`
+  - updated handler permissions
+- updated `AWS::CodeCommit::Repository`
+  - added property `KmsKeyId`
+- updated `AWS::CodeDeploy::DeploymentConfig`
+  - added definition `MinimumHealthyHostsPerZone`
+  - added definition `ZonalConfig`
+  - added property `ZonalConfig`
+  - updated `createOnlyProperties`
+- updated `AWS::CodeDeploy::DeploymentGroup`
+  - added property `TerminationHookEnabled`
+- updated `AWS::CodePipeline::Pipeline`
+  - added definition `GitConfiguration`
+  - added definition `GitPushFilter`
+  - added definition `GitTagFilterCriteria`
+  - added definition `PipelineTriggerDeclaration`
+  - added definition `VariableDeclaration`
+  - added property `PipelineType`
+  - added property `Triggers`
+  - added property `Variables`
+- updated `AWS::Cognito::UserPool`
+  - added definition `PreTokenGenerationConfig`
+  - updated definition `LambdaConfig`
+- updated `AWS::Config::ConfigurationRecorder`
+  - added definition `RecordingModeOverride`
+  - added definition `RecordingMode`
+  - added property `RecordingMode`
+- updated `AWS::Connect::Instance`
+  - added definition `Tag`
+  - added property `Tags`
+  - updated `tagging`
+  - updated handler permissions
+- updated `AWS::Connect::InstanceStorageConfig`
+  - updated definition `KinesisVideoStreamConfig`
+- updated `AWS::Connect::IntegrationAssociation`
+  - updated definition `IntegrationType`
+  - updated handler permissions
+- updated `AWS::Connect::PhoneNumber`
+  - added property `SourcePhoneNumberArn`
+  - updated `createOnlyProperties`
+  - updated `required`
+  - updated handler permissions
+  - updated property `Type`
+- updated `AWS::Connect::TaskTemplate`
+  - added `tagging`
+  - updated definition `ClientToken`
+  - updated handler permissions
+  - updated property `ContactFlowArn`
+- updated `AWS::Connect::User`
+  - added definition `AttributeName`
+  - added definition `AttributeValue`
+  - added definition `Level`
+  - added definition `UserProficiency`
+  - added property `UserProficiencies`
+  - updated handler permissions
+- updated `AWS::DLM::LifecyclePolicy`
+  - added definition `CrossRegionCopyTargets`
+  - added definition `ExcludeTags`
+  - added definition `ExcludeVolumeTypesList`
+  - added definition `Exclusions`
+  - added property `CopyTags`
+  - added property `CreateInterval`
+  - added property `CrossRegionCopyTargets`
+  - added property `DefaultPolicy`
+  - added property `Exclusions`
+  - added property `ExtendDeletion`
+  - added property `RetainInterval`
+  - updated definition `PolicyDetails`
+- updated `AWS::DMS::Endpoint`
+  - updated definition `IbmDb2Settings`
+  - updated definition `S3Settings`
+- updated `AWS::DMS::ReplicationConfig`
+  - added `additionalIdentifiers`
+  - added `createOnlyProperties`
+  - updated handler permissions
+- updated `AWS::DocDB::DBCluster`
+  - added property `StorageType`
+  - updated `createOnlyProperties`
+- updated `AWS::DocDB::DBInstance`
+  - added property `CACertificateIdentifier`
+  - added property `CertificateRotationRestart`
+- updated `AWS::DynamoDB::GlobalTable`
+  - updated handler permissions
+- updated `AWS::EC2::CapacityReservationFleet`
+  - updated handler permissions
+- updated `AWS::EC2::IPAMAllocation`
+  - updated definition `Cidr`
+- updated `AWS::EC2::IPAMPool`
+  - added definition `SourceResource`
+  - added property `SourceResource`
+  - updated `createOnlyProperties`
+- updated `AWS::EC2::InternetGateway`
+  - added `tagging`
+  - removed `taggable`
+- updated `AWS::EC2::LaunchTemplate`
+  - added definition `ConnectionTrackingSpecification`
+  - updated definition `MaintenanceOptions`
+  - updated definition `NetworkInterface`
+- updated `AWS::EC2::NetworkInterface`
+  - added definition `ConnectionTrackingSpecification`
+  - added property `ConnectionTrackingSpecification`
+  - added property `EnablePrimaryIpv6`
+  - added property `PrimaryIpv6Address`
+  - updated `conditionalCreateOnlyProperties`
+  - updated `readOnlyProperties`
+- updated `AWS::EC2::Route`
+  - added property `CoreNetworkArn`
+- updated `AWS::EC2::SecurityGroupEgress`
+  - added `sourceUrl`
+  - added `tagging`
+  - updated handler permissions
+  - updated property `CidrIp`
+  - updated property `CidrIpv6`
+  - updated property `Description`
+  - updated property `DestinationPrefixListId`
+  - updated property `DestinationSecurityGroupId`
+  - updated property `FromPort`
+  - updated property `GroupId`
+  - updated property `Id`
+  - updated property `IpProtocol`
+  - updated property `ToPort`
+- updated `AWS::EC2::Subnet`
+  - added `writeOnlyProperties`
+  - added property `Ipv4IpamPoolId`
+  - added property `Ipv6IpamPoolId`
+  - updated `createOnlyProperties`
+  - updated `readOnlyProperties`
+- updated `AWS::EC2::SubnetCidrBlock`
+  - added `writeOnlyProperties`
+  - added property `Ipv6IpamPoolId`
+  - added property `Ipv6NetmaskLength`
+  - updated `createOnlyProperties`
+  - updated `required`
+- updated `AWS::EC2::VPCDHCPOptionsAssociation`
+  - added `tagging`
+- updated `AWS::EC2::VerifiedAccessTrustProvider`
+  - updated definition `DeviceOptions`
+- updated `AWS::ECS::CapacityProvider`
+  - added `tagging`
+  - updated definition `AutoScalingGroupProvider`
+- updated `AWS::ECS::ClusterCapacityProviderAssociations`
+  - added `tagging`
+- updated `AWS::ECS::Service`
+  - added definition `ServiceVolumeConfiguration`
+  - added property `VolumeConfigurations`
+  - updated `writeOnlyProperties`
+  - updated handler permissions
+- updated `AWS::ECS::TaskDefinition`
+  - updated definition `Volume`
+- updated `AWS::EKS::Cluster`
+  - added `writeOnlyProperties`
+  - added definition `AccessConfig`
+  - added property `AccessConfig`
+  - updated `createOnlyProperties`
+- updated `AWS::EMR::Cluster`
+  - added definition `PlacementGroupConfig`
+  - added property `EbsRootVolumeIops`
+  - added property `EbsRootVolumeThroughput`
+  - added property `PlacementGroupConfigs`
+  - updated `createOnlyProperties`
+- updated `AWS::EMR::Studio`
+  - added property `EncryptionKeyArn`
+  - added property `IdcInstanceArn`
+  - added property `IdcUserAssignment`
+  - added property `TrustedIdentityPropagationEnabled`
+  - updated `createOnlyProperties`
+- updated `AWS::EMR::StudioSessionMapping`
+  - updated handler permissions
+- updated `AWS::EMRServerless::Application`
+  - added definition `CloudWatchLoggingConfiguration`
+  - added definition `LogGroupName`
+  - added definition `LogStreamNamePrefix`
+  - added definition `LogTypeList`
+  - added definition `LogTypeMapKeyValuePair`
+  - added definition `LogTypeString`
+  - added definition `WorkerTypeString`
+  - updated definition `MonitoringConfiguration`
+- updated `AWS::ElastiCache::ServerlessCache`
+  - updated `readOnlyProperties`
+- updated `AWS::ElasticLoadBalancingV2::TargetGroup`
+  - updated handler permissions
+- updated `AWS::EventSchemas::Discoverer`
+  - added `tagging`
+  - added property `State`
+  - updated `primaryIdentifier`
+  - updated `readOnlyProperties`
+  - updated handler permissions
+  - updated property `CrossAccount`
+  - updated property `Description`
+  - updated property `DiscovererArn`
+  - updated property `DiscovererId`
+  - updated property `SourceArn`
+  - updated property `Tags`
+- updated `AWS::EventSchemas::Registry`
+  - added `tagging`
+  - removed property `Id`
+  - updated `primaryIdentifier`
+  - updated `readOnlyProperties`
+  - updated handler permissions
+  - updated property `Description`
+  - updated property `RegistryArn`
+  - updated property `RegistryName`
+  - updated property `Tags`
+- updated `AWS::EventSchemas::Schema`
+  - added `sourceUrl`
+  - added `tagging`
+  - added property `LastModified`
+  - added property `VersionCreatedDate`
+  - removed property `Id`
+  - updated `primaryIdentifier`
+  - updated `readOnlyProperties`
+  - updated handler permissions
+  - updated property `Content`
+  - updated property `Description`
+  - updated property `RegistryName`
+  - updated property `SchemaArn`
+  - updated property `SchemaName`
+  - updated property `SchemaVersion`
+  - updated property `Tags`
+  - updated property `Type`
+- updated `AWS::Events::Rule`
+  - added definition `AppSyncParameters`
+  - updated definition `Target`
+- updated `AWS::FIS::ExperimentTemplate`
+  - added definition `ExperimentTemplateExperimentOptions`
+  - added property `ExperimentOptions`
+  - updated `createOnlyProperties`
+- updated `AWS::FSx::DataRepositoryAssociation`
+  - updated `tagging`
+- updated `AWS::FSx::FileSystem`
+  - updated definition `OntapConfiguration`
+- updated `AWS::FSx::Volume`
+  - added definition `AggregateConfiguration`
+  - updated definition `OntapConfiguration`
+- updated `AWS::GameLift::Fleet`
+  - added property `ApplyCapacity`
+  - updated `createOnlyProperties`
+- updated `AWS::GlobalAccelerator::EndpointGroup`
+  - added `writeOnlyProperties`
+  - updated definition `EndpointConfiguration`
+- updated `AWS::GuardDuty::IPSet`
+  - updated `required`
+- updated `AWS::GuardDuty::ThreatIntelSet`
+  - updated `required`
+- updated `AWS::IdentityStore::GroupMembership`
+  - updated `createOnlyProperties`
+- updated `AWS::ImageBuilder::Image`
+  - added definition `WorkflowConfiguration`
+  - added definition `WorkflowParameterValue`
+  - added definition `WorkflowParameter`
+  - added property `ExecutionRole`
+  - added property `Workflows`
+  - updated `createOnlyProperties`
+  - updated handler permissions
+- updated `AWS::ImageBuilder::ImagePipeline`
+  - added definition `WorkflowConfiguration`
+  - added definition `WorkflowParameterValue`
+  - added definition `WorkflowParameter`
+  - added property `ExecutionRole`
+  - added property `Workflows`
+  - updated handler permissions
+- updated `AWS::IoTSiteWise::Gateway`
+  - updated handler permissions
+- updated `AWS::IoTSiteWise::Portal`
+  - updated handler permissions
+- updated `AWS::IoTSiteWise::Project`
+  - updated handler permissions
+- updated `AWS::KinesisAnalyticsV2::Application`
+  - updated `tagging`
+- updated `AWS::KinesisFirehose::DeliveryStream`
+  - added definition `SplunkBufferingHints`
+  - updated definition `Processor`
+  - updated definition `SplunkDestinationConfiguration`
+- updated `AWS::Lambda::EventInvokeConfig`
+  - added `sourceUrl`
+  - added `tagging`
+  - removed `readOnlyProperties`
+  - removed property `Id`
+  - updated `primaryIdentifier`
+  - updated definition `DestinationConfig`
+  - updated definition `OnFailure`
+  - updated definition `OnSuccess`
+  - updated handler permissions
+  - updated property `FunctionName`
+  - updated property `MaximumEventAgeInSeconds`
+  - updated property `MaximumRetryAttempts`
+  - updated property `Qualifier`
+- updated `AWS::Lambda::Function`
+  - removed property `Policy`
+  - updated `writeOnlyProperties`
+  - updated handler permissions
+- updated `AWS::Location::GeofenceCollection`
+  - added `tagging`
+  - added definition `TagMap`
+  - added definition `Tag`
+  - added property `Tags`
+  - updated `createOnlyProperties`
+  - updated handler permissions
+- updated `AWS::Location::Map`
+  - added `tagging`
+  - added definition `TagMap`
+  - added definition `Tag`
+  - added property `Tags`
+  - removed property `DataSource`
+  - updated `createOnlyProperties`
+  - updated `readOnlyProperties`
+  - updated `required`
+  - updated definition `MapConfiguration`
+  - updated handler permissions
+  - updated property `MapArn`
+- updated `AWS::Location::PlaceIndex`
+  - added `tagging`
+  - added definition `TagMap`
+  - added definition `Tag`
+  - added property `Tags`
+  - updated `createOnlyProperties`
+  - updated `readOnlyProperties`
+  - updated `required`
+  - updated handler permissions
+  - updated property `IndexArn`
+- updated `AWS::Location::RouteCalculator`
+  - added `tagging`
+  - added definition `TagMap`
+  - added definition `Tag`
+  - added property `Tags`
+  - updated `createOnlyProperties`
+  - updated `required`
+  - updated handler permissions
+  - updated property `CalculatorArn`
+- updated `AWS::Location::Tracker`
+  - added `tagging`
+  - added definition `TagMap`
+  - added definition `Tag`
+  - added property `EventBridgeEnabled`
+  - added property `KmsKeyEnableGeospatialQueries`
+  - added property `Tags`
+  - updated `createOnlyProperties`
+  - updated `readOnlyProperties`
+  - updated handler permissions
+- updated `AWS::Location::TrackerConsumer`
+  - updated handler permissions
+- updated `AWS::Logs::AccountPolicy`
+  - added property `SelectionCriteria`
+  - updated handler permissions
+  - updated property `PolicyType`
+- updated `AWS::Logs::QueryDefinition`
+  - added `tagging`
+  - updated handler permissions
+- updated `AWS::Logs::ResourcePolicy`
+  - added `tagging`
+- updated `AWS::Logs::SubscriptionFilter`
+  - updated handler permissions
+- updated `AWS::MediaLive::Channel`
+  - added definition `EpochLockingSettings`
+  - added definition `OutputLockingSettings`
+  - added definition `PipelineLockingSettings`
+  - updated definition `FeatureActivations`
+  - updated definition `GlobalConfiguration`
+- updated `AWS::MediaPackage::OriginEndpoint`
+  - updated definition `DashPackage`
+- updated `AWS::MediaTailor::Channel`
+  - added definition `TimeShiftConfiguration`
+  - added property `TimeShiftConfiguration`
+  - updated definition `DashPlaylistSettings`
+  - updated definition `HlsPlaylistSettings`
+- updated `AWS::MemoryDB::ACL`
+  - updated handler permissions
+- updated `AWS::MemoryDB::ParameterGroup`
+  - updated handler permissions
+- updated `AWS::MemoryDB::SubnetGroup`
+  - updated handler permissions
+- updated `AWS::MemoryDB::User`
+  - updated handler permissions
+- updated `AWS::Neptune::DBCluster`
+  - updated handler permissions
+- updated `AWS::NetworkFirewall::FirewallPolicy`
+  - updated definition `FirewallPolicy`
+  - updated handler permissions
+- updated `AWS::OSIS::Pipeline`
+  - added definition `BufferOptions`
+  - added definition `EncryptionAtRestOptions`
+  - added property `BufferOptions`
+  - added property `EncryptionAtRestOptions`
+  - updated definition `LogPublishingOptions`
+  - updated definition `VpcOptions`
+  - updated handler permissions
+- updated `AWS::OpenSearchService::Domain`
+  - added property `DomainEndpointV2`
+  - added property `IPAddressType`
+  - updated `readOnlyProperties`
+- updated `AWS::Pinpoint::GCMChannel`
+  - added property `DefaultAuthenticationMethod`
+  - added property `ServiceJson`
+  - updated `required`
+- updated `AWS::QuickSight::Analysis`
+  - added `sourceUrl`
+  - updated `readOnlyProperties`
+  - updated `writeOnlyProperties`
+  - updated definition `ResourcePermission`
+  - updated handler permissions
+- updated `AWS::QuickSight::Dashboard`
+  - added `sourceUrl`
+  - updated `readOnlyProperties`
+  - updated `writeOnlyProperties`
+  - updated definition `ResourcePermission`
+  - updated handler permissions
+- updated `AWS::QuickSight::Template`
+  - added `sourceUrl`
+  - updated `readOnlyProperties`
+  - updated `writeOnlyProperties`
+  - updated definition `ResourcePermission`
+  - updated handler permissions
+- updated `AWS::QuickSight::Theme`
+  - added `sourceUrl`
+  - updated `readOnlyProperties`
+  - updated definition `ResourcePermission`
+  - updated handler permissions
+- updated `AWS::QuickSight::Topic`
+  - added definition `TopicUserExperienceVersion`
+  - added property `UserExperienceVersion`
+  - updated definition `TopicDetails`
+- updated `AWS::RDS::DBCluster`
+  - updated handler permissions
+- updated `AWS::RDS::DBInstance`
+  - updated handler permissions
+- updated `AWS::RDS::DBProxy`
+  - added `tagging`
+- updated `AWS::RDS::DBProxyEndpoint`
+  - added `tagging`
+- updated `AWS::RDS::DBProxyTargetGroup`
+  - added `tagging`
+- updated `AWS::Redshift::Cluster`
+  - added property `ClusterNamespaceArn`
+  - added property `ManageMasterPassword`
+  - added property `MasterPasswordSecretArn`
+  - added property `MasterPasswordSecretKmsKeyId`
+  - added property `NamespaceResourcePolicy`
+  - removed property `Id`
+  - updated `readOnlyProperties`
+  - updated `required`
+  - updated `writeOnlyProperties`
+  - updated definition `LoggingProperties`
+  - updated handler permissions
+  - updated property `MasterUserPassword`
+- updated `AWS::Redshift::ClusterParameterGroup`
+  - updated handler permissions
+- updated `AWS::Redshift::EndpointAccess`
+  - updated handler permissions
+- updated `AWS::ResilienceHub::App`
+  - updated `tagging`
+- updated `AWS::ResilienceHub::ResiliencyPolicy`
+  - updated `tagging`
+- updated `AWS::ResourceExplorer2::Index`
+  - updated handler permissions
+- updated `AWS::Route53RecoveryControl::Cluster`
+  - updated handler permissions
+- updated `AWS::Route53RecoveryControl::ControlPanel`
+  - updated handler permissions
+- updated `AWS::Route53RecoveryControl::RoutingControl`
+  - updated handler permissions
+- updated `AWS::Route53RecoveryControl::SafetyRule`
+  - updated handler permissions
+- updated `AWS::Route53Resolver::ResolverConfig`
+  - added `propertyTransform`
+  - updated `primaryIdentifier`
+  - updated handler permissions
+- updated `AWS::Route53Resolver::ResolverEndpoint`
+  - added property `Protocols`
+- updated `AWS::S3::Bucket`
+  - updated definition `InventoryConfiguration`
+- updated `AWS::S3::StorageLens`
+  - updated definition `Tag`
+- updated `AWS::S3Express::DirectoryBucket`
+  - updated property `Arn`
+  - updated property `BucketName`
+  - updated property `DataRedundancy`
+- updated `AWS::SNS::Subscription`
+  - added property `ReplayPolicy`
+- updated `AWS::SNS::Topic`
+  - added definition `LoggingConfig`
+  - added property `DeliveryStatusLogging`
+  - updated handler permissions
+- updated `AWS::SQS::QueuePolicy`
+  - updated property `Id`
+- updated `AWS::SSM::Association`
+  - added `writeOnlyProperties`
+  - updated handler permissions
+- updated `AWS::SSM::PatchBaseline`
+  - added `tagging`
+  - added property `DefaultBaseline`
+  - removed definition `PatchStringDate`
+  - updated definition `PatchFilterGroup`
+  - updated definition `PatchFilter`
+  - updated definition `PatchSource`
+  - updated definition `RuleGroup`
+  - updated definition `Rule`
+  - updated definition `Tag`
+  - updated handler permissions
+  - updated property `ApprovedPatchesComplianceLevel`
+  - updated property `ApprovedPatchesEnableNonSecurity`
+  - updated property `ApprovedPatches`
+  - updated property `Description`
+  - updated property `GlobalFilters`
+  - updated property `Id`
+  - updated property `Name`
+  - updated property `OperatingSystem`
+  - updated property `PatchGroups`
+  - updated property `RejectedPatchesAction`
+  - updated property `RejectedPatches`
+  - updated property `Sources`
+  - updated property `Tags`
+- updated `AWS::SageMaker::App`
+  - updated definition `ResourceSpec`
+- updated `AWS::SageMaker::Domain`
+  - added definition `CodeEditorAppSettings`
+  - added definition `CodeRepository`
+  - added definition `CustomFileSystemConfig`
+  - added definition `CustomPosixUserConfig`
+  - added definition `DefaultEbsStorageSettings`
+  - added definition `DefaultSpaceStorageSettings`
+  - added definition `EFSFileSystemConfig`
+  - added definition `JupyterLabAppSettings`
+  - added definition `SpaceEbsVolumeSizeInGb`
+  - added definition `StudioLifecycleConfigArn`
+  - added property `SingleSignOnApplicationArn`
+  - updated `createOnlyProperties`
+  - updated `readOnlyProperties`
+  - updated definition `ResourceSpec`
+  - updated definition `UserSettings`
+- updated `AWS::SageMaker::EndpointConfig`
+  - added definition `ManagedInstanceScaling`
+  - added definition `RoutingConfig`
+  - added definition `VpcConfig`
+  - added property `EnableNetworkIsolation`
+  - added property `ExecutionRoleArn`
+  - added property `VpcConfig`
+  - updated `createOnlyProperties`
+  - updated definition `ProductionVariant`
+- updated `AWS::SageMaker::FeatureGroup`
+  - added `tagging`
+  - added definition `StorageType`
+  - added definition `ThroughputConfig`
+  - added definition `ThroughputMode`
+  - added property `ThroughputConfig`
+  - updated property `FeatureDefinitions`
+  - updated property `OnlineStoreConfig`
+  - updated property `Tags`
+- updated `AWS::SageMaker::Model`
+  - added definition `ModelAccessConfig`
+  - added definition `ModelDataSource`
+  - added definition `S3DataSource`
+  - removed `required`
+  - updated definition `ContainerDefinition`
+- updated `AWS::SageMaker::UserProfile`
+  - added definition `CodeEditorAppSettings`
+  - added definition `CodeRepository`
+  - added definition `CustomFileSystemConfig`
+  - added definition `CustomPosixUserConfig`
+  - added definition `DefaultEbsStorageSettings`
+  - added definition `DefaultSpaceStorageSettings`
+  - added definition `EFSFileSystemConfig`
+  - added definition `JupyterLabAppSettings`
+  - added definition `SpaceEbsVolumeSizeInGb`
+  - added definition `StudioLifecycleConfigArn`
+  - updated definition `ResourceSpec`
+  - updated definition `UserSettings`
+- updated `AWS::SecurityHub::Hub`
+  - added `sourceUrl`
+  - added `tagging`
+  - added `writeOnlyProperties`
+  - added property `ARN`
+  - added property `SubscribedAt`
+  - removed property `Id`
+  - updated `primaryIdentifier`
+  - updated `readOnlyProperties`
+  - updated definition `undefined`
+  - updated handler permissions
+  - updated property `AutoEnableControls`
+  - updated property `ControlFindingGenerator`
+  - updated property `EnableDefaultStandards`
+  - updated property `Tags`
+- updated `AWS::ServiceCatalogAppRegistry::Application`
+  - added property `ApplicationName`
+  - added property `ApplicationTagKey`
+  - added property `ApplicationTagValue`
+  - updated `readOnlyProperties`
+- updated `AWS::Signer::SigningProfile`
+  - updated definition `Arn`
+- updated `AWS::Synthetics::Canary`
+  - added `tagging`
+  - updated handler permissions
+- updated `AWS::Synthetics::Group`
+  - added `tagging`
+- updated `AWS::Transfer::Server`
+  - added definition `S3StorageOptions`
+  - added property `S3StorageOptions`
+- updated `AWS::Transfer::User`
+  - updated definition `HomeDirectoryMapEntry`
+- updated `AWS::VerifiedPermissions::Policy`
+  - updated `required`
+- updated `AWS::VerifiedPermissions::PolicyStore`
+  - added property `Description`
+- updated `AWS::VoiceID::Domain`
+  - updated handler permissions
